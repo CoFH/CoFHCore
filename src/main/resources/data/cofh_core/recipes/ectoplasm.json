@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:ghast_tear"
+    },
+    {
+      "tag": "forge:slimeballs"
+    }
+  ],
+  "result": {
+    "item": "cofh_core:ectoplasm"
+  },
+  "conditions": [
+    {
+      "flag": "ectoplasm",
+      "type": "cofh_core:flag"
+    }
+  ]
+}

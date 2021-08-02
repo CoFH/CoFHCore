@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:golden_axe",
+    "minecraft:golden_pickaxe",
+    "minecraft:golden_shovel",
+    "minecraft:golden_sword"
+  ]
+}

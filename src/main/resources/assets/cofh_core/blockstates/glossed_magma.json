@@ -1,0 +1,72 @@
+{
+  "variants": {
+    "age=0": [
+      {
+        "model": "cofh_core:block/glossed_magma_0"
+      },
+      {
+        "model": "cofh_core:block/glossed_magma_0",
+        "y": 90
+      },
+      {
+        "model": "cofh_core:block/glossed_magma_0",
+        "y": 180
+      },
+      {
+        "model": "cofh_core:block/glossed_magma_0",
+        "y": 270
+      }
+    ],
+    "age=1": [
+      {
+        "model": "cofh_core:block/glossed_magma_1"
+      },
+      {
+        "model": "cofh_core:block/glossed_magma_1",
+        "y": 90
+      },
+      {
+        "model": "cofh_core:block/glossed_magma_1",
+        "y": 180
+      },
+      {
+        "model": "cofh_core:block/glossed_magma_1",
+        "y": 270
+      }
+    ],
+    "age=2": [
+      {
+        "model": "cofh_core:block/glossed_magma_2"
+      },
+      {
+        "model": "cofh_core:block/glossed_magma_2",
+        "y": 90
+      },
+      {
+        "model": "cofh_core:block/glossed_magma_2",
+        "y": 180
+      },
+      {
+        "model": "cofh_core:block/glossed_magma_2",
+        "y": 270
+      }
+    ],
+    "age=3": [
+      {
+        "model": "cofh_core:block/glossed_magma_3"
+      },
+      {
+        "model": "cofh_core:block/glossed_magma_3",
+        "y": 90
+      },
+      {
+        "model": "cofh_core:block/glossed_magma_3",
+        "y": 180
+      },
+      {
+        "model": "cofh_core:block/glossed_magma_3",
+        "y": 270
+      }
+    ]
+  }
+}

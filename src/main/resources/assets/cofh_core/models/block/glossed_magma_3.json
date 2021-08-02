@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "cofh_core:block/glossed_magma_3"
+  }
+}
