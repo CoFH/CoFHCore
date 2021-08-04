@@ -8,6 +8,7 @@ public class NBTTags {
 
     public static final String TAG_ACCESSIBLE = "Accessible";
     public static final String TAG_ACTIVE = "Active";
+    public static final String TAG_ACTIVE_PREV = "ActivePrev";
     public static final String TAG_AMOUNT = "Amount";
     public static final String TAG_AMOUNT_IN = "AmountIn";
     public static final String TAG_AMOUNT_OUT = "AmountOut";
