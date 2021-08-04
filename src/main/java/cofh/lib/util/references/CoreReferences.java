@@ -120,6 +120,9 @@ public class CoreReferences {
     @ObjectHolder(ID_EFFECT_SUNDERED)
     public static final Effect SUNDERED = null;
 
+    @ObjectHolder(ID_EFFECT_SUPERCHARGE)
+    public static final Effect SUPERCHARGE = null;
+
     @ObjectHolder(ID_EFFECT_WRENCHED)
     public static final Effect WRENCHED = null;
     // endregion

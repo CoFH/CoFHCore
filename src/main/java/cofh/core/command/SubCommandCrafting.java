@@ -30,7 +30,14 @@ public class SubCommandCrafting {
 
     private static int openContainer(PlayerEntity playerEntity) {
 
-        playerEntity.openContainer(new SimpleNamedContainerProvider((id, player, inv) -> new WorkbenchContainer(id, player), TITLE));
+        playerEntity.openContainer(new SimpleNamedContainerProvider((id, inventory, player) -> new WorkbenchContainer(id, inventory) {
+
+            @Override
+            public boolean canInteractWith(PlayerEntity playerIn) {
+
+                return true;
+            }
+        }, TITLE));
         return 1;
     }
 

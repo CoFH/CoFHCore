@@ -21,6 +21,8 @@
   "commands.cofh.invuln.remove.multiple": "Removed invulnerability from %s entities",
   "commands.cofh.invuln.success.single": "Made %s invulnerable",
   "commands.cofh.invuln.success.multiple": "Made %s entities invulnerable",
+  "commands.cofh.recharge.success.single": "Supercharging %s",
+  "commands.cofh.recharge.success.multiple": "Supercharging %s entities",
   "commands.cofh.repair.success.single": "Repaired equipment for %s",
   "commands.cofh.repair.success.multiple": "Repaired equipment for %s entities",
   "commands.cofh.zap.success.single": "Zapped %s",
@@ -132,6 +134,7 @@
   "effect.cofh_core.shocked": "Shocked",
   "effect.cofh_core.slimed": "Slimed",
   "effect.cofh_core.sundered": "Sundered",
+  "effect.cofh_core.supercharge": "Supercharging",
   "effect.cofh_core.wrenched": "Wrenched!",
 
   "enchantment.cofh_core.disabled": "Shimmer",

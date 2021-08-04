@@ -23,7 +23,14 @@ public class SubCommandAnvil {
 
     private static int openContainer(PlayerEntity playerEntity) {
 
-        playerEntity.openContainer(new SimpleNamedContainerProvider((id, player, inv) -> new RepairContainer(id, player), TITLE));
+        playerEntity.openContainer(new SimpleNamedContainerProvider((id, player, inv) -> new RepairContainer(id, player) {
+
+            @Override
+            public boolean canInteractWith(PlayerEntity playerIn) {
+
+                return true;
+            }
+        }, TITLE));
         return 1;
     }
 

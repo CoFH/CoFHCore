@@ -16,17 +16,17 @@ public class CoFHCommand {
     private CoFHCommand(CommandDispatcher<CommandSource> dispatcher) {
 
         dispatcher.register(LiteralArgumentBuilder.<CommandSource>literal("cofh")
-                // TODO: Figure out appropriate dummy calls for IWorldPosCallable
+                // TODO: This works but there's just not a need.
                 //                .then(SubCommandAnvil.register())
-                //                .then(SubCommandCrafting.register())
-                //                .then(SubCommandCrafting.registerAlt())
-                .then(SubCommandCharge.register())
+                .then(SubCommandCrafting.register())
+                .then(SubCommandCrafting.registerAlt())
                 .then(SubCommandEnderChest.register())
                 .then(SubCommandFriend.register())
                 .then(SubCommandHeal.register())
                 .then(SubCommandIgnite.register())
                 .then(SubCommandInvis.register())
                 .then(SubCommandInvuln.register())
+                .then(SubCommandRecharge.register())
                 .then(SubCommandRepair.register())
                 .then(SubCommandZap.register())
         );
