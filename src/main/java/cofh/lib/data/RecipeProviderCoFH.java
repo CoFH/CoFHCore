@@ -277,6 +277,18 @@ public class RecipeProviderCoFH extends RecipeProvider implements IConditionBuil
                 .build(consumer, this.modid + ":" + folder + "/" + name(output) + "_from" + suffix + "_blasting");
     }
 
+    protected void generateStonecuttingRecipe(DeferredRegisterCoFH<Item> reg, Consumer<IFinishedRecipe> consumer, Item input, Item output, String folder) {
+
+        generateStonecuttingRecipe(reg, consumer, input, output, folder, "");
+    }
+
+    protected void generateStonecuttingRecipe(DeferredRegisterCoFH<Item> reg, Consumer<IFinishedRecipe> consumer, Item input, Item output, String folder, String suffix) {
+
+        SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(input), output)
+                .addCriterion("has_" + name(input), hasItem(input))
+                .build(consumer, this.modid + ":" + folder + "/" + name(output) + "_from" + suffix + "_stonecutting");
+    }
+
     // TODO: Change if Mojang implements some better defaults...
     public InventoryChangeTrigger.Instance hasItem(MinMaxBounds.IntBound amount, IItemProvider itemIn) {
 

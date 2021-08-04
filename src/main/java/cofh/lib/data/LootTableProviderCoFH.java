@@ -36,12 +36,12 @@ public abstract class LootTableProviderCoFH extends LootTableProvider {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
     protected final Map<Block, LootTable.Builder> blockLootTables = new HashMap<>();
-    private final DataGenerator generator;
+    protected final DataGenerator generator;
 
-    public LootTableProviderCoFH(DataGenerator gen) {
+    public LootTableProviderCoFH(DataGenerator dataGeneratorIn) {
 
-        super(gen);
-        this.generator = gen;
+        super(dataGeneratorIn);
+        this.generator = dataGeneratorIn;
     }
 
     protected abstract void addTables();

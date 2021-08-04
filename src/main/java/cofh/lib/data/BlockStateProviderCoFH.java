@@ -20,11 +20,17 @@ public abstract class BlockStateProviderCoFH extends BlockStateProvider {
     }
 
     public static final String CROPS = "crops";
+    public static final String DECO = "deco";
     public static final String GLASS = "glass";
     public static final String MISC = "misc";
     public static final String ORES = "ores";
     public static final String RAILS = "rails";
     public static final String STORAGE = "storage";
+
+    protected void decoBlock(Supplier<? extends Block> block) {
+
+        simpleBlock(block.get(), cubeAll(block, DECO));
+    }
 
     protected void glassBlock(Supplier<? extends Block> block) {
 
