@@ -24,19 +24,23 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.*;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.templates.EmptyFluidHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import static cofh.lib.util.constants.Constants.BOTTLE_VOLUME;
@@ -197,6 +201,22 @@ public class FluidHelper {
     public static boolean hasFluidHandlerCap(ItemStack item) {
 
         return !item.isEmpty() && item.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent();
+    }
+
+    public static LazyOptional<IFluidHandlerItem> getFluidHandlerCap(@Nonnull ItemStack stack) {
+
+        return stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY);
+    }
+
+    public static Optional<FluidStack> getFluidContainedInItem(@Nonnull ItemStack container) {
+
+        if (!container.isEmpty()) {
+            Optional<FluidStack> fluidContained = getFluidHandlerCap(container).map(c -> c.getFluidInTank(0));
+            if (fluidContained.isPresent() && !fluidContained.get().isEmpty()) {
+                return fluidContained;
+            }
+        }
+        return Optional.empty();
     }
 
     /**

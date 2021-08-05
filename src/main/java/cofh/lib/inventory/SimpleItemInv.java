@@ -115,7 +115,7 @@ public class SimpleItemInv extends SimpleItemHandler {
     }
     // endregion
 
-    // HELPERS
+    // region HELPERS
     public CompoundNBT writeSlotsToNBT(CompoundNBT nbt, int startIndex, int endIndex) {
 
         return writeSlotsToNBT(nbt, tag, startIndex, endIndex);
@@ -147,7 +147,7 @@ public class SimpleItemInv extends SimpleItemHandler {
     }
     // endregion
 
-    // UNORDERED METHODS
+    // region UNORDERED METHODS
     public SimpleItemInv readSlotsUnordered(ListNBT list, int startIndex) {
 
         return readSlotsUnordered(list, startIndex, slots.size());
