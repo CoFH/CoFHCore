@@ -1,6 +1,6 @@
 package cofh.core.event;
 
-import cofh.lib.client.model.DynamicFluidItemModel;
+import cofh.lib.client.model.DynamicFluidContainerModel;
 import cofh.lib.item.IColorableItem;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.item.Item;
@@ -38,7 +38,7 @@ public class CoreClientSetupEvents {
     @SubscribeEvent
     public static void registerModels(final ModelRegistryEvent event) {
 
-        ModelLoaderRegistry.registerLoader(new ResourceLocation(ID_COFH_CORE, "dynamic_fluid"), new DynamicFluidItemModel.Loader());
+        ModelLoaderRegistry.registerLoader(new ResourceLocation(ID_COFH_CORE, "dynamic_fluid"), new DynamicFluidContainerModel.Loader());
     }
 
     // region HELPERS

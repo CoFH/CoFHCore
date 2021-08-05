@@ -1,7 +1,10 @@
 package cofh.lib.client.model;
 
 import cofh.core.util.helpers.FluidHelper;
-import com.google.common.collect.*;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
@@ -35,7 +38,7 @@ import java.util.function.Predicate;
 import static cofh.lib.util.constants.Constants.BUCKET_VOLUME;
 import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
 
-public final class DynamicFluidItemModel implements IModelGeometry<DynamicFluidItemModel> {
+public final class DynamicFluidContainerModel implements IModelGeometry<DynamicFluidContainerModel> {
 
     // minimal Z offset to prevent depth-fighting
     private static final float NORTH_Z_COVER = 7.496f / 16f;
@@ -51,13 +54,7 @@ public final class DynamicFluidItemModel implements IModelGeometry<DynamicFluidI
     private final boolean coverIsMask;
     private final boolean applyFluidLuminosity;
 
-    @Deprecated
-    public DynamicFluidItemModel(FluidStack fluidStack, boolean flipGas, boolean tint, boolean coverIsMask) {
-
-        this(fluidStack, flipGas, tint, coverIsMask, true);
-    }
-
-    public DynamicFluidItemModel(FluidStack fluidStack, boolean flipGas, boolean tint, boolean coverIsMask, boolean applyFluidLuminosity) {
+    public DynamicFluidContainerModel(FluidStack fluidStack, boolean flipGas, boolean tint, boolean coverIsMask, boolean applyFluidLuminosity) {
 
         this.fluidStack = fluidStack;
         this.flipGas = flipGas;
@@ -70,9 +67,9 @@ public final class DynamicFluidItemModel implements IModelGeometry<DynamicFluidI
      * Returns a new ModelDynBucket representing the given fluid, but with the same
      * other properties (flipGas, tint, coverIsMask).
      */
-    public DynamicFluidItemModel withFluid(FluidStack newFluid) {
+    public DynamicFluidContainerModel withFluid(FluidStack newFluid) {
 
-        return new DynamicFluidItemModel(newFluid, flipGas, tint, coverIsMask, applyFluidLuminosity);
+        return new DynamicFluidContainerModel(newFluid, flipGas, tint, coverIsMask, applyFluidLuminosity);
     }
 
     @Override
@@ -84,15 +81,12 @@ public final class DynamicFluidItemModel implements IModelGeometry<DynamicFluidI
         RenderMaterial coverLocation = owner.isTexturePresent("cover") ? owner.resolveTexture("cover") : null;
 
         IModelTransform transformsFromModel = owner.getCombinedTransform();
-
         Fluid fluid = fluidStack.getFluid();
 
         TextureAtlasSprite fluidSprite = fluid != Fluids.EMPTY ? spriteGetter.apply(ForgeHooksClient.getBlockMaterial(fluid.getAttributes().getStillTexture())) : null;
         TextureAtlasSprite coverSprite = (coverLocation != null && (!coverIsMask || baseLocation != null)) ? spriteGetter.apply(coverLocation) : null;
 
-        ImmutableMap<TransformType, TransformationMatrix> transformMap =
-                PerspectiveMapWrapper.getTransforms(new ModelTransformComposition(transformsFromModel, modelTransform));
-
+        ImmutableMap<TransformType, TransformationMatrix> transformMap = PerspectiveMapWrapper.getTransforms(new ModelTransformComposition(transformsFromModel, modelTransform));
         TextureAtlasSprite particleSprite = particleLocation != null ? spriteGetter.apply(particleLocation) : null;
 
         if (particleSprite == null) particleSprite = fluidSprite;
@@ -104,16 +98,13 @@ public final class DynamicFluidItemModel implements IModelGeometry<DynamicFluidI
                     modelTransform.getRotation().blockCornerToCenter().compose(
                             new TransformationMatrix(null, new Quaternion(0, 0, 1, 0), null, null)).blockCenterToCorner());
         }
-
         TransformationMatrix transform = modelTransform.getRotation();
-
         ItemMultiLayerBakedModel.Builder builder = ItemMultiLayerBakedModel.builder(owner, particleSprite, new ContainedFluidOverrideHandler(overrides, bakery, owner, this), transformMap);
 
         if (baseLocation != null) {
             // build base (insidest)
             builder.addQuads(ItemLayerModel.getLayerRenderType(false), ItemLayerModel.getQuadsForSprites(ImmutableList.of(baseLocation), transform, spriteGetter));
         }
-
         if (fluidMaskLocation != null && fluidSprite != null) {
             TextureAtlasSprite templateSprite = spriteGetter.apply(fluidMaskLocation);
             if (templateSprite != null) {
@@ -124,7 +115,6 @@ public final class DynamicFluidItemModel implements IModelGeometry<DynamicFluidI
                 builder.addQuads(ItemLayerModel.getLayerRenderType(luminosity > 0), ItemTextureQuadConverter.convertTexture(transform, templateSprite, fluidSprite, SOUTH_Z_FLUID, Direction.SOUTH, color, 1, luminosity));
             }
         }
-
         if (coverIsMask) {
             if (coverSprite != null && baseLocation != null) {
                 TextureAtlasSprite baseSprite = spriteGetter.apply(baseLocation);
@@ -137,9 +127,7 @@ public final class DynamicFluidItemModel implements IModelGeometry<DynamicFluidI
                 builder.addQuads(ItemLayerModel.getLayerRenderType(false), ItemTextureQuadConverter.genQuad(transform, 0, 0, 16, 16, SOUTH_Z_COVER, coverSprite, Direction.SOUTH, 0xFFFFFFFF, 2));
             }
         }
-
         builder.setParticle(particleSprite);
-
         return builder.build();
     }
 
@@ -163,7 +151,7 @@ public final class DynamicFluidItemModel implements IModelGeometry<DynamicFluidI
         return texs;
     }
 
-    public static class Loader implements IModelLoader<DynamicFluidItemModel> {
+    public static class Loader implements IModelLoader<DynamicFluidContainerModel> {
 
         @Override
         public IResourceType getResourceType() {
@@ -182,7 +170,7 @@ public final class DynamicFluidItemModel implements IModelGeometry<DynamicFluidI
         }
 
         @Override
-        public DynamicFluidItemModel read(JsonDeserializationContext deserializationContext, JsonObject modelContents) {
+        public DynamicFluidContainerModel read(JsonDeserializationContext deserializationContext, JsonObject modelContents) {
 
             FluidStack stack = FluidStack.EMPTY;
             if (modelContents.has("fluid")) {
@@ -209,7 +197,7 @@ public final class DynamicFluidItemModel implements IModelGeometry<DynamicFluidI
                 applyFluidLuminosity = modelContents.get("applyFluidLuminosity").getAsBoolean();
             }
             // create new model with correct liquid
-            return new DynamicFluidItemModel(stack, flip, tint, coverIsMask, applyFluidLuminosity);
+            return new DynamicFluidContainerModel(stack, flip, tint, coverIsMask, applyFluidLuminosity);
         }
 
     }
@@ -220,9 +208,9 @@ public final class DynamicFluidItemModel implements IModelGeometry<DynamicFluidI
         private final ItemOverrideList nested;
         private final ModelBakery bakery;
         private final IModelConfiguration owner;
-        private final DynamicFluidItemModel parent;
+        private final DynamicFluidContainerModel parent;
 
-        private ContainedFluidOverrideHandler(ItemOverrideList nested, ModelBakery bakery, IModelConfiguration owner, DynamicFluidItemModel parent) {
+        private ContainedFluidOverrideHandler(ItemOverrideList nested, ModelBakery bakery, IModelConfiguration owner, DynamicFluidContainerModel parent) {
 
             this.nested = nested;
             this.bakery = bakery;
@@ -235,15 +223,15 @@ public final class DynamicFluidItemModel implements IModelGeometry<DynamicFluidI
 
             IBakedModel overriden = nested.getOverrideModel(originalModel, stack, world, entity);
 
-//            if (overriden != originalModel) {
-//                return overriden;
-//            }
+            if (overriden != originalModel) {
+                return overriden;
+            }
             return FluidHelper.getFluidContainedInItem(stack)
                     .map(fluidStack -> {
                         List<Integer> fluidHash = Arrays.asList(overriden.hashCode(), FluidHelper.fluidHashcode(fluidStack));
                         if (!cache.containsKey(fluidHash)) {
-                            DynamicFluidItemModel unbaked = this.parent.withFluid(fluidStack);
-                            IBakedModel bakedModel = unbaked.bake(owner, bakery, ModelLoader.defaultTextureGetter(), ModelRotation.X0_Y0, this, new ResourceLocation(ID_COFH_CORE, "mask_override"));
+                            DynamicFluidContainerModel unbaked = this.parent.withFluid(fluidStack);
+                            IBakedModel bakedModel = unbaked.bake(owner, bakery, ModelLoader.defaultTextureGetter(), ModelRotation.X0_Y0, this, new ResourceLocation(ID_COFH_CORE, "fluid_container_override"));
                             cache.put(fluidHash, bakedModel);
                             return bakedModel;
                         }

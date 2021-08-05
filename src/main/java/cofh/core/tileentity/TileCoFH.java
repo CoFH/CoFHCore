@@ -79,6 +79,37 @@ public class TileCoFH extends TileEntity implements ITileCallback, ITilePacketHa
         }
     }
 
+    // region BASE OVERRIDES
+    // TODO: Decide if this is necessary/prudent.
+
+    //    @Override
+    //    public void read(BlockState state, CompoundNBT nbt) {
+    //
+    //        this.pos = new BlockPos(nbt.getInt("x"), nbt.getInt("y"), nbt.getInt("z"));
+    //    }
+    //
+    //    @Override
+    //    public CompoundNBT write(CompoundNBT compound) {
+    //
+    //        ResourceLocation resourcelocation = TileEntityType.getId(this.getType());
+    //        if (resourcelocation == null) {
+    //            throw new RuntimeException(this.getClass() + " is missing a mapping! This is a bug!");
+    //        } else {
+    //            compound.putString("id", resourcelocation.toString());
+    //            compound.putInt("x", this.pos.getX());
+    //            compound.putInt("y", this.pos.getY());
+    //            compound.putInt("z", this.pos.getZ());
+    //            return compound;
+    //        }
+    //    }
+    //
+    //    @Override
+    //    public CompoundNBT getTileData() {
+    //
+    //        return new CompoundNBT();
+    //    }
+    // endregion
+
     // region HELPERS
     public TileCoFH worldContext(BlockState state, IBlockReader world) {
 
