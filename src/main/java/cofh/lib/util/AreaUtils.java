@@ -30,8 +30,8 @@ public class AreaUtils {
 
     }
 
-    public static final int HORZ_MAX = 16;
-    public static final int VERT_MAX = 8;
+    public static final int HORZ_MAX = 32;
+    public static final int VERT_MAX = 16;
 
     // region BURNING
     public static void igniteNearbyEntities(Entity entity, World worldIn, BlockPos pos, int radius, int duration) {
