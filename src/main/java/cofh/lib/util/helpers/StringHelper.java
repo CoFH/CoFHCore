@@ -12,6 +12,8 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
 
+import static cofh.lib.util.constants.Constants.INVIS_STYLE;
+
 public final class StringHelper {
 
     private StringHelper() {
@@ -145,6 +147,11 @@ public final class StringHelper {
     public static IFormattableTextComponent getInfoTextComponent(String key) {
 
         return getTextComponent(key).mergeStyle(TextFormatting.GOLD);
+    }
+
+    public static IFormattableTextComponent getKeywordTextComponent(String key) {
+
+        return getTextComponent(key).mergeStyle(INVIS_STYLE);
     }
     // endregion
 

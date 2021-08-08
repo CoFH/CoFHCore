@@ -1,0 +1,144 @@
+package cofh.lib.inventory;
+
+import cofh.lib.util.IInventoryCallback;
+import cofh.lib.util.StorageGroup;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.wrapper.EmptyHandler;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.BooleanSupplier;
+
+import static cofh.lib.util.constants.Constants.FALSE;
+
+public class IOItemInv extends SimpleItemInv {
+
+    protected List<ItemStorageCoFH> accessibleSlots = new ArrayList<>();
+    protected List<ItemStorageCoFH> internalSlots = new ArrayList<>();
+
+    protected IOItemHandler outputHandler;
+    protected IOItemHandler inputHandler;
+    protected IItemHandler internalHandler;
+    protected IItemHandler allHandler;
+
+    public IOItemInv(@Nullable IInventoryCallback tile) {
+
+        super(tile);
+    }
+
+    public IOItemInv(IInventoryCallback tile, String tag) {
+
+        super(tile, tag);
+    }
+
+    public void addSlot(ItemStorageCoFH slot, StorageGroup group) {
+
+        if (allHandler != null) {
+            return;
+        }
+        slots.add(slot);
+        switch (group) {
+            case INTERNAL:
+                internalSlots.add(slot);
+                break;
+            case ACCESSIBLE:
+                accessibleSlots.add(slot);
+                break;
+            default:
+        }
+    }
+
+    public void setConditions(BooleanSupplier allowInsert, BooleanSupplier allowExtract) {
+
+        outputHandler.setConditions(FALSE, allowExtract);
+        inputHandler.setConditions(allowInsert, FALSE);
+    }
+
+    protected void optimize() {
+
+        ((ArrayList<ItemStorageCoFH>) slots).trimToSize();
+        ((ArrayList<ItemStorageCoFH>) accessibleSlots).trimToSize();
+        ((ArrayList<ItemStorageCoFH>) internalSlots).trimToSize();
+    }
+
+    public void initHandlers() {
+
+        optimize();
+
+        outputHandler = new IOItemHandler(tile, accessibleSlots);
+        inputHandler = new IOItemHandler(tile, accessibleSlots);
+        internalHandler = new SimpleItemHandler(tile, internalSlots);
+        allHandler = new SimpleItemHandler(tile, slots);
+    }
+
+    public boolean isBufferEmpty() {
+
+        for (ItemStorageCoFH slot : accessibleSlots) {
+            if (!slot.isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isBufferFull() {
+
+        for (ItemStorageCoFH slot : accessibleSlots) {
+            if (!slot.isFull()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isConfigEmpty() {
+
+        for (ItemStorageCoFH slot : internalSlots) {
+            if (!slot.isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isConfigFull() {
+
+        for (ItemStorageCoFH slot : internalSlots) {
+            if (!slot.isFull()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public List<ItemStorageCoFH> getAccessibleSlots() {
+
+        return accessibleSlots;
+    }
+
+    public List<ItemStorageCoFH> getInternalSlots() {
+
+        return internalSlots;
+    }
+
+    public IItemHandler getHandler(StorageGroup group) {
+
+        if (allHandler == null) {
+            initHandlers();
+        }
+        switch (group) {
+            case INPUT:
+                return inputHandler;
+            case OUTPUT:
+                return outputHandler;
+            case INTERNAL:
+                return internalHandler;
+            case ALL:
+                return allHandler;
+            default:
+        }
+        return EmptyHandler.INSTANCE;
+    }
+
+}

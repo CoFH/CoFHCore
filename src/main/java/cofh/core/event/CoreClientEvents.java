@@ -10,13 +10,16 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -53,6 +56,15 @@ public class CoreClientEvents {
         }
         ItemStack stack = event.getItemStack();
 
+        if (CoreConfig.enableKeywords && NAMESPACES.contains(Utils.getItemNamespace(stack.getItem()))) {
+            String keywordKey = stack.getTranslationKey() + ".keyword";
+            if (canLocalize(keywordKey)) {
+                if (tooltip.get(0) instanceof IFormattableTextComponent) {
+                    IFormattableTextComponent formatted = (IFormattableTextComponent) tooltip.get(0);
+                    formatted.append(getKeywordTextComponent(keywordKey));
+                }
+            }
+        }
         if (CoreConfig.enableItemDescriptions && NAMESPACES.contains(Utils.getItemNamespace(stack.getItem()))) {
             String infoKey = stack.getTranslationKey() + ".desc";
             if (canLocalize(infoKey)) {
@@ -102,6 +114,18 @@ public class CoreClientEvents {
                     tooltip.add(getTextComponent("info.cofh.hold_ctrl_for_tags").mergeStyle(GRAY));
                 }
             }
+        }
+    }
+
+    @SubscribeEvent
+    public static void handleRenderTooltipEvent(RenderTooltipEvent.Pre event) {
+
+        if (event.getLines().isEmpty()) {
+            return;
+        }
+        if (event.getLines().get(0) instanceof IFormattableTextComponent) {
+            IFormattableTextComponent formatted = (IFormattableTextComponent) event.getLines().get(0);
+            formatted.getSiblings().removeIf(string -> string.getStyle().equals(INVIS_STYLE));
         }
     }
 

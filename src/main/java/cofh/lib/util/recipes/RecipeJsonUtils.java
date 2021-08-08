@@ -266,20 +266,25 @@ public abstract class RecipeJsonUtils {
     public static final String CONSTANT = "constant";
     public static final String COUNT = "count";
     public static final String CYCLES = "cycles";
-    public static final String DEPENDENCY = "dependency";
     public static final String DURATION_MOD = "duration_mod";
     public static final String ENABLE = "enable";
     public static final String ENERGY = "energy";
     public static final String ENERGY_MOD = "energy_mod";
-    public static final String EXPERIENCE = "experience";
     public static final String ENTRY = "entry";
+    public static final String EXPERIENCE = "experience";
     public static final String FLUID = "fluid";
-    public static final String FLUID_TAG = "fluid";
+    public static final String FLUID_TAG = "fluid_tag";
+    public static final String HIVE = "hive";
+    public static final String HONEY = "honey";
+    public static final String HONEYCOMB = "honeycomb";
     public static final String INGREDIENT = "ingredient";
     public static final String INGREDIENTS = "ingredients";
     public static final String INPUT = "input";
     public static final String INPUTS = "inputs";
     public static final String ITEM = "item";
+    public static final String LAVA = "lava";
+    public static final String LEAF = "leaf";
+    public static final String LEAVES = "leaves";
     public static final String LOCKED = "locked";
     public static final String LOOT_TABLE = "loot_table";
     public static final String MIN_CHANCE = "min_chance";
@@ -288,7 +293,6 @@ public abstract class RecipeJsonUtils {
     public static final String OUTPUT = "output";
     public static final String OUTPUT_MOD = "output_mod";
     public static final String OUTPUTS = "outputs";
-    public static final String ORE = "ore";
     public static final String PRIMARY_MOD = "primary_mod";
     public static final String REMOVE = "remove";
     public static final String RESULT = "result";
@@ -297,20 +301,13 @@ public abstract class RecipeJsonUtils {
     public static final String TAG = "tag";
     public static final String TICKS = "ticks";
     public static final String TIME = "time";
+    public static final String TRUNK = "trunk";
     public static final String TYPE = "type";
     public static final String USE_CHANCE = "use_chance";
     public static final String VALUE = "value";
+    public static final String WATER = "water";
+    public static final String WATER_MOD = "water_mod";
     public static final String WILDCARD = "wildcard";
     public static final String XP = "xp";
-
-    public static final String TRUNK = "trunk";
-    public static final String LEAF = "leaf";
-    public static final String LEAVES = "leaves";
-
-    public static final String LAVA = "lava";
-    public static final String WATER = "water";
-
-    public static final String LAVA_MOD = "lava_mod";
-    public static final String WATER_MOD = "water_mod";
     // endregion
 }

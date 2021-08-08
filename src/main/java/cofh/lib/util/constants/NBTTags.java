@@ -30,7 +30,7 @@ public class NBTTags {
     public static final String TAG_COOLANT_MAX = "CoolantMax";
     public static final String TAG_CREATIVE = "Creative";
     public static final String TAG_ENCHANTMENTS = "Enchantments";
-    public static final String TAG_ENDER_FREQUENCY = "EnderFrequency";
+    public static final String TAG_ENDER_ADDRESS = "EnderAddress";
     public static final String TAG_ENTITY = "EntityTag";
     public static final String TAG_ENERGY = "Energy";
     public static final String TAG_ENERGY_MAX = "EnergyMax";

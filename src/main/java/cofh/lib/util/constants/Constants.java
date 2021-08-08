@@ -11,7 +11,9 @@ import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.properties.RailShape;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Direction.Plane;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.text.Style;
 import net.minecraftforge.common.PlantType;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
@@ -216,6 +218,13 @@ public class Constants {
     // endregion
 
     public static final PlantType FUNGUS = PlantType.get("fungus");
+
+    // region FONTS
+    public static final ResourceLocation ENDER_FONT = new ResourceLocation(ID_COFH_CORE, "ender");
+    public static final ResourceLocation INVIS_FONT = new ResourceLocation(ID_COFH_CORE, "invis");
+
+    public static final Style ENDER_STYLE = Style.EMPTY.setFontId(ENDER_FONT);
+    public static final Style INVIS_STYLE = Style.EMPTY.setFontId(INVIS_FONT);
 
     // region TEXTURES
     public static final String PATH_GFX = ID_COFH_CORE + ":textures/";

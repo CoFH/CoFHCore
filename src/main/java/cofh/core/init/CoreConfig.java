@@ -214,6 +214,7 @@ public class CoreConfig {
 
     public static boolean enableEnchantmentDescriptions = true;
     public static boolean enableItemDescriptions = true;
+    public static boolean enableKeywords = true;
     public static boolean enableItemTags = true;
 
     public static boolean alwaysShowDetails = false;
