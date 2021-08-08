@@ -2,7 +2,7 @@
     "providers": [
         {
             "type": "bitmap",
-            "file": "cofh_core:font/ascii_ender.png",
+            "file": "cofh_core:font/ascii_hylian.png",
             "ascent": 7,
             "chars": [
                 "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
