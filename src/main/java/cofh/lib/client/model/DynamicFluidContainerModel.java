@@ -3,11 +3,12 @@ package cofh.lib.client.model;
 import cofh.core.util.helpers.FluidHelper;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.client.renderer.model.*;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -31,7 +32,8 @@ import net.minecraftforge.resource.VanillaResourceType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Collection;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -63,10 +65,6 @@ public final class DynamicFluidContainerModel implements IModelGeometry<DynamicF
         this.applyFluidLuminosity = applyFluidLuminosity;
     }
 
-    /**
-     * Returns a new ModelDynBucket representing the given fluid, but with the same
-     * other properties (flipGas, tint, coverIsMask).
-     */
     public DynamicFluidContainerModel withFluid(FluidStack newFluid) {
 
         return new DynamicFluidContainerModel(newFluid, flipGas, tint, coverIsMask, applyFluidLuminosity);
@@ -77,7 +75,7 @@ public final class DynamicFluidContainerModel implements IModelGeometry<DynamicF
 
         RenderMaterial particleLocation = owner.isTexturePresent("particle") ? owner.resolveTexture("particle") : null;
         RenderMaterial baseLocation = owner.isTexturePresent("base") ? owner.resolveTexture("base") : null;
-        RenderMaterial fluidMaskLocation = owner.isTexturePresent("fluid") ? owner.resolveTexture("fluid") : null;
+        RenderMaterial fluidMaskLocation = owner.isTexturePresent("fluid_mask") ? owner.resolveTexture("fluid_mask") : null;
         RenderMaterial coverLocation = owner.isTexturePresent("cover") ? owner.resolveTexture("cover") : null;
 
         IModelTransform transformsFromModel = owner.getCombinedTransform();
@@ -89,9 +87,12 @@ public final class DynamicFluidContainerModel implements IModelGeometry<DynamicF
         ImmutableMap<TransformType, TransformationMatrix> transformMap = PerspectiveMapWrapper.getTransforms(new ModelTransformComposition(transformsFromModel, modelTransform));
         TextureAtlasSprite particleSprite = particleLocation != null ? spriteGetter.apply(particleLocation) : null;
 
-        if (particleSprite == null) particleSprite = fluidSprite;
-        if (particleSprite == null && !coverIsMask) particleSprite = coverSprite;
-
+        if (particleSprite == null) {
+            particleSprite = fluidSprite;
+        }
+        if (particleSprite == null && !coverIsMask) {
+            particleSprite = coverSprite;
+        }
         // if the fluid is lighter than air, will manipulate the initial state to be rotated 180deg to turn it upside down
         if (flipGas && fluid != Fluids.EMPTY && fluid.getAttributes().isLighterThanAir()) {
             modelTransform = new SimpleModelTransform(
@@ -142,8 +143,8 @@ public final class DynamicFluidContainerModel implements IModelGeometry<DynamicF
         if (owner.isTexturePresent("base")) {
             texs.add(owner.resolveTexture("base"));
         }
-        if (owner.isTexturePresent("fluid")) {
-            texs.add(owner.resolveTexture("fluid"));
+        if (owner.isTexturePresent("fluid_mask")) {
+            texs.add(owner.resolveTexture("fluid_mask"));
         }
         if (owner.isTexturePresent("cover")) {
             texs.add(owner.resolveTexture("cover"));
@@ -204,7 +205,7 @@ public final class DynamicFluidContainerModel implements IModelGeometry<DynamicF
 
     private static final class ContainedFluidOverrideHandler extends ItemOverrideList {
 
-        private final Map<List<Integer>, IBakedModel> cache = Maps.newHashMap(); // contains all the baked models since they'll never change
+        private final Int2ObjectMap<IBakedModel> cache = new Int2ObjectOpenHashMap<>(); // contains all the baked models since they'll never change
         private final ItemOverrideList nested;
         private final ModelBakery bakery;
         private final IModelConfiguration owner;
@@ -221,14 +222,13 @@ public final class DynamicFluidContainerModel implements IModelGeometry<DynamicF
         @Override
         public IBakedModel getOverrideModel(IBakedModel originalModel, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
 
-            IBakedModel overriden = nested.getOverrideModel(originalModel, stack, world, entity);
-
-            if (overriden != originalModel) {
-                return overriden;
+            IBakedModel overrideModel = nested.getOverrideModel(originalModel, stack, world, entity);
+            if (overrideModel != originalModel) {
+                return overrideModel;
             }
             return FluidHelper.getFluidContainedInItem(stack)
                     .map(fluidStack -> {
-                        List<Integer> fluidHash = Arrays.asList(overriden.hashCode(), FluidHelper.fluidHashcode(fluidStack));
+                        int fluidHash = FluidHelper.fluidHashcode(fluidStack);
                         if (!cache.containsKey(fluidHash)) {
                             DynamicFluidContainerModel unbaked = this.parent.withFluid(fluidStack);
                             IBakedModel bakedModel = unbaked.bake(owner, bakery, ModelLoader.defaultTextureGetter(), ModelRotation.X0_Y0, this, new ResourceLocation(ID_COFH_CORE, "fluid_container_override"));
