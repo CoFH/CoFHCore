@@ -78,6 +78,42 @@ public class RecipeProviderCoFH extends RecipeProvider implements IConditionBuil
     }
 
     // region HELPERS
+    protected void generateSmallPackingRecipe(Consumer<IFinishedRecipe> consumer, Item storage, Item individual, String suffix) {
+
+        String storageName = name(storage);
+        String individualName = name(individual);
+
+        ShapedRecipeBuilder.shapedRecipe(storage)
+                .key('#', individual)
+                .patternLine("##")
+                .patternLine("##")
+                .addCriterion("has_at_least_4_" + individualName, hasItem(MinMaxBounds.IntBound.atLeast(4), individual))
+                .build(consumer, this.modid + ":storage/" + storageName + suffix);
+    }
+
+    protected void generateSmallUnpackingRecipe(Consumer<IFinishedRecipe> consumer, Item storage, Item individual, String suffix) {
+
+        String storageName = name(storage);
+        String individualName = name(individual);
+
+        ShapelessRecipeBuilder.shapelessRecipe(individual, 4)
+                .addIngredient(storage)
+                .addCriterion("has_at_least_4_" + individualName, hasItem(MinMaxBounds.IntBound.atLeast(4), individual))
+                .addCriterion("has_" + storageName, hasItem(storage))
+                .build(consumer, this.modid + ":storage/" + individualName + suffix);
+    }
+
+    protected void generateSmallStorageRecipes(Consumer<IFinishedRecipe> consumer, Item storage, Item individual, String packingSuffix, String unpackingSuffix) {
+
+        generateSmallPackingRecipe(consumer, storage, individual, packingSuffix);
+        generateSmallUnpackingRecipe(consumer, storage, individual, unpackingSuffix);
+    }
+
+    protected void generateSmallStorageRecipes(Consumer<IFinishedRecipe> consumer, Item storage, Item individual) {
+
+        generateSmallStorageRecipes(consumer, storage, individual, "", "_from_block");
+    }
+
     protected void generatePackingRecipe(Consumer<IFinishedRecipe> consumer, Item storage, Item individual, String suffix) {
 
         String storageName = name(storage);

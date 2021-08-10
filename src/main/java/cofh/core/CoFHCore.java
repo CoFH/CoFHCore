@@ -6,6 +6,7 @@ import cofh.core.command.CoFHCommand;
 import cofh.core.compat.quark.QuarkFlags;
 import cofh.core.event.ArmorEvents;
 import cofh.core.init.*;
+import cofh.core.item.SpawnEggItemCoFH;
 import cofh.core.network.packet.client.*;
 import cofh.core.network.packet.server.*;
 import cofh.core.util.Proxy;
@@ -127,12 +128,12 @@ public class CoFHCore {
         CapabilityEnchantableItem.register();
         CapabilityShieldItem.register();
 
+        event.enqueueWork(SpawnEggItemCoFH::setup);
+
         event.enqueueWork(TileNBTSync::setup);
 
         ArmorEvents.setup();
         QuarkFlags.setup();
-
-        event.enqueueWork(TileNBTSync::setup);
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {

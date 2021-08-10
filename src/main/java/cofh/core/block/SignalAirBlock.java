@@ -41,13 +41,6 @@ public class SignalAirBlock extends AirBlock {
     }
 
     @Override
-    public int getStrongPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
-
-        // return side == Direction.DOWN ? blockState.getWeakPower(blockAccess, pos, side) : 0;
-        return blockState.getWeakPower(blockAccess, pos, side);
-    }
-
-    @Override
     public int getWeakPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
 
         TileEntity tile = blockAccess.getTileEntity(pos);

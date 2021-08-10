@@ -2,6 +2,7 @@ package cofh.core.item;
 
 import cofh.core.util.ProxyUtils;
 import cofh.lib.item.IColorableItem;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -12,6 +13,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
+import java.util.Set;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
@@ -20,6 +22,8 @@ import static cofh.lib.util.constants.NBTTags.TAG_ENTITY;
 import static net.minecraftforge.common.util.Constants.NBT.TAG_COMPOUND;
 
 public class SpawnEggItemCoFH extends SpawnEggItem implements IColorableItem {
+
+    private static final Set<SpawnEggItemCoFH> EGG_ITEMS = new ObjectOpenHashSet<>();
 
     protected BooleanSupplier showInGroups = TRUE;
 
@@ -36,6 +40,16 @@ public class SpawnEggItemCoFH extends SpawnEggItem implements IColorableItem {
         this.secondaryColor = secondaryColorIn;
 
         ProxyUtils.registerColorable(this);
+
+        EGGS.remove(typeSupIn.get());
+        EGG_ITEMS.add(this);
+    }
+
+    public static void setup() {
+
+        for (SpawnEggItemCoFH egg : EGG_ITEMS) {
+            EGGS.put(egg.typeSup.get(), egg);
+        }
     }
 
     public SpawnEggItemCoFH setShowInGroups(BooleanSupplier showInGroups) {
