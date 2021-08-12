@@ -18,9 +18,9 @@ public class SimpleItemHandler implements IItemHandler {
     protected IInventoryCallback tile;
     protected List<ItemStorageCoFH> slots;
 
-    public SimpleItemHandler() {
+    public SimpleItemHandler(@Nonnull List<ItemStorageCoFH> slots) {
 
-        this(null);
+        this(null, slots);
     }
 
     public SimpleItemHandler(@Nullable IInventoryCallback tile) {

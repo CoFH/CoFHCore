@@ -21,6 +21,11 @@ public class SimpleItemInv extends SimpleItemHandler {
 
     protected String tag;
 
+    public SimpleItemInv(@Nonnull List<ItemStorageCoFH> slots) {
+
+        this(null, slots, TAG_ITEM_INV);
+    }
+
     public SimpleItemInv(@Nullable IInventoryCallback tile) {
 
         this(tile, TAG_ITEM_INV);

@@ -7,6 +7,8 @@ import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -18,15 +20,25 @@ import javax.annotation.Nullable;
  */
 public class EnergyContainerItemWrapper implements IRedstoneFluxStorage, ICapabilityProvider {
 
-    private final LazyOptional<IRedstoneFluxStorage> holder = LazyOptional.of(() -> this);
+    private final LazyOptional<IEnergyStorage> holder = LazyOptional.of(() -> this);
 
     protected final ItemStack container;
     protected final IEnergyContainerItem item;
+
+    protected final boolean restrictedEnergySystem;
 
     public EnergyContainerItemWrapper(ItemStack containerIn, IEnergyContainerItem itemIn) {
 
         this.container = containerIn;
         this.item = itemIn;
+        this.restrictedEnergySystem = true;
+    }
+
+    public EnergyContainerItemWrapper(ItemStack containerIn, IEnergyContainerItem itemIn, boolean restrictedEnergySystem) {
+
+        this.container = containerIn;
+        this.item = itemIn;
+        this.restrictedEnergySystem = restrictedEnergySystem;
     }
 
     // region IEnergyStorage
@@ -77,10 +89,10 @@ public class EnergyContainerItemWrapper implements IRedstoneFluxStorage, ICapabi
     @Nonnull
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
 
-        if (cap == EnergyHelper.getEnergySystem()) {
+        if (restrictedEnergySystem && cap == EnergyHelper.getEnergySystem()) {
             return holder.cast();
         }
-        return LazyOptional.empty();
+        return CapabilityEnergy.ENERGY.orEmpty(cap, holder);
     }
     // endregion
 }

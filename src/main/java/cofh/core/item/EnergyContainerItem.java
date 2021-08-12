@@ -23,6 +23,8 @@ public class EnergyContainerItem extends ItemCoFH implements IEnergyContainerIte
     protected int extract;
     protected int receive;
 
+    protected boolean restrictedEnergySystem = true;
+
     private EnergyContainerItem(Properties builder, int maxEnergy, int extract, int receive) {
 
         super(builder);
@@ -36,6 +38,12 @@ public class EnergyContainerItem extends ItemCoFH implements IEnergyContainerIte
     public EnergyContainerItem(Properties builder, int maxEnergy, int maxTransfer) {
 
         this(builder, maxEnergy, maxTransfer, maxTransfer);
+    }
+
+    public EnergyContainerItem restrictEnergySystem(boolean restrictedEnergySystem) {
+
+        this.restrictedEnergySystem = restrictedEnergySystem;
+        return this;
     }
 
     @Override
@@ -86,7 +94,7 @@ public class EnergyContainerItem extends ItemCoFH implements IEnergyContainerIte
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
 
-        return new EnergyContainerItemWrapper(stack, this);
+        return new EnergyContainerItemWrapper(stack, this, restrictedEnergySystem);
     }
 
     // region IEnergyContainerItem

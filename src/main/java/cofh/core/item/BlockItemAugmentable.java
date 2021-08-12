@@ -42,5 +42,10 @@ public class BlockItemAugmentable extends BlockItemCoFH implements IAugmentableI
 
         return augValidator.test(augment, augments);
     }
+
+    @Override
+    public void updateAugmentState(ItemStack augmentable, List<ItemStack> augments) {
+
+    }
     // endregion
 }
