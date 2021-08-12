@@ -22,7 +22,7 @@ public class CoreEffects {
         EFFECTS.register(ID_EFFECT_LIGHTNING_RESISTANCE, () -> new EffectCoFH(EffectType.BENEFICIAL, 0xA0A0A0));
         EFFECTS.register(ID_EFFECT_MAGIC_RESISTANCE, () -> new EffectCoFH(EffectType.BENEFICIAL, 0x580058));
 
-        EFFECTS.register(ID_EFFECT_SUPERCHARGE, () -> new RFChargeEffect(EffectType.BENEFICIAL, 0xCC1FFF, Integer.MAX_VALUE));
+        EFFECTS.register(ID_EFFECT_SUPERCHARGE, () -> new EnergyChargeEffect(EffectType.BENEFICIAL, 0xCC1FFF, Integer.MAX_VALUE));
 
         EFFECTS.register(ID_EFFECT_CLARITY, () -> new EffectCoFH(EffectType.BENEFICIAL, 0x70FF00));
         EFFECTS.register(ID_EFFECT_CHILLED, () -> new ChilledEffect(EffectType.HARMFUL, 0x86AEFD)

@@ -1,8 +1,11 @@
 package cofh.core.util.helpers;
 
+import cofh.lib.capability.CapabilityRedstoneFlux;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 
 import static cofh.lib.util.constants.Constants.RF_PER_FURNACE_UNIT;
 
@@ -12,6 +15,8 @@ import static cofh.lib.util.constants.Constants.RF_PER_FURNACE_UNIT;
  * @author King Lemming
  */
 public class EnergyHelper {
+
+    public static boolean standaloneRedstoneFlux;
 
     private EnergyHelper() {
 
@@ -29,7 +34,12 @@ public class EnergyHelper {
 
     public static boolean hasEnergyHandlerCap(ItemStack item) {
 
-        return !item.isEmpty() && item.getCapability(CapabilityEnergy.ENERGY).isPresent();
+        return !item.isEmpty() && item.getCapability(getEnergySystem()).isPresent();
+    }
+
+    public static Capability<? extends IEnergyStorage> getEnergySystem() {
+
+        return standaloneRedstoneFlux ? CapabilityRedstoneFlux.RF_ENERGY : CapabilityEnergy.ENERGY;
     }
 
 }
