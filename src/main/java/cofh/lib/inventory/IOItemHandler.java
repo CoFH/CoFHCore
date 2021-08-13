@@ -15,9 +15,9 @@ public class IOItemHandler extends SimpleItemHandler {
     protected BooleanSupplier allowInsert = TRUE;
     protected BooleanSupplier allowExtract = TRUE;
 
-    public IOItemHandler(@Nullable IInventoryCallback tile, @Nonnull List<ItemStorageCoFH> slots) {
+    public IOItemHandler(@Nullable IInventoryCallback callback, @Nonnull List<ItemStorageCoFH> slots) {
 
-        super(tile, slots);
+        super(callback, slots);
     }
 
     public void setConditions(BooleanSupplier allowInsert, BooleanSupplier allowExtract) {

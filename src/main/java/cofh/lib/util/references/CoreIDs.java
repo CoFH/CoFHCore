@@ -23,6 +23,8 @@ public class CoreIDs {
     public static final String ID_FLUID_STEAM = "steam";
     public static final String ID_FLUID_XP = "experience";
 
+    public static final String ID_CONTAINER_HELD_INVENTORY = "held_inventory";
+
     public static final String ID_CONTAINER_HELD_FLUID_FILTER = "held_fluid_filter";
     public static final String ID_CONTAINER_TILE_FLUID_FILTER = "tile_fluid_filter";
     public static final String ID_CONTAINER_HELD_ITEM_FILTER = "held_item_filter";

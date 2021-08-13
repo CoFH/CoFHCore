@@ -22,14 +22,14 @@ public class IOItemInv extends SimpleItemInv {
     protected IItemHandler internalHandler;
     protected IItemHandler allHandler;
 
-    public IOItemInv(@Nullable IInventoryCallback tile) {
+    public IOItemInv(@Nullable IInventoryCallback callback) {
 
-        super(tile);
+        super(callback);
     }
 
-    public IOItemInv(IInventoryCallback tile, String tag) {
+    public IOItemInv(IInventoryCallback callback, String tag) {
 
-        super(tile, tag);
+        super(callback, tag);
     }
 
     public void addSlot(ItemStorageCoFH slot, StorageGroup group) {
@@ -66,10 +66,10 @@ public class IOItemInv extends SimpleItemInv {
 
         optimize();
 
-        outputHandler = new IOItemHandler(tile, accessibleSlots);
-        inputHandler = new IOItemHandler(tile, accessibleSlots);
-        internalHandler = new SimpleItemHandler(tile, internalSlots);
-        allHandler = new SimpleItemHandler(tile, slots);
+        outputHandler = new IOItemHandler(callback, accessibleSlots);
+        inputHandler = new IOItemHandler(callback, accessibleSlots);
+        internalHandler = new SimpleItemHandler(callback, internalSlots);
+        allHandler = new SimpleItemHandler(callback, slots);
     }
 
     public boolean isBufferEmpty() {

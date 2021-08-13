@@ -1,5 +1,6 @@
 package cofh.core;
 
+import cofh.core.client.gui.HeldInventoryScreen;
 import cofh.core.client.gui.HeldItemFilterScreen;
 import cofh.core.client.gui.TileItemFilterScreen;
 import cofh.core.command.CoFHCommand;
@@ -41,8 +42,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import static cofh.lib.util.constants.Constants.*;
-import static cofh.lib.util.references.CoreReferences.HELD_ITEM_FILTER_CONTAINER;
-import static cofh.lib.util.references.CoreReferences.TILE_ITEM_FILTER_CONTAINER;
+import static cofh.lib.util.references.CoreReferences.*;
 
 @Mod(ID_COFH_CORE)
 public class CoFHCore {
@@ -137,6 +137,8 @@ public class CoFHCore {
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {
+
+        ScreenManager.registerFactory(HELD_INVENTORY_CONTAINER, HeldInventoryScreen::new);
 
         ScreenManager.registerFactory(HELD_ITEM_FILTER_CONTAINER, HeldItemFilterScreen::new);
         ScreenManager.registerFactory(TILE_ITEM_FILTER_CONTAINER, TileItemFilterScreen::new);

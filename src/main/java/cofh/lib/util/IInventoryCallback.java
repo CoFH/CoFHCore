@@ -2,11 +2,11 @@ package cofh.lib.util;
 
 public interface IInventoryCallback {
 
-    default void onInventoryChange(int slot) {
+    default void onInventoryChanged(int slot) {
 
     }
 
-    default void onTankChange(int tank) {
+    default void onTankChanged(int tank) {
 
     }
 

@@ -9,11 +9,9 @@ import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.function.IntSupplier;
 
-import static cofh.lib.util.Utils.getItemEnchantmentLevel;
 import static cofh.lib.util.constants.NBTTags.*;
 import static cofh.lib.util.helpers.AugmentableHelper.getPropertyWithDefault;
 import static cofh.lib.util.helpers.AugmentableHelper.setAttributeFromAugmentMax;
-import static cofh.lib.util.references.CoreReferences.HOLDING;
 
 public class InventoryContainerItemAugmentable extends InventoryContainerItem implements IAugmentableItem {
 
@@ -61,12 +59,11 @@ public class InventoryContainerItemAugmentable extends InventoryContainerItem im
 
     // region IInventoryContainerItem
     @Override
-    public int getSlots(ItemStack container) {
+    public int getContainerSlots(ItemStack container) {
 
         float base = getPropertyWithDefault(container, TAG_AUGMENT_BASE_MOD, 1.0F);
         float mod = getPropertyWithDefault(container, TAG_AUGMENT_ITEM_STORAGE, 1.0F);
-        int holding = getItemEnchantmentLevel(HOLDING, container);
-        return Math.round(slots * (mod + base + holding));
+        return Math.round(slots * mod * base);
     }
     // endregion
 

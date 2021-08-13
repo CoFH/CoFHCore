@@ -26,19 +26,24 @@ public class SimpleItemInv extends SimpleItemHandler {
         this(null, slots, TAG_ITEM_INV);
     }
 
-    public SimpleItemInv(@Nullable IInventoryCallback tile) {
+    public SimpleItemInv(@Nullable IInventoryCallback callback) {
 
-        this(tile, TAG_ITEM_INV);
+        this(callback, TAG_ITEM_INV);
     }
 
-    public SimpleItemInv(@Nullable IInventoryCallback tile, @Nonnull String tag) {
+    public SimpleItemInv(@Nullable IInventoryCallback callback, @Nonnull List<ItemStorageCoFH> slots) {
 
-        this(tile, Collections.emptyList(), tag);
+        this(callback, slots, TAG_ITEM_INV);
     }
 
-    public SimpleItemInv(@Nullable IInventoryCallback tile, @Nonnull List<ItemStorageCoFH> slots, @Nonnull String tag) {
+    public SimpleItemInv(@Nullable IInventoryCallback callback, @Nonnull String tag) {
 
-        super(tile, slots);
+        this(callback, Collections.emptyList(), tag);
+    }
+
+    public SimpleItemInv(@Nullable IInventoryCallback callback, @Nonnull List<ItemStorageCoFH> slots, @Nonnull String tag) {
+
+        super(callback, slots);
         this.tag = tag;
     }
 
@@ -115,6 +120,8 @@ public class SimpleItemInv extends SimpleItemHandler {
         }
         if (!list.isEmpty()) {
             nbt.put(tag, list);
+        } else {
+            nbt.remove(tag);
         }
         return nbt;
     }
@@ -147,6 +154,8 @@ public class SimpleItemInv extends SimpleItemHandler {
         }
         if (!list.isEmpty()) {
             nbt.put(saveTag, list);
+        } else {
+            nbt.remove(tag);
         }
         return nbt;
     }
@@ -195,6 +204,8 @@ public class SimpleItemInv extends SimpleItemHandler {
         }
         if (!list.isEmpty()) {
             nbt.put(saveTag, list);
+        } else {
+            nbt.remove(saveTag);
         }
         return nbt;
     }

@@ -14,9 +14,9 @@ public class ManagedItemHandler extends SimpleItemHandler {
 
     protected boolean preventInputExtract = false;
 
-    public ManagedItemHandler(@Nullable IInventoryCallback tile, @Nonnull List<ItemStorageCoFH> inputSlots, @Nonnull List<ItemStorageCoFH> outputSlots) {
+    public ManagedItemHandler(@Nullable IInventoryCallback callback, @Nonnull List<ItemStorageCoFH> inputSlots, @Nonnull List<ItemStorageCoFH> outputSlots) {
 
-        super(tile);
+        super(callback);
 
         this.inputSlots = inputSlots;
         this.outputSlots = outputSlots;
@@ -51,7 +51,7 @@ public class ManagedItemHandler extends SimpleItemHandler {
     public ItemStack extractItem(int slot, int amount, boolean simulate) {
 
         int minSlot = preventInputExtract ? inputSlots.size() : 0;
-        if (slot < minSlot || slot > getSlots()) {
+        if (slot < minSlot || slot >= getSlots()) {
             return ItemStack.EMPTY;
         }
         ItemStack ret = slots.get(slot).extractItem(slot, amount, simulate);

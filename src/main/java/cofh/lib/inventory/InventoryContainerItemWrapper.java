@@ -27,7 +27,7 @@ public class InventoryContainerItemWrapper implements IItemHandler, ICapabilityP
     @Override
     public int getSlots() {
 
-        return item.getSlots(container);
+        return item.getContainerSlots(container);
     }
 
     @Nonnull

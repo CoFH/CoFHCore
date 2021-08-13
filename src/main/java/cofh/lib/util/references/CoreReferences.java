@@ -1,5 +1,6 @@
 package cofh.lib.util.references;
 
+import cofh.core.inventory.container.HeldInventoryContainer;
 import cofh.core.inventory.container.HeldItemFilterContainer;
 import cofh.core.inventory.container.TileItemFilterContainer;
 import net.minecraft.block.Block;
@@ -39,6 +40,10 @@ public class CoreReferences {
     // endregion
 
     // region CONTAINERS
+    @ObjectHolder(ID_CONTAINER_HELD_INVENTORY)
+    public static final ContainerType<HeldInventoryContainer> HELD_INVENTORY_CONTAINER = null;
+
+
     //    @ObjectHolder(ID_CONTAINER_HELD_FLUID_FILTER)
     //    public static final ContainerType<HeldFluidFilterContainer> HELD_FLUID_FILTER_CONTAINER = null;
     //

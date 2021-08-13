@@ -55,7 +55,7 @@ public class SimpleFluidHandler implements IFluidHandler {
         if (tile == null) {
             return;
         }
-        tile.onTankChange(tank);
+        tile.onTankChanged(tank);
     }
 
     // region IFluidHandler
