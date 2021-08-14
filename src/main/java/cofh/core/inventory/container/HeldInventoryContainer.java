@@ -16,6 +16,9 @@ import static cofh.lib.util.references.CoreReferences.HELD_INVENTORY_CONTAINER;
 
 public class HeldInventoryContainer extends ContainerCoFH {
 
+    public static final int MAX_SLOTS = 54;
+    public static final int MAX_ROWS = MAX_SLOTS / 9;
+
     protected final IInventoryContainerItem containerItem;
     protected SimpleItemInv itemInventory;
     protected InvWrapperCoFH invWrapper;
@@ -33,11 +36,11 @@ public class HeldInventoryContainer extends ContainerCoFH {
         containerStack = player.getHeldItemMainhand();
         containerItem = (IInventoryContainerItem) containerStack.getItem();
 
-        slots = containerItem.getContainerSlots(containerStack);
+        slots = MathHelper.clamp(containerItem.getContainerSlots(containerStack), 0, MAX_SLOTS);
         itemInventory = containerItem.getContainerInventory(containerStack);
         invWrapper = new InvWrapperCoFH(itemInventory, slots);
 
-        rows = MathHelper.clamp(slots / 9, 0, 10);
+        rows = MathHelper.clamp(slots / 9, 0, MAX_ROWS);
         int extraSlots = slots % 9;
 
         int xOffset = 8;
@@ -78,7 +81,12 @@ public class HeldInventoryContainer extends ContainerCoFH {
     @Override
     protected int getPlayerInventoryVerticalOffset() {
 
-        return 84 + MathHelper.clamp(rows - 3, 0, 7) * 18;
+        return 84 + getExtraRows() * 18;
+    }
+
+    public int getExtraRows() {
+
+        return MathHelper.clamp((rows + (slots % 9 > 0 ? 1 : 0)) - 3, 0, 3);
     }
 
     public int getContainerInventorySize() {

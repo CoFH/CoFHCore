@@ -5,6 +5,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -37,6 +38,11 @@ public interface ICoFHItem extends IForgeItem {
                 return getPropertyWithDefault(stack, TAG_AUGMENT_RF_CREATIVE, 0.0F) > 0;
         }
         return false;
+    }
+
+    default boolean canPlayerAccess(ItemStack stack, PlayerEntity player) {
+
+        return SecurityHelper.getAccess(stack).matches(SecurityHelper.getOwner(stack), player);
     }
 
     @Override

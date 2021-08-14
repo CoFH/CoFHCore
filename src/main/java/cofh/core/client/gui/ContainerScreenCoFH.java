@@ -91,11 +91,8 @@ public class ContainerScreenCoFH<T extends Container> extends ContainerScreen<T>
         RenderHelper.resetColor();
         RenderHelper.bindTexture(texture);
 
-        if (xSize > 256 || ySize > 256) {
-            drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize, 512, 512);
-        } else {
-            drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
-        }
+        drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
+
         RenderSystem.pushMatrix();
         RenderSystem.translatef(guiLeft, guiTop, 0.0F);
 
