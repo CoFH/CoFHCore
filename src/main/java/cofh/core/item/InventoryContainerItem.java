@@ -3,7 +3,6 @@ package cofh.core.item;
 import cofh.lib.inventory.IInventoryContainerItem;
 import cofh.lib.inventory.ItemStorageCoFH;
 import cofh.lib.inventory.SimpleItemInv;
-import cofh.lib.util.IInventoryCallback;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
@@ -62,24 +61,6 @@ public class InventoryContainerItem extends ItemCoFH implements IInventoryContai
     public void onContainerInventoryChanged(ItemStack container) {
 
         INVENTORIES.remove(container);
-    }
-    // endregion
-
-    // region CALLBACK
-    public class ContainerCallback implements IInventoryCallback {
-
-        private final ItemStack containerItem;
-
-        public ContainerCallback(ItemStack containerItem) {
-
-            this.containerItem = containerItem;
-        }
-
-        public void onInventoryChanged(int slot) {
-
-            onContainerInventoryChanged(containerItem);
-        }
-
     }
     // endregion
 }
