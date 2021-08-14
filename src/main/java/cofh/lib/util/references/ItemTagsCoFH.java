@@ -231,6 +231,9 @@ public class ItemTagsCoFH {
     public static final IOptionalNamedTag<Item> SLAG = forgeTag("slag");
     public static final IOptionalNamedTag<Item> TAR = forgeTag("tar");
 
+    public static final IOptionalNamedTag<Item> LOCKS = thermalTag("crafting/locks");
+    public static final IOptionalNamedTag<Item> SECURABLE = thermalTag("crafting/securable");
+
     public static final IOptionalNamedTag<Item> MACHINE_DIES = thermalTag("crafting/dies");
     public static final IOptionalNamedTag<Item> MACHINE_CASTS = thermalTag("crafting/casts");
 

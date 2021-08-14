@@ -1,6 +1,5 @@
 package cofh.core;
 
-import cofh.core.client.gui.HeldInventoryScreen;
 import cofh.core.client.gui.HeldItemFilterScreen;
 import cofh.core.client.gui.TileItemFilterScreen;
 import cofh.core.command.CoFHCommand;
@@ -25,6 +24,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
+import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.particles.ParticleType;
 import net.minecraft.potion.Effect;
 import net.minecraft.tileentity.TileEntityType;
@@ -42,7 +42,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import static cofh.lib.util.constants.Constants.*;
-import static cofh.lib.util.references.CoreReferences.*;
+import static cofh.lib.util.references.CoreReferences.HELD_ITEM_FILTER_CONTAINER;
+import static cofh.lib.util.references.CoreReferences.TILE_ITEM_FILTER_CONTAINER;
 
 @Mod(ID_COFH_CORE)
 public class CoFHCore {
@@ -59,6 +60,7 @@ public class CoFHCore {
     public static final DeferredRegisterCoFH<Effect> EFFECTS = DeferredRegisterCoFH.create(ForgeRegistries.POTIONS, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<Enchantment> ENCHANTMENTS = DeferredRegisterCoFH.create(ForgeRegistries.ENCHANTMENTS, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<ParticleType<?>> PARTICLES = DeferredRegisterCoFH.create(ForgeRegistries.PARTICLE_TYPES, ID_COFH_CORE);
+    public static final DeferredRegisterCoFH<IRecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegisterCoFH.create(ForgeRegistries.RECIPE_SERIALIZERS, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<TileEntityType<?>> TILE_ENTITIES = DeferredRegisterCoFH.create(ForgeRegistries.TILE_ENTITIES, ID_COFH_CORE);
 
     public CoFHCore() {
@@ -80,6 +82,7 @@ public class CoFHCore {
         EFFECTS.register(modEventBus);
         ENCHANTMENTS.register(modEventBus);
         // PARTICLES.register(modEventBus);
+        RECIPE_SERIALIZERS.register(modEventBus);
         TILE_ENTITIES.register(modEventBus);
 
         CoreConfig.register();
@@ -92,6 +95,7 @@ public class CoFHCore {
         CoreEffects.register();
         CoreEnchantments.register();
         // CoreParticles.register();
+        CoreRecipeSerializers.register();
     }
 
     private void registerPackets() {
@@ -137,8 +141,6 @@ public class CoFHCore {
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {
-
-        ScreenManager.registerFactory(HELD_INVENTORY_CONTAINER, HeldInventoryScreen::new);
 
         ScreenManager.registerFactory(HELD_ITEM_FILTER_CONTAINER, HeldItemFilterScreen::new);
         ScreenManager.registerFactory(TILE_ITEM_FILTER_CONTAINER, TileItemFilterScreen::new);

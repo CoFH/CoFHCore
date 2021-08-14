@@ -41,6 +41,11 @@ public class HeldItemFilterScreen extends ContainerScreenCoFH<HeldItemFilterCont
             Slot slot = container.inventorySlots.get(i);
             addElement(createSlot(this, slot.xPos, slot.yPos));
         }
+        addButtons();
+    }
+
+    // region ELEMENTS
+    protected void addButtons() {
 
         addElement(new ElementButton(this, 132, 22) {
 
@@ -102,5 +107,5 @@ public class HeldItemFilterScreen extends ContainerScreenCoFH<HeldItemFilterCont
                 .setTooltipFactory(new SimpleTooltip(new TranslationTextComponent("info.cofh.filter.checkNBT.1")))
                 .setVisible(() -> container.getCheckNBT()));
     }
-
+    // endregion
 }

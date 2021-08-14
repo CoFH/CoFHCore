@@ -28,6 +28,7 @@
   "commands.cofh.zap.success.single": "Zapped %s",
   "commands.cofh.zap.success.multiple": "Zapped %s entities",
 
+  "info.cofh.another_player": "Another Player",
   "info.cofh.amount": "Amount",
   "info.cofh.area": "Area",
   "info.cofh.arrows": "Arrows",
