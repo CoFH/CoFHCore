@@ -68,9 +68,9 @@ public class SpawnEggItemCoFH extends SpawnEggItem implements IColorableItem {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public int getColor(ItemStack stack, int tintIndex) {
+    public int getColor(ItemStack item, int colorIndex) {
 
-        return tintIndex == 0 ? this.primaryColor : this.secondaryColor;
+        return colorIndex == 0 ? this.primaryColor : this.secondaryColor;
     }
 
     @Override

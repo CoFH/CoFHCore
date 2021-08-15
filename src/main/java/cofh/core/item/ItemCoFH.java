@@ -2,6 +2,7 @@ package cofh.core.item;
 
 import cofh.core.init.CoreConfig;
 import cofh.lib.item.ICoFHItem;
+import cofh.lib.util.helpers.SecurityHelper;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
@@ -20,7 +21,7 @@ import java.util.function.BooleanSupplier;
 
 import static cofh.lib.util.constants.Constants.TRUE;
 import static cofh.lib.util.helpers.StringHelper.getTextComponent;
-import static net.minecraft.util.text.TextFormatting.GRAY;
+import static net.minecraft.util.text.TextFormatting.*;
 
 public class ItemCoFH extends Item implements ICoFHItem {
 
@@ -73,6 +74,9 @@ public class ItemCoFH extends Item implements ICoFHItem {
         List<ITextComponent> additionalTooltips = new ArrayList<>();
         tooltipDelegate(stack, worldIn, additionalTooltips, flagIn);
 
+        if (SecurityHelper.isItemClaimable(stack)) {
+            tooltip.add(getTextComponent("info.cofh.claimable").mergeStyle(GREEN).mergeStyle(ITALIC));
+        }
         if (!additionalTooltips.isEmpty()) {
             if (Screen.hasShiftDown() || CoreConfig.alwaysShowDetails) {
                 tooltip.addAll(additionalTooltips);

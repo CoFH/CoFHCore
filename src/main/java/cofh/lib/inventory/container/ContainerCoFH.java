@@ -25,11 +25,14 @@ public abstract class ContainerCoFH extends Container {
     protected boolean falseSlotSupport = true;
     protected boolean syncing = false;
 
+    protected PlayerEntity player;
+
     protected List<SlotCoFH> augmentSlots = new ArrayList<>();
 
     public ContainerCoFH(@Nullable ContainerType<?> type, int id, PlayerInventory inventory, PlayerEntity player) {
 
         super(type, id);
+        this.player = player;
     }
 
     // region HELPERS

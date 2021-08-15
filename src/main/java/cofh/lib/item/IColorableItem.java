@@ -36,6 +36,13 @@ public interface IColorableItem extends INBTCopyIngredient {
         }
     }
 
-    int getColor(ItemStack stack, int tintIndex);
+    default int getColor(ItemStack item, int colorIndex) {
+
+        CompoundNBT colorTag = item.getChildTag(TAG_COLORS);
+        if (colorTag != null) {
+            return colorTag.getInt(TAG_INDEX + colorIndex);
+        }
+        return 0xDD2222;
+    }
 
 }

@@ -89,9 +89,14 @@ public class SecurityHelper {
         stack.getOrCreateChildTag(TAG_SECURITY);
     }
 
+    public static boolean isItemClaimable(ItemStack stack) {
+
+        return hasSecurity(stack) && getOwner(stack) == DEFAULT_GAME_PROFILE;
+    }
+
     public static boolean attemptClaimItem(ItemStack stack, PlayerEntity player) {
 
-        if (hasSecurity(stack) && getOwner(stack) == DEFAULT_GAME_PROFILE) {
+        if (isItemClaimable(stack)) {
             setOwner(stack, player.getGameProfile());
             setAccess(stack, AccessMode.PUBLIC);
             return true;
