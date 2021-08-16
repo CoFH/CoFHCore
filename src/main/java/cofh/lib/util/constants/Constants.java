@@ -92,6 +92,7 @@ public class Constants {
     public static final String ID_ENSORCELLATION = "ensorcellation";
     public static final String ID_OMGOURD = "omgourd";
     public static final String ID_REDSTONE_ARSENAL = "redstone_arsenal";
+    public static final String ID_THAUMCRAFT = "thaumcraft";
 
     public static final String ID_QUARK = "quark";
     // endregion
@@ -99,7 +100,6 @@ public class Constants {
     // region BLOCKSTATE PROPERTIES
     public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
     public static final IntegerProperty CHARGED = IntegerProperty.create("charged", 0, 4);
-    public static final BooleanProperty TILLED = BooleanProperty.create("tilled");
     public static final BooleanProperty TOP = BooleanProperty.create("top");
 
     public static final IntegerProperty AGE_0_4 = IntegerProperty.create("age", 0, 4);

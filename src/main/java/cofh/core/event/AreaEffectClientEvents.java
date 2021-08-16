@@ -1,6 +1,6 @@
 package cofh.core.event;
 
-import cofh.core.client.MyRenderType;
+import cofh.core.client.CoreRenderType;
 import cofh.lib.capability.templates.AreaEffectItemWrapper;
 import cofh.lib.tileentity.IAreaEffectTile;
 import com.google.common.collect.ImmutableList;
@@ -29,7 +29,10 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.WeakHashMap;
 
 import static cofh.lib.capability.CapabilityAreaEffect.AREA_EFFECT_ITEM_CAPABILITY;
 import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
@@ -39,8 +42,15 @@ import static cofh.lib.util.helpers.AreaEffectHelper.validAreaEffectMiningItem;
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = ID_COFH_CORE)
 public class AreaEffectClientEvents {
 
+    private static final Set<IAreaEffectTile> AREA_EFFECT_TILES = Collections.newSetFromMap(new WeakHashMap<>());
+
     private AreaEffectClientEvents() {
 
+    }
+
+    public static void registerAreaEffectTile(IAreaEffectTile tile) {
+
+        AREA_EFFECT_TILES.add(tile);
     }
 
     @SubscribeEvent(priority = EventPriority.LOW)
@@ -138,11 +148,15 @@ public class AreaEffectClientEvents {
                 .endVertex();
     }
 
+    public static boolean playerWithinDistance(BlockPos pos, PlayerEntity player, double distanceSq) {
+
+        return pos.distanceSq(player.getPositionVec(), true) <= distanceSq;
+    }
+
     private static void locateTileEntities(ClientPlayerEntity player, MatrixStack matrixStack) {
 
         IRenderTypeBuffer.Impl buffer = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
-        IVertexBuilder builder = buffer.getBuffer(MyRenderType.OVERLAY_LINES);
-        //IVertexBuilder builder = buffer.getBuffer(RenderType.getLines());
+        IVertexBuilder builder = buffer.getBuffer(CoreRenderType.OVERLAY_LINES);
 
         BlockPos playerPos = player.getPosition();
         int px = playerPos.getX();
@@ -158,39 +172,67 @@ public class AreaEffectClientEvents {
         Matrix4f positionMatrix = matrixStack.getLast().getMatrix();
 
         BlockPos.Mutable pos = new BlockPos.Mutable();
-        for (int dx = -10; dx <= 10; ++dx) {
-            for (int dy = -10; dy <= 10; ++dy) {
-                for (int dz = -10; dz <= 10; ++dz) {
-                    pos.setPos(px + dx, py + dy, pz + dz);
-                    if (world.getTileEntity(pos) instanceof IAreaEffectTile) {
-                        AxisAlignedBB area = ((IAreaEffectTile) world.getTileEntity(pos)).getArea();
 
-                        pos.setPos(area.minX, area.minY, area.minZ);
-                        float lenX = (float) (area.maxX - area.minX);
-                        float lenY = (float) (area.maxY - area.minY);
-                        float lenZ = (float) (area.maxZ - area.minZ);
-
-                        blueLine(builder, positionMatrix, pos, 0, 0, 0, lenX, 0, 0);
-                        blueLine(builder, positionMatrix, pos, 0, lenY, 0, lenX, lenY, 0);
-                        blueLine(builder, positionMatrix, pos, 0, 0, lenZ, lenX, 0, lenZ);
-                        blueLine(builder, positionMatrix, pos, 0, lenY, lenZ, lenX, lenY, lenZ);
-
-                        blueLine(builder, positionMatrix, pos, 0, 0, 0, 0, 0, lenZ);
-                        blueLine(builder, positionMatrix, pos, lenX, 0, 0, lenX, 0, lenZ);
-                        blueLine(builder, positionMatrix, pos, 0, lenY, 0, 0, lenY, lenZ);
-                        blueLine(builder, positionMatrix, pos, lenX, lenY, 0, lenX, lenY, lenZ);
-
-                        blueLine(builder, positionMatrix, pos, 0, 0, 0, 0, lenY, 0);
-                        blueLine(builder, positionMatrix, pos, lenX, 0, 0, lenX, lenY, 0);
-                        blueLine(builder, positionMatrix, pos, 0, 0, lenZ, 0, lenY, lenZ);
-                        blueLine(builder, positionMatrix, pos, lenX, 0, lenZ, lenX, lenY, lenZ);
-                    }
-                }
+        for (IAreaEffectTile tile : AREA_EFFECT_TILES) {
+            if (!tile.canPlayerAccess(player) || !playerWithinDistance(tile.pos(), player, 576)) {
+                continue;
             }
+            AxisAlignedBB area = tile.getArea();
+
+            pos.setPos(area.minX, area.minY, area.minZ);
+            float lenX = (float) (area.maxX - area.minX);
+            float lenY = (float) (area.maxY - area.minY);
+            float lenZ = (float) (area.maxZ - area.minZ);
+
+            blueLine(builder, positionMatrix, pos, 0, 0, 0, lenX, 0, 0);
+            blueLine(builder, positionMatrix, pos, 0, lenY, 0, lenX, lenY, 0);
+            blueLine(builder, positionMatrix, pos, 0, 0, lenZ, lenX, 0, lenZ);
+            blueLine(builder, positionMatrix, pos, 0, lenY, lenZ, lenX, lenY, lenZ);
+
+            blueLine(builder, positionMatrix, pos, 0, 0, 0, 0, 0, lenZ);
+            blueLine(builder, positionMatrix, pos, lenX, 0, 0, lenX, 0, lenZ);
+            blueLine(builder, positionMatrix, pos, 0, lenY, 0, 0, lenY, lenZ);
+            blueLine(builder, positionMatrix, pos, lenX, lenY, 0, lenX, lenY, lenZ);
+
+            blueLine(builder, positionMatrix, pos, 0, 0, 0, 0, lenY, 0);
+            blueLine(builder, positionMatrix, pos, lenX, 0, 0, lenX, lenY, 0);
+            blueLine(builder, positionMatrix, pos, 0, 0, lenZ, 0, lenY, lenZ);
+            blueLine(builder, positionMatrix, pos, lenX, 0, lenZ, lenX, lenY, lenZ);
         }
+
+        //        for (int dx = -10; dx <= 10; ++dx) {
+        //            for (int dy = -10; dy <= 10; ++dy) {
+        //                for (int dz = -10; dz <= 10; ++dz) {
+        //                    pos.setPos(px + dx, py + dy, pz + dz);
+        //                    if (world.getTileEntity(pos) instanceof IAreaEffectTile) {
+        //                        AxisAlignedBB area = ((IAreaEffectTile) world.getTileEntity(pos)).getArea();
+        //
+        //                        pos.setPos(area.minX, area.minY, area.minZ);
+        //                        float lenX = (float) (area.maxX - area.minX);
+        //                        float lenY = (float) (area.maxY - area.minY);
+        //                        float lenZ = (float) (area.maxZ - area.minZ);
+        //
+        //                        blueLine(builder, positionMatrix, pos, 0, 0, 0, lenX, 0, 0);
+        //                        blueLine(builder, positionMatrix, pos, 0, lenY, 0, lenX, lenY, 0);
+        //                        blueLine(builder, positionMatrix, pos, 0, 0, lenZ, lenX, 0, lenZ);
+        //                        blueLine(builder, positionMatrix, pos, 0, lenY, lenZ, lenX, lenY, lenZ);
+        //
+        //                        blueLine(builder, positionMatrix, pos, 0, 0, 0, 0, 0, lenZ);
+        //                        blueLine(builder, positionMatrix, pos, lenX, 0, 0, lenX, 0, lenZ);
+        //                        blueLine(builder, positionMatrix, pos, 0, lenY, 0, 0, lenY, lenZ);
+        //                        blueLine(builder, positionMatrix, pos, lenX, lenY, 0, lenX, lenY, lenZ);
+        //
+        //                        blueLine(builder, positionMatrix, pos, 0, 0, 0, 0, lenY, 0);
+        //                        blueLine(builder, positionMatrix, pos, lenX, 0, 0, lenX, lenY, 0);
+        //                        blueLine(builder, positionMatrix, pos, 0, 0, lenZ, 0, lenY, lenZ);
+        //                        blueLine(builder, positionMatrix, pos, lenX, 0, lenZ, lenX, lenY, lenZ);
+        //                    }
+        //                }
+        //            }
+        //        }
         matrixStack.pop();
         RenderSystem.disableDepthTest();
-        buffer.finish(MyRenderType.OVERLAY_LINES);
+        buffer.finish(CoreRenderType.OVERLAY_LINES);
     }
     // endregion
 }

@@ -1,6 +1,7 @@
 package cofh.core.util;
 
 import cofh.core.CoFHCore;
+import cofh.lib.tileentity.IAreaEffectTile;
 import cofh.lib.util.IProxyItemPropertyGetter;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -63,6 +64,11 @@ public class ProxyUtils {
     public static void registerItemModelProperty(Item item, ResourceLocation resourceLoc, IProxyItemPropertyGetter propertyGetter) {
 
         CoFHCore.PROXY.registerItemModelProperty(item, resourceLoc, propertyGetter);
+    }
+
+    public static void registerAreaEffectTile(IAreaEffectTile tile) {
+
+        CoFHCore.PROXY.registerAreaEffectTile(tile);
     }
 
 }

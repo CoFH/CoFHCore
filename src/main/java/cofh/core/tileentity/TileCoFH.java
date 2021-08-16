@@ -1,17 +1,16 @@
 package cofh.core.tileentity;
 
 import cofh.core.network.packet.client.TileGuiPacket;
+import cofh.core.util.ProxyUtils;
 import cofh.core.util.helpers.FluidHelper;
+import cofh.lib.tileentity.IAreaEffectTile;
 import cofh.lib.tileentity.ITileCallback;
 import cofh.lib.tileentity.ITilePacketHandler;
+import cofh.lib.tileentity.ITileXpHandler;
 import cofh.lib.util.IConveyableData;
 import cofh.lib.util.Utils;
-import cofh.lib.util.helpers.XpHelper;
-import cofh.lib.xp.EmptyXpStorage;
-import cofh.lib.xp.XpStorage;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
@@ -24,7 +23,6 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
@@ -33,7 +31,7 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class TileCoFH extends TileEntity implements ITileCallback, ITilePacketHandler, IConveyableData {
+public class TileCoFH extends TileEntity implements ITileCallback, ITilePacketHandler, ITileXpHandler, IConveyableData {
 
     protected int numPlayersUsing;
 
@@ -47,8 +45,13 @@ public class TileCoFH extends TileEntity implements ITileCallback, ITilePacketHa
 
         super.onLoad();
 
-        if (world != null && Utils.isClientWorld(world) && !hasClientUpdate()) {
-            world.tickableTileEntities.remove(this);
+        if (world != null && Utils.isClientWorld(world)) {
+            if (!hasClientUpdate()) {
+                world.tickableTileEntities.remove(this);
+            }
+            if (this instanceof IAreaEffectTile) {
+                ProxyUtils.registerAreaEffectTile((IAreaEffectTile) this);
+            }
         }
         validate();
     }
@@ -145,35 +148,6 @@ public class TileCoFH extends TileEntity implements ITileCallback, ITilePacketHa
     public boolean playerWithinDistance(PlayerEntity player, double distanceSq) {
 
         return pos.distanceSq(player.getPositionVec(), true) <= distanceSq;
-    }
-
-    public boolean claimXP(PlayerEntity player) {
-
-        if (!getXpStorage().isEmpty()) {
-            int xp = getXpStorage().getStored();
-            XpHelper.addXPToPlayer(player, xp);
-            getXpStorage().clear();
-            return true;
-        }
-        return false;
-
-    }
-
-    public void spawnXpOrbs(int xp, Vector3d pos) {
-
-        if (world == null) {
-            return;
-        }
-        while (xp > 0) {
-            int orbAmount = ExperienceOrbEntity.getXPSplit(xp);
-            xp -= orbAmount;
-            world.addEntity(new ExperienceOrbEntity(world, pos.x, pos.y, pos.z, orbAmount));
-        }
-    }
-
-    public XpStorage getXpStorage() {
-
-        return EmptyXpStorage.INSTANCE;
     }
     // endregion
 

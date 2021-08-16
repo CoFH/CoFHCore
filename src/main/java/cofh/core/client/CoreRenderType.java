@@ -7,15 +7,15 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.OptionalDouble;
 
-public class MyRenderType extends RenderType {
+public class CoreRenderType extends RenderType {
 
     // Dummy
-    public MyRenderType(String name, VertexFormat format, int p_i225992_3_, int p_i225992_4_, boolean p_i225992_5_, boolean p_i225992_6_, Runnable runnablePre, Runnable runnablePost) {
+    public CoreRenderType(String name, VertexFormat format, int p_i225992_3_, int p_i225992_4_, boolean p_i225992_5_, boolean p_i225992_6_, Runnable runnablePre, Runnable runnablePost) {
 
         super(name, format, p_i225992_3_, p_i225992_4_, p_i225992_5_, p_i225992_6_, runnablePre, runnablePost);
     }
 
-    private static final LineState THICK_LINES = new LineState(OptionalDouble.of(3.0D));
+    private static final LineState THICK_LINES = new LineState(OptionalDouble.of(2.5D));
 
     public static final RenderType OVERLAY_LINES = makeType("overlay_lines",
             DefaultVertexFormats.POSITION_COLOR, GL11.GL_LINES, 256,

@@ -1,6 +1,8 @@
 package cofh.core.util;
 
+import cofh.core.event.AreaEffectClientEvents;
 import cofh.core.event.CoreClientSetupEvents;
+import cofh.lib.tileentity.IAreaEffectTile;
 import cofh.lib.util.IProxyItemPropertyGetter;
 import cofh.lib.util.helpers.SoundHelper;
 import cofh.lib.util.helpers.StringHelper;
@@ -21,8 +23,8 @@ import java.util.Set;
 
 public class ProxyClient extends Proxy {
 
-    protected static Map<ResourceLocation, Object> modelMap = new Object2ObjectOpenHashMap<>();
-    protected static Set<ModelPropertyWrapper> itemPropertyGetters = new HashSet<>();
+    protected static final Map<ResourceLocation, Object> MODEL_MAP = new Object2ObjectOpenHashMap<>();
+    protected static final Set<ModelPropertyWrapper> ITEM_PROPERTY_GETTERS = new HashSet<>();
 
     // region HELPERS
     @Override
@@ -68,13 +70,13 @@ public class ProxyClient extends Proxy {
     @Override
     protected Object addModel(ResourceLocation loc, Object model) {
 
-        return modelMap.put(loc, model);
+        return MODEL_MAP.put(loc, model);
     }
 
     @Override
     public Object getModel(ResourceLocation loc) {
 
-        return modelMap.get(loc);
+        return MODEL_MAP.get(loc);
     }
 
     @Override
@@ -86,16 +88,22 @@ public class ProxyClient extends Proxy {
     @Override
     public void registerItemModelProperty(Item item, ResourceLocation resourceLoc, IProxyItemPropertyGetter propertyGetter) {
 
-        itemPropertyGetters.add(new ModelPropertyWrapper(item, resourceLoc, propertyGetter));
+        ITEM_PROPERTY_GETTERS.add(new ModelPropertyWrapper(item, resourceLoc, propertyGetter));
+    }
+
+    @Override
+    public void registerAreaEffectTile(IAreaEffectTile tile) {
+
+        AreaEffectClientEvents.registerAreaEffectTile(tile);
     }
     // endregion
 
     public static void registerItemModelProperties() {
 
-        for (ModelPropertyWrapper wrapper : itemPropertyGetters) {
+        for (ModelPropertyWrapper wrapper : ITEM_PROPERTY_GETTERS) {
             ItemModelsProperties.registerProperty(wrapper.item, wrapper.resourceLoc, wrapper.propertyGetter);
         }
-        itemPropertyGetters.clear();
+        ITEM_PROPERTY_GETTERS.clear();
     }
 
     static class ModelPropertyWrapper {
