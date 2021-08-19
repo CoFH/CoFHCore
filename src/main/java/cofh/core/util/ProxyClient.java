@@ -1,6 +1,5 @@
 package cofh.core.util;
 
-import cofh.core.event.AreaEffectClientEvents;
 import cofh.core.event.CoreClientSetupEvents;
 import cofh.lib.tileentity.IAreaEffectTile;
 import cofh.lib.util.IProxyItemPropertyGetter;
@@ -17,14 +16,13 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class ProxyClient extends Proxy {
 
     protected static final Map<ResourceLocation, Object> MODEL_MAP = new Object2ObjectOpenHashMap<>();
     protected static final Set<ModelPropertyWrapper> ITEM_PROPERTY_GETTERS = new HashSet<>();
+    protected static final Set<IAreaEffectTile> AREA_EFFECT_TILES = Collections.newSetFromMap(new WeakHashMap<>());
 
     // region HELPERS
     @Override
@@ -94,9 +92,14 @@ public class ProxyClient extends Proxy {
     @Override
     public void registerAreaEffectTile(IAreaEffectTile tile) {
 
-        AreaEffectClientEvents.registerAreaEffectTile(tile);
+        AREA_EFFECT_TILES.add(tile);
     }
     // endregion
+
+    public static Set<IAreaEffectTile> getAreaEffectTiles() {
+
+        return AREA_EFFECT_TILES;
+    }
 
     public static void registerItemModelProperties() {
 
@@ -106,7 +109,7 @@ public class ProxyClient extends Proxy {
         ITEM_PROPERTY_GETTERS.clear();
     }
 
-    static class ModelPropertyWrapper {
+    protected static class ModelPropertyWrapper {
 
         Item item;
         ResourceLocation resourceLoc;

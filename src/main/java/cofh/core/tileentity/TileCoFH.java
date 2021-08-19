@@ -147,7 +147,7 @@ public class TileCoFH extends TileEntity implements ITileCallback, ITilePacketHa
     // region GUI
     public boolean playerWithinDistance(PlayerEntity player, double distanceSq) {
 
-        return pos.distanceSq(player.getPositionVec(), true) <= distanceSq;
+        return !isRemoved() && pos.distanceSq(player.getPositionVec(), true) <= distanceSq;
     }
     // endregion
 
