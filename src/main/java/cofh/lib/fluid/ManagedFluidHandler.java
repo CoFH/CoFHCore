@@ -1,6 +1,6 @@
 package cofh.lib.fluid;
 
-import cofh.lib.tileentity.ITileCallback;
+import cofh.lib.util.IInventoryCallback;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
@@ -14,7 +14,7 @@ public class ManagedFluidHandler extends SimpleFluidHandler {
 
     protected boolean preventInputDrain = false;
 
-    public ManagedFluidHandler(@Nullable ITileCallback tile, @Nonnull List<FluidStorageCoFH> inputTanks, @Nonnull List<FluidStorageCoFH> outputTanks) {
+    public ManagedFluidHandler(@Nullable IInventoryCallback tile, @Nonnull List<FluidStorageCoFH> inputTanks, @Nonnull List<FluidStorageCoFH> outputTanks) {
 
         super(tile);
 

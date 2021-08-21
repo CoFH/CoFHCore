@@ -35,6 +35,12 @@ public class SlotCoFH extends Slot {
         this.slotStackLimit = () -> slotStackLimit;
     }
 
+    public SlotCoFH(IInventory inventoryIn, int index, int xPosition, int yPosition, IntSupplier slotStackLimit) {
+
+        super(inventoryIn, index, xPosition, yPosition);
+        this.slotStackLimit = slotStackLimit;
+    }
+
     public SlotCoFH setEnabled(BooleanSupplier enabled) {
 
         this.enabled = enabled;

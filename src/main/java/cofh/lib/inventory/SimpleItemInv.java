@@ -1,12 +1,15 @@
 package cofh.lib.inventory;
 
 import cofh.lib.util.IInventoryCallback;
+import cofh.lib.util.StorageGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,6 +23,8 @@ import static net.minecraftforge.common.util.Constants.NBT.TAG_COMPOUND;
 public class SimpleItemInv extends SimpleItemHandler {
 
     protected String tag;
+
+    protected IItemHandler allHandler;
 
     public SimpleItemInv(@Nonnull List<ItemStorageCoFH> slots) {
 
@@ -45,6 +50,14 @@ public class SimpleItemInv extends SimpleItemHandler {
 
         super(callback, slots);
         this.tag = tag;
+    }
+
+    public void addSlot(ItemStorageCoFH slot) {
+
+        if (allHandler != null) {
+            return;
+        }
+        slots.add(slot);
     }
 
     public void clear() {
@@ -210,4 +223,14 @@ public class SimpleItemInv extends SimpleItemHandler {
         return nbt;
     }
     // endregion
+
+    public IItemHandler getHandler(StorageGroup group) {
+
+        if (allHandler == null) {
+            ((ArrayList<ItemStorageCoFH>) slots).trimToSize();
+            allHandler = new SimpleItemHandler(callback, slots);
+        }
+        return allHandler;
+    }
+
 }

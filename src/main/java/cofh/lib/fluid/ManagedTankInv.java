@@ -19,7 +19,6 @@ public class ManagedTankInv extends SimpleTankInv {
     protected IFluidHandler outputHandler;
     protected IFluidHandler accessibleHandler;
     protected IFluidHandler internalHandler;
-    protected IFluidHandler allHandler;
 
     public ManagedTankInv(ITileCallback tile) {
 
@@ -67,11 +66,11 @@ public class ManagedTankInv extends SimpleTankInv {
 
         optimize();
 
-        inputHandler = new ManagedFluidHandler(tile, inputTanks, Collections.emptyList());
-        outputHandler = new ManagedFluidHandler(tile, Collections.emptyList(), outputTanks);
-        accessibleHandler = new ManagedFluidHandler(tile, inputTanks, outputTanks).restrict();
-        internalHandler = new SimpleFluidHandler(tile, internalTanks);
-        allHandler = new SimpleFluidHandler(tile, tanks);
+        inputHandler = new ManagedFluidHandler(callback, inputTanks, Collections.emptyList());
+        outputHandler = new ManagedFluidHandler(callback, Collections.emptyList(), outputTanks);
+        accessibleHandler = new ManagedFluidHandler(callback, inputTanks, outputTanks).restrict();
+        internalHandler = new SimpleFluidHandler(callback, internalTanks);
+        allHandler = new SimpleFluidHandler(callback, tanks);
     }
 
     public boolean hasInputTanks() {

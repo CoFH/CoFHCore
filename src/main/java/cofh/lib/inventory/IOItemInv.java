@@ -20,7 +20,6 @@ public class IOItemInv extends SimpleItemInv {
     protected IOItemHandler outputHandler;
     protected IOItemHandler inputHandler;
     protected IItemHandler internalHandler;
-    protected IItemHandler allHandler;
 
     public IOItemInv(@Nullable IInventoryCallback callback) {
 
@@ -55,16 +54,11 @@ public class IOItemInv extends SimpleItemInv {
         inputHandler.setConditions(allowInsert, FALSE);
     }
 
-    protected void optimize() {
+    public void initHandlers() {
 
         ((ArrayList<ItemStorageCoFH>) slots).trimToSize();
         ((ArrayList<ItemStorageCoFH>) accessibleSlots).trimToSize();
         ((ArrayList<ItemStorageCoFH>) internalSlots).trimToSize();
-    }
-
-    public void initHandlers() {
-
-        optimize();
 
         outputHandler = new IOItemHandler(callback, accessibleSlots);
         inputHandler = new IOItemHandler(callback, accessibleSlots);
@@ -122,6 +116,7 @@ public class IOItemInv extends SimpleItemInv {
         return internalSlots;
     }
 
+    @Override
     public IItemHandler getHandler(StorageGroup group) {
 
         if (allHandler == null) {

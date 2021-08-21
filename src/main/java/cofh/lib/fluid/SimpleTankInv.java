@@ -1,12 +1,15 @@
 package cofh.lib.fluid;
 
 import cofh.lib.tileentity.ITileCallback;
+import cofh.lib.util.StorageGroup;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,6 +23,8 @@ import static net.minecraftforge.common.util.Constants.NBT.TAG_COMPOUND;
 public class SimpleTankInv extends SimpleFluidHandler {
 
     protected String tag;
+
+    protected IFluidHandler allHandler;
 
     public SimpleTankInv(@Nullable ITileCallback tile) {
 
@@ -35,6 +40,14 @@ public class SimpleTankInv extends SimpleFluidHandler {
 
         super(tile, tanks);
         this.tag = tag;
+    }
+
+    public void addSlot(FluidStorageCoFH tank) {
+
+        if (allHandler != null) {
+            return;
+        }
+        tanks.add(tank);
     }
 
     public void clear() {
@@ -96,4 +109,14 @@ public class SimpleTankInv extends SimpleFluidHandler {
         return nbt;
     }
     // endregion
+
+    public IFluidHandler getHandler(StorageGroup group) {
+
+        if (allHandler == null) {
+            ((ArrayList<FluidStorageCoFH>) tanks).trimToSize();
+            allHandler = new SimpleFluidHandler(callback, tanks);
+        }
+        return allHandler;
+    }
+
 }

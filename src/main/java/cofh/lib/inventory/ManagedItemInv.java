@@ -22,7 +22,6 @@ public class ManagedItemInv extends SimpleItemInv {
     protected IItemHandler outputHandler;
     protected IItemHandler accessibleHandler;
     protected IItemHandler internalHandler;
-    protected IItemHandler allHandler;
 
     public ManagedItemInv(IInventoryCallback callback) {
 
@@ -75,18 +74,13 @@ public class ManagedItemInv extends SimpleItemInv {
         }
     }
 
-    protected void optimize() {
+    public void initHandlers() {
 
         ((ArrayList<ItemStorageCoFH>) slots).trimToSize();
         ((ArrayList<ItemStorageCoFH>) inputSlots).trimToSize();
         ((ArrayList<ItemStorageCoFH>) catalystSlots).trimToSize();
         ((ArrayList<ItemStorageCoFH>) outputSlots).trimToSize();
         ((ArrayList<ItemStorageCoFH>) internalSlots).trimToSize();
-    }
-
-    public void initHandlers() {
-
-        optimize();
 
         inputHandler = new ManagedItemHandler(callback, inputSlots, Collections.emptyList());
         outputHandler = new ManagedItemHandler(callback, Collections.emptyList(), outputSlots);
@@ -125,6 +119,7 @@ public class ManagedItemInv extends SimpleItemInv {
         return internalSlots;
     }
 
+    @Override
     public IItemHandler getHandler(StorageGroup group) {
 
         if (allHandler == null) {
