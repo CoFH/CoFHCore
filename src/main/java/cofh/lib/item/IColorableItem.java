@@ -3,46 +3,15 @@ package cofh.lib.item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
-import static cofh.lib.util.constants.NBTTags.TAG_COLORS;
-import static cofh.lib.util.constants.NBTTags.TAG_INDEX;
-
-public interface IColorableItem extends INBTCopyIngredient {
-
-    default void applyColor(ItemStack item, int color, int colorIndex) {
-
-        if (item.getTag() == null) {
-            item.setTag(new CompoundNBT());
-        }
-        CompoundNBT colorTag = item.getTag().getCompound(TAG_COLORS);
-        colorTag.putInt(TAG_INDEX + colorIndex, color);
-    }
-
-    default void removeColor(ItemStack item, int colorIndex) {
-
-        if (item.getTag() == null || item.getChildTag(TAG_COLORS) == null) {
-            return;
-        }
-        CompoundNBT colorTag = item.getTag().getCompound(TAG_COLORS);
-        colorTag.remove(TAG_INDEX + colorIndex);
-        if (colorTag.isEmpty()) {
-            item.removeChildTag(TAG_COLORS);
-        }
-    }
-
-    default void removeAllColors(ItemStack item) {
-
-        if (item.getChildTag(TAG_COLORS) != null) {
-            item.removeChildTag(TAG_COLORS);
-        }
-    }
+public interface IColorableItem {
 
     default int getColor(ItemStack item, int colorIndex) {
 
-        CompoundNBT colorTag = item.getChildTag(TAG_COLORS);
-        if (colorTag != null) {
-            return colorTag.getInt(TAG_INDEX + colorIndex);
+        if (colorIndex == 0) {
+            CompoundNBT nbt = item.getChildTag("display");
+            return nbt != null && nbt.contains("color", 99) ? nbt.getInt("color") : 0xFFFFFF;
         }
-        return 0xDD2222;
+        return 0xFFFFFF;
     }
 
 }

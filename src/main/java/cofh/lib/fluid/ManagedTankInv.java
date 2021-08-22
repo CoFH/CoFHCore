@@ -54,17 +54,12 @@ public class ManagedTankInv extends SimpleTankInv {
         }
     }
 
-    protected void optimize() {
+    public void initHandlers() {
 
         ((ArrayList<FluidStorageCoFH>) tanks).trimToSize();
         ((ArrayList<FluidStorageCoFH>) inputTanks).trimToSize();
         ((ArrayList<FluidStorageCoFH>) outputTanks).trimToSize();
         ((ArrayList<FluidStorageCoFH>) internalTanks).trimToSize();
-    }
-
-    public void initHandlers() {
-
-        optimize();
 
         inputHandler = new ManagedFluidHandler(callback, inputTanks, Collections.emptyList());
         outputHandler = new ManagedFluidHandler(callback, Collections.emptyList(), outputTanks);

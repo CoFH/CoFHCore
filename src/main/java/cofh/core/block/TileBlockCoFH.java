@@ -146,6 +146,18 @@ public class TileBlockCoFH extends Block implements IDismantleable {
     }
 
     @Override
+    public float getPlayerRelativeBlockHardness(BlockState state, PlayerEntity player, IBlockReader worldIn, BlockPos pos) {
+
+        TileEntity tile = worldIn.getTileEntity(pos);
+        if (tile instanceof TileCoFH && !tile.isRemoved()) {
+            if (!((TileCoFH) tile).canPlayerChange(player)) {
+                return -1;
+            }
+        }
+        return super.getPlayerRelativeBlockHardness(state, player, worldIn, pos);
+    }
+
+    @Override
     public ItemStack getItem(IBlockReader worldIn, BlockPos pos, BlockState state) {
 
         ItemStack stack = super.getItem(worldIn, pos, state);

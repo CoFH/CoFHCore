@@ -63,7 +63,6 @@ public class SecureRecipe extends SpecialRecipe {
             SecurityHelper.createSecurityTag(result);
             SecurityHelper.setAccess(result, AccessMode.PUBLIC);
         }
-        System.out.println(result);
         return result;
     }
 
