@@ -3,6 +3,7 @@ package cofh.core;
 import cofh.core.client.gui.HeldItemFilterScreen;
 import cofh.core.client.gui.TileItemFilterScreen;
 import cofh.core.command.CoFHCommand;
+import cofh.core.compat.curios.CuriosIntegration;
 import cofh.core.compat.quark.QuarkFlags;
 import cofh.core.event.ArmorEvents;
 import cofh.core.init.*;
@@ -33,6 +34,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -63,7 +65,11 @@ public class CoFHCore {
     public static final DeferredRegisterCoFH<IRecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegisterCoFH.create(ForgeRegistries.RECIPE_SERIALIZERS, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<TileEntityType<?>> TILE_ENTITIES = DeferredRegisterCoFH.create(ForgeRegistries.TILE_ENTITIES, ID_COFH_CORE);
 
+    public static boolean curiosLoaded = false;
+
     public CoFHCore() {
+
+        curiosLoaded = ModList.get().isLoaded(ID_CURIOS);
 
         registerPackets();
 
@@ -96,6 +102,10 @@ public class CoFHCore {
         CoreEnchantments.register();
         // CoreParticles.register();
         CoreRecipeSerializers.register();
+
+        if (ModList.get().isLoaded(ID_CURIOS)) {
+            FMLJavaModLoadingContext.get().getModEventBus().addListener(CuriosIntegration::sendImc);
+        }
     }
 
     private void registerPackets() {

@@ -94,6 +94,7 @@ public class Constants {
     public static final String ID_REDSTONE_ARSENAL = "redstone_arsenal";
     public static final String ID_THAUMCRAFT = "thaumcraft";
 
+    public static final String ID_CURIOS = "curios";
     public static final String ID_QUARK = "quark";
     // endregion
 
