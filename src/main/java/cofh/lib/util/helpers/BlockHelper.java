@@ -58,7 +58,7 @@ public class BlockHelper {
 
     public static ToIntFunction<BlockState> lightValue(BooleanProperty property, int lightValue) {
 
-        return (state) -> state.get(property) ? lightValue : 0;
+        return (state) -> state.getValue(property) ? lightValue : 0;
     }
 
     public static ToIntFunction<BlockState> lightValue(int lightValue) {
@@ -69,8 +69,8 @@ public class BlockHelper {
     // region TILE ENTITIES
     public static TileEntity getAdjacentTileEntity(World world, BlockPos pos, Direction dir) {
 
-        pos = pos.offset(dir);
-        return world == null || !world.isBlockLoaded(pos) ? null : world.getTileEntity(pos);
+        pos = pos.relative(dir);
+        return world == null || !world.hasChunkAt(pos) ? null : world.getBlockEntity(pos);
     }
 
     public static TileEntity getAdjacentTileEntity(World world, BlockPos pos, int side) {
@@ -80,7 +80,7 @@ public class BlockHelper {
 
     public static TileEntity getAdjacentTileEntity(TileEntity refTile, Direction dir) {
 
-        return refTile == null ? null : getAdjacentTileEntity(refTile.getWorld(), refTile.getPos(), dir);
+        return refTile == null ? null : getAdjacentTileEntity(refTile.getLevel(), refTile.getBlockPos(), dir);
     }
     // endregion
 
@@ -94,27 +94,27 @@ public class BlockHelper {
             return false;
         }
         // DOUBLE CHESTS
-        if (properties.contains(CHEST_TYPE) && state.get(CHEST_TYPE) != ChestType.SINGLE) {
+        if (properties.contains(CHEST_TYPE) && state.getValue(CHEST_TYPE) != ChestType.SINGLE) {
             return false;
         }
         // EXTENDED PISTONS
-        if (properties.contains(EXTENDED) && state.get(EXTENDED)) {
+        if (properties.contains(EXTENDED) && state.getValue(EXTENDED)) {
             return false;
         }
         BlockState rotState;
 
         if (properties.contains(FACING)) {
-            int index = state.get(FACING).getIndex();
+            int index = state.getValue(FACING).get3DDataValue();
             for (int i = 1; i < 6; ++i) {
-                rotState = state.with(FACING, Direction.byIndex(index + i));
-                if (rotState != state && rotState.isValidPosition(world, pos)) {
-                    world.setBlockState(pos, rotState);
-                    if (rotState.canProvidePower()) {
+                rotState = state.setValue(FACING, Direction.from3DDataValue(index + i));
+                if (rotState != state && rotState.canSurvive(world, pos)) {
+                    world.setBlockAndUpdate(pos, rotState);
+                    if (rotState.isSignalSource()) {
                         Block block = rotState.getBlock();
-                        world.notifyNeighborsOfStateChange(pos, block);
-                        if (rotState.getStrongPower(world, pos, rotState.get(FACING)) > 0) {
-                            world.notifyNeighborsOfStateChange(pos.offset(state.get(FACING).getOpposite()), block);
-                            world.notifyNeighborsOfStateChange(pos.offset(rotState.get(FACING).getOpposite()), block);
+                        world.updateNeighborsAt(pos, block);
+                        if (rotState.getDirectSignal(world, pos, rotState.getValue(FACING)) > 0) {
+                            world.updateNeighborsAt(pos.relative(state.getValue(FACING).getOpposite()), block);
+                            world.updateNeighborsAt(pos.relative(rotState.getValue(FACING).getOpposite()), block);
                         }
                     }
                     return true;
@@ -123,17 +123,17 @@ public class BlockHelper {
             return true;
         }
         if (properties.contains(HORIZONTAL_FACING)) {
-            int index = state.get(HORIZONTAL_FACING).getHorizontalIndex();
+            int index = state.getValue(HORIZONTAL_FACING).get2DDataValue();
             for (int i = 1; i < 4; ++i) {
-                rotState = state.with(HORIZONTAL_FACING, Direction.byHorizontalIndex(index + i));
-                if (rotState != state && rotState.isValidPosition(world, pos)) {
-                    world.setBlockState(pos, rotState);
-                    if (rotState.canProvidePower()) {
+                rotState = state.setValue(HORIZONTAL_FACING, Direction.from2DDataValue(index + i));
+                if (rotState != state && rotState.canSurvive(world, pos)) {
+                    world.setBlockAndUpdate(pos, rotState);
+                    if (rotState.isSignalSource()) {
                         Block block = rotState.getBlock();
-                        world.notifyNeighborsOfStateChange(pos, block);
-                        if (rotState.getStrongPower(world, pos, rotState.get(HORIZONTAL_FACING)) > 0) {
-                            world.notifyNeighborsOfStateChange(pos.offset(state.get(HORIZONTAL_FACING).getOpposite()), block);
-                            world.notifyNeighborsOfStateChange(pos.offset(rotState.get(HORIZONTAL_FACING).getOpposite()), block);
+                        world.updateNeighborsAt(pos, block);
+                        if (rotState.getDirectSignal(world, pos, rotState.getValue(HORIZONTAL_FACING)) > 0) {
+                            world.updateNeighborsAt(pos.relative(state.getValue(HORIZONTAL_FACING).getOpposite()), block);
+                            world.updateNeighborsAt(pos.relative(rotState.getValue(HORIZONTAL_FACING).getOpposite()), block);
                         }
                     }
                     return true;
@@ -142,41 +142,41 @@ public class BlockHelper {
             return true;
         }
         if (properties.contains(AXIS)) {
-            switch (state.get(AXIS)) {
+            switch (state.getValue(AXIS)) {
                 case Y:
-                    rotState = state.with(AXIS, Direction.Axis.X);
+                    rotState = state.setValue(AXIS, Direction.Axis.X);
                     break;
                 case X:
-                    rotState = state.with(AXIS, Direction.Axis.Z);
+                    rotState = state.setValue(AXIS, Direction.Axis.Z);
                     break;
                 default:
-                    rotState = state.with(AXIS, Direction.Axis.Y);
+                    rotState = state.setValue(AXIS, Direction.Axis.Y);
                     break;
             }
-            if (rotState != state && rotState.isValidPosition(world, pos)) {
-                world.setBlockState(pos, rotState);
+            if (rotState != state && rotState.canSurvive(world, pos)) {
+                world.setBlockAndUpdate(pos, rotState);
             }
             return true;
         }
-        if (properties.contains(FACING_EXCEPT_UP)) {
-            rotState = state.with(FACING_EXCEPT_UP, Rotation.CLOCKWISE_90.rotate(state.get(FACING_EXCEPT_UP)));
-            if (rotState != state && rotState.isValidPosition(world, pos)) {
-                world.setBlockState(pos, rotState);
+        if (properties.contains(FACING_HOPPER)) {
+            rotState = state.setValue(FACING_HOPPER, Rotation.CLOCKWISE_90.rotate(state.getValue(FACING_HOPPER)));
+            if (rotState != state && rotState.canSurvive(world, pos)) {
+                world.setBlockAndUpdate(pos, rotState);
             }
             return true;
         }
-        if (properties.contains(ROTATION_0_15)) {
-            rotState = state.with(ROTATION_0_15, (state.get(ROTATION_0_15) + 1) % 16);
-            if (rotState != state && rotState.isValidPosition(world, pos)) {
-                world.setBlockState(pos, rotState);
+        if (properties.contains(ROTATION_16)) {
+            rotState = state.setValue(ROTATION_16, (state.getValue(ROTATION_16) + 1) % 16);
+            if (rotState != state && rotState.canSurvive(world, pos)) {
+                world.setBlockAndUpdate(pos, rotState);
                 return true;
             }
         }
         // RAILS
         if (state.getBlock() instanceof AbstractRailBlock) {
             rotState = state.rotate(world, pos, Rotation.CLOCKWISE_90);
-            if (rotState != state && rotState.isValidPosition(world, pos)) {
-                world.setBlockState(pos, rotState);
+            if (rotState != state && rotState.canSurvive(world, pos)) {
+                world.setBlockAndUpdate(pos, rotState);
                 return true;
             }
         }

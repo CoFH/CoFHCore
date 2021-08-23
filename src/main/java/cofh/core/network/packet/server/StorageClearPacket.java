@@ -27,11 +27,11 @@ public class StorageClearPacket extends PacketBase implements IPacketServer {
     @Override
     public void handleServer(ServerPlayerEntity player) {
 
-        World world = player.world;
-        if (!world.isBlockPresent(pos)) {
+        World world = player.level;
+        if (!world.isLoaded(pos)) {
             return;
         }
-        TileEntity tile = world.getTileEntity(pos);
+        TileEntity tile = world.getBlockEntity(pos);
         if (tile instanceof ITileCallback) {
             switch (StorageType.values()[storageType]) {
                 case ENERGY:

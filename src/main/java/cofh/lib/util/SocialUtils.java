@@ -27,7 +27,7 @@ public class SocialUtils {
 
     private static FriendData friends(ServerPlayerEntity player) {
 
-        return player.getServerWorld().getSavedData().getOrCreate(() -> new FriendData(TAG_FRIENDS), TAG_FRIENDS);
+        return player.getLevel().getDataStorage().computeIfAbsent(() -> new FriendData(TAG_FRIENDS), TAG_FRIENDS);
     }
 
     // region FRIEND PASSTHROUGH
@@ -79,7 +79,7 @@ public class SocialUtils {
             }
             set.add(friend);
             friendLists.put(playerUUID, set);
-            this.markDirty();
+            this.setDirty();
             return true;
         }
 
@@ -90,7 +90,7 @@ public class SocialUtils {
             }
             String playerUUID = player.getGameProfile().getId().toString();
             Set<GameProfile> set = friendLists.get(playerUUID);
-            this.markDirty();
+            this.setDirty();
             return set != null && set.remove(friend);
         }
 
@@ -100,17 +100,17 @@ public class SocialUtils {
                 return false;
             }
             friendLists.remove(player.getGameProfile().getId().toString());
-            this.markDirty();
+            this.setDirty();
             return true;
         }
 
         boolean clearAllFriendLists(PlayerEntity player) {
 
-            if (!player.hasPermissionLevel(4)) {
+            if (!player.hasPermissions(4)) {
                 return false;
             }
             friendLists.clear();
-            this.markDirty();
+            this.setDirty();
             return true;
         }
 
@@ -129,9 +129,9 @@ public class SocialUtils {
         }
 
         @Override
-        public void read(CompoundNBT nbt) {
+        public void load(CompoundNBT nbt) {
 
-            for (String player : nbt.keySet()) {
+            for (String player : nbt.getAllKeys()) {
                 ListNBT list = nbt.getList(player, TAG_COMPOUND);
                 Set<GameProfile> friendList = new ObjectOpenHashSet<>();
                 for (int i = 0; i < list.size(); ++i) {
@@ -143,7 +143,7 @@ public class SocialUtils {
         }
 
         @Override
-        public CompoundNBT write(CompoundNBT nbt) {
+        public CompoundNBT save(CompoundNBT nbt) {
 
             for (Map.Entry<String, Set<GameProfile>> friendList : friendLists.entrySet()) {
                 ListNBT list = new ListNBT();

@@ -34,7 +34,7 @@ public class CarvedPumpkinBlockCoFH extends CarvedPumpkinBlock {
      */
     public static void updatePredicate() {
 
-        IS_PUMPKIN = (state) -> state != null && (state.isIn(Blocks.CARVED_PUMPKIN) || state.isIn(Blocks.JACK_O_LANTERN) || state.getBlock() instanceof CarvedPumpkinBlockCoFH);
+        PUMPKINS_PREDICATE = (state) -> state != null && (state.is(Blocks.CARVED_PUMPKIN) || state.is(Blocks.JACK_O_LANTERN) || state.getBlock() instanceof CarvedPumpkinBlockCoFH);
     }
 
     public CarvedPumpkinBlockCoFH(Properties properties) {
@@ -55,9 +55,9 @@ public class CarvedPumpkinBlockCoFH extends CarvedPumpkinBlock {
     }
 
     @Override
-    public String getTranslationKey() {
+    public String getDescriptionId() {
 
-        String specificTranslation = Util.makeTranslationKey("block", Registry.BLOCK.getKey(this));
+        String specificTranslation = Util.makeDescriptionId("block", Registry.BLOCK.getKey(this));
         if (ProxyUtils.canLocalize(specificTranslation)) {
             return specificTranslation;
         }
@@ -65,24 +65,24 @@ public class CarvedPumpkinBlockCoFH extends CarvedPumpkinBlock {
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 
-        ItemStack itemstack = player.getHeldItem(handIn);
+        ItemStack itemstack = player.getItemInHand(handIn);
         if (itemstack.getItem() instanceof ShearsItem) {
-            if (!worldIn.isRemote) {
-                Direction direction = hit.getFace();
-                Direction direction1 = direction.getAxis() == Direction.Axis.Y ? player.getHorizontalFacing().getOpposite() : direction;
-                worldIn.playSound(null, pos, SoundEvents.BLOCK_PUMPKIN_CARVE, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                worldIn.setBlockState(pos, (player.isSecondaryUseActive() ? carvePrev.get() : carveNext.get())
-                        .getDefaultState()
-                        .with(CarvedPumpkinBlock.FACING, direction1), 11);
+            if (!worldIn.isClientSide) {
+                Direction direction = hit.getDirection();
+                Direction direction1 = direction.getAxis() == Direction.Axis.Y ? player.getDirection().getOpposite() : direction;
+                worldIn.playSound(null, pos, SoundEvents.PUMPKIN_CARVE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                worldIn.setBlock(pos, (player.isSecondaryUseActive() ? carvePrev.get() : carveNext.get())
+                        .defaultBlockState()
+                        .setValue(CarvedPumpkinBlock.FACING, direction1), 11);
                 //                itemstack.damageItem(1, player, (entity) -> {
                 //                    entity.sendBreakAnimation(handIn);
                 //                });
             }
             return ActionResultType.SUCCESS;
         } else {
-            return super.onBlockActivated(state, worldIn, pos, player, handIn, hit);
+            return super.use(state, worldIn, pos, player, handIn, hit);
         }
     }
 

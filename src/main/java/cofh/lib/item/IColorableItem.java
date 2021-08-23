@@ -8,7 +8,7 @@ public interface IColorableItem {
     default int getColor(ItemStack item, int colorIndex) {
 
         if (colorIndex == 0) {
-            CompoundNBT nbt = item.getChildTag("display");
+            CompoundNBT nbt = item.getTagElement("display");
             return nbt != null && nbt.contains("color", 99) ? nbt.getInt("color") : 0xFFFFFF;
         }
         return 0xFFFFFF;

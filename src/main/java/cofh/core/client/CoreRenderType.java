@@ -17,16 +17,16 @@ public class CoreRenderType extends RenderType {
 
     private static final LineState THICK_LINES = new LineState(OptionalDouble.of(2.5D));
 
-    public static final RenderType OVERLAY_LINES = makeType("overlay_lines",
+    public static final RenderType OVERLAY_LINES = create("overlay_lines",
             DefaultVertexFormats.POSITION_COLOR, GL11.GL_LINES, 256,
-            RenderType.State.getBuilder().line(THICK_LINES)
-                    .layer(field_239235_M_)
-                    .transparency(TRANSLUCENT_TRANSPARENCY)
-                    .texture(NO_TEXTURE)
-                    .depthTest(DEPTH_ALWAYS)
-                    .cull(CULL_DISABLED)
-                    .lightmap(LIGHTMAP_DISABLED)
-                    .writeMask(COLOR_DEPTH_WRITE)
-                    .build(false));
+            RenderType.State.builder().setLineState(THICK_LINES)
+                    .setLayeringState(VIEW_OFFSET_Z_LAYERING)
+                    .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+                    .setTextureState(NO_TEXTURE)
+                    .setDepthTestState(NO_DEPTH_TEST)
+                    .setCullState(NO_CULL)
+                    .setLightmapState(NO_LIGHTMAP)
+                    .setWriteMaskState(COLOR_DEPTH_WRITE)
+                    .createCompositeState(false));
 
 }

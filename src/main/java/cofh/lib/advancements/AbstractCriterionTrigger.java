@@ -30,7 +30,7 @@ public abstract class AbstractCriterionTrigger<T extends CriterionListeners<U>, 
     }
 
     @Override
-    public void addListener(@Nonnull PlayerAdvancements playerAdvancements, @Nonnull Listener<U> listener) {
+    public void addPlayerListener(@Nonnull PlayerAdvancements playerAdvancements, @Nonnull Listener<U> listener) {
 
         T listeners = this.listeners.get(playerAdvancements);
         if (listeners == null) {
@@ -41,7 +41,7 @@ public abstract class AbstractCriterionTrigger<T extends CriterionListeners<U>, 
     }
 
     @Override
-    public void removeListener(@Nonnull PlayerAdvancements playerAdvancements, @Nonnull Listener<U> listener) {
+    public void removePlayerListener(@Nonnull PlayerAdvancements playerAdvancements, @Nonnull Listener<U> listener) {
 
         final T listeners = this.listeners.get(playerAdvancements);
 
@@ -60,7 +60,7 @@ public abstract class AbstractCriterionTrigger<T extends CriterionListeners<U>, 
     }
 
     @Override
-    public void removeAllListeners(@Nonnull PlayerAdvancements playerAdvancements) {
+    public void removePlayerListeners(@Nonnull PlayerAdvancements playerAdvancements) {
 
         this.listeners.remove(playerAdvancements);
     }

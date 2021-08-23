@@ -60,7 +60,7 @@ public class CoreClientEvents {
         ItemStack stack = event.getItemStack();
 
         if (CoreConfig.enableKeywords && NAMESPACES.contains(Utils.getItemNamespace(stack.getItem()))) {
-            String keywordKey = stack.getTranslationKey() + ".keyword";
+            String keywordKey = stack.getDescriptionId() + ".keyword";
             if (canLocalize(keywordKey)) {
                 if (tooltip.get(0) instanceof IFormattableTextComponent) {
                     IFormattableTextComponent formatted = (IFormattableTextComponent) tooltip.get(0);
@@ -69,7 +69,7 @@ public class CoreClientEvents {
             }
         }
         if (CoreConfig.enableItemDescriptions && NAMESPACES.contains(Utils.getItemNamespace(stack.getItem()))) {
-            String infoKey = stack.getTranslationKey() + ".desc";
+            String infoKey = stack.getDescriptionId() + ".desc";
             if (canLocalize(infoKey)) {
                 tooltip.add(1, getInfoTextComponent(infoKey));
             }
@@ -78,9 +78,9 @@ public class CoreClientEvents {
             if (stack.getTag() != null) {
                 ListNBT list = stack.getTag().getList(TAG_STORED_ENCHANTMENTS, TAG_COMPOUND);
                 if (list.size() == 1) {
-                    Enchantment ench = ForgeRegistries.ENCHANTMENTS.getValue(ResourceLocation.tryCreate(list.getCompound(0).getString("id")));
+                    Enchantment ench = ForgeRegistries.ENCHANTMENTS.getValue(ResourceLocation.tryParse(list.getCompound(0).getString("id")));
                     if (ench != null && ench.getRegistryName() != null) {
-                        String enchKey = ench.getName() + ".desc";
+                        String enchKey = ench.getDescriptionId() + ".desc";
                         if (canLocalize(enchKey)) {
                             tooltip.add(getInfoTextComponent(enchKey));
                         }
@@ -91,30 +91,30 @@ public class CoreClientEvents {
         if (CoreConfig.enableItemTags && event.getFlags().isAdvanced()) {
             Item item = event.getItemStack().getItem();
 
-            Set<ResourceLocation> blockTags = Block.getBlockFromItem(item).getTags();
+            Set<ResourceLocation> blockTags = Block.byItem(item).getTags();
             Set<ResourceLocation> itemTags = item.getTags();
 
             if (!blockTags.isEmpty() || !itemTags.isEmpty()) {
                 if (Screen.hasControlDown()) {
                     if (!blockTags.isEmpty()) {
-                        tooltip.add(getTextComponent("info.cofh.block_tags").mergeStyle(GRAY));
+                        tooltip.add(getTextComponent("info.cofh.block_tags").withStyle(GRAY));
                         blockTags.stream()
                                 .map(Object::toString)
                                 .map(s -> "  " + s)
-                                .map(t -> getTextComponent(t).mergeStyle(DARK_GRAY))
+                                .map(t -> getTextComponent(t).withStyle(DARK_GRAY))
                                 .forEach(tooltip::add);
                     }
 
                     if (!itemTags.isEmpty()) {
-                        tooltip.add(getTextComponent("info.cofh.item_tags").mergeStyle(GRAY));
+                        tooltip.add(getTextComponent("info.cofh.item_tags").withStyle(GRAY));
                         itemTags.stream()
                                 .map(Object::toString)
                                 .map(s -> "  " + s)
-                                .map(t -> getTextComponent(t).mergeStyle(DARK_GRAY))
+                                .map(t -> getTextComponent(t).withStyle(DARK_GRAY))
                                 .forEach(tooltip::add);
                     }
                 } else {
-                    tooltip.add(getTextComponent("info.cofh.hold_ctrl_for_tags").mergeStyle(GRAY));
+                    tooltip.add(getTextComponent("info.cofh.hold_ctrl_for_tags").withStyle(GRAY));
                 }
             }
         }

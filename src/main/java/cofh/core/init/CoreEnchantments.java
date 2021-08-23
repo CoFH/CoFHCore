@@ -27,7 +27,7 @@ public class CoreEnchantments {
 
         public static void register() {
 
-            ENCHANTABLE = EnchantmentType.create("ENCHANTABLE", (item -> item.getItemEnchantability() > 0));
+            ENCHANTABLE = EnchantmentType.create("ENCHANTABLE", (item -> item.getEnchantmentValue() > 0));
             HOE = EnchantmentType.create("HOE", (item -> item instanceof HoeItem));
             PICKAXE_OR_SHOVEL = EnchantmentType.create("PICKAXE_OR_SHOVEL", (item -> item instanceof PickaxeItem || item instanceof ShovelItem));
             SWORD_OR_AXE = EnchantmentType.create("SWORD_OR_AXE", (item -> item instanceof SwordItem || item instanceof AxeItem));

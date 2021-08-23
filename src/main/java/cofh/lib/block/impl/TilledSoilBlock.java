@@ -31,7 +31,7 @@ public class TilledSoilBlock extends SoilBlock {
     @Override
     public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
 
-        if (!state.isValidPosition(worldIn, pos)) {
+        if (!state.canSurvive(worldIn, pos)) {
             turnToDirt(state, worldIn, pos);
         }
         super.neighborChanged(state, worldIn, pos, blockIn, fromPos, isMoving);
@@ -44,7 +44,7 @@ public class TilledSoilBlock extends SoilBlock {
     }
 
     @Override
-    public boolean allowsMovement(BlockState state, IBlockReader worldIn, BlockPos pos, PathType type) {
+    public boolean isPathfindable(BlockState state, IBlockReader worldIn, BlockPos pos, PathType type) {
 
         return false;
     }
@@ -56,21 +56,21 @@ public class TilledSoilBlock extends SoilBlock {
     }
 
     @Override
-    public boolean isTransparent(BlockState state) {
+    public boolean useShapeForLightOcclusion(BlockState state) {
 
         return true;
     }
 
     @Override
-    public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
+    public boolean canSurvive(BlockState state, IWorldReader worldIn, BlockPos pos) {
 
-        BlockState blockstate = worldIn.getBlockState(pos.up());
+        BlockState blockstate = worldIn.getBlockState(pos.above());
         return !blockstate.getMaterial().isSolid() || blockstate.getBlock() instanceof FenceGateBlock || blockstate.getBlock() instanceof MovingPistonBlock;
     }
 
     public void turnToDirt(BlockState state, World worldIn, BlockPos pos) {
 
-        worldIn.setBlockState(pos, nudgeEntitiesWithNewState(state, dirt.get().getDefaultState(), worldIn, pos));
+        worldIn.setBlockAndUpdate(pos, pushEntitiesUp(state, dirt.get().defaultBlockState(), worldIn, pos));
     }
 
 }

@@ -121,14 +121,14 @@ public abstract class ElementResourceStorage extends ElementBase {
     public void addTooltip(List<ITextComponent> tooltipList, int mouseX, int mouseY) {
 
         if (storage.isCreative()) {
-            tooltipList.add(new TranslationTextComponent("info.cofh.infinite").mergeStyle(TextFormatting.LIGHT_PURPLE).mergeStyle(TextFormatting.ITALIC));
+            tooltipList.add(new TranslationTextComponent("info.cofh.infinite").withStyle(TextFormatting.LIGHT_PURPLE).withStyle(TextFormatting.ITALIC));
         } else {
             tooltipList.add(new StringTextComponent(format(storage.getStored()) + " / " + format(storage.getCapacity()) + " " + storage.getUnit()));
         }
         if (clearable.getAsBoolean() && clearStorage != FALSE && (hasAltDown() || hasShiftDown())) {
-            tooltipList.add(new TranslationTextComponent("info.cofh.click_to_clear").mergeStyle(TextFormatting.GRAY));
+            tooltipList.add(new TranslationTextComponent("info.cofh.click_to_clear").withStyle(TextFormatting.GRAY));
         } else if (claimable.getAsBoolean()) {
-            tooltipList.add(new TranslationTextComponent("info.cofh.click_to_claim").mergeStyle(TextFormatting.GRAY));
+            tooltipList.add(new TranslationTextComponent("info.cofh.click_to_claim").withStyle(TextFormatting.GRAY));
         }
     }
 

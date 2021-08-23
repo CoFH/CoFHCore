@@ -23,12 +23,12 @@ public class SubCommandIgnite {
     static ArgumentBuilder<CommandSource, ?> register() {
 
         return Commands.literal("ignite")
-                .requires(source -> source.hasPermissionLevel(permissionLevel))
+                .requires(source -> source.hasPermission(permissionLevel))
                 // Self - default duration
-                .executes(context -> igniteEntities(context.getSource(), ImmutableList.of(context.getSource().assertIsEntity()), DEFAULT_DURATION))
+                .executes(context -> igniteEntities(context.getSource(), ImmutableList.of(context.getSource().getEntityOrException()), DEFAULT_DURATION))
                 // Duration specified
                 .then(Commands.argument(CMD_DURATION, IntegerArgumentType.integer())
-                        .executes(context -> igniteEntities(context.getSource(), ImmutableList.of(context.getSource().assertIsEntity()), IntegerArgumentType.getInteger(context, CMD_DURATION))))
+                        .executes(context -> igniteEntities(context.getSource(), ImmutableList.of(context.getSource().getEntityOrException()), IntegerArgumentType.getInteger(context, CMD_DURATION))))
                 // Targets specified - default duration
                 .then(Commands.argument(CMD_TARGETS, EntityArgument.entities())
                         .executes(context -> igniteEntities(context.getSource(), EntityArgument.getEntities(context, CMD_TARGETS), DEFAULT_DURATION)))
@@ -41,12 +41,12 @@ public class SubCommandIgnite {
     private static int igniteEntities(CommandSource source, Collection<? extends Entity> targets, int duration) {
 
         for (Entity entity : targets) {
-            entity.setFire(duration);
+            entity.setSecondsOnFire(duration);
         }
         if (targets.size() == 1) {
-            source.sendFeedback(new TranslationTextComponent("commands.cofh.ignite.success.single", targets.iterator().next().getDisplayName()), true);
+            source.sendSuccess(new TranslationTextComponent("commands.cofh.ignite.success.single", targets.iterator().next().getDisplayName()), true);
         } else {
-            source.sendFeedback(new TranslationTextComponent("commands.cofh.ignite.success.multiple", targets.size()), true);
+            source.sendSuccess(new TranslationTextComponent("commands.cofh.ignite.success.multiple", targets.size()), true);
         }
         return targets.size();
     }

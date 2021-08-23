@@ -14,7 +14,7 @@ public class SlotRemoveOnly extends SlotCoFH {
     }
 
     @Override
-    public boolean isItemValid(ItemStack stack) {
+    public boolean mayPlace(ItemStack stack) {
 
         return false;
     }

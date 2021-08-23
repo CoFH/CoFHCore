@@ -34,7 +34,7 @@ public class ElementItemStack extends ElementBase {
 
         if (!renderStack.get().isEmpty()) {
             // GL11.glPushMatrix();
-            RenderHelper.renderItem().renderItemAndEffectIntoGUI(renderStack.get().getStack(), posX(), posY());
+            RenderHelper.renderItem().renderAndDecorateItem(renderStack.get().getStack(), posX(), posY());
             // GL11.glPopMatrix();
         }
     }

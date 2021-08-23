@@ -29,25 +29,25 @@ public abstract class SerializableRecipe implements IRecipe<FalseIInventory> {
     }
 
     @Override
-    public ItemStack getCraftingResult(FalseIInventory inv) {
+    public ItemStack assemble(FalseIInventory inv) {
 
         return ItemStack.EMPTY;
     }
 
     @Override
-    public boolean canFit(int width, int height) {
+    public boolean canCraftInDimensions(int width, int height) {
 
         return true;
     }
 
     @Override
-    public ItemStack getRecipeOutput() {
+    public ItemStack getResultItem() {
 
         return ItemStack.EMPTY;
     }
 
     @Override
-    public boolean isDynamic() {
+    public boolean isSpecial() {
 
         return true;
     }

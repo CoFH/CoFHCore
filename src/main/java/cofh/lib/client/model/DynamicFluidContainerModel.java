@@ -220,9 +220,9 @@ public final class DynamicFluidContainerModel implements IModelGeometry<DynamicF
         }
 
         @Override
-        public IBakedModel getOverrideModel(IBakedModel originalModel, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
+        public IBakedModel resolve(IBakedModel originalModel, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
 
-            IBakedModel overrideModel = nested.getOverrideModel(originalModel, stack, world, entity);
+            IBakedModel overrideModel = nested.resolve(originalModel, stack, world, entity);
             if (overrideModel != originalModel) {
                 return overrideModel;
             }

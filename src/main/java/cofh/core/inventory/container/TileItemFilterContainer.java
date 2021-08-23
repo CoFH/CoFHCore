@@ -28,7 +28,7 @@ public class TileItemFilterContainer extends TileContainer implements IFilterOpt
 
         allowSwap = false;
 
-        filterable = (IFilterableTile) world.getTileEntity(pos);
+        filterable = (IFilterableTile) world.getBlockEntity(pos);
         filter = (AbstractItemFilter) filterable.getFilter();
 
         int slots = filter.size();
@@ -59,24 +59,24 @@ public class TileItemFilterContainer extends TileContainer implements IFilterOpt
     @Override
     protected int getMergeableSlotCount() {
 
-        return filterInventory.getSizeInventory();
+        return filterInventory.getContainerSize();
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity player) {
+    public boolean stillValid(PlayerEntity player) {
 
         if (!FilterHelper.hasFilter(filterable)) {
             return false;
         }
-        return super.canInteractWith(player);
+        return super.stillValid(player);
     }
 
     @Override
-    public void onContainerClosed(PlayerEntity playerIn) {
+    public void removed(PlayerEntity playerIn) {
 
         filter.setItems(filterInventory.getStacks());
         filterable.onFilterChanged();
-        super.onContainerClosed(playerIn);
+        super.removed(playerIn);
     }
 
     // region NETWORK

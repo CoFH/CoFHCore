@@ -17,23 +17,23 @@ public class SubCommandCrafting {
     static ArgumentBuilder<CommandSource, ?> register() {
 
         return Commands.literal("crafting")
-                .requires(source -> source.hasPermissionLevel(permissionLevel))
-                .executes(context -> openContainer(context.getSource().asPlayer()));
+                .requires(source -> source.hasPermission(permissionLevel))
+                .executes(context -> openContainer(context.getSource().getPlayerOrException()));
     }
 
     static ArgumentBuilder<CommandSource, ?> registerAlt() {
 
         return Commands.literal("workbench")
-                .requires(source -> source.hasPermissionLevel(permissionLevel))
-                .executes(context -> openContainer(context.getSource().asPlayer()));
+                .requires(source -> source.hasPermission(permissionLevel))
+                .executes(context -> openContainer(context.getSource().getPlayerOrException()));
     }
 
     private static int openContainer(PlayerEntity playerEntity) {
 
-        playerEntity.openContainer(new SimpleNamedContainerProvider((id, inventory, player) -> new WorkbenchContainer(id, inventory) {
+        playerEntity.openMenu(new SimpleNamedContainerProvider((id, inventory, player) -> new WorkbenchContainer(id, inventory) {
 
             @Override
-            public boolean canInteractWith(PlayerEntity playerIn) {
+            public boolean stillValid(PlayerEntity playerIn) {
 
                 return true;
             }

@@ -17,16 +17,16 @@ public class SubCommandAnvil {
     static ArgumentBuilder<CommandSource, ?> register() {
 
         return Commands.literal("anvil")
-                .requires(source -> source.hasPermissionLevel(permissionLevel))
-                .executes(context -> openContainer(context.getSource().asPlayer()));
+                .requires(source -> source.hasPermission(permissionLevel))
+                .executes(context -> openContainer(context.getSource().getPlayerOrException()));
     }
 
     private static int openContainer(PlayerEntity playerEntity) {
 
-        playerEntity.openContainer(new SimpleNamedContainerProvider((id, player, inv) -> new RepairContainer(id, player) {
+        playerEntity.openMenu(new SimpleNamedContainerProvider((id, player, inv) -> new RepairContainer(id, player) {
 
             @Override
-            public boolean canInteractWith(PlayerEntity playerIn) {
+            public boolean stillValid(PlayerEntity playerIn) {
 
                 return true;
             }

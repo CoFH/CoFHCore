@@ -23,7 +23,7 @@ public class XPFluid extends FluidCoFH {
                 .density(250)
                 .viscosity(500)
                 .rarity(Rarity.UNCOMMON)
-                .sound(SoundEvents.ITEM_BUCKET_FILL, SoundEvents.ITEM_BUCKET_EMPTY)
+                .sound(SoundEvents.BUCKET_FILL, SoundEvents.BUCKET_EMPTY)
         );
     }
 

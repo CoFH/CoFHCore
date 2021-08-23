@@ -27,10 +27,10 @@ public class CakeBlockCoFH extends CakeBlock {
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 
-        if (worldIn.isRemote) {
-            ItemStack stack = player.getHeldItem(handIn);
+        if (worldIn.isClientSide) {
+            ItemStack stack = player.getItemInHand(handIn);
             if (this.eatPiece(worldIn, pos, state, player) == ActionResultType.SUCCESS) {
                 return ActionResultType.SUCCESS;
             }
@@ -46,17 +46,17 @@ public class CakeBlockCoFH extends CakeBlock {
         if (!player.canEat(false)) {
             return ActionResultType.PASS;
         } else {
-            player.addStat(Stats.EAT_CAKE_SLICE);
-            player.getFoodStats().addStats(food.getHealing(), food.getSaturation());
+            player.awardStat(Stats.EAT_CAKE_SLICE);
+            player.getFoodData().eat(food.getNutrition(), food.getSaturationModifier());
 
             for (Pair<EffectInstance, Float> pair : this.food.getEffects()) {
-                if (!world.isRemote && pair.getFirst() != null && world.rand.nextFloat() < pair.getSecond()) {
-                    player.addPotionEffect(new EffectInstance(pair.getFirst()));
+                if (!world.isClientSide && pair.getFirst() != null && world.random.nextFloat() < pair.getSecond()) {
+                    player.addEffect(new EffectInstance(pair.getFirst()));
                 }
             }
-            int i = state.get(BITES);
+            int i = state.getValue(BITES);
             if (i < 6) {
-                world.setBlockState(pos, state.with(BITES, i + 1), 3);
+                world.setBlock(pos, state.setValue(BITES, i + 1), 3);
             } else {
                 world.removeBlock(pos, false);
             }

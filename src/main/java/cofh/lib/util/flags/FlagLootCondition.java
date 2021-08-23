@@ -32,7 +32,7 @@ public class FlagLootCondition implements ILootCondition {
 
     @Nonnull
     @Override
-    public LootConditionType func_230419_b_() {
+    public LootConditionType getType() {
 
         return manager.flagConditionType;
     }

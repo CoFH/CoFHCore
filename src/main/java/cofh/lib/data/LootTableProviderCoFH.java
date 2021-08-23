@@ -59,108 +59,108 @@ public abstract class LootTableProviderCoFH extends LootTableProvider {
     // region TABLE HELPERS
     protected LootTable.Builder getSilkTouchTable(String name, Block block, Item lootItem, float min, float max, int bonus) {
 
-        LootPool.Builder builder = LootPool.builder()
+        LootPool.Builder builder = LootPool.lootPool()
                 .name(name)
-                .rolls(ConstantRange.of(1))
-                .addEntry(AlternativesLootEntry.builder(ItemLootEntry.builder(block)
-                        .acceptCondition(MatchTool.builder(ItemPredicate.Builder.create()
-                                .enchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.IntBound.atLeast(1))))), ItemLootEntry.builder(lootItem)
-                        .acceptFunction(SetCount.builder(new RandomValueRange(min, max)))
-                        .acceptFunction(ApplyBonus.uniformBonusCount(Enchantments.FORTUNE, bonus))
-                        .acceptFunction(ExplosionDecay.builder())));
-        return LootTable.builder().addLootPool(builder);
+                .setRolls(ConstantRange.exactly(1))
+                .add(AlternativesLootEntry.alternatives(ItemLootEntry.lootTableItem(block)
+                        .when(MatchTool.toolMatches(ItemPredicate.Builder.item()
+                                .hasEnchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.IntBound.atLeast(1))))), ItemLootEntry.lootTableItem(lootItem)
+                        .apply(SetCount.setCount(new RandomValueRange(min, max)))
+                        .apply(ApplyBonus.addUniformBonusCount(Enchantments.BLOCK_FORTUNE, bonus))
+                        .apply(ExplosionDecay.explosionDecay())));
+        return LootTable.lootTable().withPool(builder);
     }
 
     protected LootTable.Builder getSilkTouchOreTable(Block block, Item lootItem) {
 
-        LootPool.Builder builder = LootPool.builder()
-                .rolls(ConstantRange.of(1))
-                .addEntry(AlternativesLootEntry.builder(ItemLootEntry.builder(block)
-                        .acceptCondition(MatchTool.builder(ItemPredicate.Builder.create()
-                                .enchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.IntBound.atLeast(1))))), ItemLootEntry.builder(lootItem)
-                        .acceptFunction(ApplyBonus.oreDrops(Enchantments.FORTUNE))
-                        .acceptFunction(ExplosionDecay.builder())));
-        return LootTable.builder().addLootPool(builder);
+        LootPool.Builder builder = LootPool.lootPool()
+                .setRolls(ConstantRange.exactly(1))
+                .add(AlternativesLootEntry.alternatives(ItemLootEntry.lootTableItem(block)
+                        .when(MatchTool.toolMatches(ItemPredicate.Builder.item()
+                                .hasEnchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.IntBound.atLeast(1))))), ItemLootEntry.lootTableItem(lootItem)
+                        .apply(ApplyBonus.addOreBonusCount(Enchantments.BLOCK_FORTUNE))
+                        .apply(ExplosionDecay.explosionDecay())));
+        return LootTable.lootTable().withPool(builder);
     }
 
     protected LootTable.Builder getCropTable(Block block, Item crop, Item seed, IntegerProperty ageProp, int age) {
 
-        ILootCondition.IBuilder harvestAge = BlockStateProperty.builder(block).fromProperties(StatePropertiesPredicate.Builder.newBuilder().withIntProp(ageProp, age));
-        return LootTable.builder()
-                .addLootPool(LootPool.builder()
-                        .addEntry(ItemLootEntry.builder(crop)
-                                .acceptCondition(harvestAge)
-                                .alternatively(ItemLootEntry.builder(seed))))
-                .addLootPool(LootPool.builder()
-                        .acceptCondition(harvestAge)
-                        .addEntry(ItemLootEntry.builder(seed)
+        ILootCondition.IBuilder harvestAge = BlockStateProperty.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(ageProp, age));
+        return LootTable.lootTable()
+                .withPool(LootPool.lootPool()
+                        .add(ItemLootEntry.lootTableItem(crop)
+                                .when(harvestAge)
+                                .otherwise(ItemLootEntry.lootTableItem(seed))))
+                .withPool(LootPool.lootPool()
+                        .when(harvestAge)
+                        .add(ItemLootEntry.lootTableItem(seed)
                                 // These are Mojang's numbers. No idea.
-                                .acceptFunction(ApplyBonus.binomialWithBonusCount(Enchantments.FORTUNE, 0.5714286F, 3))))
-                .acceptFunction(ExplosionDecay.builder());
+                                .apply(ApplyBonus.addBonusBinomialDistributionCount(Enchantments.BLOCK_FORTUNE, 0.5714286F, 3))))
+                .apply(ExplosionDecay.explosionDecay());
     }
 
     protected LootTable.Builder getTuberTable(Block block, Item crop, IntegerProperty ageProp, int age) {
 
-        ILootCondition.IBuilder harvestAge = BlockStateProperty.builder(block).fromProperties(StatePropertiesPredicate.Builder.newBuilder().withIntProp(ageProp, age));
-        return LootTable.builder()
-                .addLootPool(LootPool.builder()
-                        .addEntry(ItemLootEntry.builder(crop)))
-                .addLootPool(LootPool.builder()
-                        .acceptCondition(harvestAge)
-                        .addEntry(ItemLootEntry.builder(crop)
-                                .acceptFunction(ApplyBonus.binomialWithBonusCount(Enchantments.FORTUNE, 0.5714286F, 3)))
-                        .acceptFunction(ExplosionDecay.builder()));
+        ILootCondition.IBuilder harvestAge = BlockStateProperty.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(ageProp, age));
+        return LootTable.lootTable()
+                .withPool(LootPool.lootPool()
+                        .add(ItemLootEntry.lootTableItem(crop)))
+                .withPool(LootPool.lootPool()
+                        .when(harvestAge)
+                        .add(ItemLootEntry.lootTableItem(crop)
+                                .apply(ApplyBonus.addBonusBinomialDistributionCount(Enchantments.BLOCK_FORTUNE, 0.5714286F, 3)))
+                        .apply(ExplosionDecay.explosionDecay()));
     }
 
     protected LootTable.Builder getSimpleDropTable(Block block) {
 
-        LootPool.Builder builder = LootPool.builder()
-                .rolls(ConstantRange.of(1))
-                .addEntry(ItemLootEntry.builder(block))
-                .acceptCondition(SurvivesExplosion.builder());
-        return LootTable.builder().addLootPool(builder);
+        LootPool.Builder builder = LootPool.lootPool()
+                .setRolls(ConstantRange.exactly(1))
+                .add(ItemLootEntry.lootTableItem(block))
+                .when(SurvivesExplosion.survivesExplosion());
+        return LootTable.lootTable().withPool(builder);
     }
 
     protected LootTable.Builder getEmptyTable() {
 
-        return LootTable.builder();
+        return LootTable.lootTable();
     }
 
     protected LootTable.Builder getStandardTileTable(String name, Block block) {
 
-        LootPool.Builder builder = LootPool.builder()
+        LootPool.Builder builder = LootPool.lootPool()
                 .name(name)
-                .rolls(ConstantRange.of(1))
-                .addEntry(ItemLootEntry.builder(block)
-                        .acceptFunction(CopyName.builder(CopyName.Source.BLOCK_ENTITY))
-                        .acceptFunction(CopyNbt.builder(CopyNbt.Source.BLOCK_ENTITY)
-                                .addOperation("Info", "BlockEntityTag.Info", CopyNbt.Action.REPLACE)
-                                .addOperation("Items", "BlockEntityTag.Items", CopyNbt.Action.REPLACE)
-                                .addOperation("Energy", "BlockEntityTag.Energy", CopyNbt.Action.REPLACE))
-                        .acceptFunction(SetContents.builderIn()
-                                .addLootEntry(DynamicLootEntry.func_216162_a(new ResourceLocation("minecraft", "contents")))));
-        return LootTable.builder().addLootPool(builder);
+                .setRolls(ConstantRange.exactly(1))
+                .add(ItemLootEntry.lootTableItem(block)
+                        .apply(CopyName.copyName(CopyName.Source.BLOCK_ENTITY))
+                        .apply(CopyNbt.copyData(CopyNbt.Source.BLOCK_ENTITY)
+                                .copy("Info", "BlockEntityTag.Info", CopyNbt.Action.REPLACE)
+                                .copy("Items", "BlockEntityTag.Items", CopyNbt.Action.REPLACE)
+                                .copy("Energy", "BlockEntityTag.Energy", CopyNbt.Action.REPLACE))
+                        .apply(SetContents.setContents()
+                                .withEntry(DynamicLootEntry.dynamicEntry(new ResourceLocation("minecraft", "contents")))));
+        return LootTable.lootTable().withPool(builder);
     }
 
     protected LootTable.Builder getSyncDropTable(Block block) {
 
-        LootPool.Builder builder = LootPool.builder()
-                .rolls(ConstantRange.of(1))
-                .addEntry(ItemLootEntry.builder(block)
-                        .acceptFunction(TileNBTSync.builder()))
-                .acceptCondition(SurvivesExplosion.builder());
-        return LootTable.builder().addLootPool(builder);
+        LootPool.Builder builder = LootPool.lootPool()
+                .setRolls(ConstantRange.exactly(1))
+                .add(ItemLootEntry.lootTableItem(block)
+                        .apply(TileNBTSync.builder()))
+                .when(SurvivesExplosion.survivesExplosion());
+        return LootTable.lootTable().withPool(builder);
     }
     // endregion
 
     @Override
-    public void act(DirectoryCache cache) {
+    public void run(DirectoryCache cache) {
 
         addTables();
 
         Map<ResourceLocation, LootTable> tables = new HashMap<>();
         for (Map.Entry<Block, LootTable.Builder> entry : blockLootTables.entrySet()) {
-            tables.put(entry.getKey().getLootTable(), entry.getValue().setParameterSet(LootParameterSets.BLOCK).build());
+            tables.put(entry.getKey().getLootTable(), entry.getValue().setParamSet(LootParameterSets.BLOCK).build());
         }
         writeTables(cache, tables);
     }
@@ -171,7 +171,7 @@ public abstract class LootTableProviderCoFH extends LootTableProvider {
         tables.forEach((key, lootTable) -> {
             Path path = outputFolder.resolve("data/" + key.getNamespace() + "/loot_tables/" + key.getPath() + ".json");
             try {
-                IDataProvider.save(GSON, cache, LootTableManager.toJson(lootTable), path);
+                IDataProvider.save(GSON, cache, LootTableManager.serialize(lootTable), path);
             } catch (IOException e) {
                 LOGGER.error("Couldn't write loot table {}", path, e);
             }

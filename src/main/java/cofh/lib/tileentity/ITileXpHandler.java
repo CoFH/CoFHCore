@@ -28,9 +28,9 @@ public interface ITileXpHandler {
             return;
         }
         while (xp > 0) {
-            int orbAmount = ExperienceOrbEntity.getXPSplit(xp);
+            int orbAmount = ExperienceOrbEntity.getExperienceValue(xp);
             xp -= orbAmount;
-            world.addEntity(new ExperienceOrbEntity(world, pos.x, pos.y, pos.z, orbAmount));
+            world.addFreshEntity(new ExperienceOrbEntity(world, pos.x, pos.y, pos.z, orbAmount));
         }
     }
 

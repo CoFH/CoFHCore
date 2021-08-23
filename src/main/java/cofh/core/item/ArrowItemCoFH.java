@@ -40,7 +40,7 @@ public class ArrowItemCoFH extends ArrowItem implements ICoFHItem {
         super(builder);
         this.factory = factory;
 
-        DispenserBlock.registerDispenseBehavior(this, DISPENSER_BEHAVIOR);
+        DispenserBlock.registerBehavior(this, DISPENSER_BEHAVIOR);
     }
 
     public ArrowItemCoFH setDisplayGroup(Supplier<ItemGroup> displayGroup) {
@@ -56,25 +56,25 @@ public class ArrowItemCoFH extends ArrowItem implements ICoFHItem {
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
 
         if (!showInItemGroup.getAsBoolean()) {
             return;
         }
-        super.fillItemGroup(group, items);
+        super.fillItemCategory(group, items);
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public boolean hasEffect(ItemStack stack) {
+    public boolean isFoil(ItemStack stack) {
 
         return showEnchantEffect.getAsBoolean() && stack.isEnchanted();
     }
 
     @Override
-    protected boolean isInGroup(ItemGroup group) {
+    protected boolean allowdedIn(ItemGroup group) {
 
-        return group == ItemGroup.SEARCH || getCreativeTabs().stream().anyMatch(tab -> tab == group);
+        return group == ItemGroup.TAB_SEARCH || getCreativeTabs().stream().anyMatch(tab -> tab == group);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class ArrowItemCoFH extends ArrowItem implements ICoFHItem {
     @Override
     public boolean isInfinite(ItemStack stack, ItemStack bow, PlayerEntity player) {
 
-        return infinitySupport && getItemEnchantmentLevel(Enchantments.INFINITY, bow) > 0 || super.isInfinite(stack, bow, player);
+        return infinitySupport && getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, bow) > 0 || super.isInfinite(stack, bow, player);
     }
 
     // region FACTORY
@@ -109,11 +109,11 @@ public class ArrowItemCoFH extends ArrowItem implements ICoFHItem {
     private static final ProjectileDispenseBehavior DISPENSER_BEHAVIOR = new ProjectileDispenseBehavior() {
 
         @Override
-        protected ProjectileEntity getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
+        protected ProjectileEntity getProjectile(World worldIn, IPosition position, ItemStack stackIn) {
 
             ArrowItemCoFH arrowItem = ((ArrowItemCoFH) stackIn.getItem());
-            AbstractArrowEntity arrow = arrowItem.factory.createArrow(worldIn, position.getX(), position.getY(), position.getZ());
-            arrow.pickupStatus = AbstractArrowEntity.PickupStatus.ALLOWED;
+            AbstractArrowEntity arrow = arrowItem.factory.createArrow(worldIn, position.x(), position.y(), position.z());
+            arrow.pickup = AbstractArrowEntity.PickupStatus.ALLOWED;
             return arrow;
         }
     };

@@ -151,8 +151,8 @@ public class CoFHCore {
 
     private void clientSetup(final FMLClientSetupEvent event) {
 
-        ScreenManager.registerFactory(HELD_ITEM_FILTER_CONTAINER, HeldItemFilterScreen::new);
-        ScreenManager.registerFactory(TILE_ITEM_FILTER_CONTAINER, TileItemFilterScreen::new);
+        ScreenManager.register(HELD_ITEM_FILTER_CONTAINER, HeldItemFilterScreen::new);
+        ScreenManager.register(TILE_ITEM_FILTER_CONTAINER, TileItemFilterScreen::new);
 
         CoreKeys.register();
 

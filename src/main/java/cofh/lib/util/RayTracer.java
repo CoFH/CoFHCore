@@ -34,12 +34,12 @@ public class RayTracer {
 
     public static BlockRayTraceResult retrace(PlayerEntity player, RayTraceContext.BlockMode blockMode, RayTraceContext.FluidMode fluidMode) {
 
-        return player.world.rayTraceBlocks(new RayTraceContext(getStartVec(player), getEndVec(player), blockMode, fluidMode, player));
+        return player.level.clip(new RayTraceContext(getStartVec(player), getEndVec(player), blockMode, fluidMode, player));
     }
 
     public static BlockRayTraceResult retrace(PlayerEntity player, double reach, RayTraceContext.BlockMode blockMode, RayTraceContext.FluidMode fluidMode) {
 
-        return player.world.rayTraceBlocks(new RayTraceContext(getStartVec(player), getEndVec(player, reach), blockMode, fluidMode, player));
+        return player.level.clip(new RayTraceContext(getStartVec(player), getEndVec(player, reach), blockMode, fluidMode, player));
     }
 
     public static Vector3d getStartVec(PlayerEntity player) {
@@ -50,7 +50,7 @@ public class RayTracer {
     public static Vector3d getEndVec(PlayerEntity player) {
 
         Vector3d headVec = getCorrectedHeadVec(player);
-        Vector3d lookVec = player.getLook(1.0F);
+        Vector3d lookVec = player.getViewVector(1.0F);
         double reach = getBlockReachDistance(player);
         return headVec.add(lookVec.x * reach, lookVec.y * reach, lookVec.z * reach);
     }
@@ -58,18 +58,18 @@ public class RayTracer {
     public static Vector3d getEndVec(PlayerEntity player, double reach) {
 
         Vector3d headVec = getCorrectedHeadVec(player);
-        Vector3d lookVec = player.getLook(1.0F);
+        Vector3d lookVec = player.getViewVector(1.0F);
         return headVec.add(lookVec.x * reach, lookVec.y * reach, lookVec.z * reach);
     }
 
     public static Vector3d getCorrectedHeadVec(PlayerEntity player) {
 
-        return new Vector3d(player.getPosX(), player.getPosY() + player.getEyeHeight(), player.getPosZ());
+        return new Vector3d(player.getX(), player.getY() + player.getEyeHeight(), player.getZ());
     }
 
     public static double getBlockReachDistance(PlayerEntity player) {
 
-        return player.world.isRemote ? getBlockReachDistanceClient() : player instanceof ServerPlayerEntity ? getBlockReachDistanceServer((ServerPlayerEntity) player) : 5D;
+        return player.level.isClientSide ? getBlockReachDistanceClient() : player instanceof ServerPlayerEntity ? getBlockReachDistanceServer((ServerPlayerEntity) player) : 5D;
     }
 
     private static double getBlockReachDistanceServer(ServerPlayerEntity player) {
@@ -80,7 +80,7 @@ public class RayTracer {
     @OnlyIn(Dist.CLIENT)
     private static double getBlockReachDistanceClient() {
 
-        return Minecraft.getInstance().playerController.getBlockReachDistance();
+        return Minecraft.getInstance().gameMode.getPickRange();
     }
 
 }

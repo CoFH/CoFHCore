@@ -45,15 +45,15 @@ public class TileCoFH extends TileEntity implements ITileCallback, ITilePacketHa
 
         super.onLoad();
 
-        if (world != null && Utils.isClientWorld(world)) {
+        if (level != null && Utils.isClientWorld(level)) {
             if (!hasClientUpdate()) {
-                world.tickableTileEntities.remove(this);
+                level.tickableBlockEntities.remove(this);
             }
             if (this instanceof IAreaEffectTile) {
                 ProxyUtils.registerAreaEffectTile((IAreaEffectTile) this);
             }
         }
-        validate();
+        clearRemoved();
     }
 
     public int getPlayersUsing() {
@@ -121,7 +121,7 @@ public class TileCoFH extends TileEntity implements ITileCallback, ITilePacketHa
 
     public boolean onActivatedDelegate(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, BlockRayTraceResult result) {
 
-        return getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).map(handler -> FluidHelper.interactWithHandler(player.getHeldItem(hand), handler, player, hand)).orElse(false);
+        return getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).map(handler -> FluidHelper.interactWithHandler(player.getItemInHand(hand), handler, player, hand)).orElse(false);
     }
 
     public boolean hasClientUpdate() {
@@ -145,8 +145,8 @@ public class TileCoFH extends TileEntity implements ITileCallback, ITilePacketHa
 
     protected void markDirtyFast() {
 
-        if (this.world != null) {
-            this.world.markChunkDirty(this.pos, this);
+        if (this.level != null) {
+            this.level.blockEntityChanged(this.worldPosition, this);
         }
     }
     // endregion
@@ -154,7 +154,7 @@ public class TileCoFH extends TileEntity implements ITileCallback, ITilePacketHa
     // region GUI
     public boolean playerWithinDistance(PlayerEntity player, double distanceSq) {
 
-        return !isRemoved() && pos.distanceSq(player.getPositionVec(), true) <= distanceSq;
+        return !isRemoved() && worldPosition.distSqr(player.position(), true) <= distanceSq;
     }
     // endregion
 
@@ -163,19 +163,19 @@ public class TileCoFH extends TileEntity implements ITileCallback, ITilePacketHa
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
 
-        return new SUpdateTileEntityPacket(pos, 0, getUpdateTag());
+        return new SUpdateTileEntityPacket(worldPosition, 0, getUpdateTag());
     }
 
     @Override
     public CompoundNBT getUpdateTag() {
 
-        return this.write(new CompoundNBT());
+        return this.save(new CompoundNBT());
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
 
-        read(this.cachedBlockState, pkt.getNbtCompound());
+        load(this.blockState, pkt.getTag());
     }
     // endregion
 
@@ -195,13 +195,13 @@ public class TileCoFH extends TileEntity implements ITileCallback, ITilePacketHa
     @Override
     public BlockPos pos() {
 
-        return pos;
+        return worldPosition;
     }
 
     @Override
     public World world() {
 
-        return world;
+        return level;
     }
     // endregion
 }

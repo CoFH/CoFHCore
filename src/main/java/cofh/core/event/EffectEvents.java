@@ -30,7 +30,7 @@ public class EffectEvents {
             return;
         }
         LivingEntity entity = event.getEntityLiving();
-        if (entity.isPotionActive(ENDERFERENCE)) {
+        if (entity.hasEffect(ENDERFERENCE)) {
             event.setCanceled(true);
         }
     }
@@ -42,7 +42,7 @@ public class EffectEvents {
             return;
         }
         Entity entity = event.getEntity();
-        if (entity instanceof LivingEntity && ((LivingEntity) entity).isPotionActive(LIGHTNING_RESISTANCE)) {
+        if (entity instanceof LivingEntity && ((LivingEntity) entity).hasEffect(LIGHTNING_RESISTANCE)) {
             event.setCanceled(true);
         }
     }
@@ -55,14 +55,14 @@ public class EffectEvents {
         }
         LivingEntity entity = event.getEntityLiving();
         DamageSource source = event.getSource();
-        if (source.isDamageAbsolute()) {
+        if (source.isBypassMagic()) {
             return;
         }
-        if (source.isExplosion() && entity.isPotionActive(EXPLOSION_RESISTANCE)) {
+        if (source.isExplosion() && entity.hasEffect(EXPLOSION_RESISTANCE)) {
             event.setCanceled(true);
-        } else if (source.isMagicDamage() && entity.isPotionActive(MAGIC_RESISTANCE)) {
+        } else if (source.isMagic() && entity.hasEffect(MAGIC_RESISTANCE)) {
             event.setCanceled(true);
-        } else if (source == DamageSource.LIGHTNING_BOLT && entity.isPotionActive(LIGHTNING_RESISTANCE)) {
+        } else if (source == DamageSource.LIGHTNING_BOLT && entity.hasEffect(LIGHTNING_RESISTANCE)) {
             event.setCanceled(true);
         }
     }
@@ -75,7 +75,7 @@ public class EffectEvents {
         }
         PlayerEntity player = event.getPlayer();
 
-        EffectInstance clarityEffect = player.getActivePotionEffect(CLARITY);
+        EffectInstance clarityEffect = player.getEffect(CLARITY);
         if (clarityEffect == null) {
             return;
         }

@@ -26,7 +26,7 @@ public abstract class EnchantmentCoFH extends Enchantment {
     public EnchantmentCoFH setEnable(boolean enable) {
 
         this.enable = enable;
-        name = enable ? getName() : "enchantment.cofh_core.disabled";
+        descriptionId = enable ? getDescriptionId() : "enchantment.cofh_core.disabled";
         return this;
     }
 
@@ -59,14 +59,14 @@ public abstract class EnchantmentCoFH extends Enchantment {
     }
 
     @Override
-    public int getMaxEnchantability(int level) {
+    public int getMaxCost(int level) {
 
         return enable ? maxDelegate(level) : -1;
     }
 
     protected int maxDelegate(int level) {
 
-        return getMinEnchantability(level) + 5;
+        return getMinCost(level) + 5;
     }
 
     @Override
@@ -88,19 +88,19 @@ public abstract class EnchantmentCoFH extends Enchantment {
     }
 
     @Override
-    public boolean canGenerateInLoot() {
+    public boolean isDiscoverable() {
 
         return enable && allowGenerateInLoot;
     }
 
     @Override
-    public boolean canVillagerTrade() {
+    public boolean isTradeable() {
 
         return enable && allowVillagerTrade;
     }
 
     @Override
-    public boolean isTreasureEnchantment() {
+    public boolean isTreasureOnly() {
 
         return treasureEnchantment;
     }

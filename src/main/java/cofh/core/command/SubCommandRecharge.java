@@ -21,9 +21,9 @@ public class SubCommandRecharge {
     static ArgumentBuilder<CommandSource, ?> register() {
 
         return Commands.literal("recharge")
-                .requires(source -> source.hasPermissionLevel(permissionLevel))
+                .requires(source -> source.hasPermission(permissionLevel))
                 // Self
-                .executes(context -> chargeEntities(context.getSource(), ImmutableList.of(context.getSource().asPlayer())))
+                .executes(context -> chargeEntities(context.getSource(), ImmutableList.of(context.getSource().getPlayerOrException())))
                 // Targets Specified
                 .then(Commands.argument(CMD_TARGETS, EntityArgument.players())
                         .executes(context -> chargeEntities(context.getSource(), EntityArgument.getPlayers(context, CMD_TARGETS))));
@@ -32,12 +32,12 @@ public class SubCommandRecharge {
     private static int chargeEntities(CommandSource source, Collection<? extends ServerPlayerEntity> targets) {
 
         for (ServerPlayerEntity entity : targets) {
-            entity.addPotionEffect(new EffectInstance(SUPERCHARGE, 1200, 0, false, false));
+            entity.addEffect(new EffectInstance(SUPERCHARGE, 1200, 0, false, false));
         }
         if (targets.size() == 1) {
-            source.sendFeedback(new TranslationTextComponent("commands.cofh.recharge.success.single", targets.iterator().next().getDisplayName()), true);
+            source.sendSuccess(new TranslationTextComponent("commands.cofh.recharge.success.single", targets.iterator().next().getDisplayName()), true);
         } else {
-            source.sendFeedback(new TranslationTextComponent("commands.cofh.recharge.success.multiple", targets.size()), true);
+            source.sendSuccess(new TranslationTextComponent("commands.cofh.recharge.success.multiple", targets.size()), true);
         }
         return targets.size();
     }

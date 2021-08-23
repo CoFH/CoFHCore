@@ -22,8 +22,8 @@ public class SecurityPacket extends PacketBase implements IPacketServer {
     @Override
     public void handleServer(ServerPlayerEntity player) {
 
-        if (player.openContainer instanceof ISecurable) {
-            ((ISecurable) player.openContainer).setAccess(AccessMode.VALUES[mode]);
+        if (player.containerMenu instanceof ISecurable) {
+            ((ISecurable) player.containerMenu).setAccess(AccessMode.VALUES[mode]);
         }
     }
 

@@ -42,9 +42,9 @@ public abstract class AbstractTNTMinecartEntity extends AbstractMinecartEntityCo
     }
 
     @Override
-    public BlockState getDefaultDisplayTile() {
+    public BlockState getDefaultDisplayBlockState() {
 
-        return getBlock().getDefaultState();
+        return getBlock().defaultBlockState();
     }
 
     @Override
@@ -54,12 +54,12 @@ public abstract class AbstractTNTMinecartEntity extends AbstractMinecartEntityCo
 
         if (this.fuse > 0) {
             --this.fuse;
-            this.world.addParticle(ParticleTypes.SMOKE, this.getPosX(), this.getPosY() + 0.5D, this.getPosZ(), 0.0D, 0.0D, 0.0D);
+            this.level.addParticle(ParticleTypes.SMOKE, this.getX(), this.getY() + 0.5D, this.getZ(), 0.0D, 0.0D, 0.0D);
         } else if (this.fuse == 0) {
-            this.explodeCart(horizontalMag(this.getMotion()));
+            this.explodeCart(getHorizontalDistanceSqr(this.getDeltaMovement()));
         }
-        if (this.collidedHorizontally) {
-            double d0 = horizontalMag(this.getMotion());
+        if (this.horizontalCollision) {
+            double d0 = getHorizontalDistanceSqr(this.getDeltaMovement());
             if (d0 >= (double) 0.01F) {
                 this.explodeCart(d0);
             }
@@ -67,48 +67,48 @@ public abstract class AbstractTNTMinecartEntity extends AbstractMinecartEntityCo
     }
 
     @Override
-    public boolean attackEntityFrom(DamageSource source, float amount) {
+    public boolean hurt(DamageSource source, float amount) {
 
-        Entity entity = source.getImmediateSource();
+        Entity entity = source.getDirectEntity();
         if (entity instanceof AbstractArrowEntity) {
             AbstractArrowEntity abstractarrowentity = (AbstractArrowEntity) entity;
-            if (abstractarrowentity.isBurning()) {
-                this.explodeCart(abstractarrowentity.getMotion().lengthSquared());
+            if (abstractarrowentity.isOnFire()) {
+                this.explodeCart(abstractarrowentity.getDeltaMovement().lengthSqr());
             }
         }
-        return super.attackEntityFrom(source, amount);
+        return super.hurt(source, amount);
     }
 
     @Override
-    public void killMinecart(DamageSource source) {
+    public void destroy(DamageSource source) {
 
-        double d0 = horizontalMag(this.getMotion());
-        if (!source.isFireDamage() && !source.isExplosion() && !(d0 >= (double) 0.01F)) {
+        double d0 = getHorizontalDistanceSqr(this.getDeltaMovement());
+        if (!source.isFire() && !source.isExplosion() && !(d0 >= (double) 0.01F)) {
             detonated = true;
-            super.killMinecart(source);
-            if (!source.isExplosion() && this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
-                this.entityDropItem(getBlock());
+            super.destroy(source);
+            if (!source.isExplosion() && this.level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
+                this.spawnAtLocation(getBlock());
             }
         } else {
             if (this.fuse < 0) {
                 this.ignite();
-                this.fuse = this.rand.nextInt(20) + this.rand.nextInt(20);
+                this.fuse = this.random.nextInt(20) + this.random.nextInt(20);
             }
         }
     }
 
     @Override
-    public boolean onLivingFall(float distance, float damageMultiplier) {
+    public boolean causeFallDamage(float distance, float damageMultiplier) {
 
         if (distance >= 3.0F) {
             float f = distance / 10.0F;
             this.explodeCart(f * f);
         }
-        return super.onLivingFall(distance, damageMultiplier);
+        return super.causeFallDamage(distance, damageMultiplier);
     }
 
     @Override
-    public void onActivatorRailPass(int x, int y, int z, boolean receivingPower) {
+    public void activateMinecart(int x, int y, int z, boolean receivingPower) {
 
         if (receivingPower && this.fuse < 0) {
             this.ignite();
@@ -117,31 +117,31 @@ public abstract class AbstractTNTMinecartEntity extends AbstractMinecartEntityCo
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void handleStatusUpdate(byte id) {
+    public void handleEntityEvent(byte id) {
 
         if (id == 10) {
             this.ignite();
         } else {
-            super.handleStatusUpdate(id);
+            super.handleEntityEvent(id);
         }
     }
 
     @Override
-    public float getExplosionResistance(Explosion explosionIn, IBlockReader worldIn, BlockPos pos, BlockState blockStateIn, FluidState p_180428_5_, float p_180428_6_) {
+    public float getBlockExplosionResistance(Explosion explosionIn, IBlockReader worldIn, BlockPos pos, BlockState blockStateIn, FluidState p_180428_5_, float p_180428_6_) {
 
-        return !this.isIgnited() || !blockStateIn.isIn(BlockTags.RAILS) && !worldIn.getBlockState(pos.up()).isIn(BlockTags.RAILS) ? super.getExplosionResistance(explosionIn, worldIn, pos, blockStateIn, p_180428_5_, p_180428_6_) : 0.0F;
+        return !this.isIgnited() || !blockStateIn.is(BlockTags.RAILS) && !worldIn.getBlockState(pos.above()).is(BlockTags.RAILS) ? super.getBlockExplosionResistance(explosionIn, worldIn, pos, blockStateIn, p_180428_5_, p_180428_6_) : 0.0F;
     }
 
     @Override
-    public boolean canExplosionDestroyBlock(Explosion explosionIn, IBlockReader worldIn, BlockPos pos, BlockState blockStateIn, float p_174816_5_) {
+    public boolean shouldBlockExplode(Explosion explosionIn, IBlockReader worldIn, BlockPos pos, BlockState blockStateIn, float p_174816_5_) {
 
-        return (!this.isIgnited() || !blockStateIn.isIn(BlockTags.RAILS) && !worldIn.getBlockState(pos.up()).isIn(BlockTags.RAILS)) && super.canExplosionDestroyBlock(explosionIn, worldIn, pos, blockStateIn, p_174816_5_);
+        return (!this.isIgnited() || !blockStateIn.is(BlockTags.RAILS) && !worldIn.getBlockState(pos.above()).is(BlockTags.RAILS)) && super.shouldBlockExplode(explosionIn, worldIn, pos, blockStateIn, p_174816_5_);
     }
 
     @Override
-    public void readAdditional(CompoundNBT compound) {
+    public void readAdditionalSaveData(CompoundNBT compound) {
 
-        super.readAdditional(compound);
+        super.readAdditionalSaveData(compound);
 
         if (compound.contains(TAG_FUSE, 99)) {
             this.fuse = compound.getInt(TAG_FUSE);
@@ -149,9 +149,9 @@ public abstract class AbstractTNTMinecartEntity extends AbstractMinecartEntityCo
     }
 
     @Override
-    public void writeAdditional(CompoundNBT compound) {
+    public void addAdditionalSaveData(CompoundNBT compound) {
 
-        super.writeAdditional(compound);
+        super.addAdditionalSaveData(compound);
 
         compound.putInt(TAG_FUSE, this.fuse);
     }
@@ -165,10 +165,10 @@ public abstract class AbstractTNTMinecartEntity extends AbstractMinecartEntityCo
     public void ignite() {
 
         this.fuse = 80;
-        if (!this.world.isRemote) {
-            this.world.setEntityState(this, (byte) 10);
+        if (!this.level.isClientSide) {
+            this.level.broadcastEntityEvent(this, (byte) 10);
             if (!this.isSilent()) {
-                this.world.playSound(null, this.getPosX(), this.getPosY(), this.getPosZ(), SoundEvents.ENTITY_TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                this.level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
             }
         }
     }
@@ -191,7 +191,7 @@ public abstract class AbstractTNTMinecartEntity extends AbstractMinecartEntityCo
         if (d0 > 5.0D) {
             d0 = 5.0D;
         }
-        radius += (int) world.rand.nextDouble() * 1.5 * d0;
+        radius += (int) level.random.nextDouble() * 1.5 * d0;
         detonated = true;
         explode();
     }

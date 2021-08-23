@@ -29,9 +29,9 @@ public class ProxyClient extends Proxy {
     public void addIndexedChatMessage(ITextComponent chat, int index) {
 
         if (chat == null) {
-            Minecraft.getInstance().ingameGUI.getChatGUI().deleteChatLine(index);
+            Minecraft.getInstance().gui.getChat().removeById(index);
         } else {
-            Minecraft.getInstance().ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(chat, index);
+            Minecraft.getInstance().gui.getChat().addMessage(chat, index);
         }
     }
 
@@ -50,7 +50,7 @@ public class ProxyClient extends Proxy {
     @Override
     public World getClientWorld() {
 
-        return Minecraft.getInstance().world;
+        return Minecraft.getInstance().level;
     }
 
     @Override
@@ -104,7 +104,7 @@ public class ProxyClient extends Proxy {
     public static void registerItemModelProperties() {
 
         for (ModelPropertyWrapper wrapper : ITEM_PROPERTY_GETTERS) {
-            ItemModelsProperties.registerProperty(wrapper.item, wrapper.resourceLoc, wrapper.propertyGetter);
+            ItemModelsProperties.register(wrapper.item, wrapper.resourceLoc, wrapper.propertyGetter);
         }
         ITEM_PROPERTY_GETTERS.clear();
     }

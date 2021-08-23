@@ -20,13 +20,13 @@ public class SignalAirTile extends TileEntity implements ITickableTileEntity {
     @Override
     public void tick() {
 
-        if (world == null) {
+        if (level == null) {
             return;
         }
         if (--duration <= 0) {
-            this.world.setBlockState(pos, Blocks.AIR.getDefaultState());
-            this.world.removeTileEntity(this.pos);
-            this.remove();
+            this.level.setBlockAndUpdate(worldPosition, Blocks.AIR.defaultBlockState());
+            this.level.removeBlockEntity(this.worldPosition);
+            this.setRemoved();
         }
     }
 

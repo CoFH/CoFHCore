@@ -20,73 +20,73 @@ public class EnergyChargeEffect extends EffectCoFH {
     }
 
     @Override
-    public void performEffect(LivingEntity entityLivingBaseIn, int amplifier) {
+    public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier) {
 
         if (entityLivingBaseIn instanceof ServerPlayerEntity) {
             ServerPlayerEntity entity = (ServerPlayerEntity) entityLivingBaseIn;
 
             if (chargeAmount <= 0) {
                 // Main Inventory
-                for (ItemStack stack : entity.inventory.mainInventory) {
+                for (ItemStack stack : entity.inventory.items) {
                     stack.getCapability(CapabilityEnergy.ENERGY, null)
                             .ifPresent(c -> c.extractEnergy(chargeAmount, false));
                 }
                 // Armor Inventory
-                for (ItemStack stack : entity.inventory.armorInventory) {
+                for (ItemStack stack : entity.inventory.armor) {
                     stack.getCapability(CapabilityEnergy.ENERGY, null)
                             .ifPresent(c -> c.extractEnergy(chargeAmount, false));
                 }
                 // Offhand
-                for (ItemStack stack : entity.inventory.offHandInventory) {
+                for (ItemStack stack : entity.inventory.offhand) {
                     stack.getCapability(CapabilityEnergy.ENERGY, null)
                             .ifPresent(c -> c.extractEnergy(chargeAmount, false));
                 }
                 if (EnergyHelper.standaloneRedstoneFlux) {
                     // Main Inventory
-                    for (ItemStack stack : entity.inventory.mainInventory) {
+                    for (ItemStack stack : entity.inventory.items) {
                         stack.getCapability(CapabilityRedstoneFlux.RF_ENERGY, null)
                                 .ifPresent(c -> c.extractEnergy(chargeAmount, false));
                     }
                     // Armor Inventory
-                    for (ItemStack stack : entity.inventory.armorInventory) {
+                    for (ItemStack stack : entity.inventory.armor) {
                         stack.getCapability(CapabilityRedstoneFlux.RF_ENERGY, null)
                                 .ifPresent(c -> c.extractEnergy(chargeAmount, false));
                     }
                     // Offhand
-                    for (ItemStack stack : entity.inventory.offHandInventory) {
+                    for (ItemStack stack : entity.inventory.offhand) {
                         stack.getCapability(CapabilityRedstoneFlux.RF_ENERGY, null)
                                 .ifPresent(c -> c.extractEnergy(chargeAmount, false));
                     }
                 }
             } else {
                 // Main Inventory
-                for (ItemStack stack : entity.inventory.mainInventory) {
+                for (ItemStack stack : entity.inventory.items) {
                     stack.getCapability(CapabilityEnergy.ENERGY, null)
                             .ifPresent(c -> c.receiveEnergy(chargeAmount, false));
                 }
                 // Armor Inventory
-                for (ItemStack stack : entity.inventory.armorInventory) {
+                for (ItemStack stack : entity.inventory.armor) {
                     stack.getCapability(CapabilityEnergy.ENERGY, null)
                             .ifPresent(c -> c.receiveEnergy(chargeAmount, false));
                 }
                 // Offhand
-                for (ItemStack stack : entity.inventory.offHandInventory) {
+                for (ItemStack stack : entity.inventory.offhand) {
                     stack.getCapability(CapabilityEnergy.ENERGY, null)
                             .ifPresent(c -> c.receiveEnergy(chargeAmount, false));
                 }
                 if (EnergyHelper.standaloneRedstoneFlux) {
                     // Main Inventory
-                    for (ItemStack stack : entity.inventory.mainInventory) {
+                    for (ItemStack stack : entity.inventory.items) {
                         stack.getCapability(CapabilityRedstoneFlux.RF_ENERGY, null)
                                 .ifPresent(c -> c.receiveEnergy(chargeAmount, false));
                     }
                     // Armor Inventory
-                    for (ItemStack stack : entity.inventory.armorInventory) {
+                    for (ItemStack stack : entity.inventory.armor) {
                         stack.getCapability(CapabilityRedstoneFlux.RF_ENERGY, null)
                                 .ifPresent(c -> c.receiveEnergy(chargeAmount, false));
                     }
                     // Offhand
-                    for (ItemStack stack : entity.inventory.offHandInventory) {
+                    for (ItemStack stack : entity.inventory.offhand) {
                         stack.getCapability(CapabilityRedstoneFlux.RF_ENERGY, null)
                                 .ifPresent(c -> c.receiveEnergy(chargeAmount, false));
                     }

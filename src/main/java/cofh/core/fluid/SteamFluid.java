@@ -22,7 +22,7 @@ public class SteamFluid extends FluidCoFH {
                 .temperature(750)
                 .viscosity(200)
                 .gaseous()
-                .sound(SoundEvents.ITEM_BUCKET_FILL, SoundEvents.ITEM_BUCKET_EMPTY)
+                .sound(SoundEvents.BUCKET_FILL, SoundEvents.BUCKET_EMPTY)
         );
     }
 

@@ -15,12 +15,12 @@ public class FalseCraftingInventory extends CraftingInventory {
     private static final Container FALSE_CONTAINER = new Container(null, -1) {
 
         @Override
-        public void onCraftMatrixChanged(IInventory inventory) {
+        public void slotsChanged(IInventory inventory) {
 
         }
 
         @Override
-        public boolean canInteractWith(PlayerEntity player) {
+        public boolean stillValid(PlayerEntity player) {
 
             return false;
         }

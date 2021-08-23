@@ -62,7 +62,7 @@ public class ComparableItemStack {
 
     public int getId() {
 
-        return Item.getIdFromItem(item); // '0' is null. '-1' is an unmapped item (missing in this World)
+        return Item.getId(item); // '0' is null. '-1' is an unmapped item (missing in this World)
     }
 
     public ItemStack toItemStack() {

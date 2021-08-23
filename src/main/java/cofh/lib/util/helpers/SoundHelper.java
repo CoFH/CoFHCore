@@ -20,7 +20,7 @@ public class SoundHelper {
 
     private static SoundHandler manager() {
 
-        return Minecraft.getInstance().getSoundHandler();
+        return Minecraft.getInstance().getSoundManager();
     }
 
     /**
@@ -50,7 +50,7 @@ public class SoundHelper {
 
     public static void playSimpleSound(SoundEvent sound, float volume, float pitch) {
 
-        manager().play(SimpleSound.master(sound, pitch, volume));
+        manager().play(SimpleSound.forUI(sound, pitch, volume));
     }
 
 }

@@ -27,35 +27,35 @@ public class GrenadeItem extends ItemCoFH {
         super(builder);
         this.factory = factory;
 
-        ProxyUtils.registerItemModelProperty(this, new ResourceLocation("thrown"), (stack, world, living) -> (stack.getDamage() > 0 ? 1.0F : 0.0F));
-        DispenserBlock.registerDispenseBehavior(this, DISPENSER_BEHAVIOR);
+        ProxyUtils.registerItemModelProperty(this, new ResourceLocation("thrown"), (stack, world, living) -> (stack.getDamageValue() > 0 ? 1.0F : 0.0F));
+        DispenserBlock.registerBehavior(this, DISPENSER_BEHAVIOR);
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
+    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
 
-        ItemStack stack = playerIn.getHeldItem(handIn);
-        worldIn.playSound(null, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.ENTITY_SNOWBALL_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (random.nextFloat() * 0.4F + 0.8F));
-        playerIn.getCooldownTracker().setCooldown(this, cooldown);
-        if (!worldIn.isRemote) {
+        ItemStack stack = playerIn.getItemInHand(handIn);
+        worldIn.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.SNOWBALL_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (random.nextFloat() * 0.4F + 0.8F));
+        playerIn.getCooldowns().addCooldown(this, cooldown);
+        if (!worldIn.isClientSide) {
             createGrenade(stack, worldIn, playerIn);
         }
-        playerIn.addStat(Stats.ITEM_USED.get(this));
-        if (!playerIn.abilities.isCreativeMode) {
+        playerIn.awardStat(Stats.ITEM_USED.get(this));
+        if (!playerIn.abilities.instabuild) {
             stack.shrink(1);
         }
-        return ActionResult.resultSuccess(stack);
+        return ActionResult.success(stack);
     }
 
     protected void createGrenade(ItemStack stack, World world, PlayerEntity player) {
 
         AbstractGrenadeEntity grenade = factory.createGrenade(world, player);
         ItemStack throwStack = cloneStack(stack, 1);
-        throwStack.setDamage(1);
+        throwStack.setDamageValue(1);
         grenade.setItem(throwStack);
         grenade.setRadius(1 + radius);
-        grenade.func_234612_a_(player, player.rotationPitch, player.rotationYaw, 0.0F, 1.5F, 0.5F);
-        world.addEntity(grenade);
+        grenade.shootFromRotation(player, player.xRot, player.yRot, 0.0F, 1.5F, 0.5F);
+        world.addFreshEntity(grenade);
     }
 
     // region FACTORY
@@ -72,19 +72,19 @@ public class GrenadeItem extends ItemCoFH {
     private static final ProjectileDispenseBehavior DISPENSER_BEHAVIOR = new ProjectileDispenseBehavior() {
 
         @Override
-        protected ProjectileEntity getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
+        protected ProjectileEntity getProjectile(World worldIn, IPosition position, ItemStack stackIn) {
 
             GrenadeItem grenadeItem = ((GrenadeItem) stackIn.getItem());
-            AbstractGrenadeEntity grenade = grenadeItem.factory.createGrenade(worldIn, position.getX(), position.getY(), position.getZ());
+            AbstractGrenadeEntity grenade = grenadeItem.factory.createGrenade(worldIn, position.x(), position.y(), position.z());
             ItemStack throwStack = cloneStack(stackIn, 1);
-            throwStack.setDamage(1);
+            throwStack.setDamageValue(1);
             grenade.setItem(throwStack);
             grenade.setRadius(1 + grenadeItem.radius);
             return grenade;
         }
 
         @Override
-        protected float getProjectileInaccuracy() {
+        protected float getUncertainty() {
 
             return 3.0F;
         }

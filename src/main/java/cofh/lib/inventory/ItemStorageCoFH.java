@@ -123,13 +123,13 @@ public class ItemStorageCoFH implements IItemHandler, IItemStackAccess, IResourc
     // region NBT
     public ItemStorageCoFH read(CompoundNBT nbt) {
 
-        item = ItemStack.read(nbt);
+        item = ItemStack.of(nbt);
         return this;
     }
 
     public CompoundNBT write(CompoundNBT nbt) {
 
-        item.write(nbt);
+        item.save(nbt);
         return nbt;
     }
     // endregion

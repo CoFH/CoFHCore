@@ -34,7 +34,7 @@ public class TileGuiPacket extends PacketBase implements IPacketClient {
             CoFHCore.LOG.error("Client world is null! (Is this being called on the server?)");
             return;
         }
-        TileEntity tile = world.getTileEntity(pos);
+        TileEntity tile = world.getBlockEntity(pos);
         if (tile instanceof ITilePacketHandler) {
             ((ITilePacketHandler) tile).handleGuiPacket(buffer);
         }

@@ -39,11 +39,11 @@ public class CriterionListeners<T extends ICriterionInstance> {
 
         final List<ICriterionTrigger.Listener<T>> toGrant = new ArrayList<>();
         for (ICriterionTrigger.Listener<T> listener : this.listeners) {
-            if (test.test(listener.getCriterionInstance())) {
+            if (test.test(listener.getTriggerInstance())) {
                 toGrant.add(listener);
             }
         }
-        toGrant.forEach(listener -> listener.grantCriterion(this.playerAdvancements));
+        toGrant.forEach(listener -> listener.run(this.playerAdvancements));
     }
 
 }

@@ -30,7 +30,7 @@ public class HeldItemFilterContainer extends ContainerCoFH implements IFilterOpt
 
         allowSwap = false;
 
-        filterStack = player.getHeldItemMainhand();
+        filterStack = player.getMainHandItem();
         filterable = (IFilterableItem) filterStack.getItem();
         filter = (AbstractItemFilter) filterable.getFilter(filterStack);
 
@@ -61,7 +61,7 @@ public class HeldItemFilterContainer extends ContainerCoFH implements IFilterOpt
             }
         }
         for (int i = 0; i < 9; ++i) {
-            if (i == inventory.currentItem) {
+            if (i == inventory.selected) {
                 addSlot(new SlotLocked(inventory, i, xOffset + i * 18, yOffset + 58));
             } else {
                 addSlot(new Slot(inventory, i, xOffset + i * 18, yOffset + 58));
@@ -77,22 +77,22 @@ public class HeldItemFilterContainer extends ContainerCoFH implements IFilterOpt
     @Override
     protected int getMergeableSlotCount() {
 
-        return filterInventory.getSizeInventory();
+        return filterInventory.getContainerSize();
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn) {
+    public boolean stillValid(PlayerEntity playerIn) {
 
         return true;
     }
 
     @Override
-    public void onContainerClosed(PlayerEntity playerIn) {
+    public void removed(PlayerEntity playerIn) {
 
         filter.setItems(filterInventory.getStacks());
         filter.write(filterStack.getOrCreateTag());
         filterable.onFilterChanged(filterStack);
-        super.onContainerClosed(playerIn);
+        super.removed(playerIn);
     }
 
     // region NETWORK

@@ -22,23 +22,23 @@ public class SubCommandEnderChest {
     static ArgumentBuilder<CommandSource, ?> register() {
 
         return Commands.literal("enderchest")
-                .requires(source -> source.hasPermissionLevel(permissionLevel))
+                .requires(source -> source.hasPermission(permissionLevel))
                 // Self
-                .executes(context -> openContainer(context.getSource().asPlayer(), context.getSource().asPlayer()))
+                .executes(context -> openContainer(context.getSource().getPlayerOrException(), context.getSource().getPlayerOrException()))
                 // Target Specified
                 .then(Commands.argument(CMD_PLAYER, EntityArgument.player())
-                        .executes(context -> openContainer(context.getSource().asPlayer(), EntityArgument.getPlayer(context, CMD_PLAYER))));
+                        .executes(context -> openContainer(context.getSource().getPlayerOrException(), EntityArgument.getPlayer(context, CMD_PLAYER))));
     }
 
     private static int openContainer(PlayerEntity user, PlayerEntity target) {
 
-        IFormattableTextComponent title = TITLE.deepCopy();
+        IFormattableTextComponent title = TITLE.copy();
 
         if (user != target) {
-            title.appendString(" - ").append(target.getDisplayName());
+            title.append(" - ").append(target.getDisplayName());
         }
-        user.openContainer(new SimpleNamedContainerProvider((id, player, inv) -> ChestContainer.createGeneric9X3(id, player, target.getInventoryEnderChest()), title));
-        user.addStat(Stats.OPEN_ENDERCHEST);
+        user.openMenu(new SimpleNamedContainerProvider((id, player, inv) -> ChestContainer.threeRows(id, player, target.getEnderChestInventory()), title));
+        user.awardStat(Stats.OPEN_ENDERCHEST);
         return 1;
     }
 

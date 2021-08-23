@@ -44,14 +44,14 @@ public class SecurityControlModule implements ISecurable {
 
         access = AccessMode.VALUES[buffer.readByte()];
         owner = SecurityHelper.DEFAULT_GAME_PROFILE;
-        setOwner(new GameProfile(buffer.readUniqueId(), buffer.readString(1024)));
+        setOwner(new GameProfile(buffer.readUUID(), buffer.readUtf(1024)));
     }
 
     public void writeToBuffer(PacketBuffer buffer) {
 
         buffer.writeByte(access.ordinal());
-        buffer.writeUniqueId(owner.getId());
-        buffer.writeString(owner.getName());
+        buffer.writeUUID(owner.getId());
+        buffer.writeUtf(owner.getName());
     }
     // endregion
 

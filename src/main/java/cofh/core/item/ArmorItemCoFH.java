@@ -72,25 +72,25 @@ public class ArmorItemCoFH extends ArmorItem implements ICoFHItem {
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
 
         if (!showInGroups.getAsBoolean()) {
             return;
         }
-        super.fillItemGroup(group, items);
+        super.fillItemCategory(group, items);
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public boolean hasEffect(ItemStack stack) {
+    public boolean isFoil(ItemStack stack) {
 
         return showEnchantEffect.getAsBoolean() && stack.isEnchanted();
     }
 
     @Override
-    protected boolean isInGroup(ItemGroup group) {
+    protected boolean allowdedIn(ItemGroup group) {
 
-        return group == ItemGroup.SEARCH || getCreativeTabs().stream().anyMatch(tab -> tab == group);
+        return group == ItemGroup.TAB_SEARCH || getCreativeTabs().stream().anyMatch(tab -> tab == group);
     }
 
     @Override

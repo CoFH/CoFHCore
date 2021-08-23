@@ -17,7 +17,7 @@ public class TNTMinecartRendererCoFH extends MinecartRenderer<AbstractTNTMinecar
     }
 
     @Override
-    protected void renderBlockState(AbstractTNTMinecartEntity entityIn, float partialTicks, BlockState stateIn, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
+    protected void renderMinecartContents(AbstractTNTMinecartEntity entityIn, float partialTicks, BlockState stateIn, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
 
         int i = entityIn.getFuseTicks();
         if (i > -1 && (float) i - partialTicks + 1.0F < 10.0F) {
@@ -28,7 +28,7 @@ public class TNTMinecartRendererCoFH extends MinecartRenderer<AbstractTNTMinecar
             float f1 = 1.0F + f * 0.3F;
             matrixStackIn.scale(f1, f1, f1);
         }
-        TNTMinecartRenderer.renderTntFlash(stateIn, matrixStackIn, bufferIn, packedLightIn, i > -1 && i / 5 % 2 == 0);
+        TNTMinecartRenderer.renderWhiteSolidBlock(stateIn, matrixStackIn, bufferIn, packedLightIn, i > -1 && i / 5 % 2 == 0);
     }
 
 }

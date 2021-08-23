@@ -21,7 +21,7 @@ import static cofh.lib.util.constants.ToolTypes.SICKLE;
 public class SickleItem extends ToolItem implements ICoFHItem {
 
     public static final Set<Block> EFFECTIVE_BLOCKS = ImmutableSet.of();
-    public static final Set<Material> EFFECTIVE_MATERIALS = ImmutableSet.of(Material.LEAVES, Material.PLANTS, Material.TALL_PLANTS, Material.WEB);
+    public static final Set<Material> EFFECTIVE_MATERIALS = ImmutableSet.of(Material.LEAVES, Material.PLANT, Material.REPLACEABLE_PLANT, Material.WEB);
 
     private static final float DEFAULT_ATTACK_DAMAGE = 2.5F;
     private static final float DEFAULT_ATTACK_SPEED = -2.6F;
@@ -33,31 +33,31 @@ public class SickleItem extends ToolItem implements ICoFHItem {
 
     public SickleItem(IItemTier tier, float attackDamageIn, float attackSpeedIn, int radius, int height, Properties builder) {
 
-        super(attackDamageIn, attackSpeedIn, tier, EFFECTIVE_BLOCKS, builder.addToolType(SICKLE, tier.getHarvestLevel()));
+        super(attackDamageIn, attackSpeedIn, tier, EFFECTIVE_BLOCKS, builder.addToolType(SICKLE, tier.getLevel()));
         this.radius = radius;
         this.height = height;
     }
 
     public SickleItem(IItemTier tier, float attackDamageIn, float attackSpeedIn, Properties builder) {
 
-        this(tier, attackDamageIn, attackSpeedIn, DEFAULT_BASE_RADIUS, DEFAULT_BASE_HEIGHT, builder.addToolType(SICKLE, tier.getHarvestLevel()));
+        this(tier, attackDamageIn, attackSpeedIn, DEFAULT_BASE_RADIUS, DEFAULT_BASE_HEIGHT, builder.addToolType(SICKLE, tier.getLevel()));
     }
 
     public SickleItem(IItemTier tier, float attackDamageIn, Properties builder) {
 
-        this(tier, attackDamageIn, DEFAULT_ATTACK_SPEED, DEFAULT_BASE_RADIUS, DEFAULT_BASE_HEIGHT, builder.addToolType(SICKLE, tier.getHarvestLevel()));
+        this(tier, attackDamageIn, DEFAULT_ATTACK_SPEED, DEFAULT_BASE_RADIUS, DEFAULT_BASE_HEIGHT, builder.addToolType(SICKLE, tier.getLevel()));
     }
 
     public SickleItem(IItemTier tier, Properties builder) {
 
-        this(tier, DEFAULT_ATTACK_DAMAGE, DEFAULT_ATTACK_SPEED, DEFAULT_BASE_RADIUS, DEFAULT_BASE_HEIGHT, builder.addToolType(SICKLE, tier.getHarvestLevel()));
+        this(tier, DEFAULT_ATTACK_DAMAGE, DEFAULT_ATTACK_SPEED, DEFAULT_BASE_RADIUS, DEFAULT_BASE_HEIGHT, builder.addToolType(SICKLE, tier.getLevel()));
     }
 
     @Override
-    public boolean canHarvestBlock(BlockState state) {
+    public boolean isCorrectToolForDrops(BlockState state) {
 
         if (state.getHarvestTool() == SICKLE) {
-            return getTier().getHarvestLevel() >= state.getHarvestLevel();
+            return getTier().getLevel() >= state.getHarvestLevel();
         }
         return EFFECTIVE_MATERIALS.contains(state.getMaterial());
     }
@@ -69,7 +69,7 @@ public class SickleItem extends ToolItem implements ICoFHItem {
         if (block == Blocks.COBWEB) {
             return 15.0F;
         } else {
-            return EFFECTIVE_MATERIALS.contains(state.getMaterial()) ? this.efficiency : 1.0F;
+            return EFFECTIVE_MATERIALS.contains(state.getMaterial()) ? this.speed : 1.0F;
         }
     }
 

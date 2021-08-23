@@ -22,16 +22,16 @@ public class LightningAirTile extends TileEntity implements ITickableTileEntity 
     @Override
     public void tick() {
 
-        if (world == null) {
+        if (level == null) {
             return;
         }
         if (--duration <= 0) {
-            if (world.canSeeSky(pos) && world instanceof ServerWorld) {
-                Utils.spawnLightningBolt(world, pos, null);
+            if (level.canSeeSky(worldPosition) && level instanceof ServerWorld) {
+                Utils.spawnLightningBolt(level, worldPosition, null);
             }
-            this.world.setBlockState(pos, Blocks.AIR.getDefaultState());
-            this.world.removeTileEntity(this.pos);
-            this.remove();
+            this.level.setBlockAndUpdate(worldPosition, Blocks.AIR.defaultBlockState());
+            this.level.removeBlockEntity(this.worldPosition);
+            this.setRemoved();
         }
     }
 

@@ -15,7 +15,7 @@ public class NeutralEffect extends EffectCoFH {
     }
 
     @Override
-    public boolean isReady(int duration, int amplifier) {
+    public boolean isDurationEffectTick(int duration, int amplifier) {
 
         return false;
     }

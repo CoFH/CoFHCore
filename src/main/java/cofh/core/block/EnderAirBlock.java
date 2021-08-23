@@ -54,7 +54,7 @@ public class EnderAirBlock extends AirBlock {
     }
 
     @Override
-    public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
+    public void entityInside(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
 
         if (!teleport || Utils.isClientWorld(worldIn)) {
             return;
@@ -62,16 +62,16 @@ public class EnderAirBlock extends AirBlock {
         if (entityIn instanceof ItemEntity || entityIn instanceof ExperienceOrbEntity) {
             return;
         }
-        BlockPos randPos = pos.add(-128 + worldIn.rand.nextInt(257), worldIn.rand.nextInt(8), -128 + worldIn.rand.nextInt(257));
+        BlockPos randPos = pos.offset(-128 + worldIn.random.nextInt(257), worldIn.random.nextInt(8), -128 + worldIn.random.nextInt(257));
 
         if (!worldIn.getBlockState(randPos).getMaterial().isSolid()) {
             if (entityIn instanceof LivingEntity) {
                 if (Utils.teleportEntityTo(entityIn, randPos)) {
-                    ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(ENDERFERENCE, duration, 0, false, false));
+                    ((LivingEntity) entityIn).addEffect(new EffectInstance(ENDERFERENCE, duration, 0, false, false));
                 }
             } else if (worldIn.getGameTime() % duration == 0) {
-                entityIn.setPosition(randPos.getX(), randPos.getY(), randPos.getZ());
-                entityIn.playSound(SoundEvents.ENTITY_ENDERMAN_TELEPORT, 1.0F, 1.0F);
+                entityIn.setPos(randPos.getX(), randPos.getY(), randPos.getZ());
+                entityIn.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
             }
         }
     }

@@ -24,15 +24,15 @@ public class SecureRecipe extends SpecialRecipe {
     @Override
     public boolean matches(CraftingInventory inv, World worldIn) {
 
-        Ingredient ingredientSecure = Ingredient.fromTag(ItemTagsCoFH.LOCKS);
-        Ingredient ingredientSecurable = Ingredient.fromTag(ItemTagsCoFH.SECURABLE);
+        Ingredient ingredientSecure = Ingredient.of(ItemTagsCoFH.LOCKS);
+        Ingredient ingredientSecurable = Ingredient.of(ItemTagsCoFH.SECURABLE);
 
         // boolean flag
         boolean lockItem = false;
         boolean securableItem = false;
 
-        for (int i = 0; i < inv.getSizeInventory(); ++i) {
-            ItemStack stack = inv.getStackInSlot(i);
+        for (int i = 0; i < inv.getContainerSize(); ++i) {
+            ItemStack stack = inv.getItem(i);
             if (!stack.isEmpty()) {
                 if (ingredientSecure.test(stack)) {
                     lockItem = true;
@@ -45,13 +45,13 @@ public class SecureRecipe extends SpecialRecipe {
     }
 
     @Override
-    public ItemStack getCraftingResult(CraftingInventory inv) {
+    public ItemStack assemble(CraftingInventory inv) {
 
-        Ingredient ingredientSecurable = Ingredient.fromTag(ItemTagsCoFH.SECURABLE);
+        Ingredient ingredientSecurable = Ingredient.of(ItemTagsCoFH.SECURABLE);
 
         ItemStack result = ItemStack.EMPTY;
-        for (int i = 0; i < inv.getSizeInventory(); ++i) {
-            ItemStack stack = inv.getStackInSlot(i);
+        for (int i = 0; i < inv.getContainerSize(); ++i) {
+            ItemStack stack = inv.getItem(i);
             if (!stack.isEmpty()) {
                 if (ingredientSecurable.test(stack)) {
                     result = stack.copy();
@@ -67,7 +67,7 @@ public class SecureRecipe extends SpecialRecipe {
     }
 
     @Override
-    public boolean canFit(int width, int height) {
+    public boolean canCraftInDimensions(int width, int height) {
 
         return width * height >= 2;
     }

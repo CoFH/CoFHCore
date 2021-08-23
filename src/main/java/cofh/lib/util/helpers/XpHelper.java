@@ -26,14 +26,14 @@ public class XpHelper {
 
     public static int getExtraPlayerXp(PlayerEntity player) {
 
-        return Math.round(player.experience * player.xpBarCap());
+        return Math.round(player.experienceProgress * player.getXpNeededForNextLevel());
     }
 
     public static void setPlayerXP(PlayerEntity player, int exp) {
 
         player.experienceLevel = 0;
-        player.experience = 0.0F;
-        player.experienceTotal = 0;
+        player.experienceProgress = 0.0F;
+        player.totalExperience = 0;
 
         addXPToPlayer(player, exp);
     }
@@ -41,18 +41,18 @@ public class XpHelper {
     public static void setPlayerLevel(PlayerEntity player, int level) {
 
         player.experienceLevel = level;
-        player.experience = 0.0F;
+        player.experienceProgress = 0.0F;
     }
 
     public static void addXPToPlayer(PlayerEntity player, int exp) {
 
-        int i = Integer.MAX_VALUE - player.experienceTotal;
+        int i = Integer.MAX_VALUE - player.totalExperience;
         if (exp > i) {
             exp = i;
         }
-        player.experience += (float) exp / (float) player.xpBarCap();
-        for (player.experienceTotal += exp; player.experience >= 1.0F; player.experience /= (float) player.xpBarCap()) {
-            player.experience = (player.experience - 1.0F) * (float) player.xpBarCap();
+        player.experienceProgress += (float) exp / (float) player.getXpNeededForNextLevel();
+        for (player.totalExperience += exp; player.experienceProgress >= 1.0F; player.experienceProgress /= (float) player.getXpNeededForNextLevel()) {
+            player.experienceProgress = (player.experienceProgress - 1.0F) * (float) player.getXpNeededForNextLevel();
             addXPLevelToPlayer(player, 1);
         }
     }
@@ -63,18 +63,18 @@ public class XpHelper {
 
         if (player.experienceLevel < 0) {
             player.experienceLevel = 0;
-            player.experience = 0.0F;
-            player.experienceTotal = 0;
+            player.experienceProgress = 0.0F;
+            player.totalExperience = 0;
         }
     }
 
     public static void attemptStoreXP(PlayerEntity player, ExperienceOrbEntity orb) {
 
         // Xp Storage Items
-        if (player.world.getGameTime() - player.getPersistentData().getLong(TAG_XP_TIMER) <= 40) {
+        if (player.level.getGameTime() - player.getPersistentData().getLong(TAG_XP_TIMER) <= 40) {
             PlayerInventory inventory = player.inventory;
-            for (int i = 0; i < inventory.getSizeInventory(); ++i) {
-                ItemStack stack = inventory.getStackInSlot(i);
+            for (int i = 0; i < inventory.getContainerSize(); ++i) {
+                ItemStack stack = inventory.getItem(i);
                 if (stack.getItem() instanceof IXpContainerItem && IXpContainerItem.storeXpOrb(player, orb, stack)) {
                     break;
                 }

@@ -12,11 +12,11 @@ public interface IChargeableSoil extends IForgeBlock {
 
     static void charge(BlockState state, World worldIn, BlockPos pos) {
 
-        int charge = state.get(CHARGED);
+        int charge = state.getValue(CHARGED);
         if (charge < 4) {
-            worldIn.setBlockState(pos, state.with(CHARGED, charge + 1), 2);
+            worldIn.setBlock(pos, state.setValue(CHARGED, charge + 1), 2);
         } else if (worldIn instanceof ServerWorld) {
-            state.getBlock().tick(state, (ServerWorld) worldIn, pos, worldIn.rand);
+            state.getBlock().tick(state, (ServerWorld) worldIn, pos, worldIn.random);
         }
     }
 

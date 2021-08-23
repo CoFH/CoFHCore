@@ -93,14 +93,14 @@ public abstract class ContainerCoFH extends Container {
         // TODO: Consider reverting or allowing augment shift-click in some cases.
         int invBase = getMergeableSlotCount();
         // int invBase = getSizeInventory() - getNumAugmentSlots();
-        int invFull = inventorySlots.size();
+        int invFull = slots.size();
         int invHotbar = invFull - 9;
         int invPlayer = invHotbar - 27;
 
         if (index < invPlayer) {
-            return mergeItemStack(stack, invPlayer, invFull, false);
+            return moveItemStackTo(stack, invPlayer, invFull, false);
         } else {
-            return mergeItemStack(stack, 0, invBase, false);
+            return moveItemStackTo(stack, 0, invBase, false);
         }
     }
     // endregion
@@ -118,27 +118,27 @@ public abstract class ContainerCoFH extends Container {
 
     // region OVERRIDES
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity player, int index) {
+    public ItemStack quickMoveStack(PlayerEntity player, int index) {
 
         if (!supportsShiftClick(player, index)) {
             return ItemStack.EMPTY;
         }
         ItemStack stack = ItemStack.EMPTY;
-        Slot slot = inventorySlots.get(index);
+        Slot slot = slots.get(index);
 
-        if (slot != null && slot.getHasStack()) {
-            ItemStack stackInSlot = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack stackInSlot = slot.getItem();
             stack = stackInSlot.copy();
 
             if (!performMerge(index, stackInSlot)) {
                 return ItemStack.EMPTY;
             }
-            slot.onSlotChange(stackInSlot, stack);
+            slot.onQuickCraft(stackInSlot, stack);
 
             if (stackInSlot.isEmpty()) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
             if (stackInSlot.getCount() == stack.getCount()) {
                 return ItemStack.EMPTY;
@@ -149,23 +149,23 @@ public abstract class ContainerCoFH extends Container {
     }
 
     @Override
-    public ItemStack slotClick(int index, int dragType, ClickType clickTypeIn, PlayerEntity player) {
+    public ItemStack clicked(int index, int dragType, ClickType clickTypeIn, PlayerEntity player) {
 
         if (clickTypeIn == ClickType.SWAP && !allowSwap) {
             return ItemStack.EMPTY;
         }
         if (falseSlotSupport) {
-            Slot slot = index < 0 ? null : inventorySlots.get(index);
+            Slot slot = index < 0 ? null : slots.get(index);
             if (slot instanceof SlotFalseCopy) {
                 if (dragType == 2) {
-                    slot.putStack(ItemStack.EMPTY);
+                    slot.set(ItemStack.EMPTY);
                 } else {
-                    slot.putStack(player.inventory.getItemStack().isEmpty() ? ItemStack.EMPTY : player.inventory.getItemStack().copy());
+                    slot.set(player.inventory.getCarried().isEmpty() ? ItemStack.EMPTY : player.inventory.getCarried().copy());
                 }
-                return player.inventory.getItemStack();
+                return player.inventory.getCarried();
             }
         }
-        return super.slotClick(index, dragType, clickTypeIn, player);
+        return super.clicked(index, dragType, clickTypeIn, player);
     }
 
     @Override
@@ -174,15 +174,15 @@ public abstract class ContainerCoFH extends Container {
 
         syncing = true;
         for (int i = 0; i < stacks.size(); ++i) {
-            putStackInSlot(i, stacks.get(i));
+            setItem(i, stacks.get(i));
         }
         syncing = false;
     }
 
     @Override
-    protected boolean mergeItemStack(ItemStack stack, int startIndex, int endIndex, boolean reverseDirection) {
+    protected boolean moveItemStackTo(ItemStack stack, int startIndex, int endIndex, boolean reverseDirection) {
 
-        return InventoryHelper.mergeItemStack(inventorySlots, stack, startIndex, endIndex, reverseDirection);
+        return InventoryHelper.mergeItemStack(slots, stack, startIndex, endIndex, reverseDirection);
     }
     // endregion
 }

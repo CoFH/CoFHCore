@@ -35,15 +35,15 @@ public class SignalAirBlock extends AirBlock {
     }
 
     @Override
-    public boolean canProvidePower(BlockState state) {
+    public boolean isSignalSource(BlockState state) {
 
         return true;
     }
 
     @Override
-    public int getWeakPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
+    public int getSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
 
-        TileEntity tile = blockAccess.getTileEntity(pos);
+        TileEntity tile = blockAccess.getBlockEntity(pos);
         return tile instanceof SignalAirTile ? ((SignalAirTile) tile).getPower() : 0;
     }
 
@@ -52,7 +52,7 @@ public class SignalAirBlock extends AirBlock {
     public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
 
         if (rand.nextInt(8) == 0) {
-            Utils.spawnBlockParticlesClient(worldIn, RedstoneParticleData.REDSTONE_DUST, pos, rand, 2);
+            Utils.spawnBlockParticlesClient(worldIn, RedstoneParticleData.REDSTONE, pos, rand, 2);
         }
     }
 

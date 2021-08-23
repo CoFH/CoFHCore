@@ -37,17 +37,17 @@ public class ShieldItemCoFH extends ShieldItem implements ICoFHItem {
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
 
         if (!showInGroups.getAsBoolean()) {
             return;
         }
-        super.fillItemGroup(group, items);
+        super.fillItemCategory(group, items);
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public boolean hasEffect(ItemStack stack) {
+    public boolean isFoil(ItemStack stack) {
 
         return showEnchantEffect.getAsBoolean() && stack.isEnchanted();
     }
@@ -59,7 +59,7 @@ public class ShieldItemCoFH extends ShieldItem implements ICoFHItem {
     }
 
     @Override
-    public int getItemEnchantability() {
+    public int getEnchantmentValue() {
 
         return enchantability;
     }

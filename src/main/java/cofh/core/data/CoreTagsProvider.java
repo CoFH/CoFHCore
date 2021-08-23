@@ -29,7 +29,7 @@ public class CoreTagsProvider {
         }
 
         @Override
-        protected void registerTags() {
+        protected void addTags() {
 
         }
 
@@ -49,30 +49,30 @@ public class CoreTagsProvider {
         }
 
         @Override
-        protected void registerTags() {
+        protected void addTags() {
 
-            getOrCreateBuilder(ItemTagsCoFH.ARMOR_IRON).add(
+            tag(ItemTagsCoFH.ARMOR_IRON).add(
                     Items.IRON_BOOTS,
                     Items.IRON_CHESTPLATE,
                     Items.IRON_HELMET,
                     Items.IRON_LEGGINGS
             );
 
-            getOrCreateBuilder(ItemTagsCoFH.ARMOR_GOLD).add(
+            tag(ItemTagsCoFH.ARMOR_GOLD).add(
                     Items.GOLDEN_BOOTS,
                     Items.GOLDEN_CHESTPLATE,
                     Items.GOLDEN_HELMET,
                     Items.GOLDEN_LEGGINGS
             );
 
-            getOrCreateBuilder(ItemTagsCoFH.ARMOR_DIAMOND).add(
+            tag(ItemTagsCoFH.ARMOR_DIAMOND).add(
                     Items.DIAMOND_BOOTS,
                     Items.DIAMOND_CHESTPLATE,
                     Items.DIAMOND_HELMET,
                     Items.DIAMOND_LEGGINGS
             );
 
-            getOrCreateBuilder(ItemTagsCoFH.TOOLS_IRON).add(
+            tag(ItemTagsCoFH.TOOLS_IRON).add(
                     Items.IRON_AXE,
                     Items.IRON_PICKAXE,
                     Items.IRON_SHOVEL,
@@ -80,14 +80,14 @@ public class CoreTagsProvider {
                     Items.SHEARS
             );
 
-            getOrCreateBuilder(ItemTagsCoFH.TOOLS_GOLD).add(
+            tag(ItemTagsCoFH.TOOLS_GOLD).add(
                     Items.GOLDEN_AXE,
                     Items.GOLDEN_PICKAXE,
                     Items.GOLDEN_SHOVEL,
                     Items.GOLDEN_SWORD
             );
 
-            getOrCreateBuilder(ItemTagsCoFH.TOOLS_DIAMOND).add(
+            tag(ItemTagsCoFH.TOOLS_DIAMOND).add(
                     Items.DIAMOND_AXE,
                     Items.DIAMOND_PICKAXE,
                     Items.DIAMOND_SHOVEL,
@@ -111,20 +111,20 @@ public class CoreTagsProvider {
         }
 
         @Override
-        protected void registerTags() {
+        protected void addTags() {
 
-            getOrCreateBuilder(FluidTagsCoFH.HONEY).add(FLUIDS.get(ID_FLUID_HONEY));
-            getOrCreateBuilder(FluidTagsCoFH.POTION).add(FLUIDS.get(ID_FLUID_POTION));
-            getOrCreateBuilder(FluidTagsCoFH.EXPERIENCE).add(FLUIDS.get(ID_FLUID_XP));
+            tag(FluidTagsCoFH.HONEY).add(FLUIDS.get(ID_FLUID_HONEY));
+            tag(FluidTagsCoFH.POTION).add(FLUIDS.get(ID_FLUID_POTION));
+            tag(FluidTagsCoFH.EXPERIENCE).add(FLUIDS.get(ID_FLUID_XP));
 
-            getOrCreateBuilder(FluidTagsCoFH.REDSTONE);
-            getOrCreateBuilder(FluidTagsCoFH.GLOWSTONE);
-            getOrCreateBuilder(FluidTagsCoFH.ENDER);
+            tag(FluidTagsCoFH.REDSTONE);
+            tag(FluidTagsCoFH.GLOWSTONE);
+            tag(FluidTagsCoFH.ENDER);
 
-            getOrCreateBuilder(FluidTagsCoFH.LATEX);
+            tag(FluidTagsCoFH.LATEX);
 
-            getOrCreateBuilder(FluidTagsCoFH.CREOSOTE);
-            getOrCreateBuilder(FluidTagsCoFH.CRUDE_OIL);
+            tag(FluidTagsCoFH.CREOSOTE);
+            tag(FluidTagsCoFH.CRUDE_OIL);
         }
 
     }

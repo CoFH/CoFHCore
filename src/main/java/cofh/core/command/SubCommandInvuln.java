@@ -23,12 +23,12 @@ public class SubCommandInvuln {
     static ArgumentBuilder<CommandSource, ?> register() {
 
         return Commands.literal("invuln")
-                .requires(source -> source.hasPermissionLevel(permissionLevel))
+                .requires(source -> source.hasPermission(permissionLevel))
                 // Self
-                .executes(context -> flagEntities(context.getSource(), ImmutableList.of(context.getSource().asPlayer()), DEFAULT_FLAG))
+                .executes(context -> flagEntities(context.getSource(), ImmutableList.of(context.getSource().getPlayerOrException()), DEFAULT_FLAG))
                 // Flag Specified
                 .then(Commands.argument(CMD_FLAG, BoolArgumentType.bool())
-                        .executes(context -> flagEntities(context.getSource(), ImmutableList.of(context.getSource().asPlayer()), BoolArgumentType.getBool(context, CMD_FLAG))))
+                        .executes(context -> flagEntities(context.getSource(), ImmutableList.of(context.getSource().getPlayerOrException()), BoolArgumentType.getBool(context, CMD_FLAG))))
                 // Targets Specified
                 .then(Commands.argument(CMD_TARGETS, EntityArgument.players())
                         .executes(context -> flagEntities(context.getSource(), EntityArgument.getPlayers(context, CMD_TARGETS), DEFAULT_FLAG)))
@@ -41,12 +41,12 @@ public class SubCommandInvuln {
     static ArgumentBuilder<CommandSource, ?> registerAlt() {
 
         return Commands.literal("invulnerable")
-                .requires(source -> source.hasPermissionLevel(permissionLevel))
+                .requires(source -> source.hasPermission(permissionLevel))
                 // Self
-                .executes(context -> flagEntities(context.getSource(), ImmutableList.of(context.getSource().asPlayer()), DEFAULT_FLAG))
+                .executes(context -> flagEntities(context.getSource(), ImmutableList.of(context.getSource().getPlayerOrException()), DEFAULT_FLAG))
                 // Flag Specified
                 .then(Commands.argument(CMD_FLAG, BoolArgumentType.bool())
-                        .executes(context -> flagEntities(context.getSource(), ImmutableList.of(context.getSource().asPlayer()), BoolArgumentType.getBool(context, CMD_FLAG))))
+                        .executes(context -> flagEntities(context.getSource(), ImmutableList.of(context.getSource().getPlayerOrException()), BoolArgumentType.getBool(context, CMD_FLAG))))
                 // Targets Specified
                 .then(Commands.argument(CMD_TARGETS, EntityArgument.players())
                         .executes(context -> flagEntities(context.getSource(), EntityArgument.getPlayers(context, CMD_TARGETS), DEFAULT_FLAG)))
@@ -63,15 +63,15 @@ public class SubCommandInvuln {
         }
         if (flag) {
             if (targets.size() == 1) {
-                source.sendFeedback(new TranslationTextComponent("commands.cofh.invuln.success.single", targets.iterator().next().getDisplayName()), true);
+                source.sendSuccess(new TranslationTextComponent("commands.cofh.invuln.success.single", targets.iterator().next().getDisplayName()), true);
             } else {
-                source.sendFeedback(new TranslationTextComponent("commands.cofh.invuln.success.multiple", targets.size()), true);
+                source.sendSuccess(new TranslationTextComponent("commands.cofh.invuln.success.multiple", targets.size()), true);
             }
         } else {
             if (targets.size() == 1) {
-                source.sendFeedback(new TranslationTextComponent("commands.cofh.invuln.remove.single", targets.iterator().next().getDisplayName()), true);
+                source.sendSuccess(new TranslationTextComponent("commands.cofh.invuln.remove.single", targets.iterator().next().getDisplayName()), true);
             } else {
-                source.sendFeedback(new TranslationTextComponent("commands.cofh.invuln.remove.multiple", targets.size()), true);
+                source.sendSuccess(new TranslationTextComponent("commands.cofh.invuln.remove.multiple", targets.size()), true);
             }
         }
         return targets.size();

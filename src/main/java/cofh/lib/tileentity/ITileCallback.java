@@ -62,7 +62,7 @@ public interface ITileCallback extends IInventoryCallback {
             return;
         }
         BlockState state = world().getBlockState(pos());
-        world().notifyBlockUpdate(pos(), state, state, 3);
+        world().sendBlockUpdated(pos(), state, state, 3);
     }
 
     default void callNeighborStateChange() {
@@ -70,7 +70,7 @@ public interface ITileCallback extends IInventoryCallback {
         if (world() == null) {
             return;
         }
-        world().notifyNeighborsOfStateChange(pos(), block());
+        world().updateNeighborsAt(pos(), block());
     }
 
     default void onControlUpdate() {

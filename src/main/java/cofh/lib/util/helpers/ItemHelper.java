@@ -36,7 +36,7 @@ public class ItemHelper {
             if (ret.isEmpty()) {
                 return ItemStack.EMPTY;
             }
-            if (ret.isDamageable() && ret.getDamage() > ret.getMaxDamage()) {
+            if (ret.isDamageableItem() && ret.getDamageValue() > ret.getMaxDamage()) {
                 ret = ItemStack.EMPTY;
             }
             return ret;
@@ -116,12 +116,12 @@ public class ItemHelper {
     // region COMPARISON
     public static boolean itemsEqualWithTags(ItemStack stackA, ItemStack stackB) {
 
-        return itemsEqual(stackA, stackB) && ItemStack.areItemStackTagsEqual(stackA, stackB);
+        return itemsEqual(stackA, stackB) && ItemStack.tagMatches(stackA, stackB);
     }
 
     public static boolean itemsEqual(ItemStack stackA, ItemStack stackB) {
 
-        return ItemStack.areItemsEqual(stackA, stackB);
+        return ItemStack.isSame(stackA, stackB);
     }
 
     /**
@@ -143,7 +143,7 @@ public class ItemHelper {
         if (stackA.getItem() != stackB.getItem()) {
             return false;
         }
-        if (stackA.getDamage() != stackB.getDamage()) {
+        if (stackA.getDamageValue() != stackB.getDamageValue()) {
             return false;
         }
         if (stackA.getCount() != stackB.getCount()) {
@@ -155,8 +155,8 @@ public class ItemHelper {
         if (stackA.getTag() == null || stackB.getTag() == null) {
             return false;
         }
-        int numberOfKeys = stackA.getTag().keySet().size();
-        if (numberOfKeys != stackB.getTag().keySet().size()) {
+        int numberOfKeys = stackA.getTag().getAllKeys().size();
+        if (numberOfKeys != stackB.getTag().getAllKeys().size()) {
             return false;
         }
 
@@ -164,7 +164,7 @@ public class ItemHelper {
         CompoundNBT tagB = stackB.getTag();
 
         String[] keys = new String[numberOfKeys];
-        keys = tagA.keySet().toArray(keys);
+        keys = tagA.getAllKeys().toArray(keys);
 
         a:
         for (int i = 0; i < numberOfKeys; ++i) {
@@ -189,19 +189,19 @@ public class ItemHelper {
 
     public static ItemStack getMainhandStack(PlayerEntity player) {
 
-        return player.getHeldItemMainhand();
+        return player.getMainHandItem();
     }
 
     public static ItemStack getOffhandStack(PlayerEntity player) {
 
-        return player.getHeldItemOffhand();
+        return player.getOffhandItem();
     }
 
     public static ItemStack getHeldStack(PlayerEntity player) {
 
-        ItemStack stack = player.getHeldItemMainhand();
+        ItemStack stack = player.getMainHandItem();
         if (stack.isEmpty()) {
-            stack = player.getHeldItemOffhand();
+            stack = player.getOffhandItem();
         }
         return stack;
     }
@@ -210,9 +210,9 @@ public class ItemHelper {
     // region MODE CHANGE
     public static ItemStack getHeldMultiModeStack(PlayerEntity player) {
 
-        ItemStack stack = player.getHeldItemMainhand();
+        ItemStack stack = player.getMainHandItem();
         if (stack.isEmpty() || !(stack.getItem() instanceof IMultiModeItem)) {
-            stack = player.getHeldItemOffhand();
+            stack = player.getOffhandItem();
         }
         return stack;
     }
@@ -222,11 +222,11 @@ public class ItemHelper {
         if (!isPlayerHoldingSomething(player)) {
             return false;
         }
-        ItemStack heldItem = player.getHeldItemMainhand();
+        ItemStack heldItem = player.getMainHandItem();
         if (heldItem.getItem() instanceof IMultiModeItem) {
             return true;
         } else {
-            heldItem = player.getHeldItemOffhand();
+            heldItem = player.getOffhandItem();
             return heldItem.getItem() instanceof IMultiModeItem;
         }
     }
@@ -236,8 +236,8 @@ public class ItemHelper {
         if (!isPlayerHoldingSomething(player)) {
             return false;
         }
-        ItemStack mainHand = player.getHeldItemMainhand();
-        ItemStack offHand = player.getHeldItemOffhand();
+        ItemStack mainHand = player.getMainHandItem();
+        ItemStack offHand = player.getOffhandItem();
         return mainHand.getItem() instanceof IMultiModeItem
                 ? ((IMultiModeItem) mainHand.getItem()).incrMode(mainHand)
                 : offHand.getItem() instanceof IMultiModeItem && ((IMultiModeItem) offHand.getItem()).incrMode(offHand);
@@ -248,8 +248,8 @@ public class ItemHelper {
         if (!isPlayerHoldingSomething(player)) {
             return false;
         }
-        ItemStack mainHand = player.getHeldItemMainhand();
-        ItemStack offHand = player.getHeldItemOffhand();
+        ItemStack mainHand = player.getMainHandItem();
+        ItemStack offHand = player.getOffhandItem();
         return mainHand.getItem() instanceof IMultiModeItem
                 ? ((IMultiModeItem) mainHand.getItem()).decrMode(mainHand)
                 : offHand.getItem() instanceof IMultiModeItem && ((IMultiModeItem) offHand.getItem()).decrMode(offHand);

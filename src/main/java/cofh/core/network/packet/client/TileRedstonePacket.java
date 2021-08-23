@@ -34,7 +34,7 @@ public class TileRedstonePacket extends PacketBase implements IPacketClient {
             CoFHCore.LOG.error("Client world is null! (Is this being called on the server?)");
             return;
         }
-        TileEntity tile = world.getTileEntity(pos);
+        TileEntity tile = world.getBlockEntity(pos);
         if (tile instanceof ITilePacketHandler) {
             ((ITilePacketHandler) tile).handleRedstonePacket(buffer);
         }
@@ -62,7 +62,7 @@ public class TileRedstonePacket extends PacketBase implements IPacketClient {
         TileRedstonePacket packet = new TileRedstonePacket();
         packet.pos = tile.pos();
         packet.buffer = tile.getRedstonePacket(new PacketBuffer(Unpooled.buffer()));
-        packet.sendToAllAround(packet.pos, NETWORK_UPDATE_DISTANCE, tile.world().getDimensionKey());
+        packet.sendToAllAround(packet.pos, NETWORK_UPDATE_DISTANCE, tile.world().dimension());
     }
 
 }

@@ -12,9 +12,9 @@ public class WrenchedEffect extends EffectCoFH {
     }
 
     @Override
-    public void performEffect(LivingEntity entityLivingBaseIn, int amplifier) {
+    public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier) {
 
-        entityLivingBaseIn.rotationYaw += 2 * (1 + amplifier);
+        entityLivingBaseIn.yRot += 2 * (1 + amplifier);
     }
 
 }

@@ -22,23 +22,23 @@ public class HammerItem extends PickaxeItem {
 
     public HammerItem(IItemTier tier, float attackDamageIn, float attackSpeedIn, int radius, Properties builder) {
 
-        super(tier, (int) attackDamageIn, attackSpeedIn, builder.addToolType(HAMMER, tier.getHarvestLevel()));
+        super(tier, (int) attackDamageIn, attackSpeedIn, builder.addToolType(HAMMER, tier.getLevel()));
         this.radius = radius;
     }
 
     public HammerItem(IItemTier tier, float attackDamageIn, float attackSpeedIn, Properties builder) {
 
-        this(tier, attackDamageIn, attackSpeedIn, DEFAULT_BASE_AREA, builder.addToolType(HAMMER, tier.getHarvestLevel()));
+        this(tier, attackDamageIn, attackSpeedIn, DEFAULT_BASE_AREA, builder.addToolType(HAMMER, tier.getLevel()));
     }
 
     public HammerItem(IItemTier tier, float attackDamageIn, Properties builder) {
 
-        this(tier, attackDamageIn, DEFAULT_ATTACK_SPEED, DEFAULT_BASE_AREA, builder.addToolType(HAMMER, tier.getHarvestLevel()));
+        this(tier, attackDamageIn, DEFAULT_ATTACK_SPEED, DEFAULT_BASE_AREA, builder.addToolType(HAMMER, tier.getLevel()));
     }
 
     public HammerItem(IItemTier tier, Properties builder) {
 
-        this(tier, DEFAULT_ATTACK_DAMAGE, DEFAULT_ATTACK_SPEED, DEFAULT_BASE_AREA, builder.addToolType(HAMMER, tier.getHarvestLevel()));
+        this(tier, DEFAULT_ATTACK_DAMAGE, DEFAULT_ATTACK_SPEED, DEFAULT_BASE_AREA, builder.addToolType(HAMMER, tier.getLevel()));
     }
 
     //    @Override

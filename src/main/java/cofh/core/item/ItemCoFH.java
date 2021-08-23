@@ -72,36 +72,36 @@ public class ItemCoFH extends Item implements ICoFHItem {
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
 
         if (!showInGroups.getAsBoolean()) {
             return;
         }
-        super.fillItemGroup(group, items);
+        super.fillItemCategory(group, items);
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 
         List<ITextComponent> additionalTooltips = new ArrayList<>();
         tooltipDelegate(stack, worldIn, additionalTooltips, flagIn);
 
         if (SecurityHelper.isItemClaimable(stack)) {
-            tooltip.add(getTextComponent("info.cofh.claimable").mergeStyle(GREEN).mergeStyle(ITALIC));
+            tooltip.add(getTextComponent("info.cofh.claimable").withStyle(GREEN).withStyle(ITALIC));
         }
         if (!additionalTooltips.isEmpty()) {
             if (Screen.hasShiftDown() || CoreConfig.alwaysShowDetails) {
                 tooltip.addAll(additionalTooltips);
             } else if (CoreConfig.holdShiftForDetails) {
-                tooltip.add(getTextComponent("info.cofh.hold_shift_for_details").mergeStyle(GRAY));
+                tooltip.add(getTextComponent("info.cofh.hold_shift_for_details").withStyle(GRAY));
             }
         }
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public boolean hasEffect(ItemStack stack) {
+    public boolean isFoil(ItemStack stack) {
 
         return showEnchantEffect.getAsBoolean() && stack.isEnchanted();
     }

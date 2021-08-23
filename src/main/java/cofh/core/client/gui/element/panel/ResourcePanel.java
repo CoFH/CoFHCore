@@ -92,19 +92,19 @@ public class ResourcePanel extends PanelBase {
         if (!fullyOpen) {
             return;
         }
-        getFontRenderer().drawStringWithShadow(matrixStack, localize(resource), sideOffset() + 20, 6, headerColor);
+        getFontRenderer().drawShadow(matrixStack, localize(resource), sideOffset() + 20, 6, headerColor);
 
         if (curAmt.getAsInt() > -1) {
-            getFontRenderer().drawStringWithShadow(matrixStack, localize(curDesc) + ":", sideOffset() + 6, 18, subheaderColor);
-            getFontRenderer().drawString(matrixStack, curAmt.getAsInt() + " " + curUnit, sideOffset() + 14, 30, textColor);
+            getFontRenderer().drawShadow(matrixStack, localize(curDesc) + ":", sideOffset() + 6, 18, subheaderColor);
+            getFontRenderer().draw(matrixStack, curAmt.getAsInt() + " " + curUnit, sideOffset() + 14, 30, textColor);
         }
         if (maxAmt.getAsInt() > -1) {
-            getFontRenderer().drawStringWithShadow(matrixStack, localize(maxDesc) + ":", sideOffset() + 6, 42, subheaderColor);
-            getFontRenderer().drawString(matrixStack, maxAmt.getAsInt() + " " + maxUnit, sideOffset() + 14, 54, textColor);
+            getFontRenderer().drawShadow(matrixStack, localize(maxDesc) + ":", sideOffset() + 6, 42, subheaderColor);
+            getFontRenderer().draw(matrixStack, maxAmt.getAsInt() + " " + maxUnit, sideOffset() + 14, 54, textColor);
         }
         if (efficiency.getAsDouble() > -1) {
-            getFontRenderer().drawStringWithShadow(matrixStack, localize("info.cofh.efficiency") + ":", sideOffset() + 6, 66, subheaderColor);
-            getFontRenderer().drawString(matrixStack, DF0.format(efficiency.getAsDouble() * 100) + "%", sideOffset() + 14, 78, textColor);
+            getFontRenderer().drawShadow(matrixStack, localize("info.cofh.efficiency") + ":", sideOffset() + 6, 66, subheaderColor);
+            getFontRenderer().draw(matrixStack, DF0.format(efficiency.getAsDouble() * 100) + "%", sideOffset() + 14, 78, textColor);
         }
         RenderHelper.resetColor();
     }

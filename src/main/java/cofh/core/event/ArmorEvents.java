@@ -45,9 +45,9 @@ public class ArmorEvents {
 
         double hazRes = getHazardResistance(entity);
         if (hazRes > 0.0D) {
-            if (source.isFireDamage() || HAZARD_DAMAGE_TYPES.contains(source.getDamageType())) {
-                if (entity.getRNG().nextDouble() < hazRes) {
-                    entity.extinguish();
+            if (source.isFire() || HAZARD_DAMAGE_TYPES.contains(source.getMsgId())) {
+                if (entity.getRandom().nextDouble() < hazRes) {
+                    entity.clearFire();
                     attemptDamagePlayerArmor(entity, amount);
                     event.setCanceled(true);
                 }
@@ -55,8 +55,8 @@ public class ArmorEvents {
         }
         double stingRes = getStingResistance(entity);
         if (stingRes > 0.0D) {
-            if (STING_DAMAGE_TYPES.contains(source.getDamageType())) {
-                if (entity.getRNG().nextDouble() < stingRes) {
+            if (STING_DAMAGE_TYPES.contains(source.getMsgId())) {
+                if (entity.getRandom().nextDouble() < stingRes) {
                     attemptDamagePlayerArmor(entity, amount);
                     event.setCanceled(true);
                 }
@@ -89,8 +89,8 @@ public class ArmorEvents {
 
         double hazRes = getHazardResistance(entity);
         if (hazRes > 0.0D) {
-            if (HAZARD_EFFECTS.contains(effect.getPotion())) {
-                if (entity.getRNG().nextDouble() < hazRes) {
+            if (HAZARD_EFFECTS.contains(effect.getEffect())) {
+                if (entity.getRandom().nextDouble() < hazRes) {
                     attemptDamagePlayerArmor(entity, (1 + effect.getAmplifier()) * effect.getDuration() / 40F);
                     event.setResult(Event.Result.DENY);
                 }
@@ -122,8 +122,8 @@ public class ArmorEvents {
     private static void attemptDamagePlayerArmor(Entity entity, float amount) {
 
         if (entity instanceof PlayerEntity) {
-            if (100 * entity.world.rand.nextFloat() < amount) {
-                ((PlayerEntity) entity).inventory.func_234563_a_(DamageSource.GENERIC, Math.min(20.0F, amount));
+            if (100 * entity.level.random.nextFloat() < amount) {
+                ((PlayerEntity) entity).inventory.hurtArmor(DamageSource.GENERIC, Math.min(20.0F, amount));
             }
         }
     }
@@ -131,7 +131,7 @@ public class ArmorEvents {
     private static double getFallResistance(Entity entity) {
 
         double ret = 0.0D;
-        for (ItemStack armor : entity.getArmorInventoryList()) {
+        for (ItemStack armor : entity.getArmorSlots()) {
             ret += FALL_RESISTANCE_MAP.getOrDefault(armor.getItem(), 0.0D);
         }
         return ret;
@@ -140,7 +140,7 @@ public class ArmorEvents {
     private static double getHazardResistance(Entity entity) {
 
         double ret = 0.0D;
-        for (ItemStack armor : entity.getArmorInventoryList()) {
+        for (ItemStack armor : entity.getArmorSlots()) {
             ret += HAZARD_RESISTANCE_MAP.getOrDefault(armor.getItem(), 0.0D);
         }
         return ret;
@@ -149,7 +149,7 @@ public class ArmorEvents {
     private static double getStingResistance(Entity entity) {
 
         double ret = 0.0D;
-        for (ItemStack armor : entity.getArmorInventoryList()) {
+        for (ItemStack armor : entity.getArmorSlots()) {
             ret += STING_RESISTANCE_MAP.getOrDefault(armor.getItem(), 0.0D);
         }
         return ret;

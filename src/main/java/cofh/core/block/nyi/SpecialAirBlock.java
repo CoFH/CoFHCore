@@ -29,11 +29,11 @@ public class SpecialAirBlock extends AirBlock {
     public SpecialAirBlock(Properties builder) {
 
         super(builder);
-        this.setDefaultState(this.stateContainer.getBaseState().with(WATERLOGGED, false).with(AGE, 0));
+        this.registerDefaultState(this.stateDefinition.any().setValue(WATERLOGGED, false).setValue(AGE, 0));
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
 
         builder.add(WATERLOGGED);
         builder.add(AGE);
@@ -42,24 +42,24 @@ public class SpecialAirBlock extends AirBlock {
     @Override
     public FluidState getFluidState(BlockState state) {
 
-        return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
     @Override
     @Nullable
     public BlockState getStateForPlacement(BlockItemUseContext context) {
 
-        boolean flag = context.getWorld().getFluidState(context.getPos()).getFluid() == Fluids.WATER;
-        return this.getDefaultState().with(WATERLOGGED, flag);
+        boolean flag = context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER;
+        return this.defaultBlockState().setValue(WATERLOGGED, flag);
     }
 
     @Override
-    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
 
-        if (stateIn.get(WATERLOGGED)) {
-            worldIn.getPendingFluidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickRate(worldIn));
+        if (stateIn.getValue(WATERLOGGED)) {
+            worldIn.getLiquidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn));
         }
-        return super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+        return super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
     }
 
     @Override
@@ -83,22 +83,22 @@ public class SpecialAirBlock extends AirBlock {
         if ((rand.nextInt(4) == 0 || this.shouldDisperse(worldIn, pos, 4)) && this.slightlyDisperse(state, worldIn, pos)) {
             BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable();
             for (Direction direction : Direction.values()) {
-                blockpos$mutable.setAndMove(pos, direction);
+                blockpos$mutable.setWithOffset(pos, direction);
                 BlockState blockstate = worldIn.getBlockState(blockpos$mutable);
-                if (blockstate.isIn(this) && !this.slightlyDisperse(blockstate, worldIn, blockpos$mutable)) {
-                    worldIn.getPendingBlockTicks().scheduleTick(blockpos$mutable, this, net.minecraft.util.math.MathHelper.nextInt(rand, 20, 40));
+                if (blockstate.is(this) && !this.slightlyDisperse(blockstate, worldIn, blockpos$mutable)) {
+                    worldIn.getBlockTicks().scheduleTick(blockpos$mutable, this, net.minecraft.util.math.MathHelper.nextInt(rand, 20, 40));
                 }
             }
         } else {
-            worldIn.getPendingBlockTicks().scheduleTick(pos, this, MathHelper.nextInt(rand, 20, 40));
+            worldIn.getBlockTicks().scheduleTick(pos, this, MathHelper.nextInt(rand, 20, 40));
         }
     }
 
     // region HELPERS
     protected void turnIntoAir(BlockState state, World worldIn, BlockPos pos) {
 
-        BlockState newState = worldIn.getFluidState(pos).getBlockState();
-        worldIn.setBlockState(pos, newState);
+        BlockState newState = worldIn.getFluidState(pos).createLegacyBlock();
+        worldIn.setBlockAndUpdate(pos, newState);
         worldIn.neighborChanged(pos, newState.getBlock(), pos);
     }
 
@@ -107,8 +107,8 @@ public class SpecialAirBlock extends AirBlock {
         int i = 0;
         BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable();
         for (Direction direction : Direction.values()) {
-            blockpos$mutable.setAndMove(pos, direction);
-            if (worldIn.getBlockState(blockpos$mutable).isIn(this)) {
+            blockpos$mutable.setWithOffset(pos, direction);
+            if (worldIn.getBlockState(blockpos$mutable).is(this)) {
                 ++i;
                 if (i >= neighborsRequired) {
                     return false;
@@ -120,9 +120,9 @@ public class SpecialAirBlock extends AirBlock {
 
     protected boolean slightlyDisperse(BlockState state, World worldIn, BlockPos pos) {
 
-        int i = state.get(AGE);
+        int i = state.getValue(AGE);
         if (i < 1) {
-            worldIn.setBlockState(pos, state.with(AGE, i + 1), 2);
+            worldIn.setBlock(pos, state.setValue(AGE, i + 1), 2);
             return false;
         } else {
             this.turnIntoAir(state, worldIn, pos);

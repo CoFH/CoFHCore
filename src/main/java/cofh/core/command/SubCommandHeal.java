@@ -21,9 +21,9 @@ public class SubCommandHeal {
     static ArgumentBuilder<CommandSource, ?> register() {
 
         return Commands.literal("heal")
-                .requires(source -> source.hasPermissionLevel(permissionLevel))
+                .requires(source -> source.hasPermission(permissionLevel))
                 // Self
-                .executes(context -> healEntities(context.getSource(), ImmutableList.of(context.getSource().asPlayer())))
+                .executes(context -> healEntities(context.getSource(), ImmutableList.of(context.getSource().getPlayerOrException())))
                 // Targets Specified
                 .then(Commands.argument(CMD_TARGETS, EntityArgument.players())
                         .executes(context -> healEntities(context.getSource(), EntityArgument.getPlayers(context, CMD_TARGETS))));
@@ -33,20 +33,20 @@ public class SubCommandHeal {
 
         for (ServerPlayerEntity entity : targets) {
             // Extinguish Fire
-            entity.extinguish();
+            entity.clearFire();
             // Clear all negative effects
             PanaceaEffect.clearHarmfulEffects(entity);
             // Set to Max Air
-            entity.setAir(entity.getMaxAir());
+            entity.setAirSupply(entity.getMaxAirSupply());
             // Set to Max Food
-            entity.getFoodStats().addStats(MAX_FOOD_LEVEL, 5.0F);
+            entity.getFoodData().eat(MAX_FOOD_LEVEL, 5.0F);
             // Heal to Max Health
             entity.setHealth(entity.getMaxHealth());
         }
         if (targets.size() == 1) {
-            source.sendFeedback(new TranslationTextComponent("commands.cofh.heal.success.single", targets.iterator().next().getDisplayName()), true);
+            source.sendSuccess(new TranslationTextComponent("commands.cofh.heal.success.single", targets.iterator().next().getDisplayName()), true);
         } else {
-            source.sendFeedback(new TranslationTextComponent("commands.cofh.heal.success.multiple", targets.size()), true);
+            source.sendSuccess(new TranslationTextComponent("commands.cofh.heal.success.multiple", targets.size()), true);
         }
         return targets.size();
     }

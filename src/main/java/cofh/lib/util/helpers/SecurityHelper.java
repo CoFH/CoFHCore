@@ -51,7 +51,7 @@ public class SecurityHelper {
             }
             return getClientID(player);
         }
-        return entity.getUniqueID();
+        return entity.getUUID();
     }
 
     private static UUID getClientID(PlayerEntity player) {
@@ -86,7 +86,7 @@ public class SecurityHelper {
     // region ITEM HELPERS
     public static void createSecurityTag(ItemStack stack) {
 
-        stack.getOrCreateChildTag(TAG_SECURITY);
+        stack.getOrCreateTagElement(TAG_SECURITY);
     }
 
     public static boolean isItemClaimable(ItemStack stack) {
@@ -106,11 +106,11 @@ public class SecurityHelper {
 
     public static CompoundNBT getSecurityTag(ItemStack stack) {
 
-        CompoundNBT nbt = stack.getChildTag(TAG_BLOCK_ENTITY);
+        CompoundNBT nbt = stack.getTagElement(TAG_BLOCK_ENTITY);
         if (nbt != null) {
             return nbt.contains(TAG_SECURITY) ? nbt.getCompound(TAG_SECURITY) : null;
         }
-        return stack.getChildTag(TAG_SECURITY);
+        return stack.getTagElement(TAG_SECURITY);
     }
 
     public static boolean hasSecurity(ItemStack stack) {
@@ -153,7 +153,7 @@ public class SecurityHelper {
             if (!Strings.isNullOrEmpty(uuid)) {
                 return new GameProfile(UUID.fromString(uuid), name);
             } else if (!Strings.isNullOrEmpty(name)) {
-                return new GameProfile(PreYggdrasilConverter.convertMobOwnerIfNeeded(ServerLifecycleHooks.getCurrentServer(), name), name);
+                return new GameProfile(PreYggdrasilConverter.convertMobOwnerIfNecessary(ServerLifecycleHooks.getCurrentServer(), name), name);
             }
         }
         return DEFAULT_GAME_PROFILE;

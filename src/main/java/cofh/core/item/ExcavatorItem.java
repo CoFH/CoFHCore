@@ -21,23 +21,23 @@ public class ExcavatorItem extends ShovelItem {
 
     public ExcavatorItem(IItemTier tier, float attackDamageIn, float attackSpeedIn, int radius, Properties builder) {
 
-        super(tier, attackDamageIn, attackSpeedIn, builder.addToolType(EXCAVATOR, tier.getHarvestLevel()));
+        super(tier, attackDamageIn, attackSpeedIn, builder.addToolType(EXCAVATOR, tier.getLevel()));
         this.radius = radius;
     }
 
     public ExcavatorItem(IItemTier tier, float attackDamageIn, float attackSpeedIn, Properties builder) {
 
-        this(tier, attackDamageIn, attackSpeedIn, DEFAULT_BASE_AREA, builder.addToolType(EXCAVATOR, tier.getHarvestLevel()));
+        this(tier, attackDamageIn, attackSpeedIn, DEFAULT_BASE_AREA, builder.addToolType(EXCAVATOR, tier.getLevel()));
     }
 
     public ExcavatorItem(IItemTier tier, float attackDamageIn, Properties builder) {
 
-        this(tier, attackDamageIn, DEFAULT_ATTACK_SPEED, DEFAULT_BASE_AREA, builder.addToolType(EXCAVATOR, tier.getHarvestLevel()));
+        this(tier, attackDamageIn, DEFAULT_ATTACK_SPEED, DEFAULT_BASE_AREA, builder.addToolType(EXCAVATOR, tier.getLevel()));
     }
 
     public ExcavatorItem(IItemTier tier, Properties builder) {
 
-        this(tier, DEFAULT_ATTACK_DAMAGE, DEFAULT_ATTACK_SPEED, DEFAULT_BASE_AREA, builder.addToolType(EXCAVATOR, tier.getHarvestLevel()));
+        this(tier, DEFAULT_ATTACK_DAMAGE, DEFAULT_ATTACK_SPEED, DEFAULT_BASE_AREA, builder.addToolType(EXCAVATOR, tier.getLevel()));
     }
 
     //    @Override

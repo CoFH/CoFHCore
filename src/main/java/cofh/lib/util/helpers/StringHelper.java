@@ -30,17 +30,17 @@ public final class StringHelper {
 
     public static String localize(String key) {
 
-        return I18n.format(key);
+        return I18n.get(key);
     }
 
     public static String localize(String key, Object... format) {
 
-        return I18n.format(key, format);
+        return I18n.get(key, format);
     }
 
     public static boolean canLocalize(String key) {
 
-        return I18n.hasKey(key);
+        return I18n.exists(key);
     }
 
     public static String format(long number) {
@@ -51,17 +51,17 @@ public final class StringHelper {
     public static IFormattableTextComponent getFluidName(FluidStack stack) {
 
         Fluid fluid = stack.getFluid();
-        IFormattableTextComponent name = fluid.getAttributes().getDisplayName(stack).deepCopy();
+        IFormattableTextComponent name = fluid.getAttributes().getDisplayName(stack).copy();
 
         switch (fluid.getAttributes().getRarity(stack)) {
             case UNCOMMON:
-                name.mergeStyle(TextFormatting.YELLOW);
+                name.withStyle(TextFormatting.YELLOW);
                 break;
             case RARE:
-                name.mergeStyle(TextFormatting.AQUA);
+                name.withStyle(TextFormatting.AQUA);
                 break;
             case EPIC:
-                name.mergeStyle(TextFormatting.LIGHT_PURPLE);
+                name.withStyle(TextFormatting.LIGHT_PURPLE);
                 break;
         }
         return name;
@@ -70,17 +70,17 @@ public final class StringHelper {
     public static ITextComponent getItemName(ItemStack stack) {
 
         Item item = stack.getItem();
-        IFormattableTextComponent name = item.getDisplayName(stack).deepCopy();
+        IFormattableTextComponent name = item.getName(stack).copy();
 
         switch (item.getRarity(stack)) {
             case UNCOMMON:
-                name.mergeStyle(TextFormatting.YELLOW);
+                name.withStyle(TextFormatting.YELLOW);
                 break;
             case RARE:
-                name.mergeStyle(TextFormatting.AQUA);
+                name.withStyle(TextFormatting.AQUA);
                 break;
             case EPIC:
-                name.mergeStyle(TextFormatting.LIGHT_PURPLE);
+                name.withStyle(TextFormatting.LIGHT_PURPLE);
                 break;
         }
         return name;
@@ -131,7 +131,7 @@ public final class StringHelper {
 
     public static ITextComponent fromJSON(String string) {
 
-        return ITextComponent.Serializer.getComponentFromJsonLenient(string);
+        return ITextComponent.Serializer.fromJsonLenient(string);
     }
 
     public static IFormattableTextComponent getEmptyLine() {
@@ -146,12 +146,12 @@ public final class StringHelper {
 
     public static IFormattableTextComponent getInfoTextComponent(String key) {
 
-        return getTextComponent(key).mergeStyle(TextFormatting.GOLD);
+        return getTextComponent(key).withStyle(TextFormatting.GOLD);
     }
 
     public static IFormattableTextComponent getKeywordTextComponent(String key) {
 
-        return getTextComponent(key).mergeStyle(INVIS_STYLE);
+        return getTextComponent(key).withStyle(INVIS_STYLE);
     }
     // endregion
 

@@ -22,7 +22,7 @@ public class RetexturedBakedQuad extends BakedQuad {
 
     public RetexturedBakedQuad(BakedQuad quad, TextureAtlasSprite textureIn) {
 
-        super(Arrays.copyOf(quad.getVertexData(), quad.getVertexData().length), quad.getTintIndex(), FaceBakery.getFacingFromVertexData(quad.getVertexData()), quad.getSprite(), quad.applyDiffuseLighting());
+        super(Arrays.copyOf(quad.getVertices(), quad.getVertices().length), quad.getTintIndex(), FaceBakery.calculateFacing(quad.getVertices()), quad.getSprite(), quad.isShade());
         this.texture = textureIn;
         this.remapQuad();
     }
@@ -32,8 +32,8 @@ public class RetexturedBakedQuad extends BakedQuad {
         for (int i = 0; i < 4; ++i) {
             int j = DefaultVertexFormats.BLOCK.getIntegerSize() * i;
             int uvIndex = 4;
-            this.vertexData[j + uvIndex] = Float.floatToRawIntBits(this.texture.getInterpolatedU(getUnInterpolatedU(this.sprite, Float.intBitsToFloat(this.vertexData[j + uvIndex]))));
-            this.vertexData[j + uvIndex + 1] = Float.floatToRawIntBits(this.texture.getInterpolatedV(getUnInterpolatedV(this.sprite, Float.intBitsToFloat(this.vertexData[j + uvIndex + 1]))));
+            this.vertices[j + uvIndex] = Float.floatToRawIntBits(this.texture.getU(getUnInterpolatedU(this.sprite, Float.intBitsToFloat(this.vertices[j + uvIndex]))));
+            this.vertices[j + uvIndex + 1] = Float.floatToRawIntBits(this.texture.getV(getUnInterpolatedV(this.sprite, Float.intBitsToFloat(this.vertices[j + uvIndex + 1]))));
         }
     }
 
@@ -45,14 +45,14 @@ public class RetexturedBakedQuad extends BakedQuad {
 
     private static float getUnInterpolatedU(TextureAtlasSprite sprite, float u) {
 
-        float f = sprite.getMaxU() - sprite.getMinU();
-        return (u - sprite.getMinU()) / f * 16.0F;
+        float f = sprite.getU1() - sprite.getU0();
+        return (u - sprite.getU0()) / f * 16.0F;
     }
 
     private static float getUnInterpolatedV(TextureAtlasSprite sprite, float v) {
 
-        float f = sprite.getMaxV() - sprite.getMinV();
-        return (v - sprite.getMinV()) / f * 16.0F;
+        float f = sprite.getV1() - sprite.getV0();
+        return (v - sprite.getV0()) / f * 16.0F;
     }
 
 }

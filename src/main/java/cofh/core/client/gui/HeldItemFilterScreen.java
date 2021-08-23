@@ -37,9 +37,9 @@ public class HeldItemFilterScreen extends ContainerScreenCoFH<HeldItemFilterCont
 
         super.init();
 
-        for (int i = 0; i < container.getFilterSize(); ++i) {
-            Slot slot = container.inventorySlots.get(i);
-            addElement(createSlot(this, slot.xPos, slot.yPos));
+        for (int i = 0; i < menu.getFilterSize(); ++i) {
+            Slot slot = menu.slots.get(i);
+            addElement(createSlot(this, slot.x, slot.y));
         }
         addButtons();
     }
@@ -52,7 +52,7 @@ public class HeldItemFilterScreen extends ContainerScreenCoFH<HeldItemFilterCont
             @Override
             public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
 
-                container.setAllowList(true);
+                menu.setAllowList(true);
                 playClickSound(0.7F);
                 return true;
             }
@@ -60,14 +60,14 @@ public class HeldItemFilterScreen extends ContainerScreenCoFH<HeldItemFilterCont
                 .setSize(20, 20)
                 .setTexture(TEX_DENY_LIST, 40, 20)
                 .setTooltipFactory(new SimpleTooltip(new TranslationTextComponent("info.cofh.filter.allowlist.0")))
-                .setVisible(() -> !container.getAllowList()));
+                .setVisible(() -> !menu.getAllowList()));
 
         addElement(new ElementButton(this, 132, 22) {
 
             @Override
             public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
 
-                container.setAllowList(false);
+                menu.setAllowList(false);
                 playClickSound(0.4F);
                 return true;
             }
@@ -75,14 +75,14 @@ public class HeldItemFilterScreen extends ContainerScreenCoFH<HeldItemFilterCont
                 .setSize(20, 20)
                 .setTexture(TEX_ALLOW_LIST, 40, 20)
                 .setTooltipFactory(new SimpleTooltip(new TranslationTextComponent("info.cofh.filter.allowlist.1")))
-                .setVisible(() -> container.getAllowList()));
+                .setVisible(() -> menu.getAllowList()));
 
         addElement(new ElementButton(this, 132, 44) {
 
             @Override
             public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
 
-                container.setCheckNBT(true);
+                menu.setCheckNBT(true);
                 playClickSound(0.7F);
                 return true;
             }
@@ -90,14 +90,14 @@ public class HeldItemFilterScreen extends ContainerScreenCoFH<HeldItemFilterCont
                 .setSize(20, 20)
                 .setTexture(TEX_IGNORE_NBT, 40, 20)
                 .setTooltipFactory(new SimpleTooltip(new TranslationTextComponent("info.cofh.filter.checkNBT.0")))
-                .setVisible(() -> !container.getCheckNBT()));
+                .setVisible(() -> !menu.getCheckNBT()));
 
         addElement(new ElementButton(this, 132, 44) {
 
             @Override
             public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
 
-                container.setCheckNBT(false);
+                menu.setCheckNBT(false);
                 playClickSound(0.4F);
                 return true;
             }
@@ -105,7 +105,7 @@ public class HeldItemFilterScreen extends ContainerScreenCoFH<HeldItemFilterCont
                 .setSize(20, 20)
                 .setTexture(TEX_USE_NBT, 40, 20)
                 .setTooltipFactory(new SimpleTooltip(new TranslationTextComponent("info.cofh.filter.checkNBT.1")))
-                .setVisible(() -> container.getCheckNBT()));
+                .setVisible(() -> menu.getCheckNBT()));
     }
     // endregion
 }

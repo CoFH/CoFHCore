@@ -54,16 +54,16 @@ public final class ArcheryHelper {
         IArcheryBowItem bowCap = bow.getCapability(BOW_ITEM_CAPABILITY).orElse(new ArcheryBowItemWrapper(bow));
         IArcheryAmmoItem ammoCap = ammo.getCapability(AMMO_ITEM_CAPABILITY).orElse(new ArcheryAmmoItemWrapper(ammo));
 
-        boolean infinite = shooter.abilities.isCreativeMode
+        boolean infinite = shooter.abilities.instabuild
                 || ammoCap.isInfinite(bow, shooter)
                 || (isArrow(ammo) && ((ArrowItem) ammo.getItem()).isInfinite(ammo, bow, shooter))
-                || ammo.isEmpty() && getItemEnchantmentLevel(INFINITY, bow) > 0;
+                || ammo.isEmpty() && getItemEnchantmentLevel(INFINITY_ARROWS, bow) > 0;
 
         if (!ammo.isEmpty() || infinite) {
             if (ammo.isEmpty()) {
                 ammo = new ItemStack(Items.ARROW);
             }
-            float arrowVelocity = BowItem.getArrowVelocity(charge);
+            float arrowVelocity = BowItem.getPowerForTime(charge);
 
             float accuracyMod = bowCap.getAccuracyModifier(shooter);
             float damageMod = bowCap.getDamageModifier(shooter);
@@ -73,9 +73,9 @@ public final class ArcheryHelper {
                 if (Utils.isServerWorld(world)) {
                     int encVolley = getItemEnchantmentLevel(VOLLEY, bow);
                     int encTrueshot = getItemEnchantmentLevel(TRUESHOT, bow);
-                    int encPunch = getItemEnchantmentLevel(PUNCH, bow);
-                    int encPower = getItemEnchantmentLevel(POWER, bow);
-                    int encFlame = getItemEnchantmentLevel(FLAME, bow);
+                    int encPunch = getItemEnchantmentLevel(PUNCH_ARROWS, bow);
+                    int encPower = getItemEnchantmentLevel(POWER_ARROWS, bow);
+                    int encFlame = getItemEnchantmentLevel(FLAMING_ARROWS, bow);
 
                     if (encTrueshot > 0) {
                         accuracyMod *= (1.5F / (1 + encTrueshot));
@@ -84,7 +84,7 @@ public final class ArcheryHelper {
                     }
                     int numArrows = encVolley > 0 ? 3 : 1;
                     // Each additional arrow fired at a higher arc - arrows will not be fired beyond vertically. Maximum of 5 degrees between arrows.
-                    float volleyPitch = encVolley > 0 ? MathHelper.clamp(90.0F + shooter.rotationPitch / encVolley, 0.0F, 5.0F) : 0;
+                    float volleyPitch = encVolley > 0 ? MathHelper.clamp(90.0F + shooter.xRot / encVolley, 0.0F, 5.0F) : 0;
 
                     BowItem bowItem = bow.getItem() instanceof BowItem ? (BowItem) bow.getItem() : null;
 
@@ -93,40 +93,40 @@ public final class ArcheryHelper {
                         if (bowItem != null) {
                             arrow = bowItem.customArrow(arrow);
                         }
-                        arrow.func_234612_a_(shooter, shooter.rotationPitch - volleyPitch * shot, shooter.rotationYaw, 0.0F, arrowVelocity * 3.0F * velocityMod, accuracyMod);// * (1 + shot * 2));
-                        arrow.setDamage(arrow.getDamage() * damageMod);
+                        arrow.shootFromRotation(shooter, shooter.xRot - volleyPitch * shot, shooter.yRot, 0.0F, arrowVelocity * 3.0F * velocityMod, accuracyMod);// * (1 + shot * 2));
+                        arrow.setBaseDamage(arrow.getBaseDamage() * damageMod);
 
                         if (arrowVelocity >= 1.0F) {
-                            arrow.setIsCritical(true);
+                            arrow.setCritArrow(true);
                         }
                         if (encTrueshot > 0) {
                             arrow.setPierceLevel((byte) encTrueshot);
                         }
-                        if (encPower > 0 && arrow.getDamage() > 0) {
-                            arrow.setDamage(arrow.getDamage() + (double) encPower * 0.5D + 0.5D);
+                        if (encPower > 0 && arrow.getBaseDamage() > 0) {
+                            arrow.setBaseDamage(arrow.getBaseDamage() + (double) encPower * 0.5D + 0.5D);
                         }
                         if (encPunch > 0) {
-                            arrow.setKnockbackStrength(encPunch);
+                            arrow.setKnockback(encPunch);
                         }
                         if (encFlame > 0) {
-                            arrow.setFire(100);
+                            arrow.setSecondsOnFire(100);
                         }
                         if (infinite || shot > 0) {
-                            arrow.pickupStatus = AbstractArrowEntity.PickupStatus.CREATIVE_ONLY;
+                            arrow.pickup = AbstractArrowEntity.PickupStatus.CREATIVE_ONLY;
                         }
-                        world.addEntity(arrow);
+                        world.addFreshEntity(arrow);
                     }
                     bowCap.onArrowLoosed(shooter);
                 }
-                world.playSound(null, shooter.getPosX(), shooter.getPosY(), shooter.getPosZ(), SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F / (world.rand.nextFloat() * 0.4F + 1.2F) + arrowVelocity * 0.5F);
+                world.playSound(null, shooter.getX(), shooter.getY(), shooter.getZ(), SoundEvents.ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F / (world.random.nextFloat() * 0.4F + 1.2F) + arrowVelocity * 0.5F);
 
-                if (!infinite && !shooter.abilities.isCreativeMode) {
+                if (!infinite && !shooter.abilities.instabuild) {
                     ammoCap.onArrowLoosed(shooter);
                     if (ammo.isEmpty()) {
-                        shooter.inventory.deleteStack(ammo);
+                        shooter.inventory.removeItem(ammo);
                     }
                 }
-                shooter.addStat(Stats.ITEM_USED.get(bow.getItem()));
+                shooter.awardStat(Stats.ITEM_USED.get(bow.getItem()));
             }
             return true;
         }
@@ -146,8 +146,8 @@ public final class ArcheryHelper {
 
     public static ItemStack findAmmo(PlayerEntity shooter) {
 
-        ItemStack offHand = shooter.getHeldItemOffhand();
-        ItemStack mainHand = shooter.getHeldItemMainhand();
+        ItemStack offHand = shooter.getOffhandItem();
+        ItemStack mainHand = shooter.getMainHandItem();
 
         // HELD
         if (offHand.getCapability(AMMO_ITEM_CAPABILITY).map(cap -> !cap.isEmpty(shooter)).orElse(false) || isArrow(offHand)) {
@@ -170,7 +170,7 @@ public final class ArcheryHelper {
             return retStack[0];
         }
         // INVENTORY
-        for (ItemStack slot : shooter.inventory.mainInventory) {
+        for (ItemStack slot : shooter.inventory.items) {
             if (slot.getCapability(AMMO_ITEM_CAPABILITY).map(cap -> !cap.isEmpty(shooter)).orElse(false) || isArrow(slot)) {
                 return slot;
             }
@@ -183,16 +183,16 @@ public final class ArcheryHelper {
      */
     public static ItemStack findArrows(PlayerEntity shooter) {
 
-        ItemStack offHand = shooter.getHeldItemOffhand();
-        ItemStack mainHand = shooter.getHeldItemMainhand();
+        ItemStack offHand = shooter.getOffhandItem();
+        ItemStack mainHand = shooter.getMainHandItem();
 
         if (isSimpleArrow(offHand)) {
             return offHand;
         } else if (isSimpleArrow(mainHand)) {
             return mainHand;
         }
-        for (int i = 0; i < shooter.inventory.getSizeInventory(); ++i) {
-            ItemStack stack = shooter.inventory.getStackInSlot(i);
+        for (int i = 0; i < shooter.inventory.getContainerSize(); ++i) {
+            ItemStack stack = shooter.inventory.getItem(i);
             if (isSimpleArrow(stack)) {
                 return stack;
             }

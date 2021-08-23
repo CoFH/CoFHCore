@@ -18,13 +18,13 @@ public class CoinItem extends CountedItem {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
+    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
 
-        ItemStack stack = playerIn.getHeldItem(handIn);
+        ItemStack stack = playerIn.getItemInHand(handIn);
         int count = stack.getCount();
         int heads = 0;
 
-        if (worldIn.isRemote) {
+        if (worldIn.isClientSide) {
             if (count == 1) {
                 if (worldIn.getRandom().nextBoolean()) {
                     ChatHelper.sendIndexedChatMessageToPlayer(playerIn, new TranslationTextComponent("info.cofh.heads"));
@@ -38,8 +38,8 @@ public class CoinItem extends CountedItem {
                 ChatHelper.sendIndexedChatMessageToPlayer(playerIn, new TranslationTextComponent(localize("info.cofh.heads") + ": " + heads + " " + localize("info.cofh.tails") + ": " + (count - heads)));
             }
         }
-        playerIn.getCooldownTracker().setCooldown(this, 40);
-        return ActionResult.resultPass(playerIn.getHeldItem(handIn));
+        playerIn.getCooldowns().addCooldown(this, 40);
+        return ActionResult.pass(playerIn.getItemInHand(handIn));
     }
 
 }

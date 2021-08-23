@@ -79,7 +79,7 @@ public interface ICoFHItem extends IForgeItem {
 
     default void addIncrementModeChangeTooltip(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 
-        tooltip.add(new TranslationTextComponent("info.cofh.mode_change", getKeynameFromKeycode(MULTIMODE_INCREMENT.getKey().getKeyCode())).mergeStyle(YELLOW));
+        tooltip.add(new TranslationTextComponent("info.cofh.mode_change", getKeynameFromKeycode(MULTIMODE_INCREMENT.getKey().getValue())).withStyle(YELLOW));
     }
 
     default boolean isActive(ItemStack stack) {
@@ -99,7 +99,7 @@ public interface ICoFHItem extends IForgeItem {
 
     default void setActive(ItemStack stack, LivingEntity entity) {
 
-        stack.getOrCreateTag().putLong(TAG_ACTIVE, entity.world.getGameTime() + 20);
+        stack.getOrCreateTag().putLong(TAG_ACTIVE, entity.level.getGameTime() + 20);
     }
 
 }

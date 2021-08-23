@@ -41,14 +41,14 @@ public class SpawnEggItemCoFH extends SpawnEggItem implements IColorableItem {
 
         ProxyUtils.registerColorable(this);
 
-        EGGS.remove(typeSupIn.get());
+        BY_ID.remove(typeSupIn.get());
         EGG_ITEMS.add(this);
     }
 
     public static void setup() {
 
         for (SpawnEggItemCoFH egg : EGG_ITEMS) {
-            EGGS.put(egg.typeSup.get(), egg);
+            BY_ID.put(egg.typeSup.get(), egg);
         }
     }
 
@@ -59,12 +59,12 @@ public class SpawnEggItemCoFH extends SpawnEggItem implements IColorableItem {
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
 
         if (!showInGroups.getAsBoolean()) {
             return;
         }
-        super.fillItemGroup(group, items);
+        super.fillItemCategory(group, items);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -79,7 +79,7 @@ public class SpawnEggItemCoFH extends SpawnEggItem implements IColorableItem {
         if (tag != null && tag.contains(TAG_ENTITY, TAG_COMPOUND)) {
             CompoundNBT compoundnbt = tag.getCompound(TAG_ENTITY);
             if (compoundnbt.contains("id", 8)) {
-                return EntityType.byKey(compoundnbt.getString("id")).orElse(this.typeSup.get());
+                return EntityType.byString(compoundnbt.getString("id")).orElse(this.typeSup.get());
             }
         }
         return this.typeSup.get();

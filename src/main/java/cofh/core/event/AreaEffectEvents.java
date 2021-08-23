@@ -31,7 +31,7 @@ import static cofh.lib.util.Utils.getItemEnchantmentLevel;
 import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
 import static cofh.lib.util.helpers.AreaEffectHelper.validAreaEffectMiningItem;
 import static cofh.lib.util.references.EnsorcReferences.WEEDING;
-import static net.minecraft.item.HoeItem.HOE_LOOKUP;
+import static net.minecraft.item.HoeItem.TILLABLES;
 
 @Mod.EventBusSubscriber(modid = ID_COFH_CORE)
 public class AreaEffectEvents {
@@ -47,14 +47,14 @@ public class AreaEffectEvents {
     public static void handleBlockBreakEvent(BlockEvent.BreakEvent event) {
 
         PlayerEntity player = event.getPlayer();
-        if (!(player instanceof ServerPlayerEntity) || Utils.isClientWorld(player.world)) {
+        if (!(player instanceof ServerPlayerEntity) || Utils.isClientWorld(player.level)) {
             return;
         }
         if (HARVESTING_PLAYERS.contains(player)) {
             return;
         }
         HARVESTING_PLAYERS.add(player);
-        ItemStack stack = player.getHeldItemMainhand();
+        ItemStack stack = player.getMainHandItem();
         if (!validAreaEffectMiningItem(stack)) {
             return;
         }
@@ -65,7 +65,7 @@ public class AreaEffectEvents {
             if (stack.isEmpty()) {
                 break;
             }
-            playerMP.interactionManager.tryHarvestBlock(pos);
+            playerMP.gameMode.destroyBlock(pos);
         }
     }
 
@@ -76,20 +76,20 @@ public class AreaEffectEvents {
             return;
         }
         PlayerEntity player = event.getPlayer();
-        ItemStack stack = player.getHeldItemMainhand();
+        ItemStack stack = player.getMainHandItem();
         if (!validAreaEffectMiningItem(stack)) {
             return;
         }
         ImmutableList<BlockPos> areaBlocks = stack.getCapability(AREA_EFFECT_ITEM_CAPABILITY).orElse(new AreaEffectItemWrapper(stack)).getAreaEffectBlocks(event.getPos(), player);
 
-        float curHardness = event.getState().getBlockHardness(player.world, event.getPos());
+        float curHardness = event.getState().getDestroySpeed(player.level, event.getPos());
         if (curHardness <= 0) {
             return;
         }
         float areaMod = MathHelper.clamp(1.0F - 0.01F * areaBlocks.size(), 0.1F, 1.0F);
         event.setNewSpeed(event.getNewSpeed() * areaMod);
 
-        float maxHardness = getMaxHardness(player.world, areaBlocks, curHardness);
+        float maxHardness = getMaxHardness(player.level, areaBlocks, curHardness);
         if (maxHardness > curHardness) {
             event.setNewSpeed(event.getNewSpeed() * curHardness / maxHardness);
         }
@@ -102,18 +102,18 @@ public class AreaEffectEvents {
             return;
         }
         PlayerEntity player = event.getPlayer();
-        ItemStack stack = event.getContext().getItem();
-        BlockPos target = event.getContext().getPos();
-        World world = player.world;
-        BlockState targetTilled = HOE_LOOKUP.get(world.getBlockState(target).getBlock());
-        BlockPos up = target.up();
+        ItemStack stack = event.getContext().getItemInHand();
+        BlockPos target = event.getContext().getClickedPos();
+        World world = player.level;
+        BlockState targetTilled = TILLABLES.get(world.getBlockState(target).getBlock());
+        BlockPos up = target.above();
         boolean weeding = getItemEnchantmentLevel(WEEDING, stack) > 0;
 
-        if (targetTilled == null || !world.isAirBlock(up) && !weeding) {
+        if (targetTilled == null || !world.isEmptyBlock(up) && !weeding) {
             return;
         }
         if (Utils.isClientWorld(world)) {
-            player.swingArm(event.getContext().getHand());
+            player.swing(event.getContext().getHand());
             return;
         }
         if (TILLING_PLAYERS.contains(player)) {
@@ -125,28 +125,28 @@ public class AreaEffectEvents {
             if (stack.isEmpty()) {
                 break;
             }
-            BlockState tilled = HOE_LOOKUP.get(world.getBlockState(pos).getBlock());
+            BlockState tilled = TILLABLES.get(world.getBlockState(pos).getBlock());
             if (tilled != null) {
-                world.setBlockState(pos, tilled);
+                world.setBlockAndUpdate(pos, tilled);
                 if (weeding) {
-                    up = pos.up();
-                    if (!world.isAirBlock(up)) {
-                        world.destroyBlock(up, !player.abilities.isCreativeMode);
+                    up = pos.above();
+                    if (!world.isEmptyBlock(up)) {
+                        world.destroyBlock(up, !player.abilities.instabuild);
                     }
                 }
-                stack.damageItem(1, player, (entity) -> {
-                    entity.sendBreakAnimation(event.getContext().getHand());
+                stack.hurtAndBreak(1, player, (entity) -> {
+                    entity.broadcastBreakEvent(event.getContext().getHand());
                 });
             }
         }
-        world.setBlockState(target, targetTilled);
+        world.setBlockAndUpdate(target, targetTilled);
         if (weeding) {
-            up = target.up();
-            if (!world.isAirBlock(up)) {
-                world.destroyBlock(up, !player.abilities.isCreativeMode);
+            up = target.above();
+            if (!world.isEmptyBlock(up)) {
+                world.destroyBlock(up, !player.abilities.instabuild);
             }
         }
-        world.playSound(player, target, SoundEvents.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
+        world.playSound(player, target, SoundEvents.HOE_TILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
         event.setResult(Event.Result.ALLOW);
     }
 
@@ -166,7 +166,7 @@ public class AreaEffectEvents {
         float testHardness;
 
         for (BlockPos pos : areaBlocks) {
-            testHardness = world.getBlockState(pos).getBlockHardness(world, pos);
+            testHardness = world.getBlockState(pos).getDestroySpeed(world, pos);
             if (testHardness > maxHardness) {
                 maxHardness = testHardness;
             }

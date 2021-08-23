@@ -108,23 +108,23 @@ public class InventoryHelper {
                     break;
                 }
                 Slot slot = slots.get(i);
-                if (slot instanceof SlotFalseCopy || !slot.isItemValid(stack)) {
+                if (slot instanceof SlotFalseCopy || !slot.mayPlace(stack)) {
                     i += iterOrder;
                     continue;
                 }
-                ItemStack stackInSlot = slot.getStack();
+                ItemStack stackInSlot = slot.getItem();
                 if (!stackInSlot.isEmpty() && itemsEqualWithTags(stackInSlot, stack)) {
                     int size = stackInSlot.getCount() + stack.getCount();
-                    int maxSize = Math.min(stack.getMaxStackSize(), slot.getSlotStackLimit());
+                    int maxSize = Math.min(stack.getMaxStackSize(), slot.getMaxStackSize());
                     if (size <= maxSize) {
                         stack.setCount(0);
                         stackInSlot.setCount(size);
-                        slot.putStack(stackInSlot);
+                        slot.set(stackInSlot);
                         successful = true;
                     } else if (stackInSlot.getCount() < maxSize) {
                         stack.shrink(maxSize - stackInSlot.getCount());
                         stackInSlot.setCount(maxSize);
-                        slot.putStack(stackInSlot);
+                        slot.set(stackInSlot);
                         successful = true;
                     }
                 }
@@ -146,11 +146,11 @@ public class InventoryHelper {
                     i += iterOrder;
                     continue;
                 }
-                ItemStack stackInSlot = slot.getStack();
-                if (stackInSlot.isEmpty() && slot.isItemValid(stack)) {
-                    int maxSize = Math.min(stack.getMaxStackSize(), slot.getSlotStackLimit());
+                ItemStack stackInSlot = slot.getItem();
+                if (stackInSlot.isEmpty() && slot.mayPlace(stack)) {
+                    int maxSize = Math.min(stack.getMaxStackSize(), slot.getMaxStackSize());
                     int splitSize = Math.min(maxSize, stack.getCount());
-                    slot.putStack(stack.split(splitSize));
+                    slot.set(stack.split(splitSize));
                     successful = true;
                 }
                 i += iterOrder;

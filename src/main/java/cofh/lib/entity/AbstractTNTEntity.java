@@ -23,18 +23,18 @@ public abstract class AbstractTNTEntity extends TNTEntity {
     public AbstractTNTEntity(EntityType<? extends AbstractTNTEntity> type, World worldIn, double x, double y, double z, @Nullable LivingEntity igniter) {
 
         this(type, worldIn);
-        this.setPosition(x, y, z);
-        double d0 = worldIn.rand.nextDouble() * (double) ((float) Math.PI * 2F);
-        this.setMotion(-Math.sin(d0) * 0.02D, 0.2F, -Math.cos(d0) * 0.02D);
+        this.setPos(x, y, z);
+        double d0 = worldIn.random.nextDouble() * (double) ((float) Math.PI * 2F);
+        this.setDeltaMovement(-Math.sin(d0) * 0.02D, 0.2F, -Math.cos(d0) * 0.02D);
         this.setFuse(80);
-        this.prevPosX = x;
-        this.prevPosY = y;
-        this.prevPosZ = z;
-        this.tntPlacedBy = igniter;
+        this.xo = x;
+        this.yo = y;
+        this.zo = z;
+        this.owner = igniter;
     }
 
     @Override
-    public IPacket<?> createSpawnPacket() {
+    public IPacket<?> getAddEntityPacket() {
 
         return NetworkHooks.getEntitySpawningPacket(this);
     }

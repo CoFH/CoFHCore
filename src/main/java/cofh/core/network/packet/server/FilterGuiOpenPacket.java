@@ -28,11 +28,11 @@ public class FilterGuiOpenPacket extends PacketBase implements IPacketServer {
     @Override
     public void handleServer(ServerPlayerEntity player) {
 
-        World world = player.world;
-        if (!world.isBlockPresent(pos)) {
+        World world = player.level;
+        if (!world.isLoaded(pos)) {
             return;
         }
-        TileEntity tile = world.getTileEntity(pos);
+        TileEntity tile = world.getBlockEntity(pos);
         if (tile instanceof IFilterableTile) {
             if (mode == TILE) {
                 ((IFilterableTile) tile).openGui(player);

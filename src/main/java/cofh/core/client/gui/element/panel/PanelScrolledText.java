@@ -28,8 +28,8 @@ public abstract class PanelScrolledText extends PanelBase {
 
         maxHeight = 92;
 
-        myText = getFontRenderer().trimStringToWidth(new StringTextComponent(info), maxWidth - 16);
-        numLines = Math.min(myText.size(), (maxHeight - 24) / getFontRenderer().FONT_HEIGHT);
+        myText = getFontRenderer().split(new StringTextComponent(info), maxWidth - 16);
+        numLines = Math.min(myText.size(), (maxHeight - 24) / getFontRenderer().lineHeight);
         maxFirstLine = myText.size() - numLines;
         scrollable = maxFirstLine > 0;
     }
@@ -57,9 +57,9 @@ public abstract class PanelScrolledText extends PanelBase {
                 gui.drawIcon(matrixStack, ICON_ARROW_DOWN_INACTIVE, sideOffset() + maxWidth - 20, 76);
             }
         }
-        getFontRenderer().drawStringWithShadow(matrixStack, getTitle().getString(), sideOffset() + 18, 6, headerColor);
+        getFontRenderer().drawShadow(matrixStack, getTitle().getString(), sideOffset() + 18, 6, headerColor);
         for (int i = firstLine; i < firstLine + numLines; ++i) {
-            getFontRenderer().func_238422_b_(matrixStack, myText.get(i), sideOffset() + 2, 20 + (i - firstLine) * getFontRenderer().FONT_HEIGHT, textColor);
+            getFontRenderer().draw(matrixStack, myText.get(i), sideOffset() + 2, 20 + (i - firstLine) * getFontRenderer().lineHeight, textColor);
         }
         RenderHelper.resetColor();
     }

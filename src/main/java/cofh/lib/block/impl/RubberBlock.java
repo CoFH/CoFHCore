@@ -16,32 +16,32 @@ public class RubberBlock extends Block {
     }
 
     @Override
-    public void onFallenUpon(World worldIn, BlockPos pos, Entity entityIn, float fallDistance) {
+    public void fallOn(World worldIn, BlockPos pos, Entity entityIn, float fallDistance) {
 
         if (entityIn.isSuppressingBounce()) {
-            super.onFallenUpon(worldIn, pos, entityIn, fallDistance);
+            super.fallOn(worldIn, pos, entityIn, fallDistance);
         } else {
-            entityIn.onLivingFall(fallDistance, 0.1F);
+            entityIn.causeFallDamage(fallDistance, 0.1F);
         }
     }
 
     @Override
-    public void onLanded(IBlockReader worldIn, Entity entityIn) {
+    public void updateEntityAfterFallOn(IBlockReader worldIn, Entity entityIn) {
 
-        if (entityIn.isSuppressingBounce() || Math.abs(entityIn.getMotion().y) < 0.1D) {
-            super.onLanded(worldIn, entityIn);
+        if (entityIn.isSuppressingBounce() || Math.abs(entityIn.getDeltaMovement().y) < 0.1D) {
+            super.updateEntityAfterFallOn(worldIn, entityIn);
         } else {
-            this.func_226946_a_(entityIn);
+            this.bounceUp(entityIn);
         }
     }
 
-    protected void func_226946_a_(Entity entityIn) {
+    protected void bounceUp(Entity entityIn) {
 
-        Vector3d vec3d = entityIn.getMotion();
+        Vector3d vec3d = entityIn.getDeltaMovement();
 
         if (vec3d.y < 0.0D) {
             double d0 = entityIn instanceof LivingEntity ? 0.75D : 0.50D;
-            entityIn.setMotion(vec3d.x, -vec3d.y * d0, vec3d.z);
+            entityIn.setDeltaMovement(vec3d.x, -vec3d.y * d0, vec3d.z);
         }
     }
 

@@ -26,7 +26,7 @@ import static cofh.lib.util.Utils.getItemEnchantmentLevel;
 import static cofh.lib.util.Utils.getMaxEquippedEnchantmentLevel;
 import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
 import static cofh.lib.util.references.CoreReferences.SLIMED;
-import static net.minecraft.enchantment.Enchantments.FEATHER_FALLING;
+import static net.minecraft.enchantment.Enchantments.FALL_PROTECTION;
 import static net.minecraft.enchantment.Enchantments.MENDING;
 
 @Mod.EventBusSubscriber(modid = ID_COFH_CORE)
@@ -47,7 +47,7 @@ public class CoreCommonEvents {
         }
         Entity entity = event.getEntity();
         if (entity instanceof LivingEntity) {
-            int encFeatherFalling = getMaxEquippedEnchantmentLevel((LivingEntity) entity, FEATHER_FALLING);
+            int encFeatherFalling = getMaxEquippedEnchantmentLevel((LivingEntity) entity, FALL_PROTECTION);
             if (encFeatherFalling > 0) {
                 event.setCanceled(true);
             }
@@ -62,10 +62,10 @@ public class CoreCommonEvents {
         }
         if (event.getDistance() >= 3.0) {
             LivingEntity living = event.getEntityLiving();
-            if (living.isPotionActive(SLIMED)) {
-                Vector3d motion = living.getMotion();
-                living.setMotion(motion.x, 0.08 * Math.sqrt(event.getDistance() / 0.08), motion.z);
-                living.velocityChanged = true;
+            if (living.hasEffect(SLIMED)) {
+                Vector3d motion = living.getDeltaMovement();
+                living.setDeltaMovement(motion.x, 0.08 * Math.sqrt(event.getDistance() / 0.08), motion.z);
+                living.hurtMarked = true;
                 event.setCanceled(true);
             }
         }
@@ -80,11 +80,11 @@ public class CoreCommonEvents {
         if (!CoreConfig.enableFishingExhaustion) {
             return;
         }
-        Entity player = event.getHookEntity().func_234616_v_();
+        Entity player = event.getHookEntity().getOwner();
         if (!(player instanceof PlayerEntity) || player instanceof FakePlayer) {
             return;
         }
-        ((PlayerEntity) player).addExhaustion(CoreConfig.amountFishingExhaustion);
+        ((PlayerEntity) player).causeFoodExhaustion(CoreConfig.amountFishingExhaustion);
     }
 
     @SubscribeEvent(priority = EventPriority.LOW)
@@ -96,8 +96,8 @@ public class CoreCommonEvents {
         PlayerEntity player = event.getPlayer();
         ExperienceOrbEntity orb = event.getOrb();
 
-        player.xpCooldown = 2;
-        player.onItemPickup(orb, 1);
+        player.takeXpDelay = 2;
+        player.take(orb, 1);
 
         // Improved Mending
         if (CoreConfig.improvedMending) {
@@ -105,15 +105,15 @@ public class CoreCommonEvents {
             if (entry != null) {
                 ItemStack itemstack = entry.getValue();
                 if (!itemstack.isEmpty() && itemstack.isDamaged()) {
-                    int i = Math.min((int) (orb.xpValue * itemstack.getXpRepairRatio()), itemstack.getDamage());
-                    orb.xpValue -= durabilityToXp(i);
-                    itemstack.setDamage(itemstack.getDamage() - i);
+                    int i = Math.min((int) (orb.value * itemstack.getXpRepairRatio()), itemstack.getDamageValue());
+                    orb.value -= durabilityToXp(i);
+                    itemstack.setDamageValue(itemstack.getDamageValue() - i);
                 }
             }
         }
         XpHelper.attemptStoreXP(player, orb);
-        if (orb.xpValue > 0) {
-            player.giveExperiencePoints(orb.xpValue);
+        if (orb.value > 0) {
+            player.giveExperiencePoints(orb.value);
         }
         orb.remove();
         event.setCanceled(true);
@@ -136,7 +136,7 @@ public class CoreCommonEvents {
     // region HELPERS
     private static Map.Entry<EquipmentSlotType, ItemStack> getMostDamagedItem(PlayerEntity player) {
 
-        Map<EquipmentSlotType, ItemStack> map = MENDING.getEntityEquipment(player);
+        Map<EquipmentSlotType, ItemStack> map = MENDING.getSlotItems(player);
         Map.Entry<EquipmentSlotType, ItemStack> mostDamaged = null;
         if (map.isEmpty()) {
             return null;
@@ -167,7 +167,7 @@ public class CoreCommonEvents {
 
     private static double calcDurabilityRatio(ItemStack stack) {
 
-        return (double) stack.getDamage() / stack.getMaxDamage();
+        return (double) stack.getDamageValue() / stack.getMaxDamage();
     }
     // endregion
 }

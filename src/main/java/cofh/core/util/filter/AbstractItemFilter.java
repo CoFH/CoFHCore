@@ -103,7 +103,7 @@ public abstract class AbstractItemFilter implements IFilter, IFilterOptions {
             CompoundNBT slotTag = list.getCompound(i);
             int slot = slotTag.getByte(TAG_SLOT);
             if (slot >= 0 && slot < items.size()) {
-                items.set(slot, ItemStack.read(slotTag));
+                items.set(slot, ItemStack.of(slotTag));
             }
         }
         allowList = subTag.getBoolean(TAG_FILTER_OPT_LIST);
@@ -123,7 +123,7 @@ public abstract class AbstractItemFilter implements IFilter, IFilterOptions {
             if (!items.get(i).isEmpty()) {
                 CompoundNBT slotTag = new CompoundNBT();
                 slotTag.putByte(TAG_SLOT, (byte) i);
-                items.get(i).write(slotTag);
+                items.get(i).save(slotTag);
                 list.add(slotTag);
             }
         }

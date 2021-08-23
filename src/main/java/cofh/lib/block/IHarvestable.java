@@ -8,7 +8,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nonnull;
 
 import static cofh.lib.util.Utils.getItemEnchantmentLevel;
-import static net.minecraft.enchantment.Enchantments.FORTUNE;
+import static net.minecraft.enchantment.Enchantments.BLOCK_FORTUNE;
 
 public interface IHarvestable {
 
@@ -18,7 +18,7 @@ public interface IHarvestable {
 
     default boolean harvest(World world, BlockPos pos, BlockState state, @Nonnull PlayerEntity player) {
 
-        return harvest(world, pos, state, getItemEnchantmentLevel(FORTUNE, player.getHeldItemMainhand()));
+        return harvest(world, pos, state, getItemEnchantmentLevel(BLOCK_FORTUNE, player.getMainHandItem()));
     }
 
 }

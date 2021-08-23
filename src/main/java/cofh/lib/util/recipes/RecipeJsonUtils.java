@@ -34,24 +34,24 @@ public abstract class RecipeJsonUtils {
     public static Ingredient parseIngredient(JsonElement element) {
 
         if (element == null || element.isJsonNull()) {
-            return Ingredient.fromStacks(ItemStack.EMPTY);
+            return Ingredient.of(ItemStack.EMPTY);
         }
         Ingredient ingredient;
 
         if (element.isJsonArray()) {
             try {
-                ingredient = Ingredient.deserialize(element);
+                ingredient = Ingredient.fromJson(element);
             } catch (Throwable t) {
-                ingredient = Ingredient.fromStacks(ItemStack.EMPTY);
+                ingredient = Ingredient.of(ItemStack.EMPTY);
             }
         } else {
             JsonElement subElement = element.getAsJsonObject();
             try {
                 JsonObject object = subElement.getAsJsonObject();
                 if (object.has(VALUE)) {
-                    ingredient = Ingredient.deserialize(object.get(VALUE));
+                    ingredient = Ingredient.fromJson(object.get(VALUE));
                 } else {
-                    ingredient = Ingredient.deserialize(subElement);
+                    ingredient = Ingredient.fromJson(subElement);
                 }
                 int count = 1;
                 if (object.has(COUNT)) {
@@ -60,12 +60,12 @@ public abstract class RecipeJsonUtils {
                     count = object.get(AMOUNT).getAsInt();
                 }
                 if (count > 1) {
-                    for (ItemStack stack : ingredient.getMatchingStacks()) {
+                    for (ItemStack stack : ingredient.getItems()) {
                         stack.setCount(count);
                     }
                 }
             } catch (Throwable t) {
-                ingredient = Ingredient.fromStacks(ItemStack.EMPTY);
+                ingredient = Ingredient.of(ItemStack.EMPTY);
             }
         }
         return ingredient;
@@ -157,9 +157,9 @@ public abstract class RecipeJsonUtils {
                 CompoundNBT nbt;
                 try {
                     if (nbtElement.isJsonObject()) {
-                        nbt = JsonToNBT.getTagFromJson(GSON.toJson(nbtElement));
+                        nbt = JsonToNBT.parseTag(GSON.toJson(nbtElement));
                     } else {
-                        nbt = JsonToNBT.getTagFromJson(JSONUtils.getString(nbtElement, NBT));
+                        nbt = JsonToNBT.parseTag(JSONUtils.convertToString(nbtElement, NBT));
                     }
                     stack.setTag(nbt);
                 } catch (Exception e) {
@@ -207,9 +207,9 @@ public abstract class RecipeJsonUtils {
                 CompoundNBT nbt;
                 try {
                     if (nbtElement.isJsonObject()) {
-                        nbt = JsonToNBT.getTagFromJson(GSON.toJson(nbtElement));
+                        nbt = JsonToNBT.parseTag(GSON.toJson(nbtElement));
                     } else {
-                        nbt = JsonToNBT.getTagFromJson(JSONUtils.getString(nbtElement, NBT));
+                        nbt = JsonToNBT.parseTag(JSONUtils.convertToString(nbtElement, NBT));
                     }
                     stack.setTag(nbt);
                 } catch (Exception e) {

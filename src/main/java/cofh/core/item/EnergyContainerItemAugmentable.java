@@ -49,7 +49,7 @@ public class EnergyContainerItemAugmentable extends EnergyContainerItem implemen
 
     protected void setAttributesFromAugment(ItemStack container, CompoundNBT augmentData) {
 
-        CompoundNBT subTag = container.getChildTag(TAG_PROPERTIES);
+        CompoundNBT subTag = container.getTagElement(TAG_PROPERTIES);
         if (subTag == null) {
             return;
         }

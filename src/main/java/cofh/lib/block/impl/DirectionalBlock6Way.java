@@ -23,9 +23,9 @@ public class DirectionalBlock6Way extends Block {
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
 
-        super.fillStateContainer(builder);
+        super.createBlockStateDefinition(builder);
         builder.add(FACING_ALL);
     }
 
@@ -33,29 +33,29 @@ public class DirectionalBlock6Way extends Block {
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
 
-        return this.getDefaultState().with(FACING_ALL, context.getNearestLookingDirection().getOpposite());
+        return this.defaultBlockState().setValue(FACING_ALL, context.getNearestLookingDirection().getOpposite());
     }
 
     @Override
     public BlockState rotate(BlockState state, Rotation rot) {
 
-        return state.with(FACING_ALL, Direction.byIndex(state.get(FACING_ALL).getIndex() + 1));
+        return state.setValue(FACING_ALL, Direction.from3DDataValue(state.getValue(FACING_ALL).get3DDataValue() + 1));
     }
 
     @Override
     public BlockState mirror(BlockState state, Mirror mirrorIn) {
 
-        return state.rotate(mirrorIn.toRotation(state.get(FACING_ALL)));
+        return state.rotate(mirrorIn.getRotation(state.getValue(FACING_ALL)));
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 
-        if (Utils.isWrench(player.getHeldItem(handIn).getItem())) {
+        if (Utils.isWrench(player.getItemInHand(handIn).getItem())) {
 
             BlockState rotState = rotate(state, worldIn, pos, Rotation.CLOCKWISE_90);
             if (rotState != state) {
-                worldIn.setBlockState(pos, rotState);
+                worldIn.setBlockAndUpdate(pos, rotState);
                 return ActionResultType.SUCCESS;
             }
         }
