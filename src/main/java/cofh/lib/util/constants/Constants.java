@@ -68,6 +68,8 @@ public class Constants {
             Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D),
             Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D),
             Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)};
+
+    public static final VoxelShape FULL_CUBE_COLLISION = Block.makeCuboidShape(1.0D, 0.0D, 1.0D, 15.9375D, 15.9375D, 15.9375D);
     // endregion
 
     // region MOD IDS

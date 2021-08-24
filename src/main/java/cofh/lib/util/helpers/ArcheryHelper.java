@@ -1,5 +1,6 @@
 package cofh.lib.util.helpers;
 
+import cofh.core.compat.curios.CuriosProxy;
 import cofh.lib.capability.IArcheryAmmoItem;
 import cofh.lib.capability.IArcheryBowItem;
 import cofh.lib.capability.templates.ArcheryAmmoItemWrapper;
@@ -148,12 +149,27 @@ public final class ArcheryHelper {
         ItemStack offHand = shooter.getHeldItemOffhand();
         ItemStack mainHand = shooter.getHeldItemMainhand();
 
+        // HELD
         if (offHand.getCapability(AMMO_ITEM_CAPABILITY).map(cap -> !cap.isEmpty(shooter)).orElse(false) || isArrow(offHand)) {
             return offHand;
         }
         if (mainHand.getCapability(AMMO_ITEM_CAPABILITY).map(cap -> !cap.isEmpty(shooter)).orElse(false) || isArrow(mainHand)) {
             return mainHand;
         }
+        // CURIOS
+        final ItemStack[] retStack = {ItemStack.EMPTY};
+        CuriosProxy.getAllWorn(shooter).ifPresent(c -> {
+            for (int i = 0; i < c.getSlots(); ++i) {
+                ItemStack slot = c.getStackInSlot(i);
+                if (slot.getCapability(AMMO_ITEM_CAPABILITY).map(cap -> !cap.isEmpty(shooter)).orElse(false) || isArrow(slot)) {
+                    retStack[0] = slot;
+                }
+            }
+        });
+        if (!retStack[0].isEmpty()) {
+            return retStack[0];
+        }
+        // INVENTORY
         for (ItemStack slot : shooter.inventory.mainInventory) {
             if (slot.getCapability(AMMO_ITEM_CAPABILITY).map(cap -> !cap.isEmpty(shooter)).orElse(false) || isArrow(slot)) {
                 return slot;

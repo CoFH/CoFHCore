@@ -3,7 +3,7 @@ package cofh.core;
 import cofh.core.client.gui.HeldItemFilterScreen;
 import cofh.core.client.gui.TileItemFilterScreen;
 import cofh.core.command.CoFHCommand;
-import cofh.core.compat.curios.CuriosIntegration;
+import cofh.core.compat.curios.CuriosProxy;
 import cofh.core.compat.quark.QuarkFlags;
 import cofh.core.event.ArmorEvents;
 import cofh.core.init.*;
@@ -103,9 +103,7 @@ public class CoFHCore {
         // CoreParticles.register();
         CoreRecipeSerializers.register();
 
-        if (ModList.get().isLoaded(ID_CURIOS)) {
-            FMLJavaModLoadingContext.get().getModEventBus().addListener(CuriosIntegration::sendImc);
-        }
+        CuriosProxy.register();
     }
 
     private void registerPackets() {

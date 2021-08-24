@@ -27,6 +27,7 @@ public class ItemTagsCoFH {
     public static final IOptionalNamedTag<Item> COINS_SILVER = forgeTag("coins/silver");
     public static final IOptionalNamedTag<Item> COINS_TIN = forgeTag("coins/tin");
 
+    public static final IOptionalNamedTag<Item> CROPS_AMARANTH = forgeTag("crops/amaranth");
     public static final IOptionalNamedTag<Item> CROPS_BARLEY = forgeTag("crops/barley");
     public static final IOptionalNamedTag<Item> CROPS_BELL_PEPPER = forgeTag("crops/bell_pepper");
     public static final IOptionalNamedTag<Item> CROPS_COFFEE = forgeTag("crops/coffee");
@@ -169,6 +170,7 @@ public class ItemTagsCoFH {
     public static final IOptionalNamedTag<Item> PLATES_SILVER = forgeTag("plates/silver");
     public static final IOptionalNamedTag<Item> PLATES_TIN = forgeTag("plates/tin");
 
+    public static final IOptionalNamedTag<Item> SEEDS_AMARANTH = forgeTag("seeds/amaranth");
     public static final IOptionalNamedTag<Item> SEEDS_BARLEY = forgeTag("seeds/barley");
     public static final IOptionalNamedTag<Item> SEEDS_BELL_PEPPER = forgeTag("seeds/bell_pepper");
     public static final IOptionalNamedTag<Item> SEEDS_COFFEE = forgeTag("seeds/coffee");
