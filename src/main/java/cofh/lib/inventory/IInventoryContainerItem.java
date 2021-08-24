@@ -1,6 +1,7 @@
 package cofh.lib.inventory;
 
 import cofh.lib.item.IContainerItem;
+import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
@@ -18,6 +19,21 @@ public interface IInventoryContainerItem extends IContainerItem {
     int getContainerSlots(ItemStack container);
 
     void onContainerInventoryChanged(ItemStack container);
+
+    default int getSpace(ItemStack container, int slot) {
+
+        return getSlotLimit(container, slot) - getItemAmount(container, slot);
+    }
+
+    default int getScaledItemsStored(ItemStack container, int slot, int scale) {
+
+        return MathHelper.round((double) getItemAmount(container, slot) * scale / getSlotLimit(container, slot));
+    }
+
+    default int getItemAmount(ItemStack container, int slot) {
+
+        return getStackInSlot(container, slot).getCount();
+    }
 
     @Nonnull
     default ItemStack getStackInSlot(ItemStack container, int slot) {
