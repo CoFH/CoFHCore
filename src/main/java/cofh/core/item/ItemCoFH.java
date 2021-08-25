@@ -30,6 +30,7 @@ public class ItemCoFH extends Item implements ICoFHItem {
 
     protected int burnTime = -1;
     protected int enchantability;
+    protected String modId = "";
 
     public ItemCoFH(Properties builder) {
 
@@ -54,8 +55,20 @@ public class ItemCoFH extends Item implements ICoFHItem {
         return this;
     }
 
+    public ItemCoFH setModId(String modId) {
+
+        this.modId = modId;
+        return this;
+    }
+
     protected void tooltipDelegate(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 
+    }
+
+    @Override
+    public String getCreatorModId(ItemStack itemStack) {
+
+        return modId == null || modId.isEmpty() ? super.getCreatorModId(itemStack) : modId;
     }
 
     @Override

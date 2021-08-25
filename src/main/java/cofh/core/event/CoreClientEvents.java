@@ -14,6 +14,7 @@ import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderTooltipEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -31,6 +32,9 @@ import static net.minecraftforge.common.util.Constants.NBT.TAG_COMPOUND;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = ID_COFH_CORE)
 public class CoreClientEvents {
+
+    public static int renderTime;
+    public static float renderFrame;
 
     private static final Set<String> NAMESPACES = new ObjectOpenHashSet<>();
 
@@ -125,6 +129,22 @@ public class CoreClientEvents {
         if (event.getLines().get(0) instanceof IFormattableTextComponent) {
             IFormattableTextComponent formatted = (IFormattableTextComponent) event.getLines().get(0);
             formatted.getSiblings().removeIf(string -> string.getStyle().equals(INVIS_STYLE));
+        }
+    }
+
+    @SubscribeEvent
+    public static void clientTick(TickEvent.ClientTickEvent event) {
+
+        if (event.phase == TickEvent.Phase.END) {
+            renderTime++;
+        }
+    }
+
+    @SubscribeEvent
+    public static void renderTick(TickEvent.RenderTickEvent event) {
+
+        if (event.phase == TickEvent.Phase.START) {
+            renderFrame = event.renderTickTime;
         }
     }
 

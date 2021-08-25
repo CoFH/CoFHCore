@@ -164,6 +164,7 @@ public class Constants {
     public static final int PACKET_GUI = 2;
     public static final int PACKET_REDSTONE = 3;
     public static final int PACKET_STATE = 4;
+    public static final int PACKET_RENDER = 5;
 
     public static final int PACKET_CHAT = 16;
     public static final int PACKET_MOTION = 17;

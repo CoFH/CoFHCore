@@ -33,6 +33,7 @@ public class BlockItemCoFH extends BlockItem implements ICoFHItem {
 
     protected int burnTime = -1;
     protected int enchantability;
+    protected String modId = "";
 
     protected Supplier<ItemGroup> displayGroup;
 
@@ -65,8 +66,20 @@ public class BlockItemCoFH extends BlockItem implements ICoFHItem {
         return this;
     }
 
+    public BlockItemCoFH setModId(String modId) {
+
+        this.modId = modId;
+        return this;
+    }
+
     protected void tooltipDelegate(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 
+    }
+
+    @Override
+    public String getCreatorModId(ItemStack itemStack) {
+
+        return modId == null || modId.isEmpty() ? super.getCreatorModId(itemStack) : modId;
     }
 
     @Override
