@@ -59,7 +59,7 @@ public class FluidHelper {
 
     public static final Predicate<FluidStack> IS_WATER = e -> e.getFluid().equals(Fluids.WATER);
     public static final Predicate<FluidStack> IS_LAVA = e -> e.getFluid().equals(Fluids.LAVA);
-    public static final Predicate<FluidStack> IS_XP = e -> e.getFluid().equals(CoreReferences.FLUID_XP);
+    public static final Predicate<FluidStack> IS_XP = e -> FluidTagsCoFH.EXPERIENCE.contains(e.getFluid());
 
     // TODO: Revisit
     //    public static final Object2IntMap<Fluid> COLOR_CACHE = new Object2IntOpenHashMap<>();

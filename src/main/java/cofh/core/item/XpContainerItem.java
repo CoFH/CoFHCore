@@ -1,5 +1,6 @@
 package cofh.core.item;
 
+import cofh.core.util.helpers.FluidHelper;
 import cofh.lib.fluid.FluidContainerItemWrapper;
 import cofh.lib.fluid.IFluidContainerItem;
 import cofh.lib.item.ContainerType;
@@ -141,6 +142,12 @@ public class XpContainerItem extends ItemCoFH implements IXpContainerItem, IFlui
 
         int xp = getStoredXp(container);
         return xp > 0 ? new FluidStack(FLUID_XP, xp * MB_PER_XP) : FluidStack.EMPTY;
+    }
+
+    @Override
+    public boolean isFluidValid(ItemStack container, FluidStack resource) {
+
+        return FluidHelper.IS_XP.test(resource);
     }
 
     @Override
