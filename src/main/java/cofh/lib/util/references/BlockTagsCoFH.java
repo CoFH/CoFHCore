@@ -13,6 +13,8 @@ public class BlockTagsCoFH {
     public static final IOptionalNamedTag<Block> HARDENED_GLASS = thermalTag("glass/hardened");
     public static final IOptionalNamedTag<Block> ROCKWOOL = thermalTag("rockwool");
 
+    public static final IOptionalNamedTag<Block> LOGS_ELASTICA = forgeTag("elastica_logs");
+
     public static final IOptionalNamedTag<Block> ORES_APATITE = forgeTag("ores/apatite");
     public static final IOptionalNamedTag<Block> ORES_CINNABAR = forgeTag("ores/cinnabar");
     public static final IOptionalNamedTag<Block> ORES_COPPER = forgeTag("ores/copper");

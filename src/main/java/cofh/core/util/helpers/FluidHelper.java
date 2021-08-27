@@ -4,7 +4,6 @@ import cofh.core.fluid.PotionFluid;
 import cofh.lib.fluid.FluidStorageCoFH;
 import cofh.lib.util.helpers.BlockHelper;
 import cofh.lib.util.helpers.ItemHelper;
-import cofh.lib.util.references.CoreReferences;
 import cofh.lib.util.references.FluidTagsCoFH;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.BlockState;

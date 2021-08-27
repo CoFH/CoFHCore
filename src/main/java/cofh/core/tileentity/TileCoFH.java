@@ -142,6 +142,13 @@ public class TileCoFH extends TileEntity implements ITileCallback, ITilePacketHa
 
         return null;
     }
+
+    protected void markDirtyFast() {
+
+        if (this.world != null) {
+            this.world.markChunkDirty(this.pos, this);
+        }
+    }
     // endregion
 
     // region GUI
