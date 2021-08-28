@@ -63,7 +63,11 @@ public class Proxy {
 
     }
 
-    public void registerAreaEffectTile(IAreaEffectTile tile) {
+    public void addAreaEffectTile(IAreaEffectTile tile) {
+
+    }
+
+    public void removeAreaEffectTile(IAreaEffectTile tile) {
 
     }
     // endregion

@@ -66,17 +66,7 @@ public class CoreConfig {
 
         SERVER_CONFIG.pop();
 
-        SERVER_CONFIG.push("Enchantments");
-
-        serverImprovedFeatherFalling = SERVER_CONFIG
-                .comment("If TRUE, Feather Falling will prevent Farmland from being trampled. This option will work with alternative versions (overrides) of Feather Falling.")
-                .define("Improved Feather Falling", improvedFeatherFalling);
-
-        serverImprovedMending = SERVER_CONFIG
-                .comment("If TRUE, Mending behavior is altered so that Experience Orbs always repair items if possible, and the most damaged item is prioritized. This option may not work with alternative versions (overrides) of Mending.")
-                .define("Improved Mending", improvedMending);
-
-        SERVER_CONFIG.pop();
+        genEnchantmentConfig();
 
         SERVER_CONFIG.push("Fishing");
 
@@ -143,6 +133,14 @@ public class CoreConfig {
 
         SERVER_CONFIG.push("Enchantments");
 
+        serverImprovedFeatherFalling = SERVER_CONFIG
+                .comment("If TRUE, Feather Falling will prevent Farmland from being trampled. This option will work with alternative versions (overrides) of Feather Falling.")
+                .define("Improved Feather Falling", improvedFeatherFalling);
+
+        serverImprovedMending = SERVER_CONFIG
+                .comment("If TRUE, Mending behavior is altered so that Experience Orbs always repair items if possible, and the most damaged item is prioritized. This option may not work with alternative versions (overrides) of Mending.")
+                .define("Improved Mending", improvedMending);
+
         SERVER_CONFIG.push("Holding");
         enableHolding = SERVER_CONFIG
                 .comment("If TRUE, the Holding Enchantment is available for various Storage Items and Blocks.")
@@ -166,8 +164,7 @@ public class CoreConfig {
         SubCommandIgnite.permissionLevel = permissionIgnite.get();
         SubCommandRepair.permissionLevel = permissionRepair.get();
 
-        improvedFeatherFalling = serverImprovedFeatherFalling.get();
-        improvedMending = serverImprovedMending.get();
+        refreshEnchantmentConfig();
 
         enableFishingExhaustion = serverEnableFishingExhaustion.get();
         amountFishingExhaustion = serverAmountFishingExhaustion.get().floatValue();
@@ -187,6 +184,9 @@ public class CoreConfig {
     }
 
     private static void refreshEnchantmentConfig() {
+
+        improvedFeatherFalling = serverImprovedFeatherFalling.get();
+        improvedMending = serverImprovedMending.get();
 
         if (HOLDING instanceof EnchantmentCoFH) {
             ((EnchantmentCoFH) HOLDING).setEnable(enableHolding.get());

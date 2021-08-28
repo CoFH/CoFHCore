@@ -66,9 +66,14 @@ public class ProxyUtils {
         CoFHCore.PROXY.registerItemModelProperty(item, resourceLoc, propertyGetter);
     }
 
-    public static void registerAreaEffectTile(IAreaEffectTile tile) {
+    public static void addAreaEffectTile(IAreaEffectTile tile) {
 
-        CoFHCore.PROXY.registerAreaEffectTile(tile);
+        CoFHCore.PROXY.addAreaEffectTile(tile);
+    }
+
+    public static void removeAreaEffectTile(IAreaEffectTile tile) {
+
+        CoFHCore.PROXY.removeAreaEffectTile(tile);
     }
 
 }

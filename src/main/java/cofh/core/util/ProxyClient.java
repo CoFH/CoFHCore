@@ -90,9 +90,15 @@ public class ProxyClient extends Proxy {
     }
 
     @Override
-    public void registerAreaEffectTile(IAreaEffectTile tile) {
+    public void addAreaEffectTile(IAreaEffectTile tile) {
 
         AREA_EFFECT_TILES.add(tile);
+    }
+
+    @Override
+    public void removeAreaEffectTile(IAreaEffectTile tile) {
+
+        AREA_EFFECT_TILES.remove(tile);
     }
     // endregion
 
