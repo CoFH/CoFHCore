@@ -116,7 +116,7 @@ public class ItemTagsCoFH {
     public static final IOptionalNamedTag<Item> INGOTS_SILVER = forgeTag("ingots/silver");
     public static final IOptionalNamedTag<Item> INGOTS_TIN = forgeTag("ingots/tin");
 
-    public static final IOptionalNamedTag<Item> LOGS_ELASTICA = forgeTag("elastica_logs");
+    public static final IOptionalNamedTag<Item> LOGS_RUBBERWOOD = forgeTag("rubberwood_logs");
 
     public static final IOptionalNamedTag<Item> NUGGETS_BRONZE = forgeTag("nuggets/bronze");
     public static final IOptionalNamedTag<Item> NUGGETS_CONSTANTAN = forgeTag("nuggets/constantan");
