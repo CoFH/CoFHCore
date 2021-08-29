@@ -49,9 +49,9 @@ public class TileCoFH extends TileEntity implements ITileCallback, ITilePacketHa
             if (!hasClientUpdate()) {
                 level.tickableBlockEntities.remove(this);
             }
-        }
-        if (this instanceof IAreaEffectTile) {
-            ProxyUtils.addAreaEffectTile((IAreaEffectTile) this);
+            if (this instanceof IAreaEffectTile) {
+                ProxyUtils.addAreaEffectTile((IAreaEffectTile) this);
+            }
         }
         clearRemoved();
     }

@@ -16,4 +16,9 @@ public interface IAreaEffectTile {
         return !(this instanceof ISecurable) || ((ISecurable) this).canAccess(player);
     }
 
+    default int getColor() {
+
+        return 0xFFFFFFFF;
+    }
+
 }
