@@ -12,6 +12,7 @@ import cofh.core.network.packet.client.*;
 import cofh.core.network.packet.server.*;
 import cofh.core.util.Proxy;
 import cofh.core.util.ProxyClient;
+import cofh.core.util.helpers.FluidHelper;
 import cofh.lib.capability.CapabilityArchery;
 import cofh.lib.capability.CapabilityAreaEffect;
 import cofh.lib.capability.CapabilityEnchantableItem;
@@ -147,6 +148,8 @@ public class CoFHCore {
 
         ArmorEvents.setup();
         QuarkFlags.setup();
+
+        FluidHelper.init();
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {

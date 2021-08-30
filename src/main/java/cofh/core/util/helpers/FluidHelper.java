@@ -6,6 +6,7 @@ import cofh.lib.util.helpers.BlockHelper;
 import cofh.lib.util.helpers.ItemHelper;
 import cofh.lib.util.references.FluidTagsCoFH;
 import com.mojang.datafixers.util.Pair;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.ai.attributes.Attribute;
@@ -13,6 +14,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
@@ -40,6 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import static cofh.lib.util.constants.Constants.BOTTLE_VOLUME;
@@ -59,6 +62,9 @@ public class FluidHelper {
     public static final Predicate<FluidStack> IS_WATER = e -> e.getFluid().equals(Fluids.WATER);
     public static final Predicate<FluidStack> IS_LAVA = e -> e.getFluid().equals(Fluids.LAVA);
     public static final Predicate<FluidStack> IS_XP = e -> FluidTagsCoFH.EXPERIENCE.contains(e.getFluid());
+
+    public static final Map<Item, Function<ItemStack, FluidStack>> BOTTLE_DRAIN_MAP = new Object2ObjectOpenHashMap<>();
+    public static final Map<Predicate<FluidStack>, Function<FluidStack, ItemStack>> BOTTLE_FILL_MAP = new Object2ObjectOpenHashMap<>();
 
     // TODO: Revisit
     //    public static final Object2IntMap<Fluid> COLOR_CACHE = new Object2IntOpenHashMap<>();
@@ -197,6 +203,17 @@ public class FluidHelper {
     // endregion
 
     // region CAPABILITY HELPERS
+    public static void init() {
+
+        BOTTLE_DRAIN_MAP.put(Items.POTION, (stack -> PotionFluid.getPotionFluidFromItem(BOTTLE_VOLUME, stack)));
+        BOTTLE_DRAIN_MAP.put(Items.HONEY_BOTTLE, (stack -> new FluidStack(FLUID_HONEY, BOTTLE_VOLUME)));
+        BOTTLE_DRAIN_MAP.put(Items.EXPERIENCE_BOTTLE, (stack -> new FluidStack(FLUID_XP, BOTTLE_VOLUME)));
+
+        BOTTLE_FILL_MAP.put(fluid -> fluid.getFluid() == Fluids.WATER || hasPotionTag(fluid), fluid -> PotionUtils.setPotion(new ItemStack(Items.POTION), getPotionFromFluid(fluid)));
+        BOTTLE_FILL_MAP.put(fluid -> fluid.getFluid().is(FluidTagsCoFH.HONEY), fluid -> new ItemStack(Items.HONEY_BOTTLE));
+        BOTTLE_FILL_MAP.put(fluid -> fluid.getFluid().is(FluidTagsCoFH.EXPERIENCE), fluid -> new ItemStack(Items.EXPERIENCE_BOTTLE));
+    }
+
     public static boolean hasFluidHandlerCap(ItemStack item) {
 
         return !item.isEmpty() && item.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent();
@@ -229,15 +246,7 @@ public class FluidHelper {
      */
     public static boolean drainBottleToHandler(ItemStack stack, IFluidHandler handler, PlayerEntity player, Hand hand) {
 
-        FluidStack fluid = FluidStack.EMPTY;
-
-        if (stack.getItem() == Items.POTION) {
-            fluid = PotionFluid.getPotionFluidFromItem(BOTTLE_VOLUME, stack);
-        } else if (stack.getItem() == Items.HONEY_BOTTLE) {
-            fluid = new FluidStack(FLUID_HONEY, BOTTLE_VOLUME);
-        } else if (stack.getItem() == Items.EXPERIENCE_BOTTLE) {
-            fluid = new FluidStack(FLUID_XP, BOTTLE_VOLUME);
-        }
+        FluidStack fluid = BOTTLE_DRAIN_MAP.containsKey(stack.getItem()) ? BOTTLE_DRAIN_MAP.get(stack.getItem()).apply(stack) : FluidStack.EMPTY;
         return !fluid.isEmpty() && addEmptyBottleToPlayer(stack, fluid, handler, player, hand);
     }
 
@@ -277,12 +286,11 @@ public class FluidHelper {
         }
         ItemStack bottle = ItemStack.EMPTY;
 
-        if (fluid.getFluid() == Fluids.WATER || hasPotionTag(fluid)) {
-            bottle = PotionUtils.setPotion(new ItemStack(Items.POTION), getPotionFromFluid(fluid));
-        } else if (fluid.getFluid().is(FluidTagsCoFH.HONEY)) {
-            bottle = new ItemStack(Items.HONEY_BOTTLE);
-        } else if (fluid.getFluid().is(FluidTagsCoFH.EXPERIENCE)) {
-            bottle = new ItemStack(Items.EXPERIENCE_BOTTLE);
+        for (Map.Entry<Predicate<FluidStack>, Function<FluidStack, ItemStack>> entry : BOTTLE_FILL_MAP.entrySet()) {
+            if (entry.getKey().test(fluid)) {
+                bottle = entry.getValue().apply(fluid);
+                break;
+            }
         }
         return !bottle.isEmpty() && addFilledBottleToPlayer(stack, bottle, handler, player, hand);
     }
