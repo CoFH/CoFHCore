@@ -112,22 +112,22 @@ public abstract class RecipeJsonUtils {
         return ingredient;
     }
 
-    public static void parseInputs(List<Ingredient> ingredients, List<FluidStack> fluids, JsonElement element) {
+    public static void parseInputs(List<Ingredient> ingredients, List<FluidIngredient> fluids, JsonElement element) {
 
         if (element.isJsonArray()) {
             for (JsonElement arrayElement : element.getAsJsonArray()) {
                 if (arrayElement.isJsonArray()) {
                     ingredients.add(parseIngredient(arrayElement.getAsJsonArray()));
                 } else if (arrayElement.isJsonObject()) {
-                    if (arrayElement.getAsJsonObject().has(FLUID)) {
-                        fluids.add(parseFluidStack(arrayElement));
+                    if (arrayElement.getAsJsonObject().has(FLUID) || arrayElement.getAsJsonObject().has(FLUID_TAG)) {
+                        fluids.add(parseFluidIngredient(arrayElement.getAsJsonObject()));
                     } else {
                         ingredients.add(parseIngredient(arrayElement.getAsJsonObject()));
                     }
                 }
             }
-        } else if (element.getAsJsonObject().has(FLUID)) {
-            fluids.add(parseFluidStack(element));
+        } else if (element.getAsJsonObject().has(FLUID) || element.getAsJsonObject().has(FLUID_TAG)) {
+            fluids.add(parseFluidIngredient(element.getAsJsonObject()));
         } else {
             ingredients.add(parseIngredient(element.getAsJsonObject()));
         }
@@ -257,15 +257,6 @@ public abstract class RecipeJsonUtils {
                     return FluidStack.EMPTY;
                 }
             }
-
-            //            /* NBT */
-            //            if (fluidObject.has(NBT)) {
-            //                try {
-            //                    stack.setTag(JsonToNBT.getTagFromJson(fluidObject.get(NBT).getAsString()));
-            //                } catch (Exception e) {
-            //                    return FluidStack.EMPTY;
-            //                }
-            //            }
         }
         return stack;
     }
