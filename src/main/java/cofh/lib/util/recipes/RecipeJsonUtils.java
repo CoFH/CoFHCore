@@ -1,5 +1,6 @@
 package cofh.lib.util.recipes;
 
+import cofh.lib.fluid.FluidIngredient;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -66,6 +67,46 @@ public abstract class RecipeJsonUtils {
                 }
             } catch (Throwable t) {
                 ingredient = Ingredient.of(ItemStack.EMPTY);
+            }
+        }
+        return ingredient;
+    }
+
+    public static FluidIngredient parseFluidIngredient(JsonElement element) {
+
+        if (element == null || element.isJsonNull()) {
+            return FluidIngredient.of(FluidStack.EMPTY);
+        }
+        FluidIngredient ingredient;
+
+        if (element.isJsonArray()) {
+            try {
+                ingredient = FluidIngredient.fromJson(element);
+            } catch (Throwable t) {
+                ingredient = FluidIngredient.of(FluidStack.EMPTY);
+            }
+        } else {
+            JsonElement subElement = element.getAsJsonObject();
+            try {
+                JsonObject object = subElement.getAsJsonObject();
+                if (object.has(VALUE)) {
+                    ingredient = FluidIngredient.fromJson(object.get(VALUE));
+                } else {
+                    ingredient = FluidIngredient.fromJson(subElement);
+                }
+                int amount = BUCKET_VOLUME;
+                if (object.has(AMOUNT)) {
+                    amount = object.get(AMOUNT).getAsInt();
+                } else if (object.has(COUNT)) {
+                    amount = object.get(COUNT).getAsInt();
+                }
+                if (amount > 0) {
+                    for (FluidStack stack : ingredient.getFluids()) {
+                        stack.setAmount(amount);
+                    }
+                }
+            } catch (Throwable t) {
+                ingredient = FluidIngredient.of(FluidStack.EMPTY);
             }
         }
         return ingredient;
