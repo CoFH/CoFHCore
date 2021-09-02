@@ -47,17 +47,17 @@ public class FluidIngredient implements Predicate<FluidStack> {
     }
 
     @Override
-    public boolean test(@Nullable FluidStack p_test_1_) {
+    public boolean test(@Nullable FluidStack test) {
 
-        if (p_test_1_ == null) {
+        if (test == null) {
             return false;
         } else {
             this.dissolve();
             if (this.fluidStacks.length == 0) {
-                return p_test_1_.isEmpty();
+                return test.isEmpty();
             } else {
                 for (FluidStack fluidstack : this.fluidStacks) {
-                    if (fluidstack.getFluid() == p_test_1_.getFluid()) {
+                    if (fluidstack.getFluid() == test.getFluid()) {
                         return true;
                     }
                 }
@@ -109,9 +109,9 @@ public class FluidIngredient implements Predicate<FluidStack> {
         return fromValues(stacks.filter((stack) -> !stack.isEmpty()).map(SingleFluidList::new));
     }
 
-    public static FluidIngredient of(ITag<Fluid> tagIn) {
+    public static FluidIngredient of(ITag<Fluid> tagIn, int amount) {
 
-        return fromValues(Stream.of(new FluidIngredient.TagList(tagIn)));
+        return fromValues(Stream.of(new FluidIngredient.TagList(tagIn, amount)));
     }
 
     public static FluidIngredient fromNetwork(PacketBuffer buffer) {
@@ -120,13 +120,13 @@ public class FluidIngredient implements Predicate<FluidStack> {
         return fromValues(Stream.generate(() -> new SingleFluidList(buffer.readFluidStack())).limit(i));
     }
 
-    public static FluidIngredient fromJson(@Nullable JsonElement p_199802_0_) {
+    public static FluidIngredient fromJson(@Nullable JsonElement jsonElement) {
 
-        if (p_199802_0_ != null && !p_199802_0_.isJsonNull()) {
-            if (p_199802_0_.isJsonObject()) {
-                return fromValues(Stream.of(valueFromJson(p_199802_0_.getAsJsonObject())));
-            } else if (p_199802_0_.isJsonArray()) {
-                JsonArray jsonarray = p_199802_0_.getAsJsonArray();
+        if (jsonElement != null && !jsonElement.isJsonNull()) {
+            if (jsonElement.isJsonObject()) {
+                return fromValues(Stream.of(valueFromJson(jsonElement.getAsJsonObject())));
+            } else if (jsonElement.isJsonArray()) {
+                JsonArray jsonarray = jsonElement.getAsJsonArray();
                 if (jsonarray.size() == 0) {
                     throw new JsonSyntaxException("Fluid array cannot be empty, at least one fluid must be defined");
                 } else {
@@ -140,25 +140,36 @@ public class FluidIngredient implements Predicate<FluidStack> {
         }
     }
 
-    public static FluidIngredient.IFluidList valueFromJson(JsonObject p_199803_0_) {
+    public static FluidIngredient.IFluidList valueFromJson(JsonObject jsonObject) {
 
-        if (p_199803_0_.has("fluid") && p_199803_0_.has("fluid_tag")) {
+        if (jsonObject.has("fluid") && jsonObject.has("fluid_tag")) {
             throw new JsonParseException("A fluid ingredient entry is either a fluid tag or a fluid, not both");
-        } else if (p_199803_0_.has("fluid")) {
-            ResourceLocation resourcelocation1 = new ResourceLocation(JSONUtils.getAsString(p_199803_0_, "fluid"));
+        } else if (jsonObject.has("fluid")) {
+            ResourceLocation resourcelocation1 = new ResourceLocation(JSONUtils.getAsString(jsonObject, "fluid"));
             Fluid fluid = ForgeRegistries.FLUIDS.getValue(resourcelocation1);
             if (fluid == null) {
                 throw new JsonSyntaxException("Unknown fluid '" + resourcelocation1 + "'");
             }
-            return new FluidIngredient.SingleFluidList(new FluidStack(fluid, FluidAttributes.BUCKET_VOLUME));
-        } else if (p_199803_0_.has("fluid_tag")) {
-            ResourceLocation resourcelocation = new ResourceLocation(JSONUtils.getAsString(p_199803_0_, "fluid_tag"));
+            int amount = FluidAttributes.BUCKET_VOLUME;
+            if (jsonObject.has("amount")) {
+                amount = jsonObject.get("amount").getAsInt();
+            } else if (jsonObject.has("count")) {
+                amount = jsonObject.get("count").getAsInt();
+            }
+            return new FluidIngredient.SingleFluidList(new FluidStack(fluid, amount));
+        } else if (jsonObject.has("fluid_tag")) {
+            ResourceLocation resourcelocation = new ResourceLocation(JSONUtils.getAsString(jsonObject, "fluid_tag"));
             ITag<Fluid> itag = TagCollectionManager.getInstance().getFluids().getTag(resourcelocation);
             if (itag == null) {
                 throw new JsonSyntaxException("Unknown fluid tag '" + resourcelocation + "'");
-            } else {
-                return new FluidIngredient.TagList(itag);
             }
+            int amount = FluidAttributes.BUCKET_VOLUME;
+            if (jsonObject.has("amount")) {
+                amount = jsonObject.get("amount").getAsInt();
+            } else if (jsonObject.has("count")) {
+                amount = jsonObject.get("count").getAsInt();
+            }
+            return new FluidIngredient.TagList(itag, amount);
         } else {
             throw new JsonParseException("A fluid ingredient entry needs either a fluid_tag or a fluid");
         }
@@ -198,10 +209,12 @@ public class FluidIngredient implements Predicate<FluidStack> {
     public static class TagList implements FluidIngredient.IFluidList {
 
         private final ITag<Fluid> tag;
+        private final int amount;
 
-        public TagList(ITag<Fluid> p_i48193_1_) {
+        public TagList(ITag<Fluid> tag, int amount) {
 
-            this.tag = p_i48193_1_;
+            this.tag = tag;
+            this.amount = amount;
         }
 
         public Collection<FluidStack> getFluids() {
