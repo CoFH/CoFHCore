@@ -95,6 +95,7 @@ public class Constants {
     public static final String ID_OMGOURD = "omgourd";
     public static final String ID_REDSTONE_ARSENAL = "redstone_arsenal";
     public static final String ID_THAUMCRAFT = "thaumcraft";
+    public static final String ID_TOOLS_COMPLEMENT = "tools_complement";
 
     public static final String ID_CURIOS = "curios";
     public static final String ID_QUARK = "quark";
