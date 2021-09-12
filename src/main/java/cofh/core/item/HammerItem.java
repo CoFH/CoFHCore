@@ -1,10 +1,10 @@
 package cofh.core.item;
 
 import cofh.lib.capability.templates.AreaEffectMiningItemWrapper;
+import cofh.lib.item.impl.PickaxeItemCoFH;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.PickaxeItem;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
@@ -12,7 +12,7 @@ import javax.annotation.Nullable;
 
 import static cofh.lib.util.constants.ToolTypes.HAMMER;
 
-public class HammerItem extends PickaxeItem {
+public class HammerItem extends PickaxeItemCoFH {
 
     private static final float DEFAULT_ATTACK_DAMAGE = 4.0F;
     private static final float DEFAULT_ATTACK_SPEED = -3.4F;

@@ -1,9 +1,9 @@
 package cofh.core.item;
 
 import cofh.lib.capability.templates.AreaEffectMiningItemWrapper;
+import cofh.lib.item.impl.ShovelItemCoFH;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ShovelItem;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
@@ -11,7 +11,7 @@ import javax.annotation.Nullable;
 
 import static cofh.lib.util.constants.ToolTypes.EXCAVATOR;
 
-public class ExcavatorItem extends ShovelItem {
+public class ExcavatorItem extends ShovelItemCoFH {
 
     private static final float DEFAULT_ATTACK_DAMAGE = 2.0F;
     private static final float DEFAULT_ATTACK_SPEED = -3.2F;

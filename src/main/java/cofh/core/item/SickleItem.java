@@ -8,17 +8,23 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.IItemTier;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolItem;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
 import java.util.Set;
+import java.util.function.BooleanSupplier;
 
+import static cofh.lib.util.constants.Constants.TRUE;
 import static cofh.lib.util.constants.ToolTypes.SICKLE;
 
 public class SickleItem extends ToolItem implements ICoFHItem {
+
+    protected BooleanSupplier showInGroups = TRUE;
 
     public static final Set<Block> EFFECTIVE_BLOCKS = ImmutableSet.of();
     public static final Set<Material> EFFECTIVE_MATERIALS = ImmutableSet.of(Material.LEAVES, Material.PLANT, Material.REPLACEABLE_PLANT, Material.WEB);
@@ -51,6 +57,21 @@ public class SickleItem extends ToolItem implements ICoFHItem {
     public SickleItem(IItemTier tier, Properties builder) {
 
         this(tier, DEFAULT_ATTACK_DAMAGE, DEFAULT_ATTACK_SPEED, DEFAULT_BASE_RADIUS, DEFAULT_BASE_HEIGHT, builder.addToolType(SICKLE, tier.getLevel()));
+    }
+
+    public SickleItem setShowInGroups(BooleanSupplier showInGroups) {
+
+        this.showInGroups = showInGroups;
+        return this;
+    }
+
+    @Override
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+
+        if (!showInGroups.getAsBoolean()) {
+            return;
+        }
+        super.fillItemCategory(group, items);
     }
 
     @Override

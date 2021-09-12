@@ -72,12 +72,6 @@ public class ArrowItemCoFH extends ArrowItem implements ICoFHItem {
     }
 
     @Override
-    protected boolean allowdedIn(ItemGroup group) {
-
-        return group == ItemGroup.TAB_SEARCH || getCreativeTabs().stream().anyMatch(tab -> tab == group);
-    }
-
-    @Override
     public Collection<ItemGroup> getCreativeTabs() {
 
         return displayGroup != null && displayGroup.get() != null ? Collections.singletonList(displayGroup.get()) : super.getCreativeTabs();
