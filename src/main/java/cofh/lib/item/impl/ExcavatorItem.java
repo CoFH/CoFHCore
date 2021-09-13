@@ -1,7 +1,6 @@
-package cofh.core.item;
+package cofh.lib.item.impl;
 
 import cofh.lib.capability.templates.AreaEffectMiningItemWrapper;
-import cofh.lib.item.impl.ShovelItemCoFH;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -21,7 +20,7 @@ public class ExcavatorItem extends ShovelItemCoFH {
 
     public ExcavatorItem(IItemTier tier, float attackDamageIn, float attackSpeedIn, int radius, Properties builder) {
 
-        super(tier, attackDamageIn, attackSpeedIn, builder.addToolType(EXCAVATOR, tier.getLevel()));
+        super(tier, attackDamageIn, attackSpeedIn, builder.addToolType(EXCAVATOR, tier.getLevel()).durability(tier.getUses() * 4));
         this.radius = radius;
     }
 
@@ -39,12 +38,6 @@ public class ExcavatorItem extends ShovelItemCoFH {
 
         this(tier, DEFAULT_ATTACK_DAMAGE, DEFAULT_ATTACK_SPEED, DEFAULT_BASE_AREA, builder.addToolType(EXCAVATOR, tier.getLevel()));
     }
-
-    //    @Override
-    //    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-    //
-    //        return super.canApplyAtEnchantingTable(stack, enchantment) || enchantment.canApply(new ItemStack(Items.IRON_SHOVEL));
-    //    }
 
     @Nullable
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {

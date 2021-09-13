@@ -1,7 +1,6 @@
-package cofh.core.item;
+package cofh.lib.item.impl;
 
 import cofh.lib.capability.templates.AreaEffectMiningItemWrapper;
-import cofh.lib.item.impl.PickaxeItemCoFH;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
@@ -22,7 +21,7 @@ public class HammerItem extends PickaxeItemCoFH {
 
     public HammerItem(IItemTier tier, float attackDamageIn, float attackSpeedIn, int radius, Properties builder) {
 
-        super(tier, (int) attackDamageIn, attackSpeedIn, builder.addToolType(HAMMER, tier.getLevel()));
+        super(tier, (int) attackDamageIn, attackSpeedIn, builder.addToolType(HAMMER, tier.getLevel()).durability(tier.getUses() * 4));
         this.radius = radius;
     }
 
@@ -40,12 +39,6 @@ public class HammerItem extends PickaxeItemCoFH {
 
         this(tier, DEFAULT_ATTACK_DAMAGE, DEFAULT_ATTACK_SPEED, DEFAULT_BASE_AREA, builder.addToolType(HAMMER, tier.getLevel()));
     }
-
-    //    @Override
-    //    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-    //
-    //        return super.canApplyAtEnchantingTable(stack, enchantment) || enchantment.canApply(new ItemStack(Items.IRON_PICKAXE));
-    //    }
 
     @Override
     public boolean canDisableShield(ItemStack stack, ItemStack shield, LivingEntity entity, LivingEntity attacker) {

@@ -1,4 +1,4 @@
-package cofh.core.item;
+package cofh.lib.item.impl;
 
 import cofh.lib.capability.templates.AreaEffectMiningItemWrapper;
 import cofh.lib.item.ICoFHItem;
@@ -39,7 +39,7 @@ public class SickleItem extends ToolItem implements ICoFHItem {
 
     public SickleItem(IItemTier tier, float attackDamageIn, float attackSpeedIn, int radius, int height, Properties builder) {
 
-        super(attackDamageIn, attackSpeedIn, tier, EFFECTIVE_BLOCKS, builder.addToolType(SICKLE, tier.getLevel()));
+        super(attackDamageIn, attackSpeedIn, tier, EFFECTIVE_BLOCKS, builder.addToolType(SICKLE, tier.getLevel()).durability(tier.getUses() * 4));
         this.radius = radius;
         this.height = height;
     }

@@ -1,4 +1,4 @@
-package cofh.core.item;
+package cofh.lib.item.impl;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;

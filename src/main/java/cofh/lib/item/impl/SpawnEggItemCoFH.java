@@ -1,4 +1,4 @@
-package cofh.core.item;
+package cofh.lib.item.impl;
 
 import cofh.core.util.ProxyUtils;
 import cofh.lib.item.IColorableItem;

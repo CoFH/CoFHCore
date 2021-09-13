@@ -1,4 +1,4 @@
-package cofh.core.item;
+package cofh.lib.item;
 
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.crafting.Ingredient;
