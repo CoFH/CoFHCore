@@ -33,6 +33,7 @@ import net.minecraft.particles.IParticleData;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.tags.ITag;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.SoundEvents;
@@ -151,6 +152,16 @@ public class Utils {
             }
         }
         return false;
+    }
+
+    public static boolean isTagPopulated(ITag tag) {
+
+        return !isTagEmpty(tag);
+    }
+
+    public static boolean isTagEmpty(ITag tag) {
+
+        return tag == null || tag.getValues().isEmpty();
     }
 
     // region TIME CHECKS

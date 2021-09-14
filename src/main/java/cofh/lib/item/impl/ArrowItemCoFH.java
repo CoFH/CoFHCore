@@ -1,4 +1,4 @@
-package cofh.core.item;
+package cofh.lib.item.impl;
 
 import cofh.lib.item.ICoFHItem;
 import net.minecraft.block.DispenserBlock;
@@ -28,7 +28,7 @@ import static cofh.lib.util.constants.Constants.TRUE;
 public class ArrowItemCoFH extends ArrowItem implements ICoFHItem {
 
     protected BooleanSupplier showEnchantEffect = TRUE;
-    protected BooleanSupplier showInItemGroup = TRUE;
+    protected BooleanSupplier showInGroups = TRUE;
 
     protected Supplier<ItemGroup> displayGroup;
 
@@ -49,6 +49,12 @@ public class ArrowItemCoFH extends ArrowItem implements ICoFHItem {
         return this;
     }
 
+    public ArrowItemCoFH setShowInGroups(BooleanSupplier showInGroups) {
+
+        this.showInGroups = showInGroups;
+        return this;
+    }
+
     public ArrowItemCoFH setInfinitySupport(boolean infinitySupport) {
 
         this.infinitySupport = infinitySupport;
@@ -58,7 +64,7 @@ public class ArrowItemCoFH extends ArrowItem implements ICoFHItem {
     @Override
     public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
 
-        if (!showInItemGroup.getAsBoolean()) {
+        if (!showInGroups.getAsBoolean()) {
             return;
         }
         super.fillItemCategory(group, items);

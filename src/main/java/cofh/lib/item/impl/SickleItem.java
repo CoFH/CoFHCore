@@ -16,8 +16,11 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Set;
 import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 import static cofh.lib.util.constants.Constants.TRUE;
 import static cofh.lib.util.constants.ToolTypes.SICKLE;
@@ -25,6 +28,8 @@ import static cofh.lib.util.constants.ToolTypes.SICKLE;
 public class SickleItem extends ToolItem implements ICoFHItem {
 
     protected BooleanSupplier showInGroups = TRUE;
+
+    protected Supplier<ItemGroup> displayGroup;
 
     public static final Set<Block> EFFECTIVE_BLOCKS = ImmutableSet.of();
     public static final Set<Material> EFFECTIVE_MATERIALS = ImmutableSet.of(Material.LEAVES, Material.PLANT, Material.REPLACEABLE_PLANT, Material.WEB);
@@ -59,6 +64,12 @@ public class SickleItem extends ToolItem implements ICoFHItem {
         this(tier, DEFAULT_ATTACK_DAMAGE, DEFAULT_ATTACK_SPEED, DEFAULT_BASE_RADIUS, DEFAULT_BASE_HEIGHT, builder.addToolType(SICKLE, tier.getLevel()));
     }
 
+    public SickleItem setDisplayGroup(Supplier<ItemGroup> displayGroup) {
+
+        this.displayGroup = displayGroup;
+        return this;
+    }
+
     public SickleItem setShowInGroups(BooleanSupplier showInGroups) {
 
         this.showInGroups = showInGroups;
@@ -72,6 +83,12 @@ public class SickleItem extends ToolItem implements ICoFHItem {
             return;
         }
         super.fillItemCategory(group, items);
+    }
+
+    @Override
+    public Collection<ItemGroup> getCreativeTabs() {
+
+        return displayGroup != null && displayGroup.get() != null ? Collections.singletonList(displayGroup.get()) : super.getCreativeTabs();
     }
 
     @Override
