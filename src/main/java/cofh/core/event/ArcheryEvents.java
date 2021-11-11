@@ -43,7 +43,7 @@ public class ArcheryEvents {
             return;
         }
         PlayerEntity shooter = event.getPlayer();
-        event.setCanceled(bow.getCapability(BOW_ITEM_CAPABILITY).orElse(new ArcheryBowItemWrapper(bow)).fireArrow(findAmmo(shooter), shooter, event.getCharge(), event.getWorld()));
+        event.setCanceled(bow.getCapability(BOW_ITEM_CAPABILITY).orElse(new ArcheryBowItemWrapper(bow)).fireArrow(findAmmo(shooter, bow), shooter, event.getCharge(), event.getWorld()));
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -54,7 +54,7 @@ public class ArcheryEvents {
             return;
         }
         PlayerEntity shooter = event.getPlayer();
-        ItemStack ammo = findAmmo(shooter);
+        ItemStack ammo = findAmmo(shooter, bow);
 
         if (ammo.isEmpty() && getItemEnchantmentLevel(INFINITY_ARROWS, bow) > 0) {
             ammo = new ItemStack(Items.ARROW);

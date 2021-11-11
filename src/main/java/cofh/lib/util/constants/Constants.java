@@ -183,6 +183,8 @@ public class Constants {
     public static final int PACKET_STORAGE_CLEAR = 37;
     public static final int PACKET_CLAIM_XP = 38;
 
+    public static final int PACKET_LEFT_CLICK = 40;
+
     public static final int PACKET_ITEM_MODE_CHANGE = 64;
     // endregion
 
@@ -200,6 +202,7 @@ public class Constants {
     public static final UUID EMPTY_UUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
 
     public static final UUID UUID_ARMOR_TOUGHNESS = UUID.fromString("D1ADBCE5-95CE-470C-BF99-6C59843084A2");
+    public static final UUID UUID_ATTACK_KNOCKBACK = UUID.fromString("05A16EFA-3B80-11EC-8D3D-0242AC130003");
 
     public static final UUID UUID_EFFECT_CHILLED_MOVEMENT_SPEED = UUID.fromString("D99513AE-6F0E-4987-82DE-80DCBAF058BC");
     public static final UUID UUID_EFFECT_CHILLED_ATTACK_SPEED = UUID.fromString("DF93E7E2-5056-49FA-B425-0D8C46902105");

@@ -8,15 +8,14 @@ import cofh.lib.capability.templates.ArcheryBowItemWrapper;
 import cofh.lib.util.Utils;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.item.ArrowItem;
-import net.minecraft.item.BowItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.item.*;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.LazyOptional;
+
+import java.util.function.Predicate;
 
 import static cofh.lib.capability.CapabilityArchery.AMMO_ITEM_CAPABILITY;
 import static cofh.lib.capability.CapabilityArchery.BOW_ITEM_CAPABILITY;
@@ -144,16 +143,18 @@ public final class ArcheryHelper {
         return isArrow(ammo) ? ((ArrowItem) ammo.getItem()).createArrow(world, ammo, shooter) : ((ArrowItem) Items.ARROW).createArrow(world, ammo, shooter);
     }
 
-    public static ItemStack findAmmo(PlayerEntity shooter) {
+    public static ItemStack findAmmo(PlayerEntity shooter, ItemStack weapon) {
 
         ItemStack offHand = shooter.getOffhandItem();
         ItemStack mainHand = shooter.getMainHandItem();
+        Predicate<ItemStack> isHeldAmmo = weapon.getItem() instanceof ShootableItem ? ((ShootableItem) weapon.getItem()).getSupportedHeldProjectiles() : i -> false;
+        Predicate<ItemStack> isAmmo = weapon.getItem() instanceof ShootableItem ? ((ShootableItem) weapon.getItem()).getAllSupportedProjectiles() : i -> false;
 
         // HELD
-        if (offHand.getCapability(AMMO_ITEM_CAPABILITY).map(cap -> !cap.isEmpty(shooter)).orElse(false) || isArrow(offHand)) {
+        if (offHand.getCapability(AMMO_ITEM_CAPABILITY).map(cap -> !cap.isEmpty(shooter)).orElse(false) || isHeldAmmo.test(offHand)) {
             return offHand;
         }
-        if (mainHand.getCapability(AMMO_ITEM_CAPABILITY).map(cap -> !cap.isEmpty(shooter)).orElse(false) || isArrow(mainHand)) {
+        if (mainHand.getCapability(AMMO_ITEM_CAPABILITY).map(cap -> !cap.isEmpty(shooter)).orElse(false) || isHeldAmmo.test(mainHand)) {
             return mainHand;
         }
         // CURIOS
@@ -161,7 +162,7 @@ public final class ArcheryHelper {
         CuriosProxy.getAllWorn(shooter).ifPresent(c -> {
             for (int i = 0; i < c.getSlots(); ++i) {
                 ItemStack slot = c.getStackInSlot(i);
-                if (slot.getCapability(AMMO_ITEM_CAPABILITY).map(cap -> !cap.isEmpty(shooter)).orElse(false) || isArrow(slot)) {
+                if (slot.getCapability(AMMO_ITEM_CAPABILITY).map(cap -> !cap.isEmpty(shooter)).orElse(false) || isAmmo.test(slot)) {
                     retStack[0] = slot;
                 }
             }
@@ -171,7 +172,7 @@ public final class ArcheryHelper {
         }
         // INVENTORY
         for (ItemStack slot : shooter.inventory.items) {
-            if (slot.getCapability(AMMO_ITEM_CAPABILITY).map(cap -> !cap.isEmpty(shooter)).orElse(false) || isArrow(slot)) {
+            if (slot.getCapability(AMMO_ITEM_CAPABILITY).map(cap -> !cap.isEmpty(shooter)).orElse(false) || isAmmo.test(slot)) {
                 return slot;
             }
         }

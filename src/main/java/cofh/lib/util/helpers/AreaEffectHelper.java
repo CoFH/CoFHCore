@@ -248,6 +248,46 @@ public class AreaEffectHelper {
     }
     // endregion
 
+    //region PLACING
+    public static ImmutableList<BlockPos> getPlaceableBlocksRadius(ItemStack stack, BlockPos pos, PlayerEntity player, int radius) {
+
+        List<BlockPos> area;
+        World world = player.getCommandSenderWorld();
+        Item tool = stack.getItem();
+
+        BlockRayTraceResult traceResult = RayTracer.retrace(player, RayTraceContext.FluidMode.NONE);
+        if (traceResult.getType() == RayTraceResult.Type.MISS || player.isSecondaryUseActive() || !canToolAffect(tool, stack, world, pos) || radius <= 0) {
+            return ImmutableList.of();
+        }
+        int yMin = -1;
+        int yMax = 2 * radius - 1;
+
+        switch (traceResult.getDirection()) {
+            case DOWN:
+            case UP:
+                area = BlockPos.betweenClosedStream(pos.offset(-radius, 0, -radius), pos.offset(radius, 0, radius))
+                        .filter(blockPos -> canToolAffect(tool, stack, world, blockPos))
+                        .map(BlockPos::immutable)
+                        .collect(Collectors.toList());
+                break;
+            case NORTH:
+            case SOUTH:
+                area = BlockPos.betweenClosedStream(pos.offset(-radius, yMin, 0), pos.offset(radius, yMax, 0))
+                        .filter(blockPos -> canToolAffect(tool, stack, world, blockPos))
+                        .map(BlockPos::immutable)
+                        .collect(Collectors.toList());
+                break;
+            default:
+                area = BlockPos.betweenClosedStream(pos.offset(0, yMin, -radius), pos.offset(0, yMax, radius))
+                        .filter(blockPos -> canToolAffect(tool, stack, world, blockPos))
+                        .map(BlockPos::immutable)
+                        .collect(Collectors.toList());
+                break;
+        }
+        return ImmutableList.copyOf(area);
+    }
+    //endregion
+
     // region HOE
     public static ImmutableList<BlockPos> getTillableBlocksRadius(ItemStack stack, BlockPos pos, PlayerEntity player, int radius) {
 

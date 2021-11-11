@@ -20,6 +20,9 @@ public class CapabilityArchery {
     @CapabilityInject(IArcheryBowItem.class)
     public static Capability<IArcheryBowItem> BOW_ITEM_CAPABILITY = null;
 
+    @CapabilityInject(IArcheryBowItem.class)
+    public static Capability<IArcheryBowItem> CROSSBOW_ITEM_CAPABILITY = null;
+
     @CapabilityInject(IArcheryAmmoItem.class)
     public static Capability<IArcheryAmmoItem> AMMO_ITEM_CAPABILITY = null;
 
