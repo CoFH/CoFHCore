@@ -3,6 +3,7 @@ package cofh.lib.data;
 import cofh.lib.util.DeferredRegisterCoFH;
 import cofh.lib.util.flags.FlagManager;
 import cofh.lib.util.flags.FlagRecipeCondition;
+import cofh.lib.util.flags.TagExistsRecipeCondition;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -453,6 +454,12 @@ public class RecipeProviderCoFH extends RecipeProvider implements IConditionBuil
         public ConditionalRecipeConsumer addConditions(List<ICondition> conditions) {
 
             this.conditions.addAll(conditions);
+            return this;
+        }
+
+        public ConditionalRecipeConsumer tagExists(ITag.INamedTag<?> tag) {
+
+            this.conditions.add(new TagExistsRecipeCondition(tag.getName()));
             return this;
         }
 

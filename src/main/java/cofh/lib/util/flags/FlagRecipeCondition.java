@@ -31,6 +31,12 @@ public class FlagRecipeCondition implements ICondition {
         return manager.getFlag(flag).getAsBoolean();
     }
 
+    @Override
+    public String toString() {
+
+        return "flag_set(\"" + flag + "\")";
+    }
+
     // region SERIALIZER
     public static class Serializer implements IConditionSerializer<FlagRecipeCondition> {
 

@@ -2,7 +2,6 @@ package cofh.lib.item.impl;
 
 import cofh.lib.capability.templates.ArcheryBowItemWrapper;
 import cofh.lib.item.ICoFHItem;
-import net.minecraft.item.BowItem;
 import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;

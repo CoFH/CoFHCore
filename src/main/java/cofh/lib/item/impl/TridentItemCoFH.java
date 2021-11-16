@@ -65,4 +65,5 @@ public class TridentItemCoFH extends TridentItem implements ICoFHItem {
 
         return enchantability;
     }
+
 }
