@@ -13,6 +13,7 @@ public class QuarkFlags {
 
     public static void setup() {
 
+        // This allows the "quark:flag" syntax to work as a recipe condition without Quark present.
         if (!isModLoaded(ID_QUARK)) {
             new FlagManager(ID_QUARK);
         }

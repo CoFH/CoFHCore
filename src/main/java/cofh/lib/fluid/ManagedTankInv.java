@@ -17,6 +17,7 @@ public class ManagedTankInv extends SimpleTankInv {
 
     protected IFluidHandler inputHandler;
     protected IFluidHandler outputHandler;
+    protected IFluidHandler ioHandler;
     protected IFluidHandler accessibleHandler;
     protected IFluidHandler internalHandler;
 
@@ -63,7 +64,8 @@ public class ManagedTankInv extends SimpleTankInv {
 
         inputHandler = new ManagedFluidHandler(callback, inputTanks, Collections.emptyList());
         outputHandler = new ManagedFluidHandler(callback, Collections.emptyList(), outputTanks);
-        accessibleHandler = new ManagedFluidHandler(callback, inputTanks, outputTanks).restrict();
+        ioHandler = new ManagedFluidHandler(callback, inputTanks, outputTanks).restrict();
+        accessibleHandler = new ManagedFluidHandler(callback, inputTanks, outputTanks);
         internalHandler = new SimpleFluidHandler(callback, internalTanks);
         allHandler = new SimpleFluidHandler(callback, tanks);
     }
@@ -108,6 +110,8 @@ public class ManagedTankInv extends SimpleTankInv {
                 return inputHandler;
             case OUTPUT:
                 return outputHandler;
+            case INPUT_OUTPUT:
+                return ioHandler;
             case ACCESSIBLE:
                 return accessibleHandler;
             case INTERNAL:

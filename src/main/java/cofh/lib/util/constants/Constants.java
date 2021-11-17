@@ -88,6 +88,7 @@ public class Constants {
     public static final String ID_THERMAL_FOUNDATION = "thermal_foundation";
     public static final String ID_THERMAL_HORIZONS = "thermal_horizons";
     public static final String ID_THERMAL_INNOVATION = "thermal_innovation";
+    public static final String ID_THERMAL_INTEGRATION = "thermal_integration";
     public static final String ID_THERMAL_LOCOMOTION = "thermal_locomotion";
 
     public static final String ID_ARCHERS_PARADOX = "archers_paradox";

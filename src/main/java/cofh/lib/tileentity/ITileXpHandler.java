@@ -19,7 +19,6 @@ public interface ITileXpHandler {
             return true;
         }
         return false;
-
     }
 
     default void spawnXpOrbs(World world, int xp, Vector3d pos) {
