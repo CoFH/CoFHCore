@@ -116,6 +116,11 @@ public class GuiHelper {
         return createDefaultSlot(gui, posX - 1, posY - 1, 18, 18, PATH_ELEMENTS + "slot.png", 32, 32);
     }
 
+    public static ElementSlot createLockedSlot(IGuiAccess gui, int posX, int posY) {
+
+        return createDefaultSlot(gui, posX - 1, posY - 1, 18, 18, PATH_ELEMENTS + "slot.png", 32, 32).setOverlayTexture(PATH_ELEMENTS + "locked_overlay_slot.png");
+    }
+
     public static ElementSlot createInputSlot(IGuiAccess gui, int posX, int posY, IReconfigurable reconfig) {
 
         return createDefaultSlot(gui, posX - 1, posY - 1, 18, 18, PATH_ELEMENTS + "slot.png", PATH_ELEMENTS + "input_underlay_slot.png", reconfig::hasInputSide, 32, 32);

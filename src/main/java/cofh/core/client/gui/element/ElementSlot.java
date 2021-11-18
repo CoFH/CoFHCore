@@ -60,6 +60,12 @@ public class ElementSlot extends ElementBase {
 
         drawSlot();
         drawUnderlayTexture();
+
+    }
+
+    @Override
+    public void drawForeground(MatrixStack matrixStack, int mouseX, int mouseY) {
+
         drawOverlayTexture();
     }
 
