@@ -6,16 +6,23 @@ import cofh.lib.capability.IArcheryBowItem;
 import cofh.lib.capability.templates.ArcheryAmmoItemWrapper;
 import cofh.lib.capability.templates.ArcheryBowItemWrapper;
 import cofh.lib.util.Utils;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
+import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.*;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.EntityRayTraceResult;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.LazyOptional;
 
+import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import static cofh.lib.capability.CapabilityArchery.AMMO_ITEM_CAPABILITY;
 import static cofh.lib.capability.CapabilityArchery.BOW_ITEM_CAPABILITY;
@@ -199,6 +206,19 @@ public final class ArcheryHelper {
             }
         }
         return ItemStack.EMPTY;
+    }
+
+    public static Stream<EntityRayTraceResult> findHitEntities(World world, ProjectileEntity projectile, Vector3d startPos, Vector3d endPos, Predicate<Entity> filter) {
+
+        Vector3d padding = new Vector3d(projectile.getBbWidth() * 0.5, projectile.getBbHeight() * 0.5, projectile.getBbWidth() * 0.5);
+        return findHitEntities(world, projectile, startPos, endPos, projectile.getBoundingBox().expandTowards(projectile.getDeltaMovement()).inflate(1.5D), padding, filter);
+    }
+
+    public static Stream<EntityRayTraceResult> findHitEntities(World world, ProjectileEntity projectile, Vector3d startPos, Vector3d endPos, AxisAlignedBB searchArea, Vector3d padding, Predicate<Entity> filter) {
+
+        return world.getEntities(projectile, searchArea, filter).stream()
+                .filter(entity -> entity.getBoundingBox().inflate(padding.x(), padding.y(), padding.z()).clip(startPos, endPos).isPresent())
+                .map(EntityRayTraceResult::new);
     }
 
 }
