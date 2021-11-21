@@ -184,9 +184,8 @@ public class Constants {
     public static final int PACKET_STORAGE_CLEAR = 37;
     public static final int PACKET_CLAIM_XP = 38;
 
-    public static final int PACKET_LEFT_CLICK = 40;
-
     public static final int PACKET_ITEM_MODE_CHANGE = 64;
+    public static final int PACKET_ITEM_LEFT_CLICK = 65;
     // endregion
 
     // region CONSTANTS
