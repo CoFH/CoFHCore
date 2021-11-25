@@ -1,6 +1,7 @@
 package cofh.core.event;
 
 import cofh.core.init.CoreConfig;
+import cofh.lib.util.Utils;
 import cofh.lib.util.helpers.XpHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -10,6 +11,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.event.entity.player.PlayerXpEvent;
@@ -130,6 +132,14 @@ public class CoreCommonEvents {
         }
         if (event.getRand().nextInt(CoreConfig.amountSaplingGrowthMod) != 0) {
             event.setResult(Event.Result.DENY);
+        }
+    }
+
+    @SubscribeEvent
+    public static void serverTick(TickEvent.ServerTickEvent event) {
+
+        if (event.phase == TickEvent.Phase.START) {
+            Utils.tickTimeConstants();
         }
     }
 
