@@ -38,7 +38,7 @@ public class ShieldEvents {
             return;
         }
         ItemStack shield = entity.getUseItem();
-        shield.getCapability(SHIELD_ITEM_CAPABILITY).ifPresent(cap -> cap.onBlock(entity, source));
+        shield.getCapability(SHIELD_ITEM_CAPABILITY).ifPresent(cap -> cap.onBlock(entity, source, event.getAmount()));
     }
 
     // region HELPERS

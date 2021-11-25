@@ -11,6 +11,6 @@ public interface IShieldItem {
      * @param entity Entity holding the shield.
      * @param source Immediate source of the damage. True source may be an entity.
      */
-    void onBlock(LivingEntity entity, DamageSource source);
+    void onBlock(LivingEntity entity, DamageSource source, float amount);
 
 }
