@@ -16,6 +16,7 @@ import java.util.function.Supplier;
 public abstract class ItemModelProviderCoFH extends ItemModelProvider {
 
     public static final String ARMOR = "armor";
+    public static final String MATERIALS = "materials";
     public static final String PROJECTILES = "projectiles";
     public static final String TOOLS = "tools";
 
