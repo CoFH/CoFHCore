@@ -53,6 +53,7 @@ public class CoreIDs {
 
     // public static final String ID_PARTICLE_SNOW = "snow";
 
+    public static final String ID_CRAFTING_POTION = "crafting_shaped_potion";
     public static final String ID_CRAFTING_SECURABLE = "crafting_securable";
     // endregion
 }
