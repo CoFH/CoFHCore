@@ -21,7 +21,13 @@ public class ManagedFluidHandler extends SimpleFluidHandler {
         this.inputTanks = inputTanks;
         this.outputTanks = outputTanks;
         this.tanks.addAll(inputTanks);
-        this.tanks.addAll(outputTanks);
+
+        // Do not add a duplicate to the underlying "all tanks" list.
+        for (FluidStorageCoFH tank : outputTanks) {
+            if (!this.tanks.contains(tank)) {
+                this.tanks.add(tank);
+            }
+        }
     }
 
     public ManagedFluidHandler restrict() {

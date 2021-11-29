@@ -1,6 +1,5 @@
 package cofh.core.util.crafting;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.*;
