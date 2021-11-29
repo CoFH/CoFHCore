@@ -90,6 +90,11 @@ public class Utils {
         return entity instanceof FakePlayer;
     }
 
+    public static boolean isCreativePlayer(Entity entity) {
+
+        return entity instanceof PlayerEntity && ((PlayerEntity) entity).abilities.instabuild;
+    }
+
     public static String createPrettyJSON(String jsonString) {
 
         JsonParser parser = new JsonParser();
