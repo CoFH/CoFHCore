@@ -3,11 +3,15 @@ package cofh.core.util.helpers;
 import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.model.BakedQuad;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.MissingTextureSprite;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -16,13 +20,19 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.renderer.vertex.VertexFormatElement;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Matrix4f;
+import net.minecraft.util.math.vector.Quaternion;
 import net.minecraftforge.client.model.pipeline.LightUtil;
 import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Contains various helper functions to assist with rendering.
@@ -35,7 +45,7 @@ public final class RenderHelper {
 
     }
 
-    public static final double RENDER_OFFSET = 1.0D / 512.0D;
+    public static final float RENDER_OFFSET = 1.0F / 512.0F;
     public static final ResourceLocation MC_BLOCK_SHEET = new ResourceLocation("textures/atlas/blocks.png");
     public static final ResourceLocation MC_FONT_DEFAULT = new ResourceLocation("textures/font/ascii.png");
     public static final ResourceLocation MC_FONT_SGA = new ResourceLocation("textures/font/ascii_sga.png");
@@ -422,6 +432,84 @@ public final class RenderHelper {
     public static void bindTexture(ResourceLocation texture) {
 
         engine().bind(texture);
+    }
+
+    public static void renderItemOnBlockSide(MatrixStack matrixStackIn, ItemStack stack, Direction side, BlockPos pos) {
+
+        if (stack.isEmpty() || side.getAxis() == Direction.Axis.Y) {
+            return;
+        }
+        matrixStackIn.pushPose();
+
+        int x = pos.getX();
+        int y = pos.getY();
+        int z = pos.getZ();
+
+        switch (side) {
+            case NORTH:
+                matrixStackIn.translate(x + 0.75, y + 0.84375, z + RenderHelper.RENDER_OFFSET * 145);
+                break;
+            case SOUTH:
+                matrixStackIn.translate(x + 0.25, y + 0.84375, z + 1 - RenderHelper.RENDER_OFFSET * 145);
+                matrixStackIn.mulPose(new Quaternion(0, 180, 0, true));
+                break;
+            case WEST:
+                matrixStackIn.translate(x + RenderHelper.RENDER_OFFSET * 145, y + 0.84375, z + 0.25);
+                matrixStackIn.mulPose(new Quaternion(0, 90, 0, true));
+                break;
+            case EAST:
+                matrixStackIn.translate(x + 1 - RenderHelper.RENDER_OFFSET * 145, y + 0.84375, z + 0.75);
+                matrixStackIn.mulPose(new Quaternion(0, 270, 0, true));
+                break;
+            default:
+        }
+        matrixStackIn.scale(0.03125F, 0.03125F, -RenderHelper.RENDER_OFFSET);
+        matrixStackIn.mulPose(new Quaternion(0, 0, 180, true));
+
+        // renderItem().renderAndDecorateItem(stack, 0, 0);
+
+        matrixStackIn.popPose();
+
+        // What of this do I still need?
+
+        //        GlStateManager.enableAlpha();
+        //        GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+        //        GlStateManager.enableBlend();
+        //        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
+        //        GlStateManager.popMatrix();
+        //        net.minecraft.client.renderer.RenderHelper.enableStandardItemLighting();
+    }
+
+    private static void renderFastItem(@Nonnull ItemStack itemStack, BlockState state, int slot, MatrixStack matrix, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay, Direction side, float partialTickTime) {
+
+        matrix.pushPose();
+
+        Consumer<IRenderTypeBuffer> finish = (IRenderTypeBuffer buf) -> {
+            if (buf instanceof IRenderTypeBuffer.Impl)
+                ((IRenderTypeBuffer.Impl) buf).endBatch();
+        };
+
+        try {
+            matrix.translate(0, 0, 100f);
+            matrix.scale(1, -1, 1);
+            matrix.scale(16, 16, 16);
+
+            IBakedModel itemModel = renderItem().getModel(itemStack, null, null);
+            boolean render3D = itemModel.isGui3d();
+            finish.accept(buffer);
+
+            if (render3D) {
+                setupGui3DDiffuseLighting();
+            } else {
+                setupGuiFlatDiffuseLighting();
+            }
+            matrix.last().normal().set(1, -1, 1);
+            renderItem().render(itemStack, ItemCameraTransforms.TransformType.GUI, false, matrix, buffer, combinedLight, combinedOverlay, itemModel);
+            finish.accept(buffer);
+        } catch (Exception e) {
+            // pokemon!
+        }
+        matrix.popPose();
     }
 
 }

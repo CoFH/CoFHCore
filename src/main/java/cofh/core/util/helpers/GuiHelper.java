@@ -7,6 +7,7 @@ import cofh.core.tileentity.TileCoFH;
 import cofh.lib.client.gui.IGuiAccess;
 import cofh.lib.energy.EnergyStorageCoFH;
 import cofh.lib.fluid.FluidStorageCoFH;
+import cofh.lib.inventory.ItemStorageCoFH;
 import cofh.lib.util.control.IReconfigurable;
 import cofh.lib.xp.XpStorage;
 import net.minecraftforge.fluids.FluidStack;
@@ -177,7 +178,19 @@ public class GuiHelper {
                 .setSize(width, height)
                 .setTexture(texture, texW, texH);
     }
-    // endregion
+
+    public static ElementItemStorage createDefaultItemStorage(IGuiAccess gui, int posX, int posY, ItemStorageCoFH storage) {
+
+        return createDefaultItemStorage(gui, posX, posY, storage, 16, 42, 32, 64);
+    }
+
+    public static ElementItemStorage createDefaultItemStorage(IGuiAccess gui, int posX, int posY, ItemStorageCoFH storage, int width, int height, int texW, int texH) {
+
+        return (ElementItemStorage) new ElementItemStorage(gui, posX, posY, storage)
+                .setCreativeTexture(PATH_ELEMENTS + "storage_energy_c.png")
+                .setTexture(PATH_ELEMENTS + "storage_energy.png", texW, texH)
+                .setSize(width, height);
+    }// endregion
 
     // region EXPERIENCE
     public static ElementXpStorage createDefaultXpStorage(IGuiAccess gui, int posX, int posY, XpStorage storage) {
