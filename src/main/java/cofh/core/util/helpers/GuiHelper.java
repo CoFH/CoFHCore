@@ -16,8 +16,7 @@ import java.util.function.BooleanSupplier;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
-import static cofh.core.network.packet.server.StorageClearPacket.StorageType.ENERGY;
-import static cofh.core.network.packet.server.StorageClearPacket.StorageType.FLUID;
+import static cofh.core.network.packet.server.StorageClearPacket.StorageType.*;
 import static cofh.lib.util.constants.Constants.PATH_ELEMENTS;
 import static cofh.lib.util.constants.Constants.TRUE;
 import static cofh.lib.util.helpers.StringHelper.canLocalize;
@@ -181,16 +180,22 @@ public class GuiHelper {
 
     public static ElementItemStorage createDefaultItemStorage(IGuiAccess gui, int posX, int posY, ItemStorageCoFH storage) {
 
-        return createDefaultItemStorage(gui, posX, posY, storage, 16, 42, 32, 64);
+        return createDefaultItemStorage(gui, posX, posY, storage, 16, 34, 32, 64);
     }
 
     public static ElementItemStorage createDefaultItemStorage(IGuiAccess gui, int posX, int posY, ItemStorageCoFH storage, int width, int height, int texW, int texH) {
 
         return (ElementItemStorage) new ElementItemStorage(gui, posX, posY, storage)
-                .setCreativeTexture(PATH_ELEMENTS + "storage_energy_c.png")
-                .setTexture(PATH_ELEMENTS + "storage_energy.png", texW, texH)
+                .setCreativeTexture(PATH_ELEMENTS + "storage_item_c.png")
+                .setTexture(PATH_ELEMENTS + "storage_item.png", texW, texH)
                 .setSize(width, height);
-    }// endregion
+    }
+
+    public static ElementResourceStorage setClearable(ElementItemStorage storage, TileCoFH tile, int slot) {
+
+        return storage.setClearStorage(() -> StorageClearPacket.sendToServer(tile, ITEM, slot));
+    }
+    // endregion
 
     // region EXPERIENCE
     public static ElementXpStorage createDefaultXpStorage(IGuiAccess gui, int posX, int posY, XpStorage storage) {

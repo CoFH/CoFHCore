@@ -6,7 +6,6 @@ import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CropsBlock;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -181,7 +180,7 @@ public class CropsBlockCoFH extends CropsBlock implements IHarvestable {
             return true;
         }
         if (getPostHarvestAge() >= 0) {
-            int fortune = EnchantmentHelper.getItemEnchantmentLevel(BLOCK_FORTUNE, player.getMainHandItem());
+            int fortune = Utils.getItemEnchantmentLevel(BLOCK_FORTUNE, player.getMainHandItem());
             Utils.dropItemStackIntoWorldWithRandomness(new ItemStack(getCropItem(), 2 + MathHelper.binomialDist(fortune, 0.5D)), world, pos);
             world.setBlock(pos, getStateForAge(getPostHarvestAge()), 2);
         } else {

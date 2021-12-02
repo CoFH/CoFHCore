@@ -22,16 +22,6 @@ public class EnergyHelper {
 
     }
 
-    public static boolean validFurnaceFuel(ItemStack input) {
-
-        return getEnergyFurnaceFuel(input) > 0;
-    }
-
-    public static int getEnergyFurnaceFuel(ItemStack stack) {
-
-        return ForgeHooks.getBurnTime(stack) * RF_PER_FURNACE_UNIT;
-    }
-
     public static boolean hasEnergyHandlerCap(ItemStack item) {
 
         return !item.isEmpty() && item.getCapability(getEnergySystem()).isPresent();

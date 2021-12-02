@@ -151,7 +151,7 @@ public class CropsBlockTall extends CropsBlockCoFH {
             return true;
         }
         if (getPostHarvestAge() >= 0) {
-            int fortune = EnchantmentHelper.getItemEnchantmentLevel(BLOCK_FORTUNE, player.getMainHandItem());
+            int fortune = Utils.getItemEnchantmentLevel(BLOCK_FORTUNE, player.getMainHandItem());
             Utils.dropItemStackIntoWorldWithRandomness(new ItemStack(getCropItem(), 2 + MathHelper.binomialDist(fortune, 0.5D)), world, pos);
             if (isTop(state)) {
                 world.setBlock(pos, this.getStateForAge(getPostHarvestAge() + getTallAge()), 2);
