@@ -103,6 +103,10 @@ public class CoreConfig {
                 .comment("If TRUE, Enchantment descriptions will be added to the tooltip for Enchanted Books containing only a single enchantment.")
                 .define("Show Enchantment Descriptions", enableEnchantmentDescriptions);
 
+        //        clientEnableFoodDescriptions = CLIENT_CONFIG
+        //                .comment("If TRUE, Food descriptions (nutrition and effects) will be added to the tooltip for Food items.")
+        //                .define("Show Food Descriptions", enableFoodDescriptions);
+
         clientEnableItemDescriptions = CLIENT_CONFIG
                 .comment("If TRUE, Item descriptions will be added to their tooltips if possible.")
                 .define("Show Item Descriptions", enableItemDescriptions);
@@ -176,6 +180,7 @@ public class CoreConfig {
     private static void refreshClientConfig() {
 
         enableEnchantmentDescriptions = clientEnableEnchantmentDescriptions.get();
+        // enableFoodDescriptions = clientEnableFoodDescriptions.get();
         enableItemDescriptions = clientEnableItemDescriptions.get();
         enableItemTags = clientEnableItemTags.get();
 
@@ -213,6 +218,7 @@ public class CoreConfig {
     public static int amountSaplingGrowthMod = 4;
 
     public static boolean enableEnchantmentDescriptions = true;
+    public static boolean enableFoodDescriptions = true;
     public static boolean enableItemDescriptions = true;
     public static boolean enableKeywords = true;
     public static boolean enableItemTags = true;
@@ -230,6 +236,7 @@ public class CoreConfig {
     private static IntValue serverAmountSaplingGrowthMod;
 
     private static BooleanValue clientEnableEnchantmentDescriptions;
+    private static BooleanValue clientEnableFoodDescriptions;
     private static BooleanValue clientEnableItemDescriptions;
     private static BooleanValue clientEnableItemTags;
 

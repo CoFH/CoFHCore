@@ -185,6 +185,7 @@ public class ArmorEvents {
         STING_DAMAGE_TYPES.add("sting");
         STING_DAMAGE_TYPES.add("cactus");
         STING_DAMAGE_TYPES.add("sweetBerryBush");
+        STING_DAMAGE_TYPES.add("sadiroot");
 
         HAZARD_DAMAGE_TYPES.add("lightningBolt");
         HAZARD_DAMAGE_TYPES.add("cold");

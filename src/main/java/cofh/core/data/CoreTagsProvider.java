@@ -1,7 +1,9 @@
 package cofh.core.data;
 
+import cofh.lib.util.references.BlockTagsCoFH;
 import cofh.lib.util.references.FluidTagsCoFH;
 import cofh.lib.util.references.ItemTagsCoFH;
+import net.minecraft.block.Blocks;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.FluidTagsProvider;
@@ -31,6 +33,7 @@ public class CoreTagsProvider {
         @Override
         protected void addTags() {
 
+            tag(BlockTagsCoFH.PUMPKINS_CARVED).add(Blocks.CARVED_PUMPKIN);
         }
 
     }
@@ -50,6 +53,8 @@ public class CoreTagsProvider {
 
         @Override
         protected void addTags() {
+
+            copy(BlockTagsCoFH.PUMPKINS_CARVED, ItemTagsCoFH.PUMPKINS_CARVED);
 
             tag(ItemTagsCoFH.ARMOR_IRON).add(
                     Items.IRON_BOOTS,
@@ -92,6 +97,33 @@ public class CoreTagsProvider {
                     Items.DIAMOND_PICKAXE,
                     Items.DIAMOND_SHOVEL,
                     Items.DIAMOND_SWORD
+            );
+
+            tag(ItemTagsCoFH.COOKED_FISH).add(
+                    Items.COOKED_COD,
+                    Items.COOKED_SALMON
+            );
+
+            tag(ItemTagsCoFH.COOKED_MEAT).add(
+                    Items.COOKED_PORKCHOP,
+                    Items.COOKED_BEEF,
+                    Items.COOKED_RABBIT,
+                    Items.COOKED_CHICKEN,
+                    Items.COOKED_MUTTON
+            );
+
+            tag(ItemTagsCoFH.RAW_FISH).add(
+                    Items.COD,
+                    Items.SALMON,
+                    Items.TROPICAL_FISH
+            );
+
+            tag(ItemTagsCoFH.RAW_MEAT).add(
+                    Items.PORKCHOP,
+                    Items.BEEF,
+                    Items.RABBIT,
+                    Items.CHICKEN,
+                    Items.MUTTON
             );
         }
 

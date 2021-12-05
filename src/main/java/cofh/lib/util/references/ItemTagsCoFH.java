@@ -224,6 +224,8 @@ public class ItemTagsCoFH {
     public static final IOptionalNamedTag<Item> STORAGE_BLOCKS_TAR = forgeTag("storage_blocks/tar");
     public static final IOptionalNamedTag<Item> STORAGE_BLOCKS_TIN = forgeTag("storage_blocks/tin");
 
+    public static final IOptionalNamedTag<Item> PUMPKINS_CARVED = forgeTag("pumpkins/carved");
+
     public static final IOptionalNamedTag<Item> ARMOR_IRON = forgeTag("armor/iron");
     public static final IOptionalNamedTag<Item> ARMOR_GOLD = forgeTag("armor/gold");
     public static final IOptionalNamedTag<Item> ARMOR_DIAMOND = forgeTag("armor/diamond");
@@ -239,6 +241,12 @@ public class ItemTagsCoFH {
     public static final IOptionalNamedTag<Item> SAWDUST = forgeTag("sawdust");
     public static final IOptionalNamedTag<Item> SLAG = forgeTag("slag");
     public static final IOptionalNamedTag<Item> TAR = forgeTag("tar");
+
+    public static final IOptionalNamedTag<Item> COOKED_MEAT = forgeTag("foods/meat/cooked");
+    public static final IOptionalNamedTag<Item> RAW_MEAT = forgeTag("foods/meat/raw");
+
+    public static final IOptionalNamedTag<Item> COOKED_FISH = forgeTag("foods/fish/cooked");
+    public static final IOptionalNamedTag<Item> RAW_FISH = forgeTag("foods/fish/raw");
 
     public static final IOptionalNamedTag<Item> LOCKS = thermalTag("crafting/locks");
     public static final IOptionalNamedTag<Item> SECURABLE = thermalTag("crafting/securable");

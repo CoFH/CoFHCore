@@ -51,7 +51,7 @@ public class CakeBlockCoFH extends CakeBlock {
 
         if (worldIn.isClientSide) {
             ItemStack stack = player.getItemInHand(handIn);
-            if (this.eatPiece(worldIn, pos, state, player) == ActionResultType.SUCCESS) {
+            if (this.eatPiece(worldIn, pos, state, player).consumesAction()) {
                 return ActionResultType.SUCCESS;
             }
             if (stack.isEmpty()) {

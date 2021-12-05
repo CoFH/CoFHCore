@@ -141,6 +141,7 @@ public class CropsBlockCoFH extends CropsBlock implements IHarvestable {
     }
 
     // region AGE
+    @Override
     public IntegerProperty getAgeProperty() {
 
         return AGE_0_7;
