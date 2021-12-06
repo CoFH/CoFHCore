@@ -1,7 +1,7 @@
 80c91b6c649aac27df19f94e7bb68ca945ab2e17 assets/cofh_core/models/item/ectoplasm.json
 374fc761ad454802cb3e7a484cfec94537b114d8 data/cofh_core/loot_tables/blocks/glossed_magma.json
 488dd370028945cb1cedf5c6fcd5307156c6544f data/cofh_core/recipes/ectoplasm.json
-83e4d0378f1fa9ecaaa116f4eeccb45552225f4b data/forge/tags/blocks/pumpkin/carved.json
+83e4d0378f1fa9ecaaa116f4eeccb45552225f4b data/forge/tags/blocks/pumpkins/carved.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/fluids/creosote.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/fluids/crude_oil.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/fluids/ender.json

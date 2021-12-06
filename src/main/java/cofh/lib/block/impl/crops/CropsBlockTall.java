@@ -108,7 +108,7 @@ public class CropsBlockTall extends CropsBlockCoFH {
             return worldIn.getBlockState(pos.below()).getBlock() == this;
         }
         if (getAge(state) >= getTallAge()) {
-            return worldIn.getBlockState(pos.above()).getBlock() == this;
+            return worldIn.getBlockState(pos.above()).getBlock() == this && super.canSurvive(state, worldIn, pos);
         }
         return pos.getY() < 255 && super.canSurvive(state, worldIn, pos) && (worldIn.isEmptyBlock(pos.above()));
     }

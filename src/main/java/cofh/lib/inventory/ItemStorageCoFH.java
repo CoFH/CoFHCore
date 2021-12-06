@@ -137,8 +137,11 @@ public class ItemStorageCoFH implements IItemHandler, IItemStackAccess, IResourc
     protected final ItemStack loadItemStack(CompoundNBT nbt) {
 
         ItemStack retStack = ItemStack.of(nbt);
-        if (getCapacity() > retStack.getMaxStackSize()) {
-            retStack.setCount(nbt.getInt("IntCount"));
+        if (nbt.contains("IntCount")) {
+            int storedCount = nbt.getInt("IntCount");
+            if (retStack.getCount() < storedCount) {
+                retStack.setCount(storedCount);
+            }
         }
         return retStack;
     }
@@ -146,7 +149,7 @@ public class ItemStorageCoFH implements IItemHandler, IItemStackAccess, IResourc
     protected final void saveItemStack(ItemStack stack, CompoundNBT nbt) {
 
         stack.save(nbt);
-        if (getCapacity() > stack.getMaxStackSize()) {
+        if (stack.getCount() > Byte.MAX_VALUE) {
             nbt.putInt("IntCount", stack.getCount());
         }
     }
