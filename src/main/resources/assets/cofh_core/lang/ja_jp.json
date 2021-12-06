@@ -30,8 +30,10 @@
 
   "info.cofh.another_player": "他のプレイヤー",
   "info.cofh.amount": "数値",
+  "info.cofh.amount_unmodifiable": "不変の値",
   "info.cofh.area": "エリア",
   "info.cofh.arrows": "矢",
+  "info.cofh.boostable": "ブースト可能",
   "info.cofh.chance": "確率",
   "info.cofh.chance_additional": "追加確率",
   "info.cofh.claimable": "要求可能",
