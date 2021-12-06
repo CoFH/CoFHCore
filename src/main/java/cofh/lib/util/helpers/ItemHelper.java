@@ -1,5 +1,6 @@
 package cofh.lib.util.helpers;
 
+import cofh.lib.item.ILeftClickHandlerItem;
 import cofh.lib.item.IMultiModeItem;
 import com.google.common.base.Strings;
 import net.minecraft.block.Block;
@@ -259,6 +260,22 @@ public class ItemHelper {
 
         ItemStack heldItem = getHeldMultiModeStack(player);
         ((IMultiModeItem) heldItem.getItem()).onModeChange(player, heldItem);
+    }
+    // endregion
+
+    // region LEFT CLICK
+    public static boolean isPlayerHoldingLeftClickItem(PlayerEntity player) {
+
+        if (!isPlayerHoldingSomething(player)) {
+            return false;
+        }
+        return player.getMainHandItem().getItem() instanceof ILeftClickHandlerItem;
+    }
+
+    public static void onHeldLeftClickItem(PlayerEntity player) {
+
+        ItemStack heldItem = player.getMainHandItem();
+        ((ILeftClickHandlerItem) heldItem.getItem()).onLeftClick(player, heldItem);
     }
     // endregion
 }

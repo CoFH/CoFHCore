@@ -1,6 +1,7 @@
 80c91b6c649aac27df19f94e7bb68ca945ab2e17 assets/cofh_core/models/item/ectoplasm.json
 374fc761ad454802cb3e7a484cfec94537b114d8 data/cofh_core/loot_tables/blocks/glossed_magma.json
 488dd370028945cb1cedf5c6fcd5307156c6544f data/cofh_core/recipes/ectoplasm.json
+83e4d0378f1fa9ecaaa116f4eeccb45552225f4b data/forge/tags/blocks/pumpkins/carved.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/fluids/creosote.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/fluids/crude_oil.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/fluids/ender.json
@@ -13,6 +14,11 @@ e86b5ac3986c151f404956aab35a0ed8bb9a9856 data/forge/tags/fluids/potion.json
 ac06d2c25f17d740831a9f4dce9e999175a131a6 data/forge/tags/items/armor/diamond.json
 f2f7b764bb0bcb2f8879ef548a1a76cb26170957 data/forge/tags/items/armor/gold.json
 391eaf99cd11223696ad678b1d81b3256e475165 data/forge/tags/items/armor/iron.json
+f6f21a46dd264ba831ca7ba95aa9df30884d8a4e data/forge/tags/items/foods/fish/cooked.json
+e649e661fc3c6ac6aaa5504ac02f432959ed4c6a data/forge/tags/items/foods/fish/raw.json
+b7e73768417943cffbbb1c99aa5cad85ba45b179 data/forge/tags/items/foods/meat/cooked.json
+59e15b2f7733e5fd01af78fb091a7b9bfb63e57a data/forge/tags/items/foods/meat/raw.json
+83e4d0378f1fa9ecaaa116f4eeccb45552225f4b data/forge/tags/items/pumpkins/carved.json
 a3ee15454b7dc86019512781728c13341cbec555 data/forge/tags/items/tools/diamond.json
 ed003ae99ca98a8dc465190cdfa941595be4f4dd data/forge/tags/items/tools/gold.json
 4f00c7a01265e01d5f525e918f97c8f0a911a6a8 data/forge/tags/items/tools/iron.json

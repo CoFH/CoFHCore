@@ -30,8 +30,10 @@
 
   "info.cofh.another_player": "Another Player",
   "info.cofh.amount": "Amount",
+  "info.cofh.amount_unmodifiable": "Unmodifiable Amount",
   "info.cofh.area": "Area",
   "info.cofh.arrows": "Arrows",
+  "info.cofh.boostable": "Boostable",
   "info.cofh.chance": "Chance",
   "info.cofh.chance_additional": "Additional Chance",
   "info.cofh.claimable": "Claimable",

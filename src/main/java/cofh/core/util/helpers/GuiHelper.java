@@ -7,6 +7,7 @@ import cofh.core.tileentity.TileCoFH;
 import cofh.lib.client.gui.IGuiAccess;
 import cofh.lib.energy.EnergyStorageCoFH;
 import cofh.lib.fluid.FluidStorageCoFH;
+import cofh.lib.inventory.ItemStorageCoFH;
 import cofh.lib.util.control.IReconfigurable;
 import cofh.lib.xp.XpStorage;
 import net.minecraftforge.fluids.FluidStack;
@@ -15,8 +16,7 @@ import java.util.function.BooleanSupplier;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
-import static cofh.core.network.packet.server.StorageClearPacket.StorageType.ENERGY;
-import static cofh.core.network.packet.server.StorageClearPacket.StorageType.FLUID;
+import static cofh.core.network.packet.server.StorageClearPacket.StorageType.*;
 import static cofh.lib.util.constants.Constants.PATH_ELEMENTS;
 import static cofh.lib.util.constants.Constants.TRUE;
 import static cofh.lib.util.helpers.StringHelper.canLocalize;
@@ -116,6 +116,11 @@ public class GuiHelper {
         return createDefaultSlot(gui, posX - 1, posY - 1, 18, 18, PATH_ELEMENTS + "slot.png", 32, 32);
     }
 
+    public static ElementSlot createLockedSlot(IGuiAccess gui, int posX, int posY) {
+
+        return createDefaultSlot(gui, posX - 1, posY - 1, 18, 18, PATH_ELEMENTS + "slot.png", 32, 32).setOverlayTexture(PATH_ELEMENTS + "locked_overlay_slot.png");
+    }
+
     public static ElementSlot createInputSlot(IGuiAccess gui, int posX, int posY, IReconfigurable reconfig) {
 
         return createDefaultSlot(gui, posX - 1, posY - 1, 18, 18, PATH_ELEMENTS + "slot.png", PATH_ELEMENTS + "input_underlay_slot.png", reconfig::hasInputSide, 32, 32);
@@ -171,6 +176,24 @@ public class GuiHelper {
                 .setOverlayTexture(overlayTexture)
                 .setSize(width, height)
                 .setTexture(texture, texW, texH);
+    }
+
+    public static ElementItemStorage createDefaultItemStorage(IGuiAccess gui, int posX, int posY, ItemStorageCoFH storage) {
+
+        return createDefaultItemStorage(gui, posX, posY, storage, 16, 34, 32, 64);
+    }
+
+    public static ElementItemStorage createDefaultItemStorage(IGuiAccess gui, int posX, int posY, ItemStorageCoFH storage, int width, int height, int texW, int texH) {
+
+        return (ElementItemStorage) new ElementItemStorage(gui, posX, posY, storage)
+                .setCreativeTexture(PATH_ELEMENTS + "storage_item_c.png")
+                .setTexture(PATH_ELEMENTS + "storage_item.png", texW, texH)
+                .setSize(width, height);
+    }
+
+    public static ElementResourceStorage setClearable(ElementItemStorage storage, TileCoFH tile, int slot) {
+
+        return storage.setClearStorage(() -> StorageClearPacket.sendToServer(tile, ITEM, slot));
     }
     // endregion
 

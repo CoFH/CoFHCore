@@ -20,6 +20,7 @@ public class ManagedItemInv extends SimpleItemInv {
 
     protected IItemHandler inputHandler;
     protected IItemHandler outputHandler;
+    protected IItemHandler ioHandler;
     protected IItemHandler accessibleHandler;
     protected IItemHandler internalHandler;
 
@@ -84,7 +85,8 @@ public class ManagedItemInv extends SimpleItemInv {
 
         inputHandler = new ManagedItemHandler(callback, inputSlots, Collections.emptyList());
         outputHandler = new ManagedItemHandler(callback, Collections.emptyList(), outputSlots);
-        accessibleHandler = new ManagedItemHandler(callback, inputSlots, outputSlots).restrict();
+        ioHandler = new ManagedItemHandler(callback, inputSlots, outputSlots).restrict();
+        accessibleHandler = new ManagedItemHandler(callback, inputSlots, outputSlots);
         internalHandler = new SimpleItemHandler(callback, internalSlots);
         allHandler = new SimpleItemHandler(callback, slots);
     }
@@ -130,6 +132,8 @@ public class ManagedItemInv extends SimpleItemInv {
                 return inputHandler;
             case OUTPUT:
                 return outputHandler;
+            case INPUT_OUTPUT:
+                return ioHandler;
             case ACCESSIBLE:
                 return accessibleHandler;
             case INTERNAL:

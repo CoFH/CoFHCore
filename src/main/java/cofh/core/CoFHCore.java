@@ -132,6 +132,7 @@ public class CoFHCore {
         PACKET_HANDLER.registerPacket(PACKET_CLAIM_XP, ClaimXPPacket::new);
 
         PACKET_HANDLER.registerPacket(PACKET_ITEM_MODE_CHANGE, ItemModeChangePacket::new);
+        PACKET_HANDLER.registerPacket(PACKET_ITEM_LEFT_CLICK, ItemLeftClickPacket::new);
     }
 
     // region INITIALIZATION

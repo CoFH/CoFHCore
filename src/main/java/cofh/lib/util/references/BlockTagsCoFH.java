@@ -54,6 +54,8 @@ public class BlockTagsCoFH {
     public static final IOptionalNamedTag<Block> STORAGE_BLOCKS_TAR = forgeTag("storage_blocks/tar");
     public static final IOptionalNamedTag<Block> STORAGE_BLOCKS_TIN = forgeTag("storage_blocks/tin");
 
+    public static final IOptionalNamedTag<Block> PUMPKINS_CARVED = forgeTag("pumpkins/carved");
+
     // region HELPERS
     private static IOptionalNamedTag<Block> thermalTag(String name) {
 

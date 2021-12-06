@@ -88,6 +88,11 @@ public class CoreClientEvents {
                 }
             }
         }
+        //        if (CoreConfig.enableFoodDescriptions) {
+        //            if (stack.isEdible()) {
+        //
+        //            }
+        //        }
         if (CoreConfig.enableItemTags && event.getFlags().isAdvanced()) {
             Item item = event.getItemStack().getItem();
 

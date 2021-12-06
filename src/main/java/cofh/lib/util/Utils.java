@@ -90,6 +90,11 @@ public class Utils {
         return entity instanceof FakePlayer;
     }
 
+    public static boolean isCreativePlayer(Entity entity) {
+
+        return entity instanceof PlayerEntity && ((PlayerEntity) entity).abilities.instabuild;
+    }
+
     public static String createPrettyJSON(String jsonString) {
 
         JsonParser parser = new JsonParser();
@@ -166,30 +171,39 @@ public class Utils {
 
     // region TIME CHECKS
     public static final int TIME_CONSTANT = 32;
-    public static final int TIME_CONSTANT_2X = TIME_CONSTANT * 2;
-
     public static final int TIME_CONSTANT_HALF = TIME_CONSTANT / 2;
     public static final int TIME_CONSTANT_QUARTER = TIME_CONSTANT / 4;
-    public static final int TIME_CONSTANT_EIGHTH = TIME_CONSTANT / 8;
+
+    private static int timeConstant = 0;
+    private static int timeConstantHalf = 0;
+    private static int timeConstantQuarter = 0;
+
+    public static void tickTimeConstants() {
+
+        if (++timeConstant >= TIME_CONSTANT) {
+            timeConstant = 0;
+        }
+        if (++timeConstantHalf >= TIME_CONSTANT_HALF) {
+            timeConstantHalf = 0;
+        }
+        if (++timeConstantQuarter >= TIME_CONSTANT_QUARTER) {
+            timeConstantQuarter = 0;
+        }
+    }
 
     public static boolean timeCheck(World world) {
 
-        return world.getGameTime() % TIME_CONSTANT == 0;
+        return timeConstant == 0;
     }
 
     public static boolean timeCheckHalf(World world) {
 
-        return world.getGameTime() % TIME_CONSTANT_HALF == 0;
+        return timeConstantHalf == 0;
     }
 
     public static boolean timeCheckQuarter(World world) {
 
-        return world.getGameTime() % TIME_CONSTANT_QUARTER == 0;
-    }
-
-    public static boolean timeCheckEighth(World world) {
-
-        return world.getGameTime() % TIME_CONSTANT_EIGHTH == 0;
+        return timeConstantQuarter == 0;
     }
     // endregion
 

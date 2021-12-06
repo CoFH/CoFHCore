@@ -24,6 +24,8 @@ public class HeldItemFilterContainer extends ContainerCoFH implements IFilterOpt
     protected InvWrapperGeneric filterInventory;
     protected ItemStack filterStack;
 
+    public SlotLocked lockedSlot;
+
     public HeldItemFilterContainer(int windowId, PlayerInventory inventory, PlayerEntity player) {
 
         super(HELD_ITEM_FILTER_CONTAINER, windowId, inventory, player);
@@ -62,7 +64,8 @@ public class HeldItemFilterContainer extends ContainerCoFH implements IFilterOpt
         }
         for (int i = 0; i < 9; ++i) {
             if (i == inventory.selected) {
-                addSlot(new SlotLocked(inventory, i, xOffset + i * 18, yOffset + 58));
+                lockedSlot = new SlotLocked(inventory, i, xOffset + i * 18, yOffset + 58);
+                addSlot(lockedSlot);
             } else {
                 addSlot(new Slot(inventory, i, xOffset + i * 18, yOffset + 58));
             }

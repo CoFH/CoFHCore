@@ -21,7 +21,13 @@ public class ManagedItemHandler extends SimpleItemHandler {
         this.inputSlots = inputSlots;
         this.outputSlots = outputSlots;
         this.slots.addAll(inputSlots);
-        this.slots.addAll(outputSlots);
+
+        // Do not add a duplicate to the underlying "all slots" list.
+        for (ItemStorageCoFH slot : outputSlots) {
+            if (!this.slots.contains(slot)) {
+                this.slots.add(slot);
+            }
+        }
     }
 
     public ManagedItemHandler restrict() {

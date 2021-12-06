@@ -88,6 +88,7 @@ public class Constants {
     public static final String ID_THERMAL_FOUNDATION = "thermal_foundation";
     public static final String ID_THERMAL_HORIZONS = "thermal_horizons";
     public static final String ID_THERMAL_INNOVATION = "thermal_innovation";
+    public static final String ID_THERMAL_INTEGRATION = "thermal_integration";
     public static final String ID_THERMAL_LOCOMOTION = "thermal_locomotion";
 
     public static final String ID_ARCHERS_PARADOX = "archers_paradox";
@@ -111,6 +112,9 @@ public class Constants {
     public static final IntegerProperty AGE_0_7 = IntegerProperty.create("age", 0, 7);
     public static final IntegerProperty AGE_0_9 = IntegerProperty.create("age", 0, 9);
     public static final IntegerProperty AGE_0_10 = IntegerProperty.create("age", 0, 10);
+
+    public static final IntegerProperty BITES_0_3 = IntegerProperty.create("bites", 0, 3);
+    public static final IntegerProperty BITES_0_7 = IntegerProperty.create("bites", 0, 7);
 
     public static final DirectionProperty FACING_ALL = DirectionProperty.create("facing", Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST, Direction.UP, Direction.DOWN);
     public static final DirectionProperty FACING_HORIZONTAL = DirectionProperty.create("facing", Plane.HORIZONTAL);
@@ -183,9 +187,8 @@ public class Constants {
     public static final int PACKET_STORAGE_CLEAR = 37;
     public static final int PACKET_CLAIM_XP = 38;
 
-    public static final int PACKET_LEFT_CLICK = 40;
-
     public static final int PACKET_ITEM_MODE_CHANGE = 64;
+    public static final int PACKET_ITEM_LEFT_CLICK = 65;
     // endregion
 
     // region CONSTANTS
@@ -202,7 +205,8 @@ public class Constants {
     public static final UUID EMPTY_UUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
 
     public static final UUID UUID_ARMOR_TOUGHNESS = UUID.fromString("D1ADBCE5-95CE-470C-BF99-6C59843084A2");
-    public static final UUID UUID_ATTACK_KNOCKBACK = UUID.fromString("05A16EFA-3B80-11EC-8D3D-0242AC130003");
+    public static final UUID UUID_TOOL_KNOCKBACK = UUID.fromString("D5A16EFA-3B80-11EC-8D3D-0242AC130003");
+    public static final UUID UUID_TOOL_REACH = UUID.fromString("DAE66BD6-BAAE-4702-9F9F-9327C3BB6581");
 
     public static final UUID UUID_EFFECT_CHILLED_MOVEMENT_SPEED = UUID.fromString("D99513AE-6F0E-4987-82DE-80DCBAF058BC");
     public static final UUID UUID_EFFECT_CHILLED_ATTACK_SPEED = UUID.fromString("DF93E7E2-5056-49FA-B425-0D8C46902105");

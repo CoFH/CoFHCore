@@ -9,21 +9,21 @@ import java.util.function.Supplier;
 
 import static cofh.lib.util.constants.Constants.EMPTY_ITEM;
 
-public class ElementItemStack extends ElementBase {
+public class ElementItem extends ElementBase {
 
     protected Supplier<ItemStack> renderStack = EMPTY_ITEM;
 
-    public ElementItemStack(IGuiAccess gui) {
+    public ElementItem(IGuiAccess gui) {
 
         super(gui);
     }
 
-    public ElementItemStack(IGuiAccess gui, int posX, int posY) {
+    public ElementItem(IGuiAccess gui, int posX, int posY) {
 
         super(gui, posX, posY);
     }
 
-    public ElementItemStack setItem(Supplier<ItemStack> supplier) {
+    public ElementItem setItem(Supplier<ItemStack> supplier) {
 
         this.renderStack = supplier;
         return this;
@@ -33,9 +33,7 @@ public class ElementItemStack extends ElementBase {
     public void drawForeground(MatrixStack matrixStack, int mouseX, int mouseY) {
 
         if (!renderStack.get().isEmpty()) {
-            // GL11.glPushMatrix();
             RenderHelper.renderItem().renderAndDecorateItem(renderStack.get().getStack(), posX(), posY());
-            // GL11.glPopMatrix();
         }
     }
 

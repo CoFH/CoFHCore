@@ -1,13 +1,13 @@
 package cofh.lib.inventory;
 
-import cofh.lib.item.IContainerItem;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
 import javax.annotation.Nonnull;
 
-public interface IInventoryContainerItem extends IContainerItem {
+// TODO: Re-implement if a Holding solution is found.
+public interface IInventoryContainerItem { // extends IContainerItem {
 
     default CompoundNBT getOrCreateInvTag(ItemStack container) {
 
