@@ -7,12 +7,17 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolItem;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
@@ -96,6 +101,16 @@ public class SickleItem extends ToolItem implements ICoFHItem {
 
         if (state.getHarvestTool() == SICKLE) {
             return getTier().getLevel() >= state.getHarvestLevel();
+        }
+        return EFFECTIVE_MATERIALS.contains(state.getMaterial());
+    }
+
+    public boolean mineBlock(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity entity) {
+
+        if (!world.isClientSide && !state.getBlock().is(BlockTags.FIRE)) {
+            stack.hurtAndBreak(1, entity, (p_220036_0_) -> {
+                p_220036_0_.broadcastBreakEvent(EquipmentSlotType.MAINHAND);
+            });
         }
         return EFFECTIVE_MATERIALS.contains(state.getMaterial());
     }
