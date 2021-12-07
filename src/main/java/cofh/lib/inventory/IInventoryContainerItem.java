@@ -6,12 +6,14 @@ import net.minecraft.nbt.CompoundNBT;
 
 import javax.annotation.Nonnull;
 
+import static cofh.lib.util.constants.NBTTags.TAG_ITEM_INV;
+
 // TODO: Re-implement if a Holding solution is found.
 public interface IInventoryContainerItem { // extends IContainerItem {
 
     default CompoundNBT getOrCreateInvTag(ItemStack container) {
 
-        return container.getOrCreateTag();
+        return container.getOrCreateTagElement(TAG_ITEM_INV);
     }
 
     SimpleItemInv getContainerInventory(ItemStack container);

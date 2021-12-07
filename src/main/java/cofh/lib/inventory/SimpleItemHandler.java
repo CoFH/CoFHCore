@@ -35,11 +35,6 @@ public class SimpleItemHandler implements IItemHandler {
         this.slots = new ArrayList<>(slots);
     }
 
-    public boolean hasSlots() {
-
-        return slots.size() > 0;
-    }
-
     public boolean isEmpty() {
 
         for (ItemStorageCoFH slot : slots) {
