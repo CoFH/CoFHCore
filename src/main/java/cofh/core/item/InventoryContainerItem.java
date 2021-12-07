@@ -6,7 +6,6 @@ import cofh.lib.inventory.SimpleItemInv;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.WeakHashMap;
 
@@ -15,7 +14,7 @@ import static cofh.lib.util.helpers.ItemHelper.areItemStacksEqualIgnoreTags;
 
 public class InventoryContainerItem extends ItemCoFH implements IInventoryContainerItem {
 
-    protected static final int MAP_CAPACITY = 64;
+    protected static final int MAP_CAPACITY = 128;
     protected static final WeakHashMap<ItemStack, SimpleItemInv> INVENTORIES = new WeakHashMap<>(MAP_CAPACITY);
 
     protected int slots;
@@ -34,17 +33,7 @@ public class InventoryContainerItem extends ItemCoFH implements IInventoryContai
         for (int i = 0; i < numSlots; ++i) {
             invSlots.add(new ItemStorageCoFH());
         }
-        SimpleItemInv inventory = new SimpleItemInv(invSlots) {
-
-            @Override
-            public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-
-                if (slot < 0 || slot >= getSlots()) {
-                    return false;
-                }
-                return !(stack.getItem() instanceof IInventoryContainerItem);
-            }
-        };
+        SimpleItemInv inventory = new SimpleItemInv(invSlots);
         inventory.read(containerTag);
         return inventory;
     }

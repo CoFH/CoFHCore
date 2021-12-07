@@ -29,7 +29,6 @@ import static net.minecraft.util.text.TextFormatting.GRAY;
 public class BlockItemCoFH extends BlockItem implements ICoFHItem {
 
     protected BooleanSupplier showInGroups = TRUE;
-    protected BooleanSupplier showEnchantEffect = TRUE;
 
     protected int burnTime = -1;
     protected int enchantability;
@@ -105,13 +104,6 @@ public class BlockItemCoFH extends BlockItem implements ICoFHItem {
                 tooltip.add(getTextComponent("info.cofh.hold_shift_for_details").withStyle(GRAY));
             }
         }
-    }
-
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public boolean isFoil(ItemStack stack) {
-
-        return showEnchantEffect.getAsBoolean() && stack.isEnchanted();
     }
 
     @Override

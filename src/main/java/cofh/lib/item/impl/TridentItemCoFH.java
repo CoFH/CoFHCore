@@ -18,9 +18,9 @@ public class TridentItemCoFH extends TridentItem implements ICoFHItem {
 
     protected BooleanSupplier showInGroups = TRUE;
 
-    protected Supplier<ItemGroup> displayGroup;
-
     protected int enchantability = 1;
+
+    protected Supplier<ItemGroup> displayGroup;
 
     public TridentItemCoFH(Properties builder) {
 
@@ -48,7 +48,7 @@ public class TridentItemCoFH extends TridentItem implements ICoFHItem {
     @Override
     public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
 
-        if (!showInGroups.getAsBoolean()) {
+        if (!showInGroups.getAsBoolean() || displayGroup != null && displayGroup.get() != null && displayGroup.get() != group) {
             return;
         }
         super.fillItemCategory(group, items);
@@ -58,6 +58,12 @@ public class TridentItemCoFH extends TridentItem implements ICoFHItem {
     public Collection<ItemGroup> getCreativeTabs() {
 
         return displayGroup != null && displayGroup.get() != null ? Collections.singletonList(displayGroup.get()) : super.getCreativeTabs();
+    }
+
+    @Override
+    public boolean isEnchantable(ItemStack stack) {
+
+        return enchantability > 0;
     }
 
     @Override

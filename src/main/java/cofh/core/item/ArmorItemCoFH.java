@@ -50,7 +50,6 @@ public class ArmorItemCoFH extends ArmorItem implements ICoFHItem {
     };
 
     protected BooleanSupplier showInGroups = TRUE;
-    protected BooleanSupplier showEnchantEffect = TRUE;
 
     protected Supplier<ItemGroup> displayGroup;
 
@@ -74,17 +73,10 @@ public class ArmorItemCoFH extends ArmorItem implements ICoFHItem {
     @Override
     public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
 
-        if (!showInGroups.getAsBoolean()) {
+        if (!showInGroups.getAsBoolean() || displayGroup != null && displayGroup.get() != null && displayGroup.get() != group) {
             return;
         }
         super.fillItemCategory(group, items);
-    }
-
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public boolean isFoil(ItemStack stack) {
-
-        return showEnchantEffect.getAsBoolean() && stack.isEnchanted();
     }
 
     @Override

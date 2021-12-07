@@ -14,8 +14,6 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -27,7 +25,6 @@ import static cofh.lib.util.constants.Constants.TRUE;
 
 public class ArrowItemCoFH extends ArrowItem implements ICoFHItem {
 
-    protected BooleanSupplier showEnchantEffect = TRUE;
     protected BooleanSupplier showInGroups = TRUE;
 
     protected Supplier<ItemGroup> displayGroup;
@@ -64,17 +61,10 @@ public class ArrowItemCoFH extends ArrowItem implements ICoFHItem {
     @Override
     public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
 
-        if (!showInGroups.getAsBoolean()) {
+        if (!showInGroups.getAsBoolean() || displayGroup != null && displayGroup.get() != null && displayGroup.get() != group) {
             return;
         }
         super.fillItemCategory(group, items);
-    }
-
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public boolean isFoil(ItemStack stack) {
-
-        return showEnchantEffect.getAsBoolean() && stack.isEnchanted();
     }
 
     @Override

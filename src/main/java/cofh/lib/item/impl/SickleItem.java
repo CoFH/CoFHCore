@@ -84,7 +84,7 @@ public class SickleItem extends ToolItem implements ICoFHItem {
     @Override
     public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
 
-        if (!showInGroups.getAsBoolean()) {
+        if (!showInGroups.getAsBoolean() || displayGroup != null && displayGroup.get() != null && displayGroup.get() != group) {
             return;
         }
         super.fillItemCategory(group, items);

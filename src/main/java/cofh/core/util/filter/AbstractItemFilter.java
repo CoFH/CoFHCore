@@ -70,9 +70,6 @@ public abstract class AbstractItemFilter implements IFilter, IFilterOptions {
                 if (stack.isEmpty()) {
                     return false;
                 }
-                if (allowList != itemSet.contains(stack.getItem())) {
-                    return false;
-                }
                 if (checkNBT) {
                     for (ItemStack item : items) {
                         if (ItemHelper.itemsEqualWithTags(stack, item)) {
@@ -81,7 +78,7 @@ public abstract class AbstractItemFilter implements IFilter, IFilterOptions {
                     }
                     return !allowList;
                 }
-                return true;
+                return allowList == itemSet.contains(stack.getItem());
             };
         }
         return rules;
