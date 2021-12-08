@@ -13,7 +13,7 @@ import static cofh.core.CoFHCore.TILE_ENTITIES;
 import static cofh.lib.util.helpers.BlockHelper.lightValue;
 import static cofh.lib.util.references.CoreIDs.*;
 import static cofh.lib.util.references.CoreReferences.*;
-import static net.minecraft.block.AbstractBlock.Properties.from;
+import static net.minecraft.block.AbstractBlock.Properties.copy;
 
 public class CoreBlocks {
 
@@ -23,17 +23,17 @@ public class CoreBlocks {
 
     public static void register() {
 
-        BLOCKS.register(ID_GLOSSED_MAGMA, () -> new GlossedMagmaBlock(from(Blocks.MAGMA_BLOCK).setLightLevel(lightValue(6))));
+        BLOCKS.register(ID_GLOSSED_MAGMA, () -> new GlossedMagmaBlock(copy(Blocks.MAGMA_BLOCK).lightLevel(lightValue(6))));
 
-        BLOCKS.register(ID_SIGNAL_AIR, () -> new SignalAirBlock(from(Blocks.AIR).setLightLevel(lightValue(7)).doesNotBlockMovement().noDrops()));
-        BLOCKS.register(ID_GLOW_AIR, () -> new GlowAirBlock(from(Blocks.AIR).setLightLevel(lightValue(15))));
-        BLOCKS.register(ID_ENDER_AIR, () -> new EnderAirBlock(from(Blocks.AIR).setLightLevel(lightValue(3))));
-        BLOCKS.register(ID_LIGHTNING_AIR, () -> new LightningAirBlock(from(Blocks.AIR)));
+        BLOCKS.register(ID_SIGNAL_AIR, () -> new SignalAirBlock(copy(Blocks.AIR).lightLevel(lightValue(7)).noCollission().noDrops()));
+        BLOCKS.register(ID_GLOW_AIR, () -> new GlowAirBlock(copy(Blocks.AIR).lightLevel(lightValue(15))));
+        BLOCKS.register(ID_ENDER_AIR, () -> new EnderAirBlock(copy(Blocks.AIR).lightLevel(lightValue(3))));
+        BLOCKS.register(ID_LIGHTNING_AIR, () -> new LightningAirBlock(copy(Blocks.AIR)));
 
-        TILE_ENTITIES.register(ID_SIGNAL_AIR, () -> TileEntityType.Builder.create(SignalAirTile::new, SIGNAL_AIR).build(null));
-        TILE_ENTITIES.register(ID_GLOW_AIR, () -> TileEntityType.Builder.create(GlowAirTile::new, GLOW_AIR).build(null));
-        TILE_ENTITIES.register(ID_ENDER_AIR, () -> TileEntityType.Builder.create(EnderAirTile::new, ENDER_AIR).build(null));
-        TILE_ENTITIES.register(ID_LIGHTNING_AIR, () -> TileEntityType.Builder.create(LightningAirTile::new, LIGHTNING_AIR).build(null));
+        TILE_ENTITIES.register(ID_SIGNAL_AIR, () -> TileEntityType.Builder.of(SignalAirTile::new, SIGNAL_AIR).build(null));
+        TILE_ENTITIES.register(ID_GLOW_AIR, () -> TileEntityType.Builder.of(GlowAirTile::new, GLOW_AIR).build(null));
+        TILE_ENTITIES.register(ID_ENDER_AIR, () -> TileEntityType.Builder.of(EnderAirTile::new, ENDER_AIR).build(null));
+        TILE_ENTITIES.register(ID_LIGHTNING_AIR, () -> TileEntityType.Builder.of(LightningAirTile::new, LIGHTNING_AIR).build(null));
     }
 
 }

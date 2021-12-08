@@ -105,7 +105,7 @@ public class PacketHandler {
                 LOG.error("Received packet ID that isn't an IPacketServer? ID: {}", id);
                 return;
             }
-            INetHandler netHandler = ctx.getNetworkManager().getNetHandler();
+            INetHandler netHandler = ctx.getNetworkManager().getPacketListener();
             if (netHandler instanceof ServerPlayNetHandler) {
                 ctx.enqueueWork(() -> {
                     packet.read(buf);

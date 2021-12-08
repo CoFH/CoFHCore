@@ -35,9 +35,9 @@ public class CropsBlockMushroom extends CropsBlockCoFH {
     }
 
     @Override
-    protected boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos) {
+    protected boolean mayPlaceOn(BlockState state, IBlockReader worldIn, BlockPos pos) {
 
-        return state.isIn(Blocks.MYCELIUM) || state.isIn(Blocks.PODZOL);
+        return state.is(Blocks.MYCELIUM) || state.is(Blocks.PODZOL);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class CropsBlockMushroom extends CropsBlockCoFH {
         int age = getAge(state);
         if (age < getMaxAge() && ForgeHooks.onCropsGrowPre(worldIn, pos, state, random.nextInt(20 - age) == 0)) {
             int newAge = age + 1 == getPostHarvestAge() ? getMaxAge() : age + 1;
-            worldIn.setBlockState(pos, withAge(newAge), newAge == getMaxAge() ? 3 : 2);
+            worldIn.setBlock(pos, getStateForAge(newAge), newAge == getMaxAge() ? 3 : 2);
             ForgeHooks.onCropsGrowPost(worldIn, pos, state);
         }
     }
@@ -54,7 +54,7 @@ public class CropsBlockMushroom extends CropsBlockCoFH {
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 
-        return MUSHROOMS_BY_AGE[MathHelper.clamp(state.get(getAgeProperty()), 0, MUSHROOMS_BY_AGE.length - 1)];
+        return MUSHROOMS_BY_AGE[MathHelper.clamp(state.getValue(getAgeProperty()), 0, MUSHROOMS_BY_AGE.length - 1)];
     }
 
     @Override
@@ -72,12 +72,12 @@ public class CropsBlockMushroom extends CropsBlockCoFH {
     @Override
     protected int getBonemealAgeIncrease(World worldIn) {
 
-        return MathHelper.nextInt(worldIn.rand, 0, 2);
+        return MathHelper.nextInt(worldIn.random, 0, 2);
     }
 
     // region IGrowable
     @Override
-    public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, BlockState state) {
+    public boolean isBonemealSuccess(World worldIn, Random rand, BlockPos pos, BlockState state) {
 
         return false;
     }

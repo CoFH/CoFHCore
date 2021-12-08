@@ -1,6 +1,7 @@
 package cofh.core.util;
 
 import cofh.core.event.CoreClientSetupEvents;
+import cofh.lib.tileentity.IAreaEffectTile;
 import cofh.lib.util.IProxyItemPropertyGetter;
 import cofh.lib.util.helpers.SoundHelper;
 import cofh.lib.util.helpers.StringHelper;
@@ -15,23 +16,22 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class ProxyClient extends Proxy {
 
-    protected static Map<ResourceLocation, Object> modelMap = new Object2ObjectOpenHashMap<>();
-    protected static Set<ModelPropertyWrapper> itemPropertyGetters = new HashSet<>();
+    protected static final Map<ResourceLocation, Object> MODEL_MAP = new Object2ObjectOpenHashMap<>();
+    protected static final Set<ModelPropertyWrapper> ITEM_PROPERTY_GETTERS = new HashSet<>();
+    protected static final Set<IAreaEffectTile> AREA_EFFECT_TILES = Collections.newSetFromMap(new WeakHashMap<>());
 
     // region HELPERS
     @Override
     public void addIndexedChatMessage(ITextComponent chat, int index) {
 
         if (chat == null) {
-            Minecraft.getInstance().ingameGUI.getChatGUI().deleteChatLine(index);
+            Minecraft.getInstance().gui.getChat().removeById(index);
         } else {
-            Minecraft.getInstance().ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(chat, index);
+            Minecraft.getInstance().gui.getChat().addMessage(chat, index);
         }
     }
 
@@ -50,7 +50,7 @@ public class ProxyClient extends Proxy {
     @Override
     public World getClientWorld() {
 
-        return Minecraft.getInstance().world;
+        return Minecraft.getInstance().level;
     }
 
     @Override
@@ -68,13 +68,13 @@ public class ProxyClient extends Proxy {
     @Override
     protected Object addModel(ResourceLocation loc, Object model) {
 
-        return modelMap.put(loc, model);
+        return MODEL_MAP.put(loc, model);
     }
 
     @Override
     public Object getModel(ResourceLocation loc) {
 
-        return modelMap.get(loc);
+        return MODEL_MAP.get(loc);
     }
 
     @Override
@@ -86,19 +86,36 @@ public class ProxyClient extends Proxy {
     @Override
     public void registerItemModelProperty(Item item, ResourceLocation resourceLoc, IProxyItemPropertyGetter propertyGetter) {
 
-        itemPropertyGetters.add(new ModelPropertyWrapper(item, resourceLoc, propertyGetter));
+        ITEM_PROPERTY_GETTERS.add(new ModelPropertyWrapper(item, resourceLoc, propertyGetter));
+    }
+
+    @Override
+    public void addAreaEffectTile(IAreaEffectTile tile) {
+
+        AREA_EFFECT_TILES.add(tile);
+    }
+
+    @Override
+    public void removeAreaEffectTile(IAreaEffectTile tile) {
+
+        AREA_EFFECT_TILES.remove(tile);
     }
     // endregion
 
-    public static void registerItemModelProperties() {
+    public static Set<IAreaEffectTile> getAreaEffectTiles() {
 
-        for (ModelPropertyWrapper wrapper : itemPropertyGetters) {
-            ItemModelsProperties.registerProperty(wrapper.item, wrapper.resourceLoc, wrapper.propertyGetter);
-        }
-        itemPropertyGetters.clear();
+        return AREA_EFFECT_TILES;
     }
 
-    static class ModelPropertyWrapper {
+    public static void registerItemModelProperties() {
+
+        for (ModelPropertyWrapper wrapper : ITEM_PROPERTY_GETTERS) {
+            ItemModelsProperties.register(wrapper.item, wrapper.resourceLoc, wrapper.propertyGetter);
+        }
+        ITEM_PROPERTY_GETTERS.clear();
+    }
+
+    protected static class ModelPropertyWrapper {
 
         Item item;
         ResourceLocation resourceLoc;

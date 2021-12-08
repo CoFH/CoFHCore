@@ -26,7 +26,7 @@ import static cofh.lib.util.helpers.ArcheryHelper.findAmmo;
 import static cofh.lib.util.helpers.ArcheryHelper.validBow;
 import static cofh.lib.util.references.EnsorcReferences.QUICK_DRAW;
 import static cofh.lib.util.references.EnsorcReferences.VOLLEY;
-import static net.minecraft.enchantment.Enchantments.INFINITY;
+import static net.minecraft.enchantment.Enchantments.INFINITY_ARROWS;
 
 @Mod.EventBusSubscriber(modid = ID_COFH_CORE)
 public class ArcheryEvents {
@@ -43,7 +43,7 @@ public class ArcheryEvents {
             return;
         }
         PlayerEntity shooter = event.getPlayer();
-        event.setCanceled(bow.getCapability(BOW_ITEM_CAPABILITY).orElse(new ArcheryBowItemWrapper(bow)).fireArrow(findAmmo(shooter), shooter, event.getCharge(), event.getWorld()));
+        event.setCanceled(bow.getCapability(BOW_ITEM_CAPABILITY).orElse(new ArcheryBowItemWrapper(bow)).fireArrow(findAmmo(shooter, bow), shooter, event.getCharge(), event.getWorld()));
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -54,16 +54,16 @@ public class ArcheryEvents {
             return;
         }
         PlayerEntity shooter = event.getPlayer();
-        ItemStack ammo = findAmmo(shooter);
+        ItemStack ammo = findAmmo(shooter, bow);
 
-        if (ammo.isEmpty() && getItemEnchantmentLevel(INFINITY, bow) > 0) {
+        if (ammo.isEmpty() && getItemEnchantmentLevel(INFINITY_ARROWS, bow) > 0) {
             ammo = new ItemStack(Items.ARROW);
         }
         if (!ammo.isEmpty()) {
-            shooter.setActiveHand(event.getHand());
-            event.setAction(ActionResult.resultSuccess(bow));
-        } else if (!shooter.abilities.isCreativeMode) {
-            event.setAction(ActionResult.resultFail(bow));
+            shooter.startUsingItem(event.getHand());
+            event.setAction(ActionResult.success(bow));
+        } else if (!shooter.abilities.instabuild) {
+            event.setAction(ActionResult.fail(bow));
         }
     }
 
@@ -84,7 +84,7 @@ public class ArcheryEvents {
         }
         Entity entity = event.getEntity();
         DamageSource source = event.getSource();
-        Entity attacker = event.getSource().getTrueSource();
+        Entity attacker = event.getSource().getEntity();
 
         if (entity instanceof ProjectileEntity) {
             return;
@@ -92,10 +92,10 @@ public class ArcheryEvents {
         if (!(attacker instanceof LivingEntity)) {
             return;
         }
-        if (source.damageType.equals(DAMAGE_ARROW)) {
+        if (source.msgId.equals(DAMAGE_ARROW)) {
             int encVolley = getHeldEnchantmentLevel((LivingEntity) attacker, VOLLEY);
             if (encVolley > 0) {
-                entity.hurtResistantTime = 0;
+                entity.invulnerableTime = 0;
             }
         }
     }

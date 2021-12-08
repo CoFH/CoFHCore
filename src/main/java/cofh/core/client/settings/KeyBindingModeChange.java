@@ -14,9 +14,9 @@ public class KeyBindingModeChange extends KeyBinding {
         setKeyConflictContext(KeyConflictContext.IN_GAME);
     }
 
-    public void setPressed(boolean valueIn) {
+    public void setDown(boolean valueIn) {
 
-        super.setPressed(valueIn);
+        super.setDown(valueIn);
         isPressed = valueIn;
     }
 
@@ -28,10 +28,10 @@ public class KeyBindingModeChange extends KeyBinding {
         }
 
         @Override
-        public void setPressed(boolean valueIn) {
+        public void setDown(boolean valueIn) {
 
             boolean prevPressed = isPressed;
-            super.setPressed(valueIn);
+            super.setDown(valueIn);
 
             if (isPressed && !prevPressed) {
                 ItemModeChangePacket.incrMode();
@@ -48,10 +48,10 @@ public class KeyBindingModeChange extends KeyBinding {
         }
 
         @Override
-        public void setPressed(boolean valueIn) {
+        public void setDown(boolean valueIn) {
 
             boolean prevPressed = isPressed;
-            super.setPressed(valueIn);
+            super.setDown(valueIn);
 
             if (isPressed && !prevPressed) {
                 ItemModeChangePacket.decrMode();

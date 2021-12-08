@@ -4,9 +4,9 @@ import cofh.core.fluid.PotionFluid;
 import cofh.lib.fluid.FluidStorageCoFH;
 import cofh.lib.util.helpers.BlockHelper;
 import cofh.lib.util.helpers.ItemHelper;
-import cofh.lib.util.references.CoreReferences;
 import cofh.lib.util.references.FluidTagsCoFH;
 import com.mojang.datafixers.util.Pair;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.ai.attributes.Attribute;
@@ -14,6 +14,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
@@ -24,19 +25,24 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.*;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.templates.EmptyFluidHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import static cofh.lib.util.constants.Constants.BOTTLE_VOLUME;
@@ -55,7 +61,10 @@ public class FluidHelper {
 
     public static final Predicate<FluidStack> IS_WATER = e -> e.getFluid().equals(Fluids.WATER);
     public static final Predicate<FluidStack> IS_LAVA = e -> e.getFluid().equals(Fluids.LAVA);
-    public static final Predicate<FluidStack> IS_XP = e -> e.getFluid().equals(CoreReferences.FLUID_XP);
+    public static final Predicate<FluidStack> IS_XP = e -> FluidTagsCoFH.EXPERIENCE.contains(e.getFluid());
+
+    public static final Map<Item, Function<ItemStack, FluidStack>> BOTTLE_DRAIN_MAP = new Object2ObjectOpenHashMap<>();
+    public static final Map<Predicate<FluidStack>, Function<FluidStack, ItemStack>> BOTTLE_FILL_MAP = new Object2ObjectOpenHashMap<>();
 
     // TODO: Revisit
     //    public static final Object2IntMap<Fluid> COLOR_CACHE = new Object2IntOpenHashMap<>();
@@ -194,9 +203,36 @@ public class FluidHelper {
     // endregion
 
     // region CAPABILITY HELPERS
+    public static void init() {
+
+        BOTTLE_DRAIN_MAP.put(Items.POTION, (stack -> PotionFluid.getPotionFluidFromItem(BOTTLE_VOLUME, stack)));
+        BOTTLE_DRAIN_MAP.put(Items.HONEY_BOTTLE, (stack -> new FluidStack(FLUID_HONEY, BOTTLE_VOLUME)));
+        BOTTLE_DRAIN_MAP.put(Items.EXPERIENCE_BOTTLE, (stack -> new FluidStack(FLUID_XP, BOTTLE_VOLUME)));
+
+        BOTTLE_FILL_MAP.put(fluid -> fluid.getFluid() == Fluids.WATER || hasPotionTag(fluid), fluid -> PotionUtils.setPotion(new ItemStack(Items.POTION), getPotionFromFluid(fluid)));
+        BOTTLE_FILL_MAP.put(fluid -> fluid.getFluid().is(FluidTagsCoFH.HONEY), fluid -> new ItemStack(Items.HONEY_BOTTLE));
+        BOTTLE_FILL_MAP.put(fluid -> fluid.getFluid().is(FluidTagsCoFH.EXPERIENCE), fluid -> new ItemStack(Items.EXPERIENCE_BOTTLE));
+    }
+
     public static boolean hasFluidHandlerCap(ItemStack item) {
 
         return !item.isEmpty() && item.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent();
+    }
+
+    public static LazyOptional<IFluidHandlerItem> getFluidHandlerCap(@Nonnull ItemStack stack) {
+
+        return stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY);
+    }
+
+    public static Optional<FluidStack> getFluidContainedInItem(@Nonnull ItemStack container) {
+
+        if (!container.isEmpty()) {
+            Optional<FluidStack> fluidContained = getFluidHandlerCap(container).map(c -> c.getFluidInTank(0));
+            if (fluidContained.isPresent() && !fluidContained.get().isEmpty()) {
+                return fluidContained;
+            }
+        }
+        return Optional.empty();
     }
 
     /**
@@ -210,15 +246,7 @@ public class FluidHelper {
      */
     public static boolean drainBottleToHandler(ItemStack stack, IFluidHandler handler, PlayerEntity player, Hand hand) {
 
-        FluidStack fluid = FluidStack.EMPTY;
-
-        if (stack.getItem() == Items.POTION) {
-            fluid = PotionFluid.getPotionFluidFromItem(BOTTLE_VOLUME, stack);
-        } else if (stack.getItem() == Items.HONEY_BOTTLE) {
-            fluid = new FluidStack(FLUID_HONEY, BOTTLE_VOLUME);
-        } else if (stack.getItem() == Items.EXPERIENCE_BOTTLE) {
-            fluid = new FluidStack(FLUID_XP, BOTTLE_VOLUME);
-        }
+        FluidStack fluid = BOTTLE_DRAIN_MAP.containsKey(stack.getItem()) ? BOTTLE_DRAIN_MAP.get(stack.getItem()).apply(stack) : FluidStack.EMPTY;
         return !fluid.isEmpty() && addEmptyBottleToPlayer(stack, fluid, handler, player, hand);
     }
 
@@ -226,11 +254,11 @@ public class FluidHelper {
 
         if (handler.fill(fluid, SIMULATE) == BOTTLE_VOLUME) {
             handler.fill(fluid, EXECUTE);
-            if (!player.abilities.isCreativeMode) {
+            if (!player.abilities.instabuild) {
                 ItemStack bottle = new ItemStack(Items.GLASS_BOTTLE);
-                player.setHeldItem(hand, ItemHelper.consumeItem(stack, 1));
-                if (!player.addItemStackToInventory(bottle)) {
-                    player.dropItem(bottle, false);
+                player.setItemInHand(hand, ItemHelper.consumeItem(stack, 1));
+                if (!player.addItem(bottle)) {
+                    player.drop(bottle, false);
                 }
             }
             return true;
@@ -258,12 +286,11 @@ public class FluidHelper {
         }
         ItemStack bottle = ItemStack.EMPTY;
 
-        if (fluid.getFluid() == Fluids.WATER || hasPotionTag(fluid)) {
-            bottle = PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), getPotionFromFluid(fluid));
-        } else if (fluid.getFluid().isIn(FluidTagsCoFH.HONEY)) {
-            bottle = new ItemStack(Items.HONEY_BOTTLE);
-        } else if (fluid.getFluid().isIn(FluidTagsCoFH.EXPERIENCE)) {
-            bottle = new ItemStack(Items.EXPERIENCE_BOTTLE);
+        for (Map.Entry<Predicate<FluidStack>, Function<FluidStack, ItemStack>> entry : BOTTLE_FILL_MAP.entrySet()) {
+            if (entry.getKey().test(fluid)) {
+                bottle = entry.getValue().apply(fluid);
+                break;
+            }
         }
         return !bottle.isEmpty() && addFilledBottleToPlayer(stack, bottle, handler, player, hand);
     }
@@ -280,16 +307,16 @@ public class FluidHelper {
         if (fluid.getAmount() != BUCKET_VOLUME) {
             return false;
         }
-        return fluid.getFluid().getFilledBucket() != Items.AIR;
+        return fluid.getFluid().getBucket() != Items.AIR;
     }
 
     private static boolean addFilledBottleToPlayer(ItemStack stack, ItemStack bottle, IFluidHandler handler, PlayerEntity player, Hand hand) {
 
         if (handler.drain(BOTTLE_VOLUME, EXECUTE).getAmount() == BOTTLE_VOLUME) {
-            if (!player.abilities.isCreativeMode) {
-                player.setHeldItem(hand, ItemHelper.consumeItem(stack, 1));
-                if (!player.addItemStackToInventory(bottle)) {
-                    player.dropItem(bottle, false);
+            if (!player.abilities.instabuild) {
+                player.setItemInHand(hand, ItemHelper.consumeItem(stack, 1));
+                if (!player.addItem(bottle)) {
+                    player.drop(bottle, false);
                 }
             }
             return true;
@@ -312,13 +339,13 @@ public class FluidHelper {
             return false;
         }
         if (drainBottleToHandler(stack, handler, player, hand)) {
-            player.world.playSound(null, player.getPosX(), player.getPosY() + 0.5, player.getPosZ(), SoundEvents.ITEM_BOTTLE_EMPTY, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            player.level.playSound(null, player.getX(), player.getY() + 0.5, player.getZ(), SoundEvents.BOTTLE_EMPTY, SoundCategory.BLOCKS, 1.0F, 1.0F);
             return true;
         }
         IItemHandler playerInv = new InvWrapper(player.inventory);
         FluidActionResult result = FluidUtil.tryEmptyContainerAndStow(stack, handler, playerInv, Integer.MAX_VALUE, player, true);
         if (result.isSuccess()) {
-            player.setHeldItem(hand, result.getResult());
+            player.setItemInHand(hand, result.getResult());
             return true;
         }
         return false;
@@ -339,13 +366,13 @@ public class FluidHelper {
             return false;
         }
         if (fillBottleFromHandler(stack, handler, player, hand)) {
-            player.world.playSound(null, player.getPosX(), player.getPosY() + 0.5, player.getPosZ(), SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            player.level.playSound(null, player.getX(), player.getY() + 0.5, player.getZ(), SoundEvents.BOTTLE_FILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
             return true;
         }
         IItemHandler playerInv = new InvWrapper(player.inventory);
         FluidActionResult result = FluidUtil.tryFillContainerAndStow(stack, handler, playerInv, Integer.MAX_VALUE, player, true);
         if (result.isSuccess()) {
-            player.setHeldItem(hand, result.getResult());
+            player.setItemInHand(hand, result.getResult());
             return true;
         }
         return false;
@@ -380,7 +407,7 @@ public class FluidHelper {
 
     public static Potion getPotionFromFluidTag(@Nullable CompoundNBT tag) {
 
-        return tag == null || !tag.contains(TAG_POTION) ? Potions.EMPTY : Potion.getPotionTypeForName(tag.getString(TAG_POTION));
+        return tag == null || !tag.contains(TAG_POTION) ? Potions.EMPTY : Potion.byName(tag.getString(TAG_POTION));
     }
 
     public static void addPotionTooltipStrings(FluidStack stack, List<ITextComponent> list) {
@@ -400,7 +427,7 @@ public class FluidHelper {
         if (stack.isEmpty()) {
             return;
         }
-        addPotionTooltip(PotionUtils.getEffectsFromTag(stack.getTag()), lores, durationFactor);
+        addPotionTooltip(PotionUtils.getAllEffects(stack.getTag()), lores, durationFactor);
     }
 
     public static void addPotionTooltip(List<EffectInstance> list, List<ITextComponent> lores, float durationFactor) {
@@ -410,13 +437,13 @@ public class FluidHelper {
             lores.add(EMPTY_POTION);
         } else {
             for (EffectInstance effectinstance : list) {
-                IFormattableTextComponent iformattabletextcomponent = new TranslationTextComponent(effectinstance.getEffectName());
-                Effect effect = effectinstance.getPotion();
-                Map<Attribute, AttributeModifier> map = effect.getAttributeModifierMap();
+                IFormattableTextComponent iformattabletextcomponent = new TranslationTextComponent(effectinstance.getDescriptionId());
+                Effect effect = effectinstance.getEffect();
+                Map<Attribute, AttributeModifier> map = effect.getAttributeModifiers();
                 if (!map.isEmpty()) {
                     for (Map.Entry<Attribute, AttributeModifier> entry : map.entrySet()) {
                         AttributeModifier attributemodifier = entry.getValue();
-                        AttributeModifier attributemodifier1 = new AttributeModifier(attributemodifier.getName(), effect.getAttributeModifierAmount(effectinstance.getAmplifier(), attributemodifier), attributemodifier.getOperation());
+                        AttributeModifier attributemodifier1 = new AttributeModifier(attributemodifier.getName(), effect.getAttributeModifierValue(effectinstance.getAmplifier(), attributemodifier), attributemodifier.getOperation());
                         list1.add(new Pair<>(entry.getKey(), attributemodifier1));
                     }
                 }
@@ -424,14 +451,14 @@ public class FluidHelper {
                     iformattabletextcomponent = new TranslationTextComponent("potion.withAmplifier", iformattabletextcomponent, new TranslationTextComponent("potion.potency." + effectinstance.getAmplifier()));
                 }
                 if (effectinstance.getDuration() > 20) {
-                    iformattabletextcomponent = new TranslationTextComponent("potion.withDuration", iformattabletextcomponent, EffectUtils.getPotionDurationString(effectinstance, durationFactor));
+                    iformattabletextcomponent = new TranslationTextComponent("potion.withDuration", iformattabletextcomponent, EffectUtils.formatDuration(effectinstance, durationFactor));
                 }
-                lores.add(iformattabletextcomponent.mergeStyle(effect.getEffectType().getColor()));
+                lores.add(iformattabletextcomponent.withStyle(effect.getCategory().getTooltipFormatting()));
             }
         }
         if (!list1.isEmpty()) {
             lores.add(StringTextComponent.EMPTY);
-            lores.add((new TranslationTextComponent("potion.whenDrank")).mergeStyle(TextFormatting.DARK_PURPLE));
+            lores.add((new TranslationTextComponent("potion.whenDrank")).withStyle(TextFormatting.DARK_PURPLE));
 
             for (Pair<Attribute, AttributeModifier> pair : list1) {
                 AttributeModifier attributemodifier2 = pair.getSecond();
@@ -443,16 +470,16 @@ public class FluidHelper {
                     d1 = attributemodifier2.getAmount() * 100.0D;
                 }
                 if (d0 > 0.0D) {
-                    lores.add((new TranslationTextComponent("attribute.modifier.plus." + attributemodifier2.getOperation().getId(), ItemStack.DECIMALFORMAT.format(d1), new TranslationTextComponent(pair.getFirst().getAttributeName()))).mergeStyle(TextFormatting.BLUE));
+                    lores.add((new TranslationTextComponent("attribute.modifier.plus." + attributemodifier2.getOperation().toValue(), ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(d1), new TranslationTextComponent(pair.getFirst().getDescriptionId()))).withStyle(TextFormatting.BLUE));
                 } else if (d0 < 0.0D) {
                     d1 = d1 * -1.0D;
-                    lores.add((new TranslationTextComponent("attribute.modifier.take." + attributemodifier2.getOperation().getId(), ItemStack.DECIMALFORMAT.format(d1), new TranslationTextComponent(pair.getFirst().getAttributeName()))).mergeStyle(TextFormatting.RED));
+                    lores.add((new TranslationTextComponent("attribute.modifier.take." + attributemodifier2.getOperation().toValue(), ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(d1), new TranslationTextComponent(pair.getFirst().getDescriptionId()))).withStyle(TextFormatting.RED));
                 }
             }
         }
     }
 
-    public static final IFormattableTextComponent EMPTY_POTION = (new TranslationTextComponent("effect.none")).mergeStyle(TextFormatting.GRAY);
+    public static final IFormattableTextComponent EMPTY_POTION = (new TranslationTextComponent("effect.none")).withStyle(TextFormatting.GRAY);
     // endregion
 
     // region PROPERTY HELPERS

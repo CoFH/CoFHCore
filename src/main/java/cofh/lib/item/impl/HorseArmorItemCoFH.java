@@ -6,17 +6,19 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 import static cofh.lib.util.constants.Constants.TRUE;
 
 public class HorseArmorItemCoFH extends HorseArmorItem implements ICoFHItem {
 
     protected BooleanSupplier showInGroups = TRUE;
-    protected BooleanSupplier showEnchantEffect = TRUE;
+
+    protected Supplier<ItemGroup> displayGroup;
 
     protected int enchantability;
 
@@ -30,9 +32,9 @@ public class HorseArmorItemCoFH extends HorseArmorItem implements ICoFHItem {
         super(protection, texture, builder);
     }
 
-    public HorseArmorItemCoFH setEnchantability(int enchantability) {
+    public HorseArmorItemCoFH setDisplayGroup(Supplier<ItemGroup> displayGroup) {
 
-        this.enchantability = enchantability;
+        this.displayGroup = displayGroup;
         return this;
     }
 
@@ -42,20 +44,25 @@ public class HorseArmorItemCoFH extends HorseArmorItem implements ICoFHItem {
         return this;
     }
 
-    @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+    public HorseArmorItemCoFH setEnchantability(int enchantability) {
 
-        if (!showInGroups.getAsBoolean()) {
-            return;
-        }
-        super.fillItemGroup(group, items);
+        this.enchantability = enchantability;
+        return this;
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public boolean hasEffect(ItemStack stack) {
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
 
-        return showEnchantEffect.getAsBoolean() && stack.isEnchanted();
+        if (!showInGroups.getAsBoolean() || displayGroup != null && displayGroup.get() != null && displayGroup.get() != group) {
+            return;
+        }
+        super.fillItemCategory(group, items);
+    }
+
+    @Override
+    public Collection<ItemGroup> getCreativeTabs() {
+
+        return displayGroup != null && displayGroup.get() != null ? Collections.singletonList(displayGroup.get()) : super.getCreativeTabs();
     }
 
     @Override
@@ -65,7 +72,7 @@ public class HorseArmorItemCoFH extends HorseArmorItem implements ICoFHItem {
     }
 
     @Override
-    public int getItemEnchantability() {
+    public int getEnchantmentValue() {
 
         return enchantability;
     }

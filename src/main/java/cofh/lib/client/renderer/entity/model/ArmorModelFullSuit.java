@@ -15,25 +15,25 @@ public class ArmorModelFullSuit extends BipedModel<LivingEntity> {
 
     public ArmorModelFullSuit(float modelSize) {
 
-        this(RenderType::getEntityTranslucentCull, modelSize, 0.0F, 64, 32);
+        this(RenderType::entityTranslucentCull, modelSize, 0.0F, 64, 32);
     }
 
     public ArmorModelFullSuit(float modelSize, float yOffsetIn, int textureWidthIn, int textureHeightIn) {
 
-        this(RenderType::getEntityTranslucentCull, modelSize, yOffsetIn, textureWidthIn, textureHeightIn);
+        this(RenderType::entityTranslucentCull, modelSize, yOffsetIn, textureWidthIn, textureHeightIn);
     }
 
     public ArmorModelFullSuit(Function<ResourceLocation, RenderType> renderTypeIn, float modelSizeIn, float yOffsetIn, int textureWidthIn, int textureHeightIn) {
 
         super(renderTypeIn, modelSizeIn, yOffsetIn, textureWidthIn, textureHeightIn);
 
-        this.bipedRightArm = new ModelRenderer(this, 40, 16);
-        this.bipedRightArm.addBox(-3.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, modelSizeIn * 0.4F);
-        this.bipedRightArm.setRotationPoint(-5.0F, 2.0F + yOffsetIn, 0.0F);
-        this.bipedLeftArm = new ModelRenderer(this, 40, 16);
-        this.bipedLeftArm.mirror = true;
-        this.bipedLeftArm.addBox(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, modelSizeIn * 0.4F);
-        this.bipedLeftArm.setRotationPoint(5.0F, 2.0F + yOffsetIn, 0.0F);
+        this.rightArm = new ModelRenderer(this, 40, 16);
+        this.rightArm.addBox(-3.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, modelSizeIn * 0.4F);
+        this.rightArm.setPos(-5.0F, 2.0F + yOffsetIn, 0.0F);
+        this.leftArm = new ModelRenderer(this, 40, 16);
+        this.leftArm.mirror = true;
+        this.leftArm.addBox(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, modelSizeIn * 0.4F);
+        this.leftArm.setPos(5.0F, 2.0F + yOffsetIn, 0.0F);
     }
 
     // TODO: Revisit if changes are made to Armor Rendering

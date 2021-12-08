@@ -13,6 +13,8 @@ public class BlockTagsCoFH {
     public static final IOptionalNamedTag<Block> HARDENED_GLASS = thermalTag("glass/hardened");
     public static final IOptionalNamedTag<Block> ROCKWOOL = thermalTag("rockwool");
 
+    public static final IOptionalNamedTag<Block> LOGS_RUBBERWOOD = forgeTag("rubberwood_logs");
+
     public static final IOptionalNamedTag<Block> ORES_APATITE = forgeTag("ores/apatite");
     public static final IOptionalNamedTag<Block> ORES_CINNABAR = forgeTag("ores/cinnabar");
     public static final IOptionalNamedTag<Block> ORES_COPPER = forgeTag("ores/copper");
@@ -51,6 +53,8 @@ public class BlockTagsCoFH {
     public static final IOptionalNamedTag<Block> STORAGE_BLOCKS_SULFUR = forgeTag("storage_blocks/sulfur");
     public static final IOptionalNamedTag<Block> STORAGE_BLOCKS_TAR = forgeTag("storage_blocks/tar");
     public static final IOptionalNamedTag<Block> STORAGE_BLOCKS_TIN = forgeTag("storage_blocks/tin");
+
+    public static final IOptionalNamedTag<Block> PUMPKINS_CARVED = forgeTag("pumpkins/carved");
 
     // region HELPERS
     private static IOptionalNamedTag<Block> thermalTag(String name) {

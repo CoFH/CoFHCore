@@ -19,11 +19,11 @@ public class ChatHelper {
 
     public static void sendIndexedChatMessageToPlayer(PlayerEntity player, ITextComponent message) {
 
-        if (player.world == null || Utils.isFakePlayer(player)) {
+        if (player.level == null || Utils.isFakePlayer(player)) {
             return;
         }
         if (indexChatMessages) {
-            if (Utils.isServerWorld(player.world)) {
+            if (Utils.isServerWorld(player.level)) {
                 if (player instanceof ServerPlayerEntity) {
                     IndexedChatPacket.sendToClient(message, TEMP_INDEX_SERVER, (ServerPlayerEntity) player);
                 }
@@ -31,18 +31,18 @@ public class ChatHelper {
                 ProxyUtils.addIndexedChatMessage(message, TEMP_INDEX_CLIENT);
             }
         } else {
-            player.sendMessage(message, Util.DUMMY_UUID);
+            player.sendMessage(message, Util.NIL_UUID);
         }
     }
 
     public static void sendIndexedChatMessagesToPlayer(PlayerEntity player, List<ITextComponent> messages) {
 
-        if (player.world == null || Utils.isFakePlayer(player)) {
+        if (player.level == null || Utils.isFakePlayer(player)) {
             return;
         }
         if (indexChatMessages) {
             for (int i = 0; i < messages.size(); ++i) {
-                if (Utils.isServerWorld(player.world)) {
+                if (Utils.isServerWorld(player.level)) {
                     if (player instanceof ServerPlayerEntity) {
                         IndexedChatPacket.sendToClient(messages.get(i), TEMP_INDEX_SERVER + i, (ServerPlayerEntity) player);
                     }
@@ -52,7 +52,7 @@ public class ChatHelper {
             }
         } else {
             for (ITextComponent message : messages) {
-                player.sendMessage(message, Util.DUMMY_UUID);
+                player.sendMessage(message, Util.NIL_UUID);
             }
         }
     }

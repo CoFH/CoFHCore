@@ -25,46 +25,46 @@ import static net.minecraftforge.common.PlantType.*;
 
 public class SoilBlock extends Block {
 
-    protected static final VoxelShape SHAPE_TILLED = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 15.0D, 16.0D);
+    protected static final VoxelShape SHAPE_TILLED = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 15.0D, 16.0D);
 
     public SoilBlock(Properties properties) {
 
         super(properties);
-        this.setDefaultState(this.stateContainer.getBaseState().with(CHARGED, 0));
+        this.registerDefaultState(this.stateDefinition.any().setValue(CHARGED, 0));
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
 
-        super.fillStateContainer(builder);
+        super.createBlockStateDefinition(builder);
         builder.add(CHARGED);
     }
 
     @Override
     public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
 
-        BlockPos abovePos = pos.up();
+        BlockPos abovePos = pos.above();
         BlockState aboveState = worldIn.getBlockState(abovePos);
 
-        if (aboveState.getBlock() instanceof IPlantable && aboveState.ticksRandomly()) {
-            int charge = state.get(CHARGED);
+        if (aboveState.getBlock() instanceof IPlantable && aboveState.isRandomlyTicking()) {
+            int charge = state.getValue(CHARGED);
             int boost = 1 + charge;
             for (int i = 0; i < boost; ++i) {
                 aboveState.randomTick(worldIn, abovePos, rand);
             }
             if (rand.nextInt(boost) > 0) {
-                worldIn.setBlockState(pos, state.with(CHARGED, Math.max(0, charge - 1)), 2);
+                worldIn.setBlock(pos, state.setValue(CHARGED, Math.max(0, charge - 1)), 2);
             }
         }
     }
 
     public static void charge(BlockState state, World worldIn, BlockPos pos) {
 
-        int charge = state.get(CHARGED);
+        int charge = state.getValue(CHARGED);
         if (charge < 4) {
-            worldIn.setBlockState(pos, state.with(CHARGED, charge + 1), 2);
+            worldIn.setBlock(pos, state.setValue(CHARGED, charge + 1), 2);
         } else if (worldIn instanceof ServerWorld) {
-            state.getBlock().tick(state, (ServerWorld) worldIn, pos, worldIn.rand);
+            state.getBlock().tick(state, (ServerWorld) worldIn, pos, worldIn.random);
         }
     }
 
@@ -76,10 +76,10 @@ public class SoilBlock extends Block {
 
     protected boolean canSustainPlant(BlockState state, IBlockReader world, BlockPos pos, Direction facing, IPlantable plantable, boolean tilled) {
 
-        if (plantable.getPlant(world, pos.offset(facing)).getBlock() instanceof AttachedStemBlock) {
+        if (plantable.getPlant(world, pos.relative(facing)).getBlock() instanceof AttachedStemBlock) {
             return true;
         }
-        PlantType type = plantable.getPlantType(world, pos.up());
+        PlantType type = plantable.getPlantType(world, pos.above());
 
         if (type == CROP) {
             return tilled;
@@ -89,8 +89,8 @@ public class SoilBlock extends Block {
         }
         if (type == BEACH) {
             for (Direction direction : Direction.Plane.HORIZONTAL) {
-                BlockPos qPos = pos.offset(direction);
-                if (world.getFluidState(qPos).isTagged(FluidTags.WATER) || world.getBlockState(qPos).getBlock() == Blocks.FROSTED_ICE) {
+                BlockPos qPos = pos.relative(direction);
+                if (world.getFluidState(qPos).is(FluidTags.WATER) || world.getBlockState(qPos).getBlock() == Blocks.FROSTED_ICE) {
                     return true;
                 }
             }

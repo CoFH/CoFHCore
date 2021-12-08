@@ -3,6 +3,7 @@ package cofh.core;
 import cofh.core.client.gui.HeldItemFilterScreen;
 import cofh.core.client.gui.TileItemFilterScreen;
 import cofh.core.command.CoFHCommand;
+import cofh.core.compat.curios.CuriosProxy;
 import cofh.core.compat.quark.QuarkFlags;
 import cofh.core.event.ArmorEvents;
 import cofh.core.init.*;
@@ -10,10 +11,12 @@ import cofh.core.network.packet.client.*;
 import cofh.core.network.packet.server.*;
 import cofh.core.util.Proxy;
 import cofh.core.util.ProxyClient;
+import cofh.core.util.helpers.FluidHelper;
 import cofh.lib.capability.CapabilityArchery;
 import cofh.lib.capability.CapabilityAreaEffect;
 import cofh.lib.capability.CapabilityEnchantableItem;
 import cofh.lib.capability.CapabilityShieldItem;
+import cofh.lib.item.impl.SpawnEggItemCoFH;
 import cofh.lib.loot.TileNBTSync;
 import cofh.lib.network.PacketHandler;
 import cofh.lib.util.DeferredRegisterCoFH;
@@ -23,6 +26,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
+import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.particles.ParticleType;
 import net.minecraft.potion.Effect;
 import net.minecraft.tileentity.TileEntityType;
@@ -31,6 +35,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -58,9 +63,14 @@ public class CoFHCore {
     public static final DeferredRegisterCoFH<Effect> EFFECTS = DeferredRegisterCoFH.create(ForgeRegistries.POTIONS, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<Enchantment> ENCHANTMENTS = DeferredRegisterCoFH.create(ForgeRegistries.ENCHANTMENTS, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<ParticleType<?>> PARTICLES = DeferredRegisterCoFH.create(ForgeRegistries.PARTICLE_TYPES, ID_COFH_CORE);
+    public static final DeferredRegisterCoFH<IRecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegisterCoFH.create(ForgeRegistries.RECIPE_SERIALIZERS, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<TileEntityType<?>> TILE_ENTITIES = DeferredRegisterCoFH.create(ForgeRegistries.TILE_ENTITIES, ID_COFH_CORE);
 
+    public static boolean curiosLoaded = false;
+
     public CoFHCore() {
+
+        curiosLoaded = ModList.get().isLoaded(ID_CURIOS);
 
         registerPackets();
 
@@ -79,6 +89,7 @@ public class CoFHCore {
         EFFECTS.register(modEventBus);
         ENCHANTMENTS.register(modEventBus);
         // PARTICLES.register(modEventBus);
+        RECIPE_SERIALIZERS.register(modEventBus);
         TILE_ENTITIES.register(modEventBus);
 
         CoreConfig.register();
@@ -91,6 +102,9 @@ public class CoFHCore {
         CoreEffects.register();
         CoreEnchantments.register();
         // CoreParticles.register();
+        CoreRecipeSerializers.register();
+
+        CuriosProxy.register();
     }
 
     private void registerPackets() {
@@ -99,6 +113,7 @@ public class CoFHCore {
         PACKET_HANDLER.registerPacket(PACKET_GUI, TileGuiPacket::new);
         PACKET_HANDLER.registerPacket(PACKET_REDSTONE, TileRedstonePacket::new);
         PACKET_HANDLER.registerPacket(PACKET_STATE, TileStatePacket::new);
+        PACKET_HANDLER.registerPacket(PACKET_RENDER, TileRenderPacket::new);
 
         PACKET_HANDLER.registerPacket(PACKET_CHAT, IndexedChatPacket::new);
         PACKET_HANDLER.registerPacket(PACKET_MOTION, PlayerMotionPacket::new);
@@ -117,6 +132,7 @@ public class CoFHCore {
         PACKET_HANDLER.registerPacket(PACKET_CLAIM_XP, ClaimXPPacket::new);
 
         PACKET_HANDLER.registerPacket(PACKET_ITEM_MODE_CHANGE, ItemModeChangePacket::new);
+        PACKET_HANDLER.registerPacket(PACKET_ITEM_LEFT_CLICK, ItemLeftClickPacket::new);
     }
 
     // region INITIALIZATION
@@ -127,18 +143,20 @@ public class CoFHCore {
         CapabilityEnchantableItem.register();
         CapabilityShieldItem.register();
 
+        event.enqueueWork(SpawnEggItemCoFH::setup);
+
         event.enqueueWork(TileNBTSync::setup);
 
         ArmorEvents.setup();
         QuarkFlags.setup();
 
-        event.enqueueWork(TileNBTSync::setup);
+        FluidHelper.init();
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {
 
-        ScreenManager.registerFactory(HELD_ITEM_FILTER_CONTAINER, HeldItemFilterScreen::new);
-        ScreenManager.registerFactory(TILE_ITEM_FILTER_CONTAINER, TileItemFilterScreen::new);
+        ScreenManager.register(HELD_ITEM_FILTER_CONTAINER, HeldItemFilterScreen::new);
+        ScreenManager.register(TILE_ITEM_FILTER_CONTAINER, TileItemFilterScreen::new);
 
         CoreKeys.register();
 

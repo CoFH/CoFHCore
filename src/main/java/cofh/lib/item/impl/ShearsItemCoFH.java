@@ -17,7 +17,7 @@ public class ShearsItemCoFH extends ShearsItem implements ICoFHItem {
     public ShearsItemCoFH(Properties builder) {
 
         super(builder);
-        DispenserBlock.registerDispenseBehavior(this, new BeehiveDispenseBehavior());
+        DispenserBlock.registerBehavior(this, new BeehiveDispenseBehavior());
     }
 
     public ShearsItemCoFH(IItemTier tier, Properties builder) {
@@ -28,12 +28,12 @@ public class ShearsItemCoFH extends ShearsItem implements ICoFHItem {
 
     public ShearsItemCoFH setParams(IItemTier tier) {
 
-        this.enchantability = tier.getEnchantability();
+        this.enchantability = tier.getEnchantmentValue();
         return this;
     }
 
     @Override
-    public int getItemEnchantability() {
+    public int getEnchantmentValue() {
 
         return enchantability;
     }

@@ -31,14 +31,14 @@ public class InvWrapperGeneric implements IInventory {
     public void readFromContainerInv(List<ItemStack> contents) {
 
         this.stackList.clear();
-        for (int i = 0; i < Math.min(contents.size(), getSizeInventory()); ++i) {
+        for (int i = 0; i < Math.min(contents.size(), getContainerSize()); ++i) {
             this.stackList.set(i, contents.get(i));
         }
     }
 
     // region IInventory
     @Override
-    public int getSizeInventory() {
+    public int getContainerSize() {
 
         return this.stackList.size();
     }
@@ -54,45 +54,45 @@ public class InvWrapperGeneric implements IInventory {
     }
 
     @Override
-    public ItemStack getStackInSlot(int index) {
+    public ItemStack getItem(int index) {
 
-        return index >= this.getSizeInventory() ? ItemStack.EMPTY : this.stackList.get(index);
+        return index >= this.getContainerSize() ? ItemStack.EMPTY : this.stackList.get(index);
     }
 
     @Override
-    public ItemStack removeStackFromSlot(int index) {
+    public ItemStack removeItemNoUpdate(int index) {
 
-        return ItemStackHelper.getAndRemove(this.stackList, index);
+        return ItemStackHelper.takeItem(this.stackList, index);
     }
 
     @Override
-    public ItemStack decrStackSize(int index, int count) {
+    public ItemStack removeItem(int index, int count) {
 
-        return ItemStackHelper.getAndSplit(this.stackList, index, count);
+        return ItemStackHelper.removeItem(this.stackList, index, count);
     }
 
     @Override
-    public void setInventorySlotContents(int index, ItemStack stack) {
+    public void setItem(int index, ItemStack stack) {
 
-        if (index >= 0 && index < getSizeInventory()) {
+        if (index >= 0 && index < getContainerSize()) {
             this.stackList.set(index, stack);
-            this.eventHandler.onCraftMatrixChanged(this);
+            this.eventHandler.slotsChanged(this);
         }
     }
 
     @Override
-    public void markDirty() {
+    public void setChanged() {
 
     }
 
     @Override
-    public boolean isUsableByPlayer(PlayerEntity player) {
+    public boolean stillValid(PlayerEntity player) {
 
         return true;
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
 
         this.stackList.clear();
     }

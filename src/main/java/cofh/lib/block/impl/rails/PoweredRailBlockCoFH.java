@@ -42,9 +42,9 @@ public class PoweredRailBlockCoFH extends PoweredRailBlock implements IDismantle
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 
-        if (Utils.isWrench(player.getHeldItem(handIn).getItem())) {
+        if (Utils.isWrench(player.getItemInHand(handIn).getItem())) {
             if (player.isSecondaryUseActive()) {
                 if (canDismantle(worldIn, pos, state, player)) {
                     dismantleBlock(worldIn, pos, state, hit, player, false);
@@ -53,7 +53,7 @@ public class PoweredRailBlockCoFH extends PoweredRailBlock implements IDismantle
             } else {
                 BlockState rotState = rotate(state, worldIn, pos, Rotation.CLOCKWISE_90);
                 if (rotState != state) {
-                    worldIn.setBlockState(pos, rotState);
+                    worldIn.setBlockAndUpdate(pos, rotState);
                     return ActionResultType.SUCCESS;
                 }
             }

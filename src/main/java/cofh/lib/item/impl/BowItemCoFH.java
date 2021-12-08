@@ -30,9 +30,9 @@ public class BowItemCoFH extends BowItem implements ICoFHItem {
 
     public BowItemCoFH setParams(IItemTier tier) {
 
-        this.enchantability = tier.getEnchantability();
-        this.damageModifier = tier.getAttackDamage() / 4;
-        this.velocityModifier = tier.getEfficiency() / 20;
+        this.enchantability = tier.getEnchantmentValue();
+        this.damageModifier = tier.getAttackDamageBonus() / 4;
+        this.velocityModifier = tier.getSpeed() / 20;
         return this;
     }
 
@@ -46,7 +46,7 @@ public class BowItemCoFH extends BowItem implements ICoFHItem {
     }
 
     @Override
-    public int getItemEnchantability() {
+    public int getEnchantmentValue() {
 
         return enchantability;
     }

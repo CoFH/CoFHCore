@@ -25,11 +25,11 @@ public class ConditionalSound extends TickableSound {
 
         super(soundIn, categoryIn);
 
-        this.x = tile.getPos().getX() + 0.5D;
-        this.y = tile.getPos().getY() + 0.5D;
-        this.z = tile.getPos().getZ() + 0.5D;
+        this.x = tile.getBlockPos().getX() + 0.5D;
+        this.y = tile.getBlockPos().getY() + 0.5D;
+        this.z = tile.getBlockPos().getZ() + 0.5D;
 
-        this.repeat = true;
+        this.looping = true;
         this.condition = condition;
     }
 
@@ -37,11 +37,11 @@ public class ConditionalSound extends TickableSound {
 
         super(soundIn, categoryIn);
 
-        this.x = entity.getPosX();
-        this.y = entity.getPosY();
-        this.z = entity.getPosZ();
+        this.x = entity.getX();
+        this.y = entity.getY();
+        this.z = entity.getZ();
 
-        this.repeat = true;
+        this.looping = true;
         this.condition = condition;
     }
 
@@ -91,7 +91,7 @@ public class ConditionalSound extends TickableSound {
     }
 
     @Override
-    public boolean isDonePlaying() {
+    public boolean isStopped() {
 
         return donePlaying;
     }

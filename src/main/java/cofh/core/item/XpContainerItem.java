@@ -1,5 +1,6 @@
 package cofh.core.item;
 
+import cofh.core.util.helpers.FluidHelper;
 import cofh.lib.fluid.FluidContainerItemWrapper;
 import cofh.lib.fluid.IFluidContainerItem;
 import cofh.lib.item.ContainerType;
@@ -82,11 +83,11 @@ public class XpContainerItem extends ItemCoFH implements IXpContainerItem, IFlui
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
+    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
 
-        ItemStack stack = player.getHeldItem(hand);
+        ItemStack stack = player.getItemInHand(hand);
         if (Utils.isFakePlayer(player)) {
-            return ActionResult.resultFail(stack);
+            return ActionResult.fail(stack);
         }
         int xp;
         int curLevel = player.experienceLevel;
@@ -119,7 +120,7 @@ public class XpContainerItem extends ItemCoFH implements IXpContainerItem, IFlui
                 modifyXp(stack, xp);
             }
         }
-        return ActionResult.resultSuccess(stack);
+        return ActionResult.success(stack);
     }
 
     @Override
@@ -141,6 +142,12 @@ public class XpContainerItem extends ItemCoFH implements IXpContainerItem, IFlui
 
         int xp = getStoredXp(container);
         return xp > 0 ? new FluidStack(FLUID_XP, xp * MB_PER_XP) : FluidStack.EMPTY;
+    }
+
+    @Override
+    public boolean isFluidValid(ItemStack container, FluidStack resource) {
+
+        return FluidHelper.IS_XP.test(resource);
     }
 
     @Override

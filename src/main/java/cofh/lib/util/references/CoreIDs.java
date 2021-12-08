@@ -23,6 +23,8 @@ public class CoreIDs {
     public static final String ID_FLUID_STEAM = "steam";
     public static final String ID_FLUID_XP = "experience";
 
+    public static final String ID_CONTAINER_HELD_INVENTORY = "held_inventory";
+
     public static final String ID_CONTAINER_HELD_FLUID_FILTER = "held_fluid_filter";
     public static final String ID_CONTAINER_TILE_FLUID_FILTER = "tile_fluid_filter";
     public static final String ID_CONTAINER_HELD_ITEM_FILTER = "held_item_filter";
@@ -42,6 +44,7 @@ public class CoreIDs {
     public static final String ID_EFFECT_SHOCKED = "shocked";
     public static final String ID_EFFECT_SLIMED = "slimed";
     public static final String ID_EFFECT_SUNDERED = "sundered";
+    public static final String ID_EFFECT_SUPERCHARGE = "supercharge";
     public static final String ID_EFFECT_WRENCHED = "wrenched";
 
     public static final String ID_HOLDING = "holding";
@@ -49,5 +52,8 @@ public class CoreIDs {
     public static final String ID_ECTOPLASM = "ectoplasm";
 
     // public static final String ID_PARTICLE_SNOW = "snow";
+
+    public static final String ID_CRAFTING_POTION = "crafting_shaped_potion";
+    public static final String ID_CRAFTING_SECURABLE = "crafting_securable";
     // endregion
 }

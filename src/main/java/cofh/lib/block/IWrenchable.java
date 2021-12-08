@@ -19,7 +19,7 @@ public interface IWrenchable extends IForgeBlock {
 
         BlockState rotState = this.rotate(state, world, pos, Rotation.CLOCKWISE_90);
         if (rotState != state) {
-            world.setBlockState(pos, rotState);
+            world.setBlockAndUpdate(pos, rotState);
         }
     }
 
@@ -28,7 +28,7 @@ public interface IWrenchable extends IForgeBlock {
      */
     default boolean canWrench(World world, BlockPos pos, BlockState state, PlayerEntity player) {
 
-        TileEntity tile = world.getTileEntity(pos);
+        TileEntity tile = world.getBlockEntity(pos);
         if (tile instanceof ITileCallback) {
             return ((ITileCallback) tile).canPlayerChange(player);
         }

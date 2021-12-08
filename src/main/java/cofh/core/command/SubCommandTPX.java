@@ -15,7 +15,7 @@ public class SubCommandTPX {
     static ArgumentBuilder<CommandSource, ?> register() {
 
         return Commands.literal("tpx")
-                .requires(source -> source.hasPermissionLevel(permissionLevel));
+                .requires(source -> source.hasPermission(permissionLevel));
         // No target - self
         //.executes(context -> execute(context.getSource(), context.getSource().asPlayer()));
     }
@@ -23,7 +23,7 @@ public class SubCommandTPX {
     static ArgumentBuilder<CommandSource, ?> registerAlt() {
 
         return Commands.literal("teleport")
-                .requires(source -> source.hasPermissionLevel(permissionLevel));
+                .requires(source -> source.hasPermission(permissionLevel));
         // No target - self
         //.executes(context -> execute(context.getSource(), context.getSource().asPlayer()));
     }
@@ -31,9 +31,9 @@ public class SubCommandTPX {
     private static int execute(CommandSource source, Collection<? extends Entity> targets) {
 
         if (targets.size() == 1) {
-            source.sendFeedback(new TranslationTextComponent("commands.cofh.tpx.success.single", targets.iterator().next().getDisplayName()), true);
+            source.sendSuccess(new TranslationTextComponent("commands.cofh.tpx.success.single", targets.iterator().next().getDisplayName()), true);
         } else {
-            source.sendFeedback(new TranslationTextComponent("commands.cofh.tpx.success.multiple", targets.size()), true);
+            source.sendSuccess(new TranslationTextComponent("commands.cofh.tpx.success.multiple", targets.size()), true);
         }
         return targets.size();
     }

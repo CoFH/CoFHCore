@@ -4,6 +4,7 @@ import cofh.core.CoFHCore;
 import cofh.core.tileentity.TileCoFH;
 import cofh.lib.network.packet.IPacketServer;
 import cofh.lib.network.packet.PacketBase;
+import cofh.lib.tileentity.ITileXpHandler;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
@@ -26,13 +27,13 @@ public class ClaimXPPacket extends PacketBase implements IPacketServer {
     @Override
     public void handleServer(ServerPlayerEntity player) {
 
-        World world = player.world;
-        if (!world.isBlockPresent(pos)) {
+        World world = player.level;
+        if (!world.isLoaded(pos)) {
             return;
         }
-        TileEntity tile = world.getTileEntity(pos);
-        if (tile instanceof TileCoFH) {
-            ((TileCoFH) tile).claimXP(player);
+        TileEntity tile = world.getBlockEntity(pos);
+        if (tile instanceof ITileXpHandler) {
+            ((ITileXpHandler) tile).claimXP(player);
         }
         // TODO: Debug logging?
     }

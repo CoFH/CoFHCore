@@ -65,7 +65,7 @@ public class AreaEffectHelper {
     public static ImmutableList<BlockPos> getBucketableBlocksRadius(ItemStack stack, BlockPos pos, PlayerEntity player, int radius) {
 
         List<BlockPos> area;
-        World world = player.getEntityWorld();
+        World world = player.getCommandSenderWorld();
         Item tool = stack.getItem();
 
         BlockRayTraceResult traceResult = RayTracer.retrace(player, RayTraceContext.FluidMode.SOURCE_ONLY);
@@ -75,25 +75,25 @@ public class AreaEffectHelper {
         int yMin = -1;
         int yMax = 2 * radius - 1;
 
-        switch (traceResult.getFace()) {
+        switch (traceResult.getDirection()) {
             case DOWN:
             case UP:
-                area = BlockPos.getAllInBox(pos.add(-radius, 0, -radius), pos.add(radius, 0, radius))
+                area = BlockPos.betweenClosedStream(pos.offset(-radius, 0, -radius), pos.offset(radius, 0, radius))
                         .filter(blockPos -> isBucketable(tool, stack, world, blockPos))
-                        .map(BlockPos::toImmutable)
+                        .map(BlockPos::immutable)
                         .collect(Collectors.toList());
                 break;
             case NORTH:
             case SOUTH:
-                area = BlockPos.getAllInBox(pos.add(-radius, yMin, 0), pos.add(radius, yMax, 0))
+                area = BlockPos.betweenClosedStream(pos.offset(-radius, yMin, 0), pos.offset(radius, yMax, 0))
                         .filter(blockPos -> isBucketable(tool, stack, world, blockPos))
-                        .map(BlockPos::toImmutable)
+                        .map(BlockPos::immutable)
                         .collect(Collectors.toList());
                 break;
             default:
-                area = BlockPos.getAllInBox(pos.add(0, yMin, -radius), pos.add(0, yMax, radius))
+                area = BlockPos.betweenClosedStream(pos.offset(0, yMin, -radius), pos.offset(0, yMax, radius))
                         .filter(blockPos -> isBucketable(tool, stack, world, blockPos))
-                        .map(BlockPos::toImmutable)
+                        .map(BlockPos::immutable)
                         .collect(Collectors.toList());
                 break;
         }
@@ -106,7 +106,7 @@ public class AreaEffectHelper {
     public static ImmutableList<BlockPos> getBreakableBlocksRadius(ItemStack stack, BlockPos pos, PlayerEntity player, int radius) {
 
         List<BlockPos> area;
-        World world = player.getEntityWorld();
+        World world = player.getCommandSenderWorld();
         Item tool = stack.getItem();
 
         BlockRayTraceResult traceResult = RayTracer.retrace(player, RayTraceContext.FluidMode.NONE);
@@ -116,25 +116,25 @@ public class AreaEffectHelper {
         int yMin = -1;
         int yMax = 2 * radius - 1;
 
-        switch (traceResult.getFace()) {
+        switch (traceResult.getDirection()) {
             case DOWN:
             case UP:
-                area = BlockPos.getAllInBox(pos.add(-radius, 0, -radius), pos.add(radius, 0, radius))
+                area = BlockPos.betweenClosedStream(pos.offset(-radius, 0, -radius), pos.offset(radius, 0, radius))
                         .filter(blockPos -> canToolAffect(tool, stack, world, blockPos))
-                        .map(BlockPos::toImmutable)
+                        .map(BlockPos::immutable)
                         .collect(Collectors.toList());
                 break;
             case NORTH:
             case SOUTH:
-                area = BlockPos.getAllInBox(pos.add(-radius, yMin, 0), pos.add(radius, yMax, 0))
+                area = BlockPos.betweenClosedStream(pos.offset(-radius, yMin, 0), pos.offset(radius, yMax, 0))
                         .filter(blockPos -> canToolAffect(tool, stack, world, blockPos))
-                        .map(BlockPos::toImmutable)
+                        .map(BlockPos::immutable)
                         .collect(Collectors.toList());
                 break;
             default:
-                area = BlockPos.getAllInBox(pos.add(0, yMin, -radius), pos.add(0, yMax, radius))
+                area = BlockPos.betweenClosedStream(pos.offset(0, yMin, -radius), pos.offset(0, yMax, radius))
                         .filter(blockPos -> canToolAffect(tool, stack, world, blockPos))
-                        .map(BlockPos::toImmutable)
+                        .map(BlockPos::immutable)
                         .collect(Collectors.toList());
                 break;
         }
@@ -145,7 +145,7 @@ public class AreaEffectHelper {
     public static ImmutableList<BlockPos> getBreakableBlocksDepth(ItemStack stack, BlockPos pos, PlayerEntity player, int radius, int depth) {
 
         List<BlockPos> area;
-        World world = player.getEntityWorld();
+        World world = player.getCommandSenderWorld();
         Item tool = stack.getItem();
 
         BlockRayTraceResult traceResult = RayTracer.retrace(player, RayTraceContext.FluidMode.NONE);
@@ -158,32 +158,32 @@ public class AreaEffectHelper {
         int yMin = -1;
         int yMax = 2 * radius - 1;
 
-        switch (traceResult.getFace()) {
+        switch (traceResult.getDirection()) {
             case DOWN:
                 dMin = 0;
                 dMax = depth;
             case UP:
-                area = BlockPos.getAllInBox(pos.add(-radius, -dMin, -radius), pos.add(radius, dMax, radius))
+                area = BlockPos.betweenClosedStream(pos.offset(-radius, -dMin, -radius), pos.offset(radius, dMax, radius))
                         .filter(blockPos -> canToolAffect(tool, stack, world, blockPos))
-                        .map(BlockPos::toImmutable)
+                        .map(BlockPos::immutable)
                         .collect(Collectors.toList());
                 break;
             case NORTH:
                 dMin = 0;
                 dMax = depth;
             case SOUTH:
-                area = BlockPos.getAllInBox(pos.add(-radius, yMin, -dMin), pos.add(radius, yMax, dMax))
+                area = BlockPos.betweenClosedStream(pos.offset(-radius, yMin, -dMin), pos.offset(radius, yMax, dMax))
                         .filter(blockPos -> canToolAffect(tool, stack, world, blockPos))
-                        .map(BlockPos::toImmutable)
+                        .map(BlockPos::immutable)
                         .collect(Collectors.toList());
                 break;
             case WEST:
                 dMin = 0;
                 dMax = depth;
             default:
-                area = BlockPos.getAllInBox(pos.add(-dMin, yMin, -radius), pos.add(dMax, yMax, radius))
+                area = BlockPos.betweenClosedStream(pos.offset(-dMin, yMin, -radius), pos.offset(dMax, yMax, radius))
                         .filter(blockPos -> canToolAffect(tool, stack, world, blockPos))
-                        .map(BlockPos::toImmutable)
+                        .map(BlockPos::immutable)
                         .collect(Collectors.toList());
                 break;
 
@@ -195,7 +195,7 @@ public class AreaEffectHelper {
     public static ImmutableList<BlockPos> getBreakableBlocksLine(ItemStack stack, BlockPos pos, PlayerEntity player, int length) {
 
         ArrayList<BlockPos> area = new ArrayList<>();
-        World world = player.getEntityWorld();
+        World world = player.getCommandSenderWorld();
         Item tool = stack.getItem();
 
         BlockPos query;
@@ -206,7 +206,7 @@ public class AreaEffectHelper {
         if (player.isSecondaryUseActive() || !canToolAffect(tool, stack, world, pos) || length <= 0) {
             return ImmutableList.of();
         }
-        switch (player.getHorizontalFacing()) {
+        switch (player.getDirection()) {
             case SOUTH:
                 for (int k = z + 1; k < z + length + 1; ++k) {
                     query = new BlockPos(x, y, k);
@@ -248,20 +248,60 @@ public class AreaEffectHelper {
     }
     // endregion
 
+    //region PLACING
+    public static ImmutableList<BlockPos> getPlaceableBlocksRadius(ItemStack stack, BlockPos pos, PlayerEntity player, int radius) {
+
+        List<BlockPos> area;
+        World world = player.getCommandSenderWorld();
+        Item tool = stack.getItem();
+
+        BlockRayTraceResult traceResult = RayTracer.retrace(player, RayTraceContext.FluidMode.NONE);
+        if (traceResult.getType() == RayTraceResult.Type.MISS || player.isSecondaryUseActive() || !canToolAffect(tool, stack, world, pos) || radius <= 0) {
+            return ImmutableList.of();
+        }
+        int yMin = -1;
+        int yMax = 2 * radius - 1;
+
+        switch (traceResult.getDirection()) {
+            case DOWN:
+            case UP:
+                area = BlockPos.betweenClosedStream(pos.offset(-radius, 0, -radius), pos.offset(radius, 0, radius))
+                        .filter(blockPos -> canToolAffect(tool, stack, world, blockPos))
+                        .map(BlockPos::immutable)
+                        .collect(Collectors.toList());
+                break;
+            case NORTH:
+            case SOUTH:
+                area = BlockPos.betweenClosedStream(pos.offset(-radius, yMin, 0), pos.offset(radius, yMax, 0))
+                        .filter(blockPos -> canToolAffect(tool, stack, world, blockPos))
+                        .map(BlockPos::immutable)
+                        .collect(Collectors.toList());
+                break;
+            default:
+                area = BlockPos.betweenClosedStream(pos.offset(0, yMin, -radius), pos.offset(0, yMax, radius))
+                        .filter(blockPos -> canToolAffect(tool, stack, world, blockPos))
+                        .map(BlockPos::immutable)
+                        .collect(Collectors.toList());
+                break;
+        }
+        return ImmutableList.copyOf(area);
+    }
+    //endregion
+
     // region HOE
     public static ImmutableList<BlockPos> getTillableBlocksRadius(ItemStack stack, BlockPos pos, PlayerEntity player, int radius) {
 
         List<BlockPos> area;
-        World world = player.getEntityWorld();
+        World world = player.getCommandSenderWorld();
         boolean weeding = getItemEnchantmentLevel(WEEDING, stack) > 0;
 
         BlockRayTraceResult traceResult = RayTracer.retrace(player, RayTraceContext.FluidMode.NONE);
-        if (traceResult.getType() == RayTraceResult.Type.MISS || traceResult.getFace() == DOWN || player.isSecondaryUseActive() || !canHoeAffect(world, pos, weeding) || radius <= 0) {
+        if (traceResult.getType() == RayTraceResult.Type.MISS || traceResult.getDirection() == DOWN || player.isSecondaryUseActive() || !canHoeAffect(world, pos, weeding) || radius <= 0) {
             return ImmutableList.of();
         }
-        area = BlockPos.getAllInBox(pos.add(-radius, 0, -radius), pos.add(radius, 0, radius))
+        area = BlockPos.betweenClosedStream(pos.offset(-radius, 0, -radius), pos.offset(radius, 0, radius))
                 .filter(blockPos -> canHoeAffect(world, blockPos, weeding))
-                .map(BlockPos::toImmutable)
+                .map(BlockPos::immutable)
                 .collect(Collectors.toList());
         area.remove(pos);
         return ImmutableList.copyOf(area);
@@ -270,35 +310,35 @@ public class AreaEffectHelper {
     public static ImmutableList<BlockPos> getTillableBlocksLine(ItemStack stack, BlockPos pos, PlayerEntity player, int length) {
 
         List<BlockPos> area;
-        World world = player.getEntityWorld();
+        World world = player.getCommandSenderWorld();
         boolean weeding = getItemEnchantmentLevel(WEEDING, stack) > 0;
 
         if (player.isSecondaryUseActive() || !canHoeAffect(world, pos, weeding) || length <= 0) {
             return ImmutableList.of();
         }
-        switch (player.getHorizontalFacing()) {
+        switch (player.getDirection()) {
             case SOUTH:
-                area = BlockPos.getAllInBox(pos.add(0, 0, 1), pos.add(0, 0, length + 1))
+                area = BlockPos.betweenClosedStream(pos.offset(0, 0, 1), pos.offset(0, 0, length + 1))
                         .filter(blockPos -> canHoeAffect(world, blockPos, weeding))
-                        .map(BlockPos::toImmutable)
+                        .map(BlockPos::immutable)
                         .collect(Collectors.toList());
                 break;
             case WEST:
-                area = BlockPos.getAllInBox(pos.add(-1, 0, 0), pos.add(-(length + 1), 0, 0))
+                area = BlockPos.betweenClosedStream(pos.offset(-1, 0, 0), pos.offset(-(length + 1), 0, 0))
                         .filter(blockPos -> canHoeAffect(world, blockPos, weeding))
-                        .map(BlockPos::toImmutable)
+                        .map(BlockPos::immutable)
                         .collect(Collectors.toList());
                 break;
             case NORTH:
-                area = BlockPos.getAllInBox(pos.add(0, 0, -1), pos.add(0, 0, -(length + 1)))
+                area = BlockPos.betweenClosedStream(pos.offset(0, 0, -1), pos.offset(0, 0, -(length + 1)))
                         .filter(blockPos -> canHoeAffect(world, blockPos, weeding))
-                        .map(BlockPos::toImmutable)
+                        .map(BlockPos::immutable)
                         .collect(Collectors.toList());
                 break;
             case EAST:
-                area = BlockPos.getAllInBox(pos.add(1, 0, 0), pos.add(length + 1, 0, 0))
+                area = BlockPos.betweenClosedStream(pos.offset(1, 0, 0), pos.offset(length + 1, 0, 0))
                         .filter(blockPos -> canHoeAffect(world, blockPos, weeding))
-                        .map(BlockPos::toImmutable)
+                        .map(BlockPos::immutable)
                         .collect(Collectors.toList());
                 break;
             default:
@@ -313,15 +353,15 @@ public class AreaEffectHelper {
     public static ImmutableList<BlockPos> getBlocksCentered(ItemStack stack, BlockPos pos, PlayerEntity player, int radius, int height) {
 
         List<BlockPos> area;
-        World world = player.getEntityWorld();
+        World world = player.getCommandSenderWorld();
         Item tool = stack.getItem();
 
         if (player.isSecondaryUseActive() || !canToolAffect(tool, stack, world, pos) || (radius <= 0 && height <= 0)) {
             return ImmutableList.of();
         }
-        area = BlockPos.getAllInBox(pos.add(-radius, -height, -radius), pos.add(radius, height, radius))
+        area = BlockPos.betweenClosedStream(pos.offset(-radius, -height, -radius), pos.offset(radius, height, radius))
                 .filter(blockPos -> canToolAffect(tool, stack, world, blockPos))
-                .map(BlockPos::toImmutable)
+                .map(BlockPos::immutable)
                 .collect(Collectors.toList());
         area.remove(pos);
         return ImmutableList.copyOf(area);
@@ -332,19 +372,19 @@ public class AreaEffectHelper {
     private static boolean canToolAffect(Item toolItem, ItemStack toolStack, World world, BlockPos pos) {
 
         BlockState state = world.getBlockState(pos);
-        if (state.getBlockHardness(world, pos) < 0) {
+        if (state.getDestroySpeed(world, pos) < 0) {
             return false;
         }
-        return toolItem.canHarvestBlock(toolStack, state) || !state.getRequiresTool() && toolItem.getDestroySpeed(toolStack, state) > 1.0F;
+        return toolItem.canHarvestBlock(toolStack, state) || !state.requiresCorrectToolForDrops() && toolItem.getDestroySpeed(toolStack, state) > 1.0F;
     }
 
     private static boolean canHoeAffect(World world, BlockPos pos, boolean weeding) {
 
         BlockState state = world.getBlockState(pos);
-        if (HoeItem.HOE_LOOKUP.containsKey(state.getBlock())) {
-            BlockPos up = pos.up();
+        if (HoeItem.TILLABLES.containsKey(state.getBlock())) {
+            BlockPos up = pos.above();
             BlockState stateUp = world.getBlockState(up);
-            return world.isAirBlock(up) || (weeding && (stateUp.getMaterial() == Material.PLANTS || stateUp.getMaterial() == Material.TALL_PLANTS) && stateUp.getBlockHardness(world, up) <= 0.0F);
+            return world.isEmptyBlock(up) || (weeding && (stateUp.getMaterial() == Material.PLANT || stateUp.getMaterial() == Material.REPLACEABLE_PLANT) && stateUp.getDestroySpeed(world, up) <= 0.0F);
         }
         return false;
     }

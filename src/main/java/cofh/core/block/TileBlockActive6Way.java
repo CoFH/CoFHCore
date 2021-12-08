@@ -27,9 +27,9 @@ public class TileBlockActive6Way extends TileBlockActive implements IWrenchable 
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
 
-        super.fillStateContainer(builder);
+        super.createBlockStateDefinition(builder);
         builder.add(FACING_ALL);
     }
 
@@ -37,28 +37,28 @@ public class TileBlockActive6Way extends TileBlockActive implements IWrenchable 
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
 
-        return this.getDefaultState().with(FACING_ALL, context.getNearestLookingDirection().getOpposite());
+        return this.defaultBlockState().setValue(FACING_ALL, context.getNearestLookingDirection().getOpposite());
     }
 
     @Override
     public BlockState rotate(BlockState state, Rotation rot) {
 
-        return state.with(FACING_ALL, rot.rotate(state.get(FACING_ALL)));
+        return state.setValue(FACING_ALL, rot.rotate(state.getValue(FACING_ALL)));
     }
 
     @Override
     public BlockState mirror(BlockState state, Mirror mirrorIn) {
 
-        return state.rotate(mirrorIn.toRotation(state.get(FACING_ALL)));
+        return state.rotate(mirrorIn.getRotation(state.getValue(FACING_ALL)));
     }
 
     // region IWrenchable
     @Override
     public void wrenchBlock(World world, BlockPos pos, BlockState state, RayTraceResult target, PlayerEntity player) {
 
-        BlockState rotState = state.with(FACING_ALL, Direction.byIndex(state.get(FACING_ALL).getIndex() + 1));
+        BlockState rotState = state.setValue(FACING_ALL, Direction.from3DDataValue(state.getValue(FACING_ALL).get3DDataValue() + 1));
         if (rotState != state) {
-            world.setBlockState(pos, rotState);
+            world.setBlockAndUpdate(pos, rotState);
         }
     }
     // endregion

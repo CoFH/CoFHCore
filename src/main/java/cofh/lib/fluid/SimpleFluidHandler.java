@@ -1,6 +1,6 @@
 package cofh.lib.fluid;
 
-import cofh.lib.tileentity.ITileCallback;
+import cofh.lib.util.IInventoryCallback;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
@@ -15,7 +15,7 @@ import java.util.List;
 public class SimpleFluidHandler implements IFluidHandler {
 
     @Nullable
-    protected ITileCallback tile;
+    protected IInventoryCallback callback;
     protected List<FluidStorageCoFH> tanks;
 
     public SimpleFluidHandler() {
@@ -23,15 +23,15 @@ public class SimpleFluidHandler implements IFluidHandler {
         this(null);
     }
 
-    public SimpleFluidHandler(@Nullable ITileCallback tile) {
+    public SimpleFluidHandler(@Nullable IInventoryCallback callback) {
 
-        this.tile = tile;
+        this.callback = callback;
         this.tanks = new ArrayList<>();
     }
 
-    public SimpleFluidHandler(@Nullable ITileCallback tile, @Nonnull List<FluidStorageCoFH> tanks) {
+    public SimpleFluidHandler(@Nullable IInventoryCallback callback, @Nonnull List<FluidStorageCoFH> tanks) {
 
-        this.tile = tile;
+        this.callback = callback;
         this.tanks = new ArrayList<>(tanks);
     }
 
@@ -52,10 +52,10 @@ public class SimpleFluidHandler implements IFluidHandler {
 
     public void onTankChange(int tank) {
 
-        if (tile == null) {
+        if (callback == null) {
             return;
         }
-        tile.onTankChange(tank);
+        callback.onTankChanged(tank);
     }
 
     // region IFluidHandler

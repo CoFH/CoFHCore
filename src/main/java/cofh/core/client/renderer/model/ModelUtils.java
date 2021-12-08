@@ -50,11 +50,11 @@ public class ModelUtils {
             this.builderGeneralQuads.addAll(model.getQuads(null, null, MathHelper.RANDOM));
 
             builderItemOverrideList = model.getOverrides();
-            builderAmbientOcclusion = model.isAmbientOcclusion();
-            builderTexture = model.getParticleTexture();
-            builderSideLit = model.isSideLit();
+            builderAmbientOcclusion = model.useAmbientOcclusion();
+            builderTexture = model.getParticleIcon();
+            builderSideLit = model.usesBlockLight();
             builderGui3d = model.isGui3d();
-            builderCameraTransforms = model.getItemCameraTransforms();
+            builderCameraTransforms = model.getTransforms();
         }
 
         public WrappedBakedModelBuilder addUnderlayQuad(Direction facing, BakedQuad quad) {

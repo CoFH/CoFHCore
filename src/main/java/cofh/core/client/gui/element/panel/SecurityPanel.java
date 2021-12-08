@@ -126,16 +126,16 @@ public class SecurityPanel extends PanelBase {
                 tooltipList.add(new TranslationTextComponent("info.cofh.owner").append(new StringTextComponent(": " + mySecurable.getOwnerName())));
                 switch (mySecurable.getAccess()) {
                     case PUBLIC:
-                        tooltipList.add(new TranslationTextComponent("info.cofh.access_public").mergeStyle(TextFormatting.YELLOW));
+                        tooltipList.add(new TranslationTextComponent("info.cofh.access_public").withStyle(TextFormatting.YELLOW));
                         break;
                     case PRIVATE:
-                        tooltipList.add(new TranslationTextComponent("info.cofh.access_private").mergeStyle(TextFormatting.YELLOW));
+                        tooltipList.add(new TranslationTextComponent("info.cofh.access_private").withStyle(TextFormatting.YELLOW));
                         break;
                     case FRIENDS:
-                        tooltipList.add(new TranslationTextComponent("info.cofh.access_friends").mergeStyle(TextFormatting.YELLOW));
+                        tooltipList.add(new TranslationTextComponent("info.cofh.access_friends").withStyle(TextFormatting.YELLOW));
                         break;
                     case TEAM:
-                        tooltipList.add(new TranslationTextComponent("info.cofh.access_team").mergeStyle(TextFormatting.YELLOW));
+                        tooltipList.add(new TranslationTextComponent("info.cofh.access_team").withStyle(TextFormatting.YELLOW));
                         break;
                 }
             }
@@ -193,21 +193,21 @@ public class SecurityPanel extends PanelBase {
         if (!fullyOpen) {
             return;
         }
-        getFontRenderer().drawStringWithShadow(matrixStack, localize("info.cofh.security"), sideOffset() + 18, 6, headerColor);
-        getFontRenderer().drawStringWithShadow(matrixStack, localize("info.cofh.access") + ":", sideOffset() + 6, 66, subheaderColor);
+        getFontRenderer().drawShadow(matrixStack, localize("info.cofh.security"), sideOffset() + 18, 6, headerColor);
+        getFontRenderer().drawShadow(matrixStack, localize("info.cofh.access") + ":", sideOffset() + 6, 66, subheaderColor);
 
         switch (mySecurable.getAccess()) {
             case PUBLIC:
-                getFontRenderer().drawString(matrixStack, localize("info.cofh.access_public"), sideOffset() + 14, 78, textColor);
+                getFontRenderer().draw(matrixStack, localize("info.cofh.access_public"), sideOffset() + 14, 78, textColor);
                 break;
             case PRIVATE:
-                getFontRenderer().drawString(matrixStack, localize("info.cofh.access_private"), sideOffset() + 14, 78, textColor);
+                getFontRenderer().draw(matrixStack, localize("info.cofh.access_private"), sideOffset() + 14, 78, textColor);
                 break;
             case FRIENDS:
-                getFontRenderer().drawString(matrixStack, localize("info.cofh.access_friends"), sideOffset() + 14, 78, textColor);
+                getFontRenderer().draw(matrixStack, localize("info.cofh.access_friends"), sideOffset() + 14, 78, textColor);
                 break;
             case TEAM:
-                getFontRenderer().drawString(matrixStack, localize("info.cofh.access_team"), sideOffset() + 14, 78, textColor);
+                getFontRenderer().draw(matrixStack, localize("info.cofh.access_team"), sideOffset() + 14, 78, textColor);
                 break;
         }
         RenderHelper.resetColor();

@@ -37,9 +37,9 @@ public class DetectorRailBlockCoFH extends DetectorRailBlock implements IDismant
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 
-        if (Utils.isWrench(player.getHeldItem(handIn).getItem())) {
+        if (Utils.isWrench(player.getItemInHand(handIn).getItem())) {
             if (player.isSecondaryUseActive()) {
                 if (canDismantle(worldIn, pos, state, player)) {
                     dismantleBlock(worldIn, pos, state, hit, player, false);
@@ -48,7 +48,7 @@ public class DetectorRailBlockCoFH extends DetectorRailBlock implements IDismant
             } else {
                 BlockState rotState = rotate(state, worldIn, pos, Rotation.CLOCKWISE_90);
                 if (rotState != state) {
-                    worldIn.setBlockState(pos, rotState);
+                    worldIn.setBlockAndUpdate(pos, rotState);
                     return ActionResultType.SUCCESS;
                 }
             }

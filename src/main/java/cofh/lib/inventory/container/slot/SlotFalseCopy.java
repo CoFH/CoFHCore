@@ -15,22 +15,22 @@ public class SlotFalseCopy extends SlotCoFH {
     }
 
     @Override
-    public boolean canTakeStack(PlayerEntity player) {
+    public boolean mayPickup(PlayerEntity player) {
 
         return false;
     }
 
     @Override
-    public void putStack(ItemStack stack) {
+    public void set(ItemStack stack) {
 
-        if (!isItemValid(stack)) {
+        if (!mayPlace(stack)) {
             return;
         }
         if (!stack.isEmpty()) {
             stack.setCount(1);
         }
-        inventory.setInventorySlotContents(this.slotIndex, stack);
-        onSlotChanged();
+        container.setItem(this.slot, stack);
+        setChanged();
     }
 
 }

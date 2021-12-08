@@ -26,13 +26,19 @@ public class SlotCoFH extends Slot {
     public SlotCoFH(IInventory inventoryIn, int index, int xPosition, int yPosition) {
 
         super(inventoryIn, index, xPosition, yPosition);
-        slotStackLimit = () -> inventoryIn.getInventoryStackLimit();
+        slotStackLimit = () -> inventoryIn.getMaxStackSize();
     }
 
     public SlotCoFH(IInventory inventoryIn, int index, int xPosition, int yPosition, int slotStackLimit) {
 
         super(inventoryIn, index, xPosition, yPosition);
         this.slotStackLimit = () -> slotStackLimit;
+    }
+
+    public SlotCoFH(IInventory inventoryIn, int index, int xPosition, int yPosition, IntSupplier slotStackLimit) {
+
+        super(inventoryIn, index, xPosition, yPosition);
+        this.slotStackLimit = slotStackLimit;
     }
 
     public SlotCoFH setEnabled(BooleanSupplier enabled) {
@@ -42,20 +48,20 @@ public class SlotCoFH extends Slot {
     }
 
     @Override
-    public int getSlotStackLimit() {
+    public int getMaxStackSize() {
 
         return slotStackLimit.getAsInt();
     }
 
     @Override
-    public boolean isItemValid(ItemStack stack) {
+    public boolean mayPlace(ItemStack stack) {
 
-        return inventory.isItemValidForSlot(slotIndex, stack);
+        return container.canPlaceItem(slot, stack);
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public boolean isEnabled() {
+    public boolean isActive() {
 
         return enabled.getAsBoolean();
     }

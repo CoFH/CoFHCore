@@ -66,17 +66,7 @@ public class CoreConfig {
 
         SERVER_CONFIG.pop();
 
-        SERVER_CONFIG.push("Enchantments");
-
-        serverImprovedFeatherFalling = SERVER_CONFIG
-                .comment("If TRUE, Feather Falling will prevent Farmland from being trampled. This option will work with alternative versions (overrides) of Feather Falling.")
-                .define("Improved Feather Falling", improvedFeatherFalling);
-
-        serverImprovedMending = SERVER_CONFIG
-                .comment("If TRUE, Mending behavior is altered so that Experience Orbs always repair items if possible, and the most damaged item is prioritized. This option may not work with alternative versions (overrides) of Mending.")
-                .define("Improved Mending", improvedMending);
-
-        SERVER_CONFIG.pop();
+        genEnchantmentConfig();
 
         SERVER_CONFIG.push("Fishing");
 
@@ -113,6 +103,10 @@ public class CoreConfig {
                 .comment("If TRUE, Enchantment descriptions will be added to the tooltip for Enchanted Books containing only a single enchantment.")
                 .define("Show Enchantment Descriptions", enableEnchantmentDescriptions);
 
+        //        clientEnableFoodDescriptions = CLIENT_CONFIG
+        //                .comment("If TRUE, Food descriptions (nutrition and effects) will be added to the tooltip for Food items.")
+        //                .define("Show Food Descriptions", enableFoodDescriptions);
+
         clientEnableItemDescriptions = CLIENT_CONFIG
                 .comment("If TRUE, Item descriptions will be added to their tooltips if possible.")
                 .define("Show Item Descriptions", enableItemDescriptions);
@@ -143,6 +137,14 @@ public class CoreConfig {
 
         SERVER_CONFIG.push("Enchantments");
 
+        serverImprovedFeatherFalling = SERVER_CONFIG
+                .comment("If TRUE, Feather Falling will prevent Farmland from being trampled. This option will work with alternative versions (overrides) of Feather Falling.")
+                .define("Improved Feather Falling", improvedFeatherFalling);
+
+        serverImprovedMending = SERVER_CONFIG
+                .comment("If TRUE, Mending behavior is altered so that Experience Orbs always repair items if possible, and the most damaged item is prioritized. This option may not work with alternative versions (overrides) of Mending.")
+                .define("Improved Mending", improvedMending);
+
         SERVER_CONFIG.push("Holding");
         enableHolding = SERVER_CONFIG
                 .comment("If TRUE, the Holding Enchantment is available for various Storage Items and Blocks.")
@@ -166,8 +168,7 @@ public class CoreConfig {
         SubCommandIgnite.permissionLevel = permissionIgnite.get();
         SubCommandRepair.permissionLevel = permissionRepair.get();
 
-        improvedFeatherFalling = serverImprovedFeatherFalling.get();
-        improvedMending = serverImprovedMending.get();
+        refreshEnchantmentConfig();
 
         enableFishingExhaustion = serverEnableFishingExhaustion.get();
         amountFishingExhaustion = serverAmountFishingExhaustion.get().floatValue();
@@ -179,6 +180,7 @@ public class CoreConfig {
     private static void refreshClientConfig() {
 
         enableEnchantmentDescriptions = clientEnableEnchantmentDescriptions.get();
+        // enableFoodDescriptions = clientEnableFoodDescriptions.get();
         enableItemDescriptions = clientEnableItemDescriptions.get();
         enableItemTags = clientEnableItemTags.get();
 
@@ -187,6 +189,9 @@ public class CoreConfig {
     }
 
     private static void refreshEnchantmentConfig() {
+
+        improvedFeatherFalling = serverImprovedFeatherFalling.get();
+        improvedMending = serverImprovedMending.get();
 
         if (HOLDING instanceof EnchantmentCoFH) {
             ((EnchantmentCoFH) HOLDING).setEnable(enableHolding.get());
@@ -213,7 +218,9 @@ public class CoreConfig {
     public static int amountSaplingGrowthMod = 4;
 
     public static boolean enableEnchantmentDescriptions = true;
+    public static boolean enableFoodDescriptions = true;
     public static boolean enableItemDescriptions = true;
+    public static boolean enableKeywords = true;
     public static boolean enableItemTags = true;
 
     public static boolean alwaysShowDetails = false;
@@ -229,6 +236,7 @@ public class CoreConfig {
     private static IntValue serverAmountSaplingGrowthMod;
 
     private static BooleanValue clientEnableEnchantmentDescriptions;
+    private static BooleanValue clientEnableFoodDescriptions;
     private static BooleanValue clientEnableItemDescriptions;
     private static BooleanValue clientEnableItemTags;
 

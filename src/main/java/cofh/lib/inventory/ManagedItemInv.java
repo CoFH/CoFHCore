@@ -20,18 +20,18 @@ public class ManagedItemInv extends SimpleItemInv {
 
     protected IItemHandler inputHandler;
     protected IItemHandler outputHandler;
+    protected IItemHandler ioHandler;
     protected IItemHandler accessibleHandler;
     protected IItemHandler internalHandler;
-    protected IItemHandler allHandler;
 
-    public ManagedItemInv(IInventoryCallback tile) {
+    public ManagedItemInv(IInventoryCallback callback) {
 
-        super(tile);
+        super(callback);
     }
 
-    public ManagedItemInv(IInventoryCallback tile, String tag) {
+    public ManagedItemInv(IInventoryCallback callback, String tag) {
 
-        super(tile, tag);
+        super(callback, tag);
     }
 
     public void addSlots(StorageGroup group, int amount) {
@@ -75,24 +75,20 @@ public class ManagedItemInv extends SimpleItemInv {
         }
     }
 
-    protected void optimize() {
+    public void initHandlers() {
 
         ((ArrayList<ItemStorageCoFH>) slots).trimToSize();
         ((ArrayList<ItemStorageCoFH>) inputSlots).trimToSize();
         ((ArrayList<ItemStorageCoFH>) catalystSlots).trimToSize();
         ((ArrayList<ItemStorageCoFH>) outputSlots).trimToSize();
         ((ArrayList<ItemStorageCoFH>) internalSlots).trimToSize();
-    }
 
-    public void initHandlers() {
-
-        optimize();
-
-        inputHandler = new ManagedItemHandler(tile, inputSlots, Collections.emptyList());
-        outputHandler = new ManagedItemHandler(tile, Collections.emptyList(), outputSlots);
-        accessibleHandler = new ManagedItemHandler(tile, inputSlots, outputSlots).restrict();
-        internalHandler = new SimpleItemHandler(tile, internalSlots);
-        allHandler = new SimpleItemHandler(tile, slots);
+        inputHandler = new ManagedItemHandler(callback, inputSlots, Collections.emptyList());
+        outputHandler = new ManagedItemHandler(callback, Collections.emptyList(), outputSlots);
+        ioHandler = new ManagedItemHandler(callback, inputSlots, outputSlots).restrict();
+        accessibleHandler = new ManagedItemHandler(callback, inputSlots, outputSlots);
+        internalHandler = new SimpleItemHandler(callback, internalSlots);
+        allHandler = new SimpleItemHandler(callback, slots);
     }
 
     public boolean hasInputSlots() {
@@ -125,6 +121,7 @@ public class ManagedItemInv extends SimpleItemInv {
         return internalSlots;
     }
 
+    @Override
     public IItemHandler getHandler(StorageGroup group) {
 
         if (allHandler == null) {
@@ -135,6 +132,8 @@ public class ManagedItemInv extends SimpleItemInv {
                 return inputHandler;
             case OUTPUT:
                 return outputHandler;
+            case INPUT_OUTPUT:
+                return ioHandler;
             case ACCESSIBLE:
                 return accessibleHandler;
             case INTERNAL:

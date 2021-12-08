@@ -43,7 +43,7 @@ public class PotionFluid extends FluidCoFH {
         // bucket = ITEMS.register(bucket(key), () -> new BucketItem(stillFluid, new Item.Properties().containerItem(Items.BUCKET).maxStackSize(1).group(ItemGroup.BREWING)));
 
         properties = new ForgeFlowingFluid.Properties(stillFluid, flowingFluid, PotionFluidAttributes.builder(new ResourceLocation(stillTexture), new ResourceLocation(flowTexture))
-                .sound(SoundEvents.ITEM_BOTTLE_FILL, SoundEvents.ITEM_BOTTLE_EMPTY));
+                .sound(SoundEvents.BOTTLE_FILL, SoundEvents.BOTTLE_EMPTY));
     }
 
     public static int getPotionColor(FluidStack stack) {
@@ -51,7 +51,7 @@ public class PotionFluid extends FluidCoFH {
         if (stack.getTag() != null && stack.getTag().contains("CustomPotionColor", 99)) {
             return stack.getTag().getInt("CustomPotionColor");
         } else {
-            return FluidHelper.getPotionFromFluidTag(stack.getTag()) == Potions.EMPTY ? DEFAULT_COLOR : PotionUtils.getPotionColorFromEffectList(PotionUtils.getEffectsFromTag(stack.getTag()));
+            return FluidHelper.getPotionFromFluidTag(stack.getTag()) == Potions.EMPTY ? DEFAULT_COLOR : PotionUtils.getColor(PotionUtils.getAllEffects(stack.getTag()));
         }
     }
 
@@ -94,7 +94,7 @@ public class PotionFluid extends FluidCoFH {
         Item item = stack.getItem();
 
         if (item.equals(Items.POTION)) {
-            return getPotionAsFluid(amount, PotionUtils.getPotionFromItem(stack));
+            return getPotionAsFluid(amount, PotionUtils.getPotion(stack));
         }
         return FluidStack.EMPTY;
     }
@@ -109,11 +109,11 @@ public class PotionFluid extends FluidCoFH {
         @Override
         public ITextComponent getDisplayName(FluidStack stack) {
 
-            Potion potion = PotionUtils.getPotionTypeFromNBT(stack.getTag());
+            Potion potion = PotionUtils.getPotion(stack.getTag());
             if (potion == Potions.EMPTY || potion == Potions.WATER) {
                 return super.getDisplayName(stack);
             }
-            return new TranslationTextComponent(potion.getNamePrefixed(Items.POTION.getTranslationKey() + ".effect."));
+            return new TranslationTextComponent(potion.getName(Items.POTION.getDescriptionId() + ".effect."));
         }
 
         public Rarity getRarity(FluidStack stack) {

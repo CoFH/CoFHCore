@@ -17,9 +17,9 @@ public class ManagedTankInv extends SimpleTankInv {
 
     protected IFluidHandler inputHandler;
     protected IFluidHandler outputHandler;
+    protected IFluidHandler ioHandler;
     protected IFluidHandler accessibleHandler;
     protected IFluidHandler internalHandler;
-    protected IFluidHandler allHandler;
 
     public ManagedTankInv(ITileCallback tile) {
 
@@ -55,23 +55,19 @@ public class ManagedTankInv extends SimpleTankInv {
         }
     }
 
-    protected void optimize() {
+    public void initHandlers() {
 
         ((ArrayList<FluidStorageCoFH>) tanks).trimToSize();
         ((ArrayList<FluidStorageCoFH>) inputTanks).trimToSize();
         ((ArrayList<FluidStorageCoFH>) outputTanks).trimToSize();
         ((ArrayList<FluidStorageCoFH>) internalTanks).trimToSize();
-    }
 
-    public void initHandlers() {
-
-        optimize();
-
-        inputHandler = new ManagedFluidHandler(tile, inputTanks, Collections.emptyList());
-        outputHandler = new ManagedFluidHandler(tile, Collections.emptyList(), outputTanks);
-        accessibleHandler = new ManagedFluidHandler(tile, inputTanks, outputTanks).restrict();
-        internalHandler = new SimpleFluidHandler(tile, internalTanks);
-        allHandler = new SimpleFluidHandler(tile, tanks);
+        inputHandler = new ManagedFluidHandler(callback, inputTanks, Collections.emptyList());
+        outputHandler = new ManagedFluidHandler(callback, Collections.emptyList(), outputTanks);
+        ioHandler = new ManagedFluidHandler(callback, inputTanks, outputTanks).restrict();
+        accessibleHandler = new ManagedFluidHandler(callback, inputTanks, outputTanks);
+        internalHandler = new SimpleFluidHandler(callback, internalTanks);
+        allHandler = new SimpleFluidHandler(callback, tanks);
     }
 
     public boolean hasInputTanks() {
@@ -114,6 +110,8 @@ public class ManagedTankInv extends SimpleTankInv {
                 return inputHandler;
             case OUTPUT:
                 return outputHandler;
+            case INPUT_OUTPUT:
+                return ioHandler;
             case ACCESSIBLE:
                 return accessibleHandler;
             case INTERNAL:

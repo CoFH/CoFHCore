@@ -36,7 +36,7 @@ public class InvWrapperCoFH implements IInventory {
 
     // region IInventory
     @Override
-    public int getSizeInventory() {
+    public int getContainerSize() {
 
         return inventory.getSlots();
     }
@@ -48,13 +48,13 @@ public class InvWrapperCoFH implements IInventory {
     }
 
     @Override
-    public ItemStack getStackInSlot(int index) {
+    public ItemStack getItem(int index) {
 
         return inventory.getStackInSlot(index);
     }
 
     @Override
-    public ItemStack decrStackSize(int index, int count) {
+    public ItemStack removeItem(int index, int count) {
 
         ItemStack inSlot = inventory.get(index);
         if (inSlot.isEmpty()) {
@@ -72,7 +72,7 @@ public class InvWrapperCoFH implements IInventory {
     }
 
     @Override
-    public ItemStack removeStackFromSlot(int index) {
+    public ItemStack removeItemNoUpdate(int index) {
 
         ItemStack stack = inventory.get(index);
         inventory.set(index, ItemStack.EMPTY);
@@ -81,7 +81,7 @@ public class InvWrapperCoFH implements IInventory {
     }
 
     @Override
-    public void setInventorySlotContents(int index, ItemStack stack) {
+    public void setItem(int index, ItemStack stack) {
 
         /* This condition succeeds when the slot is already empty and is being emptied.
         It happens enough to warrant a check and prevent superfluous logic.*/
@@ -93,30 +93,30 @@ public class InvWrapperCoFH implements IInventory {
     }
 
     @Override
-    public int getInventoryStackLimit() {
+    public int getMaxStackSize() {
 
         return stackLimit;
     }
 
     @Override
-    public void markDirty() {
+    public void setChanged() {
 
     }
 
     @Override
-    public boolean isUsableByPlayer(PlayerEntity player) {
+    public boolean stillValid(PlayerEntity player) {
 
         return true;
     }
 
     @Override
-    public boolean isItemValidForSlot(int index, ItemStack stack) {
+    public boolean canPlaceItem(int index, ItemStack stack) {
 
         return inventory.isItemValid(index, stack);
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
 
         inventory.clear();
     }

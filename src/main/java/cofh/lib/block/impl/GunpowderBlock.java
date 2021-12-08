@@ -40,25 +40,25 @@ public class GunpowderBlock extends FallingBlock {
     }
 
     @Override
-    public boolean canDropFromExplosion(Explosion explosionIn) {
+    public boolean dropFromExplosion(Explosion explosionIn) {
 
         return false;
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 
-        ItemStack stack = player.getHeldItem(handIn);
+        ItemStack stack = player.getItemInHand(handIn);
         Item item = stack.getItem();
         if (item != Items.FLINT_AND_STEEL && item != Items.FIRE_CHARGE) {
-            return super.onBlockActivated(state, worldIn, pos, player, handIn, hit);
+            return super.use(state, worldIn, pos, player, handIn, hit);
         } else {
-            catchFire(state, worldIn, pos, hit.getFace(), player);
-            worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 11);
+            catchFire(state, worldIn, pos, hit.getDirection(), player);
+            worldIn.setBlock(pos, Blocks.AIR.defaultBlockState(), 11);
             if (!player.isCreative()) {
                 if (item == Items.FLINT_AND_STEEL) {
-                    stack.damageItem(1, player, (entity) -> {
-                        entity.sendBreakAnimation(handIn);
+                    stack.hurtAndBreak(1, player, (entity) -> {
+                        entity.broadcastBreakEvent(handIn);
                     });
                 } else {
                     stack.shrink(1);
@@ -75,21 +75,21 @@ public class GunpowderBlock extends FallingBlock {
     }
 
     @Override
-    public void onExplosionDestroy(World world, BlockPos pos, Explosion explosionIn) {
+    public void wasExploded(World world, BlockPos pos, Explosion explosionIn) {
 
-        if (!world.isRemote) {
-            explode(world, pos, explosionIn.getExplosivePlacedBy());
+        if (!world.isClientSide) {
+            explode(world, pos, explosionIn.getSourceMob());
         }
     }
 
     @Override
-    public void onProjectileCollision(World worldIn, BlockState state, BlockRayTraceResult hit, ProjectileEntity projectile) {
+    public void onProjectileHit(World worldIn, BlockState state, BlockRayTraceResult hit, ProjectileEntity projectile) {
 
-        if (!worldIn.isRemote) {
-            Entity entity = projectile.func_234616_v_();
-            if (projectile.isBurning()) {
-                BlockPos blockpos = hit.getPos();
-                catchFire(state, worldIn, blockpos, hit.getFace(), entity instanceof LivingEntity ? (LivingEntity) entity : null);
+        if (!worldIn.isClientSide) {
+            Entity entity = projectile.getOwner();
+            if (projectile.isOnFire()) {
+                BlockPos blockpos = hit.getBlockPos();
+                catchFire(state, worldIn, blockpos, hit.getDirection(), entity instanceof LivingEntity ? (LivingEntity) entity : null);
                 worldIn.removeBlock(blockpos, false);
             }
         }
@@ -98,8 +98,8 @@ public class GunpowderBlock extends FallingBlock {
     // region HELPERS
     private static void explode(World world, BlockPos pos, @Nullable LivingEntity igniter) {
 
-        if (!world.isRemote) {
-            world.createExplosion(igniter, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, EXPLOSION_STRENGTH, Explosion.Mode.BREAK);
+        if (!world.isClientSide) {
+            world.explode(igniter, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, EXPLOSION_STRENGTH, Explosion.Mode.BREAK);
         }
     }
     // endregion

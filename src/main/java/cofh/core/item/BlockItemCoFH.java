@@ -29,10 +29,10 @@ import static net.minecraft.util.text.TextFormatting.GRAY;
 public class BlockItemCoFH extends BlockItem implements ICoFHItem {
 
     protected BooleanSupplier showInGroups = TRUE;
-    protected BooleanSupplier showEnchantEffect = TRUE;
 
     protected int burnTime = -1;
     protected int enchantability;
+    protected String modId = "";
 
     protected Supplier<ItemGroup> displayGroup;
 
@@ -65,22 +65,34 @@ public class BlockItemCoFH extends BlockItem implements ICoFHItem {
         return this;
     }
 
+    public BlockItemCoFH setModId(String modId) {
+
+        this.modId = modId;
+        return this;
+    }
+
     protected void tooltipDelegate(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+    public String getCreatorModId(ItemStack itemStack) {
+
+        return modId == null || modId.isEmpty() ? super.getCreatorModId(itemStack) : modId;
+    }
+
+    @Override
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
 
         if (!showInGroups.getAsBoolean() || getBlock() == null) {
             return;
         }
-        super.fillItemGroup(group, items);
+        super.fillItemCategory(group, items);
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 
         List<ITextComponent> additionalTooltips = new ArrayList<>();
         tooltipDelegate(stack, worldIn, additionalTooltips, flagIn);
@@ -89,16 +101,9 @@ public class BlockItemCoFH extends BlockItem implements ICoFHItem {
             if (Screen.hasShiftDown() || CoreConfig.alwaysShowDetails) {
                 tooltip.addAll(additionalTooltips);
             } else if (CoreConfig.holdShiftForDetails) {
-                tooltip.add(getTextComponent("info.cofh.hold_shift_for_details").mergeStyle(GRAY));
+                tooltip.add(getTextComponent("info.cofh.hold_shift_for_details").withStyle(GRAY));
             }
         }
-    }
-
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public boolean hasEffect(ItemStack stack) {
-
-        return showEnchantEffect.getAsBoolean() && stack.isEnchanted();
     }
 
     @Override
@@ -108,7 +113,7 @@ public class BlockItemCoFH extends BlockItem implements ICoFHItem {
     }
 
     @Override
-    public int getItemEnchantability() {
+    public int getEnchantmentValue() {
 
         return enchantability;
     }
@@ -117,12 +122,6 @@ public class BlockItemCoFH extends BlockItem implements ICoFHItem {
     public int getBurnTime(ItemStack itemStack) {
 
         return burnTime;
-    }
-
-    @Override
-    protected boolean isInGroup(ItemGroup group) {
-
-        return group == ItemGroup.SEARCH || getCreativeTabs().stream().anyMatch(tab -> tab == group);
     }
 
     @Override

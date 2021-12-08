@@ -9,9 +9,9 @@ public class BlockNamedItemCoFH extends BlockItemCoFH {
         super(blockIn, builder);
     }
 
-    public String getTranslationKey() {
+    public String getDescriptionId() {
 
-        return getDefaultTranslationKey();
+        return getOrCreateDescriptionId();
     }
 
 }

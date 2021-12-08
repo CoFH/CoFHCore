@@ -11,7 +11,9 @@ import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.properties.RailShape;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Direction.Plane;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.text.Style;
 import net.minecraftforge.common.PlantType;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
@@ -31,41 +33,43 @@ public class Constants {
 
     // region AABBs
     public static final VoxelShape[] CROPS_BY_AGE = new VoxelShape[]{
-            Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D),
-            Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D),
-            Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D),
-            Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D),
-            Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 10.0D, 16.0D),
-            Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D),
-            Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D),
-            Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)};
+            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D),
+            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D),
+            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D),
+            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D),
+            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 10.0D, 16.0D),
+            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D),
+            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D),
+            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)};
 
     public static final VoxelShape[] MUSHROOMS_BY_AGE = new VoxelShape[]{
-            Block.makeCuboidShape(4.0D, 0.0D, 4.0D, 12.0D, 6.0D, 12.0D),
-            Block.makeCuboidShape(3.0D, 0.0D, 3.0D, 13.0D, 8.0D, 13.0D),
-            Block.makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D),
-            Block.makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D),
-            Block.makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D)};
+            Block.box(4.0D, 0.0D, 4.0D, 12.0D, 6.0D, 12.0D),
+            Block.box(3.0D, 0.0D, 3.0D, 13.0D, 8.0D, 13.0D),
+            Block.box(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D),
+            Block.box(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D),
+            Block.box(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D)};
 
     public static final VoxelShape[] TALL_CROPS_BY_AGE = new VoxelShape[]{
-            Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D),
-            Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D),
-            Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D),
-            Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D),
-            Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D),
-            Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D),
-            Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D),
-            Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)};
+            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D),
+            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D),
+            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D),
+            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D),
+            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D),
+            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D),
+            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D),
+            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)};
 
     public static final VoxelShape[] TALL_CROPS_BY_AGE_ALT = new VoxelShape[]{
-            Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D),
-            Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D),
-            Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D),
-            Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D),
-            Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D),
-            Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D),
-            Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D),
-            Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)};
+            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D),
+            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D),
+            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D),
+            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D),
+            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D),
+            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D),
+            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D),
+            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)};
+
+    public static final VoxelShape FULL_CUBE_COLLISION = Block.box(1.0D, 0.0D, 1.0D, 15.9375D, 15.9375D, 15.9375D);
     // endregion
 
     // region MOD IDS
@@ -84,20 +88,23 @@ public class Constants {
     public static final String ID_THERMAL_FOUNDATION = "thermal_foundation";
     public static final String ID_THERMAL_HORIZONS = "thermal_horizons";
     public static final String ID_THERMAL_INNOVATION = "thermal_innovation";
+    public static final String ID_THERMAL_INTEGRATION = "thermal_integration";
     public static final String ID_THERMAL_LOCOMOTION = "thermal_locomotion";
 
     public static final String ID_ARCHERS_PARADOX = "archers_paradox";
     public static final String ID_ENSORCELLATION = "ensorcellation";
     public static final String ID_OMGOURD = "omgourd";
     public static final String ID_REDSTONE_ARSENAL = "redstone_arsenal";
+    public static final String ID_THAUMCRAFT = "thaumcraft";
+    public static final String ID_TOOLS_COMPLEMENT = "tools_complement";
 
+    public static final String ID_CURIOS = "curios";
     public static final String ID_QUARK = "quark";
     // endregion
 
     // region BLOCKSTATE PROPERTIES
     public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
     public static final IntegerProperty CHARGED = IntegerProperty.create("charged", 0, 4);
-    public static final BooleanProperty TILLED = BooleanProperty.create("tilled");
     public static final BooleanProperty TOP = BooleanProperty.create("top");
 
     public static final IntegerProperty AGE_0_4 = IntegerProperty.create("age", 0, 4);
@@ -105,6 +112,9 @@ public class Constants {
     public static final IntegerProperty AGE_0_7 = IntegerProperty.create("age", 0, 7);
     public static final IntegerProperty AGE_0_9 = IntegerProperty.create("age", 0, 9);
     public static final IntegerProperty AGE_0_10 = IntegerProperty.create("age", 0, 10);
+
+    public static final IntegerProperty BITES_0_3 = IntegerProperty.create("bites", 0, 3);
+    public static final IntegerProperty BITES_0_7 = IntegerProperty.create("bites", 0, 7);
 
     public static final DirectionProperty FACING_ALL = DirectionProperty.create("facing", Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST, Direction.UP, Direction.DOWN);
     public static final DirectionProperty FACING_HORIZONTAL = DirectionProperty.create("facing", Plane.HORIZONTAL);
@@ -159,6 +169,7 @@ public class Constants {
     public static final int PACKET_GUI = 2;
     public static final int PACKET_REDSTONE = 3;
     public static final int PACKET_STATE = 4;
+    public static final int PACKET_RENDER = 5;
 
     public static final int PACKET_CHAT = 16;
     public static final int PACKET_MOTION = 17;
@@ -177,6 +188,7 @@ public class Constants {
     public static final int PACKET_CLAIM_XP = 38;
 
     public static final int PACKET_ITEM_MODE_CHANGE = 64;
+    public static final int PACKET_ITEM_LEFT_CLICK = 65;
     // endregion
 
     // region CONSTANTS
@@ -193,11 +205,13 @@ public class Constants {
     public static final UUID EMPTY_UUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
 
     public static final UUID UUID_ARMOR_TOUGHNESS = UUID.fromString("D1ADBCE5-95CE-470C-BF99-6C59843084A2");
+    public static final UUID UUID_TOOL_KNOCKBACK = UUID.fromString("D5A16EFA-3B80-11EC-8D3D-0242AC130003");
+    public static final UUID UUID_TOOL_REACH = UUID.fromString("DAE66BD6-BAAE-4702-9F9F-9327C3BB6581");
 
     public static final UUID UUID_EFFECT_CHILLED_MOVEMENT_SPEED = UUID.fromString("D99513AE-6F0E-4987-82DE-80DCBAF058BC");
-    public static final UUID UUID_EFFECT_CHILLED_ATTACK_DAMAGE = UUID.fromString("DF93E7E2-5056-49FA-B425-0D8C46902105");
+    public static final UUID UUID_EFFECT_CHILLED_ATTACK_SPEED = UUID.fromString("DF93E7E2-5056-49FA-B425-0D8C46902105");
 
-    public static final UUID UUID_EFFECT_SHOCKED_ATTACK_SPEED = UUID.fromString("DD252988-17CC-4352-9EFF-88E11E925748");
+    public static final UUID UUID_EFFECT_SHOCKED_ATTACK_DAMAGE = UUID.fromString("DD252988-17CC-4352-9EFF-88E11E925748");
     public static final UUID UUID_EFFECT_SUNDERED_ARMOR = UUID.fromString("D01654D3-EB8B-40AB-BB2B-1E8EE3E2E694");
     public static final UUID UUID_EFFECT_SUNDERED_ARMOR_TOUGHNESS = UUID.fromString("D415470F-AE7E-4986-8034-679CFC3128CC");
 
@@ -216,6 +230,13 @@ public class Constants {
     // endregion
 
     public static final PlantType FUNGUS = PlantType.get("fungus");
+
+    // region FONTS
+    public static final ResourceLocation ENDER_FONT = new ResourceLocation(ID_COFH_CORE, "ender");
+    public static final ResourceLocation INVIS_FONT = new ResourceLocation(ID_COFH_CORE, "invis");
+
+    public static final Style ENDER_STYLE = Style.EMPTY.withFont(ENDER_FONT);
+    public static final Style INVIS_STYLE = Style.EMPTY.withFont(INVIS_FONT);
 
     // region TEXTURES
     public static final String PATH_GFX = ID_COFH_CORE + ":textures/";

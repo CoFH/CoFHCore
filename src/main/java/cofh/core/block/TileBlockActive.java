@@ -14,13 +14,13 @@ public class TileBlockActive extends TileBlockCoFH {
     public TileBlockActive(Properties builder, Supplier<? extends TileCoFH> supplier) {
 
         super(builder, supplier);
-        this.setDefaultState(this.stateContainer.getBaseState().with(ACTIVE, false));
+        this.registerDefaultState(this.stateDefinition.any().setValue(ACTIVE, false));
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
 
-        super.fillStateContainer(builder);
+        super.createBlockStateDefinition(builder);
         builder.add(ACTIVE);
     }
 

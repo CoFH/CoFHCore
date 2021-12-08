@@ -20,9 +20,9 @@ public class SubCommandRepair {
     static ArgumentBuilder<CommandSource, ?> register() {
 
         return Commands.literal("repair")
-                .requires(source -> source.hasPermissionLevel(permissionLevel))
+                .requires(source -> source.hasPermission(permissionLevel))
                 // Self
-                .executes(context -> repairEquipment(context.getSource(), ImmutableList.of(context.getSource().asPlayer())))
+                .executes(context -> repairEquipment(context.getSource(), ImmutableList.of(context.getSource().getPlayerOrException())))
                 // Targets Specified
                 .then(Commands.argument(CMD_TARGETS, EntityArgument.players())
                         .executes(context -> repairEquipment(context.getSource(), EntityArgument.getPlayers(context, CMD_TARGETS))));
@@ -33,17 +33,17 @@ public class SubCommandRepair {
         int repairedEquipment = 0;
 
         for (ServerPlayerEntity entity : targets) {
-            for (ItemStack stack : entity.getEquipmentAndArmor()) {
-                if (stack.isDamageable() && stack.isDamaged()) {
-                    stack.setDamage(0);
+            for (ItemStack stack : entity.getAllSlots()) {
+                if (stack.isDamageableItem() && stack.isDamaged()) {
+                    stack.setDamageValue(0);
                     ++repairedEquipment;
                 }
             }
         }
         if (targets.size() == 1) {
-            source.sendFeedback(new TranslationTextComponent("commands.cofh.repair.success.single", targets.iterator().next().getDisplayName()), true);
+            source.sendSuccess(new TranslationTextComponent("commands.cofh.repair.success.single", targets.iterator().next().getDisplayName()), true);
         } else {
-            source.sendFeedback(new TranslationTextComponent("commands.cofh.repair.success.multiple", targets.size()), true);
+            source.sendSuccess(new TranslationTextComponent("commands.cofh.repair.success.multiple", targets.size()), true);
         }
         return repairedEquipment;
     }

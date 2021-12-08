@@ -20,7 +20,7 @@ public class HoneyFluid extends FluidCoFH {
         super(FLUIDS, key, FluidAttributes.builder(new ResourceLocation(stillTexture), new ResourceLocation(flowTexture))
                 .density(1500)
                 .viscosity(10000000)
-                .sound(SoundEvents.ITEM_BOTTLE_FILL, SoundEvents.ITEM_BOTTLE_EMPTY)
+                .sound(SoundEvents.BOTTLE_FILL, SoundEvents.BOTTLE_EMPTY)
         );
     }
 

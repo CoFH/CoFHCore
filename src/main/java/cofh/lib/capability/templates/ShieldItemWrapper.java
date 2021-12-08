@@ -26,7 +26,7 @@ public class ShieldItemWrapper implements IShieldItem, ICapabilityProvider {
     }
 
     @Override
-    public void onBlock(LivingEntity entity, DamageSource source) {
+    public void onBlock(LivingEntity entity, DamageSource source, float amount) {
 
     }
 

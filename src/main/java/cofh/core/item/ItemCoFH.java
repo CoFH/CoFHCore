@@ -2,6 +2,7 @@ package cofh.core.item;
 
 import cofh.core.init.CoreConfig;
 import cofh.lib.item.ICoFHItem;
+import cofh.lib.util.helpers.SecurityHelper;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
@@ -20,15 +21,15 @@ import java.util.function.BooleanSupplier;
 
 import static cofh.lib.util.constants.Constants.TRUE;
 import static cofh.lib.util.helpers.StringHelper.getTextComponent;
-import static net.minecraft.util.text.TextFormatting.GRAY;
+import static net.minecraft.util.text.TextFormatting.*;
 
 public class ItemCoFH extends Item implements ICoFHItem {
 
     protected BooleanSupplier showInGroups = TRUE;
-    protected BooleanSupplier showEnchantEffect = TRUE;
 
     protected int burnTime = -1;
     protected int enchantability;
+    protected String modId = "";
 
     public ItemCoFH(Properties builder) {
 
@@ -53,40 +54,48 @@ public class ItemCoFH extends Item implements ICoFHItem {
         return this;
     }
 
+    public ItemCoFH setModId(String modId) {
+
+        this.modId = modId;
+        return this;
+    }
+
     protected void tooltipDelegate(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+    public String getCreatorModId(ItemStack itemStack) {
+
+        return modId == null || modId.isEmpty() ? super.getCreatorModId(itemStack) : modId;
+    }
+
+    @Override
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
 
         if (!showInGroups.getAsBoolean()) {
             return;
         }
-        super.fillItemGroup(group, items);
+        super.fillItemCategory(group, items);
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 
         List<ITextComponent> additionalTooltips = new ArrayList<>();
         tooltipDelegate(stack, worldIn, additionalTooltips, flagIn);
 
+        if (SecurityHelper.isItemClaimable(stack)) {
+            tooltip.add(getTextComponent("info.cofh.claimable").withStyle(GREEN).withStyle(ITALIC));
+        }
         if (!additionalTooltips.isEmpty()) {
             if (Screen.hasShiftDown() || CoreConfig.alwaysShowDetails) {
                 tooltip.addAll(additionalTooltips);
             } else if (CoreConfig.holdShiftForDetails) {
-                tooltip.add(getTextComponent("info.cofh.hold_shift_for_details").mergeStyle(GRAY));
+                tooltip.add(getTextComponent("info.cofh.hold_shift_for_details").withStyle(GRAY));
             }
         }
-    }
-
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public boolean hasEffect(ItemStack stack) {
-
-        return showEnchantEffect.getAsBoolean() && stack.isEnchanted();
     }
 
     @Override

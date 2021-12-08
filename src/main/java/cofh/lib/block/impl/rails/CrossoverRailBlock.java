@@ -31,7 +31,7 @@ public class CrossoverRailBlock extends AbstractRailBlock implements IDismantlea
     public CrossoverRailBlock(Properties builder) {
 
         super(true, builder);
-        this.setDefaultState(this.stateContainer.getBaseState().with(getShapeProperty(), RailShape.NORTH_SOUTH));
+        this.registerDefaultState(this.stateDefinition.any().setValue(getShapeProperty(), RailShape.NORTH_SOUTH));
     }
 
     public CrossoverRailBlock speed(float maxSpeed) {
@@ -41,7 +41,7 @@ public class CrossoverRailBlock extends AbstractRailBlock implements IDismantlea
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
 
         builder.add(getShapeProperty());
     }
@@ -68,15 +68,15 @@ public class CrossoverRailBlock extends AbstractRailBlock implements IDismantlea
     public RailShape getRailDirection(BlockState state, IBlockReader world, BlockPos pos, @Nullable AbstractMinecartEntity cart) {
 
         if (cart != null) {
-            double absX = Math.abs(cart.getMotion().x);
-            double absZ = Math.abs(cart.getMotion().z);
+            double absX = Math.abs(cart.getDeltaMovement().x);
+            double absZ = Math.abs(cart.getDeltaMovement().z);
             if (absX > absZ) {
                 return RailShape.EAST_WEST;
             } else if (absZ > absX) {
                 return RailShape.NORTH_SOUTH;
             }
         }
-        return state.get(getShapeProperty());
+        return state.getValue(getShapeProperty());
     }
 
     @Override
@@ -92,9 +92,9 @@ public class CrossoverRailBlock extends AbstractRailBlock implements IDismantlea
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 
-        if (Utils.isWrench(player.getHeldItem(handIn).getItem())) {
+        if (Utils.isWrench(player.getItemInHand(handIn).getItem())) {
             if (player.isSecondaryUseActive()) {
                 if (canDismantle(worldIn, pos, state, player)) {
                     dismantleBlock(worldIn, pos, state, hit, player, false);
@@ -103,7 +103,7 @@ public class CrossoverRailBlock extends AbstractRailBlock implements IDismantlea
             } else {
                 BlockState rotState = rotate(state, worldIn, pos, Rotation.CLOCKWISE_90);
                 if (rotState != state) {
-                    worldIn.setBlockState(pos, rotState);
+                    worldIn.setBlockAndUpdate(pos, rotState);
                     return ActionResultType.SUCCESS;
                 }
             }

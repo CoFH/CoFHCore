@@ -19,7 +19,7 @@ public class TileContainer extends ContainerCoFH {
     public TileContainer(@Nullable ContainerType<?> type, int windowId, World world, BlockPos pos, PlayerInventory inventory, PlayerEntity player) {
 
         super(type, windowId, inventory, player);
-        TileEntity tile = world.getTileEntity(pos);
+        TileEntity tile = world.getBlockEntity(pos);
         baseTile = tile instanceof TileCoFH ? (TileCoFH) tile : null;
 
         if (baseTile != null) {
@@ -34,27 +34,27 @@ public class TileContainer extends ContainerCoFH {
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity player) {
+    public boolean stillValid(PlayerEntity player) {
 
         return baseTile == null || baseTile.playerWithinDistance(player, 64D);
     }
 
     @Override
-    public void detectAndSendChanges() {
+    public void broadcastChanges() {
 
-        super.detectAndSendChanges();
+        super.broadcastChanges();
         if (baseTile == null) {
             return;
         }
-        for (IContainerListener listener : this.listeners) {
+        for (IContainerListener listener : this.containerListeners) {
             baseTile.sendGuiNetworkData(this, listener);
         }
     }
 
     @Override
-    public void updateProgressBar(int i, int j) {
+    public void setData(int i, int j) {
 
-        super.updateProgressBar(i, j);
+        super.setData(i, j);
 
         if (baseTile == null) {
             return;
@@ -63,12 +63,12 @@ public class TileContainer extends ContainerCoFH {
     }
 
     @Override
-    public void onContainerClosed(PlayerEntity player) {
+    public void removed(PlayerEntity player) {
 
         if (baseTile != null) {
             baseTile.removePlayerUsing();
         }
-        super.onContainerClosed(player);
+        super.removed(player);
     }
 
 }

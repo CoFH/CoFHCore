@@ -51,7 +51,7 @@ public class ArcheryAmmoItemWrapper implements IArcheryAmmoItem, ICapabilityProv
     @Override
     public boolean isInfinite(ItemStack bow, PlayerEntity shooter) {
 
-        return shooter != null && shooter.abilities.isCreativeMode || getItemEnchantmentLevel(Enchantments.INFINITY, bow) > 0 && ammoItem.getItem().getClass() == ArrowItem.class;
+        return shooter != null && shooter.abilities.instabuild || getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, bow) > 0 && ammoItem.getItem().getClass() == ArrowItem.class;
     }
 
     @Nonnull

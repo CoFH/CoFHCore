@@ -33,15 +33,15 @@ public class TileNBTSync extends LootFunction {
     }
 
     @Override
-    public LootFunctionType getFunctionType() {
+    public LootFunctionType getType() {
 
         return INSTANCE;
     }
 
     @Override
-    public ItemStack doApply(ItemStack stack, LootContext context) {
+    public ItemStack run(ItemStack stack, LootContext context) {
 
-        return applyToStack(stack, context.get(BLOCK_ENTITY));
+        return applyToStack(stack, context.getParamOrNull(BLOCK_ENTITY));
     }
 
     public static ItemStack applyToStack(ItemStack stack, TileEntity tile) {
@@ -54,7 +54,7 @@ public class TileNBTSync extends LootFunction {
 
     public static LootFunction.Builder<?> builder() {
 
-        return builder(TileNBTSync::new);
+        return simpleBuilder(TileNBTSync::new);
     }
 
     public static class Serializer extends LootFunction.Serializer<TileNBTSync> {

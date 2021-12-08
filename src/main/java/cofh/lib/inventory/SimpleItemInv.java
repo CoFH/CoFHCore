@@ -1,12 +1,15 @@
 package cofh.lib.inventory;
 
 import cofh.lib.util.IInventoryCallback;
+import cofh.lib.util.StorageGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -21,20 +24,40 @@ public class SimpleItemInv extends SimpleItemHandler {
 
     protected String tag;
 
-    public SimpleItemInv(@Nullable IInventoryCallback tile) {
+    protected IItemHandler allHandler;
 
-        this(tile, TAG_ITEM_INV);
+    public SimpleItemInv(@Nonnull List<ItemStorageCoFH> slots) {
+
+        this(null, slots, TAG_ITEM_INV);
     }
 
-    public SimpleItemInv(@Nullable IInventoryCallback tile, @Nonnull String tag) {
+    public SimpleItemInv(@Nullable IInventoryCallback callback) {
 
-        this(tile, Collections.emptyList(), tag);
+        this(callback, TAG_ITEM_INV);
     }
 
-    public SimpleItemInv(@Nullable IInventoryCallback tile, @Nonnull List<ItemStorageCoFH> slots, @Nonnull String tag) {
+    public SimpleItemInv(@Nullable IInventoryCallback callback, @Nonnull List<ItemStorageCoFH> slots) {
 
-        super(tile, slots);
+        this(callback, slots, TAG_ITEM_INV);
+    }
+
+    public SimpleItemInv(@Nullable IInventoryCallback callback, @Nonnull String tag) {
+
+        this(callback, Collections.emptyList(), tag);
+    }
+
+    public SimpleItemInv(@Nullable IInventoryCallback callback, @Nonnull List<ItemStorageCoFH> slots, @Nonnull String tag) {
+
+        super(callback, slots);
         this.tag = tag;
+    }
+
+    public void addSlot(ItemStorageCoFH slot) {
+
+        if (allHandler != null) {
+            return;
+        }
+        slots.add(slot);
     }
 
     public void clear() {
@@ -110,12 +133,14 @@ public class SimpleItemInv extends SimpleItemHandler {
         }
         if (!list.isEmpty()) {
             nbt.put(tag, list);
+        } else {
+            nbt.remove(tag);
         }
         return nbt;
     }
     // endregion
 
-    // HELPERS
+    // region HELPERS
     public CompoundNBT writeSlotsToNBT(CompoundNBT nbt, int startIndex, int endIndex) {
 
         return writeSlotsToNBT(nbt, tag, startIndex, endIndex);
@@ -142,12 +167,14 @@ public class SimpleItemInv extends SimpleItemHandler {
         }
         if (!list.isEmpty()) {
             nbt.put(saveTag, list);
+        } else {
+            nbt.remove(tag);
         }
         return nbt;
     }
     // endregion
 
-    // UNORDERED METHODS
+    // region UNORDERED METHODS
     public SimpleItemInv readSlotsUnordered(ListNBT list, int startIndex) {
 
         return readSlotsUnordered(list, startIndex, slots.size());
@@ -190,8 +217,20 @@ public class SimpleItemInv extends SimpleItemHandler {
         }
         if (!list.isEmpty()) {
             nbt.put(saveTag, list);
+        } else {
+            nbt.remove(saveTag);
         }
         return nbt;
     }
     // endregion
+
+    public IItemHandler getHandler(StorageGroup group) {
+
+        if (allHandler == null) {
+            ((ArrayList<ItemStorageCoFH>) slots).trimToSize();
+            allHandler = new SimpleItemHandler(callback, slots);
+        }
+        return allHandler;
+    }
+
 }

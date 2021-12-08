@@ -49,8 +49,6 @@ public interface IAugmentableItem {
      * @param augmentable Stack representing the Augmentable item.
      * @param augments    List of ItemStacks representing the Augments.
      */
-    default void updateAugmentState(ItemStack augmentable, List<ItemStack> augments) {
-
-    }
+    void updateAugmentState(ItemStack augmentable, List<ItemStack> augments);
 
 }

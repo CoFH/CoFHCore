@@ -31,14 +31,14 @@ public class IndexedChatPacket extends PacketBase implements IPacketClient {
     public void write(PacketBuffer buf) {
 
         buf.writeInt(index);
-        buf.writeString(message);
+        buf.writeUtf(message);
     }
 
     @Override
     public void read(PacketBuffer buf) {
 
         index = buf.readInt();
-        message = buf.readString(Short.MAX_VALUE);
+        message = buf.readUtf(Short.MAX_VALUE);
     }
 
     public static void sendToClient(ITextComponent chat, int index, ServerPlayerEntity player) {

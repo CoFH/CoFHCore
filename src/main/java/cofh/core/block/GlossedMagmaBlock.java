@@ -30,23 +30,23 @@ public class GlossedMagmaBlock extends MagmaBlock {
     public GlossedMagmaBlock(Properties builder) {
 
         super(builder);
-        this.setDefaultState(this.stateContainer.getBaseState().with(AGE, 0));
+        this.registerDefaultState(this.stateDefinition.any().setValue(AGE, 0));
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
 
         builder.add(AGE);
     }
 
     @Override
-    public void harvestBlock(World worldIn, PlayerEntity player, BlockPos pos, BlockState state, @Nullable TileEntity te, ItemStack stack) {
+    public void playerDestroy(World worldIn, PlayerEntity player, BlockPos pos, BlockState state, @Nullable TileEntity te, ItemStack stack) {
 
-        super.harvestBlock(worldIn, player, pos, state, te, stack);
+        super.playerDestroy(worldIn, player, pos, state, te, stack);
         if (getItemEnchantmentLevel(Enchantments.SILK_TOUCH, stack) == 0) {
-            Material material = worldIn.getBlockState(pos.down()).getMaterial();
-            if (material.blocksMovement() || material.isLiquid()) {
-                worldIn.setBlockState(pos, Blocks.LAVA.getDefaultState());
+            Material material = worldIn.getBlockState(pos.below()).getMaterial();
+            if (material.blocksMotion() || material.isLiquid()) {
+                worldIn.setBlockAndUpdate(pos, Blocks.LAVA.defaultBlockState());
             }
         }
     }
@@ -72,19 +72,19 @@ public class GlossedMagmaBlock extends MagmaBlock {
         if ((rand.nextInt(9) == 0 || this.shouldMelt(worldIn, pos, 4)) && this.slightlyMelt(state, worldIn, pos)) {
             BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable();
             for (Direction direction : Direction.values()) {
-                blockpos$mutable.setAndMove(pos, direction);
+                blockpos$mutable.setWithOffset(pos, direction);
                 BlockState blockstate = worldIn.getBlockState(blockpos$mutable);
-                if (blockstate.isIn(this) && !this.slightlyMelt(blockstate, worldIn, blockpos$mutable)) {
-                    worldIn.getPendingBlockTicks().scheduleTick(blockpos$mutable, this, net.minecraft.util.math.MathHelper.nextInt(rand, 20, 40));
+                if (blockstate.is(this) && !this.slightlyMelt(blockstate, worldIn, blockpos$mutable)) {
+                    worldIn.getBlockTicks().scheduleTick(blockpos$mutable, this, net.minecraft.util.math.MathHelper.nextInt(rand, 20, 40));
                 }
             }
         } else {
-            worldIn.getPendingBlockTicks().scheduleTick(pos, this, MathHelper.nextInt(rand, 20, 40));
+            worldIn.getBlockTicks().scheduleTick(pos, this, MathHelper.nextInt(rand, 20, 40));
         }
     }
 
     @Override
-    public ItemStack getItem(IBlockReader worldIn, BlockPos pos, BlockState state) {
+    public ItemStack getCloneItemStack(IBlockReader worldIn, BlockPos pos, BlockState state) {
 
         return ItemStack.EMPTY;
     }
@@ -92,7 +92,7 @@ public class GlossedMagmaBlock extends MagmaBlock {
     // region HELPERS
     protected void turnIntoLava(BlockState state, World worldIn, BlockPos pos) {
 
-        worldIn.setBlockState(pos, Blocks.LAVA.getDefaultState());
+        worldIn.setBlockAndUpdate(pos, Blocks.LAVA.defaultBlockState());
         worldIn.neighborChanged(pos, Blocks.LAVA, pos);
     }
 
@@ -101,8 +101,8 @@ public class GlossedMagmaBlock extends MagmaBlock {
         int i = 0;
         BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable();
         for (Direction direction : Direction.values()) {
-            blockpos$mutable.setAndMove(pos, direction);
-            if (worldIn.getBlockState(blockpos$mutable).isIn(this)) {
+            blockpos$mutable.setWithOffset(pos, direction);
+            if (worldIn.getBlockState(blockpos$mutable).is(this)) {
                 ++i;
                 if (i >= neighborsRequired) {
                     return false;
@@ -115,9 +115,9 @@ public class GlossedMagmaBlock extends MagmaBlock {
 
     protected boolean slightlyMelt(BlockState state, World worldIn, BlockPos pos) {
 
-        int i = state.get(AGE);
+        int i = state.getValue(AGE);
         if (i < 3) {
-            worldIn.setBlockState(pos, state.with(AGE, i + 1), 2);
+            worldIn.setBlock(pos, state.setValue(AGE, i + 1), 2);
             return false;
         } else {
             this.turnIntoLava(state, worldIn, pos);

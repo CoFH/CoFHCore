@@ -33,7 +33,7 @@ public interface IPacketClient extends IPacket {
 
         MinecraftServer server = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
         PlayerList list = server.getPlayerList();
-        list.sendPacketToAllPlayers(toVanillaPacket(NetworkDirection.PLAY_TO_CLIENT));
+        list.broadcastAll(toVanillaPacket(NetworkDirection.PLAY_TO_CLIENT));
     }
 
     /**
@@ -43,7 +43,7 @@ public interface IPacketClient extends IPacket {
      */
     default void sendToPlayer(ServerPlayerEntity player) {
 
-        player.connection.sendPacket(toVanillaPacket(NetworkDirection.PLAY_TO_CLIENT));
+        player.connection.send(toVanillaPacket(NetworkDirection.PLAY_TO_CLIENT));
     }
 
     // TODO: Consider fixing if functionality required.
@@ -68,11 +68,11 @@ public interface IPacketClient extends IPacket {
         MinecraftServer server = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
         PlayerList playerList = server.getPlayerList();
         for (ServerPlayerEntity player : playerList.getPlayers()) {
-            if (playerList.canSendCommands(player.getGameProfile())) {
+            if (playerList.isOp(player.getGameProfile())) {
                 if (packet == null) { // So we don't serialize multiple times.
                     packet = toVanillaPacket(NetworkDirection.PLAY_TO_CLIENT);
                 }
-                player.connection.sendPacket(packet);
+                player.connection.send(packet);
             }
         }
     }
@@ -118,7 +118,7 @@ public interface IPacketClient extends IPacket {
 
         MinecraftServer server = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
         PlayerList list = server.getPlayerList();
-        list.sendToAllNearExcept(null, x, y, z, range, dim, toVanillaPacket(NetworkDirection.PLAY_TO_CLIENT));
+        list.broadcast(null, x, y, z, range, dim, toVanillaPacket(NetworkDirection.PLAY_TO_CLIENT));
     }
     // endregion
 
@@ -132,7 +132,7 @@ public interface IPacketClient extends IPacket {
      */
     default void sendToChunk(TileEntity tile) {
 
-        sendToChunk((ServerWorld) tile.getWorld(), tile.getPos());
+        sendToChunk((ServerWorld) tile.getLevel(), tile.getBlockPos());
     }
 
     /**
@@ -169,8 +169,8 @@ public interface IPacketClient extends IPacket {
     default void sendToChunk(ServerWorld world, ChunkPos pos) {
 
         net.minecraft.network.IPacket<?> packet = toVanillaPacket(NetworkDirection.PLAY_TO_CLIENT);
-        world.getChunkProvider().chunkManager.getTrackingPlayers(pos, false)//
-                .forEach(e -> e.connection.sendPacket(packet));
+        world.getChunkSource().chunkMap.getPlayers(pos, false)//
+                .forEach(e -> e.connection.send(packet));
     }
     // endregion
 }

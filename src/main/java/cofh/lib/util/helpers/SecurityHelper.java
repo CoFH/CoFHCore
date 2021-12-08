@@ -51,7 +51,7 @@ public class SecurityHelper {
             }
             return getClientID(player);
         }
-        return entity.getUniqueID();
+        return entity.getUUID();
     }
 
     private static UUID getClientID(PlayerEntity player) {
@@ -84,13 +84,33 @@ public class SecurityHelper {
     // endregion
 
     // region ITEM HELPERS
+    public static void createSecurityTag(ItemStack stack) {
+
+        stack.getOrCreateTagElement(TAG_SECURITY);
+    }
+
+    public static boolean isItemClaimable(ItemStack stack) {
+
+        return hasSecurity(stack) && getOwner(stack) == DEFAULT_GAME_PROFILE;
+    }
+
+    public static boolean attemptClaimItem(ItemStack stack, PlayerEntity player) {
+
+        if (isItemClaimable(stack)) {
+            setOwner(stack, player.getGameProfile());
+            setAccess(stack, AccessMode.PUBLIC);
+            return true;
+        }
+        return false;
+    }
+
     public static CompoundNBT getSecurityTag(ItemStack stack) {
 
-        CompoundNBT nbt = stack.getChildTag(TAG_BLOCK_ENTITY);
+        CompoundNBT nbt = stack.getTagElement(TAG_BLOCK_ENTITY);
         if (nbt != null) {
             return nbt.contains(TAG_SECURITY) ? nbt.getCompound(TAG_SECURITY) : null;
         }
-        return stack.getChildTag(TAG_SECURITY);
+        return stack.getTagElement(TAG_SECURITY);
     }
 
     public static boolean hasSecurity(ItemStack stack) {
@@ -118,7 +138,7 @@ public class SecurityHelper {
     public static AccessMode getAccess(ItemStack stack) {
 
         CompoundNBT secureTag = getSecurityTag(stack);
-        if (secureTag != null) {
+        if (secureTag != null && secureTag.contains(TAG_SEC_ACCESS)) {
             return AccessMode.VALUES[secureTag.getByte(TAG_SEC_ACCESS)];
         }
         return AccessMode.PUBLIC;
@@ -133,7 +153,7 @@ public class SecurityHelper {
             if (!Strings.isNullOrEmpty(uuid)) {
                 return new GameProfile(UUID.fromString(uuid), name);
             } else if (!Strings.isNullOrEmpty(name)) {
-                return new GameProfile(PreYggdrasilConverter.convertMobOwnerIfNeeded(ServerLifecycleHooks.getCurrentServer(), name), name);
+                return new GameProfile(PreYggdrasilConverter.convertMobOwnerIfNecessary(ServerLifecycleHooks.getCurrentServer(), name), name);
             }
         }
         return DEFAULT_GAME_PROFILE;
@@ -143,7 +163,10 @@ public class SecurityHelper {
 
         CompoundNBT secureTag = getSecurityTag(stack);
         if (secureTag != null) {
-            return secureTag.getString(TAG_SEC_OWNER_NAME);
+            String name = secureTag.getString(TAG_SEC_OWNER_NAME);
+            if (!Strings.isNullOrEmpty(name)) {
+                return name;
+            }
         }
         return localize("info.cofh.another_player");
     }

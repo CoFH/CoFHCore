@@ -217,12 +217,12 @@ public class DeferredRegisterCoFH<T extends IForgeRegistryEntry<T>> {
         public void handleEvent(RegistryEvent.Register<?> event) {
 
             if (register.preventDataFixers) {
-                SharedConstants.useDatafixers = false;
+                SharedConstants.CHECK_DATA_FIXER_SCHEMA = false;
             }
             register.addEntries(event);
 
             if (register.preventDataFixers) {
-                SharedConstants.useDatafixers = true;
+                SharedConstants.CHECK_DATA_FIXER_SCHEMA = true;
             }
         }
 

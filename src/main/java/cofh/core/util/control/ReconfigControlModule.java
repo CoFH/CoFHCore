@@ -84,7 +84,7 @@ public class ReconfigControlModule implements IReconfigurable {
     // region NETWORK
     public void readFromBuffer(PacketBuffer buffer) {
 
-        facing = Direction.byIndex(buffer.readByte());
+        facing = Direction.from3DDataValue(buffer.readByte());
         for (int i = 0; i < 6; ++i) {
             sides[i] = SideConfig.VALUES[buffer.readByte()];
         }
@@ -92,7 +92,7 @@ public class ReconfigControlModule implements IReconfigurable {
 
     public void writeToBuffer(PacketBuffer buffer) {
 
-        buffer.writeByte(facing.getIndex());
+        buffer.writeByte(facing.get3DDataValue());
         for (int i = 0; i < 6; ++i) {
             buffer.writeByte(sides[i].ordinal());
         }
@@ -105,14 +105,14 @@ public class ReconfigControlModule implements IReconfigurable {
         byte[] bSides = nbt.getByteArray(TAG_SIDES);
 
         if (bSides.length == 6) {
-            sides[BlockHelper.below(facing).getIndex()] = SideConfig.VALUES[bSides[0]];
-            sides[BlockHelper.above(facing).getIndex()] = SideConfig.VALUES[bSides[1]];
+            sides[BlockHelper.below(facing).get3DDataValue()] = SideConfig.VALUES[bSides[0]];
+            sides[BlockHelper.above(facing).get3DDataValue()] = SideConfig.VALUES[bSides[1]];
 
-            sides[facing.getIndex()] = SideConfig.VALUES[bSides[2]];
-            sides[BlockHelper.opposite(facing).getIndex()] = SideConfig.VALUES[bSides[3]];
+            sides[facing.get3DDataValue()] = SideConfig.VALUES[bSides[2]];
+            sides[BlockHelper.opposite(facing).get3DDataValue()] = SideConfig.VALUES[bSides[3]];
 
-            sides[BlockHelper.right(facing).getIndex()] = SideConfig.VALUES[bSides[4]];
-            sides[BlockHelper.left(facing).getIndex()] = SideConfig.VALUES[bSides[5]];
+            sides[BlockHelper.right(facing).get3DDataValue()] = SideConfig.VALUES[bSides[4]];
+            sides[BlockHelper.left(facing).get3DDataValue()] = SideConfig.VALUES[bSides[5]];
         }
         return this;
     }
@@ -124,14 +124,14 @@ public class ReconfigControlModule implements IReconfigurable {
         if (isReconfigurable()) {
             byte[] bSides = new byte[6];
 
-            bSides[0] = (byte) sides[BlockHelper.below(facing).getIndex()].ordinal();
-            bSides[1] = (byte) sides[BlockHelper.above(facing).getIndex()].ordinal();
+            bSides[0] = (byte) sides[BlockHelper.below(facing).get3DDataValue()].ordinal();
+            bSides[1] = (byte) sides[BlockHelper.above(facing).get3DDataValue()].ordinal();
 
-            bSides[2] = (byte) sides[facing.getIndex()].ordinal();
-            bSides[3] = (byte) sides[BlockHelper.opposite(facing).getIndex()].ordinal();
+            bSides[2] = (byte) sides[facing.get3DDataValue()].ordinal();
+            bSides[3] = (byte) sides[BlockHelper.opposite(facing).get3DDataValue()].ordinal();
 
-            bSides[4] = (byte) sides[BlockHelper.right(facing).getIndex()].ordinal();
-            bSides[5] = (byte) sides[BlockHelper.left(facing).getIndex()].ordinal();
+            bSides[4] = (byte) sides[BlockHelper.right(facing).get3DDataValue()].ordinal();
+            bSides[5] = (byte) sides[BlockHelper.left(facing).get3DDataValue()].ordinal();
 
             nbt.putByteArray(TAG_SIDES, bSides);
         }

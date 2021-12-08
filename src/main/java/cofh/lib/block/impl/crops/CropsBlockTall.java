@@ -4,6 +4,8 @@ import cofh.lib.util.Utils;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
@@ -17,16 +19,18 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.PlantType;
 
+import java.util.List;
 import java.util.Random;
 
 import static cofh.lib.util.constants.Constants.*;
+import static net.minecraft.enchantment.Enchantments.BLOCK_FORTUNE;
 
 public class CropsBlockTall extends CropsBlockCoFH {
 
     public CropsBlockTall(Properties builder, PlantType type, int growLight, float growMod) {
 
         super(builder, type, growLight, growMod);
-        this.setDefaultState(this.stateContainer.getBaseState().with(this.getAgeProperty(), 0).with(TOP, false));
+        this.registerDefaultState(this.stateDefinition.any().setValue(this.getAgeProperty(), 0).setValue(TOP, false));
     }
 
     public CropsBlockTall(Properties builder, int growLight, float growMod) {
@@ -40,21 +44,21 @@ public class CropsBlockTall extends CropsBlockCoFH {
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
 
-        super.fillStateContainer(builder);
+        super.createBlockStateDefinition(builder);
         builder.add(TOP);
     }
 
     protected boolean isTop(BlockState state) {
 
-        return state.get(TOP);
+        return state.getValue(TOP);
     }
 
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 
-        int age = state.get(getAgeProperty()) - (isTop(state) ? 2 : 0);
+        int age = state.getValue(getAgeProperty()) - (isTop(state) ? 2 : 0);
         return TALL_CROPS_BY_AGE[MathHelper.clamp(age, 0, TALL_CROPS_BY_AGE.length - 1)];
     }
 
@@ -78,18 +82,18 @@ public class CropsBlockTall extends CropsBlockCoFH {
     @Override
     public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
 
-        if (!worldIn.isAreaLoaded(pos, 1) || isTop(state) || !isValidPosition(state, worldIn, pos)) {
+        if (!worldIn.isAreaLoaded(pos, 1) || isTop(state) || !canSurvive(state, worldIn, pos)) {
             return;
         }
-        if (worldIn.getLightSubtracted(pos, 0) >= growLight) {
+        if (worldIn.getRawBrightness(pos, 0) >= growLight) {
             if (!canHarvest(state)) {
                 int age = getAge(state);
-                float growthChance = MathHelper.maxF(getGrowthChance(this, worldIn, pos) * growMod, 0.1F);
+                float growthChance = MathHelper.maxF(getGrowthSpeed(this, worldIn, pos) * growMod, 0.1F);
                 if (ForgeHooks.onCropsGrowPre(worldIn, pos, state, random.nextInt((int) (25.0F / growthChance) + 1) == 0)) {
                     int newAge = age + 1 == getPostHarvestAge() ? getMaxAge() : age + 1;
-                    worldIn.setBlockState(pos, withAge(newAge), 2);
+                    worldIn.setBlock(pos, getStateForAge(newAge), 2);
                     if (newAge >= getTallAge()) {
-                        worldIn.setBlockState(pos.up(), withAge(newAge).with(TOP, true), 2);
+                        worldIn.setBlock(pos.above(), getStateForAge(newAge).setValue(TOP, true), 2);
                     }
                     ForgeHooks.onCropsGrowPost(worldIn, pos, state);
                 }
@@ -98,46 +102,46 @@ public class CropsBlockTall extends CropsBlockCoFH {
     }
 
     @Override
-    public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
+    public boolean canSurvive(BlockState state, IWorldReader worldIn, BlockPos pos) {
 
         if (isTop(state)) {
-            return worldIn.getBlockState(pos.down()).getBlock() == this;
+            return worldIn.getBlockState(pos.below()).getBlock() == this;
         }
         if (getAge(state) >= getTallAge()) {
-            return worldIn.getBlockState(pos.up()).getBlock() == this;
+            return worldIn.getBlockState(pos.above()).getBlock() == this && super.canSurvive(state, worldIn, pos);
         }
-        return pos.getY() < 255 && super.isValidPosition(state, worldIn, pos) && (worldIn.isAirBlock(pos.up()));
+        return pos.getY() < 255 && super.canSurvive(state, worldIn, pos) && (worldIn.isEmptyBlock(pos.above()));
     }
 
     // region IGrowable
     @Override
-    public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, BlockState state) {
+    public boolean isBonemealSuccess(World worldIn, Random rand, BlockPos pos, BlockState state) {
 
         return !isTop(state);
     }
 
     @Override
-    public void grow(ServerWorld worldIn, Random rand, BlockPos pos, BlockState state) {
+    public void performBonemeal(ServerWorld worldIn, Random rand, BlockPos pos, BlockState state) {
 
-        if (canHarvest(state) || isTop(state) || !isValidPosition(state, worldIn, pos)) {
+        if (canHarvest(state) || isTop(state) || !canSurvive(state, worldIn, pos)) {
             return;
         }
-        BlockPos above = pos.up();
-        if (!worldIn.isAirBlock(above) && worldIn.getBlockState(above).getBlock() != this) {
+        BlockPos above = pos.above();
+        if (!worldIn.isEmptyBlock(above) && worldIn.getBlockState(above).getBlock() != this) {
             return;
         }
         int newAge = getAge(state) + getBonemealAgeIncrease(worldIn);
         newAge = Math.min(newAge, getMaxAge());
-        worldIn.setBlockState(pos, withAge(newAge), 2);
+        worldIn.setBlock(pos, getStateForAge(newAge), 2);
         if (newAge >= getTallAge()) {
-            worldIn.setBlockState(above, withAge(newAge).with(TOP, true), 2);
+            worldIn.setBlock(above, getStateForAge(newAge).setValue(TOP, true), 2);
         }
     }
     // endregion
 
     // region IHarvestable
     @Override
-    public boolean harvest(World world, BlockPos pos, BlockState state, int fortune) {
+    public boolean harvest(World world, BlockPos pos, BlockState state, PlayerEntity player, boolean replant) {
 
         if (!canHarvest(state)) {
             return false;
@@ -146,19 +150,43 @@ public class CropsBlockTall extends CropsBlockCoFH {
             return true;
         }
         if (getPostHarvestAge() >= 0) {
+            int fortune = Utils.getItemEnchantmentLevel(BLOCK_FORTUNE, player.getMainHandItem());
             Utils.dropItemStackIntoWorldWithRandomness(new ItemStack(getCropItem(), 2 + MathHelper.binomialDist(fortune, 0.5D)), world, pos);
             if (isTop(state)) {
-                world.setBlockState(pos, this.withAge(getPostHarvestAge() + getTallAge()), 2);
-                world.setBlockState(pos.down(), this.withAge(getPostHarvestAge()), 2);
-                Utils.dropItemStackIntoWorldWithRandomness(new ItemStack(getCropItem(), 2 + MathHelper.binomialDist(fortune, 0.5D)), world, pos.down());
+                world.setBlock(pos, this.getStateForAge(getPostHarvestAge() + getTallAge()), 2);
+                world.setBlock(pos.below(), this.getStateForAge(getPostHarvestAge()), 2);
+                Utils.dropItemStackIntoWorldWithRandomness(new ItemStack(getCropItem(), 2 + MathHelper.binomialDist(fortune, 0.5D)), world, pos.below());
             } else {
-                world.setBlockState(pos, this.withAge(getPostHarvestAge()), 2);
-                world.setBlockState(pos.up(), this.withAge(getPostHarvestAge() + getTallAge()), 2);
-                Utils.dropItemStackIntoWorldWithRandomness(new ItemStack(getCropItem(), 2 + MathHelper.binomialDist(fortune, 0.5D)), world, pos.up());
+                world.setBlock(pos, this.getStateForAge(getPostHarvestAge()), 2);
+                world.setBlock(pos.above(), this.getStateForAge(getPostHarvestAge() + getTallAge()), 2);
+                Utils.dropItemStackIntoWorldWithRandomness(new ItemStack(getCropItem(), 2 + MathHelper.binomialDist(fortune, 0.5D)), world, pos.above());
             }
         } else {
-            world.destroyBlock(pos, true);
-            world.destroyBlock(isTop(state) ? pos.down() : pos.up(), true);
+            if (replant) {
+                boolean seedDrop = false;
+                Item seedItem = seed.get().getItem();
+
+                List<ItemStack> drops = Block.getDrops(state, (ServerWorld) world, pos, null, player, player.getMainHandItem());
+                for (ItemStack drop : drops) {
+                    drop.setCount(drop.getCount() * 2);
+
+                    if (!seedDrop && drop.getItem() == seedItem) {
+                        drop.shrink(1);
+                        seedDrop = true;
+                    }
+                    if (!drop.isEmpty()) {
+                        Utils.dropItemStackIntoWorldWithRandomness(drop, world, pos);
+                    }
+                    world.destroyBlock(pos, false, player);
+                    world.destroyBlock(isTop(state) ? pos.below() : pos.above(), false, player);
+                    if (seedDrop) {
+                        world.setBlock(isTop(state) ? pos.below() : pos, getStateForAge(0), 3);
+                    }
+                }
+            } else {
+                world.destroyBlock(pos, true, player);
+                world.destroyBlock(isTop(state) ? pos.below() : pos.above(), true, player);
+            }
         }
         return true;
     }

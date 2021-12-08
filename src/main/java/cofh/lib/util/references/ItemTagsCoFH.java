@@ -22,11 +22,13 @@ public class ItemTagsCoFH {
     public static final IOptionalNamedTag<Item> COINS_IRON = forgeTag("coins/iron");
     public static final IOptionalNamedTag<Item> COINS_LEAD = forgeTag("coins/lead");
     public static final IOptionalNamedTag<Item> COINS_LUMIUM = forgeTag("coins/lumium");
+    public static final IOptionalNamedTag<Item> COINS_NETHERITE = forgeTag("coins/netherite");
     public static final IOptionalNamedTag<Item> COINS_NICKEL = forgeTag("coins/nickel");
     public static final IOptionalNamedTag<Item> COINS_SIGNALUM = forgeTag("coins/signalum");
     public static final IOptionalNamedTag<Item> COINS_SILVER = forgeTag("coins/silver");
     public static final IOptionalNamedTag<Item> COINS_TIN = forgeTag("coins/tin");
 
+    public static final IOptionalNamedTag<Item> CROPS_AMARANTH = forgeTag("crops/amaranth");
     public static final IOptionalNamedTag<Item> CROPS_BARLEY = forgeTag("crops/barley");
     public static final IOptionalNamedTag<Item> CROPS_BELL_PEPPER = forgeTag("crops/bell_pepper");
     public static final IOptionalNamedTag<Item> CROPS_COFFEE = forgeTag("crops/coffee");
@@ -61,6 +63,7 @@ public class ItemTagsCoFH {
     public static final IOptionalNamedTag<Item> DUSTS_LAPIS = forgeTag("dusts/lapis");
     public static final IOptionalNamedTag<Item> DUSTS_LEAD = forgeTag("dusts/lead");
     public static final IOptionalNamedTag<Item> DUSTS_LUMIUM = forgeTag("dusts/lumium");
+    public static final IOptionalNamedTag<Item> DUSTS_NETHERITE = forgeTag("dusts/netherite");
     public static final IOptionalNamedTag<Item> DUSTS_NICKEL = forgeTag("dusts/nickel");
     public static final IOptionalNamedTag<Item> DUSTS_NITER = forgeTag("dusts/niter");
     public static final IOptionalNamedTag<Item> DUSTS_QUARTZ = forgeTag("dusts/quartz");
@@ -87,6 +90,7 @@ public class ItemTagsCoFH {
     public static final IOptionalNamedTag<Item> GEARS_LAPIS = forgeTag("gears/lapis");
     public static final IOptionalNamedTag<Item> GEARS_LEAD = forgeTag("gears/lead");
     public static final IOptionalNamedTag<Item> GEARS_LUMIUM = forgeTag("gears/lumium");
+    public static final IOptionalNamedTag<Item> GEARS_NETHERITE = forgeTag("gears/netherite");
     public static final IOptionalNamedTag<Item> GEARS_NICKEL = forgeTag("gears/nickel");
     public static final IOptionalNamedTag<Item> GEARS_QUARTZ = forgeTag("gears/quartz");
     public static final IOptionalNamedTag<Item> GEARS_RUBY = forgeTag("gears/ruby");
@@ -115,6 +119,8 @@ public class ItemTagsCoFH {
     public static final IOptionalNamedTag<Item> INGOTS_SILVER = forgeTag("ingots/silver");
     public static final IOptionalNamedTag<Item> INGOTS_TIN = forgeTag("ingots/tin");
 
+    public static final IOptionalNamedTag<Item> LOGS_RUBBERWOOD = forgeTag("rubberwood_logs");
+
     public static final IOptionalNamedTag<Item> NUGGETS_BRONZE = forgeTag("nuggets/bronze");
     public static final IOptionalNamedTag<Item> NUGGETS_CONSTANTAN = forgeTag("nuggets/constantan");
     public static final IOptionalNamedTag<Item> NUGGETS_COPPER = forgeTag("nuggets/copper");
@@ -126,6 +132,7 @@ public class ItemTagsCoFH {
     // public static final IOptionalNamedTag<Item> NUGGETS_LAPIS = forgeTag("nuggets/lapis");
     public static final IOptionalNamedTag<Item> NUGGETS_LEAD = forgeTag("nuggets/lead");
     public static final IOptionalNamedTag<Item> NUGGETS_LUMIUM = forgeTag("nuggets/lumium");
+    public static final IOptionalNamedTag<Item> NUGGETS_NETHERITE = forgeTag("nuggets/netherite");
     public static final IOptionalNamedTag<Item> NUGGETS_NICKEL = forgeTag("nuggets/nickel");
     // public static final IOptionalNamedTag<Item> NUGGETS_QUARTZ = forgeTag("nuggets/quartz");
     // public static final IOptionalNamedTag<Item> NUGGETS_RUBY = forgeTag("nuggets/ruby");
@@ -161,6 +168,7 @@ public class ItemTagsCoFH {
     // public static final IOptionalNamedTag<Item> PLATES_LAPIS = forgeTag("plates/lapis");
     public static final IOptionalNamedTag<Item> PLATES_LEAD = forgeTag("plates/lead");
     public static final IOptionalNamedTag<Item> PLATES_LUMIUM = forgeTag("plates/lumium");
+    public static final IOptionalNamedTag<Item> PLATES_NETHERITE = forgeTag("plates/netherite");
     public static final IOptionalNamedTag<Item> PLATES_NICKEL = forgeTag("plates/nickel");
     // public static final IOptionalNamedTag<Item> PLATES_QUARTZ = forgeTag("plates/quartz");
     // public static final IOptionalNamedTag<Item> PLATES_RUBY = forgeTag("plates/ruby");
@@ -169,6 +177,7 @@ public class ItemTagsCoFH {
     public static final IOptionalNamedTag<Item> PLATES_SILVER = forgeTag("plates/silver");
     public static final IOptionalNamedTag<Item> PLATES_TIN = forgeTag("plates/tin");
 
+    public static final IOptionalNamedTag<Item> SEEDS_AMARANTH = forgeTag("seeds/amaranth");
     public static final IOptionalNamedTag<Item> SEEDS_BARLEY = forgeTag("seeds/barley");
     public static final IOptionalNamedTag<Item> SEEDS_BELL_PEPPER = forgeTag("seeds/bell_pepper");
     public static final IOptionalNamedTag<Item> SEEDS_COFFEE = forgeTag("seeds/coffee");
@@ -215,6 +224,8 @@ public class ItemTagsCoFH {
     public static final IOptionalNamedTag<Item> STORAGE_BLOCKS_TAR = forgeTag("storage_blocks/tar");
     public static final IOptionalNamedTag<Item> STORAGE_BLOCKS_TIN = forgeTag("storage_blocks/tin");
 
+    public static final IOptionalNamedTag<Item> PUMPKINS_CARVED = forgeTag("pumpkins/carved");
+
     public static final IOptionalNamedTag<Item> ARMOR_IRON = forgeTag("armor/iron");
     public static final IOptionalNamedTag<Item> ARMOR_GOLD = forgeTag("armor/gold");
     public static final IOptionalNamedTag<Item> ARMOR_DIAMOND = forgeTag("armor/diamond");
@@ -230,6 +241,15 @@ public class ItemTagsCoFH {
     public static final IOptionalNamedTag<Item> SAWDUST = forgeTag("sawdust");
     public static final IOptionalNamedTag<Item> SLAG = forgeTag("slag");
     public static final IOptionalNamedTag<Item> TAR = forgeTag("tar");
+
+    public static final IOptionalNamedTag<Item> COOKED_MEAT = forgeTag("foods/meat/cooked");
+    public static final IOptionalNamedTag<Item> RAW_MEAT = forgeTag("foods/meat/raw");
+
+    public static final IOptionalNamedTag<Item> COOKED_FISH = forgeTag("foods/fish/cooked");
+    public static final IOptionalNamedTag<Item> RAW_FISH = forgeTag("foods/fish/raw");
+
+    public static final IOptionalNamedTag<Item> LOCKS = thermalTag("crafting/locks");
+    public static final IOptionalNamedTag<Item> SECURABLE = thermalTag("crafting/securable");
 
     public static final IOptionalNamedTag<Item> MACHINE_DIES = thermalTag("crafting/dies");
     public static final IOptionalNamedTag<Item> MACHINE_CASTS = thermalTag("crafting/casts");

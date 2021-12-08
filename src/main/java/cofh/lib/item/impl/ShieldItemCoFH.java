@@ -5,19 +5,21 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ShieldItem;
 import net.minecraft.util.NonNullList;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 import static cofh.lib.util.constants.Constants.TRUE;
 
 public class ShieldItemCoFH extends ShieldItem implements ICoFHItem {
 
     protected BooleanSupplier showInGroups = TRUE;
-    protected BooleanSupplier showEnchantEffect = TRUE;
 
-    protected int enchantability;
+    protected int enchantability = 1;
+
+    protected Supplier<ItemGroup> displayGroup;
 
     public ShieldItemCoFH(Properties builder) {
 
@@ -30,6 +32,12 @@ public class ShieldItemCoFH extends ShieldItem implements ICoFHItem {
         return this;
     }
 
+    public ShieldItemCoFH setDisplayGroup(Supplier<ItemGroup> displayGroup) {
+
+        this.displayGroup = displayGroup;
+        return this;
+    }
+
     public ShieldItemCoFH setShowInGroups(BooleanSupplier showInGroups) {
 
         this.showInGroups = showInGroups;
@@ -37,19 +45,18 @@ public class ShieldItemCoFH extends ShieldItem implements ICoFHItem {
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
 
-        if (!showInGroups.getAsBoolean()) {
+        if (!showInGroups.getAsBoolean() || displayGroup != null && displayGroup.get() != null && displayGroup.get() != group) {
             return;
         }
-        super.fillItemGroup(group, items);
+        super.fillItemCategory(group, items);
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public boolean hasEffect(ItemStack stack) {
+    public Collection<ItemGroup> getCreativeTabs() {
 
-        return showEnchantEffect.getAsBoolean() && stack.isEnchanted();
+        return displayGroup != null && displayGroup.get() != null ? Collections.singletonList(displayGroup.get()) : super.getCreativeTabs();
     }
 
     @Override
@@ -59,7 +66,7 @@ public class ShieldItemCoFH extends ShieldItem implements ICoFHItem {
     }
 
     @Override
-    public int getItemEnchantability() {
+    public int getEnchantmentValue() {
 
         return enchantability;
     }

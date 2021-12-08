@@ -20,13 +20,13 @@ public class LoveEffect extends EffectCoFH {
     }
 
     @Override
-    public boolean isInstant() {
+    public boolean isInstantenous() {
 
         return true;
     }
 
     @Override
-    public void performEffect(LivingEntity entityLivingBaseIn, int amplifier) {
+    public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier) {
 
         // TODO: Revisit if potion logic ever changes. Instant potions don't need this.
         //        World world = entityLivingBaseIn.world;
@@ -38,7 +38,7 @@ public class LoveEffect extends EffectCoFH {
     }
 
     @Override
-    public void affectEntity(@Nullable Entity source, @Nullable Entity indirectSource, LivingEntity entityLivingBaseIn, int amplifier, double health) {
+    public void applyInstantenousEffect(@Nullable Entity source, @Nullable Entity indirectSource, LivingEntity entityLivingBaseIn, int amplifier, double health) {
 
         if (entityLivingBaseIn instanceof AnimalEntity) {
             setLoveFlag(indirectSource, (AnimalEntity) entityLivingBaseIn);
@@ -55,10 +55,10 @@ public class LoveEffect extends EffectCoFH {
     private void setLoveFlag(Entity indirectSource, AnimalEntity animal) {
 
         PlayerEntity player = indirectSource instanceof PlayerEntity ? (PlayerEntity) indirectSource : null;
-        if (animal.getGrowingAge() == 0 && !animal.isInLove()) {
+        if (animal.getAge() == 0 && !animal.isInLove()) {
             animal.setInLove(player);
             for (int i = 0; i < 4; ++i) {
-                Utils.spawnParticles(animal.world, ParticleTypes.HEART, animal.getPosX() + animal.world.rand.nextDouble(), animal.getPosY() + 1.0D + animal.world.rand.nextDouble(), animal.getPosZ() + animal.world.rand.nextDouble(), 1, 0, 0, 0, 0);
+                Utils.spawnParticles(animal.level, ParticleTypes.HEART, animal.getX() + animal.level.random.nextDouble(), animal.getY() + 1.0D + animal.level.random.nextDouble(), animal.getZ() + animal.level.random.nextDouble(), 1, 0, 0, 0, 0);
             }
         }
     }

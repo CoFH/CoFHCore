@@ -28,13 +28,13 @@ public class ListBoxElementText implements IListBoxElement {
     @Override
     public int getWidth() {
 
-        return Minecraft.getInstance().fontRenderer.getStringWidth(text);
+        return Minecraft.getInstance().font.width(text);
     }
 
     @Override
     public void draw(MatrixStack matrixStack, ElementListBox listBox, int x, int y, int backColor, int textColor) {
 
-        listBox.getFontRenderer().drawStringWithShadow(matrixStack, text, x, y, textColor);
+        listBox.getFontRenderer().drawShadow(matrixStack, text, x, y, textColor);
     }
 
 }

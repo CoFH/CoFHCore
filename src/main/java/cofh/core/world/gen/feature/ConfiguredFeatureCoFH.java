@@ -30,10 +30,10 @@ public class ConfiguredFeatureCoFH<FC extends IFeatureConfig, F extends Feature<
     }
 
     @Override
-    public boolean generate(@Nonnull ISeedReader reader, @Nonnull ChunkGenerator chunkGenerator, @Nonnull Random rand, @Nonnull BlockPos pos) {
+    public boolean place(@Nonnull ISeedReader reader, @Nonnull ChunkGenerator chunkGenerator, @Nonnull Random rand, @Nonnull BlockPos pos) {
 
         if (enabled.getAsBoolean() && rand.nextFloat() < chance) {
-            return super.generate(reader, chunkGenerator, rand, pos);
+            return super.place(reader, chunkGenerator, rand, pos);
         }
         return false;
     }

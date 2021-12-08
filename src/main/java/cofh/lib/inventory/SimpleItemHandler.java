@@ -15,29 +15,24 @@ import java.util.List;
 public class SimpleItemHandler implements IItemHandler {
 
     @Nullable
-    protected IInventoryCallback tile;
+    protected IInventoryCallback callback;
     protected List<ItemStorageCoFH> slots;
 
-    public SimpleItemHandler() {
+    public SimpleItemHandler(@Nonnull List<ItemStorageCoFH> slots) {
 
-        this(null);
+        this(null, slots);
     }
 
-    public SimpleItemHandler(@Nullable IInventoryCallback tile) {
+    public SimpleItemHandler(@Nullable IInventoryCallback callback) {
 
-        this.tile = tile;
+        this.callback = callback;
         this.slots = new ArrayList<>();
     }
 
-    public SimpleItemHandler(@Nullable IInventoryCallback tile, @Nonnull List<ItemStorageCoFH> slots) {
+    public SimpleItemHandler(@Nullable IInventoryCallback callback, @Nonnull List<ItemStorageCoFH> slots) {
 
-        this.tile = tile;
+        this.callback = callback;
         this.slots = new ArrayList<>(slots);
-    }
-
-    public boolean hasSlots() {
-
-        return slots.size() > 0;
     }
 
     public boolean isEmpty() {
@@ -62,10 +57,10 @@ public class SimpleItemHandler implements IItemHandler {
 
     public void onInventoryChange(int slot) {
 
-        if (tile == null) {
+        if (callback == null) {
             return;
         }
-        tile.onInventoryChange(slot);
+        callback.onInventoryChanged(slot);
     }
 
     // region IItemHandler
@@ -79,7 +74,7 @@ public class SimpleItemHandler implements IItemHandler {
     @Override
     public ItemStack getStackInSlot(int slot) {
 
-        if (slot < 0 || slot > getSlots()) {
+        if (slot < 0 || slot >= getSlots()) {
             return ItemStack.EMPTY;
         }
         return slots.get(slot).getItemStack();
@@ -89,7 +84,7 @@ public class SimpleItemHandler implements IItemHandler {
     @Override
     public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
 
-        if (slot < 0 || slot > getSlots()) {
+        if (slot < 0 || slot >= getSlots()) {
             return stack;
         }
         ItemStack ret = slots.get(slot).insertItem(slot, stack, simulate);
@@ -104,7 +99,7 @@ public class SimpleItemHandler implements IItemHandler {
     @Override
     public ItemStack extractItem(int slot, int amount, boolean simulate) {
 
-        if (slot < 0 || slot > getSlots()) {
+        if (slot < 0 || slot >= getSlots()) {
             return ItemStack.EMPTY;
         }
         ItemStack ret = slots.get(slot).extractItem(slot, amount, simulate);
@@ -118,7 +113,7 @@ public class SimpleItemHandler implements IItemHandler {
     @Override
     public int getSlotLimit(int slot) {
 
-        if (slot < 0 || slot > getSlots()) {
+        if (slot < 0 || slot >= getSlots()) {
             return 0;
         }
         return slots.get(slot).getSlotLimit(slot);
@@ -127,7 +122,7 @@ public class SimpleItemHandler implements IItemHandler {
     @Override
     public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
 
-        if (slot < 0 || slot > getSlots()) {
+        if (slot < 0 || slot >= getSlots()) {
             return false;
         }
         return slots.get(slot).isItemValid(stack);

@@ -1,17 +1,16 @@
 package cofh.core.tileentity;
 
 import cofh.core.network.packet.client.TileGuiPacket;
+import cofh.core.util.ProxyUtils;
 import cofh.core.util.helpers.FluidHelper;
+import cofh.lib.tileentity.IAreaEffectTile;
 import cofh.lib.tileentity.ITileCallback;
 import cofh.lib.tileentity.ITilePacketHandler;
+import cofh.lib.tileentity.ITileXpHandler;
 import cofh.lib.util.IConveyableData;
 import cofh.lib.util.Utils;
-import cofh.lib.util.helpers.XpHelper;
-import cofh.lib.xp.EmptyXpStorage;
-import cofh.lib.xp.XpStorage;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
@@ -24,7 +23,6 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
@@ -33,7 +31,7 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class TileCoFH extends TileEntity implements ITileCallback, ITilePacketHandler, IConveyableData {
+public class TileCoFH extends TileEntity implements ITileCallback, ITilePacketHandler, ITileXpHandler, IConveyableData {
 
     protected int numPlayersUsing;
 
@@ -47,10 +45,24 @@ public class TileCoFH extends TileEntity implements ITileCallback, ITilePacketHa
 
         super.onLoad();
 
-        if (world != null && Utils.isClientWorld(world) && !hasClientUpdate()) {
-            world.tickableTileEntities.remove(this);
+        if (level != null && Utils.isClientWorld(level)) {
+            if (!hasClientUpdate()) {
+                level.tickableBlockEntities.remove(this);
+            }
+            if (this instanceof IAreaEffectTile) {
+                ProxyUtils.addAreaEffectTile((IAreaEffectTile) this);
+            }
         }
-        validate();
+        clearRemoved();
+    }
+
+    @Override
+    public void setRemoved() {
+
+        if (this instanceof IAreaEffectTile) {
+            ProxyUtils.removeAreaEffectTile((IAreaEffectTile) this);
+        }
+        super.setRemoved();
     }
 
     public int getPlayersUsing() {
@@ -79,6 +91,37 @@ public class TileCoFH extends TileEntity implements ITileCallback, ITilePacketHa
         }
     }
 
+    // region BASE OVERRIDES
+    // TODO: Decide if this is necessary/prudent.
+
+    //    @Override
+    //    public void read(BlockState state, CompoundNBT nbt) {
+    //
+    //        this.pos = new BlockPos(nbt.getInt("x"), nbt.getInt("y"), nbt.getInt("z"));
+    //    }
+    //
+    //    @Override
+    //    public CompoundNBT write(CompoundNBT compound) {
+    //
+    //        ResourceLocation resourcelocation = TileEntityType.getId(this.getType());
+    //        if (resourcelocation == null) {
+    //            throw new RuntimeException(this.getClass() + " is missing a mapping! This is a bug!");
+    //        } else {
+    //            compound.putString("id", resourcelocation.toString());
+    //            compound.putInt("x", this.pos.getX());
+    //            compound.putInt("y", this.pos.getY());
+    //            compound.putInt("z", this.pos.getZ());
+    //            return compound;
+    //        }
+    //    }
+    //
+    //    @Override
+    //    public CompoundNBT getTileData() {
+    //
+    //        return new CompoundNBT();
+    //    }
+    // endregion
+
     // region HELPERS
     public TileCoFH worldContext(BlockState state, IBlockReader world) {
 
@@ -87,7 +130,7 @@ public class TileCoFH extends TileEntity implements ITileCallback, ITilePacketHa
 
     public boolean onActivatedDelegate(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, BlockRayTraceResult result) {
 
-        return getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).map(handler -> FluidHelper.interactWithHandler(player.getHeldItem(hand), handler, player, hand)).orElse(false);
+        return getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).map(handler -> FluidHelper.interactWithHandler(player.getItemInHand(hand), handler, player, hand)).orElse(false);
     }
 
     public boolean hasClientUpdate() {
@@ -108,41 +151,19 @@ public class TileCoFH extends TileEntity implements ITileCallback, ITilePacketHa
 
         return null;
     }
+
+    protected void markDirtyFast() {
+
+        if (this.level != null) {
+            this.level.blockEntityChanged(this.worldPosition, this);
+        }
+    }
     // endregion
 
     // region GUI
     public boolean playerWithinDistance(PlayerEntity player, double distanceSq) {
 
-        return pos.distanceSq(player.getPositionVec(), true) <= distanceSq;
-    }
-
-    public boolean claimXP(PlayerEntity player) {
-
-        if (!getXpStorage().isEmpty()) {
-            int xp = getXpStorage().getStored();
-            XpHelper.addXPToPlayer(player, xp);
-            getXpStorage().clear();
-            return true;
-        }
-        return false;
-
-    }
-
-    public void spawnXpOrbs(int xp, Vector3d pos) {
-
-        if (world == null) {
-            return;
-        }
-        while (xp > 0) {
-            int orbAmount = ExperienceOrbEntity.getXPSplit(xp);
-            xp -= orbAmount;
-            world.addEntity(new ExperienceOrbEntity(world, pos.x, pos.y, pos.z, orbAmount));
-        }
-    }
-
-    public XpStorage getXpStorage() {
-
-        return EmptyXpStorage.INSTANCE;
+        return !isRemoved() && worldPosition.distSqr(player.position(), true) <= distanceSq;
     }
     // endregion
 
@@ -151,19 +172,19 @@ public class TileCoFH extends TileEntity implements ITileCallback, ITilePacketHa
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
 
-        return new SUpdateTileEntityPacket(pos, 0, getUpdateTag());
+        return new SUpdateTileEntityPacket(worldPosition, 0, getUpdateTag());
     }
 
     @Override
     public CompoundNBT getUpdateTag() {
 
-        return this.write(new CompoundNBT());
+        return this.save(new CompoundNBT());
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
 
-        read(this.cachedBlockState, pkt.getNbtCompound());
+        load(this.blockState, pkt.getTag());
     }
     // endregion
 
@@ -183,13 +204,13 @@ public class TileCoFH extends TileEntity implements ITileCallback, ITilePacketHa
     @Override
     public BlockPos pos() {
 
-        return pos;
+        return worldPosition;
     }
 
     @Override
     public World world() {
 
-        return world;
+        return level;
     }
     // endregion
 }

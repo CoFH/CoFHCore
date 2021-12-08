@@ -8,6 +8,7 @@ public class NBTTags {
 
     public static final String TAG_ACCESSIBLE = "Accessible";
     public static final String TAG_ACTIVE = "Active";
+    public static final String TAG_ACTIVE_PREV = "ActivePrev";
     public static final String TAG_AMOUNT = "Amount";
     public static final String TAG_AMOUNT_IN = "AmountIn";
     public static final String TAG_AMOUNT_OUT = "AmountOut";
@@ -28,8 +29,9 @@ public class NBTTags {
     public static final String TAG_COOLANT = "Coolant";
     public static final String TAG_COOLANT_MAX = "CoolantMax";
     public static final String TAG_CREATIVE = "Creative";
+    public static final String TAG_DAMAGE = "Damage";
     public static final String TAG_ENCHANTMENTS = "Enchantments";
-    public static final String TAG_ENDER_FREQUENCY = "EnderFrequency";
+    public static final String TAG_ENDER_ADDRESS = "EnderAddress";
     public static final String TAG_ENTITY = "EntityTag";
     public static final String TAG_ENERGY = "Energy";
     public static final String TAG_ENERGY_MAX = "EnergyMax";
@@ -74,6 +76,7 @@ public class NBTTags {
     public static final String TAG_TRACK_OUT = "TrackOut";
     public static final String TAG_TYPE = "Type";
     public static final String TAG_UUID = "UUID";
+    public static final String TAG_VALID = "Valid";
     public static final String TAG_XP = "Xp";
     public static final String TAG_XP_MAX = "XpMax";
     public static final String TAG_XP_TIMER = "XpTimer";

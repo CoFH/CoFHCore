@@ -30,11 +30,11 @@ public class PoweredRailBlockWL extends PoweredRailBlockCoFH implements IWaterLo
     public PoweredRailBlockWL(Properties builder, boolean isActivator) {
 
         super(builder, isActivator);
-        this.setDefaultState(this.stateContainer.getBaseState().with(SHAPE, RailShape.NORTH_SOUTH).with(POWERED, false).with(WATERLOGGED, false));
+        this.registerDefaultState(this.stateDefinition.any().setValue(SHAPE, RailShape.NORTH_SOUTH).setValue(POWERED, false).setValue(WATERLOGGED, false));
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
 
         builder.add(getShapeProperty(), POWERED, WATERLOGGED);
     }
@@ -42,30 +42,30 @@ public class PoweredRailBlockWL extends PoweredRailBlockCoFH implements IWaterLo
     @Override
     public float getRailMaxSpeed(BlockState state, World world, BlockPos pos, AbstractMinecartEntity cart) {
 
-        return state.get(WATERLOGGED) ? maxSpeed * 1.5F : maxSpeed;
+        return state.getValue(WATERLOGGED) ? maxSpeed * 1.5F : maxSpeed;
     }
 
     @Override
     public FluidState getFluidState(BlockState state) {
 
-        return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
     @Override
     @Nullable
     public BlockState getStateForPlacement(BlockItemUseContext context) {
 
-        boolean flag = context.getWorld().getFluidState(context.getPos()).getFluid() == Fluids.WATER;
-        return this.getDefaultState().with(WATERLOGGED, flag);
+        boolean flag = context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER;
+        return this.defaultBlockState().setValue(WATERLOGGED, flag);
     }
 
     @Override
-    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
 
-        if (stateIn.get(WATERLOGGED)) {
-            worldIn.getPendingFluidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickRate(worldIn));
+        if (stateIn.getValue(WATERLOGGED)) {
+            worldIn.getLiquidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn));
         }
-        return super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+        return super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
     }
 
 }

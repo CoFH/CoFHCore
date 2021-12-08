@@ -41,9 +41,9 @@ public class TileItemFilterScreen extends ContainerScreenCoFH<TileItemFilterCont
 
         super.init();
 
-        for (int i = 0; i < container.getFilterSize(); ++i) {
-            Slot slot = container.inventorySlots.get(i);
-            addElement(createSlot(this, slot.xPos, slot.yPos));
+        for (int i = 0; i < menu.getFilterSize(); ++i) {
+            Slot slot = menu.slots.get(i);
+            addElement(createSlot(this, slot.x, slot.y));
         }
         addButtons();
 
@@ -52,20 +52,20 @@ public class TileItemFilterScreen extends ContainerScreenCoFH<TileItemFilterCont
                 .setUV(24, 0)
                 .setSize(24, 21)
                 .setTexture(TAB_TOP, 48, 32)
-                .setVisible(() -> FilterHelper.hasFilter(container.getFilterableTile())));
+                .setVisible(() -> FilterHelper.hasFilter(menu.getFilterableTile())));
         addElement(new ElementTexture(this, 8, -17) {
 
             @Override
             public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
 
-                FilterGuiOpenPacket.openTileGui(container.getFilterableTile());
+                FilterGuiOpenPacket.openTileGui(menu.getFilterableTile());
                 return true;
             }
         }
                 .setSize(16, 16)
                 .setTexture(NAV_BACK, 16, 16)
-                .setTooltipFactory((element, mouseX, mouseY) -> Collections.singletonList(container.getFilterableTile().getDisplayName()))
-                .setVisible(() -> FilterHelper.hasFilter(container.getFilterableTile())));
+                .setTooltipFactory((element, mouseX, mouseY) -> Collections.singletonList(menu.getFilterableTile().getDisplayName()))
+                .setVisible(() -> FilterHelper.hasFilter(menu.getFilterableTile())));
     }
 
     // region ELEMENTS
@@ -76,7 +76,7 @@ public class TileItemFilterScreen extends ContainerScreenCoFH<TileItemFilterCont
             @Override
             public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
 
-                container.setAllowList(true);
+                menu.setAllowList(true);
                 playClickSound(0.7F);
                 return true;
             }
@@ -84,14 +84,14 @@ public class TileItemFilterScreen extends ContainerScreenCoFH<TileItemFilterCont
                 .setSize(20, 20)
                 .setTexture(TEX_DENY_LIST, 40, 20)
                 .setTooltipFactory(new SimpleTooltip(new TranslationTextComponent("info.cofh.filter.allowlist.0")))
-                .setVisible(() -> !container.getAllowList()));
+                .setVisible(() -> !menu.getAllowList()));
 
         addElement(new ElementButton(this, 132, 22) {
 
             @Override
             public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
 
-                container.setAllowList(false);
+                menu.setAllowList(false);
                 playClickSound(0.4F);
                 return true;
             }
@@ -99,14 +99,14 @@ public class TileItemFilterScreen extends ContainerScreenCoFH<TileItemFilterCont
                 .setSize(20, 20)
                 .setTexture(TEX_ALLOW_LIST, 40, 20)
                 .setTooltipFactory(new SimpleTooltip(new TranslationTextComponent("info.cofh.filter.allowlist.1")))
-                .setVisible(() -> container.getAllowList()));
+                .setVisible(() -> menu.getAllowList()));
 
         addElement(new ElementButton(this, 132, 44) {
 
             @Override
             public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
 
-                container.setCheckNBT(true);
+                menu.setCheckNBT(true);
                 playClickSound(0.7F);
                 return true;
             }
@@ -114,14 +114,14 @@ public class TileItemFilterScreen extends ContainerScreenCoFH<TileItemFilterCont
                 .setSize(20, 20)
                 .setTexture(TEX_IGNORE_NBT, 40, 20)
                 .setTooltipFactory(new SimpleTooltip(new TranslationTextComponent("info.cofh.filter.checkNBT.0")))
-                .setVisible(() -> !container.getCheckNBT()));
+                .setVisible(() -> !menu.getCheckNBT()));
 
         addElement(new ElementButton(this, 132, 44) {
 
             @Override
             public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
 
-                container.setCheckNBT(false);
+                menu.setCheckNBT(false);
                 playClickSound(0.4F);
                 return true;
             }
@@ -129,7 +129,7 @@ public class TileItemFilterScreen extends ContainerScreenCoFH<TileItemFilterCont
                 .setSize(20, 20)
                 .setTexture(TEX_USE_NBT, 40, 20)
                 .setTooltipFactory(new SimpleTooltip(new TranslationTextComponent("info.cofh.filter.checkNBT.1")))
-                .setVisible(() -> container.getCheckNBT()));
+                .setVisible(() -> menu.getCheckNBT()));
     }
     // endregion
 }

@@ -19,33 +19,6 @@ public abstract class BlockStateProviderCoFH extends BlockStateProvider {
         super(gen, modid, existingFileHelper);
     }
 
-    public static final String CROPS = "crops";
-    public static final String GLASS = "glass";
-    public static final String MISC = "misc";
-    public static final String ORES = "ores";
-    public static final String RAILS = "rails";
-    public static final String STORAGE = "storage";
-
-    protected void glassBlock(Supplier<? extends Block> block) {
-
-        simpleBlock(block.get(), cubeAll(block, GLASS));
-    }
-
-    protected void miscBlock(Supplier<? extends Block> block) {
-
-        simpleBlock(block.get(), cubeAll(block, MISC));
-    }
-
-    protected void oreBlock(Supplier<? extends Block> block) {
-
-        simpleBlock(block.get(), cubeAll(block, ORES));
-    }
-
-    protected void storageBlock(Supplier<? extends Block> block) {
-
-        simpleBlock(block.get(), cubeAll(block, STORAGE));
-    }
-
     // region HELPERS
     protected String name(Supplier<? extends Block> block) {
 

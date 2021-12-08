@@ -1,10 +1,14 @@
 package cofh.core.event;
 
+import cofh.lib.client.model.DynamicFluidContainerModel;
 import cofh.lib.item.IColorableItem;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -29,6 +33,12 @@ public class CoreClientSetupEvents {
         for (Item colorable : COLORABLE_ITEMS) {
             colors.register(((IColorableItem) colorable)::getColor, colorable);
         }
+    }
+
+    @SubscribeEvent
+    public static void registerModels(final ModelRegistryEvent event) {
+
+        ModelLoaderRegistry.registerLoader(new ResourceLocation(ID_COFH_CORE, "dynamic_fluid"), new DynamicFluidContainerModel.Loader());
     }
 
     // region HELPERS

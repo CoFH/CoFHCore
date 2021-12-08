@@ -132,14 +132,14 @@ public class FluidContainerItem extends ItemCoFH implements IFluidContainerItem,
 
     // region IColorableItem
     @Override
-    public int getColor(ItemStack stack, int tintIndex) {
+    public int getColor(ItemStack item, int colorIndex) {
 
         // TODO: Add base recoloration.
-        //        if (tintIndex == 0) {
+        //        if (colorIndex == 0) {
         //            return 0xD78D5B;
         //        }
-        if (tintIndex == 1) {
-            return getFluidAmount(stack) > 0 ? getFluid(stack).getFluid().getAttributes().getColor(getFluid(stack)) : 0xFFFFFF;
+        if (colorIndex == 1) {
+            return getFluidAmount(item) > 0 ? getFluid(item).getFluid().getAttributes().getColor(getFluid(item)) : 0xFFFFFF;
         }
         return 0xFFFFFF;
     }

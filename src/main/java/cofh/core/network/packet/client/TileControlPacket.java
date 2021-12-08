@@ -35,11 +35,11 @@ public class TileControlPacket extends PacketBase implements IPacketClient {
             CoFHCore.LOG.error("Client world is null! (Is this being called on the server?)");
             return;
         }
-        TileEntity tile = world.getTileEntity(pos);
+        TileEntity tile = world.getBlockEntity(pos);
         if (tile instanceof ITilePacketHandler) {
             ((ITilePacketHandler) tile).handleControlPacket(buffer);
-            BlockState state = tile.getWorld().getBlockState(pos);
-            tile.getWorld().notifyBlockUpdate(pos, state, state, 3);
+            BlockState state = tile.getLevel().getBlockState(pos);
+            tile.getLevel().sendBlockUpdated(pos, state, state, 3);
         }
     }
 
@@ -65,7 +65,7 @@ public class TileControlPacket extends PacketBase implements IPacketClient {
         TileControlPacket packet = new TileControlPacket();
         packet.pos = tile.pos();
         packet.buffer = tile.getControlPacket(new PacketBuffer(Unpooled.buffer()));
-        packet.sendToAllAround(packet.pos, NETWORK_UPDATE_DISTANCE, tile.world().getDimensionKey());
+        packet.sendToAllAround(packet.pos, NETWORK_UPDATE_DISTANCE, tile.world().dimension());
     }
 
 }

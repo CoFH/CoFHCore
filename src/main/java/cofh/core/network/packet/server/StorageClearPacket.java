@@ -4,7 +4,7 @@ import cofh.core.CoFHCore;
 import cofh.core.tileentity.TileCoFH;
 import cofh.lib.network.packet.IPacketServer;
 import cofh.lib.network.packet.PacketBase;
-import cofh.lib.util.IInventoryCallback;
+import cofh.lib.tileentity.ITileCallback;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
@@ -27,21 +27,21 @@ public class StorageClearPacket extends PacketBase implements IPacketServer {
     @Override
     public void handleServer(ServerPlayerEntity player) {
 
-        World world = player.world;
-        if (!world.isBlockPresent(pos)) {
+        World world = player.level;
+        if (!world.isLoaded(pos)) {
             return;
         }
-        TileEntity tile = world.getTileEntity(pos);
-        if (tile instanceof IInventoryCallback) {
+        TileEntity tile = world.getBlockEntity(pos);
+        if (tile instanceof ITileCallback) {
             switch (StorageType.values()[storageType]) {
                 case ENERGY:
-                    ((IInventoryCallback) tile).clearEnergy(storageIndex);
+                    ((ITileCallback) tile).clearEnergy(storageIndex);
                     break;
                 case FLUID:
-                    ((IInventoryCallback) tile).clearTank(storageIndex);
+                    ((ITileCallback) tile).clearTank(storageIndex);
                     break;
                 case ITEM:
-                    ((IInventoryCallback) tile).clearSlot(storageIndex);
+                    ((ITileCallback) tile).clearSlot(storageIndex);
                     break;
             }
         }

@@ -32,16 +32,16 @@ public class AttachedStemBlockCoFH extends AttachedStemBlock {
     }
 
     @Override
-    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
 
-        return facingState.getBlock() != this.cropBlock.get() && facing == stateIn.get(FACING)
-                ? ((StemGrownBlock) this.cropBlock.get()).getStem().getDefaultState().with(StemBlock.AGE, 7)
-                : !stateIn.isValidPosition(worldIn, currentPos) ? Blocks.AIR.getDefaultState()
+        return facingState.getBlock() != this.cropBlock.get() && facing == stateIn.getValue(FACING)
+                ? ((StemGrownBlock) this.cropBlock.get()).getStem().defaultBlockState().setValue(StemBlock.AGE, 7)
+                : !stateIn.canSurvive(worldIn, currentPos) ? Blocks.AIR.defaultBlockState()
                 : stateIn;
     }
 
     @Override
-    protected Item getSeeds() {
+    protected Item getSeedItem() {
 
         return seed.get();
     }

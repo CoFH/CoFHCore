@@ -58,20 +58,20 @@ public class StemBlockCoFH extends StemBlock {
         if (!worldIn.isAreaLoaded(pos, 1)) {
             return;
         }
-        if (worldIn.getLightSubtracted(pos, 0) >= growLight) {
+        if (worldIn.getRawBrightness(pos, 0) >= growLight) {
             float growthChance = MathHelper.maxF(CropsBlockCoFH.getGrowthChanceProxy(this, worldIn, pos) * growMod, 0.1F);
             if (ForgeHooks.onCropsGrowPre(worldIn, pos, state, random.nextInt((int) (25.0F / growthChance) + 1) == 0)) {
-                int i = state.get(AGE);
+                int i = state.getValue(AGE);
                 if (i < 7) {
-                    worldIn.setBlockState(pos, state.with(AGE, i + 1), 2);
+                    worldIn.setBlock(pos, state.setValue(AGE, i + 1), 2);
                 } else {
-                    Direction direction = Direction.Plane.HORIZONTAL.random(random);
-                    BlockPos blockpos = pos.offset(direction);
-                    BlockState soil = worldIn.getBlockState(blockpos.down());
+                    Direction direction = Direction.Plane.HORIZONTAL.getRandomDirection(random);
+                    BlockPos blockpos = pos.relative(direction);
+                    BlockState soil = worldIn.getBlockState(blockpos.below());
                     Block block = soil.getBlock();
-                    if (worldIn.isAirBlock(blockpos) && (soil.canSustainPlant(worldIn, blockpos.down(), Direction.UP, this) || block == Blocks.FARMLAND || block == Blocks.DIRT || block == Blocks.COARSE_DIRT || block == Blocks.PODZOL || block == Blocks.GRASS_BLOCK)) {
-                        worldIn.setBlockState(blockpos, this.cropBlock.get().getDefaultState());
-                        worldIn.setBlockState(pos, ((StemGrownBlock) this.cropBlock.get()).getAttachedStem().getDefaultState().with(HorizontalBlock.HORIZONTAL_FACING, direction));
+                    if (worldIn.isEmptyBlock(blockpos) && (soil.canSustainPlant(worldIn, blockpos.below(), Direction.UP, this) || block == Blocks.FARMLAND || block == Blocks.DIRT || block == Blocks.COARSE_DIRT || block == Blocks.PODZOL || block == Blocks.GRASS_BLOCK)) {
+                        worldIn.setBlockAndUpdate(blockpos, this.cropBlock.get().defaultBlockState());
+                        worldIn.setBlockAndUpdate(pos, ((StemGrownBlock) this.cropBlock.get()).getAttachedStem().defaultBlockState().setValue(HorizontalBlock.FACING, direction));
                     }
                 }
                 ForgeHooks.onCropsGrowPost(worldIn, pos, state);

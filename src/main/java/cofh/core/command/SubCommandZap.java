@@ -23,9 +23,9 @@ public class SubCommandZap {
     static ArgumentBuilder<CommandSource, ?> register() {
 
         return Commands.literal("zap")
-                .requires(source -> source.hasPermissionLevel(permissionLevel))
+                .requires(source -> source.hasPermission(permissionLevel))
                 // Self
-                .executes(context -> zapEntities(context.getSource(), ImmutableList.of(context.getSource().assertIsEntity())))
+                .executes(context -> zapEntities(context.getSource(), ImmutableList.of(context.getSource().getEntityOrException())))
                 // Targets Specified
                 .then(Commands.argument(CMD_TARGETS, EntityArgument.entities())
                         .executes(context -> zapEntities(context.getSource(), EntityArgument.getEntities(context, CMD_TARGETS))));
@@ -37,14 +37,14 @@ public class SubCommandZap {
         ServerPlayerEntity caster = source.getEntity() instanceof ServerPlayerEntity ? (ServerPlayerEntity) source.getEntity() : null;
 
         for (Entity entity : targets) {
-            if (Utils.spawnLightningBolt(entity.world, entity.getPosition(), caster)) {
+            if (Utils.spawnLightningBolt(entity.level, entity.blockPosition(), caster)) {
                 ++zappedEntities;
             }
         }
         if (targets.size() == 1) {
-            source.sendFeedback(new TranslationTextComponent("commands.cofh.zap.success.single", targets.iterator().next().getDisplayName()), true);
+            source.sendSuccess(new TranslationTextComponent("commands.cofh.zap.success.single", targets.iterator().next().getDisplayName()), true);
         } else {
-            source.sendFeedback(new TranslationTextComponent("commands.cofh.zap.success.multiple", targets.size()), true);
+            source.sendSuccess(new TranslationTextComponent("commands.cofh.zap.success.multiple", targets.size()), true);
         }
         return zappedEntities;
     }

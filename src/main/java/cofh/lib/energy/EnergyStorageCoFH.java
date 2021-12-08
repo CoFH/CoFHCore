@@ -1,5 +1,6 @@
 package cofh.lib.energy;
 
+import cofh.lib.capability.IRedstoneFluxStorage;
 import cofh.lib.util.IResourceStorage;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.nbt.CompoundNBT;
@@ -17,7 +18,7 @@ import static cofh.lib.util.constants.NBTTags.*;
  *
  * @author King Lemming
  */
-public class EnergyStorageCoFH implements IEnergyStorage, IResourceStorage, INBTSerializable<CompoundNBT> {
+public class EnergyStorageCoFH implements IRedstoneFluxStorage, IResourceStorage, INBTSerializable<CompoundNBT> {
 
     protected final int baseCapacity;
     protected final int baseReceive;

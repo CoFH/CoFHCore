@@ -53,13 +53,11 @@ public class ElementBlock extends ElementBase {
                 }
                 renderBlock = block;
             }
-            // GL11.glPushMatrix();
             if (!renderStack.isEmpty()) {
-                RenderHelper.renderItem().renderItemAndEffectIntoGUI(renderStack, posX(), posY());
+                RenderHelper.renderItem().renderAndDecorateItem(renderStack, posX(), posY());
             } else {
                 RenderHelper.drawFluid(posX(), posY(), renderFluid, 16, 16);
             }
-            // GL11.glPopMatrix();
         }
     }
 

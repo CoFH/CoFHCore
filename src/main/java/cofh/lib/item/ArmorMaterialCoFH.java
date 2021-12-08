@@ -35,37 +35,44 @@ public class ArmorMaterialCoFH implements IArmorMaterial {
     }
 
     // region IArmorMaterial
-    public int getDurability(EquipmentSlotType slotIn) {
+    @Override
+    public int getDurabilityForSlot(EquipmentSlotType slotIn) {
 
         return MAX_DAMAGE_ARRAY[slotIn.getIndex()] * this.maxDamageFactor;
     }
 
-    public int getDamageReductionAmount(EquipmentSlotType slotIn) {
+    @Override
+    public int getDefenseForSlot(EquipmentSlotType slotIn) {
 
         return this.damageReductionAmountArray[slotIn.getIndex()];
     }
 
-    public int getEnchantability() {
+    @Override
+    public int getEnchantmentValue() {
 
         return this.enchantability;
     }
 
-    public SoundEvent getSoundEvent() {
+    @Override
+    public SoundEvent getEquipSound() {
 
         return this.soundEvent;
     }
 
-    public Ingredient getRepairMaterial() {
+    @Override
+    public Ingredient getRepairIngredient() {
 
-        return this.repairMaterial.getValue();
+        return this.repairMaterial.get();
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public String getName() {
 
         return this.name;
     }
 
+    @Override
     public float getToughness() {
 
         return this.toughness;

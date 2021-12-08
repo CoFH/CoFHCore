@@ -20,13 +20,13 @@ public class PanaceaEffect extends EffectCoFH {
     }
 
     @Override
-    public void performEffect(LivingEntity entityLivingBaseIn, int amplifier) {
+    public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier) {
 
         clearHarmfulEffects(entityLivingBaseIn);
     }
 
     @Override
-    public void affectEntity(@Nullable Entity source, @Nullable Entity indirectSource, LivingEntity entityLivingBaseIn, int amplifier, double health) {
+    public void applyInstantenousEffect(@Nullable Entity source, @Nullable Entity indirectSource, LivingEntity entityLivingBaseIn, int amplifier, double health) {
 
         clearHarmfulEffects(entityLivingBaseIn);
     }
@@ -34,15 +34,15 @@ public class PanaceaEffect extends EffectCoFH {
     // region HELPERS
     public static void clearHarmfulEffects(LivingEntity entity) {
 
-        if (Utils.isClientWorld(entity.world)) {
+        if (Utils.isClientWorld(entity.level)) {
             return;
         }
-        Iterator<EffectInstance> iterator = entity.getActivePotionMap().values().iterator();
+        Iterator<EffectInstance> iterator = entity.getActiveEffectsMap().values().iterator();
 
         while (iterator.hasNext()) {
             EffectInstance effect = iterator.next();
-            if (!effect.isAmbient() && effect.getPotion().getEffectType() == EffectType.HARMFUL && !MinecraftForge.EVENT_BUS.post(new PotionEvent.PotionRemoveEvent(entity, effect))) {
-                entity.onFinishedPotionEffect(effect);
+            if (!effect.isAmbient() && effect.getEffect().getCategory() == EffectType.HARMFUL && !MinecraftForge.EVENT_BUS.post(new PotionEvent.PotionRemoveEvent(entity, effect))) {
+                entity.onEffectRemoved(effect);
                 iterator.remove();
             }
         }

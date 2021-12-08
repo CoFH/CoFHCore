@@ -24,13 +24,15 @@ public class HeldItemFilterContainer extends ContainerCoFH implements IFilterOpt
     protected InvWrapperGeneric filterInventory;
     protected ItemStack filterStack;
 
+    public SlotLocked lockedSlot;
+
     public HeldItemFilterContainer(int windowId, PlayerInventory inventory, PlayerEntity player) {
 
         super(HELD_ITEM_FILTER_CONTAINER, windowId, inventory, player);
 
         allowSwap = false;
 
-        filterStack = player.getHeldItemMainhand();
+        filterStack = player.getMainHandItem();
         filterable = (IFilterableItem) filterStack.getItem();
         filter = (AbstractItemFilter) filterable.getFilter(filterStack);
 
@@ -61,8 +63,9 @@ public class HeldItemFilterContainer extends ContainerCoFH implements IFilterOpt
             }
         }
         for (int i = 0; i < 9; ++i) {
-            if (i == inventory.currentItem) {
-                addSlot(new SlotLocked(inventory, i, xOffset + i * 18, yOffset + 58));
+            if (i == inventory.selected) {
+                lockedSlot = new SlotLocked(inventory, i, xOffset + i * 18, yOffset + 58);
+                addSlot(lockedSlot);
             } else {
                 addSlot(new Slot(inventory, i, xOffset + i * 18, yOffset + 58));
             }
@@ -77,22 +80,22 @@ public class HeldItemFilterContainer extends ContainerCoFH implements IFilterOpt
     @Override
     protected int getMergeableSlotCount() {
 
-        return filterInventory.getSizeInventory();
+        return filterInventory.getContainerSize();
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn) {
+    public boolean stillValid(PlayerEntity playerIn) {
 
         return true;
     }
 
     @Override
-    public void onContainerClosed(PlayerEntity playerIn) {
+    public void removed(PlayerEntity playerIn) {
 
         filter.setItems(filterInventory.getStacks());
         filter.write(filterStack.getOrCreateTag());
         filterable.onFilterChanged(filterStack);
-        super.onContainerClosed(playerIn);
+        super.removed(playerIn);
     }
 
     // region NETWORK

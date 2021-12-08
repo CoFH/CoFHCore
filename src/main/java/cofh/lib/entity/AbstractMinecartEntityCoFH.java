@@ -35,39 +35,39 @@ public abstract class AbstractMinecartEntityCoFH extends AbstractMinecartEntity 
     }
 
     @Override
-    public void readAdditional(CompoundNBT compound) {
+    public void readAdditionalSaveData(CompoundNBT compound) {
 
-        super.readAdditional(compound);
+        super.readAdditionalSaveData(compound);
 
         enchantments = compound.getList(TAG_ENCHANTMENTS, TAG_COMPOUND);
     }
 
     @Override
-    public void writeAdditional(CompoundNBT compound) {
+    public void addAdditionalSaveData(CompoundNBT compound) {
 
-        super.writeAdditional(compound);
+        super.addAdditionalSaveData(compound);
 
         compound.put(TAG_ENCHANTMENTS, enchantments);
     }
 
     @Override
-    public void killMinecart(DamageSource source) {
+    public void destroy(DamageSource source) {
 
         this.remove();
-        if (this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
+        if (this.level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
             ItemStack stack = getCartItem();
             if (this.hasCustomName()) {
-                stack.setDisplayName(this.getCustomName());
+                stack.setHoverName(this.getCustomName());
             }
             if (!this.enchantments.isEmpty()) {
-                stack.setTagInfo(TAG_ENCHANTMENTS, enchantments);
+                stack.addTagElement(TAG_ENCHANTMENTS, enchantments);
             }
-            this.entityDropItem(stack);
+            this.spawnAtLocation(stack);
         }
     }
 
     @Override
-    public IPacket<?> createSpawnPacket() {
+    public IPacket<?> getAddEntityPacket() {
 
         return NetworkHooks.getEntitySpawningPacket(this);
     }

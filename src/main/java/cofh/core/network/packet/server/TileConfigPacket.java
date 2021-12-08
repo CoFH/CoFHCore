@@ -27,11 +27,11 @@ public class TileConfigPacket extends PacketBase implements IPacketServer {
     @Override
     public void handleServer(ServerPlayerEntity player) {
 
-        World world = player.world;
-        if (!world.isBlockPresent(pos)) {
+        World world = player.level;
+        if (!world.isLoaded(pos)) {
             return;
         }
-        TileEntity tile = world.getTileEntity(pos);
+        TileEntity tile = world.getBlockEntity(pos);
         if (tile instanceof ITilePacketHandler) {
             ((ITilePacketHandler) tile).handleConfigPacket(buffer);
         }

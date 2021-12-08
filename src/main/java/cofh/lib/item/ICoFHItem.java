@@ -5,6 +5,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -37,6 +38,11 @@ public interface ICoFHItem extends IForgeItem {
                 return getPropertyWithDefault(stack, TAG_AUGMENT_RF_CREATIVE, 0.0F) > 0;
         }
         return false;
+    }
+
+    default boolean canPlayerAccess(ItemStack stack, PlayerEntity player) {
+
+        return SecurityHelper.getAccess(stack).matches(SecurityHelper.getOwner(stack), player);
     }
 
     @Override
@@ -73,7 +79,7 @@ public interface ICoFHItem extends IForgeItem {
 
     default void addIncrementModeChangeTooltip(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 
-        tooltip.add(new TranslationTextComponent("info.cofh.mode_change", getKeynameFromKeycode(MULTIMODE_INCREMENT.getKey().getKeyCode())).mergeStyle(YELLOW));
+        tooltip.add(new TranslationTextComponent("info.cofh.mode_change", getKeynameFromKeycode(MULTIMODE_INCREMENT.getKey().getValue())).withStyle(YELLOW));
     }
 
     default boolean isActive(ItemStack stack) {
@@ -93,7 +99,7 @@ public interface ICoFHItem extends IForgeItem {
 
     default void setActive(ItemStack stack, LivingEntity entity) {
 
-        stack.getOrCreateTag().putLong(TAG_ACTIVE, entity.world.getGameTime() + 20);
+        stack.getOrCreateTag().putLong(TAG_ACTIVE, entity.level.getGameTime() + 20);
     }
 
 }

@@ -23,7 +23,7 @@ public class PlayerMotionPacket extends PacketBase implements IPacketClient {
     @Override
     public void handleClient() {
 
-        ProxyUtils.getClientPlayer().setMotion(ProxyUtils.getClientPlayer().getMotion().add(motionX, motionY, motionZ));
+        ProxyUtils.getClientPlayer().setDeltaMovement(ProxyUtils.getClientPlayer().getDeltaMovement().add(motionX, motionY, motionZ));
     }
 
     @Override

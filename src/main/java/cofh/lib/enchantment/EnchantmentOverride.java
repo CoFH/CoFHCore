@@ -36,13 +36,13 @@ public abstract class EnchantmentOverride extends EnchantmentCoFH {
     }
 
     @Override
-    public boolean canGenerateInLoot() {
+    public boolean isDiscoverable() {
 
         return allowGenerateInLoot;
     }
 
     @Override
-    public boolean canVillagerTrade() {
+    public boolean isTradeable() {
 
         return allowVillagerTrade;
     }

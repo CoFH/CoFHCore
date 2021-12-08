@@ -19,15 +19,15 @@ public class SubCommandFriend {
     static ArgumentBuilder<CommandSource, ?> register() {
 
         return Commands.literal("friend")
-                .requires(source -> source.hasPermissionLevel(permissionLevel))
+                .requires(source -> source.hasPermission(permissionLevel))
                 .then(Commands.literal("add")
                         .then(Commands.argument(CMD_PLAYERS, GameProfileArgument.gameProfile())
-                                .executes((context) -> addFriends(context.getSource().asPlayer(), GameProfileArgument.getGameProfiles(context, CMD_PLAYERS)))))
+                                .executes((context) -> addFriends(context.getSource().getPlayerOrException(), GameProfileArgument.getGameProfiles(context, CMD_PLAYERS)))))
                 .then(Commands.literal("remove")
                         .then(Commands.argument(CMD_PLAYERS, GameProfileArgument.gameProfile())
-                                .executes((context) -> removeFriends(context.getSource().asPlayer(), GameProfileArgument.getGameProfiles(context, CMD_PLAYERS)))))
+                                .executes((context) -> removeFriends(context.getSource().getPlayerOrException(), GameProfileArgument.getGameProfiles(context, CMD_PLAYERS)))))
                 .then(Commands.literal("clear")
-                        .executes((context) -> clearFriends(context.getSource().asPlayer())));
+                        .executes((context) -> clearFriends(context.getSource().getPlayerOrException())));
     }
 
     private static int addFriends(ServerPlayerEntity user, Collection<GameProfile> players) {

@@ -28,7 +28,7 @@ public class AugmentDataHelper {
     @Nullable
     public static CompoundNBT getAugmentData(ItemStack augment) {
 
-        CompoundNBT augmentData = augment.getChildTag(TAG_AUGMENT_DATA);
+        CompoundNBT augmentData = augment.getTagElement(TAG_AUGMENT_DATA);
         if (augmentData == null && isAugmentItem(augment)) {
             return ((IAugmentItem) augment.getItem()).getAugmentData(augment);
         }

@@ -22,8 +22,8 @@ public class ContainerPacket extends PacketBase implements IPacketServer {
     @Override
     public void handleServer(ServerPlayerEntity player) {
 
-        if (player.openContainer instanceof ContainerCoFH) {
-            ((ContainerCoFH) player.openContainer).handleContainerPacket(buffer);
+        if (player.containerMenu instanceof ContainerCoFH) {
+            ((ContainerCoFH) player.containerMenu).handleContainerPacket(buffer);
         }
     }
 

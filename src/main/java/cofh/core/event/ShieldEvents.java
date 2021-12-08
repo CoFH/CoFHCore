@@ -34,30 +34,30 @@ public class ShieldEvents {
         if (!canBlockDamageSource(entity, source)) {
             return;
         }
-        if (source instanceof EntityDamageSource && ((EntityDamageSource) source).getIsThornsDamage()) {
+        if (source instanceof EntityDamageSource && ((EntityDamageSource) source).isThorns()) {
             return;
         }
-        ItemStack shield = entity.getActiveItemStack();
-        shield.getCapability(SHIELD_ITEM_CAPABILITY).ifPresent(cap -> cap.onBlock(entity, source));
+        ItemStack shield = entity.getUseItem();
+        shield.getCapability(SHIELD_ITEM_CAPABILITY).ifPresent(cap -> cap.onBlock(entity, source, event.getAmount()));
     }
 
     // region HELPERS
     private static boolean canBlockDamageSource(LivingEntity living, DamageSource source) {
 
-        Entity entity = source.getImmediateSource();
+        Entity entity = source.getDirectEntity();
         if (entity instanceof AbstractArrowEntity) {
             AbstractArrowEntity arrow = (AbstractArrowEntity) entity;
             if (arrow.getPierceLevel() > 0) {
                 return false;
             }
         }
-        if (!source.isUnblockable() && living.isActiveItemStackBlocking()) {
-            Vector3d vec3d2 = source.getDamageLocation();
+        if (!source.isBypassArmor() && living.isBlocking()) {
+            Vector3d vec3d2 = source.getSourcePosition();
             if (vec3d2 != null) {
-                Vector3d vec3d = living.getLook(1.0F);
-                Vector3d vec3d1 = vec3d2.subtractReverse(new Vector3d(living.getPosX(), living.getPosY(), living.getPosZ())).normalize();
+                Vector3d vec3d = living.getViewVector(1.0F);
+                Vector3d vec3d1 = vec3d2.vectorTo(new Vector3d(living.getX(), living.getY(), living.getZ())).normalize();
                 vec3d1 = new Vector3d(vec3d1.x, 0.0D, vec3d1.z);
-                return vec3d1.dotProduct(vec3d) < 0.0D;
+                return vec3d1.dot(vec3d) < 0.0D;
             }
         }
         return false;

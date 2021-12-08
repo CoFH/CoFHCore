@@ -25,8 +25,8 @@ public interface IDismantleable extends IForgeBlock {
     default void dismantleBlock(World world, BlockPos pos, BlockState state, RayTraceResult target, PlayerEntity player, boolean returnDrops) {
 
         ItemStack dropBlock = this.getPickBlock(state, target, world, pos, player);
-        world.setBlockState(pos, Blocks.AIR.getDefaultState());
-        if (!returnDrops || player == null || !player.addItemStackToInventory(dropBlock)) {
+        world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+        if (!returnDrops || player == null || !player.addItem(dropBlock)) {
             Utils.dropDismantleStackIntoWorld(dropBlock, world, pos);
         }
     }
@@ -36,7 +36,7 @@ public interface IDismantleable extends IForgeBlock {
      */
     default boolean canDismantle(World world, BlockPos pos, BlockState state, PlayerEntity player) {
 
-        TileEntity tile = world.getTileEntity(pos);
+        TileEntity tile = world.getBlockEntity(pos);
         if (tile instanceof ITileCallback) {
             return ((ITileCallback) tile).canPlayerChange(player);
         }

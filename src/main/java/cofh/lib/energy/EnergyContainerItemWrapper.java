@@ -1,11 +1,11 @@
 package cofh.lib.energy;
 
+import cofh.lib.capability.IRedstoneFluxStorage;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 
 import javax.annotation.Nonnull;
@@ -16,17 +16,19 @@ import javax.annotation.Nullable;
  *
  * @author King Lemming
  */
-public class EnergyContainerItemWrapper implements IEnergyStorage, ICapabilityProvider {
+public class EnergyContainerItemWrapper implements IRedstoneFluxStorage, ICapabilityProvider {
 
+    private final Capability<? extends IEnergyStorage> capability;
     private final LazyOptional<IEnergyStorage> holder = LazyOptional.of(() -> this);
 
     protected final ItemStack container;
     protected final IEnergyContainerItem item;
 
-    public EnergyContainerItemWrapper(ItemStack containerIn, IEnergyContainerItem itemIn) {
+    public EnergyContainerItemWrapper(ItemStack containerIn, IEnergyContainerItem itemIn, Capability<? extends IEnergyStorage> capability) {
 
         this.container = containerIn;
         this.item = itemIn;
+        this.capability = capability;
     }
 
     // region IEnergyStorage
@@ -77,7 +79,10 @@ public class EnergyContainerItemWrapper implements IEnergyStorage, ICapabilityPr
     @Nonnull
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
 
-        return CapabilityEnergy.ENERGY.orEmpty(cap, holder);
+        if (cap == capability) {
+            return holder.cast();
+        }
+        return LazyOptional.empty();
     }
     // endregion
 }

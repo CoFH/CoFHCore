@@ -71,7 +71,7 @@ public interface ISecurable {
                     if (team == null) {
                         return false;
                     }
-                    return team.getMembershipCollection().contains(owner.getName());
+                    return team.getPlayers().contains(owner.getName());
                 default:
                     return true;
             }

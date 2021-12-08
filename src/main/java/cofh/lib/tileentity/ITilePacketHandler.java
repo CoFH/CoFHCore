@@ -54,4 +54,14 @@ public interface ITilePacketHandler {
 
     }
 
+    // RENDER
+    default PacketBuffer getRenderPacket(PacketBuffer buffer) {
+
+        return buffer;
+    }
+
+    default void handleRenderPacket(PacketBuffer buffer) {
+
+    }
+
 }

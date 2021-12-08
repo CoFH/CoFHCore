@@ -114,13 +114,13 @@ public class AugmentableHelper {
 
     public static float getPropertyWithDefault(ItemStack container, String key, float defaultValue) {
 
-        CompoundNBT subTag = container.getChildTag(TAG_PROPERTIES);
+        CompoundNBT subTag = container.getTagElement(TAG_PROPERTIES);
         return subTag == null ? defaultValue : getAttributeModWithDefault(subTag, key, defaultValue);
     }
 
     public static String getPropertyWithDefault(ItemStack container, String key, String defaultValue) {
 
-        CompoundNBT subTag = container.getChildTag(TAG_PROPERTIES);
+        CompoundNBT subTag = container.getTagElement(TAG_PROPERTIES);
         return subTag == null ? defaultValue : getAttributeModWithDefault(subTag, key, defaultValue);
     }
 
@@ -129,7 +129,7 @@ public class AugmentableHelper {
     // region INTERNAL HELPERS
     private static void writeAugmentsToItem(ItemStack stack, ListNBT list) {
 
-        CompoundNBT nbt = stack.getChildTag(TAG_BLOCK_ENTITY);
+        CompoundNBT nbt = stack.getTagElement(TAG_BLOCK_ENTITY);
         if (nbt != null) {
             nbt.put(TAG_AUGMENTS, list);
             return;
@@ -137,17 +137,17 @@ public class AugmentableHelper {
         if (stack.getItem() instanceof BlockItem) {
             nbt = new CompoundNBT();
             nbt.put(TAG_AUGMENTS, list);
-            stack.setTagInfo(TAG_BLOCK_ENTITY, nbt);
+            stack.addTagElement(TAG_BLOCK_ENTITY, nbt);
             return;
         }
-        stack.setTagInfo(TAG_AUGMENTS, list);
+        stack.addTagElement(TAG_AUGMENTS, list);
     }
 
     private static List<ItemStack> getAugments(ListNBT list) {
 
         ArrayList<ItemStack> ret = new ArrayList<>();
         for (int i = 0; i < list.size(); ++i) {
-            ret.add(ItemStack.read(list.getCompound(i)));
+            ret.add(ItemStack.of(list.getCompound(i)));
         }
         return ret.isEmpty() ? Collections.emptyList() : ret;
     }
@@ -157,7 +157,7 @@ public class AugmentableHelper {
         if (stack.getTag() == null) {
             return new ListNBT();
         }
-        CompoundNBT nbt = stack.getChildTag(TAG_BLOCK_ENTITY);
+        CompoundNBT nbt = stack.getTagElement(TAG_BLOCK_ENTITY);
         if (nbt != null) {
             return nbt.contains(TAG_AUGMENTS) ? nbt.getList(TAG_AUGMENTS, TAG_COMPOUND) : new ListNBT();
         }
@@ -170,7 +170,7 @@ public class AugmentableHelper {
         for (ItemStack augment : augments) {
             // Empty slots are intentionally written.
             //if (!augment.isEmpty()) {
-            list.add(augment.write(new CompoundNBT()));
+            list.add(augment.save(new CompoundNBT()));
             //}
         }
         return list;

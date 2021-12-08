@@ -22,7 +22,7 @@ public class CoreTextures {
     @SubscribeEvent
     public static void preStitch(TextureStitchEvent.Pre event) {
 
-        if (!event.getMap().getTextureLocation().toString().equals(BLOCK_ATLAS)) {
+        if (!event.getMap().location().toString().equals(BLOCK_ATLAS)) {
             return;
         }
         event.addSprite(new ResourceLocation(ICONS_ + "icon_access_public"));
@@ -65,7 +65,7 @@ public class CoreTextures {
     @SubscribeEvent
     public static void postStitch(TextureStitchEvent.Post event) {
 
-        if (!event.getMap().getTextureLocation().toString().equals(BLOCK_ATLAS)) {
+        if (!event.getMap().location().toString().equals(BLOCK_ATLAS)) {
             return;
         }
         AtlasTexture map = event.getMap();

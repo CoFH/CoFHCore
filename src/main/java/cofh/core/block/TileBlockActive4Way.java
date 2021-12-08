@@ -23,9 +23,9 @@ public class TileBlockActive4Way extends TileBlockActive implements IWrenchable 
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
 
-        super.fillStateContainer(builder);
+        super.createBlockStateDefinition(builder);
         builder.add(FACING_HORIZONTAL);
     }
 
@@ -33,19 +33,19 @@ public class TileBlockActive4Way extends TileBlockActive implements IWrenchable 
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
 
-        return this.getDefaultState().with(FACING_HORIZONTAL, context.getPlayer() != null ? context.getPlayer().getAdjustedHorizontalFacing().getOpposite() : Direction.NORTH);
+        return this.defaultBlockState().setValue(FACING_HORIZONTAL, context.getPlayer() != null ? context.getPlayer().getMotionDirection().getOpposite() : Direction.NORTH);
     }
 
     @Override
     public BlockState rotate(BlockState state, Rotation rot) {
 
-        return state.with(FACING_HORIZONTAL, rot.rotate(state.get(FACING_HORIZONTAL)));
+        return state.setValue(FACING_HORIZONTAL, rot.rotate(state.getValue(FACING_HORIZONTAL)));
     }
 
     @Override
     public BlockState mirror(BlockState state, Mirror mirrorIn) {
 
-        return state.rotate(mirrorIn.toRotation(state.get(FACING_HORIZONTAL)));
+        return state.rotate(mirrorIn.getRotation(state.getValue(FACING_HORIZONTAL)));
     }
 
 }

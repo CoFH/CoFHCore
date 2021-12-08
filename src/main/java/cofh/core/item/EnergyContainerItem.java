@@ -17,13 +17,13 @@ import static cofh.lib.item.ContainerType.ENERGY;
 import static cofh.lib.util.constants.Constants.RGB_DURABILITY_FLUX;
 import static cofh.lib.util.helpers.StringHelper.*;
 
-public class EnergyContainerItem extends ItemCoFH implements IEnergyContainerItem {
+public abstract class EnergyContainerItem extends ItemCoFH implements IEnergyContainerItem {
 
     protected int maxEnergy;
     protected int extract;
     protected int receive;
 
-    private EnergyContainerItem(Properties builder, int maxEnergy, int extract, int receive) {
+    protected EnergyContainerItem(Properties builder, int maxEnergy, int extract, int receive) {
 
         super(builder);
         this.maxEnergy = maxEnergy;
@@ -86,7 +86,7 @@ public class EnergyContainerItem extends ItemCoFH implements IEnergyContainerIte
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
 
-        return new EnergyContainerItemWrapper(stack, this);
+        return new EnergyContainerItemWrapper(stack, this, getEnergyCapability());
     }
 
     // region IEnergyContainerItem

@@ -15,13 +15,13 @@ public class SlotLocked extends SlotCoFH {
     }
 
     @Override
-    public boolean canTakeStack(PlayerEntity player) {
+    public boolean mayPickup(PlayerEntity player) {
 
         return false;
     }
 
     @Override
-    public boolean isItemValid(ItemStack stack) {
+    public boolean mayPlace(ItemStack stack) {
 
         return false;
     }

@@ -13,12 +13,12 @@ public class ChilledEffect extends EffectCoFH {
         super(typeIn, liquidColorIn);
     }
 
-    public double getAttributeModifierAmount(int amplifier, AttributeModifier modifier) {
+    public double getAttributeModifierValue(int amplifier, AttributeModifier modifier) {
 
-        if (modifier.getID() == UUID_EFFECT_CHILLED_MOVEMENT_SPEED) {
-            return Math.max(-0.90D, super.getAttributeModifierAmount(amplifier, modifier));
+        if (modifier.getId() == UUID_EFFECT_CHILLED_MOVEMENT_SPEED) {
+            return Math.max(-0.90D, super.getAttributeModifierValue(amplifier, modifier));
         }
-        return super.getAttributeModifierAmount(amplifier, modifier);
+        return super.getAttributeModifierValue(amplifier, modifier);
     }
 
 }

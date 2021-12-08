@@ -27,9 +27,9 @@ public class HardenedGlassBlock extends GlassBlock implements IDismantleable {
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 
-        if (Utils.isWrench(player.getHeldItem(handIn).getItem())) {
+        if (Utils.isWrench(player.getItemInHand(handIn).getItem())) {
             if (player.isSecondaryUseActive()) {
                 if (canDismantle(worldIn, pos, state, player)) {
                     dismantleBlock(worldIn, pos, state, hit, player, false);
