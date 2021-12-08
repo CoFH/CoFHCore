@@ -4,6 +4,8 @@ import cofh.lib.item.IContainerItem;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.energy.IEnergyStorage;
 
 import static cofh.lib.item.ContainerType.ENERGY;
 import static cofh.lib.util.constants.NBTTags.TAG_ENERGY;
@@ -16,6 +18,8 @@ import static cofh.lib.util.constants.NBTTags.TAG_ENERGY;
  * @author King Lemming
  */
 public interface IEnergyContainerItem extends IContainerItem {
+
+    Capability<? extends IEnergyStorage> getEnergyCapability();
 
     default CompoundNBT getOrCreateEnergyTag(ItemStack container) {
 
