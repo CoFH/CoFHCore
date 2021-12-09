@@ -43,7 +43,6 @@ public class FluidIngredient implements Predicate<FluidStack> {
         if (this.fluidStacks == null) {
             this.fluidStacks = Arrays.stream(this.values).flatMap((ingredientList) -> ingredientList.getFluids().stream()).distinct().toArray(FluidStack[]::new);
         }
-
     }
 
     @Override
@@ -222,7 +221,7 @@ public class FluidIngredient implements Predicate<FluidStack> {
             List<FluidStack> list = Lists.newArrayList();
 
             for (Fluid fluid : this.tag.getValues()) {
-                list.add(new FluidStack(fluid, FluidAttributes.BUCKET_VOLUME));
+                list.add(new FluidStack(fluid, amount));
             }
             return list;
         }

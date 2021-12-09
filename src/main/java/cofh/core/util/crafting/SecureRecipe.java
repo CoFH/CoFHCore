@@ -1,5 +1,6 @@
 package cofh.core.util.crafting;
 
+import cofh.core.event.CoreCommonSetupEvents;
 import cofh.lib.util.control.ISecurable.AccessMode;
 import cofh.lib.util.helpers.SecurityHelper;
 import cofh.lib.util.references.ItemTagsCoFH;
@@ -24,6 +25,9 @@ public class SecureRecipe extends SpecialRecipe {
     @Override
     public boolean matches(CraftingInventory inv, World worldIn) {
 
+        if (!CoreCommonSetupEvents.getTagsInitialized()) {
+            return false;
+        }
         Ingredient ingredientSecure = Ingredient.of(ItemTagsCoFH.LOCKS);
         Ingredient ingredientSecurable = Ingredient.of(ItemTagsCoFH.SECURABLE);
 
