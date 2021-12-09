@@ -15,6 +15,7 @@ import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 
+import static cofh.lib.util.helpers.FilterHelper.hasFilter;
 import static cofh.lib.util.references.CoreReferences.HELD_ITEM_FILTER_CONTAINER;
 
 public class HeldItemFilterContainer extends ContainerCoFH implements IFilterOptions {
@@ -32,7 +33,7 @@ public class HeldItemFilterContainer extends ContainerCoFH implements IFilterOpt
 
         allowSwap = false;
 
-        filterStack = player.getMainHandItem();
+        filterStack = hasFilter(player.getMainHandItem()) ? player.getMainHandItem() : player.getOffhandItem();
         filterable = (IFilterableItem) filterStack.getItem();
         filter = (AbstractItemFilter) filterable.getFilter(filterStack);
 
