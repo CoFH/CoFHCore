@@ -22,3 +22,5 @@ b7e73768417943cffbbb1c99aa5cad85ba45b179 data/forge/tags/items/foods/meat/cooked
 a3ee15454b7dc86019512781728c13341cbec555 data/forge/tags/items/tools/diamond.json
 ed003ae99ca98a8dc465190cdfa941595be4f4dd data/forge/tags/items/tools/gold.json
 4f00c7a01265e01d5f525e918f97c8f0a911a6a8 data/forge/tags/items/tools/iron.json
+74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/thermal/tags/items/crafting/locks.json
+74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/thermal/tags/items/crafting/securable.json

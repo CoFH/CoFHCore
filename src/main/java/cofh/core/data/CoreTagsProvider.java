@@ -125,6 +125,9 @@ public class CoreTagsProvider {
                     Items.CHICKEN,
                     Items.MUTTON
             );
+
+            tag(ItemTagsCoFH.LOCKS);
+            tag(ItemTagsCoFH.SECURABLE);
         }
 
     }
