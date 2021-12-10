@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "minecraft:iron_axe",
+    "minecraft:iron_hoe",
     "minecraft:iron_pickaxe",
     "minecraft:iron_shovel",
     "minecraft:iron_sword",

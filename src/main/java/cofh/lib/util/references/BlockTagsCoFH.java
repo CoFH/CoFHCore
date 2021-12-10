@@ -10,9 +10,6 @@ import static cofh.lib.util.constants.Constants.ID_THERMAL;
 
 public class BlockTagsCoFH {
 
-    public static final IOptionalNamedTag<Block> HARDENED_GLASS = thermalTag("glass/hardened");
-    public static final IOptionalNamedTag<Block> ROCKWOOL = thermalTag("rockwool");
-
     public static final IOptionalNamedTag<Block> LOGS_RUBBERWOOD = forgeTag("rubberwood_logs");
 
     public static final IOptionalNamedTag<Block> ORES_APATITE = forgeTag("ores/apatite");
@@ -55,6 +52,9 @@ public class BlockTagsCoFH {
     public static final IOptionalNamedTag<Block> STORAGE_BLOCKS_TIN = forgeTag("storage_blocks/tin");
 
     public static final IOptionalNamedTag<Block> PUMPKINS_CARVED = forgeTag("pumpkins/carved");
+
+    public static final IOptionalNamedTag<Block> HARDENED_GLASS = thermalTag("glass/hardened");
+    public static final IOptionalNamedTag<Block> ROCKWOOL = thermalTag("rockwool");
 
     // region HELPERS
     private static IOptionalNamedTag<Block> thermalTag(String name) {

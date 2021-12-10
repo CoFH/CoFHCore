@@ -229,10 +229,30 @@ public class ItemTagsCoFH {
     public static final IOptionalNamedTag<Item> ARMOR_IRON = forgeTag("armor/iron");
     public static final IOptionalNamedTag<Item> ARMOR_GOLD = forgeTag("armor/gold");
     public static final IOptionalNamedTag<Item> ARMOR_DIAMOND = forgeTag("armor/diamond");
+    public static final IOptionalNamedTag<Item> ARMOR_NETHERITE = forgeTag("armor/netherite");
+    public static final IOptionalNamedTag<Item> ARMOR_COPPER = forgeTag("armor/copper");
+    public static final IOptionalNamedTag<Item> ARMOR_TIN = forgeTag("armor/tin");
+    public static final IOptionalNamedTag<Item> ARMOR_LEAD = forgeTag("armor/lead");
+    public static final IOptionalNamedTag<Item> ARMOR_SILVER = forgeTag("armor/silver");
+    public static final IOptionalNamedTag<Item> ARMOR_NICKEL = forgeTag("armor/nickel");
+    public static final IOptionalNamedTag<Item> ARMOR_BRONZE = forgeTag("armor/bronze");
+    public static final IOptionalNamedTag<Item> ARMOR_ELECTRUM = forgeTag("armor/electrum");
+    public static final IOptionalNamedTag<Item> ARMOR_INVAR = forgeTag("armor/invar");
+    public static final IOptionalNamedTag<Item> ARMOR_CONSTANTAN = forgeTag("armor/constantan");
 
     public static final IOptionalNamedTag<Item> TOOLS_IRON = forgeTag("tools/iron");
     public static final IOptionalNamedTag<Item> TOOLS_GOLD = forgeTag("tools/gold");
     public static final IOptionalNamedTag<Item> TOOLS_DIAMOND = forgeTag("tools/diamond");
+    public static final IOptionalNamedTag<Item> TOOLS_NETHERITE = forgeTag("tools/netherite");
+    public static final IOptionalNamedTag<Item> TOOLS_COPPER = forgeTag("tools/copper");
+    public static final IOptionalNamedTag<Item> TOOLS_TIN = forgeTag("tools/tin");
+    public static final IOptionalNamedTag<Item> TOOLS_LEAD = forgeTag("tools/lead");
+    public static final IOptionalNamedTag<Item> TOOLS_SILVER = forgeTag("tools/silver");
+    public static final IOptionalNamedTag<Item> TOOLS_NICKEL = forgeTag("tools/nickel");
+    public static final IOptionalNamedTag<Item> TOOLS_BRONZE = forgeTag("tools/bronze");
+    public static final IOptionalNamedTag<Item> TOOLS_ELECTRUM = forgeTag("tools/electrum");
+    public static final IOptionalNamedTag<Item> TOOLS_INVAR = forgeTag("tools/invar");
+    public static final IOptionalNamedTag<Item> TOOLS_CONSTANTAN = forgeTag("tools/constantan");
 
     public static final IOptionalNamedTag<Item> TOOLS_WRENCH = forgeTag("tools/wrench");
 
