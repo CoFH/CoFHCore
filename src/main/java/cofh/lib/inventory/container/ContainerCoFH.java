@@ -169,7 +169,7 @@ public abstract class ContainerCoFH extends Container {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
+    @OnlyIn (Dist.CLIENT)
     public void setAll(List<ItemStack> stacks) {
 
         syncing = true;

@@ -91,7 +91,7 @@ public class BlockItemCoFH extends BlockItem implements ICoFHItem {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
+    @OnlyIn (Dist.CLIENT)
     public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 
         List<ITextComponent> additionalTooltips = new ArrayList<>();

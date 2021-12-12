@@ -42,7 +42,7 @@ public class PacketHandler {
         channel.registerObject(new ServerHandler());
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings ("unchecked")
     public <T extends IPacket> void registerPacket(int id, Supplier<? super T> constructor) {
 
         if (id <= 0 || id >= 255) {

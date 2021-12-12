@@ -31,14 +31,14 @@ import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
 import static cofh.lib.util.helpers.AreaEffectHelper.validAreaEffectItem;
 import static cofh.lib.util.helpers.AreaEffectHelper.validAreaEffectMiningItem;
 
-@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = ID_COFH_CORE)
+@Mod.EventBusSubscriber (value = Dist.CLIENT, modid = ID_COFH_CORE)
 public class AreaEffectClientEvents {
 
     private AreaEffectClientEvents() {
 
     }
 
-    @SubscribeEvent(priority = EventPriority.LOW)
+    @SubscribeEvent (priority = EventPriority.LOW)
     public static void renderBlockHighlights(DrawHighlightEvent.HighlightBlock event) {
 
         if (event.isCanceled()) {

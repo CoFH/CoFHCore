@@ -30,7 +30,7 @@ import static net.minecraft.util.text.TextFormatting.DARK_GRAY;
 import static net.minecraft.util.text.TextFormatting.GRAY;
 import static net.minecraftforge.common.util.Constants.NBT.TAG_COMPOUND;
 
-@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = ID_COFH_CORE)
+@Mod.EventBusSubscriber (value = Dist.CLIENT, modid = ID_COFH_CORE)
 public class CoreClientEvents {
 
     public static int renderTime;

@@ -16,7 +16,7 @@ public class CapabilityEnchantableItem {
 
     private static boolean registered = false;
 
-    @CapabilityInject(IEnchantableItem.class)
+    @CapabilityInject (IEnchantableItem.class)
     public static Capability<IEnchantableItem> ENCHANTABLE_ITEM_CAPABILITY = null;
 
     public static void register() {

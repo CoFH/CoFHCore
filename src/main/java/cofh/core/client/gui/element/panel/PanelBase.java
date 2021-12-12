@@ -252,7 +252,7 @@ public abstract class PanelBase extends ElementBase {
         return new Rectangle2d(posX() + guiLeft(), posY() + guiTop(), visible() ? width : 0, visible() ? height : 0);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings ("unchecked")
     protected <T> T addElement(ElementBase element) {
 
         elements.add(element.setVisible(() -> fullyOpen).setOffsets(this::posX, () -> this.posY()));

@@ -66,7 +66,7 @@ public class ArmorMaterialCoFH implements IArmorMaterial {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
+    @OnlyIn (Dist.CLIENT)
     public String getName() {
 
         return this.name;

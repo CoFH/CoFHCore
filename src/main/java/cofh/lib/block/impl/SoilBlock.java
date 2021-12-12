@@ -107,7 +107,7 @@ public class SoilBlock extends Block {
         return true;
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @OnlyIn (Dist.CLIENT)
     public boolean isViewBlocking(BlockState state, IBlockReader worldIn, BlockPos pos) {
 
         return true;

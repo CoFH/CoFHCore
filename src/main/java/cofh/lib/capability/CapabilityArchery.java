@@ -17,10 +17,10 @@ public class CapabilityArchery {
 
     private static boolean registered = false;
 
-    @CapabilityInject(IArcheryBowItem.class)
+    @CapabilityInject (IArcheryBowItem.class)
     public static Capability<IArcheryBowItem> BOW_ITEM_CAPABILITY = null;
 
-    @CapabilityInject(IArcheryAmmoItem.class)
+    @CapabilityInject (IArcheryAmmoItem.class)
     public static Capability<IArcheryAmmoItem> AMMO_ITEM_CAPABILITY = null;
 
     public static void register() {

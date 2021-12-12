@@ -32,7 +32,7 @@ public class GunpowderBlock extends FallingBlock {
         super(properties);
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @OnlyIn (Dist.CLIENT)
     @Override
     public int getDustColor(BlockState state, IBlockReader reader, BlockPos pos) {
 

@@ -23,7 +23,7 @@ public interface IPacketServer extends IPacket {
     /**
      * Send this packet to the server.
      */
-    @OnlyIn(Dist.CLIENT)
+    @OnlyIn (Dist.CLIENT)
     default void sendToServer() {
 
         Minecraft.getInstance().getConnection().send(toVanillaPacket(NetworkDirection.PLAY_TO_SERVER));

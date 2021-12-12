@@ -17,7 +17,7 @@ import java.util.List;
 
 import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
 
-@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = ID_COFH_CORE, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber (value = Dist.CLIENT, modid = ID_COFH_CORE, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CoreClientSetupEvents {
 
     private static final List<Item> COLORABLE_ITEMS = new ArrayList<>();

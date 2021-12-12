@@ -33,7 +33,7 @@ import static cofh.lib.util.helpers.AreaEffectHelper.validAreaEffectMiningItem;
 import static cofh.lib.util.references.EnsorcReferences.WEEDING;
 import static net.minecraft.item.HoeItem.TILLABLES;
 
-@Mod.EventBusSubscriber(modid = ID_COFH_CORE)
+@Mod.EventBusSubscriber (modid = ID_COFH_CORE)
 public class AreaEffectEvents {
 
     private static final Set<PlayerEntity> HARVESTING_PLAYERS = new ObjectOpenHashSet<>();
@@ -43,7 +43,7 @@ public class AreaEffectEvents {
 
     }
 
-    @SubscribeEvent(priority = EventPriority.LOW)
+    @SubscribeEvent (priority = EventPriority.LOW)
     public static void handleBlockBreakEvent(BlockEvent.BreakEvent event) {
 
         PlayerEntity player = event.getPlayer();
@@ -69,7 +69,7 @@ public class AreaEffectEvents {
         }
     }
 
-    @SubscribeEvent(priority = EventPriority.NORMAL)
+    @SubscribeEvent (priority = EventPriority.NORMAL)
     public static void handleBreakSpeedEvent(PlayerEvent.BreakSpeed event) {
 
         if (event.isCanceled()) {
@@ -95,7 +95,7 @@ public class AreaEffectEvents {
         }
     }
 
-    @SubscribeEvent(priority = EventPriority.LOW)
+    @SubscribeEvent (priority = EventPriority.LOW)
     public static void handleUseHoeEvent(UseHoeEvent event) {
 
         if (event.isCanceled() || event.getResult() == Event.Result.ALLOW) {
@@ -150,7 +150,7 @@ public class AreaEffectEvents {
         event.setResult(Event.Result.ALLOW);
     }
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    @SubscribeEvent (priority = EventPriority.LOWEST)
     public static void handleTickEndEvent(TickEvent.ServerTickEvent event) {
 
         if (event.phase == TickEvent.Phase.END) {

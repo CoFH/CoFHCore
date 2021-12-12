@@ -26,14 +26,14 @@ import static cofh.lib.util.references.CoreReferences.SHOCKED;
 import static net.minecraft.potion.Effects.POISON;
 import static net.minecraft.potion.Effects.WITHER;
 
-@Mod.EventBusSubscriber(modid = ID_COFH_CORE)
+@Mod.EventBusSubscriber (modid = ID_COFH_CORE)
 public class ArmorEvents {
 
     private ArmorEvents() {
 
     }
 
-    @SubscribeEvent(priority = EventPriority.HIGH)
+    @SubscribeEvent (priority = EventPriority.HIGH)
     public static void handleLivingAttackEvent(LivingAttackEvent event) {
 
         if (event.isCanceled()) {
@@ -64,7 +64,7 @@ public class ArmorEvents {
         }
     }
 
-    @SubscribeEvent(priority = EventPriority.HIGH)
+    @SubscribeEvent (priority = EventPriority.HIGH)
     public static void handleLivingFallEvent(LivingFallEvent event) {
 
         if (event.isCanceled()) {
@@ -78,7 +78,7 @@ public class ArmorEvents {
         }
     }
 
-    @SubscribeEvent(priority = EventPriority.HIGH)
+    @SubscribeEvent (priority = EventPriority.HIGH)
     public static void handlePotionApplicableEvent(PotionEvent.PotionApplicableEvent event) {
 
         if (event.isCanceled()) {

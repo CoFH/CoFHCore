@@ -16,14 +16,14 @@ import net.minecraftforge.fml.common.Mod;
 import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
 import static cofh.lib.util.references.CoreReferences.*;
 
-@Mod.EventBusSubscriber(modid = ID_COFH_CORE)
+@Mod.EventBusSubscriber (modid = ID_COFH_CORE)
 public class EffectEvents {
 
     private EffectEvents() {
 
     }
 
-    @SubscribeEvent(priority = EventPriority.HIGH)
+    @SubscribeEvent (priority = EventPriority.HIGH)
     public static void handleEnderTeleportEvent(EnderTeleportEvent event) {
 
         if (event.isCanceled()) {
@@ -35,7 +35,7 @@ public class EffectEvents {
         }
     }
 
-    @SubscribeEvent(priority = EventPriority.HIGH)
+    @SubscribeEvent (priority = EventPriority.HIGH)
     public static void handleEntityStruckByLightningEvent(EntityStruckByLightningEvent event) {
 
         if (event.isCanceled()) {
@@ -47,7 +47,7 @@ public class EffectEvents {
         }
     }
 
-    @SubscribeEvent(priority = EventPriority.HIGH)
+    @SubscribeEvent (priority = EventPriority.HIGH)
     public static void handleLivingAttackEvent(LivingAttackEvent event) {
 
         if (event.isCanceled()) {
@@ -67,7 +67,7 @@ public class EffectEvents {
         }
     }
 
-    @SubscribeEvent(priority = EventPriority.HIGH)
+    @SubscribeEvent (priority = EventPriority.HIGH)
     public static void handleXpChangeEvent(PlayerXpEvent.XpChange event) {
 
         if (event.isCanceled() || event.getAmount() <= 0) {

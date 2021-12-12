@@ -14,7 +14,7 @@ import net.minecraftforge.registries.ObjectHolder;
 import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
 import static cofh.lib.util.references.CoreIDs.*;
 
-@ObjectHolder(ID_COFH_CORE)
+@ObjectHolder (ID_COFH_CORE)
 public class CoreReferences {
 
     private CoreReferences() {
@@ -22,19 +22,19 @@ public class CoreReferences {
     }
 
     // region BLOCKS
-    @ObjectHolder(ID_GLOSSED_MAGMA)
+    @ObjectHolder (ID_GLOSSED_MAGMA)
     public static final Block GLOSSED_MAGMA = null;
 
-    @ObjectHolder(ID_SIGNAL_AIR)
+    @ObjectHolder (ID_SIGNAL_AIR)
     public static final Block SIGNAL_AIR = null;
 
-    @ObjectHolder(ID_GLOW_AIR)
+    @ObjectHolder (ID_GLOW_AIR)
     public static final Block GLOW_AIR = null;
 
-    @ObjectHolder(ID_ENDER_AIR)
+    @ObjectHolder (ID_ENDER_AIR)
     public static final Block ENDER_AIR = null;
 
-    @ObjectHolder(ID_LIGHTNING_AIR)
+    @ObjectHolder (ID_LIGHTNING_AIR)
     public static final Block LIGHTNING_AIR = null;
     // endregion
 
@@ -45,95 +45,95 @@ public class CoreReferences {
     //    @ObjectHolder(ID_CONTAINER_TILE_FLUID_FILTER)
     //    public static final ContainerType<TileFluidFilterContainer> TILE_FLUID_FILTER_CONTAINER = null;
 
-    @ObjectHolder(ID_CONTAINER_HELD_ITEM_FILTER)
+    @ObjectHolder (ID_CONTAINER_HELD_ITEM_FILTER)
     public static final ContainerType<HeldItemFilterContainer> HELD_ITEM_FILTER_CONTAINER = null;
 
-    @ObjectHolder(ID_CONTAINER_TILE_ITEM_FILTER)
+    @ObjectHolder (ID_CONTAINER_TILE_ITEM_FILTER)
     public static final ContainerType<TileItemFilterContainer> TILE_ITEM_FILTER_CONTAINER = null;
     // endregion
 
     // region FLUIDS
-    @ObjectHolder(ID_FLUID_HONEY)
+    @ObjectHolder (ID_FLUID_HONEY)
     public static final FlowingFluid FLUID_HONEY = null;
 
-    @ObjectHolder(ID_FLUID_MILK)
+    @ObjectHolder (ID_FLUID_MILK)
     public static final FlowingFluid FLUID_MILK = null;
 
-    @ObjectHolder(ID_FLUID_POTION)
+    @ObjectHolder (ID_FLUID_POTION)
     public static final FlowingFluid FLUID_POTION = null;
 
-    @ObjectHolder(ID_FLUID_STEAM)
+    @ObjectHolder (ID_FLUID_STEAM)
     public static final FlowingFluid FLUID_STEAM = null;
 
-    @ObjectHolder(ID_FLUID_XP)
+    @ObjectHolder (ID_FLUID_XP)
     public static final FlowingFluid FLUID_XP = null;
     // endregion
 
     // region TILES
-    @ObjectHolder(ID_SIGNAL_AIR)
+    @ObjectHolder (ID_SIGNAL_AIR)
     public static final TileEntityType<?> SIGNAL_AIR_TILE = null;
 
-    @ObjectHolder(ID_GLOW_AIR)
+    @ObjectHolder (ID_GLOW_AIR)
     public static final TileEntityType<?> GLOW_AIR_TILE = null;
 
-    @ObjectHolder(ID_ENDER_AIR)
+    @ObjectHolder (ID_ENDER_AIR)
     public static final TileEntityType<?> ENDER_AIR_TILE = null;
 
-    @ObjectHolder(ID_LIGHTNING_AIR)
+    @ObjectHolder (ID_LIGHTNING_AIR)
     public static final TileEntityType<?> LIGHTNING_AIR_TILE = null;
     // endregion
 
     // region EFFECTS
-    @ObjectHolder(ID_EFFECT_EXPLOSION_RESISTANCE)
+    @ObjectHolder (ID_EFFECT_EXPLOSION_RESISTANCE)
     public static final Effect EXPLOSION_RESISTANCE = null;
 
-    @ObjectHolder(ID_EFFECT_LIGHTNING_RESISTANCE)
+    @ObjectHolder (ID_EFFECT_LIGHTNING_RESISTANCE)
     public static final Effect LIGHTNING_RESISTANCE = null;
 
-    @ObjectHolder(ID_EFFECT_MAGIC_RESISTANCE)
+    @ObjectHolder (ID_EFFECT_MAGIC_RESISTANCE)
     public static final Effect MAGIC_RESISTANCE = null;
 
-    @ObjectHolder(ID_EFFECT_AMPLIFICATION)
+    @ObjectHolder (ID_EFFECT_AMPLIFICATION)
     public static final Effect AMPLIFICATION = null;
 
-    @ObjectHolder(ID_EFFECT_CHILLED)
+    @ObjectHolder (ID_EFFECT_CHILLED)
     public static final Effect CHILLED = null;
 
-    @ObjectHolder(ID_EFFECT_CLARITY)
+    @ObjectHolder (ID_EFFECT_CLARITY)
     public static final Effect CLARITY = null;
 
-    @ObjectHolder(ID_EFFECT_ENDERFERENCE)
+    @ObjectHolder (ID_EFFECT_ENDERFERENCE)
     public static final Effect ENDERFERENCE = null;
 
-    @ObjectHolder(ID_EFFECT_LOVE)
+    @ObjectHolder (ID_EFFECT_LOVE)
     public static final Effect LOVE = null;
 
-    @ObjectHolder(ID_EFFECT_PANACEA)
+    @ObjectHolder (ID_EFFECT_PANACEA)
     public static final Effect PANACEA = null;
 
-    @ObjectHolder(ID_EFFECT_SHOCKED)
+    @ObjectHolder (ID_EFFECT_SHOCKED)
     public static final Effect SHOCKED = null;
 
-    @ObjectHolder(ID_EFFECT_SLIMED)
+    @ObjectHolder (ID_EFFECT_SLIMED)
     public static final Effect SLIMED = null;
 
-    @ObjectHolder(ID_EFFECT_SUNDERED)
+    @ObjectHolder (ID_EFFECT_SUNDERED)
     public static final Effect SUNDERED = null;
 
-    @ObjectHolder(ID_EFFECT_SUPERCHARGE)
+    @ObjectHolder (ID_EFFECT_SUPERCHARGE)
     public static final Effect SUPERCHARGE = null;
 
-    @ObjectHolder(ID_EFFECT_WRENCHED)
+    @ObjectHolder (ID_EFFECT_WRENCHED)
     public static final Effect WRENCHED = null;
     // endregion
 
     // region ENCHANTMENTS
-    @ObjectHolder(ID_HOLDING)
+    @ObjectHolder (ID_HOLDING)
     public static final Enchantment HOLDING = null;
     // endregion
 
     // region ITEMS
-    @ObjectHolder(ID_ECTOPLASM)
+    @ObjectHolder (ID_ECTOPLASM)
     public static final Item ECTOPLASM = null;
     // endregion
 

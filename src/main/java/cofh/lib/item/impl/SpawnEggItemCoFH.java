@@ -67,7 +67,7 @@ public class SpawnEggItemCoFH extends SpawnEggItem implements IColorableItem {
         super.fillItemCategory(group, items);
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @OnlyIn (Dist.CLIENT)
     public int getColor(ItemStack item, int colorIndex) {
 
         return colorIndex == 0 ? this.primaryColor : this.secondaryColor;

@@ -47,7 +47,7 @@ public class SignalAirBlock extends AirBlock {
         return tile instanceof SignalAirTile ? ((SignalAirTile) tile).getPower() : 0;
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @OnlyIn (Dist.CLIENT)
     @Override
     public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
 

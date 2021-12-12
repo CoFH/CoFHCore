@@ -21,7 +21,7 @@ import static cofh.lib.util.helpers.StringHelper.decompose;
  * @author King Lemming
  */
 
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings ({"rawtypes", "unchecked"})
 public class DeferredRegisterCoFH<T extends IForgeRegistryEntry<T>> {
 
     /**
@@ -247,7 +247,7 @@ public class DeferredRegisterCoFH<T extends IForgeRegistryEntry<T>> {
         }
         if (this.type != null && event.getGenericType() == this.type.getRegistrySuperType()) {
             // this.seenRegisterEvent = true;
-            @SuppressWarnings("unchecked")
+            @SuppressWarnings ("unchecked")
             IForgeRegistry<T> reg = (IForgeRegistry<T>) event.getRegistry();
             for (Map.Entry<RegistryObject<T>, Supplier<? extends T>> e : entries.entrySet()) {
                 reg.register(e.getValue().get());

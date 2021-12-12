@@ -59,7 +59,7 @@ public class SlotCoFH extends Slot {
         return container.canPlaceItem(slot, stack);
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @OnlyIn (Dist.CLIENT)
     @Override
     public boolean isActive() {
 

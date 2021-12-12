@@ -31,7 +31,7 @@ import static cofh.lib.util.references.CoreReferences.SLIMED;
 import static net.minecraft.enchantment.Enchantments.FALL_PROTECTION;
 import static net.minecraft.enchantment.Enchantments.MENDING;
 
-@Mod.EventBusSubscriber(modid = ID_COFH_CORE)
+@Mod.EventBusSubscriber (modid = ID_COFH_CORE)
 public class CoreCommonEvents {
 
     private CoreCommonEvents() {
@@ -73,7 +73,7 @@ public class CoreCommonEvents {
         }
     }
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    @SubscribeEvent (priority = EventPriority.LOWEST)
     public static void handleItemFishedEvent(ItemFishedEvent event) {
 
         if (event.isCanceled()) {
@@ -89,7 +89,7 @@ public class CoreCommonEvents {
         ((PlayerEntity) player).causeFoodExhaustion(CoreConfig.amountFishingExhaustion);
     }
 
-    @SubscribeEvent(priority = EventPriority.LOW)
+    @SubscribeEvent (priority = EventPriority.LOW)
     public static void handlePickupXpEvent(PlayerXpEvent.PickupXp event) {
 
         if (event.isCanceled()) {
@@ -121,7 +121,7 @@ public class CoreCommonEvents {
         event.setCanceled(true);
     }
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    @SubscribeEvent (priority = EventPriority.LOWEST)
     public static void handleSaplingGrowTreeEvent(SaplingGrowTreeEvent event) {
 
         if (event.isCanceled()) {

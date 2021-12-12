@@ -15,14 +15,14 @@ import net.minecraftforge.fml.common.Mod;
 import static cofh.lib.capability.CapabilityShieldItem.SHIELD_ITEM_CAPABILITY;
 import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
 
-@Mod.EventBusSubscriber(modid = ID_COFH_CORE)
+@Mod.EventBusSubscriber (modid = ID_COFH_CORE)
 public class ShieldEvents {
 
     private ShieldEvents() {
 
     }
 
-    @SubscribeEvent(priority = EventPriority.HIGH)
+    @SubscribeEvent (priority = EventPriority.HIGH)
     public static void handleLivingAttackEvent(LivingAttackEvent event) {
 
         if (event.isCanceled()) {

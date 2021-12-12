@@ -11,7 +11,7 @@ import javax.annotation.Nullable;
 
 public class CapabilityRedstoneFlux {
 
-    @CapabilityInject(IRedstoneFluxStorage.class)
+    @CapabilityInject (IRedstoneFluxStorage.class)
     public static Capability<IRedstoneFluxStorage> RF_ENERGY = null;
 
     public static void register() {

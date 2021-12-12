@@ -28,7 +28,7 @@ public class ModelUtils {
     public static final ModelProperty<byte[]> SIDES = new ModelProperty<>();
     public static final ModelProperty<ResourceLocation> UNDERLAY = new ModelProperty<>();
 
-    @OnlyIn(Dist.CLIENT)
+    @OnlyIn (Dist.CLIENT)
     public static class WrappedBakedModelBuilder {
 
         private final List<BakedQuad> builderGeneralQuads = new ArrayList<>();

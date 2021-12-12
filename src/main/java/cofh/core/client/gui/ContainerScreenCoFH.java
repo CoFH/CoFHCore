@@ -193,7 +193,7 @@ public class ContainerScreenCoFH<T extends Container> extends ContainerScreen<T>
         }
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings ("unchecked")
     protected <T> T addElement(ElementBase element) {
 
         elements.add(element);
@@ -205,7 +205,7 @@ public class ContainerScreenCoFH<T extends Container> extends ContainerScreen<T>
         elements.addAll(Arrays.asList(c));
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings ("unchecked")
     protected <T> T addPanel(PanelBase panel) {
 
         int yOffset = 4;

@@ -22,6 +22,7 @@ public class NullCapabilityStorage<T> implements Capability.IStorage<T> {
 
     @SuppressWarnings ("unchecked")
     public static <R> NullCapabilityStorage<R> instance() {
+
         return (NullCapabilityStorage<R>) INSTANCE;
     }
 

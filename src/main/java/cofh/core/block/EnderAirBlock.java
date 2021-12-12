@@ -44,7 +44,7 @@ public class EnderAirBlock extends AirBlock {
         return new EnderAirTile();
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @OnlyIn (Dist.CLIENT)
     @Override
     public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
 

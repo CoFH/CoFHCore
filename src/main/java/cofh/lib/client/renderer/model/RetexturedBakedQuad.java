@@ -15,7 +15,7 @@ import java.util.Arrays;
  * @author Mojang
  * Thanks tterrag!
  */
-@OnlyIn(Dist.CLIENT)
+@OnlyIn (Dist.CLIENT)
 public class RetexturedBakedQuad extends BakedQuad {
 
     private final TextureAtlasSprite texture;

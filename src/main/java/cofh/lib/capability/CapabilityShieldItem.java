@@ -16,7 +16,7 @@ public class CapabilityShieldItem {
 
     private static boolean registered = false;
 
-    @CapabilityInject(IShieldItem.class)
+    @CapabilityInject (IShieldItem.class)
     public static Capability<IShieldItem> SHIELD_ITEM_CAPABILITY = null;
 
     public static void register() {

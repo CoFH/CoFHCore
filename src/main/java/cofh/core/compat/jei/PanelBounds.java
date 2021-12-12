@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.Rectangle2d;
 
 import java.util.List;
 
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings ({"rawtypes", "unchecked"})
 public class PanelBounds implements IGuiContainerHandler<ContainerScreenCoFH<?>> {
 
     @Override

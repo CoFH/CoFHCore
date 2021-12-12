@@ -77,7 +77,7 @@ public class RayTracer {
         return player.getAttribute(ForgeMod.REACH_DISTANCE.get()).getValue();
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @OnlyIn (Dist.CLIENT)
     private static double getBlockReachDistanceClient() {
 
         return Minecraft.getInstance().gameMode.getPickRange();

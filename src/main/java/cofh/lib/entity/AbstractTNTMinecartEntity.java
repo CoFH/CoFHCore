@@ -116,7 +116,7 @@ public abstract class AbstractTNTMinecartEntity extends AbstractMinecartEntityCo
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
+    @OnlyIn (Dist.CLIENT)
     public void handleEntityEvent(byte id) {
 
         if (id == 10) {

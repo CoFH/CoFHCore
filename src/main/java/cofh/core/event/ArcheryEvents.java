@@ -28,14 +28,14 @@ import static cofh.lib.util.references.EnsorcReferences.QUICK_DRAW;
 import static cofh.lib.util.references.EnsorcReferences.VOLLEY;
 import static net.minecraft.enchantment.Enchantments.INFINITY_ARROWS;
 
-@Mod.EventBusSubscriber(modid = ID_COFH_CORE)
+@Mod.EventBusSubscriber (modid = ID_COFH_CORE)
 public class ArcheryEvents {
 
     private ArcheryEvents() {
 
     }
 
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    @SubscribeEvent (priority = EventPriority.HIGHEST)
     public static void handleArrowLooseEvent(ArrowLooseEvent event) {
 
         ItemStack bow = event.getBow();
@@ -46,7 +46,7 @@ public class ArcheryEvents {
         event.setCanceled(bow.getCapability(BOW_ITEM_CAPABILITY).orElse(new ArcheryBowItemWrapper(bow)).fireArrow(findAmmo(shooter, bow), shooter, event.getCharge(), event.getWorld()));
     }
 
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    @SubscribeEvent (priority = EventPriority.HIGHEST)
     public static void handleArrowNockEvent(ArrowNockEvent event) {
 
         ItemStack bow = event.getBow();
@@ -76,7 +76,7 @@ public class ArcheryEvents {
         }
     }
 
-    @SubscribeEvent(priority = EventPriority.HIGH)
+    @SubscribeEvent (priority = EventPriority.HIGH)
     public static void handleLivingHurtEvent(LivingHurtEvent event) {
 
         if (event.isCanceled()) {

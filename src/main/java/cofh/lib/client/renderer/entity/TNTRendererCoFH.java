@@ -15,7 +15,7 @@ import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-@OnlyIn(Dist.CLIENT)
+@OnlyIn (Dist.CLIENT)
 public class TNTRendererCoFH extends EntityRenderer<AbstractTNTEntity> {
 
     public TNTRendererCoFH(EntityRendererManager renderManagerIn) {

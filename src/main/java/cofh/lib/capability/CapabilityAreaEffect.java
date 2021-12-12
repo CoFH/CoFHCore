@@ -15,7 +15,7 @@ public class CapabilityAreaEffect {
 
     private static boolean registered = false;
 
-    @CapabilityInject(IAreaEffect.class)
+    @CapabilityInject (IAreaEffect.class)
     public static Capability<IAreaEffect> AREA_EFFECT_ITEM_CAPABILITY = null;
 
     public static void register() {

@@ -48,7 +48,7 @@ import static cofh.lib.util.constants.Constants.*;
 import static cofh.lib.util.references.CoreReferences.HELD_ITEM_FILTER_CONTAINER;
 import static cofh.lib.util.references.CoreReferences.TILE_ITEM_FILTER_CONTAINER;
 
-@Mod(ID_COFH_CORE)
+@Mod (ID_COFH_CORE)
 public class CoFHCore {
 
     public static final PacketHandler PACKET_HANDLER = new PacketHandler(new ResourceLocation(ID_COFH_CORE, "general"));
