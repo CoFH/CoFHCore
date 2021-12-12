@@ -235,6 +235,14 @@ public class FluidHelper {
         return Optional.empty();
     }
 
+    public static int getCapacityForItem(@Nonnull ItemStack container) {
+
+        if (!container.isEmpty()) {
+            return getFluidHandlerCap(container).map(c -> c.getTankCapacity(0)).orElse(0);
+        }
+        return 0;
+    }
+
     /**
      * Attempts to drain the item to an IFluidHandler. These are special-cased.
      *
@@ -368,6 +376,20 @@ public class FluidHelper {
         if (fillBottleFromHandler(stack, handler, player, hand)) {
             player.level.playSound(null, player.getX(), player.getY() + 0.5, player.getZ(), SoundEvents.BOTTLE_FILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
             return true;
+        }
+        if (stack.getCount() == 1) {
+            FluidStack containedFluid = getFluidContainedInItem(stack).orElse(FluidStack.EMPTY);
+            int tankSpace = getCapacityForItem(stack) - containedFluid.getAmount();
+            if (!containedFluid.isEmpty() && tankSpace > 0) {
+                stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).ifPresent(e -> {
+                    if (player.abilities.instabuild) {
+                        handler.drain(new FluidStack(containedFluid, tankSpace), EXECUTE);
+                    } else {
+                        FluidUtil.tryFluidTransfer(e, handler, new FluidStack(containedFluid, tankSpace), true);
+                    }
+                });
+                return true;
+            }
         }
         IItemHandler playerInv = new InvWrapper(player.inventory);
         FluidActionResult result = FluidUtil.tryFillContainerAndStow(stack, handler, playerInv, Integer.MAX_VALUE, player, true);

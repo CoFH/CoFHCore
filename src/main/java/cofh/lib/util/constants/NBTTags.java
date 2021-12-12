@@ -132,6 +132,7 @@ public class NBTTags {
 
     public static final String TAG_AUGMENT_FEATURE_CYCLE_PROCESS = "CycProc";
     public static final String TAG_AUGMENT_FEATURE_RS_CONTROL = "RSCtl";
+    public static final String TAG_AUGMENT_FEATURE_SECONDARY_NULL = "SecNull";
     public static final String TAG_AUGMENT_FEATURE_SIDE_CONFIG = "SideCfg";
     public static final String TAG_AUGMENT_FEATURE_XP_STORAGE = "XpStr";
 

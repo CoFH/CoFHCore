@@ -61,7 +61,7 @@ public class ArcheryEvents {
         }
         if (!ammo.isEmpty()) {
             shooter.startUsingItem(event.getHand());
-            event.setAction(ActionResult.success(bow));
+            event.setAction(ActionResult.consume(bow));
         } else if (!shooter.abilities.instabuild) {
             event.setAction(ActionResult.fail(bow));
         }
