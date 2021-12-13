@@ -201,12 +201,14 @@ public class Constants {
 
     public static final String DAMAGE_ARROW = "arrow";
     public static final String DAMAGE_PLAYER = "player";
+    public static final String CROSSBOW_AMMO = "ammo";
 
     public static final UUID EMPTY_UUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
 
     public static final UUID UUID_ARMOR_TOUGHNESS = UUID.fromString("D1ADBCE5-95CE-470C-BF99-6C59843084A2");
     public static final UUID UUID_TOOL_KNOCKBACK = UUID.fromString("D5A16EFA-3B80-11EC-8D3D-0242AC130003");
     public static final UUID UUID_TOOL_REACH = UUID.fromString("DAE66BD6-BAAE-4702-9F9F-9327C3BB6581");
+    public static final UUID UUID_DUAL_WIELD_ATTACK_SPEED = UUID.fromString("173E4578-9E79-4197-AF3A-A00AB3C5D545");
 
     public static final UUID UUID_EFFECT_CHILLED_MOVEMENT_SPEED = UUID.fromString("D99513AE-6F0E-4987-82DE-80DCBAF058BC");
     public static final UUID UUID_EFFECT_CHILLED_ATTACK_SPEED = UUID.fromString("DF93E7E2-5056-49FA-B425-0D8C46902105");
