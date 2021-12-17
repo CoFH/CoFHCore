@@ -248,7 +248,7 @@ public class AreaEffectHelper {
     }
     // endregion
 
-    //region PLACING
+    // region PLACING
     public static ImmutableList<BlockPos> getPlaceableBlocksRadius(ItemStack stack, BlockPos pos, PlayerEntity player, int radius) {
 
         List<BlockPos> area;
@@ -286,7 +286,7 @@ public class AreaEffectHelper {
         }
         return ImmutableList.copyOf(area);
     }
-    //endregion
+    // endregion
 
     // region HOE
     public static ImmutableList<BlockPos> getTillableBlocksRadius(ItemStack stack, BlockPos pos, PlayerEntity player, int radius) {
