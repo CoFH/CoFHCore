@@ -200,6 +200,7 @@ public class FluidIngredient implements Predicate<FluidStack> {
 
             JsonObject jsonobject = new JsonObject();
             jsonobject.addProperty("fluid", ForgeRegistries.FLUIDS.getKey(this.fluid.getFluid()).toString());
+            jsonobject.addProperty("amount", this.fluid.getAmount());
             return jsonobject;
         }
 
@@ -229,7 +230,8 @@ public class FluidIngredient implements Predicate<FluidStack> {
         public JsonObject serialize() {
 
             JsonObject jsonobject = new JsonObject();
-            jsonobject.addProperty("tag", TagCollectionManager.getInstance().getFluids().getIdOrThrow(this.tag).toString());
+            jsonobject.addProperty("fluid_tag", TagCollectionManager.getInstance().getFluids().getIdOrThrow(this.tag).toString());
+            jsonobject.addProperty("amount", this.amount);
             return jsonobject;
         }
 
