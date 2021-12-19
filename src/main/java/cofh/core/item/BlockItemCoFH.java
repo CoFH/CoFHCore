@@ -84,7 +84,7 @@ public class BlockItemCoFH extends BlockItem implements ICoFHItem {
     @Override
     public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
 
-        if (!showInGroups.getAsBoolean() || getBlock() == null) {
+        if (!showInGroups.getAsBoolean() || getBlock() == null || displayGroup != null && displayGroup.get() != null && displayGroup.get() != group) {
             return;
         }
         super.fillItemCategory(group, items);
