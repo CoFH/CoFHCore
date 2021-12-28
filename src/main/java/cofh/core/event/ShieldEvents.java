@@ -42,7 +42,7 @@ public class ShieldEvents {
     }
 
     // region HELPERS
-    private static boolean canBlockDamageSource(LivingEntity living, DamageSource source) {
+    public static boolean canBlockDamageSource(LivingEntity living, DamageSource source) {
 
         Entity entity = source.getDirectEntity();
         if (entity instanceof AbstractArrowEntity) {
@@ -52,13 +52,17 @@ public class ShieldEvents {
             }
         }
         if (!source.isBypassArmor() && living.isBlocking()) {
-            Vector3d vec3d2 = source.getSourcePosition();
-            if (vec3d2 != null) {
-                Vector3d vec3d = living.getViewVector(1.0F);
-                Vector3d vec3d1 = vec3d2.vectorTo(new Vector3d(living.getX(), living.getY(), living.getZ())).normalize();
-                vec3d1 = new Vector3d(vec3d1.x, 0.0D, vec3d1.z);
-                return vec3d1.dot(vec3d) < 0.0D;
-            }
+            return canBlockDamagePosition(living, source.getSourcePosition());
+        }
+        return false;
+    }
+
+    public static boolean canBlockDamagePosition(LivingEntity living, Vector3d sourcePos) {
+
+        if (sourcePos != null) {
+            Vector3d vec3d1 = sourcePos.vectorTo(living.position()).normalize();
+            vec3d1 = new Vector3d(vec3d1.x, 0.0D, vec3d1.z);
+            return vec3d1.dot(living.getViewVector(1.0F)) < 0.0D;
         }
         return false;
     }
