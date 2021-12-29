@@ -60,9 +60,7 @@ public class ShieldEvents {
     public static boolean canBlockDamagePosition(LivingEntity living, Vector3d sourcePos) {
 
         if (sourcePos != null) {
-            Vector3d vec3d1 = sourcePos.vectorTo(living.position()).normalize();
-            vec3d1 = new Vector3d(vec3d1.x, 0.0D, vec3d1.z);
-            return vec3d1.dot(living.getViewVector(1.0F)) < 0.0D;
+            return new Vector3d(living.getX() - sourcePos.x(), 0.0D, living.getZ() - sourcePos.z()).dot(living.getViewVector(1.0F)) < 0.0D;
         }
         return false;
     }
