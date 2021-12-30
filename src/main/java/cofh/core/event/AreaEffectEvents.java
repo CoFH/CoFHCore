@@ -83,7 +83,7 @@ public class AreaEffectEvents {
         ImmutableList<BlockPos> areaBlocks = stack.getCapability(AREA_EFFECT_ITEM_CAPABILITY).orElse(new AreaEffectItemWrapper(stack)).getAreaEffectBlocks(event.getPos(), player);
 
         float curHardness = event.getState().getDestroySpeed(player.level, event.getPos());
-        if (curHardness <= 0) {
+        if (curHardness <= 0 || areaBlocks.size() <= 1) {
             return;
         }
         float areaMod = MathHelper.clamp(1.0F - 0.01F * areaBlocks.size(), 0.1F, 1.0F);

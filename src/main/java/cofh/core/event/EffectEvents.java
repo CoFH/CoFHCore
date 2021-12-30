@@ -6,7 +6,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.event.entity.EntityStruckByLightningEvent;
-import net.minecraftforge.event.entity.living.EnderTeleportEvent;
+import net.minecraftforge.event.entity.living.EntityTeleportEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.player.PlayerXpEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -24,12 +24,36 @@ public class EffectEvents {
     }
 
     @SubscribeEvent (priority = EventPriority.HIGH)
-    public static void handleEnderTeleportEvent(EnderTeleportEvent event) {
+    public static void handleChorusFruitTeleportEvent(EntityTeleportEvent.ChorusFruit event) {
 
         if (event.isCanceled()) {
             return;
         }
         LivingEntity entity = event.getEntityLiving();
+        if (entity.hasEffect(ENDERFERENCE)) {
+            event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent (priority = EventPriority.HIGH)
+    public static void handleEnderEntityTeleportEvent(EntityTeleportEvent.EnderEntity event) {
+
+        if (event.isCanceled()) {
+            return;
+        }
+        LivingEntity entity = event.getEntityLiving();
+        if (entity.hasEffect(ENDERFERENCE)) {
+            event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent (priority = EventPriority.HIGH)
+    public static void handleEnderPearlTeleportEvent(EntityTeleportEvent.EnderPearl event) {
+
+        if (event.isCanceled()) {
+            return;
+        }
+        LivingEntity entity = event.getPlayer();
         if (entity.hasEffect(ENDERFERENCE)) {
             event.setCanceled(true);
         }
