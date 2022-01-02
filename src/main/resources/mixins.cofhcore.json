@@ -1,0 +1,11 @@
+{
+    "required": true,
+    "minVersion": "0.8",
+    "package": "cofh.core.mixin",
+    "refmap": "mixins.cofhcore.refmap.json",
+    "target": "@env(DEFAULT)",
+    "compatibilityLevel": "JAVA_8",
+    "client": [
+        "WorldRendererMixin"
+    ]
+}
