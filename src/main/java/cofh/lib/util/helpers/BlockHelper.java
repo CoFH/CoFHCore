@@ -12,6 +12,7 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.EnumMap;
 import java.util.function.ToIntFunction;
@@ -206,6 +207,41 @@ public class BlockHelper {
     public static Direction below(Direction face) {
 
         return SIDE_BELOW_LOOKUP.get(face);
+    }
+    // endregion
+
+    // region HELPERS
+    public static boolean isAxial(BlockPos pos) {
+
+        return pos.getX() == 0 ? (pos.getY() == 0 || pos.getZ() == 0) : (pos.getY() == 0 && pos.getZ() == 0);
+    }
+
+    @Nullable
+    public static Direction getSide(BlockPos pos) {
+
+        if (!isAxial(pos)) {
+            return null;
+        }
+        if (pos.getY() < 0) {
+            return Direction.DOWN;
+        }
+        if (pos.getY() > 0) {
+            return Direction.UP;
+        }
+        if (pos.getZ() < 0) {
+            return Direction.NORTH;
+        }
+        if (pos.getZ() > 0) {
+            return Direction.SOUTH;
+        }
+        if (pos.getX() < 0) {
+            return Direction.WEST;
+        }
+        if (pos.getX() > 0) {
+            return Direction.EAST;
+        }
+
+        return null;
     }
     // endregion
 
