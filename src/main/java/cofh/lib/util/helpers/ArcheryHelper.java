@@ -20,6 +20,8 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.LazyOptional;
 
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -216,8 +218,8 @@ public final class ArcheryHelper {
     public static Stream<EntityRayTraceResult> findHitEntities(World world, ProjectileEntity projectile, Vector3d startPos, Vector3d endPos, AxisAlignedBB searchArea, Vector3d padding, Predicate<Entity> filter) {
 
         return world.getEntities(projectile, searchArea, filter).stream()
-                .filter(entity -> entity.getBoundingBox().inflate(padding.x(), padding.y(), padding.z()).clip(startPos, endPos).isPresent())
-                .map(EntityRayTraceResult::new);
+                .map(entity -> entity.getBoundingBox().inflate(padding.x(), padding.y(), padding.z()).clip(startPos, endPos).map(vector3d -> new EntityRayTraceResult(entity, vector3d)).orElse(null))
+                .filter(Objects::nonNull);
     }
 
 }
