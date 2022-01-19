@@ -16,6 +16,7 @@ import cofh.lib.capability.CapabilityArchery;
 import cofh.lib.capability.CapabilityAreaEffect;
 import cofh.lib.capability.CapabilityEnchantableItem;
 import cofh.lib.capability.CapabilityShieldItem;
+import cofh.lib.client.renderer.entity.KnifeRenderer;
 import cofh.lib.item.impl.SpawnEggItemCoFH;
 import cofh.lib.loot.TileNBTSync;
 import cofh.lib.network.PacketHandler;
@@ -23,6 +24,7 @@ import cofh.lib.util.DeferredRegisterCoFH;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
@@ -36,6 +38,7 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -45,8 +48,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import static cofh.lib.util.constants.Constants.*;
-import static cofh.lib.util.references.CoreReferences.HELD_ITEM_FILTER_CONTAINER;
-import static cofh.lib.util.references.CoreReferences.TILE_ITEM_FILTER_CONTAINER;
+import static cofh.lib.util.references.CoreReferences.*;
 
 @Mod (ID_COFH_CORE)
 public class CoFHCore {
@@ -58,6 +60,7 @@ public class CoFHCore {
     public static final DeferredRegisterCoFH<Block> BLOCKS = DeferredRegisterCoFH.create(ForgeRegistries.BLOCKS, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<Fluid> FLUIDS = DeferredRegisterCoFH.create(ForgeRegistries.FLUIDS, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<Item> ITEMS = DeferredRegisterCoFH.create(ForgeRegistries.ITEMS, ID_COFH_CORE);
+    public static final DeferredRegisterCoFH<EntityType<?>> ENTITIES = DeferredRegisterCoFH.create(ForgeRegistries.ENTITIES, ID_COFH_CORE);
 
     public static final DeferredRegisterCoFH<ContainerType<?>> CONTAINERS = DeferredRegisterCoFH.create(ForgeRegistries.CONTAINERS, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<Effect> EFFECTS = DeferredRegisterCoFH.create(ForgeRegistries.POTIONS, ID_COFH_CORE);
@@ -84,6 +87,7 @@ public class CoFHCore {
         BLOCKS.register(modEventBus);
         FLUIDS.register(modEventBus);
         ITEMS.register(modEventBus);
+        ENTITIES.register(modEventBus);
 
         CONTAINERS.register(modEventBus);
         EFFECTS.register(modEventBus);
@@ -97,6 +101,7 @@ public class CoFHCore {
         CoreBlocks.register();
         CoreFluids.register();
         CoreItems.register();
+        CoreEntities.register();
 
         CoreContainers.register();
         CoreEffects.register();
@@ -161,11 +166,19 @@ public class CoFHCore {
         CoreKeys.register();
 
         ProxyClient.registerItemModelProperties();
+        this.registerEntityRenderingHandlers();
     }
 
     private void registerCommands(final RegisterCommandsEvent event) {
 
         CoFHCommand.initialize(event.getDispatcher());
+    }
+    // endregion
+
+    // region HELPERS
+    private void registerEntityRenderingHandlers() {
+
+        RenderingRegistry.registerEntityRenderingHandler(KNIFE_ENTITY, KnifeRenderer::new);
     }
     // endregion
 }

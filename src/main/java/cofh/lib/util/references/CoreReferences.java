@@ -2,8 +2,10 @@ package cofh.lib.util.references;
 
 import cofh.core.inventory.container.HeldItemFilterContainer;
 import cofh.core.inventory.container.TileItemFilterContainer;
+import cofh.lib.entity.KnifeEntity;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
@@ -140,5 +142,10 @@ public class CoreReferences {
     // region PARTICLES
     //    @ObjectHolder(ID_PARTICLE_SNOW)
     //    public static final BasicParticleType SNOW = null;
+    // endregion
+
+    // region ENTITIES
+    @ObjectHolder (ID_KNIFE)
+    public static final EntityType<KnifeEntity> KNIFE_ENTITY = null;
     // endregion
 }

@@ -21,7 +21,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.LazyOptional;
 
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
