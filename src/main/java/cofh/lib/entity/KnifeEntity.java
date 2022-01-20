@@ -24,6 +24,7 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraftforge.entity.PartEntity;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
@@ -142,11 +143,17 @@ public class KnifeEntity extends AbstractArrowEntity {
                 if (target.getType() == EntityType.ENDERMAN) {
                     return;
                 }
+                if (target instanceof PartEntity) {
+                    target = ((PartEntity<?>) target).getParent();
+                }
                 if (target instanceof LivingEntity) {
                     LivingEntity livingTarget = (LivingEntity) target;
                     if (owner instanceof LivingEntity) {
                         EnchantmentHelper.doPostHurtEffects(livingTarget, owner);
                         EnchantmentHelper.doPostDamageEffects((LivingEntity) owner, livingTarget);
+                        if (owner instanceof PlayerEntity) {
+                            stack.hurtEnemy(livingTarget, (PlayerEntity) owner);
+                        }
                     }
                     this.doPostHurtEffects(livingTarget);
                     target.setSecondsOnFire(4 * Utils.getItemEnchantmentLevel(Enchantments.FIRE_ASPECT, stack));

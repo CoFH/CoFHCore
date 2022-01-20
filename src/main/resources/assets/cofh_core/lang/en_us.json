@@ -7,6 +7,9 @@
   "attribute.name.cofh.hazard_resistance": "Hazard Resistance",
   "attribute.name.cofh.sting_resistance": "Sting Resistance",
 
+  "death.attack.knife": "%1$s got knifed by %2$s!",
+  "death.attack.knife.item": "%1$s was poked by %2$s using %3$s!",
+
   "forge.swimSpeed": "Swim Speed",
 
   "commands.cofh.heal.success.single": "Healed %s",
