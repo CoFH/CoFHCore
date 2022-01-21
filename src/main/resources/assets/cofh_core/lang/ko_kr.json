@@ -6,6 +6,9 @@
   "attribute.name.cofh.fall_distance": "낙하한 거리",
   "attribute.name.cofh.hazard_resistance": "방호 횟수",
   "attribute.name.cofh.sting_resistance": "쏘임 방어 횟수",
+  
+  "death.attack.knife": "%1$s이(가) %2$s만큼 칼에 찔렸습니다!",
+  "death.attack.knife.item": "%2$s이(가) %3$s을(를) 사용하여 %1$s을(를) 찔렀습니다!",
 
   "forge.swimSpeed": "수영 속도",
 
@@ -185,7 +188,7 @@
   "enchantment.minecraft.infinity.desc": "일반 화살이 소모되지 않습니다.",
   "enchantment.minecraft.knockback.desc": "피격된 대상을 밀치는 거리가 증가합니다.",
   "enchantment.minecraft.looting.desc": "처치한 몹의 아이템 드롭량을 증가시킵니다.",
-  "enchantment.minecraft.loyalty.desc": "던진 삼지창이 되돌아옵니다.",
+  "enchantment.minecraft.loyalty.desc": "던진 아이템이 되돌아옵니다.",
   "enchantment.minecraft.luck_of_the_sea.desc": "낚시 행운 증가.",
   "enchantment.minecraft.lure.desc": "낚시에 걸리는 시간이 감소합니다.",
   "enchantment.minecraft.mending.desc": "경험치 구슬이 아이템을 고치는 데 소모됩니다.",
