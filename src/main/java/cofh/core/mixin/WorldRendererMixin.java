@@ -29,6 +29,8 @@ public abstract class WorldRendererMixin {
             )
     )
     private void disableTransparencyShaderDepth(MatrixStack p1, float p2, long p3, boolean p4, ActiveRenderInfo p5, GameRenderer p6, LightTexture p7, Matrix4f p8, CallbackInfo ci) {
+
         GlStateManager._depthMask(false);
     }
+
 }

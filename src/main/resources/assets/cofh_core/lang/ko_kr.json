@@ -27,7 +27,7 @@
   "commands.cofh.repair.success.multiple": "%s 개체가 가지고있는 장비를 수리했습니다.",
   "commands.cofh.zap.success.single": "%s을(를) 감전시켰습니다.",
   "commands.cofh.zap.success.multiple": "%s 개체를 감전시켰습니다.",
-  
+
   "info.cofh.another_player": "다른 플레이어",
   "info.cofh.amount": "용량",
   "info.cofh.amount_unmodifiable": "수정할 수 없는 용량",

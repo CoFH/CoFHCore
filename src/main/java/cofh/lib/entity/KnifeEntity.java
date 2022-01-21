@@ -2,6 +2,7 @@ package cofh.lib.entity;
 
 import cofh.lib.item.impl.KnifeItem;
 import cofh.lib.util.Utils;
+import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
@@ -133,11 +134,15 @@ public class KnifeEntity extends AbstractArrowEntity {
         Entity target = result.getEntity();
         ItemStack stack = getPickupItem();
         if (stack.getItem() instanceof KnifeItem) {
+            float velocity = (float) this.getDeltaMovement().length();
             float damage = ((KnifeItem) stack.getItem()).getDamage();
+
+            System.out.println(velocity);
+
+            damage = (float) MathHelper.clamp(velocity * damage, 0.0D, damage * 3);
             if (target instanceof LivingEntity) {
                 damage += EnchantmentHelper.getDamageBonus(stack, ((LivingEntity) target).getMobType());
             }
-
             Entity owner = this.getOwner();
             if (target.hurt(this.damageSource(), damage)) {
                 if (target.getType() == EntityType.ENDERMAN) {

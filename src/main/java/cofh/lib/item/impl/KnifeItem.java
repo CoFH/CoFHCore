@@ -1,11 +1,15 @@
 package cofh.lib.item.impl;
 
 import cofh.lib.entity.KnifeEntity;
+import net.minecraft.block.DispenserBlock;
+import net.minecraft.dispenser.IPosition;
+import net.minecraft.dispenser.ProjectileDispenseBehavior;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
+import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.BowItem;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
@@ -27,6 +31,8 @@ public class KnifeItem extends SwordItemCoFH {
     public KnifeItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, Properties builder) {
 
         super(tier, attackDamageIn, attackSpeedIn, builder);
+
+        DispenserBlock.registerBehavior(this, DISPENSER_BEHAVIOR);
     }
 
     public KnifeItem(IItemTier tier, Properties builder) {
@@ -56,7 +62,7 @@ public class KnifeItem extends SwordItemCoFH {
     @Override
     public UseAction getUseAnimation(ItemStack stack) {
 
-        return UseAction.BOW;
+        return UseAction.SPEAR;
     }
 
     @Override
@@ -68,7 +74,6 @@ public class KnifeItem extends SwordItemCoFH {
             if (power < 0.1D) {
                 return;
             }
-
             if (!world.isClientSide) {
                 KnifeEntity knifeEntity = new KnifeEntity(world, player, stack);
                 knifeEntity.shootFromRotation(player, player.xRot, player.yRot, 0.0F, power * 3.0F, 0.1F);
@@ -84,5 +89,24 @@ public class KnifeItem extends SwordItemCoFH {
             player.awardStat(Stats.ITEM_USED.get(this));
         }
     }
+
+    // region DISPENSER BEHAVIOR
+    private static final ProjectileDispenseBehavior DISPENSER_BEHAVIOR = new ProjectileDispenseBehavior() {
+
+        @Override
+        protected ProjectileEntity getProjectile(World worldIn, IPosition position, ItemStack stackIn) {
+
+            KnifeEntity knife = new KnifeEntity(worldIn, position.x(), position.y(), position.z(), stackIn);
+            knife.pickup = AbstractArrowEntity.PickupStatus.ALLOWED;
+            return knife;
+        }
+
+        @Override
+        protected float getUncertainty() {
+
+            return 3.0F;
+        }
+    };
+    // endregion
 
 }

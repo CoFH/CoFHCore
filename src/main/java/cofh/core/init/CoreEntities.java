@@ -17,4 +17,5 @@ public class CoreEntities {
 
         ENTITIES.register(ID_KNIFE, () -> EntityType.Builder.<KnifeEntity>of(KnifeEntity::new, EntityClassification.MISC).sized(0.5F, 0.5F).fireImmune().build(ID_KNIFE));
     }
+
 }
