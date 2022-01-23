@@ -137,8 +137,6 @@ public class KnifeEntity extends AbstractArrowEntity {
             float velocity = (float) this.getDeltaMovement().length();
             float damage = ((KnifeItem) stack.getItem()).getDamage();
 
-            System.out.println(velocity);
-
             damage = (float) MathHelper.clamp(velocity * damage, 0.0D, damage * 3);
             if (target instanceof LivingEntity) {
                 damage += EnchantmentHelper.getDamageBonus(stack, ((LivingEntity) target).getMobType());

@@ -66,8 +66,13 @@ public class EffectEvents {
             return;
         }
         Entity entity = event.getEntity();
-        if (entity instanceof LivingEntity && ((LivingEntity) entity).hasEffect(LIGHTNING_RESISTANCE)) {
-            event.setCanceled(true);
+        if (entity instanceof LivingEntity) {
+            LivingEntity living = (LivingEntity) entity;
+            if (living.hasEffect(LIGHTNING_RESISTANCE)) {
+                event.setCanceled(true);
+            } else {
+                living.addEffect(new EffectInstance(SHOCKED, 100, 0));
+            }
         }
     }
 
