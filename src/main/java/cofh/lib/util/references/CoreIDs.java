@@ -53,7 +53,10 @@ public class CoreIDs {
 
     public static final String ID_KNIFE = "knife";
 
-    // public static final String ID_PARTICLE_SNOW = "snow";
+    public static final String ID_PARTICLE_SNOW = "snow";
+    public static final String ID_PARTICLE_FROST = "frost";
+    public static final String ID_PARTICLE_SPARK = "spark";
+    public static final String ID_PARTICLE_WIND = "wind";
 
     public static final String ID_CRAFTING_POTION = "crafting_shaped_potion";
     public static final String ID_CRAFTING_SECURABLE = "crafting_securable";

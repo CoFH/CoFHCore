@@ -25,4 +25,13 @@ public class LightningAirBlock extends AirBlock {
         return new LightningAirTile();
     }
 
+    //@OnlyIn(Dist.CLIENT)
+    //@Override
+    //public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+    //
+    //    if (rand.nextInt(4) == 0) {
+    //        worldIn.addParticle(CoreReferences.SPARK_PARTICLE, pos.getX() + rand.nextDouble(), pos.getY() + rand.nextDouble(), pos.getZ() + rand.nextDouble(), 0, 0, 0);
+    //    }
+    //}
+
 }

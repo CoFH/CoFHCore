@@ -92,7 +92,7 @@ public class CoFHCore {
         CONTAINERS.register(modEventBus);
         EFFECTS.register(modEventBus);
         ENCHANTMENTS.register(modEventBus);
-        // PARTICLES.register(modEventBus);
+        PARTICLES.register(modEventBus);
         RECIPE_SERIALIZERS.register(modEventBus);
         TILE_ENTITIES.register(modEventBus);
 
@@ -106,7 +106,7 @@ public class CoFHCore {
         CoreContainers.register();
         CoreEffects.register();
         CoreEnchantments.register();
-        // CoreParticles.register();
+        CoreParticles.register();
         CoreRecipeSerializers.register();
 
         CuriosProxy.register();

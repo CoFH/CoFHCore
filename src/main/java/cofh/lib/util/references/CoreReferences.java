@@ -9,6 +9,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
+import net.minecraft.particles.BasicParticleType;
 import net.minecraft.potion.Effect;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.registries.ObjectHolder;
@@ -140,8 +141,14 @@ public class CoreReferences {
     // endregion
 
     // region PARTICLES
-    //    @ObjectHolder(ID_PARTICLE_SNOW)
-    //    public static final BasicParticleType SNOW = null;
+    //@ObjectHolder(ID_PARTICLE_SNOW)
+    //public static final BasicParticleType SNOW = null;
+    @ObjectHolder(ID_PARTICLE_FROST)
+    public static final BasicParticleType FROST_PARTICLE = null;
+    @ObjectHolder(ID_PARTICLE_SPARK)
+    public static final BasicParticleType SPARK_PARTICLE = null;
+    //@ObjectHolder(ID_PARTICLE_WIND)
+    //public static final BasicParticleType WIND_PARTICLE = null;
     // endregion
 
     // region ENTITIES
