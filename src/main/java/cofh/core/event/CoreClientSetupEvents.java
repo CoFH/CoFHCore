@@ -1,6 +1,7 @@
 package cofh.core.event;
 
 import cofh.core.client.particle.FrostParticle;
+import cofh.core.client.particle.PlasmaBallParticle;
 import cofh.core.client.particle.SparkParticle;
 import cofh.lib.client.model.DynamicFluidContainerModel;
 import cofh.lib.item.IColorableItem;
@@ -20,8 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
-import static cofh.lib.util.references.CoreReferences.FROST_PARTICLE;
-import static cofh.lib.util.references.CoreReferences.SPARK_PARTICLE;
+import static cofh.lib.util.references.CoreReferences.*;
 
 @Mod.EventBusSubscriber (value = Dist.CLIENT, modid = ID_COFH_CORE, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CoreClientSetupEvents {
@@ -52,6 +52,7 @@ public class CoreClientSetupEvents {
 
         Minecraft.getInstance().particleEngine.register(FROST_PARTICLE, FrostParticle.Factory::new);
         Minecraft.getInstance().particleEngine.register(SPARK_PARTICLE, SparkParticle.Factory::new);
+        Minecraft.getInstance().particleEngine.register(PLASMA_PARTICLE, PlasmaBallParticle.Factory::new);
         //Minecraft.getInstance().particleEngine.register(WIND_PARTICLE, WindParticle.Factory::new);
     }
 

@@ -2,6 +2,7 @@ package cofh.lib.util.references;
 
 import cofh.core.inventory.container.HeldItemFilterContainer;
 import cofh.core.inventory.container.TileItemFilterContainer;
+import cofh.lib.entity.ElectricArcEntity;
 import cofh.lib.entity.KnifeEntity;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
@@ -147,6 +148,8 @@ public class CoreReferences {
     public static final BasicParticleType FROST_PARTICLE = null;
     @ObjectHolder(ID_PARTICLE_SPARK)
     public static final BasicParticleType SPARK_PARTICLE = null;
+    @ObjectHolder(ID_PARTICLE_PLASMA)
+    public static final BasicParticleType PLASMA_PARTICLE = null;
     //@ObjectHolder(ID_PARTICLE_WIND)
     //public static final BasicParticleType WIND_PARTICLE = null;
     // endregion
@@ -154,5 +157,12 @@ public class CoreReferences {
     // region ENTITIES
     @ObjectHolder (ID_KNIFE)
     public static final EntityType<KnifeEntity> KNIFE_ENTITY = null;
+    @ObjectHolder (ID_ELECTRIC_ARC)
+    public static final EntityType<ElectricArcEntity> ELECTRIC_ARC_ENTITY = null;
+    // endregion
+
+    // region SOUND EVENTS
+    //@ObjectHolder (ID_SOUND_ELECTRICITY)
+    //public static final SoundEvent ELECTRICITY_SOUND = null;
     // endregion
 }
