@@ -3,7 +3,6 @@ package cofh.lib.client.renderer.entity;
 import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.entity.ElectricArcEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderState;
 import net.minecraft.client.renderer.RenderType;
@@ -12,7 +11,6 @@ import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3f;
 
 import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
 
@@ -29,14 +27,11 @@ public class ElectricArcRenderer extends EntityRenderer<ElectricArcEntity> {
     @Override
     public void render(ElectricArcEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
 
-        Vector3f relCamPos = new Vector3f(Minecraft.getInstance().getCameraEntity().position());
-        relCamPos.sub(new Vector3f(entityIn.position()));
-
         matrixStackIn.pushPose();
-        RenderHelper.renderArcs(matrixStackIn, bufferIn.getBuffer(GLOW_RENDER_TYPE), packedLightIn, new Vector3f(0, 0, 0),
-                new Vector3f(0, 10, 0), 2, 0.04F, relCamPos, entityIn.seed, entityIn.tickCount + partialTicks, ElectricArcEntity.duration);
+        float time = entityIn.tickCount + partialTicks;
+        RenderHelper.renderArcs(matrixStackIn, bufferIn.getBuffer(GLOW_RENDER_TYPE), packedLightIn, 10, 2, 0.4F,
+                entityIn.seed, time, RenderHelper.getTaperOffsetFromTimes(time, ElectricArcEntity.duration, 3));
         matrixStackIn.popPose();
-
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
     }
 

@@ -173,6 +173,16 @@ public final class MathHelper {
         return r == a ? b : r;
     }
 
+    public static float sqrt(float a) {
+
+        return (float) Math.sqrt(a);
+    }
+
+    public static float invSqrt(float a) {
+
+        return 1 / sqrt(a);
+    }
+
     /**
      * Unchecked implementation to round a number. Parameter should be known to be valid in advance.
      */

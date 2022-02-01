@@ -27,7 +27,7 @@ public class ElectricArcEntity extends Entity {
     @Nullable
     protected Entity target = null;
     protected boolean cosmetic = false;
-    public static final int duration = 1000;
+    public static final int duration = 10;
     public float damage = 5.0F;
     public float radius = 1.0F;
     public long seed = random.nextLong();
@@ -61,9 +61,10 @@ public class ElectricArcEntity extends Entity {
     public void tick() {
 
         if (level.isClientSide) {
-            level.addParticle(CoreReferences.SPARK_PARTICLE, this.getX() + random.nextGaussian() * radius, this.getY() + random.nextFloat() * 0.25F, this.getZ() + random.nextGaussian() * radius, 0.0D, 0.0D, 0.0D);
             if (this.firstTick) {
                 level.addParticle(CoreReferences.PLASMA_PARTICLE, this.getX(), this.getY() + 10, this.getZ(), 0.0D, 0.0D, 0.0D);
+            } else {
+                level.addParticle(CoreReferences.SPARK_PARTICLE, this.getX() + random.nextGaussian() * radius, this.getY() + random.nextFloat() * 0.25F, this.getZ() + random.nextGaussian() * radius, 0.0D, 0.0D, 0.0D);
             }
         } else {
             if (firstTick) {

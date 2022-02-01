@@ -606,80 +606,131 @@ public final class RenderHelper {
     // region ELECTRICITY
     public static Vector3f[][] arcs = getRandomArcs(new Random(), 16, 50);
 
-    public static void renderArcs(MatrixStack matrixStackIn, IVertexBuilder builder, int packedLightIn, Vector3f from, Vector3f to, int arcCount, float arcWidth, Vector3f relCamPos, long seed, float time, float maxTime) {
-        //TODO better omnidirectionality
-        Random rand = new Random(seed + 69420 * (int) (time * 0.7F));
+    /**
+     * Renders electric arcs in a unit column towards positive y.
+     *
+     * @param arcCount      Number of individual arcs.
+     * @param arcWidth      Average width of each arc.
+     * @param seed          Seed for randomization. Should be changed based on the time.
+     * @param taperOffset   Value between -1.25F and 1.25F that determines the threshold for tapering.
+     *                      Generally, positive at the start of an animation, 0 in the middle (no taper), and negative at the end.
+     */
+    public static void renderArcs(MatrixStack matrixStackIn, IVertexBuilder builder, int packedLightIn, int arcCount, float arcWidth, long seed, float taperOffset) {
+
+        Random rand = new Random(seed);
         matrixStackIn.pushPose();
 
-        Vector3f diff = to.copy();
-        diff.sub(from);
-        float length = RenderHelper.length(diff);
-        if (length < 0.01) {
-            matrixStackIn.popPose();
-            return;
-        }
-        arcWidth /= length;
-        matrixStackIn.scale(length, length, length);
-        diff.normalize();
-        Vector3f perp = diff.copy();
-        perp.cross(Vector3f.YP);
-        matrixStackIn.mulPose(perp.rotation((float) Math.asin(RenderHelper.length(perp))));
+        MatrixStack.Entry stackEntry = matrixStackIn.last();
+        Matrix4f pose = stackEntry.pose();
+        Matrix3f normal = stackEntry.normal();
 
+        int nodeCount = arcs[0].length;
+        int first = MathHelper.clamp((int) (nodeCount * taperOffset), 0, nodeCount);
+        int last = MathHelper.clamp((int) (nodeCount * (1.25F + taperOffset)), 0, nodeCount);
+
+        //These are calculated first so they are not affected by differing taper values.
+        Vector3f[][] randomArcs = new Vector3f[nodeCount][arcCount];
+        float[] rotations = new float[arcCount];
         for (int i = 0; i < arcCount; ++i) {
-            Vector3f[] arc = arcs[rand.nextInt(arcs.length)];
-            Vector3f prevNode = null;
-            Vector3f prevAxis = null;
+            randomArcs[i] = arcs[rand.nextInt(arcs.length)];
+            rotations[i] = rand.nextFloat();
+        }
+        if (last - first > 1) {
+            Vector4f perp = new Vector4f(0.0F, 1.0F, 0.0F, 0.0F);
+            perp.transform(pose);
+            float invLength = MathHelper.invSqrt(perp.x() * perp.x() + perp.y() * perp.y());
+            float xPerp = perp.y() * invLength;
+            float yPerp = -perp.x() * invLength;
 
-            for (int j = 1; j < arc.length; ++j) {
-                float taper = 1.0F;
-                if (time < 2.0F) {
-                    taper = Math.min((2.0F * j / arc.length - 2.0F + time) * 3.0F, 1.0F);
-                } else if (maxTime - time < 2.0F) {
-                    taper = Math.min((maxTime - time - 2.0F * j / arc.length) * 3.0F, 1.0F);
+            float increment = 1.0F / nodeCount;
+            float proportion = 0;
+            for (int i = 0; i < arcCount; ++i) {
+                matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(rotations[i] * 360.0F));
+                Vector3f[] arc = randomArcs[i];
+                for (int j = first; j < last; ++j) {
+                    Vector4f node = new Vector4f(arc[j].x(), arc[j].y(), arc[j].z(), 1.0F);
+                    node.transform(pose);
+                    float width = arcWidth * (rand.nextFloat() * 0.6F + 0.7F) * MathHelper.clamp(4.0F * (0.75F - Math.abs(proportion - 0.5F - taperOffset)), 0.0F, 1.0F);
+                    float xWidth = xPerp * width;
+                    float yWidth = yPerp * width;
+                    float xPos = node.x() + xWidth;
+                    float yPos = node.y() + yWidth;
+                    float xNeg = node.x() - xWidth;
+                    float yNeg = node.y() - yWidth;
+                    float z = node.z();
+
+                    if (j != first) {
+                        builder.vertex(xNeg, yNeg, z).color(255, 255, 255, 255).uv(1, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
+                        builder.vertex(xPos, yPos, z).color(255, 255, 255, 255).uv(0, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
+                    }
+                    if (j != last - 1) {
+                        builder.vertex(xPos, yPos, z).color(255, 255, 255, 255).uv(0, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
+                        builder.vertex(xNeg, yNeg, z).color(255, 255, 255, 255).uv(1, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
+                        proportion += increment;
+                    } else {
+                        proportion = 0;
+                    }
                 }
-                if (taper < 0) {
-                    continue;
-                }
-
-                if (prevNode == null) {
-                    prevNode = arc[j - 1];
-                    prevAxis = getAxis(relCamPos, prevNode, arcWidth, taper, rand);
-                }
-                Vector3f currNode = arc[j];
-                Vector3f currAxis = getAxis(relCamPos, currNode, arcWidth, taper, rand);
-
-                MatrixStack.Entry stackEntry = matrixStackIn.last();
-                Matrix4f pose = stackEntry.pose();
-                Matrix3f normal = stackEntry.normal();
-                builder.vertex(pose, prevNode.x() + prevAxis.z(), prevNode.y(), prevNode.z() - prevAxis.x()).color(255, 255, 255, 255).uv(1, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
-                builder.vertex(pose, currNode.x() + currAxis.z(), currNode.y(), currNode.z() - currAxis.x()).color(255, 255, 255, 255).uv(1, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
-                builder.vertex(pose, currNode.x() - currAxis.z(), currNode.y(), currNode.z() + currAxis.x()).color(255, 255, 255, 255).uv(0, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
-                builder.vertex(pose, prevNode.x() - prevAxis.z(), prevNode.y(), prevNode.z() + prevAxis.x()).color(255, 255, 255, 255).uv(0, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
-
-                prevNode = currNode;
-                prevAxis = currAxis;
             }
         }
-
         matrixStackIn.popPose();
     }
 
-    public static Vector3f getAxis(Vector3f relCamPos, Vector3f node, float arcWidth, float taper, Random rand) {
+    public static void renderArcs(MatrixStack matrixStackIn, IVertexBuilder builder, int packedLightIn, int arcCount, float arcWidth, long seed, float time, float taperOffset) {
 
-        Vector3f axis = relCamPos.copy();
-        axis.sub(node);
-        axis.setY(0);
-        axis.normalize();
-        axis.mul(arcWidth * (rand.nextFloat() * 0.6F + 0.7F) * taper);
-        return axis;
+        renderArcs(matrixStackIn, builder, packedLightIn, arcCount, arcWidth, seed + 69420 * (int) (time * 0.7F), taperOffset);
     }
 
-    public static void renderArcs(MatrixStack matrixStackIn, IVertexBuilder builder, int packedLightIn, Vector3d from, Vector3d to, float radius, int arcCount, Vector3f relCamPos, long seed, float time) {
+    public static void renderArcs(MatrixStack matrixStackIn, IVertexBuilder builder, int packedLightIn, float length, int arcCount, float arcWidth, long seed, float time, float taperOffset) {
 
-        renderArcs(matrixStackIn, builder, packedLightIn, new Vector3f(from), new Vector3f(to), arcCount, radius, relCamPos, seed, time, Float.MAX_VALUE);
+        matrixStackIn.pushPose();
+        matrixStackIn.scale(length, length, length);
+        renderArcs(matrixStackIn, builder, packedLightIn, arcCount, arcWidth / length, seed, time, taperOffset);
+        matrixStackIn.popPose();
     }
 
-    public static Vector3f[][] getRandomArcs(Random random, int arcCount, int nodeCount) {
+    public static void renderArcs(MatrixStack matrixStackIn, IVertexBuilder builder, int packedLightIn, Vector3f to, int arcCount, float arcWidth, long seed, float time, float taperOffset) {
+
+        matrixStackIn.pushPose();
+        float length = RenderHelper.length(to);
+        if (length > 0.01F) {
+            to.normalize();
+            Vector3f perp = to.copy();
+            perp.cross(Vector3f.YP);
+            float angle = (float) -Math.asin(RenderHelper.length(perp));
+            perp.normalize();
+            matrixStackIn.mulPose(perp.rotation(angle));
+            renderArcs(matrixStackIn, builder, packedLightIn, length, arcCount, arcWidth, seed, time, taperOffset);
+        }
+        matrixStackIn.popPose();
+    }
+
+    public static void renderArcs(MatrixStack matrixStackIn, IVertexBuilder builder, int packedLightIn, Vector3f from, Vector3f to, int arcCount, float arcWidth, long seed, float time, float taperOffset) {
+
+        matrixStackIn.pushPose();
+        matrixStackIn.translate(from.x(), from.y(), from.z());
+        to.sub(from);
+        renderArcs(matrixStackIn, builder, packedLightIn, to, arcCount, arcWidth, seed, time, taperOffset);
+        matrixStackIn.popPose();
+    }
+
+    public static void renderArcs(MatrixStack matrixStackIn, IVertexBuilder builder, int packedLightIn, Vector3d from, Vector3d to, int arcCount, float arcWidth, long seed, float time, float taperOffset) {
+
+        renderArcs(matrixStackIn, builder, packedLightIn, new Vector3f(from), new Vector3f(to), arcCount, arcWidth, seed, time, taperOffset);
+    }
+
+    public static float getTaperOffsetFromTimes(float time, float maxTime, float taperTime) {
+
+        float offset = 0.0F;
+        if (time < taperTime) {
+            offset = 1.25F * (taperTime - time) / taperTime;
+        } else if (maxTime - time < taperTime) {
+            offset = 1.25F * (maxTime - taperTime - time) / taperTime;
+        }
+        return offset;
+    }
+
+    private static Vector3f[][] getRandomArcs(Random random, int arcCount, int nodeCount) {
 
         Vector3f[][] arcs = new Vector3f[arcCount][nodeCount];
         for (int i = 0; i < arcs.length; ++i) {
@@ -688,7 +739,7 @@ public final class RenderHelper {
         return arcs;
     }
 
-    public static Vector3f[] getRandomNodes(Random random, int count) {
+    private static Vector3f[] getRandomNodes(Random random, int count) {
 
         float[] y = new float[count];
         for (int i = 0; i < y.length; ++i) {
