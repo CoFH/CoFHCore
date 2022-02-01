@@ -613,7 +613,7 @@ public final class RenderHelper {
      * @param arcWidth      Average width of each arc.
      * @param seed          Seed for randomization. Should be changed based on the time.
      * @param taperOffset   Value between -1.25F and 1.25F that determines the threshold for tapering.
-     *                      Generally, positive at the start of an animation, 0 in the middle (no taper), and negative at the end.
+     *                      Generally, negative at the start of an animation, 0 in the middle (no taper), and positive at the end.
      */
     public static void renderArcs(MatrixStack matrixStackIn, IVertexBuilder builder, int packedLightIn, int arcCount, float arcWidth, long seed, float taperOffset) {
 
@@ -685,7 +685,7 @@ public final class RenderHelper {
 
         matrixStackIn.pushPose();
         matrixStackIn.scale(length, length, length);
-        renderArcs(matrixStackIn, builder, packedLightIn, arcCount, arcWidth / length, seed, time, taperOffset);
+        renderArcs(matrixStackIn, builder, packedLightIn, arcCount, arcWidth / Math.abs(length), seed, time, taperOffset);
         matrixStackIn.popPose();
     }
 
@@ -694,13 +694,16 @@ public final class RenderHelper {
         matrixStackIn.pushPose();
         float length = RenderHelper.length(to);
         if (length > 0.01F) {
-            to.normalize();
-            Vector3f perp = to.copy();
-            perp.cross(Vector3f.YP);
-            float angle = (float) -Math.asin(RenderHelper.length(perp));
-            perp.normalize();
-            matrixStackIn.mulPose(perp.rotation(angle));
-            renderArcs(matrixStackIn, builder, packedLightIn, length, arcCount, arcWidth, seed, time, taperOffset);
+            if (to.x() < 0.001 && to.z() < 0.001) {
+                renderArcs(matrixStackIn, builder, packedLightIn, -length, arcCount, arcWidth, seed, time, taperOffset);
+            } else {
+                to.normalize();
+                to.cross(Vector3f.YP);
+                float angle = (float) -Math.asin(RenderHelper.length(to));
+                to.normalize();
+                matrixStackIn.mulPose(to.rotation(angle));
+                renderArcs(matrixStackIn, builder, packedLightIn, length, arcCount, arcWidth, seed, time, taperOffset);
+            }
         }
         matrixStackIn.popPose();
     }
@@ -719,15 +722,20 @@ public final class RenderHelper {
         renderArcs(matrixStackIn, builder, packedLightIn, new Vector3f(from), new Vector3f(to), arcCount, arcWidth, seed, time, taperOffset);
     }
 
-    public static float getTaperOffsetFromTimes(float time, float maxTime, float taperTime) {
+    public static float getTaperOffsetFromTimes(float time, float endTime, float taperTime) {
 
         float offset = 0.0F;
         if (time < taperTime) {
-            offset = 1.25F * (taperTime - time) / taperTime;
-        } else if (maxTime - time < taperTime) {
-            offset = 1.25F * (maxTime - taperTime - time) / taperTime;
+            offset = 1.25F * (time - taperTime) / taperTime;
+        } else if (endTime - time < taperTime) {
+            offset = 1.25F * (time + taperTime - endTime) / taperTime;
         }
         return offset;
+    }
+
+    public static float getTaperOffsetFromTimes(float time, float startTime, float endTime, float taperTime) {
+
+        return getTaperOffsetFromTimes(time - startTime, endTime - startTime, taperTime);
     }
 
     private static Vector3f[][] getRandomArcs(Random random, int arcCount, int nodeCount) {

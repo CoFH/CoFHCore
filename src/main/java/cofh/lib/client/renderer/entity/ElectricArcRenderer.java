@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Vector3f;
 
 import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
 
@@ -29,8 +30,8 @@ public class ElectricArcRenderer extends EntityRenderer<ElectricArcEntity> {
 
         matrixStackIn.pushPose();
         float time = entityIn.tickCount + partialTicks;
-        RenderHelper.renderArcs(matrixStackIn, bufferIn.getBuffer(GLOW_RENDER_TYPE), packedLightIn, 10, 2, 0.4F,
-                entityIn.seed, time, RenderHelper.getTaperOffsetFromTimes(time, ElectricArcEntity.duration, 3));
+        RenderHelper.renderArcs(matrixStackIn, bufferIn.getBuffer(GLOW_RENDER_TYPE), packedLightIn, new Vector3f(0, 10, 0), new Vector3f(0, 0, 0),
+                2, 0.4F, entityIn.seed, time, RenderHelper.getTaperOffsetFromTimes(time, ElectricArcEntity.duration, 3));
         matrixStackIn.popPose();
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
     }
