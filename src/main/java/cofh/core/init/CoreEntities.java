@@ -18,7 +18,7 @@ public class CoreEntities {
     public static void register() {
 
         ENTITIES.register(ID_KNIFE, () -> EntityType.Builder.<KnifeEntity>of(KnifeEntity::new, EntityClassification.MISC).sized(0.5F, 0.5F).fireImmune().build(ID_KNIFE));
-        ENTITIES.register(ID_ELECTRIC_ARC, () -> EntityType.Builder.<ElectricArcEntity>of(ElectricArcEntity::new, EntityClassification.MISC).sized(1.0F, 1.0F).fireImmune().build(ID_ELECTRIC_ARC));
+        ENTITIES.register(ID_ELECTRIC_ARC, () -> EntityType.Builder.<ElectricArcEntity>of(ElectricArcEntity::new, EntityClassification.MISC).sized(1.0F, 10.0F).fireImmune().build(ID_ELECTRIC_ARC));
     }
 
 }

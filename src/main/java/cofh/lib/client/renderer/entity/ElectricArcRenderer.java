@@ -57,7 +57,6 @@ public class ElectricArcRenderer extends EntityRenderer<ElectricArcEntity> {
                             .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
                             .setOutputState(ITEM_ENTITY_TARGET)
                             .setAlphaState(DEFAULT_ALPHA)
-                            .setCullState(NO_CULL)
                             .setDepthTestState(LEQUAL_DEPTH_TEST)
                             .createCompositeState(true));
         }
@@ -70,7 +69,6 @@ public class ElectricArcRenderer extends EntityRenderer<ElectricArcEntity> {
                             .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
                             .setOutputState(ITEM_ENTITY_TARGET)
                             .setAlphaState(DEFAULT_ALPHA)
-                            .setCullState(NO_CULL)
                             .setDepthTestState(LEQUAL_DEPTH_TEST)
                             .createCompositeState(true));
         }

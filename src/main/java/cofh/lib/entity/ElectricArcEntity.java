@@ -9,6 +9,7 @@ import net.minecraft.network.IPacket;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -29,14 +30,12 @@ public class ElectricArcEntity extends Entity {
     protected boolean cosmetic = false;
     public static final int duration = 10;
     public float damage = 5.0F;
-    public float radius = 1.0F;
+    public float radius = 1.5F;
     public long seed = random.nextLong();
 
     public ElectricArcEntity(EntityType<? extends ElectricArcEntity> type, World world) {
 
         super(type, world);
-        noCulling = true;
-        this.yRotO = this.yRot = -360 * random.nextFloat();
     }
 
     public ElectricArcEntity(World world, Vector3d pos) {
@@ -92,9 +91,7 @@ public class ElectricArcEntity extends Entity {
         boolean hitSomething = false;
         float r2 = radius * radius;
         for (Entity entity : level.getEntities(this, this.getBoundingBox().inflate(radius), Entity::isAlive)) {
-            if (this.distanceToSqr(entity) < r2) {
-                hitSomething |= attack(entity);
-            }
+            hitSomething |= attack(entity);
         }
         return hitSomething;
     }

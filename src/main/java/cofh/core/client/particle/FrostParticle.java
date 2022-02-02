@@ -57,7 +57,7 @@ public class FrostParticle extends SpriteTexturedParticle {
 
             FrostParticle particle = new FrostParticle(world, x, y, z, dx, dy, dz);
             particle.pickSprite(spriteSet);
-            particle.setAlpha(world.random.nextFloat() * 0.3F + 0.6F);
+            particle.setAlpha(world.random.nextFloat() * 0.2F + 0.7F);
             return particle;
         }
     }

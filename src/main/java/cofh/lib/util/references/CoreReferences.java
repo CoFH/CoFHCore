@@ -144,11 +144,11 @@ public class CoreReferences {
     // region PARTICLES
     //@ObjectHolder(ID_PARTICLE_SNOW)
     //public static final BasicParticleType SNOW = null;
-    @ObjectHolder(ID_PARTICLE_FROST)
+    @ObjectHolder (ID_PARTICLE_FROST)
     public static final BasicParticleType FROST_PARTICLE = null;
-    @ObjectHolder(ID_PARTICLE_SPARK)
+    @ObjectHolder (ID_PARTICLE_SPARK)
     public static final BasicParticleType SPARK_PARTICLE = null;
-    @ObjectHolder(ID_PARTICLE_PLASMA)
+    @ObjectHolder (ID_PARTICLE_PLASMA)
     public static final BasicParticleType PLASMA_PARTICLE = null;
     //@ObjectHolder(ID_PARTICLE_WIND)
     //public static final BasicParticleType WIND_PARTICLE = null;

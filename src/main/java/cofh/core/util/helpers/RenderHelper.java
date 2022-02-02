@@ -610,7 +610,7 @@ public final class RenderHelper {
      * Renders electric arcs in a unit column towards positive y.
      *
      * @param arcCount      Number of individual arcs.
-     * @param arcWidth      Average width of each arc.
+     * @param arcWidth      Average width of each arc. 0.4F recommended.
      * @param seed          Seed for randomization. Should be changed based on the time.
      * @param taperOffset   Value between -1.25F and 1.25F that determines the threshold for tapering.
      *                      Generally, negative at the start of an animation, 0 in the middle (no taper), and positive at the end.
@@ -639,8 +639,8 @@ public final class RenderHelper {
             Vector4f perp = new Vector4f(0.0F, 1.0F, 0.0F, 0.0F);
             perp.transform(pose);
             float invLength = MathHelper.invSqrt(perp.x() * perp.x() + perp.y() * perp.y());
-            float xPerp = perp.y() * invLength;
-            float yPerp = -perp.x() * invLength;
+            float xPerp = -perp.y() * invLength;
+            float yPerp = perp.x() * invLength;
 
             float increment = 1.0F / nodeCount;
             float proportion = 0;
@@ -694,7 +694,7 @@ public final class RenderHelper {
         matrixStackIn.pushPose();
         float length = RenderHelper.length(to);
         if (length > 0.01F) {
-            if (to.x() < 0.001 && to.z() < 0.001) {
+            if (Math.abs(to.x() + to.z()) < 0.001) {
                 renderArcs(matrixStackIn, builder, packedLightIn, -length, arcCount, arcWidth, seed, time, taperOffset);
             } else {
                 to.normalize();

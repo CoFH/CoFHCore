@@ -1,17 +1,25 @@
 package cofh.core.event;
 
+import cofh.lib.potion.CustomParticleEffect;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.event.entity.EntityStruckByLightningEvent;
 import net.minecraftforge.event.entity.living.EntityTeleportEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.PotionColorCalculationEvent;
 import net.minecraftforge.event.entity.player.PlayerXpEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
 import static cofh.lib.util.references.CoreReferences.*;
@@ -93,6 +101,8 @@ public class EffectEvents {
             event.setCanceled(true);
         } else if (source == DamageSource.LIGHTNING_BOLT && entity.hasEffect(LIGHTNING_RESISTANCE)) {
             event.setCanceled(true);
+        } else if (source.isFire()) {
+            entity.removeEffect(CHILLED);
         }
     }
 
@@ -109,6 +119,24 @@ public class EffectEvents {
             return;
         }
         event.setAmount(getXPValue(event.getAmount(), clarityEffect.getAmplifier()));
+    }
+
+    @SubscribeEvent (priority = EventPriority.HIGH)
+    public static void handlePotionColorEvent(PotionColorCalculationEvent event) {
+
+        Collection<EffectInstance> effects = event.getEffects();
+        if (effects.isEmpty()) {
+            return;
+        }
+        Predicate<EffectInstance> hasCustomParticle = effect -> effect.getEffect() instanceof CustomParticleEffect;
+        if (effects.stream().anyMatch(hasCustomParticle)) {
+            List<EffectInstance> nonCustom = effects.stream().filter(hasCustomParticle.negate()).collect(Collectors.toList());
+            if (nonCustom.isEmpty()) {
+                event.shouldHideParticles(true);
+            } else {
+                event.setColor(PotionUtils.getColor(nonCustom));
+            }
+        }
     }
 
     // region HELPERS
