@@ -2,6 +2,7 @@ package cofh.core.event;
 
 import cofh.core.client.particle.FrostParticle;
 import cofh.core.client.particle.PlasmaBallParticle;
+import cofh.core.client.particle.ShockwaveParticle;
 import cofh.core.client.particle.SparkParticle;
 import cofh.lib.client.model.DynamicFluidContainerModel;
 import cofh.lib.item.IColorableItem;
@@ -53,6 +54,7 @@ public class CoreClientSetupEvents {
         Minecraft.getInstance().particleEngine.register(FROST_PARTICLE, FrostParticle.Factory::new);
         Minecraft.getInstance().particleEngine.register(SPARK_PARTICLE, SparkParticle.Factory::new);
         Minecraft.getInstance().particleEngine.register(PLASMA_PARTICLE, PlasmaBallParticle.Factory::new);
+        Minecraft.getInstance().particleEngine.register(SHOCKWAVE_PARTICLE, ShockwaveParticle.Factory::new);
         //Minecraft.getInstance().particleEngine.register(WIND_PARTICLE, WindParticle.Factory::new);
     }
 

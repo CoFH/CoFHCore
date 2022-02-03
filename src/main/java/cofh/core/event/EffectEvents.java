@@ -107,21 +107,6 @@ public class EffectEvents {
     }
 
     @SubscribeEvent (priority = EventPriority.HIGH)
-    public static void handleXpChangeEvent(PlayerXpEvent.XpChange event) {
-
-        if (event.isCanceled() || event.getAmount() <= 0) {
-            return;
-        }
-        PlayerEntity player = event.getPlayer();
-
-        EffectInstance clarityEffect = player.getEffect(CLARITY);
-        if (clarityEffect == null) {
-            return;
-        }
-        event.setAmount(getXPValue(event.getAmount(), clarityEffect.getAmplifier()));
-    }
-
-    @SubscribeEvent (priority = EventPriority.HIGH)
     public static void handlePotionColorEvent(PotionColorCalculationEvent event) {
 
         Collection<EffectInstance> effects = event.getEffects();
@@ -137,6 +122,21 @@ public class EffectEvents {
                 event.setColor(PotionUtils.getColor(nonCustom));
             }
         }
+    }
+
+    @SubscribeEvent (priority = EventPriority.HIGH)
+    public static void handleXpChangeEvent(PlayerXpEvent.XpChange event) {
+
+        if (event.isCanceled() || event.getAmount() <= 0) {
+            return;
+        }
+        PlayerEntity player = event.getPlayer();
+
+        EffectInstance clarityEffect = player.getEffect(CLARITY);
+        if (clarityEffect == null) {
+            return;
+        }
+        event.setAmount(getXPValue(event.getAmount(), clarityEffect.getAmplifier()));
     }
 
     // region HELPERS

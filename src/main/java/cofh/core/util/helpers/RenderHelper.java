@@ -4,12 +4,10 @@ import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
@@ -23,15 +21,17 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.*;
+import net.minecraft.world.IBlockDisplayReader;
+import net.minecraftforge.client.ForgeHooksClient;
+import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.pipeline.LightUtil;
 import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nonnull;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 /**
  * Contains various helper functions to assist with rendering.
@@ -69,6 +69,11 @@ public final class RenderHelper {
     public static ItemRenderer renderItem() {
 
         return Minecraft.getInstance().getItemRenderer();
+    }
+
+    public static BlockRendererDispatcher renderBlock() {
+
+        return Minecraft.getInstance().getBlockRenderer();
     }
     // endregion
 
@@ -765,6 +770,99 @@ public final class RenderHelper {
             nodes[i] = new Vector3f(centering * nodes[i + 1].x() + (float) random.nextGaussian() * eccentricity, y[i], centering * nodes[i + 1].z() + (float) random.nextGaussian() * eccentricity);
         }
         return nodes;
+    }
+    // endregion
+
+    // region SHOCKWAVE
+    public static SortedMap<Float, List<int[]>> offsets = getOffsets(16);
+    public static final List<RenderType> renderTypes = RenderType.chunkBufferLayers();
+
+    /**
+     * Renders a shockwave that propagates from the origin.
+     *
+     * @param origin        Center of the shockwave.
+     * @param time          Travels outward 1 block per unit time. Blocks take 5 units to complete their trajectory.
+     *                      Scale this value based on how fast you want the animation to play.
+     * @param radius        The maximum radius of the shockwave. Hard limit of 16.
+     * @param heightScale   Adjusts how high the blocks travel.
+     * @param canRender     Predicate for filtering which blocks are to be rendered.
+     */
+    public static void renderShockwave(MatrixStack stack, IRenderTypeBuffer buffer, IBlockDisplayReader world, BlockPos origin, float time, float radius, float heightScale, Predicate<BlockPos> canRender) {
+
+        SortedMap<Float, List<int[]>> blocks = offsets.subMap(Math.min(time - 5, radius), Math.min(time, radius + 1));
+        for (Float dist : blocks.keySet()) {
+            float progress = time - dist;
+            double height = heightScale * 0.16 * progress * (5 - progress);
+            for (int[] offset : blocks.get(dist)) {
+                for (int y = 1; y >= -1; --y) {
+                    BlockPos pos = origin.offset(offset[0], y, offset[1]);
+                    BlockState state = world.getBlockState(pos);
+                    if (canRender.test(pos)) {
+                        if (state.getRenderShape() == BlockRenderType.MODEL) {
+                            stack.pushPose();
+                            stack.translate(offset[0], height + y, offset[1]);
+                            stack.scale(1.01F, 1.01F, 1.01F);
+                            for (RenderType type : renderTypes) {
+                                if (RenderTypeLookup.canRenderInLayer(state, type)) {
+                                    ForgeHooksClient.setRenderLayer(type);
+                                    renderBlock().getModelRenderer().renderModel(world, renderBlock().getBlockModel(state), state, pos.relative(Direction.UP), stack, buffer.getBuffer(type), false, new Random(), state.getSeed(pos), OverlayTexture.NO_OVERLAY, EmptyModelData.INSTANCE);
+                                }
+                            }
+                            stack.popPose();
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+        ForgeHooksClient.setRenderLayer(null);
+    }
+
+    public static void renderShockwave(MatrixStack stack, IRenderTypeBuffer buffer, IBlockDisplayReader world, BlockPos origin, float time, float radius, float heightScale) {
+
+        RenderHelper.renderShockwave(stack, buffer, world, origin, time, radius, heightScale, pos -> {
+            BlockState state = world.getBlockState(pos);
+            return !state.isAir(world, pos) && state.isRedstoneConductor(world, pos) && state.getHarvestLevel() <= 5 &&
+                state.isCollisionShapeFullBlock(world, pos) && !state.hasTileEntity() &&
+                !world.getBlockState(pos.above()).isCollisionShapeFullBlock(world, pos.above());
+        });
+    }
+
+    private static SortedMap<Float, List<int[]>> getOffsets(int maxRadius) {
+
+        SortedMap<Float, List<int[]>> blocks = new TreeMap<>();
+        float maxSqr = maxRadius * maxRadius;
+        for (int x = 0; x <= net.minecraft.util.math.MathHelper.ceil(maxRadius); ++x) {
+            for (int z = 0; z <= x; ++z) {
+                int distSqr = x * x + z * z;
+                if (distSqr < maxSqr) {
+                    float dist = net.minecraft.util.math.MathHelper.sqrt(distSqr);
+                    if (!blocks.containsKey(dist)) {
+                        blocks.put(dist, new ArrayList<>());
+                    }
+                    addReflections(blocks.get(dist), x, z);
+                }
+            }
+        }
+        return blocks;
+    }
+
+    private static void addReflections(List<int[]> list, int x, int z) {
+
+        list.add(new int[]{x, z});
+        list.add(new int[]{-x, -z});
+        if (z != 0) {
+            list.add(new int[]{-x, z});
+            list.add(new int[]{x, -z});
+        }
+        if (x != 0 && x != z) {
+            list.add(new int[]{z, x});
+            list.add(new int[]{-z, -x});
+            if (z != 0) {
+                list.add(new int[]{-z, x});
+                list.add(new int[]{z, -x});
+            }
+        }
     }
     // endregion
 

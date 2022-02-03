@@ -150,6 +150,8 @@ public class CoreReferences {
     public static final BasicParticleType SPARK_PARTICLE = null;
     @ObjectHolder (ID_PARTICLE_PLASMA)
     public static final BasicParticleType PLASMA_PARTICLE = null;
+    @ObjectHolder (ID_PARTICLE_SHOCKWAVE)
+    public static final BasicParticleType SHOCKWAVE_PARTICLE = null;
     //@ObjectHolder(ID_PARTICLE_WIND)
     //public static final BasicParticleType WIND_PARTICLE = null;
     // endregion

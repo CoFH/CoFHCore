@@ -60,6 +60,7 @@ public class CoreIDs {
     public static final String ID_PARTICLE_FROST = "frost";
     public static final String ID_PARTICLE_SPARK = "spark";
     public static final String ID_PARTICLE_PLASMA = "plasma_ball";
+    public static final String ID_PARTICLE_SHOCKWAVE = "shockwave";
     public static final String ID_PARTICLE_WIND = "wind";
 
     public static final String ID_SOUND_ELECTRICITY = ID_COFH_CORE + ":misc.electricity";

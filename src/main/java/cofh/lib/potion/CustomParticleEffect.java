@@ -1,11 +1,7 @@
 package cofh.lib.potion;
 
-import cofh.lib.util.references.CoreReferences;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.particles.IParticleData;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.particles.RedstoneParticleData;
-import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectType;
 import net.minecraft.world.server.ServerWorld;
 
