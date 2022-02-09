@@ -17,8 +17,8 @@ import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
 
 public class ElectricArcRenderer extends EntityRenderer<ElectricArcEntity> {
 
-    protected static final ResourceLocation TEXTURE = new ResourceLocation(ID_COFH_CORE + ":textures/entity/lightning_segment.png");
-    protected static final RenderType GLOW_RENDER_TYPE = LightningRenderType.lightning(TEXTURE);
+    public static final ResourceLocation TEXTURE = new ResourceLocation(ID_COFH_CORE + ":textures/entity/lightning_segment.png");
+    public static final RenderType RENDER_TYPE = LightningRenderType.lightning(TEXTURE);
 
     public ElectricArcRenderer(EntityRendererManager manager) {
 
@@ -30,8 +30,8 @@ public class ElectricArcRenderer extends EntityRenderer<ElectricArcEntity> {
 
         matrixStackIn.pushPose();
         float time = entityIn.tickCount + partialTicks;
-        RenderHelper.renderArcs(matrixStackIn, bufferIn.getBuffer(GLOW_RENDER_TYPE), packedLightIn, new Vector3f(0, 10, 0), new Vector3f(0, 0, 0),
-                2, 0.4F, entityIn.seed, time, RenderHelper.getTaperOffsetFromTimes(time, ElectricArcEntity.duration, 3));
+        RenderHelper.renderArcs(matrixStackIn, bufferIn.getBuffer(RENDER_TYPE), packedLightIn, new Vector3f(0, 8, 0), new Vector3f(0, -1, 0),
+                2, 0.4F, RenderHelper.getSeedWithTime(entityIn.seed, time), RenderHelper.getTaperOffsetFromTimes(time, ElectricArcEntity.defaultDuration, 3));
         matrixStackIn.popPose();
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
     }
@@ -57,6 +57,7 @@ public class ElectricArcRenderer extends EntityRenderer<ElectricArcEntity> {
                             .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
                             .setOutputState(ITEM_ENTITY_TARGET)
                             .setAlphaState(DEFAULT_ALPHA)
+                            .setCullState(NO_CULL)
                             .setDepthTestState(LEQUAL_DEPTH_TEST)
                             .createCompositeState(true));
         }

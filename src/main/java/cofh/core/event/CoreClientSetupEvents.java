@@ -1,6 +1,9 @@
 package cofh.core.event;
 
-import cofh.core.client.particle.*;
+import cofh.core.client.particle.FrostParticle;
+import cofh.core.client.particle.PlasmaBallParticle;
+import cofh.core.client.particle.ShockwaveParticle;
+import cofh.core.client.particle.SparkParticle;
 import cofh.lib.client.model.DynamicFluidContainerModel;
 import cofh.lib.item.IColorableItem;
 import net.minecraft.client.Minecraft;

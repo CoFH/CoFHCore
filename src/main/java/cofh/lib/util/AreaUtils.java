@@ -1,6 +1,5 @@
 package cofh.lib.util;
 
-import cofh.core.init.CoreConfig;
 import cofh.lib.util.helpers.MathHelper;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.block.*;
