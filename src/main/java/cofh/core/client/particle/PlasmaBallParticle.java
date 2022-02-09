@@ -19,7 +19,7 @@ public class PlasmaBallParticle extends SpriteTexturedParticle {
         super(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
         this.spriteSet = spriteSet;
         setSpriteFromAge(spriteSet);
-        lifetime = ElectricArcEntity.duration;
+        lifetime = ElectricArcEntity.defaultDuration;
         scale(3.0F);
 
         xd = xSpeedIn;

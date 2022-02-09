@@ -183,6 +183,16 @@ public final class MathHelper {
         return 1 / sqrt(a);
     }
 
+    // A cross between a sin and a square wave function. Has period 4, returns a value between -1 and 1.
+    public static float bevel(float f) {
+
+        int floor = net.minecraft.util.math.MathHelper.floor(f);
+        if (f - floor < 0.66667F && (floor & 1) == 0) {
+            return -net.minecraft.util.math.MathHelper.cos((float) Math.PI * 1.5F * f);
+        }
+        return ((floor >> 1) & 1) == 0 ? 1 : -1;
+    }
+
     /**
      * Unchecked implementation to round a number. Parameter should be known to be valid in advance.
      */

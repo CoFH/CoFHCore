@@ -18,6 +18,7 @@ import cofh.lib.capability.CapabilityEnchantableItem;
 import cofh.lib.capability.CapabilityShieldItem;
 import cofh.lib.client.renderer.entity.ElectricArcRenderer;
 import cofh.lib.client.renderer.entity.KnifeRenderer;
+import cofh.lib.client.renderer.entity.NothingRenderer;
 import cofh.lib.item.impl.SpawnEggItemCoFH;
 import cofh.lib.loot.TileNBTSync;
 import cofh.lib.network.PacketHandler;
@@ -185,6 +186,8 @@ public class CoFHCore {
 
         RenderingRegistry.registerEntityRenderingHandler(KNIFE_ENTITY, KnifeRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ELECTRIC_ARC_ENTITY, ElectricArcRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ELECTRIC_FIELD_ENTITY, NothingRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(BLACK_HOLE_ENTITY, NothingRenderer::new);
     }
     // endregion
 }
