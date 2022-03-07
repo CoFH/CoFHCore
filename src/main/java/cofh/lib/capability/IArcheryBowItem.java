@@ -1,8 +1,8 @@
 package cofh.lib.capability;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 /**
  * Implement this interface as a capability for a Bow Item which should be compatible with CoFH's improved archery handling.
@@ -19,7 +19,7 @@ public interface IArcheryBowItem extends IArcheryItem {
      * @param shooter Player holding the bow.
      * @return Total accuracy modifier - 0.5F means arrows will shoot with half as much variance.
      */
-    default float getAccuracyModifier(PlayerEntity shooter) {
+    default float getAccuracyModifier(Player shooter) {
 
         return 1.0F;
     }
@@ -31,7 +31,7 @@ public interface IArcheryBowItem extends IArcheryItem {
      * @param shooter Player holding the bow.
      * @return Total damage modifier - 1.1F would be 10% more.
      */
-    default float getDamageModifier(PlayerEntity shooter) {
+    default float getDamageModifier(Player shooter) {
 
         return 1.0F;
     }
@@ -43,7 +43,7 @@ public interface IArcheryBowItem extends IArcheryItem {
      * @param shooter Player holding the bow.
      * @return Total speed modifier - as an example, 1.1F would be 10% more.
      */
-    default float getVelocityModifier(PlayerEntity shooter) {
+    default float getVelocityModifier(Player shooter) {
 
         return 1.0F;
     }
@@ -57,6 +57,6 @@ public interface IArcheryBowItem extends IArcheryItem {
      * @param world   World object, used to spawn the arrow.
      * @return TRUE if an arrow was actually fired.
      */
-    boolean fireArrow(ItemStack arrow, PlayerEntity shooter, int charge, World world);
+    boolean fireArrow(ItemStack arrow, Player shooter, int charge, Level world);
 
 }

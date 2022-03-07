@@ -1,3 +1,5 @@
+// TODO
+/*
 package cofh.core.client;
 
 import net.minecraft.client.renderer.RenderType;
@@ -30,3 +32,4 @@ public class CoreRenderType extends RenderType {
                     .createCompositeState(false));
 
 }
+*/

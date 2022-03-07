@@ -1,28 +1,33 @@
 package cofh.core.block;
 
 import cofh.core.tileentity.EnderAirTile;
+import cofh.lib.tileentity.ICoFHTickableTile;
 import cofh.lib.util.Utils;
-import net.minecraft.block.AirBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ExperienceOrbEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ExperienceOrb;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.AirBlock;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
 import static cofh.lib.util.references.CoreReferences.ENDERFERENCE;
+import static cofh.lib.util.references.CoreReferences.ENDER_AIR_TILE;
 
-public class EnderAirBlock extends AirBlock {
+public class EnderAirBlock extends AirBlock implements EntityBlock {
 
     protected static boolean teleport = true;
     protected static int duration = 40;
@@ -33,20 +38,21 @@ public class EnderAirBlock extends AirBlock {
     }
 
     @Override
-    public boolean hasTileEntity(BlockState state) {
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
 
-        return true;
+        return new EnderAirTile(pos, state);
     }
 
+    @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> actualType) {
 
-        return new EnderAirTile();
+        return ICoFHTickableTile.createTicker(level, actualType, ENDER_AIR_TILE, EnderAirTile.class);
     }
 
     @OnlyIn (Dist.CLIENT)
     @Override
-    public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+    public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, Random rand) {
 
         if (rand.nextInt(8) == 0) {
             Utils.spawnBlockParticlesClient(worldIn, ParticleTypes.PORTAL, pos, rand, 2);
@@ -54,12 +60,12 @@ public class EnderAirBlock extends AirBlock {
     }
 
     @Override
-    public void entityInside(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
+    public void entityInside(BlockState state, Level worldIn, BlockPos pos, Entity entityIn) {
 
         if (!teleport || Utils.isClientWorld(worldIn)) {
             return;
         }
-        if (entityIn instanceof ItemEntity || entityIn instanceof ExperienceOrbEntity) {
+        if (entityIn instanceof ItemEntity || entityIn instanceof ExperienceOrb) {
             return;
         }
         BlockPos randPos = pos.offset(-128 + worldIn.random.nextInt(257), worldIn.random.nextInt(8), -128 + worldIn.random.nextInt(257));
@@ -67,7 +73,7 @@ public class EnderAirBlock extends AirBlock {
         if (!worldIn.getBlockState(randPos).getMaterial().isSolid()) {
             if (entityIn instanceof LivingEntity) {
                 if (Utils.teleportEntityTo(entityIn, randPos)) {
-                    ((LivingEntity) entityIn).addEffect(new EffectInstance(ENDERFERENCE, duration, 0, false, false));
+                    ((LivingEntity) entityIn).addEffect(new MobEffectInstance(ENDERFERENCE, duration, 0, false, false));
                 }
             } else if (worldIn.getGameTime() % duration == 0) {
                 entityIn.setPos(randPos.getX(), randPos.getY(), randPos.getZ());

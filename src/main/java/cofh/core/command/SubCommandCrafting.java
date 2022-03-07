@@ -1,39 +1,39 @@
 package cofh.core.command;
 
 import com.mojang.brigadier.builder.ArgumentBuilder;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.SimpleNamedContainerProvider;
-import net.minecraft.inventory.container.WorkbenchContainer;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.CraftingMenu;
 
 public class SubCommandCrafting {
 
     public static int permissionLevel = 2;
 
-    static final TranslationTextComponent TITLE = new TranslationTextComponent("container.crafting");
+    static final TranslatableComponent TITLE = new TranslatableComponent("container.crafting");
 
-    static ArgumentBuilder<CommandSource, ?> register() {
+    static ArgumentBuilder<CommandSourceStack, ?> register() {
 
         return Commands.literal("crafting")
                 .requires(source -> source.hasPermission(permissionLevel))
                 .executes(context -> openContainer(context.getSource().getPlayerOrException()));
     }
 
-    static ArgumentBuilder<CommandSource, ?> registerAlt() {
+    static ArgumentBuilder<CommandSourceStack, ?> registerAlt() {
 
         return Commands.literal("workbench")
                 .requires(source -> source.hasPermission(permissionLevel))
                 .executes(context -> openContainer(context.getSource().getPlayerOrException()));
     }
 
-    private static int openContainer(PlayerEntity playerEntity) {
+    private static int openContainer(Player playerEntity) {
 
-        playerEntity.openMenu(new SimpleNamedContainerProvider((id, inventory, player) -> new WorkbenchContainer(id, inventory) {
+        playerEntity.openMenu(new SimpleMenuProvider((id, inventory, player) -> new CraftingMenu(id, inventory) {
 
             @Override
-            public boolean stillValid(PlayerEntity playerIn) {
+            public boolean stillValid(Player playerIn) {
 
                 return true;
             }

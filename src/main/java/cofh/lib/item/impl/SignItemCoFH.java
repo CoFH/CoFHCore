@@ -1,8 +1,8 @@
 package cofh.lib.item.impl;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.SignItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SignItem;
+import net.minecraft.world.level.block.Block;
 
 public class SignItemCoFH extends SignItem {
 

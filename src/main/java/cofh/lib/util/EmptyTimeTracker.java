@@ -1,6 +1,6 @@
 package cofh.lib.util;
 
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 
 /**
  * A basic time tracker class. Nothing surprising here.
@@ -12,13 +12,13 @@ public class EmptyTimeTracker extends TimeTracker {
     public static final EmptyTimeTracker INSTANCE = new EmptyTimeTracker();
 
     @Override
-    public boolean hasDelayPassed(World world, int delay) {
+    public boolean hasDelayPassed(Level world, int delay) {
 
         return false;
     }
 
     @Override
-    public void markTime(World world) {
+    public void markTime(Level world) {
 
     }
 

@@ -3,12 +3,12 @@ package cofh.core.data;
 import cofh.lib.util.references.BlockTagsCoFH;
 import cofh.lib.util.references.FluidTagsCoFH;
 import cofh.lib.util.references.ItemTagsCoFH;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.FluidTagsProvider;
-import net.minecraft.data.ItemTagsProvider;
-import net.minecraft.item.Items;
+import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.data.tags.FluidTagsProvider;
+import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import static cofh.core.CoFHCore.FLUIDS;

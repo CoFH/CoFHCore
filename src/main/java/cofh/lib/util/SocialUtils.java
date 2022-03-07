@@ -2,11 +2,11 @@ package cofh.lib.util;
 
 import com.mojang.authlib.GameProfile;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.world.storage.WorldSavedData;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.saveddata.SavedData;
 
 import java.util.Map;
 import java.util.Set;
@@ -15,7 +15,7 @@ import java.util.UUID;
 
 import static cofh.lib.util.constants.NBTTags.TAG_NAME;
 import static cofh.lib.util.constants.NBTTags.TAG_UUID;
-import static net.minecraftforge.common.util.Constants.NBT.TAG_COMPOUND;
+import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 
 public class SocialUtils {
 
@@ -25,49 +25,58 @@ public class SocialUtils {
 
     private static final String TAG_FRIENDS = "cofh:friends";
 
-    private static FriendData friends(ServerPlayerEntity player) {
+    private static FriendData friends(ServerPlayer player) {
 
-        return player.getLevel().getDataStorage().computeIfAbsent(() -> new FriendData(TAG_FRIENDS), TAG_FRIENDS);
+        return player.getLevel().getDataStorage().computeIfAbsent(FriendData::new, FriendData::new, TAG_FRIENDS);
     }
 
     // region FRIEND PASSTHROUGH
-    public synchronized static boolean addFriend(ServerPlayerEntity player, GameProfile friend) {
+    public synchronized static boolean addFriend(ServerPlayer player, GameProfile friend) {
 
         return friends(player).addFriend(player, friend);
     }
 
-    public synchronized static boolean removeFriend(ServerPlayerEntity player, GameProfile friend) {
+    public synchronized static boolean removeFriend(ServerPlayer player, GameProfile friend) {
 
         return friends(player).removeFriend(player, friend);
     }
 
-    public synchronized static boolean clearFriendList(ServerPlayerEntity player) {
+    public synchronized static boolean clearFriendList(ServerPlayer player) {
 
         return friends(player).clearFriendList(player);
     }
 
-    public synchronized static boolean clearAllFriendLists(ServerPlayerEntity player) {
+    public synchronized static boolean clearAllFriendLists(ServerPlayer player) {
 
         return friends(player).clearAllFriendLists(player);
     }
 
-    public static boolean isFriendOrSelf(GameProfile owner, ServerPlayerEntity player) {
+    public static boolean isFriendOrSelf(GameProfile owner, ServerPlayer player) {
 
         return friends(player).isFriendOrSelf(owner, player);
     }
     // endregion
 
     // region FRIEND DATA
-    private static class FriendData extends WorldSavedData {
+    private static class FriendData extends SavedData {
 
         private final Map<String, Set<GameProfile>> friendLists = new TreeMap<>();
 
-        FriendData(String name) {
+        FriendData() { }
 
-            super(name);
+        FriendData(CompoundTag nbt) {
+            for (String player : nbt.getAllKeys()) {
+                ListTag list = nbt.getList(player, TAG_COMPOUND);
+                Set<GameProfile> friendList = new ObjectOpenHashSet<>();
+                for (int i = 0; i < list.size(); ++i) {
+                    CompoundTag subTag = list.getCompound(i);
+                    friendList.add(new GameProfile(UUID.fromString(subTag.getString(TAG_UUID)), subTag.getString(TAG_NAME)));
+                }
+                friendLists.put(player, friendList);
+            }
         }
 
-        boolean addFriend(PlayerEntity player, GameProfile friend) {
+        boolean addFriend(Player player, GameProfile friend) {
 
             if (player == null || friend == null) {
                 return false;
@@ -83,7 +92,7 @@ public class SocialUtils {
             return true;
         }
 
-        boolean removeFriend(PlayerEntity player, GameProfile friend) {
+        boolean removeFriend(Player player, GameProfile friend) {
 
             if (player == null || friend == null) {
                 return false;
@@ -94,7 +103,7 @@ public class SocialUtils {
             return set != null && set.remove(friend);
         }
 
-        public boolean clearFriendList(PlayerEntity player) {
+        public boolean clearFriendList(Player player) {
 
             if (player == null) {
                 return false;
@@ -104,7 +113,7 @@ public class SocialUtils {
             return true;
         }
 
-        boolean clearAllFriendLists(PlayerEntity player) {
+        boolean clearAllFriendLists(Player player) {
 
             if (!player.hasPermissions(4)) {
                 return false;
@@ -114,7 +123,7 @@ public class SocialUtils {
             return true;
         }
 
-        boolean isFriendOrSelf(GameProfile owner, PlayerEntity player) {
+        boolean isFriendOrSelf(GameProfile owner, Player player) {
 
             if (owner == null || player == null) {
                 return false;
@@ -129,26 +138,12 @@ public class SocialUtils {
         }
 
         @Override
-        public void load(CompoundNBT nbt) {
-
-            for (String player : nbt.getAllKeys()) {
-                ListNBT list = nbt.getList(player, TAG_COMPOUND);
-                Set<GameProfile> friendList = new ObjectOpenHashSet<>();
-                for (int i = 0; i < list.size(); ++i) {
-                    CompoundNBT subTag = list.getCompound(i);
-                    friendList.add(new GameProfile(UUID.fromString(subTag.getString(TAG_UUID)), subTag.getString(TAG_NAME)));
-                }
-                friendLists.put(player, friendList);
-            }
-        }
-
-        @Override
-        public CompoundNBT save(CompoundNBT nbt) {
+        public CompoundTag save(CompoundTag nbt) {
 
             for (Map.Entry<String, Set<GameProfile>> friendList : friendLists.entrySet()) {
-                ListNBT list = new ListNBT();
+                ListTag list = new ListTag();
                 for (GameProfile friend : friendList.getValue()) {
-                    CompoundNBT subTag = new CompoundNBT();
+                    CompoundTag subTag = new CompoundTag();
                     subTag.putString(TAG_UUID, friend.getId().toString());
                     subTag.putString(TAG_NAME, friend.getName());
                     list.add(subTag);

@@ -2,17 +2,17 @@ package cofh.core.util;
 
 import cofh.lib.tileentity.IAreaEffectTile;
 import cofh.lib.util.IProxyItemPropertyGetter;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.Level;
 
 public class Proxy {
 
     // region HELPERS
-    public void addIndexedChatMessage(ITextComponent chat, int index) {
+    public void addIndexedChatMessage(Component chat, int index) {
 
     }
 
@@ -20,12 +20,12 @@ public class Proxy {
 
     }
 
-    public PlayerEntity getClientPlayer() {
+    public Player getClientPlayer() {
 
         return null;
     }
 
-    public World getClientWorld() {
+    public Level getClientWorld() {
 
         return null;
     }

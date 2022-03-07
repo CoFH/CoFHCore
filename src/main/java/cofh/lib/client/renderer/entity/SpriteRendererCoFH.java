@@ -1,16 +1,16 @@
 package cofh.lib.client.renderer.entity;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.SpriteRenderer;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.IRendersAsItem;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.projectile.ItemSupplier;
 
-public class SpriteRendererCoFH<T extends Entity & IRendersAsItem> extends SpriteRenderer<T> {
+@Deprecated // This doesn't have much point in existing now? Maybe? Should be removed?
+public class SpriteRendererCoFH<T extends Entity & ItemSupplier> extends ThrownItemRenderer<T> {
 
-    public SpriteRendererCoFH(EntityRendererManager renderManagerIn) {
+    public SpriteRendererCoFH(EntityRendererProvider.Context ctx, float scale, boolean fullBright) {
 
-        super(renderManagerIn, Minecraft.getInstance().getItemRenderer());
+        super(ctx, scale, fullBright);
     }
 
 }

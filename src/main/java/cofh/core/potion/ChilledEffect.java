@@ -1,14 +1,14 @@
 package cofh.core.potion;
 
 import cofh.lib.potion.EffectCoFH;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.potion.EffectType;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 
 import static cofh.lib.util.constants.Constants.UUID_EFFECT_CHILLED_MOVEMENT_SPEED;
 
 public class ChilledEffect extends EffectCoFH {
 
-    public ChilledEffect(EffectType typeIn, int liquidColorIn) {
+    public ChilledEffect(MobEffectCategory typeIn, int liquidColorIn) {
 
         super(typeIn, liquidColorIn);
     }

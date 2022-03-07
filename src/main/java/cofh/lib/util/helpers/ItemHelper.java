@@ -3,11 +3,11 @@ package cofh.lib.util.helpers;
 import cofh.lib.item.ILeftClickHandlerItem;
 import cofh.lib.item.IMultiModeItem;
 import com.google.common.base.Strings;
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 
 public class ItemHelper {
 
@@ -98,16 +98,16 @@ public class ItemHelper {
         return container;
     }
 
-    public static CompoundNBT setItemStackTagName(CompoundNBT tag, String name) {
+    public static CompoundTag setItemStackTagName(CompoundTag tag, String name) {
 
         if (Strings.isNullOrEmpty(name)) {
             return null;
         }
         if (tag == null) {
-            tag = new CompoundNBT();
+            tag = new CompoundTag();
         }
         if (!tag.contains("display")) {
-            tag.put("display", new CompoundNBT());
+            tag.put("display", new CompoundTag());
         }
         tag.getCompound("display").putString("Name", name);
         return tag;
@@ -161,8 +161,8 @@ public class ItemHelper {
             return false;
         }
 
-        CompoundNBT tagA = stackA.getTag();
-        CompoundNBT tagB = stackB.getTag();
+        CompoundTag tagA = stackA.getTag();
+        CompoundTag tagB = stackB.getTag();
 
         String[] keys = new String[numberOfKeys];
         keys = tagA.getAllKeys().toArray(keys);
@@ -183,22 +183,22 @@ public class ItemHelper {
     // endregion
 
     // region HELD ITEMS
-    public static boolean isPlayerHoldingSomething(PlayerEntity player) {
+    public static boolean isPlayerHoldingSomething(Player player) {
 
         return !getHeldStack(player).isEmpty();
     }
 
-    public static ItemStack getMainhandStack(PlayerEntity player) {
+    public static ItemStack getMainhandStack(Player player) {
 
         return player.getMainHandItem();
     }
 
-    public static ItemStack getOffhandStack(PlayerEntity player) {
+    public static ItemStack getOffhandStack(Player player) {
 
         return player.getOffhandItem();
     }
 
-    public static ItemStack getHeldStack(PlayerEntity player) {
+    public static ItemStack getHeldStack(Player player) {
 
         ItemStack stack = player.getMainHandItem();
         if (stack.isEmpty()) {
@@ -209,7 +209,7 @@ public class ItemHelper {
     // endregion
 
     // region MODE CHANGE
-    public static ItemStack getHeldMultiModeStack(PlayerEntity player) {
+    public static ItemStack getHeldMultiModeStack(Player player) {
 
         ItemStack stack = player.getMainHandItem();
         if (stack.isEmpty() || !(stack.getItem() instanceof IMultiModeItem)) {
@@ -218,7 +218,7 @@ public class ItemHelper {
         return stack;
     }
 
-    public static boolean isPlayerHoldingMultiModeItem(PlayerEntity player) {
+    public static boolean isPlayerHoldingMultiModeItem(Player player) {
 
         if (!isPlayerHoldingSomething(player)) {
             return false;
@@ -232,7 +232,7 @@ public class ItemHelper {
         }
     }
 
-    public static boolean incrHeldMultiModeItemState(PlayerEntity player) {
+    public static boolean incrHeldMultiModeItemState(Player player) {
 
         if (!isPlayerHoldingSomething(player)) {
             return false;
@@ -244,7 +244,7 @@ public class ItemHelper {
                 : offHand.getItem() instanceof IMultiModeItem && ((IMultiModeItem) offHand.getItem()).incrMode(offHand);
     }
 
-    public static boolean decrHeldMultiModeItemState(PlayerEntity player) {
+    public static boolean decrHeldMultiModeItemState(Player player) {
 
         if (!isPlayerHoldingSomething(player)) {
             return false;
@@ -256,7 +256,7 @@ public class ItemHelper {
                 : offHand.getItem() instanceof IMultiModeItem && ((IMultiModeItem) offHand.getItem()).decrMode(offHand);
     }
 
-    public static void onHeldMultiModeItemChange(PlayerEntity player) {
+    public static void onHeldMultiModeItemChange(Player player) {
 
         ItemStack heldItem = getHeldMultiModeStack(player);
         ((IMultiModeItem) heldItem.getItem()).onModeChange(player, heldItem);
@@ -264,7 +264,7 @@ public class ItemHelper {
     // endregion
 
     // region LEFT CLICK
-    public static boolean isPlayerHoldingLeftClickItem(PlayerEntity player) {
+    public static boolean isPlayerHoldingLeftClickItem(Player player) {
 
         if (!isPlayerHoldingSomething(player)) {
             return false;
@@ -272,7 +272,7 @@ public class ItemHelper {
         return player.getMainHandItem().getItem() instanceof ILeftClickHandlerItem;
     }
 
-    public static void onHeldLeftClickItem(PlayerEntity player) {
+    public static void onHeldLeftClickItem(Player player) {
 
         ItemStack heldItem = player.getMainHandItem();
         ((ILeftClickHandlerItem) heldItem.getItem()).onLeftClick(player, heldItem);

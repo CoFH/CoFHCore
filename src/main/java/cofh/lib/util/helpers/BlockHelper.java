@@ -1,23 +1,23 @@
 package cofh.lib.util.helpers;
 
-import net.minecraft.block.AbstractRailBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.Property;
-import net.minecraft.state.properties.ChestType;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseRailBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.ChestType;
+import net.minecraft.world.level.block.state.properties.Property;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.EnumMap;
 import java.util.function.ToIntFunction;
 
-import static net.minecraft.state.properties.BlockStateProperties.*;
+import static net.minecraft.world.level.block.state.properties.BlockStateProperties.*;
 
 /**
  * Contains various helper functions to assist with {@link Block} and Block-related manipulation and interaction.
@@ -68,25 +68,25 @@ public class BlockHelper {
     }
 
     // region TILE ENTITIES
-    public static TileEntity getAdjacentTileEntity(World world, BlockPos pos, Direction dir) {
+    public static BlockEntity getAdjacentTileEntity(Level world, BlockPos pos, Direction dir) {
 
         pos = pos.relative(dir);
         return world == null || !world.hasChunkAt(pos) ? null : world.getBlockEntity(pos);
     }
 
-    public static TileEntity getAdjacentTileEntity(World world, BlockPos pos, int side) {
+    public static BlockEntity getAdjacentTileEntity(Level world, BlockPos pos, int side) {
 
         return world == null ? null : getAdjacentTileEntity(world, pos, DIR_VALUES[side]);
     }
 
-    public static TileEntity getAdjacentTileEntity(TileEntity refTile, Direction dir) {
+    public static BlockEntity getAdjacentTileEntity(BlockEntity refTile, Direction dir) {
 
         return refTile == null ? null : getAdjacentTileEntity(refTile.getLevel(), refTile.getBlockPos(), dir);
     }
     // endregion
 
     // region ROTATION
-    public static boolean attemptRotateBlock(BlockState state, World world, BlockPos pos) {
+    public static boolean attemptRotateBlock(BlockState state, Level world, BlockPos pos) {
 
         Collection<Property<?>> properties = state.getProperties();
 
@@ -174,7 +174,7 @@ public class BlockHelper {
             }
         }
         // RAILS
-        if (state.getBlock() instanceof AbstractRailBlock) {
+        if (state.getBlock() instanceof BaseRailBlock) {
             rotState = state.rotate(world, pos, Rotation.CLOCKWISE_90);
             if (rotState != state && rotState.canSurvive(world, pos)) {
                 world.setBlockAndUpdate(pos, rotState);

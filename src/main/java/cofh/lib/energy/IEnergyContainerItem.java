@@ -2,8 +2,8 @@ package cofh.lib.energy;
 
 import cofh.lib.item.IContainerItem;
 import cofh.lib.util.helpers.MathHelper;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.IEnergyStorage;
 
@@ -21,7 +21,7 @@ public interface IEnergyContainerItem extends IContainerItem {
 
     Capability<? extends IEnergyStorage> getEnergyCapability();
 
-    default CompoundNBT getOrCreateEnergyTag(ItemStack container) {
+    default CompoundTag getOrCreateEnergyTag(ItemStack container) {
 
         return container.getOrCreateTag();
     }
@@ -41,7 +41,7 @@ public interface IEnergyContainerItem extends IContainerItem {
      */
     default int getEnergyStored(ItemStack container) {
 
-        CompoundNBT tag = getOrCreateEnergyTag(container);
+        CompoundTag tag = getOrCreateEnergyTag(container);
         return Math.min(tag.getInt(TAG_ENERGY), getMaxEnergyStored(container));
     }
 
@@ -56,7 +56,7 @@ public interface IEnergyContainerItem extends IContainerItem {
 
     default void setEnergyStored(ItemStack container, int energy) {
 
-        CompoundNBT tag = getOrCreateEnergyTag(container);
+        CompoundTag tag = getOrCreateEnergyTag(container);
         tag.putInt(TAG_ENERGY, MathHelper.clamp(energy, 0, getMaxEnergyStored(container)));
     }
 
@@ -71,7 +71,7 @@ public interface IEnergyContainerItem extends IContainerItem {
      */
     default int receiveEnergy(ItemStack container, int maxReceive, boolean simulate) {
 
-        CompoundNBT tag = getOrCreateEnergyTag(container);
+        CompoundTag tag = getOrCreateEnergyTag(container);
         if (isCreative(container, ENERGY)) {
             return 0;
         }
@@ -96,7 +96,7 @@ public interface IEnergyContainerItem extends IContainerItem {
      */
     default int extractEnergy(ItemStack container, int maxExtract, boolean simulate) {
 
-        CompoundNBT tag = getOrCreateEnergyTag(container);
+        CompoundTag tag = getOrCreateEnergyTag(container);
         if (isCreative(container, ENERGY)) {
             return maxExtract;
         }

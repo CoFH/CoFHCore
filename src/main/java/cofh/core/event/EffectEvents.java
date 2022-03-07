@@ -1,12 +1,12 @@
 package cofh.core.event;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.DamageSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.EntityStruckByLightningEvent;
-import net.minecraftforge.event.entity.living.EntityTeleportEvent;
+import net.minecraftforge.event.entity.EntityTeleportEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.player.PlayerXpEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -66,12 +66,11 @@ public class EffectEvents {
             return;
         }
         Entity entity = event.getEntity();
-        if (entity instanceof LivingEntity) {
-            LivingEntity living = (LivingEntity) entity;
+        if (entity instanceof LivingEntity living) {
             if (living.hasEffect(LIGHTNING_RESISTANCE)) {
                 event.setCanceled(true);
             } else {
-                living.addEffect(new EffectInstance(SHOCKED, 100, 0));
+                living.addEffect(new MobEffectInstance(SHOCKED, 100, 0));
             }
         }
     }
@@ -102,9 +101,9 @@ public class EffectEvents {
         if (event.isCanceled() || event.getAmount() <= 0) {
             return;
         }
-        PlayerEntity player = event.getPlayer();
+        Player player = event.getPlayer();
 
-        EffectInstance clarityEffect = player.getEffect(CLARITY);
+        MobEffectInstance clarityEffect = player.getEffect(CLARITY);
         if (clarityEffect == null) {
             return;
         }

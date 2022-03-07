@@ -2,13 +2,13 @@ package cofh.lib.inventory.wrapper;
 
 import cofh.lib.inventory.SimpleItemInv;
 import cofh.lib.util.helpers.MathHelper;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 import static cofh.lib.util.constants.Constants.MAX_CAPACITY;
 
-public class InvWrapperCoFH implements IInventory {
+public class InvWrapperCoFH implements Container {
 
     protected SimpleItemInv inventory;
     protected int stackLimit;
@@ -104,7 +104,7 @@ public class InvWrapperCoFH implements IInventory {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
 
         return true;
     }

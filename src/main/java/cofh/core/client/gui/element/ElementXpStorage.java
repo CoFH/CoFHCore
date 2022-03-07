@@ -20,7 +20,8 @@ public class ElementXpStorage extends ElementResourceStorage {
     @Override
     protected void drawResource() {
 
-        RenderHelper.bindTexture(texture);
+        RenderHelper.setPosTexShader();
+        RenderHelper.setShaderTexture0(texture);
         int amount = storage.getStored() <= 0 ? 0 : Math.min(getScaled(4) + 1, 4);
         drawTexturedModalRect(posX(), posY(), 0, amount * height, width, height);
     }

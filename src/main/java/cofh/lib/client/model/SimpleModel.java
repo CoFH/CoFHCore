@@ -3,10 +3,11 @@ package cofh.lib.client.model;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.client.renderer.model.*;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.resources.model.*;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraftforge.client.model.IModelBuilder;
 import net.minecraftforge.client.model.IModelConfiguration;
 import net.minecraftforge.client.model.IModelLoader;
@@ -20,50 +21,50 @@ import java.util.function.Function;
 public class SimpleModel implements ISimpleModelGeometry<SimpleModel> {
 
     private final ModelLoaderRegistry.VanillaProxy model;
-    private final SimpleModel.IFactory<IBakedModel> factory;
+    private final SimpleModel.IFactory<BakedModel> factory;
 
-    public SimpleModel(ModelLoaderRegistry.VanillaProxy model, SimpleModel.IFactory<IBakedModel> factory) {
+    public SimpleModel(ModelLoaderRegistry.VanillaProxy model, SimpleModel.IFactory<BakedModel> factory) {
 
         this.model = model;
         this.factory = factory;
     }
 
     @Override
-    public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> spriteGetter, IModelTransform modelTransform, ItemOverrideList overrides, ResourceLocation modelLocation) {
+    public BakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelTransform, ItemOverrides overrides, ResourceLocation modelLocation) {
 
         return factory.create(model.bake(owner, bakery, spriteGetter, modelTransform, overrides, modelLocation));
     }
 
     @Override
-    public void addQuads(IModelConfiguration owner, IModelBuilder<?> modelBuilder, ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> spriteGetter, IModelTransform modelTransform, ResourceLocation modelLocation) {
+    public void addQuads(IModelConfiguration owner, IModelBuilder<?> modelBuilder, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelTransform, ResourceLocation modelLocation) {
 
         model.addQuads(owner, modelBuilder, bakery, spriteGetter, modelTransform, modelLocation);
     }
 
     @Override
-    public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
+    public Collection<Material> getTextures(IModelConfiguration owner, Function<ResourceLocation, UnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
 
         return model.getTextures(owner, modelGetter, missingTextureErrors);
     }
 
-    public interface IFactory<T extends IBakedModel> {
+    public interface IFactory<T extends BakedModel> {
 
-        T create(IBakedModel originalModel);
+        T create(BakedModel originalModel);
 
     }
 
     // region LOADER
     public static class Loader implements IModelLoader<SimpleModel> {
 
-        private final SimpleModel.IFactory<IBakedModel> factory;
+        private final SimpleModel.IFactory<BakedModel> factory;
 
-        public Loader(SimpleModel.IFactory<IBakedModel> factory) {
+        public Loader(SimpleModel.IFactory<BakedModel> factory) {
 
             this.factory = factory;
         }
 
         @Override
-        public void onResourceManagerReload(IResourceManager resourceManager) {
+        public void onResourceManagerReload(ResourceManager resourceManager) {
 
         }
 

@@ -1,38 +1,30 @@
 package cofh.core.util.helpers;
 
 import cofh.lib.util.helpers.MathHelper;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.GlStateManager.DestFactor;
+import com.mojang.blaze3d.platform.GlStateManager.SourceFactor;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.block.BlockState;
+import com.mojang.blaze3d.vertex.*;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Quaternion;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.texture.AtlasTexture;
-import net.minecraft.client.renderer.texture.MissingTextureSprite;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.client.renderer.vertex.VertexFormatElement;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.math.vector.Quaternion;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.client.model.pipeline.LightUtil;
 import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
-import javax.annotation.Nonnull;
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * Contains various helper functions to assist with rendering.
@@ -57,14 +49,14 @@ public final class RenderHelper {
         return Minecraft.getInstance().getTextureManager();
     }
 
-    public static AtlasTexture textureMap() {
+    public static TextureAtlas textureMap() {
 
-        return Minecraft.getInstance().getModelManager().getAtlas(AtlasTexture.LOCATION_BLOCKS);
+        return Minecraft.getInstance().getModelManager().getAtlas(TextureAtlas.LOCATION_BLOCKS);
     }
 
-    public static Tessellator tessellator() {
+    public static Tesselator tesselator() {
 
-        return Tessellator.getInstance();
+        return Tesselator.getInstance();
     }
 
     public static ItemRenderer renderItem() {
@@ -76,17 +68,17 @@ public final class RenderHelper {
     // region SHEETS
     public static void setBlockTextureSheet() {
 
-        bindTexture(MC_BLOCK_SHEET);
+        setShaderTexture0(MC_BLOCK_SHEET);
     }
 
     public static void setDefaultFontTextureSheet() {
 
-        bindTexture(MC_FONT_DEFAULT);
+        setShaderTexture0(MC_FONT_DEFAULT);
     }
 
     public static void setSGAFontTextureSheet() {
 
-        bindTexture(MC_FONT_SGA);
+        setShaderTexture0(MC_FONT_SGA);
     }
     // endregion
 
@@ -96,15 +88,14 @@ public final class RenderHelper {
         if (fluid.isEmpty()) {
             return;
         }
-        GL11.glPushMatrix();
         RenderSystem.enableBlend();
-        RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        RenderSystem.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 
         int color = fluid.getFluid().getAttributes().getColor(fluid);
+        setPosTexShader();
         setBlockTextureSheet();
-        setGLColorFromInt(color);
+        setSahderColorFromInt(color);
         drawTiledTexture(x, y, getTexture(fluid.getFluid().getAttributes().getStillTexture(fluid)), width, height);
-        GL11.glPopMatrix();
     }
 
     public static int getFluidColor(FluidStack fluid) {
@@ -114,25 +105,25 @@ public final class RenderHelper {
 
     public static void drawIcon(TextureAtlasSprite icon, double z) {
 
-        BufferBuilder buffer = Tessellator.getInstance().getBuilder();
-        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        BufferBuilder buffer = tesselator().getBuilder();
+        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
         buffer.vertex(0, 16, z).uv(icon.getU0(), icon.getV1());
         buffer.vertex(16, 16, z).uv(icon.getU1(), icon.getV1());
         buffer.vertex(16, 0, z).uv(icon.getU1(), icon.getV0());
         buffer.vertex(0, 0, z).uv(icon.getU0(), icon.getV0());
-        tessellator().end();
+        tesselator().end();
 
     }
 
     public static void drawIcon(double x, double y, double z, TextureAtlasSprite icon, int width, int height) {
 
-        BufferBuilder buffer = Tessellator.getInstance().getBuilder();
-        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        BufferBuilder buffer = tesselator().getBuilder();
+        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
         buffer.vertex(x, y + height, z).uv(icon.getU0(), icon.getV1());
         buffer.vertex(x + width, y + height, z).uv(icon.getU1(), icon.getV1());
         buffer.vertex(x + width, y, z).uv(icon.getU1(), icon.getV0());
         buffer.vertex(x, y, z).uv(icon.getU0(), icon.getV0());
-        tessellator().end();
+        tesselator().end();
     }
 
     public static void drawTiledTexture(int x, int y, TextureAtlasSprite icon, int width, int height) {
@@ -147,8 +138,7 @@ public final class RenderHelper {
                 drawScaledTexturedModalRectFromSprite(x + i, y + j, icon, drawWidth, drawHeight);
             }
         }
-        resetColor();
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        resetShaderColor();
     }
 
     public static void drawScaledTexturedModalRectFromSprite(int x, int y, TextureAtlasSprite icon, int width, int height) {
@@ -164,16 +154,18 @@ public final class RenderHelper {
         float u = minU + (maxU - minU) * width / 16F;
         float v = minV + (maxV - minV) * height / 16F;
 
-        BufferBuilder buffer = Tessellator.getInstance().getBuilder();
-        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        BufferBuilder buffer = tesselator().getBuilder();
+        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
         buffer.vertex(x, y + height, 0).uv(minU, v).endVertex();
         buffer.vertex(x + width, y + height, 0).uv(u, v).endVertex();
         buffer.vertex(x + width, y, 0).uv(u, minV).endVertex();
         buffer.vertex(x, y, 0).uv(minU, minV).endVertex();
-        Tessellator.getInstance().end();
+        tesselator().end();
     }
 
-    public static void drawStencil(int xStart, int yStart, int xEnd, int yEnd, int flag) {
+
+    // TODO This is unused, needs PoseStack argument and Shaders set
+/*    public static void drawStencil(int xStart, int yStart, int xEnd, int yEnd, int flag) {
 
         RenderSystem.disableTexture();
         GL11.glStencilFunc(GL11.GL_ALWAYS, flag, flag);
@@ -197,54 +189,53 @@ public final class RenderHelper {
         GL11.glStencilMask(0);
         RenderSystem.colorMask(true, true, true, true);
         RenderSystem.depthMask(true);
-    }
+    }*/
     // endregion
 
     // region MATRIX DRAW METHODS
-    public static void drawFluid(MatrixStack matrixStack, int x, int y, FluidStack fluid, int width, int height) {
+    public static void drawFluid(PoseStack matrixStack, int x, int y, FluidStack fluid, int width, int height) {
 
         if (fluid.isEmpty()) {
             return;
         }
-        GL11.glPushMatrix();
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
         int color = fluid.getFluid().getAttributes().getColor(fluid);
+        setPosTexShader();
         setBlockTextureSheet();
-        setGLColorFromInt(color);
+        setSahderColorFromInt(color);
         drawTiledTexture(matrixStack, x, y, getTexture(fluid.getFluid().getAttributes().getStillTexture(fluid)), width, height);
-        GL11.glPopMatrix();
     }
 
-    public static void drawIcon(MatrixStack matrixStack, TextureAtlasSprite icon, float z) {
+    public static void drawIcon(PoseStack matrixStack, TextureAtlasSprite icon, float z) {
 
         Matrix4f matrix = matrixStack.last().pose();
 
-        BufferBuilder buffer = Tessellator.getInstance().getBuilder();
-        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        BufferBuilder buffer = tesselator().getBuilder();
+        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
         buffer.vertex(matrix, 0, 16, z).uv(icon.getU0(), icon.getV1());
         buffer.vertex(matrix, 16, 16, z).uv(icon.getU1(), icon.getV1());
         buffer.vertex(matrix, 16, 0, z).uv(icon.getU1(), icon.getV0());
         buffer.vertex(matrix, 0, 0, z).uv(icon.getU0(), icon.getV0());
-        tessellator().end();
+        tesselator().end();
 
     }
 
-    public static void drawIcon(MatrixStack matrixStack, float x, float y, float z, TextureAtlasSprite icon, int width, int height) {
+    public static void drawIcon(PoseStack matrixStack, float x, float y, float z, TextureAtlasSprite icon, int width, int height) {
 
         Matrix4f matrix = matrixStack.last().pose();
 
-        BufferBuilder buffer = Tessellator.getInstance().getBuilder();
-        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        BufferBuilder buffer = tesselator().getBuilder();
+        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
         buffer.vertex(matrix, x, y + height, z).uv(icon.getU0(), icon.getV1());
         buffer.vertex(matrix, x + width, y + height, z).uv(icon.getU1(), icon.getV1());
         buffer.vertex(matrix, x + width, y, z).uv(icon.getU1(), icon.getV0());
         buffer.vertex(matrix, x, y, z).uv(icon.getU0(), icon.getV0());
-        tessellator().end();
+        tesselator().end();
     }
 
-    public static void drawTiledTexture(MatrixStack matrixStack, int x, int y, TextureAtlasSprite icon, int width, int height) {
+    public static void drawTiledTexture(PoseStack matrixStack, int x, int y, TextureAtlasSprite icon, int width, int height) {
 
         int drawHeight;
         int drawWidth;
@@ -256,11 +247,10 @@ public final class RenderHelper {
                 drawScaledTexturedModalRectFromSprite(matrixStack, x + i, y + j, icon, drawWidth, drawHeight);
             }
         }
-        resetColor();
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        resetShaderColor();
     }
 
-    public static void drawScaledTexturedModalRectFromSprite(MatrixStack matrixStack, int x, int y, TextureAtlasSprite icon, int width, int height) {
+    public static void drawScaledTexturedModalRectFromSprite(PoseStack matrixStack, int x, int y, TextureAtlasSprite icon, int width, int height) {
 
         if (icon == null) {
             return;
@@ -275,18 +265,19 @@ public final class RenderHelper {
 
         Matrix4f matrix = matrixStack.last().pose();
 
-        BufferBuilder buffer = Tessellator.getInstance().getBuilder();
-        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        BufferBuilder buffer = tesselator().getBuilder();
+        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
         buffer.vertex(matrix, x, y + height, 0).uv(minU, v).endVertex();
         buffer.vertex(matrix, x + width, y + height, 0).uv(u, v).endVertex();
         buffer.vertex(matrix, x + width, y, 0).uv(u, minV).endVertex();
         buffer.vertex(matrix, x, y, 0).uv(minU, minV).endVertex();
-        Tessellator.getInstance().end();
+        tesselator().end();
     }
 
-    public static void drawStencil(MatrixStack matrixStack, int xStart, int yStart, int xEnd, int yEnd, int flag) {
+    public static void drawStencil(PoseStack matrixStack, int xStart, int yStart, int xEnd, int yEnd, int flag) {
 
         RenderSystem.disableTexture();
+        RenderSystem.setShader(GameRenderer::getPositionShader);
         GL11.glStencilFunc(GL11.GL_ALWAYS, flag, flag);
         GL11.glStencilOp(GL11.GL_ZERO, GL11.GL_ZERO, GL11.GL_REPLACE);
         GL11.glStencilMask(flag);
@@ -297,13 +288,13 @@ public final class RenderHelper {
 
         Matrix4f matrix = matrixStack.last().pose();
 
-        BufferBuilder buffer = Tessellator.getInstance().getBuilder();
-        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
+        BufferBuilder buffer = tesselator().getBuilder();
+        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
         buffer.vertex(matrix, xStart, yEnd, 0).endVertex();
         buffer.vertex(matrix, xEnd, yEnd, 0).endVertex();
         buffer.vertex(matrix, xEnd, yStart, 0).endVertex();
         buffer.vertex(matrix, xStart, yStart, 0).endVertex();
-        Tessellator.getInstance().end();
+        tesselator().end();
 
         RenderSystem.enableTexture();
         GL11.glStencilFunc(GL11.GL_EQUAL, flag, flag);
@@ -314,7 +305,8 @@ public final class RenderHelper {
     // endregion
 
     // region PASSTHROUGHS
-    public static void disableStandardItemLighting() {
+    // TODO Fix these if needed.
+/*    public static void disableStandardItemLighting() {
 
         net.minecraft.client.renderer.RenderHelper.turnOff();
     }
@@ -332,7 +324,7 @@ public final class RenderHelper {
     public static void setupGui3DDiffuseLighting() {
 
         net.minecraft.client.renderer.RenderHelper.setupFor3DItems();
-    }
+    }*/
     // endregion
 
     // region TEXTURE GETTERS
@@ -363,14 +355,14 @@ public final class RenderHelper {
 
     public static boolean textureExists(ResourceLocation location) {
 
-        return !(getTexture(location) instanceof MissingTextureSprite);
+        return !(getTexture(location) instanceof MissingTextureAtlasSprite);
     }
     // endregion
 
     private static int vertexColorIndex;
 
     static {
-        VertexFormat from = DefaultVertexFormats.BLOCK; //Always BLOCK as of 1.15
+        VertexFormat from = DefaultVertexFormat.BLOCK; //Always BLOCK as of 1.15
 
         vertexColorIndex = -1;
         List<VertexFormatElement> elements = from.getElements();
@@ -385,7 +377,7 @@ public final class RenderHelper {
 
     public static BakedQuad mulColor(BakedQuad quad, int color) {
 
-        VertexFormat from = DefaultVertexFormats.BLOCK; //Always BLOCK as of 1.15
+        VertexFormat from = DefaultVertexFormat.BLOCK; //Always BLOCK as of 1.15
 
         float r = ((color >> 16) & 0xFF) / 255f; // red
         float g = ((color >> 8) & 0xFF) / 255f; // green
@@ -416,25 +408,30 @@ public final class RenderHelper {
         return new BakedQuad(packedData, quad.getTintIndex(), quad.getDirection(), quad.getSprite(), quad.isShade());
     }
 
-    public static void setGLColorFromInt(int color) {
+    public static void setSahderColorFromInt(int color) {
 
         float red = (float) (color >> 16 & 255) / 255.0F;
         float green = (float) (color >> 8 & 255) / 255.0F;
         float blue = (float) (color & 255) / 255.0F;
-        RenderSystem.color4f(red, green, blue, 1.0F);
+        RenderSystem.setShaderColor(red, green, blue, 1.0F);
     }
 
-    public static void resetColor() {
+    public static void setPosTexShader() {
 
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
     }
 
-    public static void bindTexture(ResourceLocation texture) {
+    public static void resetShaderColor() {
 
-        engine().bind(texture);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
-    public static void renderItemOnBlockSide(MatrixStack matrixStackIn, ItemStack stack, Direction side, BlockPos pos) {
+    public static void setShaderTexture0(ResourceLocation texture) {
+
+        RenderSystem.setShaderTexture(0, texture);
+    }
+
+    public static void renderItemOnBlockSide(PoseStack matrixStackIn, ItemStack stack, Direction side, BlockPos pos) {
 
         if (stack.isEmpty() || side.getAxis() == Direction.Axis.Y) {
             return;
@@ -480,7 +477,8 @@ public final class RenderHelper {
         //        net.minecraft.client.renderer.RenderHelper.enableStandardItemLighting();
     }
 
-    private static void renderFastItem(@Nonnull ItemStack itemStack, BlockState state, int slot, MatrixStack matrix, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay, Direction side, float partialTickTime) {
+    // TODO Fix if required, 1.17 render changes are required.
+/*    private static void renderFastItem(@Nonnull ItemStack itemStack, BlockState state, int slot, MatrixStack matrix, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay, Direction side, float partialTickTime) {
 
         matrix.pushPose();
 
@@ -510,6 +508,6 @@ public final class RenderHelper {
             // pokemon!
         }
         matrix.popPose();
-    }
+    }*/
 
 }

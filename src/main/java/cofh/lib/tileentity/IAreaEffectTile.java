@@ -1,17 +1,17 @@
 package cofh.lib.tileentity;
 
 import cofh.lib.util.control.ISecurable;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.AABB;
 
 public interface IAreaEffectTile {
 
-    AxisAlignedBB getArea();
+    AABB getArea();
 
     BlockPos pos();
 
-    default boolean canPlayerAccess(PlayerEntity player) {
+    default boolean canPlayerAccess(Player player) {
 
         return !(this instanceof ISecurable) || ((ISecurable) this).canAccess(player);
     }

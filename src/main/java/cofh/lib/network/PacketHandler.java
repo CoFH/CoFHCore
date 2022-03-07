@@ -5,16 +5,16 @@ import cofh.lib.network.packet.IPacketClient;
 import cofh.lib.network.packet.IPacketServer;
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectArrayMap;
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
-import net.minecraft.network.INetHandler;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.play.ServerPlayNetHandler;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.PacketListener;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.fml.network.NetworkEvent;
-import net.minecraftforge.fml.network.NetworkRegistry;
-import net.minecraftforge.fml.network.event.EventNetworkChannel;
+import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.event.EventNetworkChannel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -63,7 +63,7 @@ public class PacketHandler {
         @SubscribeEvent
         public void onPayload(NetworkEvent.ServerCustomPayloadEvent event) {
 
-            PacketBuffer buf = new PacketBuffer(event.getPayload());
+            FriendlyByteBuf buf = new FriendlyByteBuf(event.getPayload());
             NetworkEvent.Context ctx = event.getSource().get();
             ctx.setPacketHandled(true);
             byte id = (byte) buf.readUnsignedByte();
@@ -91,7 +91,7 @@ public class PacketHandler {
         @SubscribeEvent
         public void onPayload(NetworkEvent.ClientCustomPayloadEvent event) {
 
-            PacketBuffer buf = new PacketBuffer(event.getPayload());
+            FriendlyByteBuf buf = new FriendlyByteBuf(event.getPayload());
             NetworkEvent.Context ctx = event.getSource().get();
             ctx.setPacketHandled(true);
             byte id = (byte) buf.readUnsignedByte();
@@ -105,11 +105,11 @@ public class PacketHandler {
                 LOG.error("Received packet ID that isn't an IPacketServer? ID: {}", id);
                 return;
             }
-            INetHandler netHandler = ctx.getNetworkManager().getPacketListener();
-            if (netHandler instanceof ServerPlayNetHandler) {
+            PacketListener netHandler = ctx.getNetworkManager().getPacketListener();
+            if (netHandler instanceof ServerGamePacketListenerImpl) {
                 ctx.enqueueWork(() -> {
                     packet.read(buf);
-                    ((IPacketServer) packet).handleServer(((ServerPlayNetHandler) netHandler).player);
+                    ((IPacketServer) packet).handleServer(((ServerGamePacketListenerImpl) netHandler).player);
                 });
             }
         }

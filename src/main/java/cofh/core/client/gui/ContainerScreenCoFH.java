@@ -6,32 +6,25 @@ import cofh.core.client.gui.element.panel.PanelBase;
 import cofh.core.client.gui.element.panel.PanelTracker;
 import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.client.gui.IGuiAccess;
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Rectangle2d;
-import net.minecraft.client.renderer.Tessellator;
+import com.mojang.blaze3d.vertex.*;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraftforge.fml.client.gui.GuiUtils;
-import org.lwjgl.opengl.GL11;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static cofh.lib.util.helpers.StringHelper.localize;
 
-public class ContainerScreenCoFH<T extends Container> extends ContainerScreen<T> implements IGuiAccess {
+public class ContainerScreenCoFH<T extends AbstractContainerMenu> extends AbstractContainerScreen<T> implements IGuiAccess {
 
     protected int mX;
     protected int mY;
@@ -39,7 +32,7 @@ public class ContainerScreenCoFH<T extends Container> extends ContainerScreen<T>
     protected String name;
     protected String info;
     protected ResourceLocation texture;
-    protected PlayerEntity player;
+    protected Player player;
 
     protected boolean drawTitle = true;
     protected boolean drawInventory = true;
@@ -47,9 +40,9 @@ public class ContainerScreenCoFH<T extends Container> extends ContainerScreen<T>
 
     private final ArrayList<PanelBase> panels = new ArrayList<>();
     private final ArrayList<ElementBase> elements = new ArrayList<>();
-    private final List<ITextComponent> tooltip = new LinkedList<>();
+    private final List<Component> tooltip = new LinkedList<>();
 
-    public ContainerScreenCoFH(T container, PlayerInventory inv, ITextComponent titleIn) {
+    public ContainerScreenCoFH(T container, Inventory inv, Component titleIn) {
 
         super(container, inv, titleIn);
         player = inv.player;
@@ -68,7 +61,7 @@ public class ContainerScreenCoFH<T extends Container> extends ContainerScreen<T>
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTick) {
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTick) {
 
         mX = mouseX - leftPos;
         mY = mouseY - topPos;
@@ -80,30 +73,31 @@ public class ContainerScreenCoFH<T extends Container> extends ContainerScreen<T>
         super.render(matrixStack, mouseX, mouseY, partialTick);
         renderTooltip(matrixStack, mouseX, mouseY);
 
-        if (showTooltips && getMinecraft().player.inventory.getCarried().isEmpty()) {
+        if (showTooltips && getMinecraft().player.getInventory().getSelected().isEmpty()) {
             drawTooltip(matrixStack);
         }
     }
 
     @Override
-    protected void renderBg(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(PoseStack matrixStack, float partialTicks, int mouseX, int mouseY) {
 
-        RenderHelper.resetColor();
-        RenderHelper.bindTexture(texture);
+        RenderHelper.setPosTexShader();
+        RenderHelper.resetShaderColor();
+        RenderHelper.setShaderTexture0(texture);
 
         drawTexturedModalRect(leftPos, topPos, 0, 0, imageWidth, imageHeight);
 
-        RenderSystem.pushMatrix();
-        RenderSystem.translatef(leftPos, topPos, 0.0F);
+        matrixStack.pushPose();
+        matrixStack.translate(leftPos, topPos, 0.0F);
 
         drawPanels(matrixStack, false);
         drawElements(matrixStack, false);
 
-        RenderSystem.popMatrix();
+        matrixStack.popPose();
     }
 
     @Override
-    protected void renderLabels(MatrixStack matrixStack, int mouseX, int mouseY) {
+    protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY) {
 
         if (drawTitle & title != null) {
             getFontRenderer().draw(matrixStack, localize(title.getString()), getCenteredOffset(localize(title.getString())), 6, 0x404040);
@@ -116,7 +110,7 @@ public class ContainerScreenCoFH<T extends Container> extends ContainerScreen<T>
     }
 
     // region ELEMENTS
-    public void drawTooltip(MatrixStack matrixStack) {
+    public void drawTooltip(PoseStack matrixStack) {
 
         PanelBase panel = getPanelAtPosition(mX, mY);
 
@@ -128,14 +122,14 @@ public class ContainerScreenCoFH<T extends Container> extends ContainerScreen<T>
         if (element != null && element.visible()) {
             element.addTooltip(tooltip, mX, mY);
         }
-        GuiUtils.drawHoveringText(matrixStack, tooltip, mX + leftPos, mY + topPos, width, height, -1, font);
+        renderTooltip(matrixStack, tooltip, Optional.empty(), mX + leftPos, mY + topPos, font);
         tooltip.clear();
     }
 
     /**
      * Draws the Elements for this GUI.
      */
-    protected void drawElements(MatrixStack matrixStack, boolean foreground) {
+    protected void drawElements(PoseStack matrixStack, boolean foreground) {
 
         if (foreground) {
             for (ElementBase c : elements) {
@@ -155,7 +149,7 @@ public class ContainerScreenCoFH<T extends Container> extends ContainerScreen<T>
     /**
      * Draws the Panels for this GUI. Open / close animation is part of this.
      */
-    protected void drawPanels(MatrixStack matrixStack, boolean foreground) {
+    protected void drawPanels(PoseStack matrixStack, boolean foreground) {
 
         int yPosRight = 4;
         int yPosLeft = 4;
@@ -289,9 +283,9 @@ public class ContainerScreenCoFH<T extends Container> extends ContainerScreen<T>
         }
     }
 
-    public List<Rectangle2d> getPanelBounds() {
+    public List<Rect2i> getPanelBounds() {
 
-        List<Rectangle2d> panelBounds = new ArrayList<>();
+        List<Rect2i> panelBounds = new ArrayList<>();
 
         for (PanelBase c : panels) {
             panelBounds.add(c.getBoundsOnScreen());
@@ -444,13 +438,13 @@ public class ContainerScreenCoFH<T extends Container> extends ContainerScreen<T>
 
     // region IGuiAccess
     @Override
-    public FontRenderer getFontRenderer() {
+    public Font getFontRenderer() {
 
         return font;
     }
 
     @Override
-    public PlayerEntity getPlayer() {
+    public Player getPlayer() {
 
         return player;
     }
@@ -462,20 +456,22 @@ public class ContainerScreenCoFH<T extends Container> extends ContainerScreen<T>
     }
 
     @Override
-    public void drawIcon(MatrixStack matrixStack, TextureAtlasSprite icon, int x, int y) {
+    public void drawIcon(PoseStack matrixStack, TextureAtlasSprite icon, int x, int y) {
 
+        RenderHelper.setPosTexShader();
         RenderHelper.setBlockTextureSheet();
-        RenderHelper.resetColor();
+        RenderHelper.resetShaderColor();
         blit(matrixStack, x, y, this.getBlitOffset(), 16, 16, icon);
     }
 
     @Override
-    public void drawIcon(MatrixStack matrixStack, TextureAtlasSprite icon, int color, int x, int y) {
+    public void drawIcon(PoseStack matrixStack, TextureAtlasSprite icon, int color, int x, int y) {
 
+        RenderHelper.setPosTexShader();
         RenderHelper.setBlockTextureSheet();
-        RenderHelper.setGLColorFromInt(color);
+        RenderHelper.setSahderColorFromInt(color);
         blit(matrixStack, x, y, this.getBlitOffset(), 16, 16, icon);
-        RenderHelper.resetColor();
+        RenderHelper.resetShaderColor();
     }
 
     @Override
@@ -499,15 +495,16 @@ public class ContainerScreenCoFH<T extends Container> extends ContainerScreen<T>
         float g = (color >> 8 & 255) / 255.0F;
         float b = (color & 255) / 255.0F;
         RenderSystem.disableTexture();
-        RenderSystem.color4f(r, g, b, a);
+        RenderSystem.setShader(GameRenderer::getPositionShader);
+        RenderSystem.setShaderColor(r, g, b, a);
 
-        BufferBuilder buffer = Tessellator.getInstance().getBuilder();
-        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
-        buffer.vertex(x1, y2, this.getBlitOffset()).endVertex();
-        buffer.vertex(x2, y2, this.getBlitOffset()).endVertex();
-        buffer.vertex(x2, y1, this.getBlitOffset()).endVertex();
-        buffer.vertex(x1, y1, this.getBlitOffset()).endVertex();
-        Tessellator.getInstance().end();
+        BufferBuilder buffer = Tesselator.getInstance().getBuilder();
+        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
+        buffer.vertex(x1, y2, getBlitOffset()).endVertex();
+        buffer.vertex(x2, y2, getBlitOffset()).endVertex();
+        buffer.vertex(x2, y1, getBlitOffset()).endVertex();
+        buffer.vertex(x1, y1, getBlitOffset()).endVertex();
+        Tesselator.getInstance().end();
         RenderSystem.enableTexture();
     }
 
@@ -532,15 +529,16 @@ public class ContainerScreenCoFH<T extends Container> extends ContainerScreen<T>
         RenderSystem.enableBlend();
         RenderSystem.disableTexture();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA.value, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA.value);
-        RenderSystem.color4f(r, g, b, a);
+        RenderSystem.setShader(GameRenderer::getPositionShader);
+        RenderSystem.setShaderColor(r, g, b, a);
 
-        BufferBuilder buffer = Tessellator.getInstance().getBuilder();
-        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
-        buffer.vertex(x1, y2, this.getBlitOffset()).endVertex();
-        buffer.vertex(x2, y2, this.getBlitOffset()).endVertex();
-        buffer.vertex(x2, y1, this.getBlitOffset()).endVertex();
-        buffer.vertex(x1, y1, this.getBlitOffset()).endVertex();
-        Tessellator.getInstance().end();
+        BufferBuilder buffer = Tesselator.getInstance().getBuilder();
+        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
+        buffer.vertex(x1, y2, getBlitOffset()).endVertex();
+        buffer.vertex(x2, y2, getBlitOffset()).endVertex();
+        buffer.vertex(x2, y1, getBlitOffset()).endVertex();
+        buffer.vertex(x1, y1, getBlitOffset()).endVertex();
+        Tesselator.getInstance().end();
         RenderSystem.enableTexture();
         RenderSystem.disableBlend();
     }
@@ -550,9 +548,9 @@ public class ContainerScreenCoFH<T extends Container> extends ContainerScreen<T>
 
         float f = 0.00390625F;
         float f1 = 0.00390625F;
-        Tessellator tessellator = Tessellator.getInstance();
+        Tesselator tessellator = Tesselator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuilder();
-        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
         bufferbuilder.vertex(x + 0, (y + height), this.getBlitOffset()).uv(((float) (textureX + 0) * 0.00390625F), ((float) (textureY + height) * 0.00390625F)).endVertex();
         bufferbuilder.vertex((x + width), (y + height), this.getBlitOffset()).uv(((float) (textureX + width) * 0.00390625F), ((float) (textureY + height) * 0.00390625F)).endVertex();
         bufferbuilder.vertex((x + width), (y + 0), this.getBlitOffset()).uv(((float) (textureX + width) * 0.00390625F), ((float) (textureY + 0) * 0.00390625F)).endVertex();
@@ -565,13 +563,13 @@ public class ContainerScreenCoFH<T extends Container> extends ContainerScreen<T>
 
         float texU = 1 / texW;
         float texV = 1 / texH;
-        BufferBuilder buffer = Tessellator.getInstance().getBuilder();
-        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        BufferBuilder buffer = Tesselator.getInstance().getBuilder();
+        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
         buffer.vertex(x, y + height, this.getBlitOffset()).uv((u) * texU, (v + height) * texV).endVertex();
         buffer.vertex(x + width, y + height, this.getBlitOffset()).uv((u + width) * texU, (v + height) * texV).endVertex();
         buffer.vertex(x + width, y, this.getBlitOffset()).uv((u + width) * texU, (v) * texV).endVertex();
         buffer.vertex(x, y, this.getBlitOffset()).uv((u) * texU, (v) * texV).endVertex();
-        Tessellator.getInstance().end();
+        Tesselator.getInstance().end();
     }
     // endregion
 }

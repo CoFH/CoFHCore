@@ -1,16 +1,15 @@
 package cofh.lib.item.impl;
 
 import cofh.lib.capability.templates.AreaEffectMiningItemWrapper;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tier;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
 
-import static cofh.lib.util.constants.ToolTypes.HAMMER;
-
+// TODO Hammer Tool Type.
 public class HammerItem extends PickaxeItemCoFH {
 
     private static final float DEFAULT_ATTACK_DAMAGE = 4.0F;
@@ -19,25 +18,25 @@ public class HammerItem extends PickaxeItemCoFH {
 
     private final int radius;
 
-    public HammerItem(IItemTier tier, float attackDamageIn, float attackSpeedIn, int radius, Properties builder) {
+    public HammerItem(Tier tier, float attackDamageIn, float attackSpeedIn, int radius, Properties builder) {
 
-        super(tier, (int) attackDamageIn, attackSpeedIn, builder.addToolType(HAMMER, tier.getLevel()).durability(tier.getUses() * 4));
+        super(tier, (int) attackDamageIn, attackSpeedIn, builder.durability(tier.getUses() * 4));
         this.radius = radius;
     }
 
-    public HammerItem(IItemTier tier, float attackDamageIn, float attackSpeedIn, Properties builder) {
+    public HammerItem(Tier tier, float attackDamageIn, float attackSpeedIn, Properties builder) {
 
-        this(tier, attackDamageIn, attackSpeedIn, DEFAULT_BASE_AREA, builder.addToolType(HAMMER, tier.getLevel()));
+        this(tier, attackDamageIn, attackSpeedIn, DEFAULT_BASE_AREA, builder);
     }
 
-    public HammerItem(IItemTier tier, float attackDamageIn, Properties builder) {
+    public HammerItem(Tier tier, float attackDamageIn, Properties builder) {
 
-        this(tier, attackDamageIn, DEFAULT_ATTACK_SPEED, DEFAULT_BASE_AREA, builder.addToolType(HAMMER, tier.getLevel()));
+        this(tier, attackDamageIn, DEFAULT_ATTACK_SPEED, DEFAULT_BASE_AREA, builder);
     }
 
-    public HammerItem(IItemTier tier, Properties builder) {
+    public HammerItem(Tier tier, Properties builder) {
 
-        this(tier, DEFAULT_ATTACK_DAMAGE, DEFAULT_ATTACK_SPEED, DEFAULT_BASE_AREA, builder.addToolType(HAMMER, tier.getLevel()));
+        this(tier, DEFAULT_ATTACK_DAMAGE, DEFAULT_ATTACK_SPEED, DEFAULT_BASE_AREA, builder);
     }
 
     @Override
@@ -47,7 +46,7 @@ public class HammerItem extends PickaxeItemCoFH {
     }
 
     @Nullable
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
 
         return new AreaEffectMiningItemWrapper(stack, radius, AreaEffectMiningItemWrapper.Type.HAMMER);
     }

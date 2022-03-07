@@ -4,12 +4,12 @@ import cofh.lib.util.filter.IFilter;
 import cofh.lib.util.filter.IFilterOptions;
 import cofh.lib.util.helpers.ItemHelper;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 import static cofh.lib.util.constants.NBTTags.*;
-import static net.minecraftforge.common.util.Constants.NBT.TAG_COMPOUND;
+import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 
 public abstract class AbstractItemFilter implements IFilter, IFilterOptions {
 
@@ -85,9 +85,9 @@ public abstract class AbstractItemFilter implements IFilter, IFilterOptions {
     }
 
     @Override
-    public IFilter read(CompoundNBT nbt) {
+    public IFilter read(CompoundTag nbt) {
 
-        CompoundNBT subTag = nbt.getCompound(TAG_FILTER);
+        CompoundTag subTag = nbt.getCompound(TAG_FILTER);
         //        int size = subTag.getInt(TAG_SLOTS);
         //        if (size > 0) {
         //            items = new ArrayList<>(size);
@@ -95,9 +95,9 @@ public abstract class AbstractItemFilter implements IFilter, IFilterOptions {
         //                items.add(ItemStack.EMPTY);
         //            }
         //        }
-        ListNBT list = subTag.getList(TAG_ITEM_INV, TAG_COMPOUND);
+        ListTag list = subTag.getList(TAG_ITEM_INV, TAG_COMPOUND);
         for (int i = 0; i < list.size(); ++i) {
-            CompoundNBT slotTag = list.getCompound(i);
+            CompoundTag slotTag = list.getCompound(i);
             int slot = slotTag.getByte(TAG_SLOT);
             if (slot >= 0 && slot < items.size()) {
                 items.set(slot, ItemStack.of(slotTag));
@@ -109,16 +109,16 @@ public abstract class AbstractItemFilter implements IFilter, IFilterOptions {
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT nbt) {
+    public CompoundTag write(CompoundTag nbt) {
 
-        CompoundNBT subTag = new CompoundNBT();
-        ListNBT list = new ListNBT();
+        CompoundTag subTag = new CompoundTag();
+        ListTag list = new ListTag();
         //        if (items.size() != SIZE) {
         //            subTag.putInt(TAG_SLOTS, items.size());
         //        }
         for (int i = 0; i < items.size(); ++i) {
             if (!items.get(i).isEmpty()) {
-                CompoundNBT slotTag = new CompoundNBT();
+                CompoundTag slotTag = new CompoundTag();
                 slotTag.putByte(TAG_SLOT, (byte) i);
                 items.get(i).save(slotTag);
                 list.add(slotTag);
@@ -163,9 +163,9 @@ public abstract class AbstractItemFilter implements IFilter, IFilterOptions {
 
     // region INamedContainerProvider
     @Override
-    public ITextComponent getDisplayName() {
+    public Component getDisplayName() {
 
-        return new TranslationTextComponent("info.cofh.item_filter");
+        return new TranslatableComponent("info.cofh.item_filter");
     }
     // endregion
 }

@@ -7,24 +7,33 @@ import cofh.lib.util.helpers.ItemHelper;
 import cofh.lib.util.references.FluidTagsCoFH;
 import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.potion.*;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.text.*;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffectUtil;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
@@ -61,7 +70,7 @@ public class FluidHelper {
 
     public static final Predicate<FluidStack> IS_WATER = e -> e.getFluid().equals(Fluids.WATER);
     public static final Predicate<FluidStack> IS_LAVA = e -> e.getFluid().equals(Fluids.LAVA);
-    public static final Predicate<FluidStack> IS_XP = e -> FluidTagsCoFH.EXPERIENCE.contains(e.getFluid());
+    public static final Predicate<FluidStack> IS_XP = e -> e.getFluid().is(FluidTagsCoFH.EXPERIENCE);
 
     public static final Map<Item, Function<ItemStack, FluidStack>> BOTTLE_DRAIN_MAP = new Object2ObjectOpenHashMap<>();
     public static final Map<Predicate<FluidStack>, Function<FluidStack, ItemStack>> BOTTLE_FILL_MAP = new Object2ObjectOpenHashMap<>();
@@ -129,13 +138,13 @@ public class FluidHelper {
     // endregion
 
     // region BLOCK TRANSFER
-    public static boolean extractFromAdjacent(TileEntity tile, FluidStorageCoFH tank, int amount, Direction side) {
+    public static boolean extractFromAdjacent(BlockEntity tile, FluidStorageCoFH tank, int amount, Direction side) {
 
         amount = Math.min(amount, tank.getSpace());
         if (!tank.getFluidStack().isEmpty()) {
             return extractFromAdjacent(tile, tank, new FluidStack(tank.getFluidStack(), amount), side);
         }
-        TileEntity adjTile = BlockHelper.getAdjacentTileEntity(tile, side);
+        BlockEntity adjTile = BlockHelper.getAdjacentTileEntity(tile, side);
         Direction opposite = side.getOpposite();
 
         IFluidHandler handler = getFluidHandlerCap(adjTile, opposite);
@@ -151,9 +160,9 @@ public class FluidHelper {
         return false;
     }
 
-    public static boolean extractFromAdjacent(TileEntity tile, FluidStorageCoFH tank, FluidStack resource, Direction side) {
+    public static boolean extractFromAdjacent(BlockEntity tile, FluidStorageCoFH tank, FluidStack resource, Direction side) {
 
-        TileEntity adjTile = BlockHelper.getAdjacentTileEntity(tile, side);
+        BlockEntity adjTile = BlockHelper.getAdjacentTileEntity(tile, side);
         Direction opposite = side.getOpposite();
 
         IFluidHandler handler = getFluidHandlerCap(adjTile, opposite);
@@ -169,14 +178,14 @@ public class FluidHelper {
         return false;
     }
 
-    public static boolean insertIntoAdjacent(TileEntity tile, FluidStorageCoFH tank, int amount, Direction side) {
+    public static boolean insertIntoAdjacent(BlockEntity tile, FluidStorageCoFH tank, int amount, Direction side) {
 
         if (tank.isEmpty()) {
             return false;
         }
         amount = Math.min(amount, tank.getAmount());
 
-        TileEntity adjTile = BlockHelper.getAdjacentTileEntity(tile, side);
+        BlockEntity adjTile = BlockHelper.getAdjacentTileEntity(tile, side);
         Direction opposite = side.getOpposite();
 
         IFluidHandler handler = getFluidHandlerCap(adjTile, opposite);
@@ -191,12 +200,12 @@ public class FluidHelper {
         return false;
     }
 
-    public static boolean hasFluidHandlerCap(TileEntity tile, Direction face) {
+    public static boolean hasFluidHandlerCap(BlockEntity tile, Direction face) {
 
         return tile != null && tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, face).isPresent();
     }
 
-    public static IFluidHandler getFluidHandlerCap(TileEntity tile, Direction face) {
+    public static IFluidHandler getFluidHandlerCap(BlockEntity tile, Direction face) {
 
         return tile == null ? EmptyFluidHandler.INSTANCE : tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, face).orElse(EmptyFluidHandler.INSTANCE);
     }
@@ -252,17 +261,17 @@ public class FluidHelper {
      * @param hand    The hand the player is holding the item in.
      * @return If the interaction was successful.
      */
-    public static boolean drainBottleToHandler(ItemStack stack, IFluidHandler handler, PlayerEntity player, Hand hand) {
+    public static boolean drainBottleToHandler(ItemStack stack, IFluidHandler handler, Player player, InteractionHand hand) {
 
         FluidStack fluid = BOTTLE_DRAIN_MAP.containsKey(stack.getItem()) ? BOTTLE_DRAIN_MAP.get(stack.getItem()).apply(stack) : FluidStack.EMPTY;
         return !fluid.isEmpty() && addEmptyBottleToPlayer(stack, fluid, handler, player, hand);
     }
 
-    private static boolean addEmptyBottleToPlayer(ItemStack stack, FluidStack fluid, IFluidHandler handler, PlayerEntity player, Hand hand) {
+    private static boolean addEmptyBottleToPlayer(ItemStack stack, FluidStack fluid, IFluidHandler handler, Player player, InteractionHand hand) {
 
         if (handler.fill(fluid, SIMULATE) == BOTTLE_VOLUME) {
             handler.fill(fluid, EXECUTE);
-            if (!player.abilities.instabuild) {
+            if (!player.getAbilities().instabuild) {
                 ItemStack bottle = new ItemStack(Items.GLASS_BOTTLE);
                 player.setItemInHand(hand, ItemHelper.consumeItem(stack, 1));
                 if (!player.addItem(bottle)) {
@@ -283,7 +292,7 @@ public class FluidHelper {
      * @param hand    The hand the player is holding the item in.
      * @return If the interaction was successful.
      */
-    public static boolean fillBottleFromHandler(ItemStack stack, IFluidHandler handler, PlayerEntity player, Hand hand) {
+    public static boolean fillBottleFromHandler(ItemStack stack, IFluidHandler handler, Player player, InteractionHand hand) {
 
         if (stack.getItem() != Items.GLASS_BOTTLE) {
             return false;
@@ -318,10 +327,10 @@ public class FluidHelper {
         return fluid.getFluid().getBucket() != Items.AIR;
     }
 
-    private static boolean addFilledBottleToPlayer(ItemStack stack, ItemStack bottle, IFluidHandler handler, PlayerEntity player, Hand hand) {
+    private static boolean addFilledBottleToPlayer(ItemStack stack, ItemStack bottle, IFluidHandler handler, Player player, InteractionHand hand) {
 
         if (handler.drain(BOTTLE_VOLUME, EXECUTE).getAmount() == BOTTLE_VOLUME) {
-            if (!player.abilities.instabuild) {
+            if (!player.getAbilities().instabuild) {
                 player.setItemInHand(hand, ItemHelper.consumeItem(stack, 1));
                 if (!player.addItem(bottle)) {
                     player.drop(bottle, false);
@@ -341,16 +350,16 @@ public class FluidHelper {
      * @param hand    The hand the player is holding the item in.
      * @return If the interaction was successful.
      */
-    public static boolean drainItemToHandler(ItemStack stack, IFluidHandler handler, PlayerEntity player, Hand hand) {
+    public static boolean drainItemToHandler(ItemStack stack, IFluidHandler handler, Player player, InteractionHand hand) {
 
         if (stack.isEmpty() || handler == null || player == null) {
             return false;
         }
         if (drainBottleToHandler(stack, handler, player, hand)) {
-            player.level.playSound(null, player.getX(), player.getY() + 0.5, player.getZ(), SoundEvents.BOTTLE_EMPTY, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            player.level.playSound(null, player.getX(), player.getY() + 0.5, player.getZ(), SoundEvents.BOTTLE_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
             return true;
         }
-        IItemHandler playerInv = new InvWrapper(player.inventory);
+        IItemHandler playerInv = new InvWrapper(player.getInventory());
         FluidActionResult result = FluidUtil.tryEmptyContainerAndStow(stack, handler, playerInv, Integer.MAX_VALUE, player, true);
         if (result.isSuccess()) {
             player.setItemInHand(hand, result.getResult());
@@ -368,13 +377,13 @@ public class FluidHelper {
      * @param hand    The hand the player is holding the item in.
      * @return If the interaction was successful.
      */
-    public static boolean fillItemFromHandler(ItemStack stack, IFluidHandler handler, PlayerEntity player, Hand hand) {
+    public static boolean fillItemFromHandler(ItemStack stack, IFluidHandler handler, Player player, InteractionHand hand) {
 
         if (stack.isEmpty() || handler == null || player == null || !bucketFillTest(stack, handler)) {
             return false;
         }
         if (fillBottleFromHandler(stack, handler, player, hand)) {
-            player.level.playSound(null, player.getX(), player.getY() + 0.5, player.getZ(), SoundEvents.BOTTLE_FILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            player.level.playSound(null, player.getX(), player.getY() + 0.5, player.getZ(), SoundEvents.BOTTLE_FILL, SoundSource.BLOCKS, 1.0F, 1.0F);
             return true;
         }
         if (stack.getCount() == 1) {
@@ -382,7 +391,7 @@ public class FluidHelper {
             int tankSpace = getCapacityForItem(stack) - containedFluid.getAmount();
             if (!containedFluid.isEmpty() && tankSpace > 0) {
                 stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).ifPresent(e -> {
-                    if (player.abilities.instabuild) {
+                    if (player.getAbilities().instabuild) {
                         handler.drain(new FluidStack(containedFluid, tankSpace), EXECUTE);
                     } else {
                         FluidUtil.tryFluidTransfer(e, handler, new FluidStack(containedFluid, tankSpace), true);
@@ -391,7 +400,7 @@ public class FluidHelper {
                 return true;
             }
         }
-        IItemHandler playerInv = new InvWrapper(player.inventory);
+        IItemHandler playerInv = new InvWrapper(player.getInventory());
         FluidActionResult result = FluidUtil.tryFillContainerAndStow(stack, handler, playerInv, Integer.MAX_VALUE, player, true);
         if (result.isSuccess()) {
             player.setItemInHand(hand, result.getResult());
@@ -410,7 +419,7 @@ public class FluidHelper {
      * @param hand    The hand the player is holding the item in.
      * @return If any interaction with the handler was successful.
      */
-    public static boolean interactWithHandler(ItemStack stack, IFluidHandler handler, PlayerEntity player, Hand hand) {
+    public static boolean interactWithHandler(ItemStack stack, IFluidHandler handler, Player player, InteractionHand hand) {
 
         return drainItemToHandler(stack, handler, player, hand) || fillItemFromHandler(stack, handler, player, hand);
     }
@@ -427,24 +436,24 @@ public class FluidHelper {
         return fluid.getFluid() == Fluids.WATER ? Potions.WATER : getPotionFromFluidTag(fluid.getTag());
     }
 
-    public static Potion getPotionFromFluidTag(@Nullable CompoundNBT tag) {
+    public static Potion getPotionFromFluidTag(@Nullable CompoundTag tag) {
 
         return tag == null || !tag.contains(TAG_POTION) ? Potions.EMPTY : Potion.byName(tag.getString(TAG_POTION));
     }
 
-    public static void addPotionTooltipStrings(FluidStack stack, List<ITextComponent> list) {
+    public static void addPotionTooltipStrings(FluidStack stack, List<Component> list) {
 
-        ArrayList<ITextComponent> lores = new ArrayList<>();
+        ArrayList<Component> lores = new ArrayList<>();
         addPotionTooltip(stack, lores, 1.0F);
         list.addAll(lores);
     }
 
-    public static void addPotionTooltip(FluidStack stack, List<ITextComponent> list) {
+    public static void addPotionTooltip(FluidStack stack, List<Component> list) {
 
         addPotionTooltip(stack, list, 1.0F);
     }
 
-    public static void addPotionTooltip(FluidStack stack, List<ITextComponent> lores, float durationFactor) {
+    public static void addPotionTooltip(FluidStack stack, List<Component> lores, float durationFactor) {
 
         if (stack.isEmpty()) {
             return;
@@ -452,15 +461,15 @@ public class FluidHelper {
         addPotionTooltip(PotionUtils.getAllEffects(stack.getTag()), lores, durationFactor);
     }
 
-    public static void addPotionTooltip(List<EffectInstance> list, List<ITextComponent> lores, float durationFactor) {
+    public static void addPotionTooltip(List<MobEffectInstance> list, List<Component> lores, float durationFactor) {
 
         List<Pair<Attribute, AttributeModifier>> list1 = new ArrayList<>();
         if (list.isEmpty()) {
             lores.add(EMPTY_POTION);
         } else {
-            for (EffectInstance effectinstance : list) {
-                IFormattableTextComponent iformattabletextcomponent = new TranslationTextComponent(effectinstance.getDescriptionId());
-                Effect effect = effectinstance.getEffect();
+            for (MobEffectInstance effectinstance : list) {
+                MutableComponent mutableComponent = new TranslatableComponent(effectinstance.getDescriptionId());
+                MobEffect effect = effectinstance.getEffect();
                 Map<Attribute, AttributeModifier> map = effect.getAttributeModifiers();
                 if (!map.isEmpty()) {
                     for (Map.Entry<Attribute, AttributeModifier> entry : map.entrySet()) {
@@ -470,17 +479,17 @@ public class FluidHelper {
                     }
                 }
                 if (effectinstance.getAmplifier() > 0) {
-                    iformattabletextcomponent = new TranslationTextComponent("potion.withAmplifier", iformattabletextcomponent, new TranslationTextComponent("potion.potency." + effectinstance.getAmplifier()));
+                    mutableComponent = new TranslatableComponent("potion.withAmplifier", mutableComponent, new TranslatableComponent("potion.potency." + effectinstance.getAmplifier()));
                 }
                 if (effectinstance.getDuration() > 20) {
-                    iformattabletextcomponent = new TranslationTextComponent("potion.withDuration", iformattabletextcomponent, EffectUtils.formatDuration(effectinstance, durationFactor));
+                    mutableComponent = new TranslatableComponent("potion.withDuration", mutableComponent, MobEffectUtil.formatDuration(effectinstance, durationFactor));
                 }
-                lores.add(iformattabletextcomponent.withStyle(effect.getCategory().getTooltipFormatting()));
+                lores.add(mutableComponent.withStyle(effect.getCategory().getTooltipFormatting()));
             }
         }
         if (!list1.isEmpty()) {
-            lores.add(StringTextComponent.EMPTY);
-            lores.add((new TranslationTextComponent("potion.whenDrank")).withStyle(TextFormatting.DARK_PURPLE));
+            lores.add(TextComponent.EMPTY);
+            lores.add((new TranslatableComponent("potion.whenDrank")).withStyle(ChatFormatting.DARK_PURPLE));
 
             for (Pair<Attribute, AttributeModifier> pair : list1) {
                 AttributeModifier attributemodifier2 = pair.getSecond();
@@ -492,16 +501,16 @@ public class FluidHelper {
                     d1 = attributemodifier2.getAmount() * 100.0D;
                 }
                 if (d0 > 0.0D) {
-                    lores.add((new TranslationTextComponent("attribute.modifier.plus." + attributemodifier2.getOperation().toValue(), ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(d1), new TranslationTextComponent(pair.getFirst().getDescriptionId()))).withStyle(TextFormatting.BLUE));
+                    lores.add((new TranslatableComponent("attribute.modifier.plus." + attributemodifier2.getOperation().toValue(), ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(d1), new TranslatableComponent(pair.getFirst().getDescriptionId()))).withStyle(ChatFormatting.BLUE));
                 } else if (d0 < 0.0D) {
                     d1 = d1 * -1.0D;
-                    lores.add((new TranslationTextComponent("attribute.modifier.take." + attributemodifier2.getOperation().toValue(), ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(d1), new TranslationTextComponent(pair.getFirst().getDescriptionId()))).withStyle(TextFormatting.RED));
+                    lores.add((new TranslatableComponent("attribute.modifier.take." + attributemodifier2.getOperation().toValue(), ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(d1), new TranslatableComponent(pair.getFirst().getDescriptionId()))).withStyle(ChatFormatting.RED));
                 }
             }
         }
     }
 
-    public static final IFormattableTextComponent EMPTY_POTION = (new TranslationTextComponent("effect.none")).withStyle(TextFormatting.GRAY);
+    public static final MutableComponent EMPTY_POTION = (new TranslatableComponent("effect.none")).withStyle(ChatFormatting.GRAY);
     // endregion
 
     // region PROPERTY HELPERS

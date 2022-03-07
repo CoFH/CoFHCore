@@ -2,8 +2,8 @@ package cofh.lib.fluid;
 
 import cofh.lib.tileentity.ITileCallback;
 import cofh.lib.util.StorageGroup;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
@@ -15,7 +15,7 @@ import java.util.List;
 
 import static cofh.lib.util.constants.NBTTags.TAG_TANK;
 import static cofh.lib.util.constants.NBTTags.TAG_TANK_INV;
-import static net.minecraftforge.common.util.Constants.NBT.TAG_COMPOUND;
+import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 
 /**
  * Fluid "inventory" abstraction using CoFH Fluid Storage objects.
@@ -73,14 +73,14 @@ public class SimpleTankInv extends SimpleFluidHandler {
     }
 
     // region NBT
-    public SimpleTankInv read(CompoundNBT nbt) {
+    public SimpleTankInv read(CompoundTag nbt) {
 
         for (FluidStorageCoFH tank : tanks) {
             tank.setFluidStack(FluidStack.EMPTY);
         }
-        ListNBT list = nbt.getList(tag, TAG_COMPOUND);
+        ListTag list = nbt.getList(tag, TAG_COMPOUND);
         for (int i = 0; i < list.size(); ++i) {
-            CompoundNBT tag = list.getCompound(i);
+            CompoundTag tag = list.getCompound(i);
             int tank = tag.getByte(TAG_TANK);
             if (tank >= 0 && tank < tanks.size()) {
                 tanks.get(tank).read(tag);
@@ -89,15 +89,15 @@ public class SimpleTankInv extends SimpleFluidHandler {
         return this;
     }
 
-    public CompoundNBT write(CompoundNBT nbt) {
+    public CompoundTag write(CompoundTag nbt) {
 
         if (tanks.size() <= 0) {
             return nbt;
         }
-        ListNBT list = new ListNBT();
+        ListTag list = new ListTag();
         for (int i = 0; i < tanks.size(); ++i) {
             if (!tanks.get(i).isEmpty()) {
-                CompoundNBT tag = new CompoundNBT();
+                CompoundTag tag = new CompoundTag();
                 tag.putByte(TAG_TANK, (byte) i);
                 tanks.get(i).write(tag);
                 list.add(tag);

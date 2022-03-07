@@ -2,11 +2,15 @@ package cofh.core.client.renderer.model;
 
 import cofh.core.util.helpers.FluidHelper;
 import cofh.lib.util.helpers.MathHelper;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.*;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.SimpleBakedModel;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.data.ModelProperty;
@@ -34,14 +38,14 @@ public class ModelUtils {
         private final List<BakedQuad> builderGeneralQuads = new ArrayList<>();
         private final Map<Direction, List<BakedQuad>> builderUnderlayQuads = new EnumMap<>(Direction.class);
         private final Map<Direction, List<BakedQuad>> builderFaceQuads = new EnumMap<>(Direction.class);
-        private final ItemOverrideList builderItemOverrideList;
+        private final ItemOverrides builderItemOverrideList;
         private final boolean builderAmbientOcclusion;
         private TextureAtlasSprite builderTexture;
         private final boolean builderSideLit;
         private final boolean builderGui3d;
-        private final ItemCameraTransforms builderCameraTransforms;
+        private final ItemTransforms builderCameraTransforms;
 
-        public WrappedBakedModelBuilder(IBakedModel model) {
+        public WrappedBakedModelBuilder(BakedModel model) {
 
             for (Direction direction : Direction.values()) {
                 this.builderUnderlayQuads.put(direction, new ArrayList<>());
@@ -86,7 +90,7 @@ public class ModelUtils {
             return this;
         }
 
-        public IBakedModel build() {
+        public BakedModel build() {
 
             if (this.builderTexture == null) {
                 throw new RuntimeException("Missing particle!");

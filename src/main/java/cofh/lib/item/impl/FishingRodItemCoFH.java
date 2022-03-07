@@ -1,21 +1,24 @@
 package cofh.lib.item.impl;
 
 import cofh.lib.item.ICoFHItem;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.FishingBobberEntity;
-import net.minecraft.item.FishingRodItem;
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.ItemStack;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.FishingHook;
+import net.minecraft.world.item.FishingRodItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.Level;
+
+import java.util.Random;
 
 public class FishingRodItemCoFH extends FishingRodItem implements ICoFHItem {
 
+    protected static Random random = new Random();
     protected int enchantability = 1;
     protected int luckModifier;
     protected int speedModifier;
@@ -25,13 +28,13 @@ public class FishingRodItemCoFH extends FishingRodItem implements ICoFHItem {
         super(builder);
     }
 
-    public FishingRodItemCoFH(IItemTier tier, Properties builder) {
+    public FishingRodItemCoFH(Tier tier, Properties builder) {
 
         super(builder);
         setParams(tier);
     }
 
-    public FishingRodItemCoFH setParams(IItemTier tier) {
+    public FishingRodItemCoFH setParams(Tier tier) {
 
         enchantability = tier.getEnchantmentValue();
         luckModifier = tier.getLevel() / 2;
@@ -48,7 +51,7 @@ public class FishingRodItemCoFH extends FishingRodItem implements ICoFHItem {
     }
 
     @Override
-    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+    public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
 
         ItemStack stack = playerIn.getItemInHand(handIn);
         if (playerIn.fishing != null) {
@@ -59,20 +62,20 @@ public class FishingRodItemCoFH extends FishingRodItem implements ICoFHItem {
                 });
             }
             playerIn.swing(handIn);
-            worldIn.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.FISHING_BOBBER_RETRIEVE, SoundCategory.NEUTRAL, 1.0F, 0.4F / (random.nextFloat() * 0.4F + 0.8F));
+            worldIn.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.FISHING_BOBBER_RETRIEVE, SoundSource.NEUTRAL, 1.0F, 0.4F / (random.nextFloat() * 0.4F + 0.8F));
         } else {
-            worldIn.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.FISHING_BOBBER_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (random.nextFloat() * 0.4F + 0.8F));
+            worldIn.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.FISHING_BOBBER_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (random.nextFloat() * 0.4F + 0.8F));
             if (!worldIn.isClientSide) {
                 int luck = EnchantmentHelper.getFishingLuckBonus(stack) + luckModifier;
                 int speed = EnchantmentHelper.getFishingSpeedBonus(stack) + speedModifier;
-                worldIn.addFreshEntity(new FishingBobberEntity(playerIn, worldIn, luck, speed));
+                worldIn.addFreshEntity(new FishingHook(playerIn, worldIn, luck, speed));
             }
 
             playerIn.swing(handIn);
             playerIn.awardStat(Stats.ITEM_USED.get(this));
         }
 
-        return ActionResult.success(stack);
+        return InteractionResultHolder.success(stack);
     }
 
     @Override

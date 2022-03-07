@@ -3,9 +3,9 @@ package cofh.core.data;
 import cofh.core.init.CoreFlags;
 import cofh.lib.data.RecipeProviderCoFH;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.data.ShapelessRecipeBuilder;
-import net.minecraft.item.Items;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.common.Tags;
 
 import java.util.function.Consumer;
@@ -29,7 +29,7 @@ public class CoreRecipeProvider extends RecipeProviderCoFH {
     }
 
     @Override
-    protected void buildShapelessRecipes(Consumer<IFinishedRecipe> consumer) {
+    protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer) {
 
         ShapelessRecipeBuilder.shapeless(ITEMS.get(ID_ECTOPLASM))
                 .requires(Items.GHAST_TEAR)

@@ -1,13 +1,12 @@
 package cofh.lib.block;
 
 import cofh.lib.tileentity.ITileCallback;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.common.extensions.IForgeBlock;
 
 public interface IWrenchable extends IForgeBlock {
@@ -15,7 +14,7 @@ public interface IWrenchable extends IForgeBlock {
     /**
      * Wrenches the block.
      */
-    default void wrenchBlock(World world, BlockPos pos, BlockState state, RayTraceResult target, PlayerEntity player) {
+    default void wrenchBlock(Level world, BlockPos pos, BlockState state, HitResult target, Player player) {
 
         BlockState rotState = this.rotate(state, world, pos, Rotation.CLOCKWISE_90);
         if (rotState != state) {
@@ -26,11 +25,10 @@ public interface IWrenchable extends IForgeBlock {
     /**
      * Return true if the block can be wrenched. The criteria for this is entirely up to the block.
      */
-    default boolean canWrench(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+    default boolean canWrench(Level world, BlockPos pos, BlockState state, Player player) {
 
-        TileEntity tile = world.getBlockEntity(pos);
-        if (tile instanceof ITileCallback) {
-            return ((ITileCallback) tile).canPlayerChange(player);
+        if (world.getBlockEntity(pos) instanceof ITileCallback tile) {
+            return tile.canPlayerChange(player);
         }
         return true;
     }

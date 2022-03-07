@@ -1,9 +1,9 @@
 package cofh.lib.capability;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 /**
  * Implement this interface as a capability for a Quiver item which should be compatible with CoFH's improved archery handling.
@@ -19,10 +19,10 @@ public interface IArcheryAmmoItem extends IArcheryItem {
      * @param shooter Player holding the bow.
      * @return Custom arrow entity which was spawned in the world.
      */
-    AbstractArrowEntity createArrowEntity(World world, PlayerEntity shooter);
+    AbstractArrow createArrowEntity(Level world, Player shooter);
 
-    boolean isEmpty(PlayerEntity shooter);
+    boolean isEmpty(Player shooter);
 
-    boolean isInfinite(ItemStack bow, PlayerEntity shooter);
+    boolean isInfinite(ItemStack bow, Player shooter);
 
 }

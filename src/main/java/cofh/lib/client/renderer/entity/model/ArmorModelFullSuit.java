@@ -1,14 +1,18 @@
+/*
 package cofh.lib.client.renderer.entity.model;
 
+import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
 
 import java.util.function.Function;
 
-public class ArmorModelFullSuit extends BipedModel<LivingEntity> {
+public class ArmorModelFullSuit extends HumanoidModel<LivingEntity> {
 
     public static ArmorModelFullSuit DEFAULT = new ArmorModelFullSuit(1.0F);
     public static ArmorModelFullSuit LARGE = new ArmorModelFullSuit(1.2F);
@@ -44,3 +48,4 @@ public class ArmorModelFullSuit extends BipedModel<LivingEntity> {
     //    }
 
 }
+*/

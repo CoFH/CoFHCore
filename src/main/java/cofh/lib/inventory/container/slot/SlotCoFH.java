@@ -1,9 +1,9 @@
 package cofh.lib.inventory.container.slot;
 
 import cofh.lib.inventory.wrapper.InvWrapperCoFH;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -23,19 +23,19 @@ public class SlotCoFH extends Slot {
         slotStackLimit = () -> inventoryIn.getSlotLimit(index);
     }
 
-    public SlotCoFH(IInventory inventoryIn, int index, int xPosition, int yPosition) {
+    public SlotCoFH(Container inventoryIn, int index, int xPosition, int yPosition) {
 
         super(inventoryIn, index, xPosition, yPosition);
         slotStackLimit = () -> inventoryIn.getMaxStackSize();
     }
 
-    public SlotCoFH(IInventory inventoryIn, int index, int xPosition, int yPosition, int slotStackLimit) {
+    public SlotCoFH(Container inventoryIn, int index, int xPosition, int yPosition, int slotStackLimit) {
 
         super(inventoryIn, index, xPosition, yPosition);
         this.slotStackLimit = () -> slotStackLimit;
     }
 
-    public SlotCoFH(IInventory inventoryIn, int index, int xPosition, int yPosition, IntSupplier slotStackLimit) {
+    public SlotCoFH(Container inventoryIn, int index, int xPosition, int yPosition, IntSupplier slotStackLimit) {
 
         super(inventoryIn, index, xPosition, yPosition);
         this.slotStackLimit = slotStackLimit;

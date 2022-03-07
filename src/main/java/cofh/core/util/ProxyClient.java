@@ -7,14 +7,14 @@ import cofh.lib.util.helpers.SoundHelper;
 import cofh.lib.util.helpers.StringHelper;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.IItemPropertyGetter;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemModelsProperties;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
+import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.client.renderer.item.ItemPropertyFunction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.Level;
 
 import java.util.*;
 
@@ -26,7 +26,7 @@ public class ProxyClient extends Proxy {
 
     // region HELPERS
     @Override
-    public void addIndexedChatMessage(ITextComponent chat, int index) {
+    public void addIndexedChatMessage(Component chat, int index) {
 
         if (chat == null) {
             Minecraft.getInstance().gui.getChat().removeById(index);
@@ -42,13 +42,13 @@ public class ProxyClient extends Proxy {
     }
 
     @Override
-    public PlayerEntity getClientPlayer() {
+    public Player getClientPlayer() {
 
         return Minecraft.getInstance().player;
     }
 
     @Override
-    public World getClientWorld() {
+    public Level getClientWorld() {
 
         return Minecraft.getInstance().level;
     }
@@ -110,7 +110,7 @@ public class ProxyClient extends Proxy {
     public static void registerItemModelProperties() {
 
         for (ModelPropertyWrapper wrapper : ITEM_PROPERTY_GETTERS) {
-            ItemModelsProperties.register(wrapper.item, wrapper.resourceLoc, wrapper.propertyGetter);
+            ItemProperties.register(wrapper.item, wrapper.resourceLoc, wrapper.propertyGetter);
         }
         ITEM_PROPERTY_GETTERS.clear();
     }
@@ -119,7 +119,7 @@ public class ProxyClient extends Proxy {
 
         Item item;
         ResourceLocation resourceLoc;
-        IItemPropertyGetter propertyGetter;
+        ItemPropertyFunction propertyGetter;
 
         ModelPropertyWrapper(Item item, ResourceLocation resourceLoc, IProxyItemPropertyGetter propertyGetter) {
 

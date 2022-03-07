@@ -3,33 +3,31 @@ package cofh.lib.inventory.container;
 import cofh.lib.inventory.container.slot.SlotCoFH;
 import cofh.lib.inventory.container.slot.SlotFalseCopy;
 import cofh.lib.util.helpers.InventoryHelper;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.ClickType;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class ContainerCoFH extends Container {
+public abstract class ContainerCoFH extends AbstractContainerMenu {
 
     protected boolean allowSwap = true;
     protected boolean falseSlotSupport = true;
     protected boolean syncing = false;
 
-    protected PlayerEntity player;
+    protected Player player;
 
     protected List<SlotCoFH> augmentSlots = new ArrayList<>();
 
-    public ContainerCoFH(@Nullable ContainerType<?> type, int id, PlayerInventory inventory, PlayerEntity player) {
+    public ContainerCoFH(@Nullable MenuType<?> type, int id, Inventory inventory, Player player) {
 
         super(type, id);
         this.player = player;
@@ -46,7 +44,7 @@ public abstract class ContainerCoFH extends Container {
         return augmentSlots;
     }
 
-    protected void bindAugmentSlots(IInventory inventory, int startIndex, int numSlots) {
+    protected void bindAugmentSlots(Container inventory, int startIndex, int numSlots) {
 
         for (int i = 0; i < numSlots; ++i) {
             SlotCoFH slot = new SlotCoFH(inventory, i + startIndex, 0, 0, 1);
@@ -56,7 +54,7 @@ public abstract class ContainerCoFH extends Container {
         ((ArrayList<SlotCoFH>) augmentSlots).trimToSize();
     }
 
-    protected void bindPlayerInventory(PlayerInventory inventory) {
+    protected void bindPlayerInventory(Inventory inventory) {
 
         int xOffset = getPlayerInventoryHorizontalOffset();
         int yOffset = getPlayerInventoryVerticalOffset();
@@ -83,7 +81,7 @@ public abstract class ContainerCoFH extends Container {
 
     protected abstract int getMergeableSlotCount();
 
-    protected boolean supportsShiftClick(PlayerEntity player, int index) {
+    protected boolean supportsShiftClick(Player player, int index) {
 
         return true;
     }
@@ -106,19 +104,19 @@ public abstract class ContainerCoFH extends Container {
     // endregion
 
     // region NETWORK
-    public PacketBuffer getContainerPacket(PacketBuffer buffer) {
+    public FriendlyByteBuf getContainerPacket(FriendlyByteBuf buffer) {
 
         return buffer;
     }
 
-    public void handleContainerPacket(PacketBuffer buffer) {
+    public void handleContainerPacket(FriendlyByteBuf buffer) {
 
     }
     // endregion
 
     // region OVERRIDES
     @Override
-    public ItemStack quickMoveStack(PlayerEntity player, int index) {
+    public ItemStack quickMoveStack(Player player, int index) {
 
         if (!supportsShiftClick(player, index)) {
             return ItemStack.EMPTY;
@@ -149,10 +147,10 @@ public abstract class ContainerCoFH extends Container {
     }
 
     @Override
-    public ItemStack clicked(int index, int dragType, ClickType clickTypeIn, PlayerEntity player) {
+    public void clicked(int index, int dragType, ClickType clickTypeIn, Player player) {
 
         if (clickTypeIn == ClickType.SWAP && !allowSwap) {
-            return ItemStack.EMPTY;
+            return;
         }
         if (falseSlotSupport) {
             Slot slot = index < 0 ? null : slots.get(index);
@@ -160,22 +158,19 @@ public abstract class ContainerCoFH extends Container {
                 if (dragType == 2) {
                     slot.set(ItemStack.EMPTY);
                 } else {
-                    slot.set(player.inventory.getCarried().isEmpty() ? ItemStack.EMPTY : player.inventory.getCarried().copy());
+                    slot.set(player.getInventory().getSelected().isEmpty() ? ItemStack.EMPTY : player.getInventory().getSelected().copy());
                 }
-                return player.inventory.getCarried();
+                return;
             }
         }
-        return super.clicked(index, dragType, clickTypeIn, player);
+        super.clicked(index, dragType, clickTypeIn, player);
     }
 
     @Override
-    @OnlyIn (Dist.CLIENT)
-    public void setAll(List<ItemStack> stacks) {
+    public void initializeContents(int p_182411_, List<ItemStack> p_182412_, ItemStack p_182413_) {
 
         syncing = true;
-        for (int i = 0; i < stacks.size(); ++i) {
-            setItem(i, stacks.get(i));
-        }
+        super.initializeContents(p_182411_, p_182412_, p_182413_);
         syncing = false;
     }
 

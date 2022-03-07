@@ -3,25 +3,25 @@ package cofh.lib.block.impl.crops;
 import cofh.lib.block.IHarvestable;
 import cofh.lib.util.Utils;
 import cofh.lib.util.helpers.MathHelper;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.CropsBlock;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.PlantType;
 
@@ -31,9 +31,9 @@ import java.util.function.Supplier;
 
 import static cofh.lib.util.constants.Constants.AGE_0_7;
 import static cofh.lib.util.constants.Constants.CROPS_BY_AGE;
-import static net.minecraft.enchantment.Enchantments.BLOCK_FORTUNE;
+import static net.minecraft.world.item.enchantment.Enchantments.BLOCK_FORTUNE;
 
-public class CropsBlockCoFH extends CropsBlock implements IHarvestable {
+public class CropsBlockCoFH extends CropBlock implements IHarvestable {
 
     protected final PlantType type;
     protected int growLight;
@@ -78,24 +78,24 @@ public class CropsBlockCoFH extends CropsBlock implements IHarvestable {
         return this;
     }
 
-    protected IItemProvider getCropItem() {
+    protected ItemLike getCropItem() {
 
         return crop.get();
     }
 
-    protected IItemProvider getBaseSeedId() {
+    protected ItemLike getBaseSeedId() {
 
         return seed.get();
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 
         builder.add(getAgeProperty());
     }
 
     @Override
-    public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
+    public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, Random random) {
 
         if (!worldIn.isAreaLoaded(pos, 1)) {
             return;
@@ -114,10 +114,10 @@ public class CropsBlockCoFH extends CropsBlock implements IHarvestable {
     }
 
     @Override
-    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
 
-        if (handIn == Hand.MAIN_HAND && canHarvest(state)) {
-            return harvest(worldIn, pos, state, player, false) ? ActionResultType.SUCCESS : ActionResultType.PASS;
+        if (handIn == InteractionHand.MAIN_HAND && canHarvest(state)) {
+            return harvest(worldIn, pos, state, player, false) ? InteractionResult.SUCCESS : InteractionResult.PASS;
         }
         return super.use(state, worldIn, pos, player, handIn, hit);
     }
@@ -130,12 +130,12 @@ public class CropsBlockCoFH extends CropsBlock implements IHarvestable {
     //    }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
 
         return CROPS_BY_AGE[MathHelper.clamp(state.getValue(getAgeProperty()), 0, CROPS_BY_AGE.length - 1)];
     }
 
-    public static float getGrowthChanceProxy(Block blockIn, IBlockReader worldIn, BlockPos pos) {
+    public static float getGrowthChanceProxy(Block blockIn, BlockGetter worldIn, BlockPos pos) {
 
         return getGrowthSpeed(blockIn, worldIn, pos);
     }
@@ -172,7 +172,7 @@ public class CropsBlockCoFH extends CropsBlock implements IHarvestable {
     }
 
     @Override
-    public boolean harvest(World world, BlockPos pos, BlockState state, PlayerEntity player, boolean replant) {
+    public boolean harvest(Level world, BlockPos pos, BlockState state, Player player, boolean replant) {
 
         if (!canHarvest(state)) {
             return false;
@@ -186,9 +186,9 @@ public class CropsBlockCoFH extends CropsBlock implements IHarvestable {
             world.setBlock(pos, getStateForAge(getPostHarvestAge()), 2);
         } else {
             if (replant) {
-                List<ItemStack> drops = Block.getDrops(state, (ServerWorld) world, pos, null, player, player.getMainHandItem());
+                List<ItemStack> drops = Block.getDrops(state, (ServerLevel) world, pos, null, player, player.getMainHandItem());
                 boolean seedDrop = false;
-                Item seedItem = seed.get().getItem();
+                Item seedItem = seed.get();
                 for (ItemStack drop : drops) {
                     if (!seedDrop && drop.getItem() == seedItem) {
                         drop.shrink(1);
@@ -212,19 +212,19 @@ public class CropsBlockCoFH extends CropsBlock implements IHarvestable {
 
     // region IGrowable
     @Override
-    public boolean isValidBonemealTarget(IBlockReader worldIn, BlockPos pos, BlockState state, boolean isClient) {
+    public boolean isValidBonemealTarget(BlockGetter worldIn, BlockPos pos, BlockState state, boolean isClient) {
 
         return !canHarvest(state);
     }
 
     @Override
-    public boolean isBonemealSuccess(World worldIn, Random rand, BlockPos pos, BlockState state) {
+    public boolean isBonemealSuccess(Level worldIn, Random rand, BlockPos pos, BlockState state) {
 
         return true;
     }
 
     @Override
-    public void performBonemeal(ServerWorld worldIn, Random rand, BlockPos pos, BlockState state) {
+    public void performBonemeal(ServerLevel worldIn, Random rand, BlockPos pos, BlockState state) {
 
         if (canHarvest(state)) {
             return;
@@ -243,7 +243,7 @@ public class CropsBlockCoFH extends CropsBlock implements IHarvestable {
 
     // region IPlantable
     @Override
-    public PlantType getPlantType(IBlockReader world, BlockPos pos) {
+    public PlantType getPlantType(BlockGetter world, BlockPos pos) {
 
         return type;
     }

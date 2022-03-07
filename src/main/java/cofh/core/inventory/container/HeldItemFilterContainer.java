@@ -9,11 +9,11 @@ import cofh.lib.inventory.wrapper.InvWrapperGeneric;
 import cofh.lib.util.filter.IFilterOptions;
 import cofh.lib.util.filter.IFilterableItem;
 import cofh.lib.util.helpers.MathHelper;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 import static cofh.lib.util.helpers.FilterHelper.hasFilter;
 import static cofh.lib.util.references.CoreReferences.HELD_ITEM_FILTER_CONTAINER;
@@ -27,7 +27,7 @@ public class HeldItemFilterContainer extends ContainerCoFH implements IFilterOpt
 
     public SlotLocked lockedSlot;
 
-    public HeldItemFilterContainer(int windowId, PlayerInventory inventory, PlayerEntity player) {
+    public HeldItemFilterContainer(int windowId, Inventory inventory, Player player) {
 
         super(HELD_ITEM_FILTER_CONTAINER, windowId, inventory, player);
 
@@ -53,7 +53,7 @@ public class HeldItemFilterContainer extends ContainerCoFH implements IFilterOpt
     }
 
     @Override
-    protected void bindPlayerInventory(PlayerInventory inventory) {
+    protected void bindPlayerInventory(Inventory inventory) {
 
         int xOffset = getPlayerInventoryHorizontalOffset();
         int yOffset = getPlayerInventoryVerticalOffset();
@@ -85,13 +85,13 @@ public class HeldItemFilterContainer extends ContainerCoFH implements IFilterOpt
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn) {
+    public boolean stillValid(Player playerIn) {
 
         return true;
     }
 
     @Override
-    public void removed(PlayerEntity playerIn) {
+    public void removed(Player playerIn) {
 
         filter.setItems(filterInventory.getStacks());
         filter.write(filterStack.getOrCreateTag());
@@ -101,7 +101,7 @@ public class HeldItemFilterContainer extends ContainerCoFH implements IFilterOpt
 
     // region NETWORK
     @Override
-    public PacketBuffer getContainerPacket(PacketBuffer buffer) {
+    public FriendlyByteBuf getContainerPacket(FriendlyByteBuf buffer) {
 
         buffer.writeBoolean(getAllowList());
         buffer.writeBoolean(getCheckNBT());
@@ -110,7 +110,7 @@ public class HeldItemFilterContainer extends ContainerCoFH implements IFilterOpt
     }
 
     @Override
-    public void handleContainerPacket(PacketBuffer buffer) {
+    public void handleContainerPacket(FriendlyByteBuf buffer) {
 
         filter.setAllowList(buffer.readBoolean());
         filter.setCheckNBT(buffer.readBoolean());

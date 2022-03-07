@@ -1,10 +1,10 @@
 package cofh.core.client.gui.element;
 
 import cofh.lib.client.gui.IGuiAccess;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.Font;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
 import java.util.function.BooleanSupplier;
@@ -56,15 +56,15 @@ public abstract class ElementBase {
         this.height = height;
     }
 
-    public void drawBackground(MatrixStack matrixStack, int mouseX, int mouseY) {
+    public void drawBackground(PoseStack matrixStack, int mouseX, int mouseY) {
 
     }
 
-    public void drawForeground(MatrixStack matrixStack, int mouseX, int mouseY) {
+    public void drawForeground(PoseStack matrixStack, int mouseX, int mouseY) {
 
     }
 
-    public void addTooltip(List<ITextComponent> tooltipList, int mouseX, int mouseY) {
+    public void addTooltip(List<Component> tooltipList, int mouseX, int mouseY) {
 
         tooltipList.addAll(tooltip.create(this, mouseX, mouseY));
     }
@@ -210,7 +210,7 @@ public abstract class ElementBase {
         gui.drawTexturedModalRect(x, y, u, v, width, height, texW, texH);
     }
 
-    public FontRenderer getFontRenderer() {
+    public Font getFontRenderer() {
 
         return gui.getFontRenderer();
     }

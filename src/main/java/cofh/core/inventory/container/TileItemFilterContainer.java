@@ -8,11 +8,11 @@ import cofh.lib.util.filter.IFilterOptions;
 import cofh.lib.util.filter.IFilterableTile;
 import cofh.lib.util.helpers.FilterHelper;
 import cofh.lib.util.helpers.MathHelper;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 
 import static cofh.lib.util.references.CoreReferences.TILE_ITEM_FILTER_CONTAINER;
 
@@ -22,7 +22,7 @@ public class TileItemFilterContainer extends TileContainer implements IFilterOpt
     protected AbstractItemFilter filter;
     protected InvWrapperGeneric filterInventory;
 
-    public TileItemFilterContainer(int windowId, World world, BlockPos pos, PlayerInventory inventory, PlayerEntity player) {
+    public TileItemFilterContainer(int windowId, Level world, BlockPos pos, Inventory inventory, Player player) {
 
         super(TILE_ITEM_FILTER_CONTAINER, windowId, world, pos, inventory, player);
 
@@ -63,7 +63,7 @@ public class TileItemFilterContainer extends TileContainer implements IFilterOpt
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
 
         if (!FilterHelper.hasFilter(filterable)) {
             return false;
@@ -72,7 +72,7 @@ public class TileItemFilterContainer extends TileContainer implements IFilterOpt
     }
 
     @Override
-    public void removed(PlayerEntity playerIn) {
+    public void removed(Player playerIn) {
 
         filter.setItems(filterInventory.getStacks());
         filterable.onFilterChanged();
@@ -81,7 +81,7 @@ public class TileItemFilterContainer extends TileContainer implements IFilterOpt
 
     // region NETWORK
     @Override
-    public PacketBuffer getContainerPacket(PacketBuffer buffer) {
+    public FriendlyByteBuf getContainerPacket(FriendlyByteBuf buffer) {
 
         buffer.writeBoolean(getAllowList());
         buffer.writeBoolean(getCheckNBT());
@@ -90,7 +90,7 @@ public class TileItemFilterContainer extends TileContainer implements IFilterOpt
     }
 
     @Override
-    public void handleContainerPacket(PacketBuffer buffer) {
+    public void handleContainerPacket(FriendlyByteBuf buffer) {
 
         filter.setAllowList(buffer.readBoolean());
         filter.setCheckNBT(buffer.readBoolean());

@@ -5,8 +5,8 @@ import cofh.lib.util.Utils;
 import cofh.lib.util.control.ISecurable;
 import cofh.lib.util.helpers.SecurityHelper;
 import com.mojang.authlib.GameProfile;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.UUID;
 import java.util.function.BooleanSupplier;
@@ -40,14 +40,14 @@ public class SecurityControlModule implements ISecurable {
     }
 
     // region NETWORK
-    public void readFromBuffer(PacketBuffer buffer) {
+    public void readFromBuffer(FriendlyByteBuf buffer) {
 
         access = AccessMode.VALUES[buffer.readByte()];
         owner = SecurityHelper.DEFAULT_GAME_PROFILE;
         setOwner(new GameProfile(buffer.readUUID(), buffer.readUtf(1024)));
     }
 
-    public void writeToBuffer(PacketBuffer buffer) {
+    public void writeToBuffer(FriendlyByteBuf buffer) {
 
         buffer.writeByte(access.ordinal());
         buffer.writeUUID(owner.getId());
@@ -56,9 +56,9 @@ public class SecurityControlModule implements ISecurable {
     // endregion
 
     // region NBT
-    public SecurityControlModule read(CompoundNBT nbt) {
+    public SecurityControlModule read(CompoundTag nbt) {
 
-        CompoundNBT subTag = nbt.getCompound(TAG_SECURITY);
+        CompoundTag subTag = nbt.getCompound(TAG_SECURITY);
 
         if (subTag.contains(TAG_SEC_OWNER_UUID)) {
             String uuid = subTag.getString(TAG_SEC_OWNER_UUID);
@@ -72,10 +72,10 @@ public class SecurityControlModule implements ISecurable {
         return this;
     }
 
-    public CompoundNBT write(CompoundNBT nbt) {
+    public CompoundTag write(CompoundTag nbt) {
 
         if (isSecurable()) {
-            CompoundNBT subTag = new CompoundNBT();
+            CompoundTag subTag = new CompoundTag();
 
             subTag.putString(TAG_SEC_OWNER_UUID, owner.getId().toString());
             subTag.putString(TAG_SEC_OWNER_NAME, owner.getName());

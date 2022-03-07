@@ -1,20 +1,20 @@
 package cofh.lib.fluid;
 
 import cofh.lib.util.DeferredRegisterCoFH;
-import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.fluid.FlowingFluid;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.RegistryObject;
 
 public abstract class FluidCoFH {
 
     protected RegistryObject<FlowingFluid> stillFluid;
     protected RegistryObject<FlowingFluid> flowingFluid;
 
-    protected RegistryObject<FlowingFluidBlock> block;
+    protected RegistryObject<LiquidBlock> block;
     protected RegistryObject<Item> bucket;
 
     protected ForgeFlowingFluid.Properties properties;

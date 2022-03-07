@@ -4,21 +4,15 @@ import cofh.lib.capability.templates.AreaEffectItemWrapper;
 import cofh.lib.util.Utils;
 import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.entity.player.UseHoeEvent;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -27,17 +21,14 @@ import java.util.List;
 import java.util.Set;
 
 import static cofh.lib.capability.CapabilityAreaEffect.AREA_EFFECT_ITEM_CAPABILITY;
-import static cofh.lib.util.Utils.getItemEnchantmentLevel;
 import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
 import static cofh.lib.util.helpers.AreaEffectHelper.validAreaEffectMiningItem;
-import static cofh.lib.util.references.EnsorcReferences.WEEDING;
-import static net.minecraft.item.HoeItem.TILLABLES;
 
 @Mod.EventBusSubscriber (modid = ID_COFH_CORE)
 public class AreaEffectEvents {
 
-    private static final Set<PlayerEntity> HARVESTING_PLAYERS = new ObjectOpenHashSet<>();
-    private static final Set<PlayerEntity> TILLING_PLAYERS = new ObjectOpenHashSet<>();
+    private static final Set<Player> HARVESTING_PLAYERS = new ObjectOpenHashSet<>();
+    private static final Set<Player> TILLING_PLAYERS = new ObjectOpenHashSet<>();
 
     private AreaEffectEvents() {
 
@@ -46,8 +37,7 @@ public class AreaEffectEvents {
     @SubscribeEvent (priority = EventPriority.LOW)
     public static void handleBlockBreakEvent(BlockEvent.BreakEvent event) {
 
-        PlayerEntity player = event.getPlayer();
-        if (!(player instanceof ServerPlayerEntity) || Utils.isClientWorld(player.level)) {
+        if (!(event.getPlayer() instanceof ServerPlayer player) || Utils.isClientWorld(player.level)) {
             return;
         }
         if (HARVESTING_PLAYERS.contains(player)) {
@@ -59,13 +49,12 @@ public class AreaEffectEvents {
             return;
         }
         ImmutableList<BlockPos> areaBlocks = stack.getCapability(AREA_EFFECT_ITEM_CAPABILITY).orElse(new AreaEffectItemWrapper(stack)).getAreaEffectBlocks(event.getPos(), player);
-        ServerPlayerEntity playerMP = (ServerPlayerEntity) player;
         // TODO: Revisit if performance issues show. This is the most *proper* way to handle this, but is not particularly friendly.
         for (BlockPos pos : areaBlocks) {
             if (stack.isEmpty()) {
                 break;
             }
-            playerMP.gameMode.destroyBlock(pos);
+            player.gameMode.destroyBlock(pos);
         }
     }
 
@@ -75,7 +64,7 @@ public class AreaEffectEvents {
         if (event.isCanceled()) {
             return;
         }
-        PlayerEntity player = event.getPlayer();
+        Player player = event.getPlayer();
         ItemStack stack = player.getMainHandItem();
         if (!validAreaEffectMiningItem(stack)) {
             return;
@@ -86,7 +75,7 @@ public class AreaEffectEvents {
         if (curHardness <= 0 || areaBlocks.size() <= 1) {
             return;
         }
-        float areaMod = MathHelper.clamp(1.0F - 0.01F * areaBlocks.size(), 0.1F, 1.0F);
+        float areaMod = Mth.clamp(1.0F - 0.01F * areaBlocks.size(), 0.1F, 1.0F);
         event.setNewSpeed(event.getNewSpeed() * areaMod);
 
         float maxHardness = getMaxHardness(player.level, areaBlocks, curHardness);
@@ -95,16 +84,17 @@ public class AreaEffectEvents {
         }
     }
 
+/*  TODO Lemming, HoeItem.TILLABLES has changed quite a lot, this Event is also deprecated for removal.. Last version..
     @SubscribeEvent (priority = EventPriority.LOW)
     public static void handleUseHoeEvent(UseHoeEvent event) {
 
         if (event.isCanceled() || event.getResult() == Event.Result.ALLOW) {
             return;
         }
-        PlayerEntity player = event.getPlayer();
+        Player player = event.getPlayer();
         ItemStack stack = event.getContext().getItemInHand();
         BlockPos target = event.getContext().getClickedPos();
-        World world = player.level;
+        Level world = player.level;
         BlockState targetTilled = TILLABLES.get(world.getBlockState(target).getBlock());
         BlockPos up = target.above();
         boolean weeding = getItemEnchantmentLevel(WEEDING, stack) > 0;
@@ -131,7 +121,7 @@ public class AreaEffectEvents {
                 if (weeding) {
                     up = pos.above();
                     if (!world.isEmptyBlock(up)) {
-                        world.destroyBlock(up, !player.abilities.instabuild);
+                        world.destroyBlock(up, !player.getAbilities().instabuild);
                     }
                 }
                 stack.hurtAndBreak(1, player, (entity) -> {
@@ -143,12 +133,12 @@ public class AreaEffectEvents {
         if (weeding) {
             up = target.above();
             if (!world.isEmptyBlock(up)) {
-                world.destroyBlock(up, !player.abilities.instabuild);
+                world.destroyBlock(up, !player.getAbilities().instabuild);
             }
         }
-        world.playSound(player, target, SoundEvents.HOE_TILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
+        world.playSound(player, target, SoundEvents.HOE_TILL, SoundSource.BLOCKS, 1.0F, 1.0F);
         event.setResult(Event.Result.ALLOW);
-    }
+    }*/
 
     @SubscribeEvent (priority = EventPriority.LOWEST)
     public static void handleTickEndEvent(TickEvent.ServerTickEvent event) {
@@ -160,7 +150,7 @@ public class AreaEffectEvents {
     }
 
     // region HELPERS
-    private static float getMaxHardness(IBlockReader world, List<BlockPos> areaBlocks, float curHardness) {
+    private static float getMaxHardness(BlockGetter world, List<BlockPos> areaBlocks, float curHardness) {
 
         float maxHardness = curHardness;
         float testHardness;

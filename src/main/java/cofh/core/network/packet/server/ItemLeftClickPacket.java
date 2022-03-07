@@ -4,8 +4,8 @@ import cofh.core.CoFHCore;
 import cofh.lib.network.packet.IPacketServer;
 import cofh.lib.network.packet.PacketBase;
 import cofh.lib.util.helpers.ItemHelper;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
 
 import static cofh.lib.util.constants.Constants.PACKET_ITEM_LEFT_CLICK;
 
@@ -17,7 +17,7 @@ public class ItemLeftClickPacket extends PacketBase implements IPacketServer {
     }
 
     @Override
-    public void handleServer(ServerPlayerEntity player) {
+    public void handleServer(ServerPlayer player) {
 
         if (!ItemHelper.isPlayerHoldingLeftClickItem(player)) {
             return;
@@ -26,12 +26,12 @@ public class ItemLeftClickPacket extends PacketBase implements IPacketServer {
     }
 
     @Override
-    public void write(PacketBuffer buf) {
+    public void write(FriendlyByteBuf buf) {
 
     }
 
     @Override
-    public void read(PacketBuffer buf) {
+    public void read(FriendlyByteBuf buf) {
 
     }
 

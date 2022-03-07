@@ -2,11 +2,11 @@ package cofh.core.client.gui.element;
 
 import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.client.gui.IGuiAccess;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.item.ItemStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.function.Supplier;
@@ -39,13 +39,13 @@ public class ElementBlock extends ElementBase {
     }
 
     @Override
-    public void drawForeground(MatrixStack matrixStack, int mouseX, int mouseY) {
+    public void drawForeground(PoseStack matrixStack, int mouseX, int mouseY) {
 
         Block block = blockSup.get();
         if (block != Blocks.AIR) {
             if (block != renderBlock) {
-                if (block instanceof FlowingFluidBlock) {
-                    renderFluid = new FluidStack(((FlowingFluidBlock) block).getFluid(), BUCKET_VOLUME);
+                if (block instanceof LiquidBlock) {
+                    renderFluid = new FluidStack(((LiquidBlock) block).getFluid(), BUCKET_VOLUME);
                     renderStack = ItemStack.EMPTY;
                 } else {
                     renderFluid = FluidStack.EMPTY;

@@ -5,16 +5,16 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.JsonToNBT;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.TagParser;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -195,12 +195,12 @@ public abstract class RecipeJsonUtils {
             /* NBT */
             if (itemObject.has(NBT)) {
                 JsonElement nbtElement = itemObject.get(NBT);
-                CompoundNBT nbt;
+                CompoundTag nbt;
                 try {
                     if (nbtElement.isJsonObject()) {
-                        nbt = JsonToNBT.parseTag(GSON.toJson(nbtElement));
+                        nbt = TagParser.parseTag(GSON.toJson(nbtElement));
                     } else {
-                        nbt = JsonToNBT.parseTag(JSONUtils.convertToString(nbtElement, NBT));
+                        nbt = TagParser.parseTag(GsonHelper.convertToString(nbtElement, NBT));
                     }
                     stack.setTag(nbt);
                 } catch (Exception e) {
@@ -245,12 +245,12 @@ public abstract class RecipeJsonUtils {
             /* NBT */
             if (fluidObject.has(NBT)) {
                 JsonElement nbtElement = fluidObject.get(NBT);
-                CompoundNBT nbt;
+                CompoundTag nbt;
                 try {
                     if (nbtElement.isJsonObject()) {
-                        nbt = JsonToNBT.parseTag(GSON.toJson(nbtElement));
+                        nbt = TagParser.parseTag(GSON.toJson(nbtElement));
                     } else {
-                        nbt = JsonToNBT.parseTag(JSONUtils.convertToString(nbtElement, NBT));
+                        nbt = TagParser.parseTag(GsonHelper.convertToString(nbtElement, NBT));
                     }
                     stack.setTag(nbt);
                 } catch (Exception e) {

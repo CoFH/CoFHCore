@@ -2,8 +2,8 @@ package cofh.core.client.gui.element;
 
 import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.client.gui.IGuiAccess;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.util.ResourceLocation;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.function.BooleanSupplier;
 
@@ -56,7 +56,7 @@ public class ElementSlot extends ElementBase {
     }
 
     @Override
-    public void drawBackground(MatrixStack matrixStack, int mouseX, int mouseY) {
+    public void drawBackground(PoseStack matrixStack, int mouseX, int mouseY) {
 
         drawSlot();
         drawUnderlayTexture();
@@ -64,21 +64,23 @@ public class ElementSlot extends ElementBase {
     }
 
     @Override
-    public void drawForeground(MatrixStack matrixStack, int mouseX, int mouseY) {
+    public void drawForeground(PoseStack matrixStack, int mouseX, int mouseY) {
 
         drawOverlayTexture();
     }
 
     protected void drawSlot() {
 
-        RenderHelper.bindTexture(texture);
+        RenderHelper.setPosTexShader();
+        RenderHelper.setShaderTexture0(texture);
         drawTexturedModalRect(posX(), posY(), 0, 0, width, height);
     }
 
     protected void drawUnderlayTexture() {
 
         if (drawUnderlay.getAsBoolean() && underlayTexture != null) {
-            RenderHelper.bindTexture(underlayTexture);
+            RenderHelper.setPosTexShader();
+            RenderHelper.setShaderTexture0(underlayTexture);
             drawTexturedModalRect(posX(), posY(), 0, 0, width, height);
         }
     }
@@ -86,7 +88,8 @@ public class ElementSlot extends ElementBase {
     protected void drawOverlayTexture() {
 
         if (drawOverlay.getAsBoolean() && overlayTexture != null) {
-            RenderHelper.bindTexture(overlayTexture);
+            RenderHelper.setPosTexShader();
+            RenderHelper.setShaderTexture0(overlayTexture);
             drawTexturedModalRect(posX(), posY(), 0, 0, width, height);
         }
     }

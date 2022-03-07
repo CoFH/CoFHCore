@@ -3,18 +3,18 @@ package cofh.core.util.crafting;
 import cofh.lib.util.control.ISecurable.AccessMode;
 import cofh.lib.util.helpers.SecurityHelper;
 import cofh.lib.util.references.ItemTagsCoFH;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.SpecialRecipe;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CustomRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.Level;
 
 import static cofh.core.CoFHCore.RECIPE_SERIALIZERS;
 import static cofh.lib.util.references.CoreIDs.ID_CRAFTING_SECURABLE;
 
-public class SecureRecipe extends SpecialRecipe {
+public class SecureRecipe extends CustomRecipe {
 
     public SecureRecipe(ResourceLocation idIn) {
 
@@ -22,7 +22,7 @@ public class SecureRecipe extends SpecialRecipe {
     }
 
     @Override
-    public boolean matches(CraftingInventory inv, World worldIn) {
+    public boolean matches(CraftingContainer inv, Level worldIn) {
 
         Ingredient ingredientSecure = Ingredient.of(ItemTagsCoFH.LOCKS);
         Ingredient ingredientSecurable = Ingredient.of(ItemTagsCoFH.SECURABLE);
@@ -45,7 +45,7 @@ public class SecureRecipe extends SpecialRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingInventory inv) {
+    public ItemStack assemble(CraftingContainer inv) {
 
         Ingredient ingredientSecurable = Ingredient.of(ItemTagsCoFH.SECURABLE);
 
@@ -73,7 +73,7 @@ public class SecureRecipe extends SpecialRecipe {
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
 
         return RECIPE_SERIALIZERS.get(ID_CRAFTING_SECURABLE);
     }

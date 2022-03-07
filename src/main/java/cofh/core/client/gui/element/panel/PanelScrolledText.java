@@ -3,11 +3,11 @@ package cofh.core.client.gui.element.panel;
 import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.client.gui.IGuiAccess;
 import cofh.lib.util.helpers.MathHelper;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.IReorderingProcessor;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.util.FormattedCharSequence;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import static cofh.core.client.gui.CoreTextures.*;
 
 public abstract class PanelScrolledText extends PanelBase {
 
-    protected List<IReorderingProcessor> myText;
+    protected List<FormattedCharSequence> myText;
     protected int firstLine = 0;
     protected int maxFirstLine;
     protected int numLines;
@@ -28,7 +28,7 @@ public abstract class PanelScrolledText extends PanelBase {
 
         maxHeight = 92;
 
-        myText = getFontRenderer().split(new StringTextComponent(info), maxWidth - 16);
+        myText = getFontRenderer().split(new TextComponent(info), maxWidth - 16);
         numLines = Math.min(myText.size(), (maxHeight - 24) / getFontRenderer().lineHeight);
         maxFirstLine = myText.size() - numLines;
         scrollable = maxFirstLine > 0;
@@ -36,10 +36,10 @@ public abstract class PanelScrolledText extends PanelBase {
 
     public abstract TextureAtlasSprite getIcon();
 
-    public abstract ITextComponent getTitle();
+    public abstract Component getTitle();
 
     @Override
-    public void drawForeground(MatrixStack matrixStack) {
+    public void drawForeground(PoseStack matrixStack) {
 
         drawPanelIcon(matrixStack, getIcon());
         if (!fullyOpen) {
@@ -61,11 +61,11 @@ public abstract class PanelScrolledText extends PanelBase {
         for (int i = firstLine; i < firstLine + numLines; ++i) {
             getFontRenderer().draw(matrixStack, myText.get(i), sideOffset() + 2, 20 + (i - firstLine) * getFontRenderer().lineHeight, textColor);
         }
-        RenderHelper.resetColor();
+        RenderHelper.resetShaderColor();
     }
 
     @Override
-    public void addTooltip(List<ITextComponent> tooltipList, int mouseX, int mouseY) {
+    public void addTooltip(List<Component> tooltipList, int mouseX, int mouseY) {
 
         if (!fullyOpen) {
             tooltipList.add(getTitle());

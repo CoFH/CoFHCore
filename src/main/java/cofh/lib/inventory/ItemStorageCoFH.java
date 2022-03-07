@@ -2,8 +2,8 @@ package cofh.lib.inventory;
 
 import cofh.lib.util.IResourceStorage;
 import cofh.lib.util.helpers.ItemHelper;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
@@ -121,20 +121,20 @@ public class ItemStorageCoFH implements IItemHandler, IItemStackAccess, IResourc
     }
 
     // region NBT
-    public ItemStorageCoFH read(CompoundNBT nbt) {
+    public ItemStorageCoFH read(CompoundTag nbt) {
 
         item = loadItemStack(nbt);
         return this;
     }
 
-    public CompoundNBT write(CompoundNBT nbt) {
+    public CompoundTag write(CompoundTag nbt) {
 
         saveItemStack(item, nbt);
         return nbt;
     }
     // endregion
 
-    protected final ItemStack loadItemStack(CompoundNBT nbt) {
+    protected final ItemStack loadItemStack(CompoundTag nbt) {
 
         ItemStack retStack = ItemStack.of(nbt);
         if (nbt.contains("IntCount")) {
@@ -146,7 +146,7 @@ public class ItemStorageCoFH implements IItemHandler, IItemStackAccess, IResourc
         return retStack;
     }
 
-    protected final void saveItemStack(ItemStack stack, CompoundNBT nbt) {
+    protected final void saveItemStack(ItemStack stack, CompoundTag nbt) {
 
         stack.save(nbt);
         if (stack.getCount() > Byte.MAX_VALUE) {

@@ -2,15 +2,16 @@ package cofh.core.item;
 
 import cofh.core.init.CoreConfig;
 import cofh.lib.item.ICoFHItem;
-import net.minecraft.block.Block;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -24,7 +25,7 @@ import java.util.function.Supplier;
 
 import static cofh.lib.util.constants.Constants.TRUE;
 import static cofh.lib.util.helpers.StringHelper.getTextComponent;
-import static net.minecraft.util.text.TextFormatting.GRAY;
+import static net.minecraft.ChatFormatting.GRAY;
 
 public class BlockItemCoFH extends BlockItem implements ICoFHItem {
 
@@ -34,7 +35,7 @@ public class BlockItemCoFH extends BlockItem implements ICoFHItem {
     protected int enchantability;
     protected String modId = "";
 
-    protected Supplier<ItemGroup> displayGroup;
+    protected Supplier<CreativeModeTab> displayGroup;
 
     public BlockItemCoFH(Block blockIn, Properties builder) {
 
@@ -53,7 +54,7 @@ public class BlockItemCoFH extends BlockItem implements ICoFHItem {
         return this;
     }
 
-    public BlockItemCoFH setDisplayGroup(Supplier<ItemGroup> displayGroup) {
+    public BlockItemCoFH setDisplayGroup(Supplier<CreativeModeTab> displayGroup) {
 
         this.displayGroup = displayGroup;
         return this;
@@ -71,7 +72,7 @@ public class BlockItemCoFH extends BlockItem implements ICoFHItem {
         return this;
     }
 
-    protected void tooltipDelegate(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    protected void tooltipDelegate(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 
     }
 
@@ -82,7 +83,7 @@ public class BlockItemCoFH extends BlockItem implements ICoFHItem {
     }
 
     @Override
-    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
 
         if (!showInGroups.getAsBoolean() || getBlock() == null || displayGroup != null && displayGroup.get() != null && displayGroup.get() != group) {
             return;
@@ -92,9 +93,9 @@ public class BlockItemCoFH extends BlockItem implements ICoFHItem {
 
     @Override
     @OnlyIn (Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 
-        List<ITextComponent> additionalTooltips = new ArrayList<>();
+        List<Component> additionalTooltips = new ArrayList<>();
         tooltipDelegate(stack, worldIn, additionalTooltips, flagIn);
 
         if (!additionalTooltips.isEmpty()) {
@@ -119,13 +120,13 @@ public class BlockItemCoFH extends BlockItem implements ICoFHItem {
     }
 
     @Override
-    public int getBurnTime(ItemStack itemStack) {
+    public int getBurnTime(ItemStack itemStack, RecipeType<?> recipeType) {
 
         return burnTime;
     }
 
     @Override
-    public Collection<ItemGroup> getCreativeTabs() {
+    public Collection<CreativeModeTab> getCreativeTabs() {
 
         return displayGroup != null && displayGroup.get() != null ? Collections.singletonList(displayGroup.get()) : super.getCreativeTabs();
     }

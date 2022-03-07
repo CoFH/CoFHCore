@@ -5,12 +5,12 @@ import cofh.lib.fluid.IFluidContainerItem;
 import cofh.lib.item.IColorableItem;
 import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.util.helpers.StringHelper;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -45,7 +45,7 @@ public class FluidContainerItem extends ItemCoFH implements IFluidContainerItem,
     }
 
     @Override
-    protected void tooltipDelegate(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    protected void tooltipDelegate(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 
         FluidStack fluid = getFluid(stack);
         if (!fluid.isEmpty()) {
@@ -64,12 +64,12 @@ public class FluidContainerItem extends ItemCoFH implements IFluidContainerItem,
         }
     }
 
-    protected void potionTooltip(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn, List<EffectInstance> effects) {
+    protected void potionTooltip(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn, List<MobEffectInstance> effects) {
 
         potionTooltip(stack, worldIn, tooltip, flagIn, effects, 1.0F);
     }
 
-    protected void potionTooltip(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn, List<EffectInstance> effects, float durationFactor) {
+    protected void potionTooltip(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn, List<MobEffectInstance> effects, float durationFactor) {
 
         FluidStack fluid = getFluid(stack);
         if (!fluid.isEmpty()) {
@@ -99,19 +99,19 @@ public class FluidContainerItem extends ItemCoFH implements IFluidContainerItem,
     }
 
     @Override
-    public boolean showDurabilityBar(ItemStack stack) {
+    public boolean isBarVisible(ItemStack stack) {
 
         return !isCreative(stack, FLUID) && getFluidAmount(stack) > 0;
     }
 
     @Override
-    public double getDurabilityForDisplay(ItemStack stack) {
+    public int getBarWidth(ItemStack stack) {
 
-        return MathHelper.clamp(1.0D - getFluidAmount(stack) / (double) getCapacity(stack), 0.0D, 1.0D);
+        return (int) Math.round(13.0D - getFluidAmount(stack) * 13.0D / (double) getCapacity(stack));
     }
 
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
 
         return new FluidContainerItemWrapper(stack, this);
     }

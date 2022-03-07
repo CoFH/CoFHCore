@@ -2,14 +2,13 @@ package cofh.lib.block;
 
 import cofh.lib.tileentity.ITileCallback;
 import cofh.lib.util.Utils;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.common.extensions.IForgeBlock;
 
 /**
@@ -22,9 +21,9 @@ public interface IDismantleable extends IForgeBlock {
     /**
      * Dismantles the block. If returnDrops is true, the drop(s) should be placed into the player's inventory.
      */
-    default void dismantleBlock(World world, BlockPos pos, BlockState state, RayTraceResult target, PlayerEntity player, boolean returnDrops) {
+    default void dismantleBlock(Level world, BlockPos pos, BlockState state, HitResult target, Player player, boolean returnDrops) {
 
-        ItemStack dropBlock = this.getPickBlock(state, target, world, pos, player);
+        ItemStack dropBlock = this.getCloneItemStack(state, target, world, pos, player);
         world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
         if (!returnDrops || player == null || !player.addItem(dropBlock)) {
             Utils.dropDismantleStackIntoWorld(dropBlock, world, pos);
@@ -34,11 +33,10 @@ public interface IDismantleable extends IForgeBlock {
     /**
      * Return true if the block can be dismantled. The criteria for this is entirely up to the block.
      */
-    default boolean canDismantle(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+    default boolean canDismantle(Level world, BlockPos pos, BlockState state, Player player) {
 
-        TileEntity tile = world.getBlockEntity(pos);
-        if (tile instanceof ITileCallback) {
-            return ((ITileCallback) tile).canPlayerChange(player);
+        if (world.getBlockEntity(pos) instanceof ITileCallback tile) {
+            return tile.canPlayerChange(player);
         }
         return true;
     }

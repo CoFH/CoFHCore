@@ -1,28 +1,27 @@
 package cofh.lib.block.impl;
 
 import cofh.lib.util.helpers.MathHelper;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialColor;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorldReader;
-import net.minecraftforge.common.ToolType;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
 
 public class OreBlockCoFH extends Block {
 
     protected int minXp = 0;
     protected int maxXp = 0;
 
-    public OreBlockCoFH(int harvestLevel) {
+    public OreBlockCoFH() {
 
-        this(Properties.of(Material.STONE, MaterialColor.STONE).strength(3.0F, 3.0F).sound(SoundType.STONE).harvestLevel(harvestLevel).harvestTool(ToolType.PICKAXE).requiresCorrectToolForDrops());
+        this(Properties.of(Material.STONE, MaterialColor.STONE).strength(3.0F, 3.0F).sound(SoundType.STONE).requiresCorrectToolForDrops());
     }
 
-    public OreBlockCoFH(MaterialColor color, int harvestLevel) {
+    public OreBlockCoFH(MaterialColor color) {
 
-        this(Properties.of(Material.STONE, color).strength(3.0F, 3.0F).sound(SoundType.STONE).harvestLevel(harvestLevel).harvestTool(ToolType.PICKAXE).requiresCorrectToolForDrops());
+        this(Properties.of(Material.STONE, color).strength(3.0F, 3.0F).sound(SoundType.STONE).requiresCorrectToolForDrops());
     }
 
     public OreBlockCoFH(Properties properties) {
@@ -49,7 +48,7 @@ public class OreBlockCoFH extends Block {
     }
 
     @Override
-    public int getExpDrop(BlockState state, IWorldReader reader, BlockPos pos, int fortune, int silktouch) {
+    public int getExpDrop(BlockState state, LevelReader reader, BlockPos pos, int fortune, int silktouch) {
 
         return silktouch == 0 ? getExperience() : 0;
     }

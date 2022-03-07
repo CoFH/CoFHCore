@@ -4,9 +4,9 @@ import cofh.core.network.packet.server.SideConfigPacket;
 import cofh.lib.util.Utils;
 import cofh.lib.util.control.IReconfigurable;
 import cofh.lib.util.helpers.BlockHelper;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.function.BooleanSupplier;
 
@@ -82,7 +82,7 @@ public class ReconfigControlModule implements IReconfigurable {
     }
 
     // region NETWORK
-    public void readFromBuffer(PacketBuffer buffer) {
+    public void readFromBuffer(FriendlyByteBuf buffer) {
 
         facing = Direction.from3DDataValue(buffer.readByte());
         for (int i = 0; i < 6; ++i) {
@@ -90,7 +90,7 @@ public class ReconfigControlModule implements IReconfigurable {
         }
     }
 
-    public void writeToBuffer(PacketBuffer buffer) {
+    public void writeToBuffer(FriendlyByteBuf buffer) {
 
         buffer.writeByte(facing.get3DDataValue());
         for (int i = 0; i < 6; ++i) {
@@ -100,7 +100,7 @@ public class ReconfigControlModule implements IReconfigurable {
     // endregion
 
     // region NBT
-    public ReconfigControlModule read(CompoundNBT nbt) {
+    public ReconfigControlModule read(CompoundTag nbt) {
 
         byte[] bSides = nbt.getByteArray(TAG_SIDES);
 
@@ -119,7 +119,7 @@ public class ReconfigControlModule implements IReconfigurable {
 
     // Sides are stored to NBT in D-U-N-S-W-E order - North assumed to be front!
     // They are converted to the appropriate rotation using the facing value.
-    public CompoundNBT write(CompoundNBT nbt) {
+    public CompoundTag write(CompoundTag nbt) {
 
         if (isReconfigurable()) {
             byte[] bSides = new byte[6];
@@ -138,7 +138,7 @@ public class ReconfigControlModule implements IReconfigurable {
         return nbt;
     }
 
-    public ReconfigControlModule readSettings(CompoundNBT nbt) {
+    public ReconfigControlModule readSettings(CompoundTag nbt) {
 
         if (isReconfigurable()) {
             return read(nbt);
@@ -146,7 +146,7 @@ public class ReconfigControlModule implements IReconfigurable {
         return this;
     }
 
-    public CompoundNBT writeSettings(CompoundNBT nbt) {
+    public CompoundTag writeSettings(CompoundTag nbt) {
 
         return write(nbt);
     }

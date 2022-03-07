@@ -1,10 +1,10 @@
 package cofh.lib.util.helpers;
 
 import cofh.lib.xp.IXpContainerItem;
-import net.minecraft.entity.item.ExperienceOrbEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.ExperienceOrb;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 import static cofh.lib.util.constants.NBTTags.TAG_XP_TIMER;
 
@@ -14,22 +14,22 @@ public class XpHelper {
 
     }
 
-    public static int getPlayerXP(PlayerEntity player) {
+    public static int getPlayerXP(Player player) {
 
         return getTotalXpForLevel(player.experienceLevel) + getExtraPlayerXp(player);
     }
 
-    public static int getLevelPlayerXP(PlayerEntity player) {
+    public static int getLevelPlayerXP(Player player) {
 
         return getTotalXpForLevel(player.experienceLevel);
     }
 
-    public static int getExtraPlayerXp(PlayerEntity player) {
+    public static int getExtraPlayerXp(Player player) {
 
         return Math.round(player.experienceProgress * player.getXpNeededForNextLevel());
     }
 
-    public static void setPlayerXP(PlayerEntity player, int exp) {
+    public static void setPlayerXP(Player player, int exp) {
 
         player.experienceLevel = 0;
         player.experienceProgress = 0.0F;
@@ -38,13 +38,13 @@ public class XpHelper {
         addXPToPlayer(player, exp);
     }
 
-    public static void setPlayerLevel(PlayerEntity player, int level) {
+    public static void setPlayerLevel(Player player, int level) {
 
         player.experienceLevel = level;
         player.experienceProgress = 0.0F;
     }
 
-    public static void addXPToPlayer(PlayerEntity player, int exp) {
+    public static void addXPToPlayer(Player player, int exp) {
 
         int i = Integer.MAX_VALUE - player.totalExperience;
         if (exp > i) {
@@ -57,7 +57,7 @@ public class XpHelper {
         }
     }
 
-    public static void addXPLevelToPlayer(PlayerEntity player, int levels) {
+    public static void addXPLevelToPlayer(Player player, int levels) {
 
         player.experienceLevel += levels;
 
@@ -68,11 +68,11 @@ public class XpHelper {
         }
     }
 
-    public static void attemptStoreXP(PlayerEntity player, ExperienceOrbEntity orb) {
+    public static void attemptStoreXP(Player player, ExperienceOrb orb) {
 
         // Xp Storage Items
         if (player.level.getGameTime() - player.getPersistentData().getLong(TAG_XP_TIMER) <= 40) {
-            PlayerInventory inventory = player.inventory;
+            Inventory inventory = player.getInventory();
             for (int i = 0; i < inventory.getContainerSize(); ++i) {
                 ItemStack stack = inventory.getItem(i);
                 if (stack.getItem() instanceof IXpContainerItem && IXpContainerItem.storeXpOrb(player, orb, stack)) {

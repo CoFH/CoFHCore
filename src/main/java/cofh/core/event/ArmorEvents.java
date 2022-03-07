@@ -2,14 +2,15 @@ package cofh.core.event;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.DamageSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.living.PotionEvent;
@@ -23,8 +24,8 @@ import java.util.Set;
 import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
 import static cofh.lib.util.references.CoreReferences.CHILLED;
 import static cofh.lib.util.references.CoreReferences.SHOCKED;
-import static net.minecraft.potion.Effects.POISON;
-import static net.minecraft.potion.Effects.WITHER;
+import static net.minecraft.world.effect.MobEffects.POISON;
+import static net.minecraft.world.effect.MobEffects.WITHER;
 
 @Mod.EventBusSubscriber (modid = ID_COFH_CORE)
 public class ArmorEvents {
@@ -85,7 +86,7 @@ public class ArmorEvents {
             return;
         }
         LivingEntity entity = event.getEntityLiving();
-        EffectInstance effect = event.getPotionEffect();
+        MobEffectInstance effect = event.getPotionEffect();
 
         double hazRes = getHazardResistance(entity);
         if (hazRes > 0.0D) {
@@ -121,9 +122,9 @@ public class ArmorEvents {
     // region HELPERS
     private static void attemptDamagePlayerArmor(Entity entity, float amount) {
 
-        if (entity instanceof PlayerEntity) {
+        if (entity instanceof Player player) {
             if (100 * entity.level.random.nextFloat() < amount) {
-                ((PlayerEntity) entity).inventory.hurtArmor(DamageSource.GENERIC, Math.min(20.0F, amount));
+                player.getInventory().hurtArmor(DamageSource.GENERIC, Math.min(20.0F, amount), Inventory.ALL_ARMOR_SLOTS);
             }
         }
     }
@@ -175,7 +176,7 @@ public class ArmorEvents {
 
     private static final Object2ObjectOpenHashMap<Item, Double> HAZARD_RESISTANCE_MAP = new Object2ObjectOpenHashMap<>();
     private static final Set<String> HAZARD_DAMAGE_TYPES = new ObjectOpenHashSet<>();
-    private static final Set<Effect> HAZARD_EFFECTS = new ObjectOpenHashSet<>();
+    private static final Set<MobEffect> HAZARD_EFFECTS = new ObjectOpenHashSet<>();
 
     private static final Object2ObjectOpenHashMap<Item, Double> STING_RESISTANCE_MAP = new Object2ObjectOpenHashMap<>();
     private static final Set<String> STING_DAMAGE_TYPES = new ObjectOpenHashSet<>();

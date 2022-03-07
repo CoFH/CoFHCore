@@ -3,8 +3,8 @@ package cofh.core.util.control;
 import cofh.core.network.packet.server.RedstoneControlPacket;
 import cofh.lib.util.Utils;
 import cofh.lib.util.control.IRedstoneControllable;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.function.BooleanSupplier;
 
@@ -38,14 +38,14 @@ public class RedstoneControlModule implements IRedstoneControllable {
     }
 
     // region NETWORK
-    public void readFromBuffer(PacketBuffer buffer) {
+    public void readFromBuffer(FriendlyByteBuf buffer) {
 
         power = buffer.readByte();
         threshold = buffer.readByte();
         mode = ControlMode.VALUES[buffer.readByte()];
     }
 
-    public void writeToBuffer(PacketBuffer buffer) {
+    public void writeToBuffer(FriendlyByteBuf buffer) {
 
         buffer.writeByte(power);
         buffer.writeByte(threshold);
@@ -54,9 +54,9 @@ public class RedstoneControlModule implements IRedstoneControllable {
     // endregion
 
     // region NBT
-    public RedstoneControlModule read(CompoundNBT nbt) {
+    public RedstoneControlModule read(CompoundTag nbt) {
 
-        CompoundNBT subTag = nbt.getCompound(TAG_RS_CONTROL);
+        CompoundTag subTag = nbt.getCompound(TAG_RS_CONTROL);
 
         if (!subTag.isEmpty()) {
             power = subTag.getByte(TAG_RS_POWER);
@@ -66,10 +66,10 @@ public class RedstoneControlModule implements IRedstoneControllable {
         return this;
     }
 
-    public CompoundNBT write(CompoundNBT nbt) {
+    public CompoundTag write(CompoundTag nbt) {
 
         if (isControllable()) {
-            CompoundNBT subTag = new CompoundNBT();
+            CompoundTag subTag = new CompoundTag();
 
             subTag.putByte(TAG_RS_POWER, (byte) power);
             subTag.putByte(TAG_RS_THRESHOLD, (byte) threshold);
@@ -80,9 +80,9 @@ public class RedstoneControlModule implements IRedstoneControllable {
         return nbt;
     }
 
-    public RedstoneControlModule readSettings(CompoundNBT nbt) {
+    public RedstoneControlModule readSettings(CompoundTag nbt) {
 
-        CompoundNBT subTag = nbt.getCompound(TAG_RS_CONTROL);
+        CompoundTag subTag = nbt.getCompound(TAG_RS_CONTROL);
 
         if (!subTag.isEmpty() && isControllable()) {
             threshold = subTag.getByte(TAG_RS_THRESHOLD);
@@ -91,10 +91,10 @@ public class RedstoneControlModule implements IRedstoneControllable {
         return this;
     }
 
-    public CompoundNBT writeSettings(CompoundNBT nbt) {
+    public CompoundTag writeSettings(CompoundTag nbt) {
 
         if (isControllable()) {
-            CompoundNBT subTag = new CompoundNBT();
+            CompoundTag subTag = new CompoundTag();
 
             subTag.putByte(TAG_RS_THRESHOLD, (byte) threshold);
             subTag.putByte(TAG_RS_MODE, (byte) mode.ordinal());

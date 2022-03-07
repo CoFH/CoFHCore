@@ -1,10 +1,14 @@
 package cofh.lib.util.helpers;
 
-import net.minecraft.client.resources.I18n;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.*;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.StringUtils;
 
@@ -48,39 +52,39 @@ public final class StringHelper {
         return StringUtils.normalizeSpace(NumberFormat.getInstance().format(number));
     }
 
-    public static IFormattableTextComponent getFluidName(FluidStack stack) {
+    public static MutableComponent getFluidName(FluidStack stack) {
 
         Fluid fluid = stack.getFluid();
-        IFormattableTextComponent name = fluid.getAttributes().getDisplayName(stack).copy();
+        MutableComponent name = fluid.getAttributes().getDisplayName(stack).copy();
 
         switch (fluid.getAttributes().getRarity(stack)) {
             case UNCOMMON:
-                name.withStyle(TextFormatting.YELLOW);
+                name.withStyle(ChatFormatting.YELLOW);
                 break;
             case RARE:
-                name.withStyle(TextFormatting.AQUA);
+                name.withStyle(ChatFormatting.AQUA);
                 break;
             case EPIC:
-                name.withStyle(TextFormatting.LIGHT_PURPLE);
+                name.withStyle(ChatFormatting.LIGHT_PURPLE);
                 break;
         }
         return name;
     }
 
-    public static ITextComponent getItemName(ItemStack stack) {
+    public static MutableComponent getItemName(ItemStack stack) {
 
         Item item = stack.getItem();
-        IFormattableTextComponent name = item.getName(stack).copy();
+        MutableComponent name = item.getName(stack).copy();
 
         switch (item.getRarity(stack)) {
             case UNCOMMON:
-                name.withStyle(TextFormatting.YELLOW);
+                name.withStyle(ChatFormatting.YELLOW);
                 break;
             case RARE:
-                name.withStyle(TextFormatting.AQUA);
+                name.withStyle(ChatFormatting.AQUA);
                 break;
             case EPIC:
-                name.withStyle(TextFormatting.LIGHT_PURPLE);
+                name.withStyle(ChatFormatting.LIGHT_PURPLE);
                 break;
         }
         return name;
@@ -124,32 +128,32 @@ public final class StringHelper {
     //        return chat;
     //    }
 
-    public static String toJSON(ITextComponent chatComponent) {
+    public static String toJSON(Component chatComponent) {
 
-        return ITextComponent.Serializer.toJson(chatComponent);
+        return Component.Serializer.toJson(chatComponent);
     }
 
-    public static ITextComponent fromJSON(String string) {
+    public static MutableComponent fromJSON(String string) {
 
-        return ITextComponent.Serializer.fromJsonLenient(string);
+        return Component.Serializer.fromJsonLenient(string);
     }
 
-    public static IFormattableTextComponent getEmptyLine() {
+    public static MutableComponent getEmptyLine() {
 
-        return new StringTextComponent("");
+        return new TextComponent("");
     }
 
-    public static IFormattableTextComponent getTextComponent(String key) {
+    public static MutableComponent getTextComponent(String key) {
 
-        return canLocalize(key) ? new TranslationTextComponent(key) : new StringTextComponent(key);
+        return canLocalize(key) ? new TranslatableComponent(key) : new TextComponent(key);
     }
 
-    public static IFormattableTextComponent getInfoTextComponent(String key) {
+    public static MutableComponent getInfoTextComponent(String key) {
 
-        return getTextComponent(key).withStyle(TextFormatting.GOLD);
+        return getTextComponent(key).withStyle(ChatFormatting.GOLD);
     }
 
-    public static IFormattableTextComponent getKeywordTextComponent(String key) {
+    public static MutableComponent getKeywordTextComponent(String key) {
 
         return getTextComponent(key).withStyle(INVIS_STYLE);
     }

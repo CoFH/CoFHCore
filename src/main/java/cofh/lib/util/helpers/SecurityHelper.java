@@ -5,14 +5,15 @@ import cofh.lib.util.control.ISecurable.AccessMode;
 import com.google.common.base.Strings;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.server.management.PreYggdrasilConverter;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.fml.server.ServerLifecycleHooks;
+
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.players.OldUsersConverter;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.UUID;
 
@@ -44,9 +45,8 @@ public class SecurityHelper {
         if (entity == null) {
             return DEFAULT_GAME_PROFILE.getId();
         }
-        if (entity instanceof PlayerEntity) {
-            PlayerEntity player = (PlayerEntity) entity;
-            if (player instanceof ServerPlayerEntity) {
+        if (entity instanceof Player player) {
+            if (player instanceof ServerPlayer) {
                 return player.getGameProfile().getId();
             }
             return getClientID(player);
@@ -54,7 +54,7 @@ public class SecurityHelper {
         return entity.getUUID();
     }
 
-    private static UUID getClientID(PlayerEntity player) {
+    private static UUID getClientID(Player player) {
 
         if (player != Minecraft.getInstance().player) {
             return player.getGameProfile().getId();
@@ -66,7 +66,7 @@ public class SecurityHelper {
     }
 
     // region TILE HELPERS
-    public static boolean hasSecurity(TileEntity tile) {
+    public static boolean hasSecurity(BlockEntity tile) {
 
         if (tile instanceof ISecurable) {
             return !isDefaultProfile(((ISecurable) tile).getOwner());
@@ -74,7 +74,7 @@ public class SecurityHelper {
         return false;
     }
 
-    public static String getOwnerName(TileEntity tile) {
+    public static String getOwnerName(BlockEntity tile) {
 
         if (hasSecurity(tile)) {
             return ((ISecurable) tile).getOwnerName();
@@ -94,7 +94,7 @@ public class SecurityHelper {
         return hasSecurity(stack) && getOwner(stack) == DEFAULT_GAME_PROFILE;
     }
 
-    public static boolean attemptClaimItem(ItemStack stack, PlayerEntity player) {
+    public static boolean attemptClaimItem(ItemStack stack, Player player) {
 
         if (isItemClaimable(stack)) {
             setOwner(stack, player.getGameProfile());
@@ -104,9 +104,9 @@ public class SecurityHelper {
         return false;
     }
 
-    public static CompoundNBT getSecurityTag(ItemStack stack) {
+    public static CompoundTag getSecurityTag(ItemStack stack) {
 
-        CompoundNBT nbt = stack.getTagElement(TAG_BLOCK_ENTITY);
+        CompoundTag nbt = stack.getTagElement(TAG_BLOCK_ENTITY);
         if (nbt != null) {
             return nbt.contains(TAG_SECURITY) ? nbt.getCompound(TAG_SECURITY) : null;
         }
@@ -120,7 +120,7 @@ public class SecurityHelper {
 
     public static void setAccess(ItemStack stack, AccessMode access) {
 
-        CompoundNBT secureTag = getSecurityTag(stack);
+        CompoundTag secureTag = getSecurityTag(stack);
         if (secureTag != null) {
             secureTag.putByte(TAG_SEC_ACCESS, (byte) access.ordinal());
         }
@@ -128,7 +128,7 @@ public class SecurityHelper {
 
     public static void setOwner(ItemStack stack, GameProfile profile) {
 
-        CompoundNBT secureTag = getSecurityTag(stack);
+        CompoundTag secureTag = getSecurityTag(stack);
         if (secureTag != null) {
             secureTag.putString(TAG_SEC_OWNER_UUID, profile.getId().toString());
             secureTag.putString(TAG_SEC_OWNER_NAME, profile.getName());
@@ -137,7 +137,7 @@ public class SecurityHelper {
 
     public static AccessMode getAccess(ItemStack stack) {
 
-        CompoundNBT secureTag = getSecurityTag(stack);
+        CompoundTag secureTag = getSecurityTag(stack);
         if (secureTag != null && secureTag.contains(TAG_SEC_ACCESS)) {
             return AccessMode.VALUES[secureTag.getByte(TAG_SEC_ACCESS)];
         }
@@ -146,14 +146,14 @@ public class SecurityHelper {
 
     public static GameProfile getOwner(ItemStack stack) {
 
-        CompoundNBT secureTag = getSecurityTag(stack);
+        CompoundTag secureTag = getSecurityTag(stack);
         if (secureTag != null) {
             String uuid = secureTag.getString(TAG_SEC_OWNER_UUID);
             String name = secureTag.getString(TAG_SEC_OWNER_NAME);
             if (!Strings.isNullOrEmpty(uuid)) {
                 return new GameProfile(UUID.fromString(uuid), name);
             } else if (!Strings.isNullOrEmpty(name)) {
-                return new GameProfile(PreYggdrasilConverter.convertMobOwnerIfNecessary(ServerLifecycleHooks.getCurrentServer(), name), name);
+                return new GameProfile(OldUsersConverter.convertMobOwnerIfNecessary(ServerLifecycleHooks.getCurrentServer(), name), name);
             }
         }
         return DEFAULT_GAME_PROFILE;
@@ -161,7 +161,7 @@ public class SecurityHelper {
 
     public static String getOwnerName(ItemStack stack) {
 
-        CompoundNBT secureTag = getSecurityTag(stack);
+        CompoundTag secureTag = getSecurityTag(stack);
         if (secureTag != null) {
             String name = secureTag.getString(TAG_SEC_OWNER_NAME);
             if (!Strings.isNullOrEmpty(name)) {

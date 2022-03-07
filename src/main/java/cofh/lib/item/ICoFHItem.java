@@ -1,15 +1,15 @@
 package cofh.lib.item;
 
 import cofh.lib.util.helpers.SecurityHelper;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.extensions.IForgeItem;
 
 import javax.annotation.Nullable;
@@ -20,7 +20,7 @@ import static cofh.lib.util.constants.NBTTags.*;
 import static cofh.lib.util.helpers.AugmentableHelper.getPropertyWithDefault;
 import static cofh.lib.util.helpers.KeyHelper.getKeynameFromKeycode;
 import static cofh.lib.util.helpers.StringHelper.*;
-import static net.minecraft.util.text.TextFormatting.YELLOW;
+import static net.minecraft.ChatFormatting.YELLOW;
 
 /**
  * Hacky default interface to reduce boilerplate. :)
@@ -40,7 +40,7 @@ public interface ICoFHItem extends IForgeItem {
         return false;
     }
 
-    default boolean canPlayerAccess(ItemStack stack, PlayerEntity player) {
+    default boolean canPlayerAccess(ItemStack stack, Player player) {
 
         return SecurityHelper.getAccess(stack).matches(SecurityHelper.getOwner(stack), player);
     }
@@ -53,7 +53,7 @@ public interface ICoFHItem extends IForgeItem {
 
     @Override
     @Nullable
-    default Entity createEntity(World world, Entity location, ItemStack stack) {
+    default Entity createEntity(Level world, Entity location, ItemStack stack) {
 
         if (SecurityHelper.hasSecurity(stack)) {
             location.setInvulnerable(true);
@@ -62,7 +62,7 @@ public interface ICoFHItem extends IForgeItem {
         return null;
     }
 
-    default void addEnergyTooltip(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn, int extract, int receive, boolean creative) {
+    default void addEnergyTooltip(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn, int extract, int receive, boolean creative) {
 
         if (extract == receive && extract > 0 || creative) {
             tooltip.add(getTextComponent(localize("info.cofh.transfer") + ": " + getScaledNumber(extract) + " RF/t"));
@@ -77,9 +77,9 @@ public interface ICoFHItem extends IForgeItem {
         }
     }
 
-    default void addIncrementModeChangeTooltip(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    default void addIncrementModeChangeTooltip(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 
-        tooltip.add(new TranslationTextComponent("info.cofh.mode_change", getKeynameFromKeycode(MULTIMODE_INCREMENT.getKey().getValue())).withStyle(YELLOW));
+        tooltip.add(new TranslatableComponent("info.cofh.mode_change", getKeynameFromKeycode(MULTIMODE_INCREMENT.getKey().getValue())).withStyle(YELLOW));
     }
 
     default boolean isActive(ItemStack stack) {

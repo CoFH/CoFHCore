@@ -1,7 +1,7 @@
 package cofh.lib.util.control;
 
-import net.minecraft.util.Direction;
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.core.Direction;
+import net.minecraft.util.StringRepresentable;
 
 public interface IReconfigurable {
 
@@ -27,7 +27,7 @@ public interface IReconfigurable {
     boolean isReconfigurable();
 
     // region CONFIGS
-    enum SideConfig implements IStringSerializable {
+    enum SideConfig implements StringRepresentable {
 
         SIDE_NONE("none", false, false),
         SIDE_INPUT("input", true, false),

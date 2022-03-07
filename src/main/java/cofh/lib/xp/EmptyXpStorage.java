@@ -1,7 +1,7 @@
 package cofh.lib.xp;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 
 public class EmptyXpStorage extends XpStorage {
 
@@ -26,31 +26,31 @@ public class EmptyXpStorage extends XpStorage {
 
     // region NETWORK
     @Override
-    public void readFromBuffer(PacketBuffer buffer) {
+    public void readFromBuffer(FriendlyByteBuf buffer) {
 
     }
 
     @Override
-    public void writeToBuffer(PacketBuffer buffer) {
+    public void writeToBuffer(FriendlyByteBuf buffer) {
 
     }
     // endregion
 
     // region NBT
     @Override
-    public XpStorage read(CompoundNBT nbt) {
+    public XpStorage read(CompoundTag nbt) {
 
         return this;
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT nbt) {
+    public CompoundTag write(CompoundTag nbt) {
 
         return nbt;
     }
 
     @Override
-    public CompoundNBT writeWithParams(CompoundNBT nbt) {
+    public CompoundTag writeWithParams(CompoundTag nbt) {
 
         return nbt;
     }

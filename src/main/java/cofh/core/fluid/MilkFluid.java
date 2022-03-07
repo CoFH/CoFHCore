@@ -1,7 +1,7 @@
 package cofh.core.fluid;
 
 import cofh.lib.fluid.FluidCoFH;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fluids.FluidAttributes;
 
 import static cofh.core.CoFHCore.FLUIDS;

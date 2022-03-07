@@ -1,3 +1,4 @@
+/*
 package cofh.core.compat.jei;
 
 import cofh.core.client.gui.ContainerScreenCoFH;
@@ -16,3 +17,4 @@ public class PanelBounds implements IGuiContainerHandler<ContainerScreenCoFH<?>>
     }
 
 }
+*/

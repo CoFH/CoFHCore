@@ -1,10 +1,10 @@
 package cofh.lib.util.recipes;
 
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeType;
 
-public class SerializableRecipeType<T extends SerializableRecipe> implements IRecipeType<T> {
+public class SerializableRecipeType<T extends SerializableRecipe> implements RecipeType<T> {
 
     private final ResourceLocation registryName;
 
@@ -21,7 +21,8 @@ public class SerializableRecipeType<T extends SerializableRecipe> implements IRe
 
     public void register() {
 
-        Registry.register(Registry.RECIPE_TYPE, registryName, this);
+        // TODO Lemming, Vanilla Registries now get Frozen, we likely need to manually un-freeze this to register things.
+//        Registry.register(Registry.RECIPE_TYPE, registryName, this);
     }
 
 }

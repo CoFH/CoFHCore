@@ -1,14 +1,14 @@
 package cofh.core.event;
 
 import cofh.lib.capability.templates.ArcheryBowItemWrapper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.DamageSource;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
@@ -26,7 +26,7 @@ import static cofh.lib.util.helpers.ArcheryHelper.findAmmo;
 import static cofh.lib.util.helpers.ArcheryHelper.validBow;
 import static cofh.lib.util.references.EnsorcReferences.QUICK_DRAW;
 import static cofh.lib.util.references.EnsorcReferences.VOLLEY;
-import static net.minecraft.enchantment.Enchantments.INFINITY_ARROWS;
+import static net.minecraft.world.item.enchantment.Enchantments.INFINITY_ARROWS;
 
 @Mod.EventBusSubscriber (modid = ID_COFH_CORE)
 public class ArcheryEvents {
@@ -42,7 +42,7 @@ public class ArcheryEvents {
         if (!validBow(bow)) {
             return;
         }
-        PlayerEntity shooter = event.getPlayer();
+        Player shooter = event.getPlayer();
         event.setCanceled(bow.getCapability(BOW_ITEM_CAPABILITY).orElse(new ArcheryBowItemWrapper(bow)).fireArrow(findAmmo(shooter, bow), shooter, event.getCharge(), event.getWorld()));
     }
 
@@ -53,7 +53,7 @@ public class ArcheryEvents {
         if (!validBow(bow)) {
             return;
         }
-        PlayerEntity shooter = event.getPlayer();
+        Player shooter = event.getPlayer();
         ItemStack ammo = findAmmo(shooter, bow);
 
         if (ammo.isEmpty() && getItemEnchantmentLevel(INFINITY_ARROWS, bow) > 0) {
@@ -61,9 +61,9 @@ public class ArcheryEvents {
         }
         if (!ammo.isEmpty()) {
             shooter.startUsingItem(event.getHand());
-            event.setAction(ActionResult.consume(bow));
-        } else if (!shooter.abilities.instabuild) {
-            event.setAction(ActionResult.fail(bow));
+            event.setAction(InteractionResultHolder.consume(bow));
+        } else if (!shooter.getAbilities().instabuild) {
+            event.setAction(InteractionResultHolder.fail(bow));
         }
     }
 
@@ -86,7 +86,7 @@ public class ArcheryEvents {
         DamageSource source = event.getSource();
         Entity attacker = event.getSource().getEntity();
 
-        if (entity instanceof ProjectileEntity) {
+        if (entity instanceof Projectile) {
             return;
         }
         if (!(attacker instanceof LivingEntity)) {

@@ -1,12 +1,14 @@
 package cofh.lib.block.impl;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 
 public class RubberBlock extends Block {
 
@@ -16,17 +18,17 @@ public class RubberBlock extends Block {
     }
 
     @Override
-    public void fallOn(World worldIn, BlockPos pos, Entity entityIn, float fallDistance) {
+    public void fallOn(Level worldIn, BlockState state, BlockPos pos, Entity entityIn, float fallDistance) {
 
         if (entityIn.isSuppressingBounce()) {
-            super.fallOn(worldIn, pos, entityIn, fallDistance);
+            super.fallOn(worldIn, state, pos, entityIn, fallDistance);
         } else {
-            entityIn.causeFallDamage(fallDistance, 0.1F);
+            entityIn.causeFallDamage(fallDistance, 0.1F, DamageSource.FALL);
         }
     }
 
     @Override
-    public void updateEntityAfterFallOn(IBlockReader worldIn, Entity entityIn) {
+    public void updateEntityAfterFallOn(BlockGetter worldIn, Entity entityIn) {
 
         if (entityIn.isSuppressingBounce() || Math.abs(entityIn.getDeltaMovement().y) < 0.1D) {
             super.updateEntityAfterFallOn(worldIn, entityIn);
@@ -37,7 +39,7 @@ public class RubberBlock extends Block {
 
     protected void bounceUp(Entity entityIn) {
 
-        Vector3d vec3d = entityIn.getDeltaMovement();
+        Vec3 vec3d = entityIn.getDeltaMovement();
 
         if (vec3d.y < 0.0D) {
             double d0 = entityIn instanceof LivingEntity ? 0.75D : 0.50D;

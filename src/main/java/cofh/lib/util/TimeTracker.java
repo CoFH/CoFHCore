@@ -1,6 +1,6 @@
 package cofh.lib.util;
 
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 
 /**
  * A basic time tracker class. Nothing surprising here.
@@ -11,7 +11,7 @@ public class TimeTracker {
 
     private long lastMark = Long.MIN_VALUE;
 
-    public boolean hasDelayPassed(World world, int delay) {
+    public boolean hasDelayPassed(Level world, int delay) {
 
         long currentTime = world.getGameTime();
 
@@ -25,7 +25,7 @@ public class TimeTracker {
         return false;
     }
 
-    public void markTime(World world) {
+    public void markTime(Level world) {
 
         lastMark = world.getGameTime();
     }

@@ -3,8 +3,8 @@ package cofh.lib.energy;
 import cofh.lib.capability.IRedstoneFluxStorage;
 import cofh.lib.util.IResourceStorage;
 import cofh.lib.util.helpers.MathHelper;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.energy.IEnergyStorage;
 
@@ -18,7 +18,7 @@ import static cofh.lib.util.constants.NBTTags.*;
  *
  * @author King Lemming
  */
-public class EnergyStorageCoFH implements IRedstoneFluxStorage, IResourceStorage, INBTSerializable<CompoundNBT> {
+public class EnergyStorageCoFH implements IRedstoneFluxStorage, IResourceStorage, INBTSerializable<CompoundTag> {
 
     protected final int baseCapacity;
     protected final int baseReceive;
@@ -138,7 +138,7 @@ public class EnergyStorageCoFH implements IRedstoneFluxStorage, IResourceStorage
     }
 
     // region NETWORK
-    public void readFromBuffer(PacketBuffer buffer) {
+    public void readFromBuffer(FriendlyByteBuf buffer) {
 
         setCapacity(buffer.readInt());
         setEnergyStored(buffer.readInt());
@@ -146,7 +146,7 @@ public class EnergyStorageCoFH implements IRedstoneFluxStorage, IResourceStorage
         setMaxReceive(buffer.readInt());
     }
 
-    public void writeToBuffer(PacketBuffer buffer) {
+    public void writeToBuffer(FriendlyByteBuf buffer) {
 
         buffer.writeInt(getMaxEnergyStored());
         buffer.writeInt(getEnergyStored());
@@ -156,13 +156,13 @@ public class EnergyStorageCoFH implements IRedstoneFluxStorage, IResourceStorage
     // endregion
 
     // region NBT
-    public EnergyStorageCoFH read(CompoundNBT nbt) {
+    public EnergyStorageCoFH read(CompoundTag nbt) {
 
         this.energy = nbt.getInt(TAG_ENERGY);
         return this;
     }
 
-    public CompoundNBT write(CompoundNBT nbt) {
+    public CompoundTag write(CompoundTag nbt) {
 
         if (this.capacity <= 0) {
             return nbt;
@@ -171,7 +171,7 @@ public class EnergyStorageCoFH implements IRedstoneFluxStorage, IResourceStorage
         return nbt;
     }
 
-    public CompoundNBT writeWithParams(CompoundNBT nbt) {
+    public CompoundTag writeWithParams(CompoundTag nbt) {
 
         if (this.capacity <= 0) {
             return nbt;
@@ -184,13 +184,13 @@ public class EnergyStorageCoFH implements IRedstoneFluxStorage, IResourceStorage
     }
 
     @Override
-    public CompoundNBT serializeNBT() {
+    public CompoundTag serializeNBT() {
 
-        return write(new CompoundNBT());
+        return write(new CompoundTag());
     }
 
     @Override
-    public void deserializeNBT(CompoundNBT nbt) {
+    public void deserializeNBT(CompoundTag nbt) {
 
         read(nbt);
     }

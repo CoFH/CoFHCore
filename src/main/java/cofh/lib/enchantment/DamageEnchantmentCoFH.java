@@ -1,13 +1,13 @@
 package cofh.lib.enchantment;
 
-import net.minecraft.enchantment.DamageEnchantment;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentType;
-import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.enchantment.DamageEnchantment;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
 public abstract class DamageEnchantmentCoFH extends EnchantmentCoFH {
 
-    protected DamageEnchantmentCoFH(Rarity rarityIn, EnchantmentType typeIn, EquipmentSlotType[] slots) {
+    protected DamageEnchantmentCoFH(Rarity rarityIn, EnchantmentCategory typeIn, EquipmentSlot[] slots) {
 
         super(rarityIn, typeIn, slots);
     }

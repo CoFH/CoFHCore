@@ -1,17 +1,19 @@
+/*
 package cofh.core.world.gen.feature;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.feature.ConfiguredFeature;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 
 import javax.annotation.Nonnull;
 import java.util.Random;
 import java.util.function.BooleanSupplier;
 
-public class ConfiguredFeatureCoFH<FC extends IFeatureConfig, F extends Feature<FC>> extends ConfiguredFeature<FC, F> {
+// TODO Lemming: ConfiguredFeature is now a Record class which means we cannot extend it as its implicitly final.
+public class ConfiguredFeatureCoFH<FC extends FeatureConfiguration, F extends Feature<FC>> extends ConfiguredFeature<FC, F> {
 
     private final BooleanSupplier enabled;
 
@@ -30,7 +32,7 @@ public class ConfiguredFeatureCoFH<FC extends IFeatureConfig, F extends Feature<
     }
 
     @Override
-    public boolean place(@Nonnull ISeedReader reader, @Nonnull ChunkGenerator chunkGenerator, @Nonnull Random rand, @Nonnull BlockPos pos) {
+    public boolean place(@Nonnull WorldGenLevel reader, @Nonnull ChunkGenerator chunkGenerator, @Nonnull Random rand, @Nonnull BlockPos pos) {
 
         if (enabled.getAsBoolean() && rand.nextFloat() < chance) {
             return super.place(reader, chunkGenerator, rand, pos);
@@ -39,3 +41,4 @@ public class ConfiguredFeatureCoFH<FC extends IFeatureConfig, F extends Feature<
     }
 
 }
+*/

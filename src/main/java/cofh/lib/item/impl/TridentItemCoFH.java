@@ -1,11 +1,11 @@
 package cofh.lib.item.impl;
 
 import cofh.lib.item.ICoFHItem;
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.TridentItem;
-import net.minecraft.util.NonNullList;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.TridentItem;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -20,20 +20,20 @@ public class TridentItemCoFH extends TridentItem implements ICoFHItem {
 
     protected int enchantability = 1;
 
-    protected Supplier<ItemGroup> displayGroup;
+    protected Supplier<CreativeModeTab> displayGroup;
 
     public TridentItemCoFH(Properties builder) {
 
         super(builder);
     }
 
-    public TridentItemCoFH(IItemTier tier, Properties builder) {
+    public TridentItemCoFH(Tier tier, Properties builder) {
 
         super(builder);
         enchantability = tier.getEnchantmentValue();
     }
 
-    public TridentItemCoFH setDisplayGroup(Supplier<ItemGroup> displayGroup) {
+    public TridentItemCoFH setDisplayGroup(Supplier<CreativeModeTab> displayGroup) {
 
         this.displayGroup = displayGroup;
         return this;
@@ -46,7 +46,7 @@ public class TridentItemCoFH extends TridentItem implements ICoFHItem {
     }
 
     @Override
-    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
 
         if (!showInGroups.getAsBoolean() || displayGroup != null && displayGroup.get() != null && displayGroup.get() != group) {
             return;
@@ -55,7 +55,7 @@ public class TridentItemCoFH extends TridentItem implements ICoFHItem {
     }
 
     @Override
-    public Collection<ItemGroup> getCreativeTabs() {
+    public Collection<CreativeModeTab> getCreativeTabs() {
 
         return displayGroup != null && displayGroup.get() != null ? Collections.singletonList(displayGroup.get()) : super.getCreativeTabs();
     }

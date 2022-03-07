@@ -20,7 +20,7 @@ Also contains a number of optional gameplay tweaks for convenience.
 [[dependencies.cofh_core]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.16.5,)"
+versionRange = "[1.18.2,)"
 ordering = "AFTER"
 side = "BOTH"
 

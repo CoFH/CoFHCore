@@ -1,6 +1,6 @@
 package cofh.lib.capability;
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 
 public interface IArcheryItem {
 
@@ -9,6 +9,6 @@ public interface IArcheryItem {
      *
      * @param shooter Player holding the weapon.
      */
-    void onArrowLoosed(PlayerEntity shooter);
+    void onArrowLoosed(Player shooter);
 
 }

@@ -1,8 +1,8 @@
 package cofh.lib.item;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 import static cofh.lib.util.constants.NBTTags.TAG_MODE;
 
@@ -35,7 +35,7 @@ public interface IMultiModeItem {
             mode = 0;
         }
         if (!stack.hasTag()) {
-            stack.setTag(new CompoundNBT());
+            stack.setTag(new CompoundTag());
         }
         if (mode < getNumModes(stack)) {
             stack.getTag().putInt("Mode", mode);
@@ -53,7 +53,7 @@ public interface IMultiModeItem {
             return false;
         }
         if (!stack.hasTag()) {
-            stack.setTag(new CompoundNBT());
+            stack.setTag(new CompoundTag());
         }
         int curMode = getMode(stack);
         ++curMode;
@@ -73,7 +73,7 @@ public interface IMultiModeItem {
             return false;
         }
         if (!stack.hasTag()) {
-            stack.setTag(new CompoundNBT());
+            stack.setTag(new CompoundTag());
         }
         int curMode = getMode(stack);
         --curMode;
@@ -98,7 +98,7 @@ public interface IMultiModeItem {
      * @param player Player holding the item, if applicable.
      * @param stack  The item being held.
      */
-    default void onModeChange(PlayerEntity player, ItemStack stack) {
+    default void onModeChange(Player player, ItemStack stack) {
 
     }
 

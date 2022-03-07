@@ -1,9 +1,9 @@
 package cofh.lib.enchantment;
 
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentType;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
 import static cofh.lib.capability.CapabilityEnchantableItem.ENCHANTABLE_ITEM_CAPABILITY;
 
@@ -18,7 +18,7 @@ public abstract class EnchantmentCoFH extends Enchantment {
 
     protected int maxLevel = 1;
 
-    protected EnchantmentCoFH(Rarity rarityIn, EnchantmentType typeIn, EquipmentSlotType[] slots) {
+    protected EnchantmentCoFH(Rarity rarityIn, EnchantmentCategory typeIn, EquipmentSlot[] slots) {
 
         super(rarityIn, typeIn, slots);
     }

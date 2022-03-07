@@ -1,10 +1,10 @@
 package cofh.lib.item.impl;
 
 import cofh.lib.item.ICoFHItem;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ShieldItem;
-import net.minecraft.util.NonNullList;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ShieldItem;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -19,7 +19,7 @@ public class ShieldItemCoFH extends ShieldItem implements ICoFHItem {
 
     protected int enchantability = 1;
 
-    protected Supplier<ItemGroup> displayGroup;
+    protected Supplier<CreativeModeTab> displayGroup;
 
     public ShieldItemCoFH(Properties builder) {
 
@@ -32,7 +32,7 @@ public class ShieldItemCoFH extends ShieldItem implements ICoFHItem {
         return this;
     }
 
-    public ShieldItemCoFH setDisplayGroup(Supplier<ItemGroup> displayGroup) {
+    public ShieldItemCoFH setDisplayGroup(Supplier<CreativeModeTab> displayGroup) {
 
         this.displayGroup = displayGroup;
         return this;
@@ -45,7 +45,7 @@ public class ShieldItemCoFH extends ShieldItem implements ICoFHItem {
     }
 
     @Override
-    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
 
         if (!showInGroups.getAsBoolean() || displayGroup != null && displayGroup.get() != null && displayGroup.get() != group) {
             return;
@@ -54,7 +54,7 @@ public class ShieldItemCoFH extends ShieldItem implements ICoFHItem {
     }
 
     @Override
-    public Collection<ItemGroup> getCreativeTabs() {
+    public Collection<CreativeModeTab> getCreativeTabs() {
 
         return displayGroup != null && displayGroup.get() != null ? Collections.singletonList(displayGroup.get()) : super.getCreativeTabs();
     }

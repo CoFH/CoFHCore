@@ -5,12 +5,12 @@ import cofh.core.client.gui.element.SimpleTooltip;
 import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.client.gui.IGuiAccess;
 import cofh.lib.util.control.ISecurable;
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -70,7 +70,7 @@ public class SecurityPanel extends PanelBase {
         }
                 .setSize(18, 18)
                 .setTexture(TEX_ACCESS_PUBLIC, 54, 18)
-                .setTooltipFactory(new SimpleTooltip(new TranslationTextComponent("info.cofh.access_public")))
+                .setTooltipFactory(new SimpleTooltip(new TranslatableComponent("info.cofh.access_public")))
                 .setEnabled(() -> mySecurable.getAccess() != PUBLIC));
 
         addElement(new ElementButton(gui, 57, 21) {
@@ -85,7 +85,7 @@ public class SecurityPanel extends PanelBase {
         }
                 .setSize(18, 18)
                 .setTexture(TEX_ACCESS_PRIVATE, 54, 18)
-                .setTooltipFactory(new SimpleTooltip(new TranslationTextComponent("info.cofh.access_private")))
+                .setTooltipFactory(new SimpleTooltip(new TranslatableComponent("info.cofh.access_private")))
                 .setEnabled(() -> mySecurable.getAccess() != PRIVATE));
 
         addElement(new ElementButton(gui, 37, 41) {
@@ -100,7 +100,7 @@ public class SecurityPanel extends PanelBase {
         }
                 .setSize(18, 18)
                 .setTexture(TEX_ACCESS_FRIENDS, 54, 18)
-                .setTooltipFactory(new SimpleTooltip(new TranslationTextComponent("info.cofh.access_friends")))
+                .setTooltipFactory(new SimpleTooltip(new TranslatableComponent("info.cofh.access_friends")))
                 .setEnabled(() -> mySecurable.getAccess() != FRIENDS));
 
         addElement(new ElementButton(gui, 57, 41) {
@@ -115,27 +115,27 @@ public class SecurityPanel extends PanelBase {
         }
                 .setSize(18, 18)
                 .setTexture(TEX_ACCESS_TEAM, 54, 18)
-                .setTooltipFactory(new SimpleTooltip(new TranslationTextComponent("info.cofh.access_team")))
+                .setTooltipFactory(new SimpleTooltip(new TranslatableComponent("info.cofh.access_team")))
                 .setEnabled(() -> mySecurable.getAccess() != TEAM));
 
         tooltip = (element, mouseX, mouseY) -> {
 
-            ArrayList<ITextComponent> tooltipList = new ArrayList<>();
+            ArrayList<Component> tooltipList = new ArrayList<>();
 
             if (!fullyOpen) {
-                tooltipList.add(new TranslationTextComponent("info.cofh.owner").append(new StringTextComponent(": " + mySecurable.getOwnerName())));
+                tooltipList.add(new TranslatableComponent("info.cofh.owner").append(new TextComponent(": " + mySecurable.getOwnerName())));
                 switch (mySecurable.getAccess()) {
                     case PUBLIC:
-                        tooltipList.add(new TranslationTextComponent("info.cofh.access_public").withStyle(TextFormatting.YELLOW));
+                        tooltipList.add(new TranslatableComponent("info.cofh.access_public").withStyle(ChatFormatting.YELLOW));
                         break;
                     case PRIVATE:
-                        tooltipList.add(new TranslationTextComponent("info.cofh.access_private").withStyle(TextFormatting.YELLOW));
+                        tooltipList.add(new TranslatableComponent("info.cofh.access_private").withStyle(ChatFormatting.YELLOW));
                         break;
                     case FRIENDS:
-                        tooltipList.add(new TranslationTextComponent("info.cofh.access_friends").withStyle(TextFormatting.YELLOW));
+                        tooltipList.add(new TranslatableComponent("info.cofh.access_friends").withStyle(ChatFormatting.YELLOW));
                         break;
                     case TEAM:
-                        tooltipList.add(new TranslationTextComponent("info.cofh.access_team").withStyle(TextFormatting.YELLOW));
+                        tooltipList.add(new TranslatableComponent("info.cofh.access_team").withStyle(ChatFormatting.YELLOW));
                         break;
                 }
             }
@@ -144,7 +144,7 @@ public class SecurityPanel extends PanelBase {
     }
 
     @Override
-    protected void drawBackground(MatrixStack matrixStack) {
+    protected void drawBackground(PoseStack matrixStack) {
 
         switch (mySecurable.getAccess()) {
             case PUBLIC:
@@ -168,13 +168,14 @@ public class SecurityPanel extends PanelBase {
         float colorR = (backgroundColor >> 16 & 255) / 255.0F * 0.6F;
         float colorG = (backgroundColor >> 8 & 255) / 255.0F * 0.6F;
         float colorB = (backgroundColor & 255) / 255.0F * 0.6F;
-        RenderSystem.color4f(colorR, colorG, colorB, 1.0F);
+        RenderHelper.setPosTexShader();
+        RenderSystem.setShaderColor(colorR, colorG, colorB, 1.0F);
         gui.drawTexturedModalRect(34, 18, 16, 20, 44, 44);
-        RenderHelper.resetColor();
+        RenderHelper.resetShaderColor();
     }
 
     @Override
-    protected void drawForeground(MatrixStack matrixStack) {
+    protected void drawForeground(PoseStack matrixStack) {
 
         switch (mySecurable.getAccess()) {
             case PUBLIC:
@@ -210,7 +211,7 @@ public class SecurityPanel extends PanelBase {
                 getFontRenderer().draw(matrixStack, localize("info.cofh.access_team"), sideOffset() + 14, 78, textColor);
                 break;
         }
-        RenderHelper.resetColor();
+        RenderHelper.resetShaderColor();
     }
 
     @Override

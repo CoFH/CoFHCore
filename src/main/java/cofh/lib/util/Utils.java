@@ -9,46 +9,41 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.LightningBoltEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.tags.ITag;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.registry.MutableRegistry;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.server.ServerWorld;
+import com.mojang.datafixers.util.Either;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.event.entity.living.EnderTeleportEvent;
+import net.minecraftforge.event.entity.EntityTeleportEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -60,9 +55,9 @@ import java.util.Random;
 
 import static cofh.lib.util.constants.Constants.MAX_CAPACITY;
 import static cofh.lib.util.constants.NBTTags.TAG_ENCHANTMENTS;
-import static net.minecraft.enchantment.EnchantmentHelper.getEnchantmentLevel;
-import static net.minecraftforge.common.util.Constants.NBT.TAG_COMPOUND;
-import static net.minecraftforge.common.util.Constants.NBT.TAG_LIST;
+import static net.minecraft.nbt.Tag.TAG_COMPOUND;
+import static net.minecraft.nbt.Tag.TAG_LIST;
+import static net.minecraft.world.item.enchantment.EnchantmentHelper.getEnchantmentLevel;
 
 public class Utils {
 
@@ -75,12 +70,12 @@ public class Utils {
         return ModList.get().isLoaded(modid);
     }
 
-    public static boolean isClientWorld(World world) {
+    public static boolean isClientWorld(Level world) {
 
         return world.isClientSide;
     }
 
-    public static boolean isServerWorld(World world) {
+    public static boolean isServerWorld(Level world) {
 
         return !world.isClientSide;
     }
@@ -92,7 +87,7 @@ public class Utils {
 
     public static boolean isCreativePlayer(Entity entity) {
 
-        return entity instanceof PlayerEntity && ((PlayerEntity) entity).abilities.instabuild;
+        return entity instanceof Player player && player.getAbilities().instabuild;
     }
 
     public static String createPrettyJSON(String jsonString) {
@@ -111,55 +106,57 @@ public class Utils {
         spec.setConfig(configData);
     }
 
-    public static boolean spawnLightningBolt(World world, BlockPos pos) {
+    public static boolean spawnLightningBolt(Level world, BlockPos pos) {
 
         return spawnLightningBolt(world, pos, null);
     }
 
-    public static boolean spawnLightningBolt(World world, BlockPos pos, Entity caster) {
+    public static boolean spawnLightningBolt(Level world, BlockPos pos, Entity caster) {
 
         if (Utils.isServerWorld(world)) {
-            LightningBoltEntity bolt = EntityType.LIGHTNING_BOLT.create(world);
-            bolt.moveTo(Vector3d.atBottomCenterOf(pos));
-            bolt.setCause(caster instanceof ServerPlayerEntity ? (ServerPlayerEntity) caster : null);
+            LightningBolt bolt = EntityType.LIGHTNING_BOLT.create(world);
+            bolt.moveTo(Vec3.atBottomCenterOf(pos));
+            bolt.setCause(caster instanceof ServerPlayer player ? player : null);
             world.addFreshEntity(bolt);
         }
         return true;
     }
 
-    public static boolean destroyBlock(World world, BlockPos pos, boolean dropBlock, @Nullable Entity entityIn) {
+    public static boolean destroyBlock(Level world, BlockPos pos, boolean dropBlock, @Nullable Entity entityIn) {
 
         BlockState state = world.getBlockState(pos);
-        if (state.isAir(world, pos) || state.getDestroySpeed(world, pos) < 0 || (entityIn instanceof PlayerEntity && state.getDestroyProgress((PlayerEntity) entityIn, world, pos) < 0)) {
+        if (state.isAir() || state.getDestroySpeed(world, pos) < 0 || (entityIn instanceof Player player && state.getDestroyProgress(player, world, pos) < 0)) {
             return false;
         } else {
             FluidState ifluidstate = world.getFluidState(pos);
             if (dropBlock) {
-                TileEntity tileentity = state.hasTileEntity() ? world.getBlockEntity(pos) : null;
+                BlockEntity tileentity = state.hasBlockEntity() ? world.getBlockEntity(pos) : null;
                 Block.dropResources(state, world, pos, tileentity, entityIn, ItemStack.EMPTY);
             }
             return world.setBlock(pos, ifluidstate.createLegacyBlock(), 3);
         }
     }
 
-    public static boolean isWrench(Item item) {
+    public static boolean isWrench(ItemStack item) {
 
         return item.is(ItemTagsCoFH.TOOLS_WRENCH);
     }
 
-    public static boolean hasBiomeType(World world, BlockPos pos, BiomeDictionary.Type type) {
+    public static boolean hasBiomeType(Level world, BlockPos pos, BiomeDictionary.Type type) {
 
-        Optional<MutableRegistry<Biome>> biomeReg = world.registryAccess().registry(Registry.BIOME_REGISTRY);
-        if (biomeReg.isPresent()) {
-            Optional<RegistryKey<Biome>> biomeKey = biomeReg.get().getResourceKey(world.getBiome(pos));
-            if (biomeKey.isPresent()) {
-                return BiomeDictionary.hasType(biomeKey.get(), type);
+        Either<ResourceKey<Biome>, Biome> biomeEither = world.getBiome(pos).unwrap();
+        Optional<ResourceKey<Biome>> biomeKey = biomeEither.left();
+        if (biomeKey.isEmpty()) {
+            Optional<? extends Registry<Biome>> biomeReg = world.registryAccess().registry(Registry.BIOME_REGISTRY);
+            if (biomeReg.isPresent()) {
+                biomeKey = biomeEither.right().flatMap(e -> biomeReg.get().getResourceKey(e));
             }
         }
-        return false;
+        return biomeKey.filter(biomeResourceKey -> BiomeDictionary.hasType(biomeResourceKey, type)).isPresent();
     }
 
-    public static boolean isTagPopulated(ITag tag) {
+    // TODO these need to be replaced with Registry/Holder usages?
+/*    public static boolean isTagPopulated(ITag tag) {
 
         return !isTagEmpty(tag);
     }
@@ -167,7 +164,7 @@ public class Utils {
     public static boolean isTagEmpty(ITag tag) {
 
         return tag == null || tag.getValues().isEmpty();
-    }
+    }*/
 
     // region TIME CHECKS
     public static final int TIME_CONSTANT = 32;
@@ -191,24 +188,24 @@ public class Utils {
         }
     }
 
-    public static boolean timeCheck(World world) {
+    public static boolean timeCheck(Level world) {
 
         return timeConstant == 0;
     }
 
-    public static boolean timeCheckHalf(World world) {
+    public static boolean timeCheckHalf(Level world) {
 
         return timeConstantHalf == 0;
     }
 
-    public static boolean timeCheckQuarter(World world) {
+    public static boolean timeCheckQuarter(Level world) {
 
         return timeConstantQuarter == 0;
     }
     // endregion
 
     // region PARTICLE UTILS
-    public static void spawnBlockParticlesClient(World world, IParticleData particle, BlockPos pos, Random rand, int count) {
+    public static void spawnBlockParticlesClient(Level world, ParticleOptions particle, BlockPos pos, Random rand, int count) {
 
         for (int i = 0; i < count; ++i) {
             double d0 = (double) pos.getX() + rand.nextDouble();
@@ -221,10 +218,10 @@ public class Utils {
         }
     }
 
-    public static void spawnParticles(World world, IParticleData particle, double posX, double posY, double posZ, int particleCount, double xOffset, double yOffset, double zOffset, double speed) {
+    public static void spawnParticles(Level world, ParticleOptions particle, double posX, double posY, double posZ, int particleCount, double xOffset, double yOffset, double zOffset, double speed) {
 
         if (isServerWorld(world)) {
-            ((ServerWorld) world).sendParticles(particle, posX, posY + 1.0D, posZ, particleCount, xOffset, yOffset, zOffset, speed);
+            ((ServerLevel) world).sendParticles(particle, posX, posY + 1.0D, posZ, particleCount, xOffset, yOffset, zOffset, speed);
         } else {
             world.addParticle(particle, posX + xOffset, posY + yOffset, posZ + zOffset, 0.0D, 0.0D, 0.0D);
         }
@@ -232,19 +229,19 @@ public class Utils {
     // endregion
 
     // region ENTITY UTILS
-    public static boolean addToPlayerInventory(PlayerEntity player, ItemStack stack) {
+    public static boolean addToPlayerInventory(Player player, ItemStack stack) {
 
         if (stack.isEmpty() || player == null) {
             return false;
         }
-        if (stack.getItem() instanceof ArmorItem) {
-            int index = ((ArmorItem) stack.getItem()).getSlot().getIndex();
-            if (player.inventory.armor.get(index).isEmpty()) {
-                player.inventory.armor.set(index, stack);
+        if (stack.getItem() instanceof ArmorItem armorItem) {
+            int index = armorItem.getSlot().getIndex();
+            if (player.getInventory().armor.get(index).isEmpty()) {
+                player.getInventory().armor.set(index, stack);
                 return true;
             }
         }
-        PlayerInventory inv = player.inventory;
+        Inventory inv = player.getInventory();
         for (int i = 0; i < inv.items.size(); ++i) {
             if (inv.items.get(i).isEmpty()) {
                 inv.items.set(i, stack.copy());
@@ -254,18 +251,18 @@ public class Utils {
         return false;
     }
 
-    public static boolean addPotionEffectNoEvent(LivingEntity entity, EffectInstance effectInstanceIn) {
+    public static boolean addPotionEffectNoEvent(LivingEntity entity, MobEffectInstance effectInstanceIn) {
 
         if (!isPotionApplicableNoEvent(entity, effectInstanceIn)) {
             return false;
         } else {
-            EffectInstance effectinstance = entity.getActiveEffectsMap().get(effectInstanceIn.getEffect());
+            MobEffectInstance effectinstance = entity.getActiveEffectsMap().get(effectInstanceIn.getEffect());
             if (effectinstance == null) {
                 entity.getActiveEffectsMap().put(effectInstanceIn.getEffect(), effectInstanceIn);
-                entity.onEffectAdded(effectInstanceIn);
+                entity.onEffectAdded(effectInstanceIn, null);
                 return true;
             } else if (effectinstance.update(effectInstanceIn)) {
-                entity.onEffectUpdated(effectinstance, true);
+                entity.onEffectUpdated(effectinstance, true, null);
                 return true;
             } else {
                 return false;
@@ -273,31 +270,31 @@ public class Utils {
         }
     }
 
-    public static boolean isPotionApplicableNoEvent(LivingEntity entity, EffectInstance potioneffectIn) {
+    public static boolean isPotionApplicableNoEvent(LivingEntity entity, MobEffectInstance potioneffectIn) {
 
-        if (entity.getMobType() == CreatureAttribute.UNDEAD) {
-            Effect effect = potioneffectIn.getEffect();
-            return effect != Effects.REGENERATION && effect != Effects.POISON;
+        if (entity.getMobType() == MobType.UNDEAD) {
+            MobEffect effect = potioneffectIn.getEffect();
+            return effect != MobEffects.REGENERATION && effect != MobEffects.POISON;
         }
         return true;
     }
 
-    public static boolean dropItemStackIntoWorld(ItemStack stack, World world, Vector3d pos) {
+    public static boolean dropItemStackIntoWorld(ItemStack stack, Level world, Vec3 pos) {
 
         return dropItemStackIntoWorld(stack, world, pos, false);
     }
 
-    public static boolean dropItemStackIntoWorldWithRandomness(ItemStack stack, World world, BlockPos pos) {
+    public static boolean dropItemStackIntoWorldWithRandomness(ItemStack stack, Level world, BlockPos pos) {
 
-        return dropItemStackIntoWorld(stack, world, Vector3d.atCenterOf(pos), true);
+        return dropItemStackIntoWorld(stack, world, Vec3.atCenterOf(pos), true);
     }
 
-    public static boolean dropItemStackIntoWorldWithRandomness(ItemStack stack, World world, Vector3d pos) {
+    public static boolean dropItemStackIntoWorldWithRandomness(ItemStack stack, Level world, Vec3 pos) {
 
         return dropItemStackIntoWorld(stack, world, pos, true);
     }
 
-    public static boolean dropItemStackIntoWorld(ItemStack stack, World world, Vector3d pos, boolean velocity) {
+    public static boolean dropItemStackIntoWorld(ItemStack stack, Level world, Vec3 pos, boolean velocity) {
 
         if (stack.isEmpty()) {
             return false;
@@ -323,7 +320,7 @@ public class Utils {
         return true;
     }
 
-    public static boolean dropDismantleStackIntoWorld(ItemStack stack, World world, BlockPos pos) {
+    public static boolean dropDismantleStackIntoWorld(ItemStack stack, Level world, BlockPos pos) {
 
         if (stack.isEmpty()) {
             return false;
@@ -349,7 +346,7 @@ public class Utils {
         if (entity instanceof LivingEntity) {
             return teleportEntityTo((LivingEntity) entity, x, y, z);
         } else {
-            entity.moveTo(x, y, z, entity.yRot, entity.xRot);
+            entity.moveTo(x, y, z, entity.getYRot(), entity.getXRot());
             entity.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
         }
         return true;
@@ -357,12 +354,11 @@ public class Utils {
 
     public static boolean teleportEntityTo(LivingEntity entity, double x, double y, double z) {
 
-        EnderTeleportEvent event = new EnderTeleportEvent(entity, x, y, z, 0);
+        EntityTeleportEvent.EnderEntity event = new EntityTeleportEvent.EnderEntity(entity, x, y, z);
         if (MinecraftForge.EVENT_BUS.post(event)) {
             return false;
         }
-        if (entity instanceof ServerPlayerEntity && !isFakePlayer(entity)) {
-            ServerPlayerEntity player = (ServerPlayerEntity) entity;
+        if (entity instanceof ServerPlayer player && !isFakePlayer(entity)) {
             if (player.connection.getConnection().isConnected() && !player.isSleeping()) {
                 if (entity.isPassenger()) {
                     entity.stopRiding();
@@ -422,11 +418,11 @@ public class Utils {
         if (stack.getTag() == null || !stack.getTag().contains(TAG_ENCHANTMENTS, TAG_LIST)) {
             return;
         }
-        ListNBT list = stack.getTag().getList(TAG_ENCHANTMENTS, TAG_COMPOUND);
+        ListTag list = stack.getTag().getList(TAG_ENCHANTMENTS, TAG_COMPOUND);
         String encId = String.valueOf(ForgeRegistries.ENCHANTMENTS.getKey(ench));
 
         for (int i = 0; i < list.size(); ++i) {
-            CompoundNBT tag = list.getCompound(i);
+            CompoundTag tag = list.getCompound(i);
             String id = tag.getString("id");
             if (encId.equals(id)) {
                 list.remove(i);

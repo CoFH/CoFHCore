@@ -1,32 +1,32 @@
 package cofh.core.command;
 
 import com.mojang.brigadier.builder.ArgumentBuilder;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.RepairContainer;
-import net.minecraft.inventory.container.SimpleNamedContainerProvider;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AnvilMenu;
 
 public class SubCommandAnvil {
 
     public static int permissionLevel = 2;
 
-    static final TranslationTextComponent TITLE = new TranslationTextComponent("container.repair");
+    static final TranslatableComponent TITLE = new TranslatableComponent("container.repair");
 
-    static ArgumentBuilder<CommandSource, ?> register() {
+    static ArgumentBuilder<CommandSourceStack, ?> register() {
 
         return Commands.literal("anvil")
                 .requires(source -> source.hasPermission(permissionLevel))
                 .executes(context -> openContainer(context.getSource().getPlayerOrException()));
     }
 
-    private static int openContainer(PlayerEntity playerEntity) {
+    private static int openContainer(Player playerEntity) {
 
-        playerEntity.openMenu(new SimpleNamedContainerProvider((id, player, inv) -> new RepairContainer(id, player) {
+        playerEntity.openMenu(new SimpleMenuProvider((id, player, inv) -> new AnvilMenu(id, player) {
 
             @Override
-            public boolean stillValid(PlayerEntity playerIn) {
+            public boolean stillValid(Player playerIn) {
 
                 return true;
             }

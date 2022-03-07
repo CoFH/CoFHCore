@@ -1,8 +1,8 @@
 package cofh.lib.block.impl.crops;
 
 import cofh.lib.util.helpers.MathHelper;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraftforge.common.PlantType;
 
 import static cofh.lib.util.constants.Constants.AGE_0_10;
@@ -53,7 +53,7 @@ public class CropsBlockPerennial extends CropsBlockCoFH {
     }
 
     @Override
-    protected int getBonemealAgeIncrease(World worldIn) {
+    protected int getBonemealAgeIncrease(Level worldIn) {
 
         return MathHelper.nextInt(worldIn.random, 1, 3);
     }

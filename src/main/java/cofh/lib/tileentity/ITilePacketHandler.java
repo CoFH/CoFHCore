@@ -1,66 +1,66 @@
 package cofh.lib.tileentity;
 
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 
 public interface ITilePacketHandler {
 
     // CONFIG
-    default PacketBuffer getConfigPacket(PacketBuffer buffer) {
+    default FriendlyByteBuf getConfigPacket(FriendlyByteBuf buffer) {
 
         return buffer;
     }
 
-    default void handleConfigPacket(PacketBuffer buffer) {
+    default void handleConfigPacket(FriendlyByteBuf buffer) {
 
     }
 
     // CONTROL
-    default PacketBuffer getControlPacket(PacketBuffer buffer) {
+    default FriendlyByteBuf getControlPacket(FriendlyByteBuf buffer) {
 
         return buffer;
     }
 
-    default void handleControlPacket(PacketBuffer buffer) {
+    default void handleControlPacket(FriendlyByteBuf buffer) {
 
     }
 
     // GUI
-    default PacketBuffer getGuiPacket(PacketBuffer buffer) {
+    default FriendlyByteBuf getGuiPacket(FriendlyByteBuf buffer) {
 
         return buffer;
     }
 
-    default void handleGuiPacket(PacketBuffer buffer) {
+    default void handleGuiPacket(FriendlyByteBuf buffer) {
 
     }
 
     // REDSTONE
-    default PacketBuffer getRedstonePacket(PacketBuffer buffer) {
+    default FriendlyByteBuf getRedstonePacket(FriendlyByteBuf buffer) {
 
         return buffer;
     }
 
-    default void handleRedstonePacket(PacketBuffer buffer) {
+    default void handleRedstonePacket(FriendlyByteBuf buffer) {
 
     }
 
     // STATE
-    default PacketBuffer getStatePacket(PacketBuffer buffer) {
+    default FriendlyByteBuf getStatePacket(FriendlyByteBuf buffer) {
 
         return buffer;
     }
 
-    default void handleStatePacket(PacketBuffer buffer) {
+    default void handleStatePacket(FriendlyByteBuf buffer) {
 
     }
 
     // RENDER
-    default PacketBuffer getRenderPacket(PacketBuffer buffer) {
+    default FriendlyByteBuf getRenderPacket(FriendlyByteBuf buffer) {
 
         return buffer;
     }
 
-    default void handleRenderPacket(PacketBuffer buffer) {
+    default void handleRenderPacket(FriendlyByteBuf buffer) {
 
     }
 

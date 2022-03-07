@@ -5,7 +5,7 @@ import cofh.lib.util.filter.IFilterFactory;
 import cofh.lib.util.filter.IFilterableTile;
 import cofh.lib.util.filter.ITileFilterFactory;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 
 import java.util.Map;
 
@@ -42,7 +42,7 @@ public class FilterRegistry {
         return true;
     }
 
-    public static IFilter getHeldFilter(String type, CompoundNBT nbt) {
+    public static IFilter getHeldFilter(String type, CompoundTag nbt) {
 
         if (HELD_FILTER_MAP.containsKey(type)) {
             return HELD_FILTER_MAP.get(type).createFilter(nbt);
@@ -50,7 +50,7 @@ public class FilterRegistry {
         return EmptyFilter.INSTANCE;
     }
 
-    public static IFilter getTileFilter(String type, IFilterableTile tile, CompoundNBT nbt) {
+    public static IFilter getTileFilter(String type, IFilterableTile tile, CompoundTag nbt) {
 
         if (TILE_FILTER_MAP.containsKey(type)) {
             return TILE_FILTER_MAP.get(type).createFilter(tile, nbt);

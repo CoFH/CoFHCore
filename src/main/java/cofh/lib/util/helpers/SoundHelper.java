@@ -1,11 +1,11 @@
 package cofh.lib.util.helpers;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.ISound;
-import net.minecraft.client.audio.SimpleSound;
-import net.minecraft.client.audio.SoundHandler;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.client.sounds.SoundManager;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 
 /**
  * Contains various helper functions to assist with Sound manipulation.
@@ -18,7 +18,7 @@ public class SoundHelper {
 
     }
 
-    private static SoundHandler manager() {
+    private static SoundManager manager() {
 
         return Minecraft.getInstance().getSoundManager();
     }
@@ -28,12 +28,12 @@ public class SoundHelper {
      */
     public static void playSound(Object sound) {
 
-        if (sound instanceof ISound) {
-            manager().play((ISound) sound);
+        if (sound instanceof SoundInstance) {
+            manager().play((SoundInstance) sound);
         }
     }
 
-    public static void playSound(ISound sound) {
+    public static void playSound(SoundInstance sound) {
 
         manager().play(sound);
     }
@@ -50,7 +50,7 @@ public class SoundHelper {
 
     public static void playSimpleSound(SoundEvent sound, float volume, float pitch) {
 
-        manager().play(SimpleSound.forUI(sound, pitch, volume));
+        manager().play(SimpleSoundInstance.forUI(sound, pitch, volume));
     }
 
 }

@@ -6,36 +6,41 @@ import cofh.lib.capability.templates.ArcheryAmmoItemWrapper;
 import cofh.lib.item.ICoFHItem;
 import cofh.lib.util.Utils;
 import cofh.lib.util.helpers.ArcheryHelper;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.entity.projectile.FireworkRocketEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.item.*;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.*;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.FireworkRocketEntity;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Random;
 
 import static cofh.lib.capability.CapabilityArchery.AMMO_ITEM_CAPABILITY;
 import static cofh.lib.util.constants.Constants.CROSSBOW_AMMO;
 
 public class CrossbowItemCoFH extends CrossbowItem implements ICoFHItem {
 
+    protected static Random random = new Random();
     protected int enchantability = 1;
     protected float accuracyModifier = 1.0F;
     protected float damageModifier = 1.0F;
@@ -48,7 +53,7 @@ public class CrossbowItemCoFH extends CrossbowItem implements ICoFHItem {
         ProxyUtils.registerItemModelProperty(this, new ResourceLocation("ammo"), this::getAmmoModelProperty);
     }
 
-    public CrossbowItemCoFH(IItemTier tier, Properties builder) {
+    public CrossbowItemCoFH(Tier tier, Properties builder) {
 
         this(builder);
         setParams(tier);
@@ -60,7 +65,7 @@ public class CrossbowItemCoFH extends CrossbowItem implements ICoFHItem {
         setParams(enchantability, accuracyModifier, damageModifier, velocityModifier);
     }
 
-    public CrossbowItemCoFH setParams(IItemTier tier) {
+    public CrossbowItemCoFH setParams(Tier tier) {
 
         this.enchantability = tier.getEnchantmentValue();
         this.damageModifier = tier.getAttackDamageBonus() / 4;
@@ -85,14 +90,14 @@ public class CrossbowItemCoFH extends CrossbowItem implements ICoFHItem {
 
     @Override
     @OnlyIn (Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 
         if (isLoaded(stack)) {
-            tooltip.add((new TranslationTextComponent("info.cofh.crossbow_loaded")).append(" ").append(getLoadedAmmo(stack).getDisplayName()));
+            tooltip.add((new TranslatableComponent("info.cofh.crossbow_loaded")).append(" ").append(getLoadedAmmo(stack).getDisplayName()));
         }
     }
 
-    public float getPullModelProperty(ItemStack stack, World world, LivingEntity entity) {
+    public float getPullModelProperty(ItemStack stack, Level world, LivingEntity entity, int seed) {
 
         if (entity == null || !entity.getUseItem().equals(stack)) {
             return 0.0F;
@@ -100,10 +105,10 @@ public class CrossbowItemCoFH extends CrossbowItem implements ICoFHItem {
         int baseDuration = getUseDuration(stack);
         int duration = baseDuration - entity.getUseItemRemainingTicks();
 
-        return MathHelper.clamp((float) (duration) / baseDuration, 0.0F, 1.0F);
+        return Mth.clamp((float) (duration) / baseDuration, 0.0F, 1.0F);
     }
 
-    public float getAmmoModelProperty(ItemStack stack, World world, LivingEntity entity) {
+    public float getAmmoModelProperty(ItemStack stack, Level world, LivingEntity entity, int seed) {
 
         if (getLoadedAmmo(stack).isEmpty()) {
             return 0F;
@@ -115,17 +120,17 @@ public class CrossbowItemCoFH extends CrossbowItem implements ICoFHItem {
     }
 
     @Override
-    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
 
         ItemStack stack = player.getItemInHand(hand);
         if (isLoaded(stack)) {
             setLoaded(stack, shootLoadedAmmo(world, player, hand, stack));
-            return ActionResult.consume(stack);
-        } else if (!ArcheryHelper.findAmmo(player, stack).isEmpty() || player.abilities.instabuild) {
+            return InteractionResultHolder.consume(stack);
+        } else if (!ArcheryHelper.findAmmo(player, stack).isEmpty() || player.getAbilities().instabuild) {
             player.startUsingItem(hand);
-            return ActionResult.consume(stack);
+            return InteractionResultHolder.consume(stack);
         }
-        return ActionResult.fail(stack);
+        return InteractionResultHolder.fail(stack);
     }
 
     @Override
@@ -135,58 +140,57 @@ public class CrossbowItemCoFH extends CrossbowItem implements ICoFHItem {
     }
 
     @Override
-    public void onUseTick(World world, LivingEntity living, ItemStack stack, int durationRemaining) {
+    public void onUseTick(Level world, LivingEntity living, ItemStack stack, int durationRemaining) {
 
         if (!world.isClientSide()) {
             int totalDuration = getUseDuration(stack);
             int duration = totalDuration - durationRemaining;
 
             if (duration == totalDuration / 4) {
-                world.playSound(null, living.getX(), living.getY(), living.getZ(), getStartSound(Utils.getItemEnchantmentLevel(Enchantments.QUICK_CHARGE, stack)), SoundCategory.PLAYERS, 0.5F, 1.0F);
+                world.playSound(null, living.getX(), living.getY(), living.getZ(), getStartSound(Utils.getItemEnchantmentLevel(Enchantments.QUICK_CHARGE, stack)), SoundSource.PLAYERS, 0.5F, 1.0F);
             }
             if (duration == totalDuration / 2) {
-                world.playSound(null, living.getX(), living.getY(), living.getZ(), SoundEvents.CROSSBOW_LOADING_MIDDLE, SoundCategory.PLAYERS, 0.5F, 1.0F);
+                world.playSound(null, living.getX(), living.getY(), living.getZ(), SoundEvents.CROSSBOW_LOADING_MIDDLE, SoundSource.PLAYERS, 0.5F, 1.0F);
             }
         }
     }
 
     @Override
-    public void releaseUsing(ItemStack stack, World world, LivingEntity living, int durationRemaining) {
+    public void releaseUsing(ItemStack stack, Level world, LivingEntity living, int durationRemaining) {
 
         if (durationRemaining < 0 && !isCharged(stack) && loadAmmo(living, stack)) {
             setCharged(stack, true);
-            world.playSound(null, living.getX(), living.getY(), living.getZ(), SoundEvents.CROSSBOW_LOADING_END, living instanceof PlayerEntity ? SoundCategory.PLAYERS : SoundCategory.HOSTILE, 1.0F, 1.0F / (random.nextFloat() * 0.5F + 1.0F) + 0.2F);
+            world.playSound(null, living.getX(), living.getY(), living.getZ(), SoundEvents.CROSSBOW_LOADING_END, living instanceof Player ? SoundSource.PLAYERS : SoundSource.HOSTILE, 1.0F, 1.0F / (random.nextFloat() * 0.5F + 1.0F) + 0.2F);
         }
     }
 
     // region HELPER
     public boolean loadAmmo(LivingEntity living, ItemStack crossbow) {
 
-        if (living instanceof PlayerEntity) {
-            PlayerEntity player = (PlayerEntity) living;
+        if (living instanceof Player player) {
             ItemStack ammo = ArcheryHelper.findAmmo(player, crossbow);
             if (!ammo.isEmpty() && ammo.getItem() instanceof FireworkRocketItem) {
-                crossbow.getOrCreateTag().put(CROSSBOW_AMMO, ammo.save(new CompoundNBT()));
-                if (!player.abilities.instabuild) {
+                crossbow.getOrCreateTag().put(CROSSBOW_AMMO, ammo.save(new CompoundTag()));
+                if (!player.getAbilities().instabuild) {
                     ammo.shrink(1);
                 }
                 setCharged(crossbow, true);
                 return true;
             }
             IArcheryAmmoItem ammoCap = ammo.getCapability(AMMO_ITEM_CAPABILITY).orElse(new ArcheryAmmoItemWrapper(ammo));
-            boolean infinite = player.abilities.instabuild
+            boolean infinite = player.getAbilities().instabuild
                     || ammoCap.isInfinite(crossbow, player)
                     || (ArcheryHelper.isArrow(ammo) && ((ArrowItem) ammo.getItem()).isInfinite(ammo, crossbow, player));
             if (!ammo.isEmpty() || infinite) {
                 if (ammo.isEmpty()) {
                     ammo = new ItemStack(Items.ARROW);
                 }
-                crossbow.getOrCreateTag().put(CROSSBOW_AMMO, ammo.save(new CompoundNBT()));
+                crossbow.getOrCreateTag().put(CROSSBOW_AMMO, ammo.save(new CompoundTag()));
                 setCharged(crossbow, true);
                 if (!infinite) {
                     ammoCap.onArrowLoosed(player);
                     if (ammo.isEmpty()) {
-                        player.inventory.removeItem(ammo);
+                        player.getInventory().removeItem(ammo);
                     }
                 }
                 return true;
@@ -197,7 +201,7 @@ public class CrossbowItemCoFH extends CrossbowItem implements ICoFHItem {
 
     public ItemStack getLoadedAmmo(ItemStack crossbow) {
 
-        CompoundNBT nbt = crossbow.getTag();
+        CompoundTag nbt = crossbow.getTag();
         if (nbt != null && nbt.contains(CROSSBOW_AMMO)) {
             return ItemStack.of(nbt.getCompound(CROSSBOW_AMMO));
         }
@@ -216,21 +220,20 @@ public class CrossbowItemCoFH extends CrossbowItem implements ICoFHItem {
     }
 
     // Returns true if the crossbow should still be charged after this method is called.
-    public boolean shootLoadedAmmo(World world, LivingEntity living, Hand hand, ItemStack crossbow) {
+    public boolean shootLoadedAmmo(Level world, LivingEntity living, InteractionHand hand, ItemStack crossbow) {
 
         //TODO: dmg/acc/vel modifiers
-        if (living instanceof PlayerEntity) {
-            PlayerEntity shooter = (PlayerEntity) living;
+        if (living instanceof Player shooter) {
             ItemStack ammo = getLoadedAmmo(crossbow);
             if (!ammo.isEmpty()) {
                 int multishot = Utils.getItemEnchantmentLevel(Enchantments.MULTISHOT, crossbow);
                 int damage = 0;
                 for (int i = -multishot; i <= multishot; ++i) {
                     if (!ammo.isEmpty()) {
-                        ProjectileEntity projectile;
+                        Projectile projectile;
                         if (ammo.getCapability(AMMO_ITEM_CAPABILITY).isPresent() || ammo.getItem() instanceof ArrowItem) {
-                            AbstractArrowEntity arrow = ArcheryHelper.createArrow(world, ammo, shooter);
-                            projectile = adjustArrow(crossbow, arrow, shooter.abilities.instabuild || i != 0);
+                            AbstractArrow arrow = ArcheryHelper.createArrow(world, ammo, shooter);
+                            projectile = adjustArrow(crossbow, arrow, shooter.getAbilities().instabuild || i != 0);
                             ++damage;
                         } else if (ammo.getItem() instanceof FireworkRocketItem) {
                             projectile = new FireworkRocketEntity(world, ammo, shooter, shooter.getX(), shooter.getEyeY() - (double) 0.15F, shooter.getZ(), true);
@@ -241,7 +244,7 @@ public class CrossbowItemCoFH extends CrossbowItem implements ICoFHItem {
 
                         world.addFreshEntity(shootProjectile(shooter, projectile, getBaseSpeed(ammo), 1.0F, i * 10.F));
                         float pitch = random.nextFloat() * 0.32F + 0.865F;
-                        world.playSound(null, shooter.getX(), shooter.getY(), shooter.getZ(), SoundEvents.CROSSBOW_SHOOT, SoundCategory.PLAYERS, 1.0F, pitch);
+                        world.playSound(null, shooter.getX(), shooter.getY(), shooter.getZ(), SoundEvents.CROSSBOW_SHOOT, SoundSource.PLAYERS, 1.0F, pitch);
                     }
                 }
 
@@ -257,7 +260,7 @@ public class CrossbowItemCoFH extends CrossbowItem implements ICoFHItem {
         return ammo.getItem() instanceof FireworkRocketItem ? 1.6F : 3.15F;
     }
 
-    public AbstractArrowEntity adjustArrow(ItemStack crossbow, AbstractArrowEntity arrow, boolean creativePickup) {
+    public AbstractArrow adjustArrow(ItemStack crossbow, AbstractArrow arrow, boolean creativePickup) {
 
         arrow.setCritArrow(true);
         arrow.setSoundEvent(SoundEvents.CROSSBOW_HIT);
@@ -267,12 +270,12 @@ public class CrossbowItemCoFH extends CrossbowItem implements ICoFHItem {
             arrow.setPierceLevel((byte) pierce);
         }
         if (creativePickup) {
-            arrow.pickup = AbstractArrowEntity.PickupStatus.CREATIVE_ONLY;
+            arrow.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
         }
         return arrow;
     }
 
-    public ProjectileEntity shootProjectile(PlayerEntity shooter, ProjectileEntity projectile, float speed, float inaccuracy, float angle) {
+    public Projectile shootProjectile(Player shooter, Projectile projectile, float speed, float inaccuracy, float angle) {
 
         Vector3f vector3f = new Vector3f(shooter.getViewVector(1.0F));
         vector3f.transform(new Quaternion(new Vector3f(shooter.getUpVector(1.0F)), angle, true));
@@ -281,13 +284,13 @@ public class CrossbowItemCoFH extends CrossbowItem implements ICoFHItem {
     }
 
     // Override to change behavior to e.g. extract energy instead of using durability.
-    public void onCrossbowShot(PlayerEntity shooter, Hand hand, ItemStack crossbow, int damage) {
+    public void onCrossbowShot(Player shooter, InteractionHand hand, ItemStack crossbow, int damage) {
 
         crossbow.hurtAndBreak(damage, shooter, (entity) -> entity.broadcastBreakEvent(hand));
 
-        if (shooter instanceof ServerPlayerEntity) {
+        if (shooter instanceof ServerPlayer player) {
             if (!shooter.level.isClientSide()) {
-                CriteriaTriggers.SHOT_CROSSBOW.trigger((ServerPlayerEntity) shooter, crossbow);
+                CriteriaTriggers.SHOT_CROSSBOW.trigger(player, crossbow);
             }
             shooter.awardStat(Stats.ITEM_USED.get(crossbow.getItem()));
         }

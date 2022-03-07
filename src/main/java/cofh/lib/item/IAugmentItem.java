@@ -1,7 +1,7 @@
 package cofh.lib.item;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
 
@@ -14,6 +14,6 @@ import javax.annotation.Nullable;
 public interface IAugmentItem {
 
     @Nullable
-    CompoundNBT getAugmentData(ItemStack augment);
+    CompoundTag getAugmentData(ItemStack augment);
 
 }

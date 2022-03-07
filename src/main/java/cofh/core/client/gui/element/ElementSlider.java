@@ -3,8 +3,8 @@ package cofh.core.client.gui.element;
 import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.client.gui.GuiColor;
 import cofh.lib.client.gui.IGuiAccess;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.util.ResourceLocation;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.resources.ResourceLocation;
 
 import static cofh.lib.util.constants.Constants.PATH_ELEMENTS;
 
@@ -70,11 +70,11 @@ public abstract class ElementSlider extends ElementBase {
     }
 
     @Override
-    public void drawBackground(MatrixStack matrixStack, int mouseX, int mouseY) {
+    public void drawBackground(PoseStack matrixStack, int mouseX, int mouseY) {
 
         drawColoredModalRect(posX() - 1, posY() - 1, posX() + width + 1, posY() + height + 1, borderColor);
         drawColoredModalRect(posX(), posY(), posX() + width, posY() + height, backgroundColor);
-        RenderHelper.resetColor();
+        RenderHelper.resetShaderColor();
     }
 
     protected void drawSlider(int mouseX, int mouseY, int sliderX, int sliderY) {
@@ -85,13 +85,14 @@ public abstract class ElementSlider extends ElementBase {
         int sliderEndY = _sliderHeight - sliderMidY;
 
         if (!enabled()) {
-            RenderHelper.bindTexture(DISABLED);
+            RenderHelper.setShaderTexture0(DISABLED);
         } else if (isHovering(mouseX, mouseY)) {
-            RenderHelper.bindTexture(HOVER);
+            RenderHelper.setShaderTexture0(HOVER);
         } else {
-            RenderHelper.bindTexture(ENABLED);
+            RenderHelper.setShaderTexture0(ENABLED);
         }
-        RenderHelper.resetColor();
+        RenderHelper.setPosTexShader();
+        RenderHelper.resetShaderColor();
         drawTexturedModalRect(sliderX, sliderY, 0, 0, sliderMidX, sliderMidY);
         drawTexturedModalRect(sliderX, sliderY + sliderMidY, 0, 256 - sliderEndY, sliderMidX, sliderEndY);
         drawTexturedModalRect(sliderX + sliderMidX, sliderY, 256 - sliderEndX, 0, sliderEndX, sliderMidY);
@@ -99,13 +100,13 @@ public abstract class ElementSlider extends ElementBase {
     }
 
     @Override
-    public void drawForeground(MatrixStack matrixStack, int mouseX, int mouseY) {
+    public void drawForeground(PoseStack matrixStack, int mouseX, int mouseY) {
 
         int sliderX = posX() + getSliderX();
         int sliderY = posY() + getSliderY();
 
         drawSlider(mouseX, mouseY, sliderX, sliderY);
-        RenderHelper.resetColor();
+        RenderHelper.resetShaderColor();
     }
 
     protected boolean isHovering(int x, int y) {

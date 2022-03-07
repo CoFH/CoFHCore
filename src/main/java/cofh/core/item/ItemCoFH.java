@@ -3,27 +3,31 @@ package cofh.core.item;
 import cofh.core.init.CoreConfig;
 import cofh.lib.item.ICoFHItem;
 import cofh.lib.util.helpers.SecurityHelper;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.function.BooleanSupplier;
 
 import static cofh.lib.util.constants.Constants.TRUE;
 import static cofh.lib.util.helpers.StringHelper.getTextComponent;
-import static net.minecraft.util.text.TextFormatting.*;
+import static net.minecraft.ChatFormatting.*;
 
 public class ItemCoFH extends Item implements ICoFHItem {
+
+    protected static final Random random = new Random();
 
     protected BooleanSupplier showInGroups = TRUE;
 
@@ -60,7 +64,7 @@ public class ItemCoFH extends Item implements ICoFHItem {
         return this;
     }
 
-    protected void tooltipDelegate(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    protected void tooltipDelegate(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 
     }
 
@@ -71,7 +75,7 @@ public class ItemCoFH extends Item implements ICoFHItem {
     }
 
     @Override
-    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
 
         if (!showInGroups.getAsBoolean()) {
             return;
@@ -81,9 +85,9 @@ public class ItemCoFH extends Item implements ICoFHItem {
 
     @Override
     @OnlyIn (Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 
-        List<ITextComponent> additionalTooltips = new ArrayList<>();
+        List<Component> additionalTooltips = new ArrayList<>();
         tooltipDelegate(stack, worldIn, additionalTooltips, flagIn);
 
         if (SecurityHelper.isItemClaimable(stack)) {
@@ -111,7 +115,7 @@ public class ItemCoFH extends Item implements ICoFHItem {
     }
 
     @Override
-    public int getBurnTime(ItemStack itemStack) {
+    public int getBurnTime(ItemStack itemStack, RecipeType<?> recipeType) {
 
         return burnTime;
     }

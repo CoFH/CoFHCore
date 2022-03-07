@@ -1,26 +1,26 @@
 package cofh.lib.entity;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.TNTEntity;
-import net.minecraft.network.IPacket;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.PrimedTnt;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
-public abstract class AbstractTNTEntity extends TNTEntity {
+public abstract class AbstractTNTEntity extends PrimedTnt {
 
     protected static final int CLOUD_DURATION = 20;
     protected int radius = 9;
 
-    public AbstractTNTEntity(EntityType<? extends AbstractTNTEntity> type, World worldIn) {
+    public AbstractTNTEntity(EntityType<? extends AbstractTNTEntity> type, Level worldIn) {
 
         super(type, worldIn);
     }
 
-    public AbstractTNTEntity(EntityType<? extends AbstractTNTEntity> type, World worldIn, double x, double y, double z, @Nullable LivingEntity igniter) {
+    public AbstractTNTEntity(EntityType<? extends AbstractTNTEntity> type, Level worldIn, double x, double y, double z, @Nullable LivingEntity igniter) {
 
         this(type, worldIn);
         this.setPos(x, y, z);
@@ -34,7 +34,7 @@ public abstract class AbstractTNTEntity extends TNTEntity {
     }
 
     @Override
-    public IPacket<?> getAddEntityPacket() {
+    public Packet<?> getAddEntityPacket() {
 
         return NetworkHooks.getEntitySpawningPacket(this);
     }

@@ -1,8 +1,8 @@
 package cofh.lib.util.helpers;
 
 import cofh.lib.item.IAugmentItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
 
@@ -26,9 +26,9 @@ public class AugmentDataHelper {
     }
 
     @Nullable
-    public static CompoundNBT getAugmentData(ItemStack augment) {
+    public static CompoundTag getAugmentData(ItemStack augment) {
 
-        CompoundNBT augmentData = augment.getTagElement(TAG_AUGMENT_DATA);
+        CompoundTag augmentData = augment.getTagElement(TAG_AUGMENT_DATA);
         if (augmentData == null && isAugmentItem(augment)) {
             return ((IAugmentItem) augment.getItem()).getAugmentData(augment);
         }
@@ -37,7 +37,7 @@ public class AugmentDataHelper {
 
     public static String getAugmentType(ItemStack augment) {
 
-        CompoundNBT augmentTag = getAugmentData(augment);
+        CompoundTag augmentTag = getAugmentData(augment);
         return augmentTag != null ? augmentTag.getString(TAG_TYPE) : "";
     }
 
@@ -49,9 +49,9 @@ public class AugmentDataHelper {
     // region DATA BUILDER
     public static class Builder {
 
-        CompoundNBT augmentData = new CompoundNBT();
+        CompoundTag augmentData = new CompoundTag();
 
-        public CompoundNBT build() {
+        public CompoundTag build() {
 
             return augmentData.isEmpty() ? null : augmentData;
         }

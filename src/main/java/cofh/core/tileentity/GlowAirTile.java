@@ -1,18 +1,20 @@
 package cofh.core.tileentity;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
+import cofh.lib.tileentity.ICoFHTickableTile;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 import static cofh.lib.util.references.CoreReferences.GLOW_AIR_TILE;
 
-public class GlowAirTile extends TileEntity implements ITickableTileEntity {
+public class GlowAirTile extends BlockEntity implements ICoFHTickableTile {
 
     protected int duration = 200;
 
-    public GlowAirTile() {
+    public GlowAirTile(BlockPos pos, BlockState state) {
 
-        super(GLOW_AIR_TILE);
+        super(GLOW_AIR_TILE, pos, state);
     }
 
     @Override

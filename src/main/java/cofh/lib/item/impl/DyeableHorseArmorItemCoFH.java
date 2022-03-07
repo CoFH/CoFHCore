@@ -1,9 +1,9 @@
 package cofh.lib.item.impl;
 
-import net.minecraft.item.IDyeableArmorItem;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.DyeableLeatherItem;
 
-public class DyeableHorseArmorItemCoFH extends HorseArmorItemCoFH implements IDyeableArmorItem {
+public class DyeableHorseArmorItemCoFH extends HorseArmorItemCoFH implements DyeableLeatherItem {
 
     public DyeableHorseArmorItemCoFH(int protection, String texture, Properties builder) {
 

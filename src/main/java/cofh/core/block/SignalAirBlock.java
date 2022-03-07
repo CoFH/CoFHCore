@@ -1,21 +1,28 @@
 package cofh.core.block;
 
 import cofh.core.tileentity.SignalAirTile;
+import cofh.lib.tileentity.ICoFHTickableTile;
 import cofh.lib.util.Utils;
-import net.minecraft.block.AirBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.particles.RedstoneParticleData;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.AirBlock;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
-public class SignalAirBlock extends AirBlock {
+import static cofh.lib.util.references.CoreReferences.SIGNAL_AIR_TILE;
+
+public class SignalAirBlock extends AirBlock implements EntityBlock {
 
     public SignalAirBlock(Properties builder) {
 
@@ -23,15 +30,15 @@ public class SignalAirBlock extends AirBlock {
     }
 
     @Override
-    public boolean hasTileEntity(BlockState state) {
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
 
-        return true;
+        return new SignalAirTile(pos, state);
     }
 
+    @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-
-        return new SignalAirTile();
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> actualType) {
+        return ICoFHTickableTile.createTicker(level, actualType, SIGNAL_AIR_TILE, SignalAirTile.class);
     }
 
     @Override
@@ -41,18 +48,17 @@ public class SignalAirBlock extends AirBlock {
     }
 
     @Override
-    public int getSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
+    public int getSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side) {
 
-        TileEntity tile = blockAccess.getBlockEntity(pos);
-        return tile instanceof SignalAirTile ? ((SignalAirTile) tile).getPower() : 0;
+        return blockAccess.getBlockEntity(pos) instanceof SignalAirTile tile ? tile.getPower() : 0;
     }
 
     @OnlyIn (Dist.CLIENT)
     @Override
-    public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+    public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, Random rand) {
 
         if (rand.nextInt(8) == 0) {
-            Utils.spawnBlockParticlesClient(worldIn, RedstoneParticleData.REDSTONE, pos, rand, 2);
+            Utils.spawnBlockParticlesClient(worldIn, DustParticleOptions.REDSTONE, pos, rand, 2);
         }
     }
 

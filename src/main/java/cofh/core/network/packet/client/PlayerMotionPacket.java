@@ -4,8 +4,8 @@ import cofh.core.CoFHCore;
 import cofh.core.util.ProxyUtils;
 import cofh.lib.network.packet.IPacketClient;
 import cofh.lib.network.packet.PacketBase;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
 
 import static cofh.lib.util.constants.Constants.PACKET_MOTION;
 
@@ -27,7 +27,7 @@ public class PlayerMotionPacket extends PacketBase implements IPacketClient {
     }
 
     @Override
-    public void write(PacketBuffer buf) {
+    public void write(FriendlyByteBuf buf) {
 
         buf.writeDouble(motionX);
         buf.writeDouble(motionY);
@@ -35,14 +35,14 @@ public class PlayerMotionPacket extends PacketBase implements IPacketClient {
     }
 
     @Override
-    public void read(PacketBuffer buf) {
+    public void read(FriendlyByteBuf buf) {
 
         motionX = buf.readDouble();
         motionY = buf.readDouble();
         motionZ = buf.readDouble();
     }
 
-    public static void sendToClient(double x, double y, double z, ServerPlayerEntity player) {
+    public static void sendToClient(double x, double y, double z, ServerPlayer player) {
 
         PlayerMotionPacket packet = new PlayerMotionPacket();
         packet.motionX = x;

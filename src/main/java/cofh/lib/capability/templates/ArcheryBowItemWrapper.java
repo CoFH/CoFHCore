@@ -3,10 +3,10 @@ package cofh.lib.capability.templates;
 import cofh.lib.capability.IArcheryBowItem;
 import cofh.lib.util.helpers.ArcheryHelper;
 import cofh.lib.util.helpers.MathHelper;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.world.World;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
@@ -41,31 +41,31 @@ public class ArcheryBowItemWrapper implements IArcheryBowItem, ICapabilityProvid
     }
 
     @Override
-    public float getAccuracyModifier(PlayerEntity shooter) {
+    public float getAccuracyModifier(Player shooter) {
 
         return accuracyModifier;
     }
 
     @Override
-    public float getDamageModifier(PlayerEntity shooter) {
+    public float getDamageModifier(Player shooter) {
 
         return damageModifier;
     }
 
     @Override
-    public float getVelocityModifier(PlayerEntity shooter) {
+    public float getVelocityModifier(Player shooter) {
 
         return velocityModifier;
     }
 
     @Override
-    public void onArrowLoosed(PlayerEntity shooter) {
+    public void onArrowLoosed(Player shooter) {
 
         bowItem.hurtAndBreak(1, shooter, (entity) -> entity.broadcastBreakEvent(shooter.getUsedItemHand()));
     }
 
     @Override
-    public boolean fireArrow(ItemStack arrow, PlayerEntity shooter, int charge, World world) {
+    public boolean fireArrow(ItemStack arrow, Player shooter, int charge, Level world) {
 
         return ArcheryHelper.fireArrow(bowItem, arrow, shooter, charge, world);
     }
