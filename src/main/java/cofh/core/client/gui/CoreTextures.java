@@ -1,8 +1,8 @@
 package cofh.core.client.gui;
 
-import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -22,7 +22,7 @@ public class CoreTextures {
     @SubscribeEvent
     public static void preStitch(TextureStitchEvent.Pre event) {
 
-        if (!event.getMap().location().toString().equals(BLOCK_ATLAS)) {
+        if (!event.getAtlas().location().toString().equals(BLOCK_ATLAS)) {
             return;
         }
         event.addSprite(new ResourceLocation(ICONS_ + "icon_access_public"));
@@ -65,10 +65,10 @@ public class CoreTextures {
     @SubscribeEvent
     public static void postStitch(TextureStitchEvent.Post event) {
 
-        if (!event.getMap().location().toString().equals(BLOCK_ATLAS)) {
+        if (!event.getAtlas().location().toString().equals(BLOCK_ATLAS)) {
             return;
         }
-        AtlasTexture map = event.getMap();
+        TextureAtlas map = event.getAtlas();
 
         ICON_ACCESS_PUBLIC = map.getSprite(new ResourceLocation(ICONS_ + "icon_access_public"));
         ICON_ACCESS_PRIVATE = map.getSprite(new ResourceLocation(ICONS_ + "icon_access_private"));

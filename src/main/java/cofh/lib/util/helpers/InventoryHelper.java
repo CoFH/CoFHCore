@@ -2,12 +2,12 @@ package cofh.lib.util.helpers;
 
 import cofh.lib.inventory.ItemStorageCoFH;
 import cofh.lib.inventory.container.slot.SlotFalseCopy;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
+import net.minecraft.world.Container;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -160,9 +160,9 @@ public class InventoryHelper {
     }
 
     // region BLOCK TRANSFER
-    public static boolean extractFromAdjacent(TileEntity tile, ItemStorageCoFH slot, int amount, Direction side) {
+    public static boolean extractFromAdjacent(BlockEntity tile, ItemStorageCoFH slot, int amount, Direction side) {
 
-        TileEntity adjTile = BlockHelper.getAdjacentTileEntity(tile, side);
+        BlockEntity adjTile = BlockHelper.getAdjacentTileEntity(tile, side);
         Direction opposite = side.getOpposite();
 
         if (hasItemHandlerCap(adjTile, opposite)) {
@@ -187,14 +187,14 @@ public class InventoryHelper {
         return false;
     }
 
-    public static boolean insertIntoAdjacent(TileEntity tile, ItemStorageCoFH slot, int amount, Direction side) {
+    public static boolean insertIntoAdjacent(BlockEntity tile, ItemStorageCoFH slot, int amount, Direction side) {
 
         if (slot.isEmpty()) {
             return false;
         }
         ItemStack initialStack = slot.getItemStack().copy();
         initialStack.setCount(Math.min(amount, initialStack.getCount()));
-        TileEntity adjTile = BlockHelper.getAdjacentTileEntity(tile, side);
+        BlockEntity adjTile = BlockHelper.getAdjacentTileEntity(tile, side);
         Direction opposite = side.getOpposite();
 
         if (hasItemHandlerCap(adjTile, opposite)) {
@@ -211,7 +211,7 @@ public class InventoryHelper {
     // endregion
 
     // region HELPERS
-    public static ItemStack addToInventory(TileEntity tile, Direction side, ItemStack stack) {
+    public static ItemStack addToInventory(BlockEntity tile, Direction side, ItemStack stack) {
 
         if (stack.isEmpty()) {
             return ItemStack.EMPTY;
@@ -222,19 +222,19 @@ public class InventoryHelper {
         return stack;
     }
 
-    public static boolean hasItemHandlerCap(TileEntity tile, Direction face) {
+    public static boolean hasItemHandlerCap(BlockEntity tile, Direction face) {
 
-        return tile != null && tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face).isPresent() || tile instanceof IInventory;
+        return tile != null && tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face).isPresent() || tile instanceof Container;
     }
 
-    public static IItemHandler getItemHandlerCap(TileEntity tile, Direction face) {
+    public static IItemHandler getItemHandlerCap(BlockEntity tile, Direction face) {
 
         if (tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face).isPresent()) {
             return tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face).orElse(EmptyHandler.INSTANCE);
-        } else if (tile instanceof ISidedInventory && face != null) {
-            return new SidedInvWrapper(((ISidedInventory) tile), face);
-        } else if (tile instanceof IInventory) {
-            return new InvWrapper((IInventory) tile);
+        } else if (tile instanceof WorldlyContainer && face != null) {
+            return new SidedInvWrapper(((WorldlyContainer) tile), face);
+        } else if (tile instanceof Container) {
+            return new InvWrapper((Container) tile);
         }
         return EmptyHandler.INSTANCE;
     }

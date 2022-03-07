@@ -3,10 +3,10 @@ package cofh.core.command;
 import cofh.lib.util.SocialUtils;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.builder.ArgumentBuilder;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.command.arguments.GameProfileArgument;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.GameProfileArgument;
+import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Collection;
 
@@ -16,7 +16,7 @@ public class SubCommandFriend {
 
     public static int permissionLevel = 0;
 
-    static ArgumentBuilder<CommandSource, ?> register() {
+    static ArgumentBuilder<CommandSourceStack, ?> register() {
 
         return Commands.literal("friend")
                 .requires(source -> source.hasPermission(permissionLevel))
@@ -30,7 +30,7 @@ public class SubCommandFriend {
                         .executes((context) -> clearFriends(context.getSource().getPlayerOrException())));
     }
 
-    private static int addFriends(ServerPlayerEntity user, Collection<GameProfile> players) {
+    private static int addFriends(ServerPlayer user, Collection<GameProfile> players) {
 
         for (GameProfile player : players) {
             SocialUtils.addFriend(user, player);
@@ -38,7 +38,7 @@ public class SubCommandFriend {
         return players.size();
     }
 
-    private static int removeFriends(ServerPlayerEntity user, Collection<GameProfile> players) {
+    private static int removeFriends(ServerPlayer user, Collection<GameProfile> players) {
 
         for (GameProfile player : players) {
             SocialUtils.removeFriend(user, player);
@@ -46,7 +46,7 @@ public class SubCommandFriend {
         return players.size();
     }
 
-    private static int clearFriends(ServerPlayerEntity user) {
+    private static int clearFriends(ServerPlayer user) {
 
         return SocialUtils.clearFriendList(user) ? 1 : 0;
     }

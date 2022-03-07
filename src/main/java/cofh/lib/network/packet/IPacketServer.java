@@ -1,10 +1,10 @@
 package cofh.lib.network.packet;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.network.NetworkDirection;
 
 /**
  * Packet sent FROM Clients TO Servers
@@ -18,7 +18,7 @@ public interface IPacketServer extends IPacket {
      *
      * @param player The player who sent the packet.
      */
-    void handleServer(ServerPlayerEntity player);
+    void handleServer(ServerPlayer player);
 
     /**
      * Send this packet to the server.

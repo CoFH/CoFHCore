@@ -1,20 +1,22 @@
 package cofh.core.tileentity;
 
+import cofh.lib.tileentity.ICoFHTickableTile;
 import cofh.lib.util.helpers.MathHelper;
-import net.minecraft.block.Blocks;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 import static cofh.lib.util.references.CoreReferences.SIGNAL_AIR_TILE;
 
-public class SignalAirTile extends TileEntity implements ITickableTileEntity {
+public class SignalAirTile extends BlockEntity implements ICoFHTickableTile {
 
     protected int duration = 200;
     protected int power = 15;
 
-    public SignalAirTile() {
+    public SignalAirTile(BlockPos pos, BlockState state) {
 
-        super(SIGNAL_AIR_TILE);
+        super(SIGNAL_AIR_TILE, pos, state);
     }
 
     @Override

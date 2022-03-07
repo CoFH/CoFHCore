@@ -3,8 +3,8 @@ package cofh.core.item;
 import cofh.lib.inventory.IInventoryContainerItem;
 import cofh.lib.inventory.ItemStorageCoFH;
 import cofh.lib.inventory.SimpleItemInv;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.WeakHashMap;
@@ -27,7 +27,7 @@ public class InventoryContainerItem extends ItemCoFH implements IInventoryContai
 
     protected SimpleItemInv readInventoryFromNBT(ItemStack container) {
 
-        CompoundNBT containerTag = getOrCreateInvTag(container);
+        CompoundTag containerTag = getOrCreateInvTag(container);
         int numSlots = getContainerSlots(container);
         ArrayList<ItemStorageCoFH> invSlots = new ArrayList<>(numSlots);
         for (int i = 0; i < numSlots; ++i) {

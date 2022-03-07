@@ -5,19 +5,19 @@ import cofh.core.tileentity.TileCoFH;
 import cofh.lib.network.packet.IPacketServer;
 import cofh.lib.network.packet.PacketBase;
 import cofh.lib.tileentity.ITileXpHandler;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.Vec3;
 
 import static cofh.lib.util.constants.Constants.PACKET_CLAIM_XP;
 
 public class ClaimXPPacket extends PacketBase implements IPacketServer {
 
     protected BlockPos pos;
-    protected Vector3d spawnPos;
+    protected Vec3 spawnPos;
 
     public ClaimXPPacket() {
 
@@ -25,13 +25,13 @@ public class ClaimXPPacket extends PacketBase implements IPacketServer {
     }
 
     @Override
-    public void handleServer(ServerPlayerEntity player) {
+    public void handleServer(ServerPlayer player) {
 
-        World world = player.level;
+        Level world = player.level;
         if (!world.isLoaded(pos)) {
             return;
         }
-        TileEntity tile = world.getBlockEntity(pos);
+        BlockEntity tile = world.getBlockEntity(pos);
         if (tile instanceof ITileXpHandler) {
             ((ITileXpHandler) tile).claimXP(player);
         }
@@ -39,13 +39,13 @@ public class ClaimXPPacket extends PacketBase implements IPacketServer {
     }
 
     @Override
-    public void write(PacketBuffer buf) {
+    public void write(FriendlyByteBuf buf) {
 
         buf.writeBlockPos(pos);
     }
 
     @Override
-    public void read(PacketBuffer buf) {
+    public void read(FriendlyByteBuf buf) {
 
         pos = buf.readBlockPos();
     }

@@ -2,12 +2,12 @@ package cofh.core.command;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.brigadier.builder.ArgumentBuilder;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.command.arguments.EntityArgument;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffectInstance;
 
 import java.util.Collection;
 
@@ -18,7 +18,7 @@ public class SubCommandRecharge {
 
     public static int permissionLevel = 2;
 
-    static ArgumentBuilder<CommandSource, ?> register() {
+    static ArgumentBuilder<CommandSourceStack, ?> register() {
 
         return Commands.literal("recharge")
                 .requires(source -> source.hasPermission(permissionLevel))
@@ -29,15 +29,15 @@ public class SubCommandRecharge {
                         .executes(context -> chargeEntities(context.getSource(), EntityArgument.getPlayers(context, CMD_TARGETS))));
     }
 
-    private static int chargeEntities(CommandSource source, Collection<? extends ServerPlayerEntity> targets) {
+    private static int chargeEntities(CommandSourceStack source, Collection<? extends ServerPlayer> targets) {
 
-        for (ServerPlayerEntity entity : targets) {
-            entity.addEffect(new EffectInstance(SUPERCHARGE, 1200, 0, false, false));
+        for (ServerPlayer entity : targets) {
+            entity.addEffect(new MobEffectInstance(SUPERCHARGE, 1200, 0, false, false));
         }
         if (targets.size() == 1) {
-            source.sendSuccess(new TranslationTextComponent("commands.cofh.recharge.success.single", targets.iterator().next().getDisplayName()), true);
+            source.sendSuccess(new TranslatableComponent("commands.cofh.recharge.success.single", targets.iterator().next().getDisplayName()), true);
         } else {
-            source.sendSuccess(new TranslationTextComponent("commands.cofh.recharge.success.multiple", targets.size()), true);
+            source.sendSuccess(new TranslatableComponent("commands.cofh.recharge.success.multiple", targets.size()), true);
         }
         return targets.size();
     }

@@ -2,14 +2,14 @@ package cofh.core.item;
 
 import cofh.core.util.ProxyUtils;
 import cofh.lib.item.ICoFHItem;
-import net.minecraft.client.renderer.entity.model.BipedModel;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.IArmorMaterial;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -51,14 +51,14 @@ public class ArmorItemCoFH extends ArmorItem implements ICoFHItem {
 
     protected BooleanSupplier showInGroups = TRUE;
 
-    protected Supplier<ItemGroup> displayGroup;
+    protected Supplier<CreativeModeTab> displayGroup;
 
-    public ArmorItemCoFH(IArmorMaterial materialIn, EquipmentSlotType slot, Properties builder) {
+    public ArmorItemCoFH(ArmorMaterial materialIn, EquipmentSlot slot, Properties builder) {
 
         super(materialIn, slot, builder);
     }
 
-    public ArmorItemCoFH setDisplayGroup(Supplier<ItemGroup> displayGroup) {
+    public ArmorItemCoFH setDisplayGroup(Supplier<CreativeModeTab> displayGroup) {
 
         this.displayGroup = displayGroup;
         return this;
@@ -71,7 +71,7 @@ public class ArmorItemCoFH extends ArmorItem implements ICoFHItem {
     }
 
     @Override
-    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
 
         if (!showInGroups.getAsBoolean() || displayGroup != null && displayGroup.get() != null && displayGroup.get() != group) {
             return;
@@ -80,14 +80,14 @@ public class ArmorItemCoFH extends ArmorItem implements ICoFHItem {
     }
 
     @Override
-    public Collection<ItemGroup> getCreativeTabs() {
+    public Collection<CreativeModeTab> getCreativeTabs() {
 
         return displayGroup != null && displayGroup.get() != null ? Collections.singletonList(displayGroup.get()) : super.getCreativeTabs();
     }
 
     @OnlyIn (Dist.CLIENT)
     @Nullable
-    public <A extends BipedModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {
+    public <A extends HumanoidModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot armorSlot, A _default) {
 
         return (A) ProxyUtils.getModel(this.getRegistryName());
     }

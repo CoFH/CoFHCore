@@ -1,6 +1,6 @@
 package cofh.lib.util.filter;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 public interface IFilterableItem {
 

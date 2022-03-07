@@ -1,7 +1,7 @@
 package cofh.lib.item;
 
 import cofh.lib.util.Utils;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import static cofh.lib.util.Utils.getItemEnchantmentLevel;
 import static cofh.lib.util.references.CoreReferences.HOLDING;

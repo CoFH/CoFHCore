@@ -3,12 +3,13 @@ package cofh.core.client.gui.element.panel;
 import cofh.core.client.gui.element.ElementBase;
 import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.client.gui.IGuiAccess;
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.renderer.Rectangle2d;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,41 +78,41 @@ public abstract class PanelBase extends ElementBase {
         }
     }
 
-    protected void drawPanelIcon(MatrixStack matrixStack, TextureAtlasSprite iconName) {
+    protected void drawPanelIcon(PoseStack matrixStack, TextureAtlasSprite iconName) {
 
         gui.drawIcon(matrixStack, iconName, sideOffset(), 3);
     }
 
-    protected void drawForeground(MatrixStack matrixStack) {
+    protected void drawForeground(PoseStack matrixStack) {
 
     }
 
-    protected void drawBackground(MatrixStack matrixStack) {
+    protected void drawBackground(PoseStack matrixStack) {
 
         float colorR = (backgroundColor >> 16 & 255) / 255.0F;
         float colorG = (backgroundColor >> 8 & 255) / 255.0F;
         float colorB = (backgroundColor & 255) / 255.0F;
 
-        RenderSystem.color4f(colorR, colorG, colorB, 1.0F);
-
-        RenderHelper.bindTexture(texture);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderColor(colorR, colorG, colorB, 1.0F);
+        RenderHelper.setShaderTexture0(texture);
 
         gui.drawTexturedModalRect(0, 4, 0, 256 - height + 4, 4, height - 4);
         gui.drawTexturedModalRect(4, 0, 256 - width + 4, 0, width - 4, 4);
         gui.drawTexturedModalRect(0, 0, 0, 0, 4, 4);
         gui.drawTexturedModalRect(4, 4, 256 - width + 4, 256 - height + 4, width - 4, height - 4);
 
-        RenderHelper.resetColor();
+        RenderHelper.resetShaderColor();
     }
 
     @Override
-    public void drawBackground(MatrixStack matrixStack, int mouseX, int mouseY) {
+    public void drawBackground(PoseStack matrixStack, int mouseX, int mouseY) {
 
         mouseX -= this.posX();
         mouseY -= this.posY();
 
-        RenderSystem.pushMatrix();
-        RenderSystem.translatef(this.posX(), this.posY(), 0.0F);
+        matrixStack.pushPose();
+        matrixStack.translate(this.posX(), this.posY(), 0.0F);
 
         drawBackground(matrixStack);
 
@@ -122,17 +123,17 @@ public abstract class PanelBase extends ElementBase {
                 }
             }
         }
-        RenderSystem.popMatrix();
+        matrixStack.popPose();
     }
 
     @Override
-    public void drawForeground(MatrixStack matrixStack, int mouseX, int mouseY) {
+    public void drawForeground(PoseStack matrixStack, int mouseX, int mouseY) {
 
         mouseX -= this.posX();
         mouseY -= this.posY();
 
-        RenderSystem.pushMatrix();
-        RenderSystem.translatef(this.posX(), this.posY(), 0.0F);
+        matrixStack.pushPose();
+        matrixStack.translate(this.posX(), this.posY(), 0.0F);
 
         drawForeground(matrixStack);
 
@@ -143,11 +144,11 @@ public abstract class PanelBase extends ElementBase {
                 }
             }
         }
-        RenderSystem.popMatrix();
+        matrixStack.popPose();
     }
 
     @Override
-    public void addTooltip(List<ITextComponent> tooltipList, int mouseX, int mouseY) {
+    public void addTooltip(List<Component> tooltipList, int mouseX, int mouseY) {
 
         tooltipList.addAll(tooltip.create(this, mouseX, mouseY));
 
@@ -247,9 +248,9 @@ public abstract class PanelBase extends ElementBase {
         }
     }
 
-    public final Rectangle2d getBoundsOnScreen() {
+    public final Rect2i getBoundsOnScreen() {
 
-        return new Rectangle2d(posX() + guiLeft(), posY() + guiTop(), visible() ? width : 0, visible() ? height : 0);
+        return new Rect2i(posX() + guiLeft(), posY() + guiTop(), visible() ? width : 0, visible() ? height : 0);
     }
 
     @SuppressWarnings ("unchecked")

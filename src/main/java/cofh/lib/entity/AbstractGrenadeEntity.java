@@ -1,5 +1,6 @@
 package cofh.lib.entity;
 
+<<<<<<< HEAD
 import cofh.lib.block.IDetonatable;
 import cofh.lib.util.references.CoreReferences;
 import net.minecraft.entity.EntityType;
@@ -14,23 +15,33 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 public abstract class AbstractGrenadeEntity extends ProjectileItemEntity implements IDetonatable {
+=======
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.network.NetworkHooks;
+
+public abstract class AbstractGrenadeEntity extends ThrowableItemProjectile {
+>>>>>>> caa1a35 (Initial 1.18.2 compile pass.)
 
     protected static final int CLOUD_DURATION = 20;
     public int effectAmplifier = 1;
     public int effectDuration = 300;
     public int radius = 5;
 
-    public AbstractGrenadeEntity(EntityType<? extends ProjectileItemEntity> type, World worldIn) {
+    public AbstractGrenadeEntity(EntityType<? extends ThrowableItemProjectile> type, Level worldIn) {
 
         super(type, worldIn);
     }
 
-    public AbstractGrenadeEntity(EntityType<? extends ProjectileItemEntity> type, double x, double y, double z, World worldIn) {
+    public AbstractGrenadeEntity(EntityType<? extends ThrowableItemProjectile> type, double x, double y, double z, Level worldIn) {
 
         super(type, x, y, z, worldIn);
     }
 
-    public AbstractGrenadeEntity(EntityType<? extends ProjectileItemEntity> type, LivingEntity livingEntityIn, World worldIn) {
+    public AbstractGrenadeEntity(EntityType<? extends ThrowableItemProjectile> type, LivingEntity livingEntityIn, Level worldIn) {
 
         super(type, livingEntityIn, worldIn);
     }
@@ -60,7 +71,7 @@ public abstract class AbstractGrenadeEntity extends ProjectileItemEntity impleme
     }
 
     @Override
-    public IPacket<?> getAddEntityPacket() {
+    public Packet<?> getAddEntityPacket() {
 
         return NetworkHooks.getEntitySpawningPacket(this);
     }

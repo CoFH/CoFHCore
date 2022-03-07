@@ -1,12 +1,12 @@
 package cofh.lib.enchantment;
 
-import net.minecraft.enchantment.EnchantmentType;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
 public abstract class EnchantmentOverride extends EnchantmentCoFH {
 
-    protected EnchantmentOverride(Rarity rarityIn, EnchantmentType typeIn, EquipmentSlotType[] slots) {
+    protected EnchantmentOverride(Rarity rarityIn, EnchantmentCategory typeIn, EquipmentSlot[] slots) {
 
         super(rarityIn, typeIn, slots);
     }

@@ -1,12 +1,12 @@
 package cofh.core.event;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSource;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.EntityDamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -45,8 +45,7 @@ public class ShieldEvents {
     public static boolean canBlockDamageSource(LivingEntity living, DamageSource source) {
 
         Entity entity = source.getDirectEntity();
-        if (entity instanceof AbstractArrowEntity) {
-            AbstractArrowEntity arrow = (AbstractArrowEntity) entity;
+        if (entity instanceof AbstractArrow arrow) {
             if (arrow.getPierceLevel() > 0) {
                 return false;
             }
@@ -57,10 +56,10 @@ public class ShieldEvents {
         return false;
     }
 
-    public static boolean canBlockDamagePosition(LivingEntity living, Vector3d sourcePos) {
+    public static boolean canBlockDamagePosition(LivingEntity living, Vec3 sourcePos) {
 
         if (sourcePos != null) {
-            return new Vector3d(living.getX() - sourcePos.x(), 0.0D, living.getZ() - sourcePos.z()).dot(living.getViewVector(1.0F)) < 0.0D;
+            return new Vec3(living.getX() - sourcePos.x(), 0.0D, living.getZ() - sourcePos.z()).dot(living.getViewVector(1.0F)) < 0.0D;
         }
         return false;
     }

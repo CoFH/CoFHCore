@@ -1,7 +1,7 @@
 package cofh.lib.potion;
 
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectType;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
 
 /**
  * Why does this exist? I'm glad you asked.
@@ -10,9 +10,9 @@ import net.minecraft.potion.EffectType;
  *
  * @author King Lemming
  */
-public class EffectCoFH extends Effect {
+public class EffectCoFH extends MobEffect {
 
-    public EffectCoFH(EffectType typeIn, int liquidColorIn) {
+    public EffectCoFH(MobEffectCategory typeIn, int liquidColorIn) {
 
         super(typeIn, liquidColorIn);
     }

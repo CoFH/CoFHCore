@@ -7,17 +7,18 @@ import cofh.lib.util.flags.TagExistsRecipeCondition;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.minecraft.advancements.criterion.*;
-import net.minecraft.block.Block;
+import net.minecraft.advancements.critereon.*;
+import net.minecraft.core.Registry;
 import net.minecraft.data.*;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.ITag;
+import net.minecraft.data.recipes.*;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.crafting.CompoundIngredient;
 import net.minecraftforge.common.crafting.CraftingHelper;
@@ -49,11 +50,11 @@ public class RecipeProviderCoFH extends RecipeProvider implements IConditionBuil
     }
 
     @Override
-    public void run(DirectoryCache cache) {
+    public void run(HashCache cache) {
 
         Path path = this.generator.getOutputFolder();
         Set<ResourceLocation> set = Sets.newHashSet();
-        buildShapelessRecipes((recipe) -> {
+        buildCraftingRecipes((recipe) -> {
             if (!set.add(recipe.getId())) {
                 LOGGER.error("Duplicate recipe " + recipe.getId());
             } else {
@@ -69,17 +70,17 @@ public class RecipeProviderCoFH extends RecipeProvider implements IConditionBuil
     }
 
     @SafeVarargs
-    protected final Ingredient fromTags(ITag.INamedTag<Item>... tagsIn) {
+    protected final Ingredient fromTags(TagKey<Item>... tagsIn) {
 
         List<Ingredient> ingredients = new ArrayList<>(tagsIn.length);
-        for (ITag.INamedTag<Item> tag : tagsIn) {
+        for (TagKey<Item> tag : tagsIn) {
             ingredients.add(Ingredient.of(tag));
         }
         return new CompoundIngredientWrapper(ingredients);
     }
 
     // region HELPERS
-    protected void generateSmallPackingRecipe(Consumer<IFinishedRecipe> consumer, Item storage, Item individual, String suffix) {
+    protected void generateSmallPackingRecipe(Consumer<FinishedRecipe> consumer, Item storage, Item individual, String suffix) {
 
         String storageName = name(storage);
         String individualName = name(individual);
@@ -88,34 +89,34 @@ public class RecipeProviderCoFH extends RecipeProvider implements IConditionBuil
                 .define('#', individual)
                 .pattern("##")
                 .pattern("##")
-                .unlockedBy("has_at_least_4_" + individualName, hasItem(MinMaxBounds.IntBound.atLeast(4), individual))
+                .unlockedBy("has_at_least_4_" + individualName, hasItem(MinMaxBounds.Ints.atLeast(4), individual))
                 .save(consumer, this.modid + ":storage/" + storageName + suffix);
     }
 
-    protected void generateSmallUnpackingRecipe(Consumer<IFinishedRecipe> consumer, Item storage, Item individual, String suffix) {
+    protected void generateSmallUnpackingRecipe(Consumer<FinishedRecipe> consumer, Item storage, Item individual, String suffix) {
 
         String storageName = name(storage);
         String individualName = name(individual);
 
         ShapelessRecipeBuilder.shapeless(individual, 4)
                 .requires(storage)
-                .unlockedBy("has_at_least_4_" + individualName, hasItem(MinMaxBounds.IntBound.atLeast(4), individual))
+                .unlockedBy("has_at_least_4_" + individualName, hasItem(MinMaxBounds.Ints.atLeast(4), individual))
                 .unlockedBy("has_" + storageName, has(storage))
                 .save(consumer, this.modid + ":storage/" + individualName + suffix);
     }
 
-    protected void generateSmallStorageRecipes(Consumer<IFinishedRecipe> consumer, Item storage, Item individual, String packingSuffix, String unpackingSuffix) {
+    protected void generateSmallStorageRecipes(Consumer<FinishedRecipe> consumer, Item storage, Item individual, String packingSuffix, String unpackingSuffix) {
 
         generateSmallPackingRecipe(consumer, storage, individual, packingSuffix);
         generateSmallUnpackingRecipe(consumer, storage, individual, unpackingSuffix);
     }
 
-    protected void generateSmallStorageRecipes(Consumer<IFinishedRecipe> consumer, Item storage, Item individual) {
+    protected void generateSmallStorageRecipes(Consumer<FinishedRecipe> consumer, Item storage, Item individual) {
 
         generateSmallStorageRecipes(consumer, storage, individual, "", "_from_block");
     }
 
-    protected void generatePackingRecipe(Consumer<IFinishedRecipe> consumer, Item storage, Item individual, String suffix) {
+    protected void generatePackingRecipe(Consumer<FinishedRecipe> consumer, Item storage, Item individual, String suffix) {
 
         String storageName = name(storage);
         String individualName = name(individual);
@@ -125,11 +126,11 @@ public class RecipeProviderCoFH extends RecipeProvider implements IConditionBuil
                 .pattern("###")
                 .pattern("###")
                 .pattern("###")
-                .unlockedBy("has_at_least_9_" + individualName, hasItem(MinMaxBounds.IntBound.atLeast(9), individual))
+                .unlockedBy("has_at_least_9_" + individualName, hasItem(MinMaxBounds.Ints.atLeast(9), individual))
                 .save(consumer, this.modid + ":storage/" + storageName + suffix);
     }
 
-    protected void generatePackingRecipe(Consumer<IFinishedRecipe> consumer, Item storage, Item individual, ITag.INamedTag<Item> tag, String suffix) {
+    protected void generatePackingRecipe(Consumer<FinishedRecipe> consumer, Item storage, Item individual, TagKey<Item> tag, String suffix) {
 
         String storageName = name(storage);
         String individualName = name(individual);
@@ -140,54 +141,54 @@ public class RecipeProviderCoFH extends RecipeProvider implements IConditionBuil
                 .pattern("###")
                 .pattern("#I#")
                 .pattern("###")
-                .unlockedBy("has_at_least_9_" + individualName, hasItem(MinMaxBounds.IntBound.atLeast(9), individual))
+                .unlockedBy("has_at_least_9_" + individualName, hasItem(MinMaxBounds.Ints.atLeast(9), individual))
                 .save(consumer, this.modid + ":storage/" + storageName + suffix);
     }
 
-    protected void generateUnpackingRecipe(Consumer<IFinishedRecipe> consumer, Item storage, Item individual, String suffix) {
+    protected void generateUnpackingRecipe(Consumer<FinishedRecipe> consumer, Item storage, Item individual, String suffix) {
 
         String storageName = name(storage);
         String individualName = name(individual);
 
         ShapelessRecipeBuilder.shapeless(individual, 9)
                 .requires(storage)
-                .unlockedBy("has_at_least_9_" + individualName, hasItem(MinMaxBounds.IntBound.atLeast(9), individual))
+                .unlockedBy("has_at_least_9_" + individualName, hasItem(MinMaxBounds.Ints.atLeast(9), individual))
                 .unlockedBy("has_" + storageName, has(storage))
                 .save(consumer, this.modid + ":storage/" + individualName + suffix);
     }
 
-    protected void generateStorageRecipes(Consumer<IFinishedRecipe> consumer, Item storage, Item individual, String packingSuffix, String unpackingSuffix) {
+    protected void generateStorageRecipes(Consumer<FinishedRecipe> consumer, Item storage, Item individual, String packingSuffix, String unpackingSuffix) {
 
         generatePackingRecipe(consumer, storage, individual, packingSuffix);
         generateUnpackingRecipe(consumer, storage, individual, unpackingSuffix);
     }
 
-    protected void generateStorageRecipes(Consumer<IFinishedRecipe> consumer, Item storage, Item individual, ITag.INamedTag<Item> tag, String packingSuffix, String unpackingSuffix) {
+    protected void generateStorageRecipes(Consumer<FinishedRecipe> consumer, Item storage, Item individual, TagKey<Item> tag, String packingSuffix, String unpackingSuffix) {
 
         generatePackingRecipe(consumer, storage, individual, tag, packingSuffix);
         generateUnpackingRecipe(consumer, storage, individual, unpackingSuffix);
     }
 
-    protected void generateStorageRecipes(Consumer<IFinishedRecipe> consumer, Item storage, Item individual, ITag.INamedTag<Item> tag) {
+    protected void generateStorageRecipes(Consumer<FinishedRecipe> consumer, Item storage, Item individual, TagKey<Item> tag) {
 
         generateStorageRecipes(consumer, storage, individual, tag, "", "_from_block");
     }
 
-    protected void generateStorageRecipes(Consumer<IFinishedRecipe> consumer, Item storage, Item individual) {
+    protected void generateStorageRecipes(Consumer<FinishedRecipe> consumer, Item storage, Item individual) {
 
         generateStorageRecipes(consumer, storage, individual, "", "_from_block");
     }
 
-    protected void generateTypeRecipes(DeferredRegisterCoFH<Item> reg, Consumer<IFinishedRecipe> consumer, String type) {
+    protected void generateTypeRecipes(DeferredRegisterCoFH<Item> reg, Consumer<FinishedRecipe> consumer, String type) {
 
         Item ingot = reg.get(type + "_ingot");
         Item gem = reg.get(type);
         Item block = reg.get(type + "_block");
         Item nugget = reg.get(type + "_nugget");
 
-        ITag.INamedTag<Item> ingotTag = forgeTag("ingots/" + type);
-        ITag.INamedTag<Item> gemTag = forgeTag("gems/" + type);
-        ITag.INamedTag<Item> nuggetTag = forgeTag("nuggets/" + type);
+        TagKey<Item> ingotTag = forgeTag("ingots/" + type);
+        TagKey<Item> gemTag = forgeTag("gems/" + type);
+        TagKey<Item> nuggetTag = forgeTag("nuggets/" + type);
 
         if (block != null) {
             if (ingot != null) {
@@ -206,7 +207,7 @@ public class RecipeProviderCoFH extends RecipeProvider implements IConditionBuil
         generateGearRecipe(reg, consumer, type);
     }
 
-    protected void generateGearRecipe(DeferredRegisterCoFH<Item> reg, Consumer<IFinishedRecipe> consumer, String type) {
+    protected void generateGearRecipe(DeferredRegisterCoFH<Item> reg, Consumer<FinishedRecipe> consumer, String type) {
 
         Item gear = reg.get(type + "_gear");
         if (gear == null) {
@@ -215,8 +216,8 @@ public class RecipeProviderCoFH extends RecipeProvider implements IConditionBuil
         Item ingot = reg.get(type + "_ingot");
         Item gem = reg.get(type);
 
-        ITag.INamedTag<Item> ingotTag = forgeTag("ingots/" + type);
-        ITag.INamedTag<Item> gemTag = forgeTag("gems/" + type);
+        TagKey<Item> ingotTag = forgeTag("ingots/" + type);
+        TagKey<Item> gemTag = forgeTag("gems/" + type);
 
         if (ingot != null) {
             ShapedRecipeBuilder.shaped(gear)
@@ -240,7 +241,7 @@ public class RecipeProviderCoFH extends RecipeProvider implements IConditionBuil
         }
     }
 
-    protected void generateGearRecipe(Consumer<IFinishedRecipe> consumer, Item gear, Item material, ITag.INamedTag<Item> tag) {
+    protected void generateGearRecipe(Consumer<FinishedRecipe> consumer, Item gear, Item material, TagKey<Item> tag) {
 
         if (gear == null || material == null || tag == null) {
             return;
@@ -255,29 +256,29 @@ public class RecipeProviderCoFH extends RecipeProvider implements IConditionBuil
                 .save(consumer, this.modid + ":parts/" + name(gear));
     }
 
-    protected void generateSmeltingRecipe(DeferredRegisterCoFH<Item> reg, Consumer<IFinishedRecipe> consumer, Item input, Item output, float xp) {
+    protected void generateSmeltingRecipe(DeferredRegisterCoFH<Item> reg, Consumer<FinishedRecipe> consumer, Item input, Item output, float xp) {
 
         generateSmeltingRecipe(reg, consumer, input, output, xp, "", "");
     }
 
-    protected void generateSmeltingRecipe(DeferredRegisterCoFH<Item> reg, Consumer<IFinishedRecipe> consumer, Item input, Item output, float xp, String folder) {
+    protected void generateSmeltingRecipe(DeferredRegisterCoFH<Item> reg, Consumer<FinishedRecipe> consumer, Item input, Item output, float xp, String folder) {
 
         generateSmeltingRecipe(reg, consumer, input, output, xp, folder, "");
     }
 
-    protected void generateSmeltingRecipe(DeferredRegisterCoFH<Item> reg, Consumer<IFinishedRecipe> consumer, Item input, Item output, float xp, String folder, String suffix) {
+    protected void generateSmeltingRecipe(DeferredRegisterCoFH<Item> reg, Consumer<FinishedRecipe> consumer, Item input, Item output, float xp, String folder, String suffix) {
 
-        CookingRecipeBuilder.smelting(Ingredient.of(input), output, xp, 200)
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(input), output, xp, 200)
                 .unlockedBy("has_" + name(input), has(input))
                 .save(consumer, this.modid + ":" + folder + "/" + name(output) + "_from" + suffix + "_smelting");
     }
 
-    protected void generateSmeltingAndBlastingRecipes(DeferredRegisterCoFH<Item> reg, Consumer<IFinishedRecipe> consumer, String material, float xp) {
+    protected void generateSmeltingAndBlastingRecipes(DeferredRegisterCoFH<Item> reg, Consumer<FinishedRecipe> consumer, String material, float xp) {
 
         generateSmeltingAndBlastingRecipes(reg, consumer, material, xp, "smelting");
     }
 
-    protected void generateSmeltingAndBlastingRecipes(DeferredRegisterCoFH<Item> reg, Consumer<IFinishedRecipe> consumer, String material, float xp, String folder) {
+    protected void generateSmeltingAndBlastingRecipes(DeferredRegisterCoFH<Item> reg, Consumer<FinishedRecipe> consumer, String material, float xp, String folder) {
 
         Item ore = reg.get(material + "_ore");
         Item ingot = reg.get(material + "_ingot");
@@ -298,43 +299,43 @@ public class RecipeProviderCoFH extends RecipeProvider implements IConditionBuil
         }
     }
 
-    protected void generateSmeltingAndBlastingRecipes(DeferredRegisterCoFH<Item> reg, Consumer<IFinishedRecipe> consumer, Item input, Item output, float xp, String folder) {
+    protected void generateSmeltingAndBlastingRecipes(DeferredRegisterCoFH<Item> reg, Consumer<FinishedRecipe> consumer, Item input, Item output, float xp, String folder) {
 
         generateSmeltingAndBlastingRecipes(reg, consumer, input, output, xp, folder, "");
     }
 
-    protected void generateSmeltingAndBlastingRecipes(DeferredRegisterCoFH<Item> reg, Consumer<IFinishedRecipe> consumer, Item input, Item output, float xp, String folder, String suffix) {
+    protected void generateSmeltingAndBlastingRecipes(DeferredRegisterCoFH<Item> reg, Consumer<FinishedRecipe> consumer, Item input, Item output, float xp, String folder, String suffix) {
 
-        CookingRecipeBuilder.smelting(Ingredient.of(input), output, xp, 200)
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(input), output, xp, 200)
                 .unlockedBy("has_" + name(input), has(input))
                 .save(consumer, this.modid + ":" + folder + "/" + name(output) + "_from" + suffix + "_smelting");
 
-        CookingRecipeBuilder.blasting(Ingredient.of(input), output, xp, 100)
+        SimpleCookingRecipeBuilder.blasting(Ingredient.of(input), output, xp, 100)
                 .unlockedBy("has_" + name(input), has(input))
                 .save(consumer, this.modid + ":" + folder + "/" + name(output) + "_from" + suffix + "_blasting");
     }
 
-    protected void generateStonecuttingRecipe(DeferredRegisterCoFH<Item> reg, Consumer<IFinishedRecipe> consumer, Item input, Item output, String folder) {
+    protected void generateStonecuttingRecipe(DeferredRegisterCoFH<Item> reg, Consumer<FinishedRecipe> consumer, Item input, Item output, String folder) {
 
         generateStonecuttingRecipe(reg, consumer, input, output, folder, "");
     }
 
-    protected void generateStonecuttingRecipe(DeferredRegisterCoFH<Item> reg, Consumer<IFinishedRecipe> consumer, Item input, Item output, String folder, String suffix) {
+    protected void generateStonecuttingRecipe(DeferredRegisterCoFH<Item> reg, Consumer<FinishedRecipe> consumer, Item input, Item output, String folder, String suffix) {
 
         SingleItemRecipeBuilder.stonecutting(Ingredient.of(input), output)
-                .unlocks("has_" + name(input), has(input))
+                .unlockedBy("has_" + name(input), has(input))
                 .save(consumer, this.modid + ":" + folder + "/" + name(output) + "_from" + suffix + "_stonecutting");
     }
 
     // TODO: Change if Mojang implements some better defaults...
-    public InventoryChangeTrigger.Instance hasItem(MinMaxBounds.IntBound amount, IItemProvider itemIn) {
+    public InventoryChangeTrigger.TriggerInstance hasItem(MinMaxBounds.Ints amount, ItemLike itemIn) {
 
-        return inventoryTrigger(new ItemPredicate(null, itemIn.asItem(), amount, MinMaxBounds.IntBound.ANY, EnchantmentPredicate.NONE, EnchantmentPredicate.NONE, null, NBTPredicate.ANY)); // ItemPredicate.Builder.create().item(itemIn).count(amount).build());
+        return inventoryTrigger(new ItemPredicate(null, Set.of(itemIn.asItem()), amount, MinMaxBounds.Ints.ANY, EnchantmentPredicate.NONE, EnchantmentPredicate.NONE, null, NbtPredicate.ANY)); // ItemPredicate.Builder.create().item(itemIn).count(amount).build());
     }
 
-    protected static Tags.IOptionalNamedTag<Item> forgeTag(String name) {
+    protected static TagKey<Item> forgeTag(String name) {
 
-        return ItemTags.createOptional(new ResourceLocation(ID_FORGE, name));
+        return ItemTags.create(new ResourceLocation(ID_FORGE, name));
     }
 
     protected static String name(Block block) {
@@ -358,12 +359,12 @@ public class RecipeProviderCoFH extends RecipeProvider implements IConditionBuil
     }
 
     // region CONDITIONAL RECIPES
-    protected static class ConditionalRecipeWrapper implements IFinishedRecipe {
+    protected static class ConditionalRecipeWrapper implements FinishedRecipe {
 
-        protected IFinishedRecipe recipe;
+        protected FinishedRecipe recipe;
         protected List<ICondition> conditions = new ArrayList<>();
 
-        public ConditionalRecipeWrapper(IFinishedRecipe recipe) {
+        public ConditionalRecipeWrapper(FinishedRecipe recipe) {
 
             this.recipe = recipe;
         }
@@ -409,7 +410,7 @@ public class RecipeProviderCoFH extends RecipeProvider implements IConditionBuil
         }
 
         @Override
-        public IRecipeSerializer<?> getType() {
+        public RecipeSerializer<?> getType() {
 
             return recipe.getType();
         }
@@ -430,17 +431,17 @@ public class RecipeProviderCoFH extends RecipeProvider implements IConditionBuil
 
     }
 
-    protected ConditionalRecipeConsumer withConditions(Consumer<IFinishedRecipe> consumer) {
+    protected ConditionalRecipeConsumer withConditions(Consumer<FinishedRecipe> consumer) {
 
         return new ConditionalRecipeConsumer(consumer);
     }
 
-    protected class ConditionalRecipeConsumer implements Consumer<IFinishedRecipe> {
+    protected class ConditionalRecipeConsumer implements Consumer<FinishedRecipe> {
 
-        protected final Consumer<IFinishedRecipe> consumer;
+        protected final Consumer<FinishedRecipe> consumer;
         protected List<ICondition> conditions = new ArrayList<>();
 
-        public ConditionalRecipeConsumer(Consumer<IFinishedRecipe> consumer) {
+        public ConditionalRecipeConsumer(Consumer<FinishedRecipe> consumer) {
 
             this.consumer = consumer;
         }
@@ -457,9 +458,9 @@ public class RecipeProviderCoFH extends RecipeProvider implements IConditionBuil
             return this;
         }
 
-        public ConditionalRecipeConsumer tagExists(ITag.INamedTag<?> tag) {
+        public ConditionalRecipeConsumer tagExists(TagKey<Item> tag) {
 
-            this.conditions.add(new TagExistsRecipeCondition(tag.getName()));
+            this.conditions.add(new TagExistsRecipeCondition(tag));
             return this;
         }
 
@@ -472,7 +473,7 @@ public class RecipeProviderCoFH extends RecipeProvider implements IConditionBuil
         }
 
         @Override
-        public void accept(IFinishedRecipe recipe) {
+        public void accept(FinishedRecipe recipe) {
 
             if (!conditions.isEmpty()) {
                 consumer.accept(new ConditionalRecipeWrapper(recipe).addConditions(conditions));

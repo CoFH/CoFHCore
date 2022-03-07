@@ -7,12 +7,12 @@ import cofh.lib.client.gui.IGuiAccess;
 import cofh.lib.util.control.IReconfigurable;
 import cofh.lib.util.control.ITransferControllable;
 import cofh.lib.util.helpers.BlockHelper;
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.util.Direction;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -91,7 +91,7 @@ public class ConfigPanel extends PanelBase {
     }
 
     @Override
-    protected void drawForeground(MatrixStack matrixStack) {
+    protected void drawForeground(PoseStack matrixStack) {
 
         drawPanelIcon(matrixStack, CoreTextures.ICON_CONFIG);
         if (!fullyOpen) {
@@ -116,7 +116,7 @@ public class ConfigPanel extends PanelBase {
     }
 
     @Override
-    protected void drawBackground(MatrixStack matrixStack) {
+    protected void drawBackground(PoseStack matrixStack) {
 
         super.drawBackground(matrixStack);
 
@@ -126,7 +126,8 @@ public class ConfigPanel extends PanelBase {
         float colorR = (backgroundColor >> 16 & 255) / 255.0F * 0.6F;
         float colorG = (backgroundColor >> 8 & 255) / 255.0F * 0.6F;
         float colorB = (backgroundColor & 255) / 255.0F * 0.6F;
-        RenderSystem.color4f(colorR, colorG, colorB, 1.0F);
+        RenderHelper.setPosTexShader();
+        RenderSystem.setShaderColor(colorR, colorG, colorB, 1.0F);
 
         if (myTransfer == null) {
             gui.drawTexturedModalRect(16, 20, 16, 20, 64, 64);
@@ -134,14 +135,14 @@ public class ConfigPanel extends PanelBase {
             gui.drawTexturedModalRect(28, 20, 16, 20, 64, 64);
             gui.drawTexturedModalRect(6, 32, 16, 20, 20, 40);
         }
-        RenderHelper.resetColor();
+        RenderHelper.resetShaderColor();
     }
 
     @Override
-    public void addTooltip(List<ITextComponent> tooltipList, int mouseX, int mouseY) {
+    public void addTooltip(List<Component> tooltipList, int mouseX, int mouseY) {
 
         if (!fullyOpen) {
-            tooltipList.add(new TranslationTextComponent("info.cofh.configuration"));
+            tooltipList.add(new TranslatableComponent("info.cofh.configuration"));
             return;
         }
         if (myTransfer == null) {
@@ -152,15 +153,15 @@ public class ConfigPanel extends PanelBase {
 
         if (8 <= x && x < 24 && 34 <= y && y < 50) {
             if (myTransfer.hasTransferIn()) {
-                tooltipList.add(myTransfer.getTransferIn() ? new TranslationTextComponent("info.cofh.transfer_in_enabled") : new TranslationTextComponent("info.cofh.transfer_in_disabled"));
+                tooltipList.add(myTransfer.getTransferIn() ? new TranslatableComponent("info.cofh.transfer_in_enabled") : new TranslatableComponent("info.cofh.transfer_in_disabled"));
             } else {
-                tooltipList.add(new TranslationTextComponent("info.cofh.transfer_in_unavailable"));
+                tooltipList.add(new TranslatableComponent("info.cofh.transfer_in_unavailable"));
             }
         } else if (8 <= x && x < 24 && 54 <= y && y < 68) {
             if (myTransfer.hasTransferOut()) {
-                tooltipList.add(myTransfer.getTransferOut() ? new TranslationTextComponent("info.cofh.transfer_out_enabled") : new TranslationTextComponent("info.cofh.transfer_out_disabled"));
+                tooltipList.add(myTransfer.getTransferOut() ? new TranslatableComponent("info.cofh.transfer_out_enabled") : new TranslatableComponent("info.cofh.transfer_out_disabled"));
             } else {
-                tooltipList.add(new TranslationTextComponent("info.cofh.transfer_out_unavailable"));
+                tooltipList.add(new TranslatableComponent("info.cofh.transfer_out_unavailable"));
             }
         }
     }

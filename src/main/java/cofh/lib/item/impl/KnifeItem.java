@@ -1,43 +1,41 @@
 package cofh.lib.item.impl;
 
 import cofh.lib.entity.KnifeEntity;
-import net.minecraft.block.DispenserBlock;
-import net.minecraft.dispenser.IPosition;
-import net.minecraft.dispenser.ProjectileDispenseBehavior;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.item.BowItem;
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.UseAction;
+import net.minecraft.core.Position;
+import net.minecraft.core.dispenser.AbstractProjectileDispenseBehavior;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.world.World;
-
-import static cofh.lib.util.constants.ToolTypes.KNIFE;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.BowItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.DispenserBlock;
 
 public class KnifeItem extends SwordItemCoFH {
 
     private static final int DEFAULT_ATTACK_DAMAGE = 1;
     private static final float DEFAULT_ATTACK_SPEED = -2.0F;
 
-    public KnifeItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, Properties builder) {
+    public KnifeItem(Tier tier, int attackDamageIn, float attackSpeedIn, Properties builder) {
 
         super(tier, attackDamageIn, attackSpeedIn, builder);
 
         DispenserBlock.registerBehavior(this, DISPENSER_BEHAVIOR);
     }
 
-    public KnifeItem(IItemTier tier, Properties builder) {
+    public KnifeItem(Tier tier, Properties builder) {
 
-        this(tier, DEFAULT_ATTACK_DAMAGE, DEFAULT_ATTACK_SPEED, builder.addToolType(KNIFE, tier.getLevel()));
+        this(tier, DEFAULT_ATTACK_DAMAGE, DEFAULT_ATTACK_SPEED, builder);
     }
 
     @Override
@@ -47,10 +45,10 @@ public class KnifeItem extends SwordItemCoFH {
     }
 
     @Override
-    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
 
         player.startUsingItem(hand);
-        return ActionResult.consume(player.getItemInHand(hand));
+        return InteractionResultHolder.consume(player.getItemInHand(hand));
     }
 
     @Override
@@ -60,44 +58,43 @@ public class KnifeItem extends SwordItemCoFH {
     }
 
     @Override
-    public UseAction getUseAnimation(ItemStack stack) {
+    public UseAnim getUseAnimation(ItemStack stack) {
 
-        return UseAction.SPEAR;
+        return UseAnim.SPEAR;
     }
 
     @Override
-    public void releaseUsing(ItemStack stack, World world, LivingEntity living, int durationRemaining) {
+    public void releaseUsing(ItemStack stack, Level world, LivingEntity living, int durationRemaining) {
 
-        if (living instanceof PlayerEntity) {
-            PlayerEntity player = (PlayerEntity) living;
+        if (living instanceof Player player) {
             float power = BowItem.getPowerForTime(this.getUseDuration(stack) - durationRemaining);
             if (power < 0.1D) {
                 return;
             }
             if (!world.isClientSide) {
                 KnifeEntity knifeEntity = new KnifeEntity(world, player, stack);
-                knifeEntity.shootFromRotation(player, player.xRot, player.yRot, 0.0F, power * 3.0F, 0.1F);
-                if (player.abilities.instabuild) {
-                    knifeEntity.pickup = AbstractArrowEntity.PickupStatus.CREATIVE_ONLY;
+                knifeEntity.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, power * 3.0F, 0.1F);
+                if (player.getAbilities().instabuild) {
+                    knifeEntity.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
                 }
                 world.addFreshEntity(knifeEntity);
             }
-            world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.TRIDENT_THROW, SoundCategory.PLAYERS, 1.0F, 1.0F / (random.nextFloat() * 0.4F + 1.2F) + power * 0.5F);
-            if (!player.abilities.instabuild) {
-                player.inventory.removeItem(stack);
+            world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.TRIDENT_THROW, SoundSource.PLAYERS, 1.0F, 1.0F / (random.nextFloat() * 0.4F + 1.2F) + power * 0.5F);
+            if (!player.getAbilities().instabuild) {
+                player.getInventory().removeItem(stack);
             }
             player.awardStat(Stats.ITEM_USED.get(this));
         }
     }
 
     // region DISPENSER BEHAVIOR
-    private static final ProjectileDispenseBehavior DISPENSER_BEHAVIOR = new ProjectileDispenseBehavior() {
+    private static final AbstractProjectileDispenseBehavior DISPENSER_BEHAVIOR = new AbstractProjectileDispenseBehavior() {
 
         @Override
-        protected ProjectileEntity getProjectile(World worldIn, IPosition position, ItemStack stackIn) {
+        protected Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
 
             KnifeEntity knife = new KnifeEntity(worldIn, position.x(), position.y(), position.z(), stackIn);
-            knife.pickup = AbstractArrowEntity.PickupStatus.ALLOWED;
+            knife.pickup = AbstractArrow.Pickup.ALLOWED;
             return knife;
         }
 

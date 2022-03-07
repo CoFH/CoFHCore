@@ -2,7 +2,7 @@ package cofh.core.client.gui.element;
 
 import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.client.gui.IGuiAccess;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.function.Supplier;
@@ -23,9 +23,10 @@ public class ElementScaledFluid extends ElementScaled {
     }
 
     @Override
-    public void drawBackground(MatrixStack matrixStack, int mouseX, int mouseY) {
+    public void drawBackground(PoseStack matrixStack, int mouseX, int mouseY) {
 
-        RenderHelper.bindTexture(texture);
+        RenderHelper.setPosTexShader();
+        RenderHelper.setShaderTexture0(texture);
         int quantity = quantitySup.getAsInt();
         FluidStack fluid = fluidSup.get();
 
@@ -36,25 +37,25 @@ public class ElementScaledFluid extends ElementScaled {
             case TOP:
                 // vertical top -> bottom
                 RenderHelper.drawFluid(posX(), posY(), fluid, width, quantity);
-                RenderHelper.bindTexture(texture);
+                RenderHelper.setShaderTexture0(texture);
                 drawTexturedModalRect(posX(), posY(), width, 0, width, quantity);
                 return;
             case BOTTOM:
                 // vertical bottom -> top
                 RenderHelper.drawFluid(posX(), posY() + height - quantity, fluid, width, quantity);
-                RenderHelper.bindTexture(texture);
+                RenderHelper.setShaderTexture0(texture);
                 drawTexturedModalRect(posX(), posY() + height - quantity, width, height - quantity, width, quantity);
                 return;
             case LEFT:
                 // horizontal left -> right
                 RenderHelper.drawFluid(posX(), posY(), fluid, quantity, height);
-                RenderHelper.bindTexture(texture);
+                RenderHelper.setShaderTexture0(texture);
                 drawTexturedModalRect(posX(), posY(), width, 0, quantity, height);
                 return;
             case RIGHT:
                 // horizontal right -> left
                 RenderHelper.drawFluid(posX() + width - quantity, posY(), fluid, quantity, height);
-                RenderHelper.bindTexture(texture);
+                RenderHelper.setShaderTexture0(texture);
                 drawTexturedModalRect(posX() + width - quantity, posY(), width + width - quantity, 0, quantity, height);
         }
     }

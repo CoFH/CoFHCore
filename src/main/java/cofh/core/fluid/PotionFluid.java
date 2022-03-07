@@ -2,20 +2,20 @@ package cofh.core.fluid;
 
 import cofh.core.util.helpers.FluidHelper;
 import cofh.lib.fluid.FluidCoFH;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.Rarity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionUtils;
-import net.minecraft.potion.Potions;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
@@ -82,7 +82,7 @@ public class PotionFluid extends FluidCoFH {
             }
         } else {
             if (stack.getTag() == null) {
-                stack.setTag(new CompoundNBT());
+                stack.setTag(new CompoundTag());
             }
             stack.getTag().putString(TAG_POTION, resourceLoc.toString());
         }
@@ -107,13 +107,13 @@ public class PotionFluid extends FluidCoFH {
         }
 
         @Override
-        public ITextComponent getDisplayName(FluidStack stack) {
+        public Component getDisplayName(FluidStack stack) {
 
             Potion potion = PotionUtils.getPotion(stack.getTag());
             if (potion == Potions.EMPTY || potion == Potions.WATER) {
                 return super.getDisplayName(stack);
             }
-            return new TranslationTextComponent(potion.getName(Items.POTION.getDescriptionId() + ".effect."));
+            return new TranslatableComponent(potion.getName(Items.POTION.getDescriptionId() + ".effect."));
         }
 
         public Rarity getRarity(FluidStack stack) {

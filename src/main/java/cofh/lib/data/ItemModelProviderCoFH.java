@@ -1,11 +1,11 @@
 package cofh.lib.data;
 
 import cofh.lib.util.DeferredRegisterCoFH;
-import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.item.Item;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile.UncheckedModelFile;
@@ -68,17 +68,17 @@ public abstract class ItemModelProviderCoFH extends ItemModelProvider {
     }
 
     // region HELPERS
-    protected String name(Supplier<? extends IItemProvider> item) {
+    protected String name(Supplier<? extends ItemLike> item) {
 
         return item.get().asItem().getRegistryName().getPath();
     }
 
-    protected ResourceLocation itemTexture(Supplier<? extends IItemProvider> item) {
+    protected ResourceLocation itemTexture(Supplier<? extends ItemLike> item) {
 
         return modLoc("item/" + name(item));
     }
 
-    protected ResourceLocation itemTexture(Supplier<? extends IItemProvider> item, String subfolder) {
+    protected ResourceLocation itemTexture(Supplier<? extends ItemLike> item, String subfolder) {
 
         return modLoc("item/" + subfolder + "/" + name(item));
     }
@@ -108,32 +108,32 @@ public abstract class ItemModelProviderCoFH extends ItemModelProvider {
         return generated(() -> block.get().asItem(), texture);
     }
 
-    protected ItemModelBuilder generated(Supplier<? extends IItemProvider> item, String subfolder) {
+    protected ItemModelBuilder generated(Supplier<? extends ItemLike> item, String subfolder) {
 
         return generated(item, itemTexture(item, subfolder));
     }
 
-    protected ItemModelBuilder generated(Supplier<? extends IItemProvider> item) {
+    protected ItemModelBuilder generated(Supplier<? extends ItemLike> item) {
 
         return generated(item, itemTexture(item));
     }
 
-    protected ItemModelBuilder generated(Supplier<? extends IItemProvider> item, ResourceLocation texture) {
+    protected ItemModelBuilder generated(Supplier<? extends ItemLike> item, ResourceLocation texture) {
 
         return getBuilder(name(item)).parent(new UncheckedModelFile("item/generated")).texture("layer0", texture);
     }
 
-    protected ItemModelBuilder handheld(Supplier<? extends IItemProvider> item) {
+    protected ItemModelBuilder handheld(Supplier<? extends ItemLike> item) {
 
         return handheld(item, itemTexture(item));
     }
 
-    protected ItemModelBuilder handheld(Supplier<? extends IItemProvider> item, String subfolder) {
+    protected ItemModelBuilder handheld(Supplier<? extends ItemLike> item, String subfolder) {
 
         return handheld(item, itemTexture(item, subfolder));
     }
 
-    protected ItemModelBuilder handheld(Supplier<? extends IItemProvider> item, ResourceLocation texture) {
+    protected ItemModelBuilder handheld(Supplier<? extends ItemLike> item, ResourceLocation texture) {
 
         return withExistingParent(name(item), "item/handheld").texture("layer0", texture);
     }

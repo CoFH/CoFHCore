@@ -3,52 +3,52 @@ package cofh.lib.entity;
 import cofh.lib.item.impl.KnifeItem;
 import cofh.lib.util.Utils;
 import cofh.lib.util.helpers.MathHelper;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.IndirectEntityDamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.IndirectEntityDamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.entity.PartEntity;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
 import static cofh.lib.util.references.CoreReferences.KNIFE_ENTITY;
 
-public class KnifeEntity extends AbstractArrowEntity {
+public class KnifeEntity extends AbstractArrow {
 
-    protected static final DataParameter<ItemStack> DATA_ITEM_STACK = EntityDataManager.defineId(KnifeEntity.class, DataSerializers.ITEM_STACK);
+    protected static final EntityDataAccessor<ItemStack> DATA_ITEM_STACK = SynchedEntityData.defineId(KnifeEntity.class, EntityDataSerializers.ITEM_STACK);
     protected int hitTime = -1;
 
-    public KnifeEntity(EntityType<? extends AbstractArrowEntity> type, World worldIn) {
+    public KnifeEntity(EntityType<? extends AbstractArrow> type, Level worldIn) {
 
         super(type, worldIn);
     }
 
-    public KnifeEntity(World world, double x, double y, double z, ItemStack stack) {
+    public KnifeEntity(Level world, double x, double y, double z, ItemStack stack) {
 
         super(KNIFE_ENTITY, x, y, z, world);
         this.entityData.set(DATA_ITEM_STACK, stack.copy());
     }
 
-    public KnifeEntity(World world, LivingEntity owner, ItemStack stack) {
+    public KnifeEntity(Level world, LivingEntity owner, ItemStack stack) {
 
         super(KNIFE_ENTITY, owner, world);
         this.entityData.set(DATA_ITEM_STACK, stack.copy());
@@ -68,7 +68,7 @@ public class KnifeEntity extends AbstractArrowEntity {
     }
 
     @Override
-    public IPacket<?> getAddEntityPacket() {
+    public Packet<?> getAddEntityPacket() {
 
         return NetworkHooks.getEntitySpawningPacket(this);
     }
@@ -88,7 +88,7 @@ public class KnifeEntity extends AbstractArrowEntity {
                         this.playSound(SoundEvents.TRIDENT_RETURN, 10.0F, 1.0F);
                     }
                     this.setNoPhysics(true);
-                    Vector3d diff = owner.getEyePosition(1.0F).subtract(this.position());
+                    Vec3 diff = owner.getEyePosition(1.0F).subtract(this.position());
                     this.setPosRaw(this.getX(), this.getY() + diff.y * 0.015D * loyalty, this.getZ());
                     if (this.level.isClientSide) {
                         this.yOld = this.getY();
@@ -96,10 +96,10 @@ public class KnifeEntity extends AbstractArrowEntity {
 
                     this.setDeltaMovement(this.getDeltaMovement().scale(0.95D).add(diff.normalize().scale(0.05F * loyalty)));
                 } else {
-                    if (!this.level.isClientSide && this.pickup == AbstractArrowEntity.PickupStatus.ALLOWED) {
+                    if (!this.level.isClientSide && this.pickup == AbstractArrow.Pickup.ALLOWED) {
                         this.spawnAtLocation(this.getPickupItem(), 0.1F);
                     }
-                    this.remove();
+                    this.remove(RemovalReason.KILLED);
                 }
             }
         }
@@ -110,17 +110,17 @@ public class KnifeEntity extends AbstractArrowEntity {
     protected boolean hasReturnOwner() {
 
         Entity owner = this.getOwner();
-        return owner != null && owner.isAlive() && !(owner instanceof ServerPlayerEntity && owner.isSpectator());
+        return owner != null && owner.isAlive() && !(owner instanceof ServerPlayer && owner.isSpectator());
     }
 
     @Nullable
-    protected EntityRayTraceResult findHitEntity(Vector3d start, Vector3d end) {
+    protected EntityHitResult findHitEntity(Vec3 start, Vec3 end) {
 
         return this.hitTime >= 0 ? null : super.findHitEntity(start, end);
     }
 
     @Override
-    protected void onHitBlock(BlockRayTraceResult result) {
+    protected void onHitBlock(BlockHitResult result) {
 
         hitTime = 0;
         super.onHitBlock(result);
@@ -128,7 +128,7 @@ public class KnifeEntity extends AbstractArrowEntity {
     }
 
     @Override
-    protected void onHitEntity(EntityRayTraceResult result) {
+    protected void onHitEntity(EntityHitResult result) {
 
         hitTime = 4;
         Entity target = result.getEntity();
@@ -149,13 +149,12 @@ public class KnifeEntity extends AbstractArrowEntity {
                 if (target instanceof PartEntity) {
                     target = ((PartEntity<?>) target).getParent();
                 }
-                if (target instanceof LivingEntity) {
-                    LivingEntity livingTarget = (LivingEntity) target;
+                if (target instanceof LivingEntity livingTarget) {
                     if (owner instanceof LivingEntity) {
                         EnchantmentHelper.doPostHurtEffects(livingTarget, owner);
                         EnchantmentHelper.doPostDamageEffects((LivingEntity) owner, livingTarget);
-                        if (owner instanceof PlayerEntity) {
-                            stack.hurtEnemy(livingTarget, (PlayerEntity) owner);
+                        if (owner instanceof Player player) {
+                            stack.hurtEnemy(livingTarget, player);
                         }
                     }
                     this.doPostHurtEffects(livingTarget);
@@ -175,7 +174,7 @@ public class KnifeEntity extends AbstractArrowEntity {
     }
 
     @Override
-    public void playerTouch(PlayerEntity player) {
+    public void playerTouch(Player player) {
 
         Entity entity = this.getOwner();
         if (entity == null || entity.getUUID() == player.getUUID()) {
@@ -184,7 +183,7 @@ public class KnifeEntity extends AbstractArrowEntity {
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundNBT nbt) {
+    public void readAdditionalSaveData(CompoundTag nbt) {
 
         super.readAdditionalSaveData(nbt);
         if (nbt.contains("Knife", 10)) {
@@ -194,17 +193,17 @@ public class KnifeEntity extends AbstractArrowEntity {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundNBT nbt) {
+    public void addAdditionalSaveData(CompoundTag nbt) {
 
         super.addAdditionalSaveData(nbt);
-        nbt.put("Knife", getPickupItem().save(new CompoundNBT()));
+        nbt.put("Knife", getPickupItem().save(new CompoundTag()));
         nbt.putInt("HitTime", this.hitTime);
     }
 
     @Override
     public void tickDespawn() {
 
-        if (this.pickup != AbstractArrowEntity.PickupStatus.ALLOWED || Utils.getItemEnchantmentLevel(Enchantments.LOYALTY, getPickupItem()) <= 0) {
+        if (this.pickup != AbstractArrow.Pickup.ALLOWED || Utils.getItemEnchantmentLevel(Enchantments.LOYALTY, getPickupItem()) <= 0) {
             super.tickDespawn();
         }
     }

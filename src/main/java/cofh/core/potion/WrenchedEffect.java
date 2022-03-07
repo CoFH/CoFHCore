@@ -1,12 +1,12 @@
 package cofh.core.potion;
 
 import cofh.lib.potion.EffectCoFH;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.potion.EffectType;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.entity.LivingEntity;
 
 public class WrenchedEffect extends EffectCoFH {
 
-    public WrenchedEffect(EffectType typeIn, int liquidColorIn) {
+    public WrenchedEffect(MobEffectCategory typeIn, int liquidColorIn) {
 
         super(typeIn, liquidColorIn);
     }
@@ -14,7 +14,7 @@ public class WrenchedEffect extends EffectCoFH {
     @Override
     public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier) {
 
-        entityLivingBaseIn.yRot += 2 * (1 + amplifier);
+        entityLivingBaseIn.setYRot(entityLivingBaseIn.getYRot() + 2 * (1 + amplifier));
     }
 
 }

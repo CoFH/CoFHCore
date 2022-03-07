@@ -4,93 +4,99 @@ import cofh.core.tileentity.TileCoFH;
 import cofh.core.util.helpers.ChatHelper;
 import cofh.lib.block.IDismantleable;
 import cofh.lib.item.IPlacementItem;
+import cofh.lib.tileentity.ICoFHTickableTile;
 import cofh.lib.tileentity.ITileCallback;
 import cofh.lib.util.RayTracer;
 import cofh.lib.util.Utils;
 import cofh.lib.util.helpers.SecurityHelper;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.network.NetworkHooks;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
-public class TileBlockCoFH extends Block implements IDismantleable {
+public class TileBlockCoFH extends Block implements EntityBlock, IDismantleable {
 
-    protected final Supplier<? extends TileCoFH> supplier;
+    protected final Supplier<BlockEntityType<? extends TileCoFH>> blockEntityType;
+    protected final Class<? extends TileCoFH> tileClass;
 
-    public TileBlockCoFH(Properties builder, Supplier<? extends TileCoFH> supplier) {
+    public TileBlockCoFH(Properties builder, Class<? extends TileCoFH> tileClass, Supplier<BlockEntityType<? extends TileCoFH>> blockEntityType) {
 
         super(builder);
-        this.supplier = supplier;
+        this.blockEntityType = blockEntityType;
+        this.tileClass = tileClass;
     }
 
     @Override
-    public boolean hasTileEntity(BlockState state) {
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
 
-        return true;
+        return blockEntityType.get().create(pos, state);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> actualType) {
+        return ICoFHTickableTile.createTicker(level, actualType, blockEntityType.get(), tileClass);
     }
 
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-
-        return supplier.get().worldContext(state, world);
-    }
-
-    @Override
-    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
 
         if (Utils.isClientWorld(worldIn)) {
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
-        TileEntity tile = worldIn.getBlockEntity(pos);
+        BlockEntity tile = worldIn.getBlockEntity(pos);
         if (!(tile instanceof TileCoFH) || tile.isRemoved()) {
-            return ActionResultType.PASS;
+            return InteractionResult.PASS;
         }
         if (!((TileCoFH) tile).canPlayerChange(player) && SecurityHelper.hasSecurity(tile)) {
-            ChatHelper.sendIndexedChatMessageToPlayer(player, new TranslationTextComponent("info.cofh.secure_warning", SecurityHelper.getOwnerName(tile)));
-            return ActionResultType.PASS;
+            ChatHelper.sendIndexedChatMessageToPlayer(player, new TranslatableComponent("info.cofh.secure_warning", SecurityHelper.getOwnerName(tile)));
+            return InteractionResult.PASS;
         }
-        if (Utils.isWrench(player.getItemInHand(handIn).getItem())) {
+        if (Utils.isWrench(player.getItemInHand(handIn))) {
             if (player.isSecondaryUseActive()) {
                 if (canDismantle(worldIn, pos, state, player)) {
                     dismantleBlock(worldIn, pos, state, hit, player, false);
-                    return ActionResultType.SUCCESS;
+                    return InteractionResult.SUCCESS;
                 }
             } else {
                 BlockState rotState = rotate(state, worldIn, pos, Rotation.CLOCKWISE_90);
                 if (rotState != state) {
                     worldIn.setBlockAndUpdate(pos, rotState);
-                    return ActionResultType.SUCCESS;
+                    return InteractionResult.SUCCESS;
                 }
             }
         }
         if (onBlockActivatedDelegate(worldIn, pos, state, player, handIn, hit)) {
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
         if (((TileCoFH) tile).canOpenGui()) {
-            NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tile, tile.getBlockPos());
-            return ActionResultType.SUCCESS;
+            NetworkHooks.openGui((ServerPlayer) player, (MenuProvider) tile, tile.getBlockPos());
+            return InteractionResult.SUCCESS;
         }
-        return ActionResultType.PASS;
+        return InteractionResult.PASS;
     }
 
-    protected boolean onBlockActivatedDelegate(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, BlockRayTraceResult result) {
+    protected boolean onBlockActivatedDelegate(Level world, BlockPos pos, BlockState state, Player player, InteractionHand hand, BlockHitResult result) {
 
         TileCoFH tile = (TileCoFH) world.getBlockEntity(pos);
         if (tile == null || !tile.canPlayerChange(player)) {
@@ -100,7 +106,7 @@ public class TileBlockCoFH extends Block implements IDismantleable {
     }
 
     @Override
-    public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
+    public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
 
         TileCoFH tile = (TileCoFH) worldIn.getBlockEntity(pos);
         if (tile != null) {
@@ -110,15 +116,14 @@ public class TileBlockCoFH extends Block implements IDismantleable {
     }
 
     @Override
-    public void setPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+    public void setPlacedBy(Level worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
 
-        if (!(placer instanceof PlayerEntity) || Utils.isClientWorld(worldIn)) {
+        if (!(placer instanceof Player player) || Utils.isClientWorld(worldIn)) {
             return;
         }
         ItemStack offhand = placer.getOffhandItem();
         if (!offhand.isEmpty() && offhand.getItem() instanceof IPlacementItem) {
-            PlayerEntity player = (PlayerEntity) placer;
-            ((IPlacementItem) offhand.getItem()).onBlockPlacement(offhand, new ItemUseContext(player, Hand.OFF_HAND, RayTracer.retrace(player)));
+            ((IPlacementItem) offhand.getItem()).onBlockPlacement(offhand, new UseOnContext(player, InteractionHand.OFF_HAND, RayTracer.retrace(player)));
         }
         TileCoFH tile = (TileCoFH) worldIn.getBlockEntity(pos);
         if (tile != null) {
@@ -127,10 +132,10 @@ public class TileBlockCoFH extends Block implements IDismantleable {
     }
 
     @Override
-    public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+    public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
 
         if (state.getBlock() != newState.getBlock()) {
-            TileEntity tile = worldIn.getBlockEntity(pos);
+            BlockEntity tile = worldIn.getBlockEntity(pos);
             if (tile instanceof TileCoFH) {
                 ((TileCoFH) tile).onReplaced(state, worldIn, pos, newState);
             }
@@ -139,16 +144,16 @@ public class TileBlockCoFH extends Block implements IDismantleable {
     }
 
     @Override
-    public int getAnalogOutputSignal(BlockState blockState, World worldIn, BlockPos pos) {
+    public int getAnalogOutputSignal(BlockState blockState, Level worldIn, BlockPos pos) {
 
-        TileEntity tile = worldIn.getBlockEntity(pos);
+        BlockEntity tile = worldIn.getBlockEntity(pos);
         return tile instanceof ITileCallback ? ((ITileCallback) tile).getComparatorInputOverride() : super.getAnalogOutputSignal(blockState, worldIn, pos);
     }
 
     @Override
-    public float getDestroyProgress(BlockState state, PlayerEntity player, IBlockReader worldIn, BlockPos pos) {
+    public float getDestroyProgress(BlockState state, Player player, BlockGetter worldIn, BlockPos pos) {
 
-        TileEntity tile = worldIn.getBlockEntity(pos);
+        BlockEntity tile = worldIn.getBlockEntity(pos);
         if (tile instanceof TileCoFH && !tile.isRemoved()) {
             if (!((TileCoFH) tile).canPlayerChange(player)) {
                 return -1;
@@ -158,10 +163,10 @@ public class TileBlockCoFH extends Block implements IDismantleable {
     }
 
     @Override
-    public ItemStack getCloneItemStack(IBlockReader worldIn, BlockPos pos, BlockState state) {
+    public ItemStack getCloneItemStack(BlockGetter worldIn, BlockPos pos, BlockState state) {
 
         ItemStack stack = super.getCloneItemStack(worldIn, pos, state);
-        TileEntity tile = worldIn.getBlockEntity(pos);
+        BlockEntity tile = worldIn.getBlockEntity(pos);
         if (tile instanceof ITileCallback) {
             ((ITileCallback) tile).createItemStackTag(stack);
         }
@@ -170,11 +175,10 @@ public class TileBlockCoFH extends Block implements IDismantleable {
 
     // region IDismantleable
     @Override
-    public boolean canDismantle(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+    public boolean canDismantle(Level world, BlockPos pos, BlockState state, Player player) {
 
-        TileEntity tile = world.getBlockEntity(pos);
-        if (tile instanceof TileCoFH) {
-            return ((TileCoFH) tile).canPlayerChange(player);
+        if (world.getBlockEntity(pos) instanceof TileCoFH tile) {
+            return tile.canPlayerChange(player);
         }
         return false;
     }

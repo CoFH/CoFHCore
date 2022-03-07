@@ -5,15 +5,15 @@ import cofh.core.tileentity.EnderAirTile;
 import cofh.core.tileentity.GlowAirTile;
 import cofh.core.tileentity.LightningAirTile;
 import cofh.core.tileentity.SignalAirTile;
-import net.minecraft.block.Blocks;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import static cofh.core.CoFHCore.BLOCKS;
 import static cofh.core.CoFHCore.TILE_ENTITIES;
 import static cofh.lib.util.helpers.BlockHelper.lightValue;
 import static cofh.lib.util.references.CoreIDs.*;
 import static cofh.lib.util.references.CoreReferences.*;
-import static net.minecraft.block.AbstractBlock.Properties.copy;
+import static net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy;
 
 public class CoreBlocks {
 
@@ -30,10 +30,10 @@ public class CoreBlocks {
         BLOCKS.register(ID_ENDER_AIR, () -> new EnderAirBlock(copy(Blocks.AIR).lightLevel(lightValue(3))));
         BLOCKS.register(ID_LIGHTNING_AIR, () -> new LightningAirBlock(copy(Blocks.AIR)));
 
-        TILE_ENTITIES.register(ID_SIGNAL_AIR, () -> TileEntityType.Builder.of(SignalAirTile::new, SIGNAL_AIR).build(null));
-        TILE_ENTITIES.register(ID_GLOW_AIR, () -> TileEntityType.Builder.of(GlowAirTile::new, GLOW_AIR).build(null));
-        TILE_ENTITIES.register(ID_ENDER_AIR, () -> TileEntityType.Builder.of(EnderAirTile::new, ENDER_AIR).build(null));
-        TILE_ENTITIES.register(ID_LIGHTNING_AIR, () -> TileEntityType.Builder.of(LightningAirTile::new, LIGHTNING_AIR).build(null));
+        TILE_ENTITIES.register(ID_SIGNAL_AIR, () -> BlockEntityType.Builder.of(SignalAirTile::new, SIGNAL_AIR).build(null));
+        TILE_ENTITIES.register(ID_GLOW_AIR, () -> BlockEntityType.Builder.of(GlowAirTile::new, GLOW_AIR).build(null));
+        TILE_ENTITIES.register(ID_ENDER_AIR, () -> BlockEntityType.Builder.of(EnderAirTile::new, ENDER_AIR).build(null));
+        TILE_ENTITIES.register(ID_LIGHTNING_AIR, () -> BlockEntityType.Builder.of(LightningAirTile::new, LIGHTNING_AIR).build(null));
     }
 
 }

@@ -1,10 +1,10 @@
 package cofh.core.client.settings;
 
 import cofh.core.network.packet.server.ItemModeChangePacket;
-import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.client.KeyMapping;
 import net.minecraftforge.client.settings.KeyConflictContext;
 
-public class KeyBindingModeChange extends KeyBinding {
+public class KeyBindingModeChange extends KeyMapping {
 
     protected boolean isPressed; // Not strictly necessary but avoids an AT at this time.
 

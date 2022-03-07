@@ -8,18 +8,18 @@ import cofh.lib.network.packet.PacketBase;
 import cofh.lib.tileentity.ITilePacketHandler;
 import cofh.lib.util.Utils;
 import io.netty.buffer.Unpooled;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 import static cofh.lib.util.constants.Constants.PACKET_GUI;
 
 public class TileGuiPacket extends PacketBase implements IPacketClient {
 
     protected BlockPos pos;
-    protected PacketBuffer buffer;
+    protected FriendlyByteBuf buffer;
 
     public TileGuiPacket() {
 
@@ -29,39 +29,39 @@ public class TileGuiPacket extends PacketBase implements IPacketClient {
     @Override
     public void handleClient() {
 
-        World world = ProxyUtils.getClientWorld();
+        Level world = ProxyUtils.getClientWorld();
         if (world == null) {
             CoFHCore.LOG.error("Client world is null! (Is this being called on the server?)");
             return;
         }
-        TileEntity tile = world.getBlockEntity(pos);
+        BlockEntity tile = world.getBlockEntity(pos);
         if (tile instanceof ITilePacketHandler) {
             ((ITilePacketHandler) tile).handleGuiPacket(buffer);
         }
     }
 
     @Override
-    public void write(PacketBuffer buf) {
+    public void write(FriendlyByteBuf buf) {
 
         buf.writeBlockPos(pos);
         buf.writeBytes(buffer);
     }
 
     @Override
-    public void read(PacketBuffer buf) {
+    public void read(FriendlyByteBuf buf) {
 
         buffer = buf;
         pos = buffer.readBlockPos();
     }
 
-    public static void sendToClient(TileCoFH tile, ServerPlayerEntity player) {
+    public static void sendToClient(TileCoFH tile, ServerPlayer player) {
 
         if (tile.world() == null || Utils.isClientWorld(tile.world())) {
             return;
         }
         TileGuiPacket packet = new TileGuiPacket();
         packet.pos = tile.pos();
-        packet.buffer = tile.getGuiPacket(new PacketBuffer(Unpooled.buffer()));
+        packet.buffer = tile.getGuiPacket(new FriendlyByteBuf(Unpooled.buffer()));
         packet.sendToPlayer(player);
     }
 

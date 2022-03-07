@@ -8,11 +8,11 @@ import cofh.lib.network.packet.PacketBase;
 import cofh.lib.tileentity.ITilePacketHandler;
 import cofh.lib.util.Utils;
 import io.netty.buffer.Unpooled;
-import net.minecraft.block.BlockState;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 import static cofh.lib.util.constants.Constants.NETWORK_UPDATE_DISTANCE;
 import static cofh.lib.util.constants.Constants.PACKET_STATE;
@@ -20,7 +20,7 @@ import static cofh.lib.util.constants.Constants.PACKET_STATE;
 public class TileStatePacket extends PacketBase implements IPacketClient {
 
     protected BlockPos pos;
-    protected PacketBuffer buffer;
+    protected FriendlyByteBuf buffer;
 
     public TileStatePacket() {
 
@@ -30,12 +30,12 @@ public class TileStatePacket extends PacketBase implements IPacketClient {
     @Override
     public void handleClient() {
 
-        World world = ProxyUtils.getClientWorld();
+        Level world = ProxyUtils.getClientWorld();
         if (world == null) {
             CoFHCore.LOG.error("Client world is null! (Is this being called on the server?)");
             return;
         }
-        TileEntity tile = world.getBlockEntity(pos);
+        BlockEntity tile = world.getBlockEntity(pos);
         if (tile instanceof ITilePacketHandler) {
             ((ITilePacketHandler) tile).handleStatePacket(buffer);
             BlockState state = tile.getLevel().getBlockState(pos);
@@ -44,14 +44,14 @@ public class TileStatePacket extends PacketBase implements IPacketClient {
     }
 
     @Override
-    public void write(PacketBuffer buf) {
+    public void write(FriendlyByteBuf buf) {
 
         buf.writeBlockPos(pos);
         buf.writeBytes(buffer);
     }
 
     @Override
-    public void read(PacketBuffer buf) {
+    public void read(FriendlyByteBuf buf) {
 
         buffer = buf;
         pos = buffer.readBlockPos();
@@ -64,7 +64,7 @@ public class TileStatePacket extends PacketBase implements IPacketClient {
         }
         TileStatePacket packet = new TileStatePacket();
         packet.pos = tile.pos();
-        packet.buffer = tile.getStatePacket(new PacketBuffer(Unpooled.buffer()));
+        packet.buffer = tile.getStatePacket(new FriendlyByteBuf(Unpooled.buffer()));
         packet.sendToAllAround(packet.pos, NETWORK_UPDATE_DISTANCE, tile.world().dimension());
     }
 

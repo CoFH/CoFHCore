@@ -1,21 +1,21 @@
 package cofh.lib.inventory.container.slot;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * Slot which cannot be interacted with.
  */
 public class SlotLocked extends SlotCoFH {
 
-    public SlotLocked(IInventory inventoryIn, int index, int xPosition, int yPosition) {
+    public SlotLocked(Container inventoryIn, int index, int xPosition, int yPosition) {
 
         super(inventoryIn, index, xPosition, yPosition);
     }
 
     @Override
-    public boolean mayPickup(PlayerEntity player) {
+    public boolean mayPickup(Player player) {
 
         return false;
     }

@@ -6,7 +6,7 @@ import cofh.lib.client.gui.IGuiAccess;
 import cofh.lib.fluid.FluidStorageCoFH;
 import cofh.lib.util.helpers.StringHelper;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 
 import java.util.List;
 
@@ -51,7 +51,7 @@ public class ElementFluidStorage extends ElementResourceStorage {
             return;
         }
         if (storage.isCreative() && creativeTexture != null) {
-            RenderHelper.bindTexture(creativeTexture);
+            RenderHelper.setShaderTexture0(creativeTexture);
             drawTexturedModalRect(posX(), posY(), 0, 0, width, height);
         } else {
             super.drawOverlayTexture();
@@ -59,7 +59,7 @@ public class ElementFluidStorage extends ElementResourceStorage {
     }
 
     @Override
-    public void addTooltip(List<ITextComponent> tooltipList, int mouseX, int mouseY) {
+    public void addTooltip(List<Component> tooltipList, int mouseX, int mouseY) {
 
         if (storage.getStored() > 0) {
             tooltipList.add(StringHelper.getFluidName(tank.getFluidStack()));

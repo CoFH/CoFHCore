@@ -1,17 +1,17 @@
 package cofh.lib.advancements;
 
 import com.google.common.collect.Maps;
-import net.minecraft.advancements.ICriterionInstance;
-import net.minecraft.advancements.ICriterionTrigger;
-import net.minecraft.advancements.PlayerAdvancements;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.advancements.CriterionTrigger;
+import net.minecraft.advancements.CriterionTriggerInstance;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.PlayerAdvancements;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.function.Function;
 
-public abstract class AbstractCriterionTrigger<T extends CriterionListeners<U>, U extends ICriterionInstance> implements ICriterionTrigger<U> {
+public abstract class AbstractCriterionTrigger<T extends CriterionListeners<U>, U extends CriterionTriggerInstance> implements CriterionTrigger<U> {
 
     private final ResourceLocation id;
     private final Function<PlayerAdvancements, T> createNew;

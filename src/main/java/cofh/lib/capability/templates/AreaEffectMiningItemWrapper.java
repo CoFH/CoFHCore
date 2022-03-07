@@ -2,9 +2,9 @@ package cofh.lib.capability.templates;
 
 import cofh.lib.util.helpers.AreaEffectHelper;
 import com.google.common.collect.ImmutableList;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 import static cofh.lib.util.Utils.getItemEnchantmentLevel;
 import static cofh.lib.util.references.EnsorcReferences.EXCAVATING;
@@ -34,7 +34,7 @@ public class AreaEffectMiningItemWrapper extends AreaEffectItemWrapper {
     }
 
     @Override
-    public ImmutableList<BlockPos> getAreaEffectBlocks(BlockPos pos, PlayerEntity player) {
+    public ImmutableList<BlockPos> getAreaEffectBlocks(BlockPos pos, Player player) {
 
         if (type == Type.SICKLE) {
             return AreaEffectHelper.getBlocksCentered(areaEffectItem, pos, player, radius, depth);

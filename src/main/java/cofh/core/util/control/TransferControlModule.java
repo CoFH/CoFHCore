@@ -3,8 +3,8 @@ package cofh.core.util.control;
 import cofh.core.network.packet.server.TransferControlPacket;
 import cofh.lib.util.Utils;
 import cofh.lib.util.control.ITransferControllable;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.function.BooleanSupplier;
 
@@ -54,13 +54,13 @@ public class TransferControlModule implements ITransferControllable {
     }
 
     // region NETWORK
-    public void readFromBuffer(PacketBuffer buffer) {
+    public void readFromBuffer(FriendlyByteBuf buffer) {
 
         enableAutoInput = buffer.readBoolean();
         enableAutoOutput = buffer.readBoolean();
     }
 
-    public void writeToBuffer(PacketBuffer buffer) {
+    public void writeToBuffer(FriendlyByteBuf buffer) {
 
         buffer.writeBoolean(enableAutoInput);
         buffer.writeBoolean(enableAutoOutput);
@@ -68,9 +68,9 @@ public class TransferControlModule implements ITransferControllable {
     // endregion
 
     // region NBT
-    public TransferControlModule read(CompoundNBT nbt) {
+    public TransferControlModule read(CompoundTag nbt) {
 
-        CompoundNBT subTag = nbt.getCompound(TAG_XFER);
+        CompoundTag subTag = nbt.getCompound(TAG_XFER);
 
         if (!subTag.isEmpty()) {
             enableAutoInput = subTag.getBoolean(TAG_XFER_IN);
@@ -79,9 +79,9 @@ public class TransferControlModule implements ITransferControllable {
         return this;
     }
 
-    public CompoundNBT write(CompoundNBT nbt) {
+    public CompoundTag write(CompoundTag nbt) {
 
-        CompoundNBT subTag = new CompoundNBT();
+        CompoundTag subTag = new CompoundTag();
 
         if (enabled.getAsBoolean()) {
             subTag.putBoolean(TAG_XFER_IN, enableAutoInput);
@@ -92,7 +92,7 @@ public class TransferControlModule implements ITransferControllable {
         return nbt;
     }
 
-    public TransferControlModule readSettings(CompoundNBT nbt) {
+    public TransferControlModule readSettings(CompoundTag nbt) {
 
         if (enabled.getAsBoolean()) {
             return read(nbt);
@@ -100,7 +100,7 @@ public class TransferControlModule implements ITransferControllable {
         return this;
     }
 
-    public CompoundNBT writeSettings(CompoundNBT nbt) {
+    public CompoundTag writeSettings(CompoundTag nbt) {
 
         return write(nbt);
     }

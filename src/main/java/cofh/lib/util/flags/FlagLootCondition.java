@@ -3,17 +3,16 @@ package cofh.lib.util.flags;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
-import net.minecraft.loot.ILootSerializer;
-import net.minecraft.loot.LootConditionType;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.conditions.ILootCondition;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 
 import javax.annotation.Nonnull;
 
 /**
  * With thanks to Vazkii. :)
  */
-public class FlagLootCondition implements ILootCondition {
+public class FlagLootCondition implements LootItemCondition {
 
     private final FlagManager manager;
     private final String flag;
@@ -32,13 +31,13 @@ public class FlagLootCondition implements ILootCondition {
 
     @Nonnull
     @Override
-    public LootConditionType getType() {
+    public LootItemConditionType getType() {
 
         return manager.flagConditionType;
     }
 
     // region SERIALIZER
-    public static class Serializer implements ILootSerializer<FlagLootCondition> {
+    public static class Serializer implements net.minecraft.world.level.storage.loot.Serializer<FlagLootCondition> {
 
         private final FlagManager manager;
 

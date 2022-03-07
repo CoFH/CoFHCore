@@ -1,12 +1,13 @@
 package cofh.lib.block.impl.crops;
 
 import cofh.lib.util.helpers.MathHelper;
-import net.minecraft.block.*;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.PlantType;
 
@@ -22,22 +23,22 @@ public class StemBlockCoFH extends StemBlock {
     protected Supplier<Block> cropBlock = () -> Blocks.MELON;
     protected Supplier<Item> seed = () -> Items.MELON_SEEDS;
 
-    public StemBlockCoFH(Properties builder, PlantType type, int growLight, float growMod) {
+    public StemBlockCoFH(Properties builder, Supplier<Item> seed, PlantType type, int growLight, float growMod) {
 
-        super((StemGrownBlock) Blocks.MELON, builder);
+        super((StemGrownBlock) Blocks.MELON, seed, builder);
         this.type = type;
         this.growLight = growLight;
         this.growMod = growMod;
     }
 
-    public StemBlockCoFH(Properties builder, int growLight, float growMod) {
+    public StemBlockCoFH(Properties builder, Supplier<Item> seed, int growLight, float growMod) {
 
-        this(builder, PlantType.CROP, growLight, growMod);
+        this(builder, seed, PlantType.CROP, growLight, growMod);
     }
 
-    public StemBlockCoFH(Properties builder) {
+    public StemBlockCoFH(Properties builder, Supplier<Item> seed) {
 
-        this(builder, PlantType.CROP, 9, 1.0F);
+        this(builder, seed, PlantType.CROP, 9, 1.0F);
     }
 
     public StemBlockCoFH crop(Supplier<Block> crop) {
@@ -46,14 +47,8 @@ public class StemBlockCoFH extends StemBlock {
         return this;
     }
 
-    public StemBlockCoFH seed(Supplier<Item> seed) {
-
-        this.seed = seed;
-        return this;
-    }
-
     @Override
-    public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
+    public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, Random random) {
 
         if (!worldIn.isAreaLoaded(pos, 1)) {
             return;
@@ -71,18 +66,11 @@ public class StemBlockCoFH extends StemBlock {
                     Block block = soil.getBlock();
                     if (worldIn.isEmptyBlock(blockpos) && (soil.canSustainPlant(worldIn, blockpos.below(), Direction.UP, this) || block == Blocks.FARMLAND || block == Blocks.DIRT || block == Blocks.COARSE_DIRT || block == Blocks.PODZOL || block == Blocks.GRASS_BLOCK)) {
                         worldIn.setBlockAndUpdate(blockpos, this.cropBlock.get().defaultBlockState());
-                        worldIn.setBlockAndUpdate(pos, ((StemGrownBlock) this.cropBlock.get()).getAttachedStem().defaultBlockState().setValue(HorizontalBlock.FACING, direction));
+                        worldIn.setBlockAndUpdate(pos, ((StemGrownBlock) this.cropBlock.get()).getAttachedStem().defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, direction));
                     }
                 }
                 ForgeHooks.onCropsGrowPost(worldIn, pos, state);
             }
         }
     }
-
-    @Override
-    protected Item getSeedItem() {
-
-        return seed.get();
-    }
-
 }

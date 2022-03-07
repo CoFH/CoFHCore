@@ -2,20 +2,20 @@ package cofh.lib.block.impl.crops;
 
 import cofh.lib.util.Utils;
 import cofh.lib.util.helpers.MathHelper;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.PlantType;
 
@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Random;
 
 import static cofh.lib.util.constants.Constants.*;
-import static net.minecraft.enchantment.Enchantments.BLOCK_FORTUNE;
+import static net.minecraft.world.item.enchantment.Enchantments.BLOCK_FORTUNE;
 
 public class CropsBlockTall extends CropsBlockCoFH {
 
@@ -44,7 +44,7 @@ public class CropsBlockTall extends CropsBlockCoFH {
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 
         super.createBlockStateDefinition(builder);
         builder.add(TOP);
@@ -56,7 +56,7 @@ public class CropsBlockTall extends CropsBlockCoFH {
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
 
         int age = state.getValue(getAgeProperty()) - (isTop(state) ? 2 : 0);
         return TALL_CROPS_BY_AGE[MathHelper.clamp(age, 0, TALL_CROPS_BY_AGE.length - 1)];
@@ -80,7 +80,7 @@ public class CropsBlockTall extends CropsBlockCoFH {
     }
 
     @Override
-    public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
+    public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, Random random) {
 
         if (!worldIn.isAreaLoaded(pos, 1) || isTop(state) || !canSurvive(state, worldIn, pos)) {
             return;
@@ -102,7 +102,7 @@ public class CropsBlockTall extends CropsBlockCoFH {
     }
 
     @Override
-    public boolean canSurvive(BlockState state, IWorldReader worldIn, BlockPos pos) {
+    public boolean canSurvive(BlockState state, LevelReader worldIn, BlockPos pos) {
 
         if (isTop(state)) {
             return worldIn.getBlockState(pos.below()).getBlock() == this;
@@ -115,13 +115,13 @@ public class CropsBlockTall extends CropsBlockCoFH {
 
     // region IGrowable
     @Override
-    public boolean isBonemealSuccess(World worldIn, Random rand, BlockPos pos, BlockState state) {
+    public boolean isBonemealSuccess(Level worldIn, Random rand, BlockPos pos, BlockState state) {
 
         return !isTop(state);
     }
 
     @Override
-    public void performBonemeal(ServerWorld worldIn, Random rand, BlockPos pos, BlockState state) {
+    public void performBonemeal(ServerLevel worldIn, Random rand, BlockPos pos, BlockState state) {
 
         if (canHarvest(state) || isTop(state) || !canSurvive(state, worldIn, pos)) {
             return;
@@ -141,7 +141,7 @@ public class CropsBlockTall extends CropsBlockCoFH {
 
     // region IHarvestable
     @Override
-    public boolean harvest(World world, BlockPos pos, BlockState state, PlayerEntity player, boolean replant) {
+    public boolean harvest(Level world, BlockPos pos, BlockState state, Player player, boolean replant) {
 
         if (!canHarvest(state)) {
             return false;
@@ -164,9 +164,9 @@ public class CropsBlockTall extends CropsBlockCoFH {
         } else {
             if (replant) {
                 boolean seedDrop = false;
-                Item seedItem = seed.get().getItem();
+                Item seedItem = seed.get();
 
-                List<ItemStack> drops = Block.getDrops(state, (ServerWorld) world, pos, null, player, player.getMainHandItem());
+                List<ItemStack> drops = Block.getDrops(state, (ServerLevel) world, pos, null, player, player.getMainHandItem());
                 for (ItemStack drop : drops) {
                     drop.setCount(drop.getCount() * 2);
 

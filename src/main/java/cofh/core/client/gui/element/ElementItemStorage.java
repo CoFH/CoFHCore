@@ -16,9 +16,9 @@ public class ElementItemStorage extends ElementResourceStorage {
     protected void drawResource() {
 
         if (storage.isCreative() && creativeTexture != null) {
-            RenderHelper.bindTexture(creativeTexture);
+            RenderHelper.setShaderTexture0(creativeTexture);
         } else {
-            RenderHelper.bindTexture(texture);
+            RenderHelper.setShaderTexture0(texture);
         }
         int resourceHeight = height - 2;
         int amount = getScaled(resourceHeight);

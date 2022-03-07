@@ -4,11 +4,11 @@ import cofh.core.util.helpers.FluidHelper;
 import cofh.lib.util.filter.IFilter;
 import cofh.lib.util.filter.IFilterOptions;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 import static cofh.lib.util.constants.NBTTags.*;
-import static net.minecraftforge.common.util.Constants.NBT.TAG_COMPOUND;
+import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 
 public abstract class AbstractFluidFilter implements IFilter, IFilterOptions {
 
@@ -81,9 +81,9 @@ public abstract class AbstractFluidFilter implements IFilter, IFilterOptions {
     }
 
     @Override
-    public IFilter read(CompoundNBT nbt) {
+    public IFilter read(CompoundTag nbt) {
 
-        CompoundNBT subTag = nbt.getCompound(TAG_FILTER);
+        CompoundTag subTag = nbt.getCompound(TAG_FILTER);
         //        int size = subTag.getInt(TAG_TANKS);
         //        if (size > 0) {
         //            fluids = new ArrayList<>(size);
@@ -91,9 +91,9 @@ public abstract class AbstractFluidFilter implements IFilter, IFilterOptions {
         //                fluids.add(FluidStack.EMPTY);
         //            }
         //        }
-        ListNBT list = subTag.getList(TAG_TANK_INV, TAG_COMPOUND);
+        ListTag list = subTag.getList(TAG_TANK_INV, TAG_COMPOUND);
         for (int i = 0; i < list.size(); ++i) {
-            CompoundNBT tankTag = list.getCompound(i);
+            CompoundTag tankTag = list.getCompound(i);
             int tank = tankTag.getByte(TAG_TANK);
             if (tank >= 0 && tank < fluids.size()) {
                 fluids.set(tank, FluidStack.loadFluidStackFromNBT(tankTag));
@@ -105,13 +105,13 @@ public abstract class AbstractFluidFilter implements IFilter, IFilterOptions {
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT nbt) {
+    public CompoundTag write(CompoundTag nbt) {
 
-        CompoundNBT subTag = new CompoundNBT();
-        ListNBT list = new ListNBT();
+        CompoundTag subTag = new CompoundTag();
+        ListTag list = new ListTag();
         for (int i = 0; i < fluids.size(); ++i) {
             if (!fluids.get(i).isEmpty()) {
-                CompoundNBT tankTag = new CompoundNBT();
+                CompoundTag tankTag = new CompoundTag();
                 tankTag.putByte(TAG_TANK, (byte) i);
                 fluids.get(i).writeToNBT(tankTag);
                 list.add(tankTag);
@@ -156,9 +156,9 @@ public abstract class AbstractFluidFilter implements IFilter, IFilterOptions {
 
     // region INamedContainerProvider
     @Override
-    public ITextComponent getDisplayName() {
+    public Component getDisplayName() {
 
-        return new TranslationTextComponent("info.cofh.fluid_filter");
+        return new TranslatableComponent("info.cofh.fluid_filter");
     }
     // endregion
 }

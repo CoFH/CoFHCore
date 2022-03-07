@@ -2,10 +2,10 @@ package cofh.lib.item.impl;
 
 import cofh.lib.capability.templates.ArcheryBowItemWrapper;
 import cofh.lib.item.ICoFHItem;
-import net.minecraft.item.BowItem;
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.BowItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tier;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
@@ -22,13 +22,13 @@ public class BowItemCoFH extends BowItem implements ICoFHItem {
         super(builder);
     }
 
-    public BowItemCoFH(IItemTier tier, Properties builder) {
+    public BowItemCoFH(Tier tier, Properties builder) {
 
         super(builder);
         setParams(tier);
     }
 
-    public BowItemCoFH setParams(IItemTier tier) {
+    public BowItemCoFH setParams(Tier tier) {
 
         this.enchantability = tier.getEnchantmentValue();
         this.damageModifier = tier.getAttackDamageBonus() / 4;
@@ -52,7 +52,7 @@ public class BowItemCoFH extends BowItem implements ICoFHItem {
     }
 
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
 
         return new ArcheryBowItemWrapper(stack, accuracyModifier, damageModifier, velocityModifier);
     }

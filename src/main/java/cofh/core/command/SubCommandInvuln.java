@@ -3,11 +3,11 @@ package cofh.core.command;
 import com.google.common.collect.ImmutableList;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.command.arguments.EntityArgument;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Collection;
 
@@ -20,7 +20,7 @@ public class SubCommandInvuln {
 
     static final boolean DEFAULT_FLAG = true;
 
-    static ArgumentBuilder<CommandSource, ?> register() {
+    static ArgumentBuilder<CommandSourceStack, ?> register() {
 
         return Commands.literal("invuln")
                 .requires(source -> source.hasPermission(permissionLevel))
@@ -38,7 +38,7 @@ public class SubCommandInvuln {
                                 .executes(context -> flagEntities(context.getSource(), EntityArgument.getPlayers(context, CMD_TARGETS), BoolArgumentType.getBool(context, CMD_FLAG)))));
     }
 
-    static ArgumentBuilder<CommandSource, ?> registerAlt() {
+    static ArgumentBuilder<CommandSourceStack, ?> registerAlt() {
 
         return Commands.literal("invulnerable")
                 .requires(source -> source.hasPermission(permissionLevel))
@@ -56,22 +56,22 @@ public class SubCommandInvuln {
                                 .executes(context -> flagEntities(context.getSource(), EntityArgument.getPlayers(context, CMD_TARGETS), BoolArgumentType.getBool(context, CMD_FLAG)))));
     }
 
-    private static int flagEntities(CommandSource source, Collection<? extends ServerPlayerEntity> targets, boolean flag) {
+    private static int flagEntities(CommandSourceStack source, Collection<? extends ServerPlayer> targets, boolean flag) {
 
-        for (ServerPlayerEntity entity : targets) {
+        for (ServerPlayer entity : targets) {
             entity.setInvulnerable(flag);
         }
         if (flag) {
             if (targets.size() == 1) {
-                source.sendSuccess(new TranslationTextComponent("commands.cofh.invuln.success.single", targets.iterator().next().getDisplayName()), true);
+                source.sendSuccess(new TranslatableComponent("commands.cofh.invuln.success.single", targets.iterator().next().getDisplayName()), true);
             } else {
-                source.sendSuccess(new TranslationTextComponent("commands.cofh.invuln.success.multiple", targets.size()), true);
+                source.sendSuccess(new TranslatableComponent("commands.cofh.invuln.success.multiple", targets.size()), true);
             }
         } else {
             if (targets.size() == 1) {
-                source.sendSuccess(new TranslationTextComponent("commands.cofh.invuln.remove.single", targets.iterator().next().getDisplayName()), true);
+                source.sendSuccess(new TranslatableComponent("commands.cofh.invuln.remove.single", targets.iterator().next().getDisplayName()), true);
             } else {
-                source.sendSuccess(new TranslationTextComponent("commands.cofh.invuln.remove.multiple", targets.size()), true);
+                source.sendSuccess(new TranslatableComponent("commands.cofh.invuln.remove.multiple", targets.size()), true);
             }
         }
         return targets.size();

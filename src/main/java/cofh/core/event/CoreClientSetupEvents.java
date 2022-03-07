@@ -3,11 +3,17 @@ package cofh.core.event;
 import cofh.core.client.particle.*;
 import cofh.lib.client.model.DynamicFluidContainerModel;
 import cofh.lib.item.IColorableItem;
+<<<<<<< HEAD
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
+=======
+import net.minecraft.client.color.item.ItemColors;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+>>>>>>> caa1a35 (Initial 1.18.2 compile pass.)
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;

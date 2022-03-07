@@ -2,21 +2,21 @@ package cofh.lib.fluid;
 
 import com.google.common.collect.Lists;
 import com.google.gson.*;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tags.ITag;
-import net.minecraft.tags.TagCollectionManager;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.Registry;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -65,7 +65,7 @@ public class FluidIngredient implements Predicate<FluidStack> {
         }
     }
 
-    public final void toNetwork(PacketBuffer buffer) {
+    public final void toNetwork(FriendlyByteBuf buffer) {
 
         this.dissolve();
         buffer.writeVarInt(this.fluidStacks.length);
@@ -108,12 +108,12 @@ public class FluidIngredient implements Predicate<FluidStack> {
         return fromValues(stacks.filter((stack) -> !stack.isEmpty()).map(SingleFluidList::new));
     }
 
-    public static FluidIngredient of(ITag<Fluid> tagIn, int amount) {
+    public static FluidIngredient of(TagKey<Fluid> tagIn, int amount) {
 
         return fromValues(Stream.of(new FluidIngredient.TagList(tagIn, amount)));
     }
 
-    public static FluidIngredient fromNetwork(PacketBuffer buffer) {
+    public static FluidIngredient fromNetwork(FriendlyByteBuf buffer) {
 
         int i = buffer.readVarInt();
         return fromValues(Stream.generate(() -> new SingleFluidList(buffer.readFluidStack())).limit(i));
@@ -129,7 +129,7 @@ public class FluidIngredient implements Predicate<FluidStack> {
                 if (jsonarray.size() == 0) {
                     throw new JsonSyntaxException("Fluid array cannot be empty, at least one fluid must be defined");
                 } else {
-                    return fromValues(StreamSupport.stream(jsonarray.spliterator(), false).map((p_209355_0_) -> valueFromJson(JSONUtils.convertToJsonObject(p_209355_0_, "fluid"))));
+                    return fromValues(StreamSupport.stream(jsonarray.spliterator(), false).map((p_209355_0_) -> valueFromJson(GsonHelper.convertToJsonObject(p_209355_0_, "fluid"))));
                 }
             } else {
                 throw new JsonSyntaxException("Expected fluid to be object or array of objects");
@@ -144,7 +144,7 @@ public class FluidIngredient implements Predicate<FluidStack> {
         if (jsonObject.has("fluid") && jsonObject.has("fluid_tag")) {
             throw new JsonParseException("A fluid ingredient entry is either a fluid tag or a fluid, not both");
         } else if (jsonObject.has("fluid")) {
-            ResourceLocation resourcelocation1 = new ResourceLocation(JSONUtils.getAsString(jsonObject, "fluid"));
+            ResourceLocation resourcelocation1 = new ResourceLocation(GsonHelper.getAsString(jsonObject, "fluid"));
             Fluid fluid = ForgeRegistries.FLUIDS.getValue(resourcelocation1);
             if (fluid == null) {
                 throw new JsonSyntaxException("Unknown fluid '" + resourcelocation1 + "'");
@@ -157,18 +157,15 @@ public class FluidIngredient implements Predicate<FluidStack> {
             }
             return new FluidIngredient.SingleFluidList(new FluidStack(fluid, amount));
         } else if (jsonObject.has("fluid_tag")) {
-            ResourceLocation resourcelocation = new ResourceLocation(JSONUtils.getAsString(jsonObject, "fluid_tag"));
-            ITag<Fluid> itag = TagCollectionManager.getInstance().getFluids().getTag(resourcelocation);
-            if (itag == null) {
-                throw new JsonSyntaxException("Unknown fluid tag '" + resourcelocation + "'");
-            }
+            ResourceLocation resourcelocation = new ResourceLocation(GsonHelper.getAsString(jsonObject, "fluid_tag"));
+            TagKey<Fluid> key = FluidTags.create(resourcelocation);
             int amount = FluidAttributes.BUCKET_VOLUME;
             if (jsonObject.has("amount")) {
                 amount = jsonObject.get("amount").getAsInt();
             } else if (jsonObject.has("count")) {
                 amount = jsonObject.get("count").getAsInt();
             }
-            return new FluidIngredient.TagList(itag, amount);
+            return new FluidIngredient.TagList(key, amount);
         } else {
             throw new JsonParseException("A fluid ingredient entry needs either a fluid_tag or a fluid");
         }
@@ -208,10 +205,10 @@ public class FluidIngredient implements Predicate<FluidStack> {
 
     public static class TagList implements FluidIngredient.IFluidList {
 
-        private final ITag<Fluid> tag;
+        private final TagKey<Fluid> tag;
         private final int amount;
 
-        public TagList(ITag<Fluid> tag, int amount) {
+        public TagList(TagKey<Fluid> tag, int amount) {
 
             this.tag = tag;
             this.amount = amount;
@@ -221,8 +218,8 @@ public class FluidIngredient implements Predicate<FluidStack> {
 
             List<FluidStack> list = Lists.newArrayList();
 
-            for (Fluid fluid : this.tag.getValues()) {
-                list.add(new FluidStack(fluid, amount));
+            for (Holder<Fluid> fluid : Registry.FLUID.getTagOrEmpty(this.tag)) {
+                list.add(new FluidStack(fluid.value(), amount));
             }
             return list;
         }
@@ -230,7 +227,7 @@ public class FluidIngredient implements Predicate<FluidStack> {
         public JsonObject serialize() {
 
             JsonObject jsonobject = new JsonObject();
-            jsonobject.addProperty("fluid_tag", TagCollectionManager.getInstance().getFluids().getIdOrThrow(this.tag).toString());
+            jsonobject.addProperty("fluid_tag", tag.location().toString());
             jsonobject.addProperty("amount", this.amount);
             return jsonobject;
         }

@@ -3,37 +3,37 @@ package cofh.lib.loot;
 import cofh.lib.tileentity.ITileCallback;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootFunction;
-import net.minecraft.loot.LootFunctionType;
-import net.minecraft.loot.conditions.ILootCondition;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
-import static net.minecraft.loot.LootParameters.BLOCK_ENTITY;
+import static net.minecraft.world.level.storage.loot.parameters.LootContextParams.BLOCK_ENTITY;
 
-public class TileNBTSync extends LootFunction {
+public class TileNBTSync extends LootItemConditionalFunction {
 
-    private static LootFunctionType INSTANCE;
+    private static LootItemFunctionType INSTANCE;
 
     public static void setup() {
 
         if (INSTANCE != null) {
             return;
         }
-        INSTANCE = Registry.register(Registry.LOOT_FUNCTION_TYPE, new ResourceLocation(ID_COFH_CORE + ":nbt_sync"), new LootFunctionType(new Serializer()));
+        INSTANCE = Registry.register(Registry.LOOT_FUNCTION_TYPE, new ResourceLocation(ID_COFH_CORE + ":nbt_sync"), new LootItemFunctionType(new Serializer()));
     }
 
-    protected TileNBTSync(ILootCondition[] conditionsIn) {
+    protected TileNBTSync(LootItemCondition[] conditionsIn) {
 
         super(conditionsIn);
     }
 
     @Override
-    public LootFunctionType getType() {
+    public LootItemFunctionType getType() {
 
         return INSTANCE;
     }
@@ -44,7 +44,7 @@ public class TileNBTSync extends LootFunction {
         return applyToStack(stack, context.getParamOrNull(BLOCK_ENTITY));
     }
 
-    public static ItemStack applyToStack(ItemStack stack, TileEntity tile) {
+    public static ItemStack applyToStack(ItemStack stack, BlockEntity tile) {
 
         if (tile instanceof ITileCallback) {
             return ((ITileCallback) tile).createItemStackTag(stack);
@@ -52,14 +52,14 @@ public class TileNBTSync extends LootFunction {
         return stack;
     }
 
-    public static LootFunction.Builder<?> builder() {
+    public static LootItemConditionalFunction.Builder<?> builder() {
 
         return simpleBuilder(TileNBTSync::new);
     }
 
-    public static class Serializer extends LootFunction.Serializer<TileNBTSync> {
+    public static class Serializer extends LootItemConditionalFunction.Serializer<TileNBTSync> {
 
-        public TileNBTSync deserialize(JsonObject object, JsonDeserializationContext deserializationContext, ILootCondition[] conditionsIn) {
+        public TileNBTSync deserialize(JsonObject object, JsonDeserializationContext deserializationContext, LootItemCondition[] conditionsIn) {
 
             return new TileNBTSync(conditionsIn);
         }

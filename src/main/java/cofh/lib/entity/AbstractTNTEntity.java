@@ -1,5 +1,6 @@
 package cofh.lib.entity;
 
+<<<<<<< HEAD
 import cofh.lib.block.IDetonatable;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
@@ -15,18 +16,31 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import javax.annotation.Nullable;
 
 public abstract class AbstractTNTEntity extends TNTEntity implements IDetonatable {
+=======
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.PrimedTnt;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraftforge.network.NetworkHooks;
+
+import javax.annotation.Nullable;
+
+public abstract class AbstractTNTEntity extends PrimedTnt {
+>>>>>>> caa1a35 (Initial 1.18.2 compile pass.)
 
     protected static final int CLOUD_DURATION = 20;
     protected int radius = 9;
     public int effectAmplifier = 1;
     public int effectDuration = 300;
 
-    public AbstractTNTEntity(EntityType<? extends AbstractTNTEntity> type, World worldIn) {
+    public AbstractTNTEntity(EntityType<? extends AbstractTNTEntity> type, Level worldIn) {
 
         super(type, worldIn);
     }
 
-    public AbstractTNTEntity(EntityType<? extends AbstractTNTEntity> type, World worldIn, double x, double y, double z, @Nullable LivingEntity igniter) {
+    public AbstractTNTEntity(EntityType<? extends AbstractTNTEntity> type, Level worldIn, double x, double y, double z, @Nullable LivingEntity igniter) {
 
         this(type, worldIn);
         this.setPos(x, y, z);
@@ -40,7 +54,7 @@ public abstract class AbstractTNTEntity extends TNTEntity implements IDetonatabl
     }
 
     @Override
-    public IPacket<?> getAddEntityPacket() {
+    public Packet<?> getAddEntityPacket() {
 
         return NetworkHooks.getEntitySpawningPacket(this);
     }

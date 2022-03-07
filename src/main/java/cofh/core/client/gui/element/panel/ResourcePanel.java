@@ -2,9 +2,9 @@ package cofh.core.client.gui.element.panel;
 
 import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.client.gui.IGuiAccess;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 
 import java.util.List;
 import java.util.function.DoubleSupplier;
@@ -86,7 +86,7 @@ public class ResourcePanel extends PanelBase {
     }
 
     @Override
-    protected void drawForeground(MatrixStack matrixStack) {
+    protected void drawForeground(PoseStack matrixStack) {
 
         drawPanelIcon(matrixStack, icon);
         if (!fullyOpen) {
@@ -106,11 +106,11 @@ public class ResourcePanel extends PanelBase {
             getFontRenderer().drawShadow(matrixStack, localize("info.cofh.efficiency") + ":", sideOffset() + 6, 66, subheaderColor);
             getFontRenderer().draw(matrixStack, DF0.format(efficiency.getAsDouble() * 100) + "%", sideOffset() + 14, 78, textColor);
         }
-        RenderHelper.resetColor();
+        RenderHelper.resetShaderColor();
     }
 
     @Override
-    public void addTooltip(List<ITextComponent> tooltipList, int mouseX, int mouseY) {
+    public void addTooltip(List<Component> tooltipList, int mouseX, int mouseY) {
 
         if (!fullyOpen) {
             tooltipList.add(getTextComponent(curAmt.getAsInt() + " " + curUnit));

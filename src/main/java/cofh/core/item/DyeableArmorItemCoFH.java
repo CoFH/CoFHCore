@@ -1,12 +1,12 @@
 package cofh.core.item;
 
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.IArmorMaterial;
-import net.minecraft.item.IDyeableArmorItem;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.DyeableLeatherItem;
 
-public class DyeableArmorItemCoFH extends ArmorItemCoFH implements IDyeableArmorItem {
+public class DyeableArmorItemCoFH extends ArmorItemCoFH implements DyeableLeatherItem {
 
-    public DyeableArmorItemCoFH(IArmorMaterial materialIn, EquipmentSlotType slot, Properties builder) {
+    public DyeableArmorItemCoFH(ArmorMaterial materialIn, EquipmentSlot slot, Properties builder) {
 
         super(materialIn, slot, builder);
     }

@@ -1,10 +1,10 @@
 package cofh.lib.util;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.WeightedRandom;
+import net.minecraft.util.random.WeightedEntry;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
-public class WeightedRandomDrop extends WeightedRandom.Item {
+public class WeightedRandomDrop extends WeightedEntry.IntrusiveBase {
 
     public final Item item;
 

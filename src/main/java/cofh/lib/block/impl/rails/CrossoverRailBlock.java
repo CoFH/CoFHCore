@@ -3,28 +3,25 @@ package cofh.lib.block.impl.rails;
 import cofh.lib.block.IDismantleable;
 import cofh.lib.util.Utils;
 import cofh.lib.util.helpers.MathHelper;
-import net.minecraft.block.AbstractRailBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.state.Property;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.RailShape;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.vehicle.AbstractMinecart;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.block.state.properties.RailShape;
+import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
 
 import static cofh.lib.util.constants.Constants.RAIL_STRAIGHT_FLAT;
 
-public class CrossoverRailBlock extends AbstractRailBlock implements IDismantleable {
+public class CrossoverRailBlock extends BaseRailBlock implements IDismantleable {
 
     protected float maxSpeed = 0.4F;
 
@@ -41,13 +38,13 @@ public class CrossoverRailBlock extends AbstractRailBlock implements IDismantlea
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 
         builder.add(getShapeProperty());
     }
 
     @Override
-    public float getRailMaxSpeed(BlockState state, World world, BlockPos pos, AbstractMinecartEntity cart) {
+    public float getRailMaxSpeed(BlockState state, Level world, BlockPos pos, AbstractMinecart cart) {
 
         return maxSpeed;
     }
@@ -59,13 +56,13 @@ public class CrossoverRailBlock extends AbstractRailBlock implements IDismantlea
     }
 
     @Override
-    public boolean canMakeSlopes(BlockState state, IBlockReader world, BlockPos pos) {
+    public boolean canMakeSlopes(BlockState state, BlockGetter world, BlockPos pos) {
 
         return false;
     }
 
     @Override
-    public RailShape getRailDirection(BlockState state, IBlockReader world, BlockPos pos, @Nullable AbstractMinecartEntity cart) {
+    public RailShape getRailDirection(BlockState state, BlockGetter world, BlockPos pos, @Nullable AbstractMinecart cart) {
 
         if (cart != null) {
             double absX = Math.abs(cart.getDeltaMovement().x);
@@ -92,23 +89,23 @@ public class CrossoverRailBlock extends AbstractRailBlock implements IDismantlea
     }
 
     @Override
-    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
 
-        if (Utils.isWrench(player.getItemInHand(handIn).getItem())) {
+        if (Utils.isWrench(player.getItemInHand(handIn))) {
             if (player.isSecondaryUseActive()) {
                 if (canDismantle(worldIn, pos, state, player)) {
                     dismantleBlock(worldIn, pos, state, hit, player, false);
-                    return ActionResultType.SUCCESS;
+                    return InteractionResult.SUCCESS;
                 }
             } else {
                 BlockState rotState = rotate(state, worldIn, pos, Rotation.CLOCKWISE_90);
                 if (rotState != state) {
                     worldIn.setBlockAndUpdate(pos, rotState);
-                    return ActionResultType.SUCCESS;
+                    return InteractionResult.SUCCESS;
                 }
             }
         }
-        return ActionResultType.PASS;
+        return InteractionResult.PASS;
     }
 
 }

@@ -1,10 +1,11 @@
 package cofh.lib.util.flags;
 
 import com.google.gson.JsonObject;
-import net.minecraft.item.Item;
-import net.minecraft.tags.ITag;
-import net.minecraft.tags.TagCollectionManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
 
@@ -13,9 +14,9 @@ import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
 public class TagExistsRecipeCondition implements ICondition {
 
     private static final ResourceLocation NAME = new ResourceLocation(ID_COFH_CORE, "tag_exists");
-    private final ResourceLocation tag_name;
+    private final TagKey<Item> tag_name;
 
-    public TagExistsRecipeCondition(ResourceLocation location) {
+    public TagExistsRecipeCondition(TagKey<Item> location) {
 
         this.tag_name = location;
     }
@@ -29,8 +30,7 @@ public class TagExistsRecipeCondition implements ICondition {
     @Override
     public boolean test() {
 
-        ITag<Item> tag = TagCollectionManager.getInstance().getItems().getTag(tag_name);
-        return tag != null && !tag.getValues().isEmpty();
+        return Registry.ITEM.getTag(tag_name).filter(e -> e.size() != 0).isPresent();
     }
 
     @Override
@@ -57,7 +57,7 @@ public class TagExistsRecipeCondition implements ICondition {
         @Override
         public TagExistsRecipeCondition read(JsonObject json) {
 
-            return new TagExistsRecipeCondition(new ResourceLocation(json.getAsJsonPrimitive("tag").getAsString()));
+            return new TagExistsRecipeCondition(ItemTags.create(new ResourceLocation(json.getAsJsonPrimitive("tag").getAsString())));
         }
 
         @Override

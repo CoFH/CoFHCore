@@ -1,20 +1,26 @@
 package cofh.core.block;
 
 import cofh.core.tileentity.GlowAirTile;
+import cofh.lib.tileentity.ICoFHTickableTile;
 import cofh.lib.util.Utils;
-import net.minecraft.block.AirBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.AirBlock;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
-public class GlowAirBlock extends AirBlock {
+import static cofh.lib.util.references.CoreReferences.GLOW_AIR_TILE;
+
+public class GlowAirBlock extends AirBlock implements EntityBlock {
 
     public GlowAirBlock(Properties builder) {
 
@@ -22,20 +28,21 @@ public class GlowAirBlock extends AirBlock {
     }
 
     @Override
-    public boolean hasTileEntity(BlockState state) {
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
 
-        return true;
+        return new GlowAirTile(pos, state);
     }
 
+    @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> actualType) {
 
-        return new GlowAirTile();
+        return ICoFHTickableTile.createTicker(level, actualType, GLOW_AIR_TILE, GlowAirTile.class);
     }
 
     @OnlyIn (Dist.CLIENT)
     @Override
-    public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+    public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, Random rand) {
 
         if (rand.nextInt(16) == 0) {
             Utils.spawnBlockParticlesClient(worldIn, ParticleTypes.INSTANT_EFFECT, pos, rand, 2);

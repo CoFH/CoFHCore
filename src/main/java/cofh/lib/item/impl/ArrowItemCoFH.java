@@ -1,19 +1,19 @@
 package cofh.lib.item.impl;
 
 import cofh.lib.item.ICoFHItem;
-import net.minecraft.block.DispenserBlock;
-import net.minecraft.dispenser.IPosition;
-import net.minecraft.dispenser.ProjectileDispenseBehavior;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.item.ArrowItem;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.world.World;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.Position;
+import net.minecraft.core.dispenser.AbstractProjectileDispenseBehavior;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.ArrowItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.DispenserBlock;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -27,12 +27,12 @@ public class ArrowItemCoFH extends ArrowItem implements ICoFHItem {
 
     protected BooleanSupplier showInGroups = TRUE;
 
-    protected Supplier<ItemGroup> displayGroup;
+    protected Supplier<CreativeModeTab> displayGroup;
 
-    protected final IArrowFactory<? extends AbstractArrowEntity> factory;
+    protected final IArrowFactory<? extends AbstractArrow> factory;
     protected boolean infinitySupport = false;
 
-    public ArrowItemCoFH(IArrowFactory<? extends AbstractArrowEntity> factory, Properties builder) {
+    public ArrowItemCoFH(IArrowFactory<? extends AbstractArrow> factory, Properties builder) {
 
         super(builder);
         this.factory = factory;
@@ -40,7 +40,7 @@ public class ArrowItemCoFH extends ArrowItem implements ICoFHItem {
         DispenserBlock.registerBehavior(this, DISPENSER_BEHAVIOR);
     }
 
-    public ArrowItemCoFH setDisplayGroup(Supplier<ItemGroup> displayGroup) {
+    public ArrowItemCoFH setDisplayGroup(Supplier<CreativeModeTab> displayGroup) {
 
         this.displayGroup = displayGroup;
         return this;
@@ -59,7 +59,7 @@ public class ArrowItemCoFH extends ArrowItem implements ICoFHItem {
     }
 
     @Override
-    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
 
         if (!showInGroups.getAsBoolean() || displayGroup != null && displayGroup.get() != null && displayGroup.get() != group) {
             return;
@@ -68,42 +68,42 @@ public class ArrowItemCoFH extends ArrowItem implements ICoFHItem {
     }
 
     @Override
-    public Collection<ItemGroup> getCreativeTabs() {
+    public Collection<CreativeModeTab> getCreativeTabs() {
 
         return displayGroup != null && displayGroup.get() != null ? Collections.singletonList(displayGroup.get()) : super.getCreativeTabs();
     }
 
     @Override
-    public AbstractArrowEntity createArrow(World worldIn, ItemStack stack, LivingEntity shooter) {
+    public AbstractArrow createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
 
         return factory.createArrow(worldIn, shooter);
     }
 
     @Override
-    public boolean isInfinite(ItemStack stack, ItemStack bow, PlayerEntity player) {
+    public boolean isInfinite(ItemStack stack, ItemStack bow, Player player) {
 
         return infinitySupport && getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, bow) > 0 || super.isInfinite(stack, bow, player);
     }
 
     // region FACTORY
-    public interface IArrowFactory<T extends AbstractArrowEntity> {
+    public interface IArrowFactory<T extends AbstractArrow> {
 
-        T createArrow(World world, LivingEntity living);
+        T createArrow(Level world, LivingEntity living);
 
-        T createArrow(World world, double posX, double posY, double posZ);
+        T createArrow(Level world, double posX, double posY, double posZ);
 
     }
     // endregion
 
     // region DISPENSER BEHAVIOR
-    private static final ProjectileDispenseBehavior DISPENSER_BEHAVIOR = new ProjectileDispenseBehavior() {
+    private static final AbstractProjectileDispenseBehavior DISPENSER_BEHAVIOR = new AbstractProjectileDispenseBehavior() {
 
         @Override
-        protected ProjectileEntity getProjectile(World worldIn, IPosition position, ItemStack stackIn) {
+        protected Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
 
             ArrowItemCoFH arrowItem = ((ArrowItemCoFH) stackIn.getItem());
-            AbstractArrowEntity arrow = arrowItem.factory.createArrow(worldIn, position.x(), position.y(), position.z());
-            arrow.pickup = AbstractArrowEntity.PickupStatus.ALLOWED;
+            AbstractArrow arrow = arrowItem.factory.createArrow(worldIn, position.x(), position.y(), position.z());
+            arrow.pickup = AbstractArrow.Pickup.ALLOWED;
             return arrow;
         }
     };

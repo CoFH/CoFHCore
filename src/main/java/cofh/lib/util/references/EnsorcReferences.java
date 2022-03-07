@@ -1,6 +1,6 @@
 package cofh.lib.util.references;
 
-import net.minecraft.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraftforge.registries.ObjectHolder;
 
 import static cofh.lib.util.constants.Constants.ID_ENSORCELLATION;

@@ -4,11 +4,11 @@ import cofh.core.client.gui.CoreTextures;
 import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.client.gui.IGuiAccess;
 import cofh.lib.util.control.IRedstoneControllable;
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.List;
 
@@ -50,7 +50,7 @@ public class RSControlPanel extends PanelBase {
 
     // TODO: Fully support new Redstone Control system.
     @Override
-    protected void drawForeground(MatrixStack matrixStack) {
+    protected void drawForeground(PoseStack matrixStack) {
 
         drawPanelIcon(matrixStack, CoreTextures.ICON_REDSTONE_ON);
         if (!fullyOpen) {
@@ -86,11 +86,11 @@ public class RSControlPanel extends PanelBase {
         gui.drawIcon(matrixStack, ICON_RS_TORCH_OFF, 48, 20);
         gui.drawIcon(matrixStack, ICON_RS_TORCH_ON, 68, 20);
 
-        RenderHelper.resetColor();
+        RenderHelper.resetShaderColor();
     }
 
     @Override
-    protected void drawBackground(MatrixStack matrixStack) {
+    protected void drawBackground(PoseStack matrixStack) {
 
         super.drawBackground(matrixStack);
 
@@ -100,46 +100,47 @@ public class RSControlPanel extends PanelBase {
         float colorR = (backgroundColor >> 16 & 255) / 255.0F * 0.6F;
         float colorG = (backgroundColor >> 8 & 255) / 255.0F * 0.6F;
         float colorB = (backgroundColor & 255) / 255.0F * 0.6F;
-        RenderSystem.color4f(colorR, colorG, colorB, 1.0F);
+        RenderHelper.setPosTexShader();
+        RenderSystem.setShaderColor(colorR, colorG, colorB, 1.0F);
         gui.drawTexturedModalRect(24, 16, 16, 20, 64, 24);
-        RenderHelper.resetColor();
+        RenderHelper.resetShaderColor();
     }
 
     @Override
-    public void addTooltip(List<ITextComponent> tooltipList, int mouseX, int mouseY) {
+    public void addTooltip(List<Component> tooltipList, int mouseX, int mouseY) {
 
         if (!fullyOpen) {
-            tooltipList.add(new TranslationTextComponent("info.cofh.redstone_control"));
+            tooltipList.add(new TranslatableComponent("info.cofh.redstone_control"));
 
             switch (myRSControllable.getMode()) {
                 case DISABLED:
-                    tooltipList.add(new TranslationTextComponent("info.cofh.disabled").withStyle(TextFormatting.YELLOW));
+                    tooltipList.add(new TranslatableComponent("info.cofh.disabled").withStyle(ChatFormatting.YELLOW));
                     break;
                 case LOW:
-                    tooltipList.add(new TranslationTextComponent("info.cofh.low").withStyle(TextFormatting.YELLOW));
+                    tooltipList.add(new TranslatableComponent("info.cofh.low").withStyle(ChatFormatting.YELLOW));
                     break;
                 case HIGH:
-                    tooltipList.add(new TranslationTextComponent("info.cofh.high").withStyle(TextFormatting.YELLOW));
+                    tooltipList.add(new TranslatableComponent("info.cofh.high").withStyle(ChatFormatting.YELLOW));
                     break;
                 default:
             }
-            tooltipList.add(new TranslationTextComponent("info.cofh.current_signal", myRSControllable.getPower())
+            tooltipList.add(new TranslatableComponent("info.cofh.current_signal", myRSControllable.getPower())
                     .withStyle(myRSControllable.getMode() == DISABLED
-                            ? TextFormatting.YELLOW
+                            ? ChatFormatting.YELLOW
                             : myRSControllable.getState()
-                            ? TextFormatting.GREEN
-                            : TextFormatting.RED));
+                            ? ChatFormatting.GREEN
+                            : ChatFormatting.RED));
             return;
         }
         int x = mouseX - this.posX();
         int y = mouseY - this.posY();
 
         if (28 <= x && x < 44 && 20 <= y && y < 36) {
-            tooltipList.add(new TranslationTextComponent("info.cofh.ignored"));
+            tooltipList.add(new TranslatableComponent("info.cofh.ignored"));
         } else if (48 <= x && x < 64 && 20 <= y && y < 36) {
-            tooltipList.add(new TranslationTextComponent("info.cofh.low"));
+            tooltipList.add(new TranslatableComponent("info.cofh.low"));
         } else if (68 <= x && x < 84 && 20 <= y && y < 36) {
-            tooltipList.add(new TranslationTextComponent("info.cofh.high"));
+            tooltipList.add(new TranslatableComponent("info.cofh.high"));
         }
     }
 

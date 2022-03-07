@@ -2,7 +2,7 @@ package cofh.core.client.gui.element;
 
 import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.client.gui.IGuiAccess;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import java.util.function.IntSupplier;
 
@@ -36,9 +36,10 @@ public class ElementScaled extends ElementBase {
     }
 
     @Override
-    public void drawBackground(MatrixStack matrixStack, int mouseX, int mouseY) {
+    public void drawBackground(PoseStack matrixStack, int mouseX, int mouseY) {
 
-        RenderHelper.bindTexture(texture);
+        RenderHelper.setPosTexShader();
+        RenderHelper.setShaderTexture0(texture);
         int quantity = quantitySup.getAsInt();
 
         if (drawBackground) {

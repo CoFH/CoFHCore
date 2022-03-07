@@ -1,22 +1,22 @@
 package cofh.lib.inventory.wrapper;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 
-public class InvWrapperItem implements IInventory {
+public class InvWrapperItem implements Container {
 
     private NonNullList<ItemStack> stackList;
     private ItemStack invContainer = ItemStack.EMPTY;
 
-    private final Container eventHandler;
+    private final AbstractContainerMenu eventHandler;
 
-    public InvWrapperItem(Container eventHandler, int size) {
+    public InvWrapperItem(AbstractContainerMenu eventHandler, int size) {
 
         this.stackList = NonNullList.withSize(size, ItemStack.EMPTY);
         this.eventHandler = eventHandler;
@@ -69,13 +69,13 @@ public class InvWrapperItem implements IInventory {
     @Override
     public ItemStack removeItemNoUpdate(int index) {
 
-        return ItemStackHelper.takeItem(this.stackList, index);
+        return ContainerHelper.takeItem(this.stackList, index);
     }
 
     @Override
     public ItemStack removeItem(int index, int count) {
 
-        return ItemStackHelper.removeItem(this.stackList, index, count);
+        return ContainerHelper.removeItem(this.stackList, index, count);
     }
 
     @Override
@@ -93,7 +93,7 @@ public class InvWrapperItem implements IInventory {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
 
         return !invContainer.isEmpty();
     }

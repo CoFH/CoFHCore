@@ -23,6 +23,7 @@ import cofh.lib.item.impl.SpawnEggItemCoFH;
 import cofh.lib.loot.TileNBTSync;
 import cofh.lib.network.PacketHandler;
 import cofh.lib.util.DeferredRegisterCoFH;
+<<<<<<< HEAD
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.enchantment.Enchantment;
@@ -36,12 +37,27 @@ import net.minecraft.potion.Effect;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+=======
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.material.Fluid;
+>>>>>>> caa1a35 (Initial 1.18.2 compile pass.)
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -65,13 +81,18 @@ public class CoFHCore {
     public static final DeferredRegisterCoFH<Item> ITEMS = DeferredRegisterCoFH.create(ForgeRegistries.ITEMS, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<EntityType<?>> ENTITIES = DeferredRegisterCoFH.create(ForgeRegistries.ENTITIES, ID_COFH_CORE);
 
-    public static final DeferredRegisterCoFH<ContainerType<?>> CONTAINERS = DeferredRegisterCoFH.create(ForgeRegistries.CONTAINERS, ID_COFH_CORE);
-    public static final DeferredRegisterCoFH<Effect> EFFECTS = DeferredRegisterCoFH.create(ForgeRegistries.POTIONS, ID_COFH_CORE);
+    public static final DeferredRegisterCoFH<MenuType<?>> CONTAINERS = DeferredRegisterCoFH.create(ForgeRegistries.CONTAINERS, ID_COFH_CORE);
+    public static final DeferredRegisterCoFH<MobEffect> EFFECTS = DeferredRegisterCoFH.create(ForgeRegistries.MOB_EFFECTS, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<Enchantment> ENCHANTMENTS = DeferredRegisterCoFH.create(ForgeRegistries.ENCHANTMENTS, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<ParticleType<?>> PARTICLES = DeferredRegisterCoFH.create(ForgeRegistries.PARTICLE_TYPES, ID_COFH_CORE);
+<<<<<<< HEAD
     public static final DeferredRegisterCoFH<IRecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegisterCoFH.create(ForgeRegistries.RECIPE_SERIALIZERS, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<SoundEvent> SOUND_EVENTS = DeferredRegisterCoFH.create(ForgeRegistries.SOUND_EVENTS, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<TileEntityType<?>> TILE_ENTITIES = DeferredRegisterCoFH.create(ForgeRegistries.TILE_ENTITIES, ID_COFH_CORE);
+=======
+    public static final DeferredRegisterCoFH<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegisterCoFH.create(ForgeRegistries.RECIPE_SERIALIZERS, ID_COFH_CORE);
+    public static final DeferredRegisterCoFH<BlockEntityType<?>> TILE_ENTITIES = DeferredRegisterCoFH.create(ForgeRegistries.BLOCK_ENTITIES, ID_COFH_CORE);
+>>>>>>> caa1a35 (Initial 1.18.2 compile pass.)
 
     public static boolean curiosLoaded = false;
 
@@ -83,6 +104,7 @@ public class CoFHCore {
 
         final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
+        modEventBus.addListener(this::registerCapabilities);
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::clientSetup);
 
@@ -152,12 +174,15 @@ public class CoFHCore {
     }
 
     // region INITIALIZATION
-    private void commonSetup(final FMLCommonSetupEvent event) {
+    private void registerCapabilities(RegisterCapabilitiesEvent event) {
 
-        CapabilityAreaEffect.register();
-        CapabilityArchery.register();
-        CapabilityEnchantableItem.register();
-        CapabilityShieldItem.register();
+        CapabilityArchery.register(event);
+        CapabilityAreaEffect.register(event);
+        CapabilityEnchantableItem.register(event);
+        CapabilityShieldItem.register(event);
+    }
+
+    private void commonSetup(final FMLCommonSetupEvent event) {
 
         event.enqueueWork(SpawnEggItemCoFH::setup);
 
@@ -171,8 +196,8 @@ public class CoFHCore {
 
     private void clientSetup(final FMLClientSetupEvent event) {
 
-        ScreenManager.register(HELD_ITEM_FILTER_CONTAINER, HeldItemFilterScreen::new);
-        ScreenManager.register(TILE_ITEM_FILTER_CONTAINER, TileItemFilterScreen::new);
+        MenuScreens.register(HELD_ITEM_FILTER_CONTAINER, HeldItemFilterScreen::new);
+        MenuScreens.register(TILE_ITEM_FILTER_CONTAINER, TileItemFilterScreen::new);
 
         CoreKeys.register();
 
@@ -189,10 +214,15 @@ public class CoFHCore {
     // region HELPERS
     private void registerEntityRenderingHandlers() {
 
+<<<<<<< HEAD
         RenderingRegistry.registerEntityRenderingHandler(KNIFE_ENTITY, KnifeRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ELECTRIC_ARC_ENTITY, ElectricArcRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ELECTRIC_FIELD_ENTITY, NothingRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(BLACK_HOLE_ENTITY, NothingRenderer::new);
+=======
+        // TODO Covers, there is an event for this now.
+//        EntityRenderers.register(KNIFE_ENTITY, KnifeRenderer::new);
+>>>>>>> caa1a35 (Initial 1.18.2 compile pass.)
     }
     // endregion
 }

@@ -6,18 +6,18 @@ import cofh.lib.network.packet.IPacketServer;
 import cofh.lib.network.packet.PacketBase;
 import cofh.lib.tileentity.ITilePacketHandler;
 import io.netty.buffer.Unpooled;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 import static cofh.lib.util.constants.Constants.PACKET_CONFIG;
 
 public class TileConfigPacket extends PacketBase implements IPacketServer {
 
     protected BlockPos pos;
-    protected PacketBuffer buffer;
+    protected FriendlyByteBuf buffer;
 
     public TileConfigPacket() {
 
@@ -25,27 +25,27 @@ public class TileConfigPacket extends PacketBase implements IPacketServer {
     }
 
     @Override
-    public void handleServer(ServerPlayerEntity player) {
+    public void handleServer(ServerPlayer player) {
 
-        World world = player.level;
+        Level world = player.level;
         if (!world.isLoaded(pos)) {
             return;
         }
-        TileEntity tile = world.getBlockEntity(pos);
+        BlockEntity tile = world.getBlockEntity(pos);
         if (tile instanceof ITilePacketHandler) {
             ((ITilePacketHandler) tile).handleConfigPacket(buffer);
         }
     }
 
     @Override
-    public void write(PacketBuffer buf) {
+    public void write(FriendlyByteBuf buf) {
 
         buf.writeBlockPos(pos);
         buf.writeBytes(buffer);
     }
 
     @Override
-    public void read(PacketBuffer buf) {
+    public void read(FriendlyByteBuf buf) {
 
         buffer = buf;
         pos = buffer.readBlockPos();
@@ -55,7 +55,7 @@ public class TileConfigPacket extends PacketBase implements IPacketServer {
 
         TileConfigPacket packet = new TileConfigPacket();
         packet.pos = tile.pos();
-        packet.buffer = tile.getConfigPacket(new PacketBuffer(Unpooled.buffer()));
+        packet.buffer = tile.getConfigPacket(new FriendlyByteBuf(Unpooled.buffer()));
         packet.sendToServer();
     }
 

@@ -2,16 +2,16 @@ package cofh.core.enchantment;
 
 import cofh.lib.enchantment.EnchantmentCoFH;
 import cofh.lib.item.IContainerItem;
-import net.minecraft.enchantment.EnchantmentType;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
 public class HoldingEnchantment extends EnchantmentCoFH {
 
     public HoldingEnchantment() {
 
-        super(Rarity.COMMON, EnchantmentType.VANISHABLE, EquipmentSlotType.values());
+        super(Rarity.COMMON, EnchantmentCategory.VANISHABLE, EquipmentSlot.values());
         maxLevel = 4;
     }
 

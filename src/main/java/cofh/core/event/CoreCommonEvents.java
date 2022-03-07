@@ -3,13 +3,13 @@ package cofh.core.event;
 import cofh.core.init.CoreConfig;
 import cofh.lib.util.Utils;
 import cofh.lib.util.helpers.XpHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ExperienceOrbEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ExperienceOrb;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
@@ -28,8 +28,8 @@ import static cofh.lib.util.Utils.getItemEnchantmentLevel;
 import static cofh.lib.util.Utils.getMaxEquippedEnchantmentLevel;
 import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
 import static cofh.lib.util.references.CoreReferences.SLIMED;
-import static net.minecraft.enchantment.Enchantments.FALL_PROTECTION;
-import static net.minecraft.enchantment.Enchantments.MENDING;
+import static net.minecraft.world.item.enchantment.Enchantments.FALL_PROTECTION;
+import static net.minecraft.world.item.enchantment.Enchantments.MENDING;
 
 @Mod.EventBusSubscriber (modid = ID_COFH_CORE)
 public class CoreCommonEvents {
@@ -65,7 +65,7 @@ public class CoreCommonEvents {
         if (event.getDistance() >= 3.0) {
             LivingEntity living = event.getEntityLiving();
             if (living.hasEffect(SLIMED)) {
-                Vector3d motion = living.getDeltaMovement();
+                Vec3 motion = living.getDeltaMovement();
                 living.setDeltaMovement(motion.x, 0.08 * Math.sqrt(event.getDistance() / 0.08), motion.z);
                 living.hurtMarked = true;
                 event.setCanceled(true);
@@ -83,10 +83,10 @@ public class CoreCommonEvents {
             return;
         }
         Entity player = event.getHookEntity().getOwner();
-        if (!(player instanceof PlayerEntity) || player instanceof FakePlayer) {
+        if (!(player instanceof Player) || player instanceof FakePlayer) {
             return;
         }
-        ((PlayerEntity) player).causeFoodExhaustion(CoreConfig.amountFishingExhaustion);
+        ((Player) player).causeFoodExhaustion(CoreConfig.amountFishingExhaustion);
     }
 
     @SubscribeEvent (priority = EventPriority.LOW)
@@ -95,15 +95,15 @@ public class CoreCommonEvents {
         if (event.isCanceled()) {
             return;
         }
-        PlayerEntity player = event.getPlayer();
-        ExperienceOrbEntity orb = event.getOrb();
+        Player player = event.getPlayer();
+        ExperienceOrb orb = event.getOrb();
 
         player.takeXpDelay = 2;
         player.take(orb, 1);
 
         // Improved Mending
         if (CoreConfig.improvedMending) {
-            Map.Entry<EquipmentSlotType, ItemStack> entry = getMostDamagedItem(player);
+            Map.Entry<EquipmentSlot, ItemStack> entry = getMostDamagedItem(player);
             if (entry != null) {
                 ItemStack itemstack = entry.getValue();
                 if (!itemstack.isEmpty() && itemstack.isDamaged()) {
@@ -117,7 +117,7 @@ public class CoreCommonEvents {
         if (orb.value > 0) {
             player.giveExperiencePoints(orb.value);
         }
-        orb.remove();
+        orb.remove(Entity.RemovalReason.KILLED);
         event.setCanceled(true);
     }
 
@@ -144,16 +144,16 @@ public class CoreCommonEvents {
     }
 
     // region HELPERS
-    private static Map.Entry<EquipmentSlotType, ItemStack> getMostDamagedItem(PlayerEntity player) {
+    private static Map.Entry<EquipmentSlot, ItemStack> getMostDamagedItem(Player player) {
 
-        Map<EquipmentSlotType, ItemStack> map = MENDING.getSlotItems(player);
-        Map.Entry<EquipmentSlotType, ItemStack> mostDamaged = null;
+        Map<EquipmentSlot, ItemStack> map = MENDING.getSlotItems(player);
+        Map.Entry<EquipmentSlot, ItemStack> mostDamaged = null;
         if (map.isEmpty()) {
             return null;
         }
         double durability = 0.0D;
 
-        for (Map.Entry<EquipmentSlotType, ItemStack> entry : map.entrySet()) {
+        for (Map.Entry<EquipmentSlot, ItemStack> entry : map.entrySet()) {
             ItemStack stack = entry.getValue();
             if (!stack.isEmpty() && getItemEnchantmentLevel(MENDING, stack) > 0) {
                 if (calcDurabilityRatio(stack) > durability) {

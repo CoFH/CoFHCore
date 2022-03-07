@@ -1,14 +1,14 @@
 package cofh.lib.item.impl;
 
 import cofh.lib.item.ICoFHItem;
-import net.minecraft.block.DispenserBlock;
-import net.minecraft.dispenser.BeehiveDispenseBehavior;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ShearsItem;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.dispenser.ShearsDispenseItemBehavior;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ShearsItem;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.DispenserBlock;
 
 public class ShearsItemCoFH extends ShearsItem implements ICoFHItem {
 
@@ -17,16 +17,16 @@ public class ShearsItemCoFH extends ShearsItem implements ICoFHItem {
     public ShearsItemCoFH(Properties builder) {
 
         super(builder);
-        DispenserBlock.registerBehavior(this, new BeehiveDispenseBehavior());
+        DispenserBlock.registerBehavior(this, new ShearsDispenseItemBehavior());
     }
 
-    public ShearsItemCoFH(IItemTier tier, Properties builder) {
+    public ShearsItemCoFH(Tier tier, Properties builder) {
 
         this(builder);
         setParams(tier);
     }
 
-    public ShearsItemCoFH setParams(IItemTier tier) {
+    public ShearsItemCoFH setParams(Tier tier) {
 
         this.enchantability = tier.getEnchantmentValue();
         return this;
@@ -39,7 +39,7 @@ public class ShearsItemCoFH extends ShearsItem implements ICoFHItem {
     }
 
     @Override
-    public boolean doesSneakBypassUse(ItemStack stack, IWorldReader world, BlockPos pos, PlayerEntity player) {
+    public boolean doesSneakBypassUse(ItemStack stack, LevelReader world, BlockPos pos, Player player) {
 
         return true;
     }

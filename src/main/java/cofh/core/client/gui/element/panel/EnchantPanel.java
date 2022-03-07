@@ -3,8 +3,8 @@ package cofh.core.client.gui.element.panel;
 import cofh.core.client.gui.CoreTextures;
 import cofh.lib.client.gui.IGuiAccess;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 public class EnchantPanel extends PanelScrolledText {
 
@@ -36,9 +36,9 @@ public class EnchantPanel extends PanelScrolledText {
     }
 
     @Override
-    public ITextComponent getTitle() {
+    public Component getTitle() {
 
-        return new TranslationTextComponent("info.cofh.enchantments");
+        return new TranslatableComponent("info.cofh.enchantments");
     }
 
 }

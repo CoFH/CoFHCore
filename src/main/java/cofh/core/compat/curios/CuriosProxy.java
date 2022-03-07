@@ -1,7 +1,7 @@
 package cofh.core.compat.curios;
 
 import cofh.core.CoFHCore;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.items.IItemHandlerModifiable;

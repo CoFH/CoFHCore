@@ -1,10 +1,10 @@
 package cofh.lib.item;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
 
 public interface IPlacementItem {
 
-    boolean onBlockPlacement(ItemStack stack, ItemUseContext context);
+    boolean onBlockPlacement(ItemStack stack, UseOnContext context);
 
 }

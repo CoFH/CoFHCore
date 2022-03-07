@@ -9,35 +9,34 @@ import cofh.lib.tileentity.ITilePacketHandler;
 import cofh.lib.tileentity.ITileXpHandler;
 import cofh.lib.util.IConveyableData;
 import cofh.lib.util.Utils;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerListener;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class TileCoFH extends TileEntity implements ITileCallback, ITilePacketHandler, ITileXpHandler, IConveyableData {
+public class TileCoFH extends BlockEntity implements ITileCallback, ITilePacketHandler, ITileXpHandler, IConveyableData {
 
     protected int numPlayersUsing;
 
-    public TileCoFH(TileEntityType<?> tileEntityTypeIn) {
+    public TileCoFH(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state) {
 
-        super(tileEntityTypeIn);
+        super(tileEntityTypeIn, pos, state);
     }
 
     @Override
@@ -46,9 +45,6 @@ public class TileCoFH extends TileEntity implements ITileCallback, ITilePacketHa
         super.onLoad();
 
         if (level != null && Utils.isClientWorld(level)) {
-            if (!hasClientUpdate()) {
-                level.tickableBlockEntities.remove(this);
-            }
             if (this instanceof IAreaEffectTile) {
                 ProxyUtils.addAreaEffectTile((IAreaEffectTile) this);
             }
@@ -84,10 +80,10 @@ public class TileCoFH extends TileEntity implements ITileCallback, ITilePacketHa
 
     }
 
-    public void sendGuiNetworkData(Container container, IContainerListener player) {
+    public void sendGuiNetworkData(AbstractContainerMenu container, ContainerListener player) {
 
-        if (hasGuiPacket() && player instanceof ServerPlayerEntity && (!(player instanceof FakePlayer))) {
-            TileGuiPacket.sendToClient(this, (ServerPlayerEntity) player);
+        if (hasGuiPacket() && player instanceof ServerPlayer && (!(player instanceof FakePlayer))) {
+            TileGuiPacket.sendToClient(this, (ServerPlayer) player);
         }
     }
 
@@ -123,19 +119,9 @@ public class TileCoFH extends TileEntity implements ITileCallback, ITilePacketHa
     // endregion
 
     // region HELPERS
-    public TileCoFH worldContext(BlockState state, IBlockReader world) {
-
-        return this;
-    }
-
-    public boolean onActivatedDelegate(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, BlockRayTraceResult result) {
+    public boolean onActivatedDelegate(Level world, BlockPos pos, BlockState state, Player player, InteractionHand hand, BlockHitResult result) {
 
         return getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).map(handler -> FluidHelper.interactWithHandler(player.getItemInHand(hand), handler, player, hand)).orElse(false);
-    }
-
-    public boolean hasClientUpdate() {
-
-        return false;
     }
 
     public boolean hasGuiPacket() {
@@ -143,7 +129,7 @@ public class TileCoFH extends TileEntity implements ITileCallback, ITilePacketHa
         return true;
     }
 
-    public void animateTick(BlockState state, World worldIn, BlockPos pos, Random rand) {
+    public void animateTick(BlockState state, Level worldIn, BlockPos pos, Random rand) {
 
     }
 
@@ -155,36 +141,36 @@ public class TileCoFH extends TileEntity implements ITileCallback, ITilePacketHa
     protected void markDirtyFast() {
 
         if (this.level != null) {
-            this.level.blockEntityChanged(this.worldPosition, this);
+            this.level.blockEntityChanged(this.worldPosition);
         }
     }
     // endregion
 
     // region GUI
-    public boolean playerWithinDistance(PlayerEntity player, double distanceSq) {
+    public boolean playerWithinDistance(Player player, double distanceSq) {
 
-        return !isRemoved() && worldPosition.distSqr(player.position(), true) <= distanceSq;
+        return !isRemoved() && worldPosition.distToCenterSqr(player.position()) <= distanceSq;
     }
     // endregion
 
     // region NETWORK
     @Nullable
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
 
-        return new SUpdateTileEntityPacket(worldPosition, 0, getUpdateTag());
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override
-    public CompoundNBT getUpdateTag() {
+    public CompoundTag getUpdateTag() {
 
-        return this.save(new CompoundNBT());
+        return saveWithoutMetadata();
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
 
-        load(this.blockState, pkt.getTag());
+        load(pkt.getTag());
     }
     // endregion
 
@@ -208,7 +194,7 @@ public class TileCoFH extends TileEntity implements ITileCallback, ITilePacketHa
     }
 
     @Override
-    public World world() {
+    public Level world() {
 
         return level;
     }

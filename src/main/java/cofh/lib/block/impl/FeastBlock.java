@@ -2,30 +2,26 @@ package cofh.lib.block.impl;
 
 import cofh.lib.util.helpers.MathHelper;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Food;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.pathfinding.PathType;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.*;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nonnull;
 import java.util.function.Supplier;
@@ -44,10 +40,10 @@ public class FeastBlock extends DirectionalBlock4Way {
             Block.box(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D),
             Block.box(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D)};
 
-    protected final Food food;
+    protected final FoodProperties food;
     protected Supplier<Item> serving = () -> Items.AIR;
 
-    public FeastBlock(Properties properties, @Nonnull Food food) {
+    public FeastBlock(Properties properties, @Nonnull FoodProperties food) {
 
         super(properties);
         this.food = food;
@@ -59,7 +55,7 @@ public class FeastBlock extends DirectionalBlock4Way {
         return this;
     }
 
-    protected IItemProvider getServingItem() {
+    protected ItemLike getServingItem() {
 
         return serving.get();
     }
@@ -74,21 +70,21 @@ public class FeastBlock extends DirectionalBlock4Way {
         return getBitesProperty().getPossibleValues().size() - 1;
     }
 
-    protected ActionResultType serve(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+    protected InteractionResult serve(Level world, BlockPos pos, BlockState state, Player player) {
 
         ItemStack servItem = new ItemStack(getServingItem());
         boolean takeServing = !servItem.isEmpty() && !player.isSecondaryUseActive();
 
         if (!player.canEat(takeServing)) {
-            return ActionResultType.PASS;
+            return InteractionResult.PASS;
         } else {
             if (takeServing) {
                 player.addItem(servItem);
             } else {
                 player.getFoodData().eat(food.getNutrition(), food.getSaturationModifier());
-                for (Pair<EffectInstance, Float> pair : this.food.getEffects()) {
+                for (Pair<MobEffectInstance, Float> pair : this.food.getEffects()) {
                     if (!world.isClientSide && pair.getFirst() != null && world.random.nextFloat() < pair.getSecond()) {
-                        player.addEffect(new EffectInstance(pair.getFirst()));
+                        player.addEffect(new MobEffectInstance(pair.getFirst()));
                     }
                 }
             }
@@ -98,45 +94,45 @@ public class FeastBlock extends DirectionalBlock4Way {
             } else {
                 world.removeBlock(pos, false);
             }
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
     }
 
     @Override
-    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
 
         if (worldIn.isClientSide) {
             ItemStack stack = player.getItemInHand(handIn);
             if (this.serve(worldIn, pos, state, player).consumesAction()) {
-                return ActionResultType.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
             if (stack.isEmpty()) {
-                return ActionResultType.CONSUME;
+                return InteractionResult.CONSUME;
             }
         }
         return this.serve(worldIn, pos, state, player);
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
 
         return SHAPE_BY_BITE[MathHelper.clamp(state.getValue(getBitesProperty()), 0, SHAPE_BY_BITE.length - 1)];
     }
 
     @Override
-    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
 
         return facing == Direction.DOWN && !stateIn.canSurvive(worldIn, currentPos) ? Blocks.AIR.defaultBlockState() : super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
     }
 
     @Override
-    public boolean canSurvive(BlockState stateIn, IWorldReader worldIn, BlockPos pos) {
+    public boolean canSurvive(BlockState stateIn, LevelReader worldIn, BlockPos pos) {
 
         return worldIn.getBlockState(pos.below()).getMaterial().isSolid();
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 
         super.createBlockStateDefinition(builder);
         builder.add(getBitesProperty());
@@ -155,7 +151,7 @@ public class FeastBlock extends DirectionalBlock4Way {
     //    }
 
     @Override
-    public boolean isPathfindable(BlockState stateIn, IBlockReader worldIn, BlockPos pos, PathType type) {
+    public boolean isPathfindable(BlockState stateIn, BlockGetter worldIn, BlockPos pos, PathComputationType type) {
 
         return false;
     }

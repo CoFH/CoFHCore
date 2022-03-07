@@ -2,13 +2,13 @@ package cofh.core.inventory.container;
 
 import cofh.core.tileentity.TileCoFH;
 import cofh.lib.inventory.container.ContainerCoFH;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ContainerListener;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 import javax.annotation.Nullable;
 
@@ -16,10 +16,10 @@ public class TileContainer extends ContainerCoFH {
 
     protected final TileCoFH baseTile;
 
-    public TileContainer(@Nullable ContainerType<?> type, int windowId, World world, BlockPos pos, PlayerInventory inventory, PlayerEntity player) {
+    public TileContainer(@Nullable MenuType<?> type, int windowId, Level world, BlockPos pos, Inventory inventory, Player player) {
 
         super(type, windowId, inventory, player);
-        TileEntity tile = world.getBlockEntity(pos);
+        BlockEntity tile = world.getBlockEntity(pos);
         baseTile = tile instanceof TileCoFH ? (TileCoFH) tile : null;
 
         if (baseTile != null) {
@@ -34,7 +34,7 @@ public class TileContainer extends ContainerCoFH {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
 
         return baseTile == null || baseTile.playerWithinDistance(player, 64D);
     }
@@ -46,7 +46,7 @@ public class TileContainer extends ContainerCoFH {
         if (baseTile == null) {
             return;
         }
-        for (IContainerListener listener : this.containerListeners) {
+        for (ContainerListener listener : this.containerListeners) {
             baseTile.sendGuiNetworkData(this, listener);
         }
     }
@@ -63,7 +63,7 @@ public class TileContainer extends ContainerCoFH {
     }
 
     @Override
-    public void removed(PlayerEntity player) {
+    public void removed(Player player) {
 
         if (baseTile != null) {
             baseTile.removePlayerUsing();

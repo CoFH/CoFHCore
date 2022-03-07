@@ -2,19 +2,19 @@ package cofh.core.potion;
 
 import cofh.lib.potion.EffectCoFH;
 import cofh.lib.util.Utils;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.EffectType;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.player.Player;
 
 import javax.annotation.Nullable;
 
 public class LoveEffect extends EffectCoFH {
 
-    public LoveEffect(EffectType typeIn, int liquidColorIn) {
+    public LoveEffect(MobEffectCategory typeIn, int liquidColorIn) {
 
         super(typeIn, liquidColorIn);
     }
@@ -40,21 +40,22 @@ public class LoveEffect extends EffectCoFH {
     @Override
     public void applyInstantenousEffect(@Nullable Entity source, @Nullable Entity indirectSource, LivingEntity entityLivingBaseIn, int amplifier, double health) {
 
-        if (entityLivingBaseIn instanceof AnimalEntity) {
-            setLoveFlag(indirectSource, (AnimalEntity) entityLivingBaseIn);
+        if (entityLivingBaseIn instanceof Animal) {
+            setLoveFlag(indirectSource, (Animal) entityLivingBaseIn);
         }
     }
 
-    @Override
-    public boolean shouldRenderHUD(EffectInstance effect) {
-
-        return false;
-    }
+    // TODO Covers, Client-side attributes moved to an EffectRenderer instance.
+//    @Override
+//    public boolean shouldRenderHUD(MobEffectInstance effect) {
+//
+//        return false;
+//    }
 
     // region HELPERS
-    private void setLoveFlag(Entity indirectSource, AnimalEntity animal) {
+    private void setLoveFlag(Entity indirectSource, Animal animal) {
 
-        PlayerEntity player = indirectSource instanceof PlayerEntity ? (PlayerEntity) indirectSource : null;
+        Player player = indirectSource instanceof Player ? (Player) indirectSource : null;
         if (animal.getAge() == 0 && !animal.isInLove()) {
             animal.setInLove(player);
             for (int i = 0; i < 4; ++i) {

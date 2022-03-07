@@ -2,15 +2,15 @@ package cofh.lib.tileentity;
 
 import cofh.lib.util.IInventoryCallback;
 import cofh.lib.util.control.ISecurable;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 
@@ -25,7 +25,7 @@ public interface ITileCallback extends IInventoryCallback {
 
     BlockPos pos();
 
-    World world();
+    Level world();
 
     default int invSize() {
 
@@ -77,25 +77,25 @@ public interface ITileCallback extends IInventoryCallback {
 
     }
 
-    default void onPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+    default void onPlacedBy(Level worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
 
     }
 
-    default void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState) {
+    default void onReplaced(BlockState state, Level worldIn, BlockPos pos, BlockState newState) {
 
     }
 
     default boolean canOpenGui() {
 
-        return this instanceof INamedContainerProvider;
+        return this instanceof MenuProvider;
     }
 
-    default boolean canPlayerChange(PlayerEntity player) {
+    default boolean canPlayerChange(Player player) {
 
         return !(this instanceof ISecurable) || ((ISecurable) this).canAccess(player);
     }
 
-    default boolean onWrench(PlayerEntity player, Direction side) {
+    default boolean onWrench(Player player, Direction side) {
 
         return false;
     }

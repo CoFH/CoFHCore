@@ -1,14 +1,14 @@
 package cofh.lib.util.filter;
 
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.function.Predicate;
 
-public interface IFilter extends INBTSerializable<CompoundNBT>, INamedContainerProvider {
+public interface IFilter extends INBTSerializable<CompoundTag>, MenuProvider {
 
     Predicate<ItemStack> ALWAYS_ALLOW_ITEM = (stack) -> true;
     Predicate<FluidStack> ALWAYS_ALLOW_FLUID = (stack) -> true;
@@ -33,18 +33,18 @@ public interface IFilter extends INBTSerializable<CompoundNBT>, INamedContainerP
         return getFluidRules().test(fluid);
     }
 
-    IFilter read(CompoundNBT nbt);
+    IFilter read(CompoundTag nbt);
 
-    CompoundNBT write(CompoundNBT nbt);
+    CompoundTag write(CompoundTag nbt);
 
     @Override
-    default CompoundNBT serializeNBT() {
+    default CompoundTag serializeNBT() {
 
-        return write(new CompoundNBT());
+        return write(new CompoundTag());
     }
 
     @Override
-    default void deserializeNBT(CompoundNBT nbt) {
+    default void deserializeNBT(CompoundTag nbt) {
 
         read(nbt);
     }

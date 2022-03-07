@@ -2,19 +2,19 @@ package cofh.lib.util.helpers;
 
 import cofh.lib.util.RayTracer;
 import com.google.common.collect.ImmutableList;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.IBucketPickupHandler;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.HoeItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ToolItem;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DiggerItem;
+import net.minecraft.world.item.HoeItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BucketPickup;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 import static cofh.lib.capability.CapabilityAreaEffect.AREA_EFFECT_ITEM_CAPABILITY;
 import static cofh.lib.util.Utils.getItemEnchantmentLevel;
 import static cofh.lib.util.references.EnsorcReferences.*;
-import static net.minecraft.util.Direction.DOWN;
+import static net.minecraft.core.Direction.DOWN;
 
 public class AreaEffectHelper {
 
@@ -33,18 +33,18 @@ public class AreaEffectHelper {
 
     public static boolean validAreaEffectItem(ItemStack stack) {
 
-        return stack.getCapability(AREA_EFFECT_ITEM_CAPABILITY).isPresent() || stack.getItem() instanceof ToolItem;
+        return stack.getCapability(AREA_EFFECT_ITEM_CAPABILITY).isPresent() || stack.getItem() instanceof DiggerItem;
     }
 
     public static boolean validAreaEffectMiningItem(ItemStack stack) {
 
-        return stack.getCapability(AREA_EFFECT_ITEM_CAPABILITY).isPresent() || stack.getItem() instanceof ToolItem;
+        return stack.getCapability(AREA_EFFECT_ITEM_CAPABILITY).isPresent() || stack.getItem() instanceof DiggerItem;
     }
 
     /**
      * Basically the "default" AOE behavior.
      */
-    public static ImmutableList<BlockPos> getAreaEffectBlocks(ItemStack stack, BlockPos pos, PlayerEntity player) {
+    public static ImmutableList<BlockPos> getAreaEffectBlocks(ItemStack stack, BlockPos pos, Player player) {
 
         int encExcavating = getItemEnchantmentLevel(EXCAVATING, stack);
         if (encExcavating > 0) {
@@ -62,14 +62,14 @@ public class AreaEffectHelper {
     }
 
     // region FLUID
-    public static ImmutableList<BlockPos> getBucketableBlocksRadius(ItemStack stack, BlockPos pos, PlayerEntity player, int radius) {
+    public static ImmutableList<BlockPos> getBucketableBlocksRadius(ItemStack stack, BlockPos pos, Player player, int radius) {
 
         List<BlockPos> area;
-        World world = player.getCommandSenderWorld();
+        Level world = player.getCommandSenderWorld();
         Item tool = stack.getItem();
 
-        BlockRayTraceResult traceResult = RayTracer.retrace(player, RayTraceContext.FluidMode.SOURCE_ONLY);
-        if (traceResult.getType() == RayTraceResult.Type.MISS || player.isSecondaryUseActive() || radius <= 0) {
+        BlockHitResult traceResult = RayTracer.retrace(player, ClipContext.Fluid.SOURCE_ONLY);
+        if (traceResult.getType() == HitResult.Type.MISS || player.isSecondaryUseActive() || radius <= 0) {
             return ImmutableList.of();
         }
         int yMin = -1;
@@ -103,14 +103,14 @@ public class AreaEffectHelper {
     // endregion
 
     // region MINING
-    public static ImmutableList<BlockPos> getBreakableBlocksRadius(ItemStack stack, BlockPos pos, PlayerEntity player, int radius) {
+    public static ImmutableList<BlockPos> getBreakableBlocksRadius(ItemStack stack, BlockPos pos, Player player, int radius) {
 
         List<BlockPos> area;
-        World world = player.getCommandSenderWorld();
+        Level world = player.getCommandSenderWorld();
         Item tool = stack.getItem();
 
-        BlockRayTraceResult traceResult = RayTracer.retrace(player, RayTraceContext.FluidMode.NONE);
-        if (traceResult.getType() == RayTraceResult.Type.MISS || player.isSecondaryUseActive() || !canToolAffect(tool, stack, world, pos) || radius <= 0) {
+        BlockHitResult traceResult = RayTracer.retrace(player, ClipContext.Fluid.NONE);
+        if (traceResult.getType() == HitResult.Type.MISS || player.isSecondaryUseActive() || !canToolAffect(tool, stack, world, pos) || radius <= 0) {
             return ImmutableList.of();
         }
         int yMin = -1;
@@ -142,14 +142,14 @@ public class AreaEffectHelper {
         return ImmutableList.copyOf(area);
     }
 
-    public static ImmutableList<BlockPos> getBreakableBlocksDepth(ItemStack stack, BlockPos pos, PlayerEntity player, int radius, int depth) {
+    public static ImmutableList<BlockPos> getBreakableBlocksDepth(ItemStack stack, BlockPos pos, Player player, int radius, int depth) {
 
         List<BlockPos> area;
-        World world = player.getCommandSenderWorld();
+        Level world = player.getCommandSenderWorld();
         Item tool = stack.getItem();
 
-        BlockRayTraceResult traceResult = RayTracer.retrace(player, RayTraceContext.FluidMode.NONE);
-        if (traceResult.getType() == RayTraceResult.Type.MISS || player.isSecondaryUseActive() || !canToolAffect(tool, stack, world, pos) || (radius <= 0 && depth <= 0)) {
+        BlockHitResult traceResult = RayTracer.retrace(player, ClipContext.Fluid.NONE);
+        if (traceResult.getType() == HitResult.Type.MISS || player.isSecondaryUseActive() || !canToolAffect(tool, stack, world, pos) || (radius <= 0 && depth <= 0)) {
             return ImmutableList.of();
         }
         int dMin = depth;
@@ -192,10 +192,10 @@ public class AreaEffectHelper {
         return ImmutableList.copyOf(area);
     }
 
-    public static ImmutableList<BlockPos> getBreakableBlocksLine(ItemStack stack, BlockPos pos, PlayerEntity player, int length) {
+    public static ImmutableList<BlockPos> getBreakableBlocksLine(ItemStack stack, BlockPos pos, Player player, int length) {
 
         ArrayList<BlockPos> area = new ArrayList<>();
-        World world = player.getCommandSenderWorld();
+        Level world = player.getCommandSenderWorld();
         Item tool = stack.getItem();
 
         BlockPos query;
@@ -249,14 +249,14 @@ public class AreaEffectHelper {
     // endregion
 
     // region PLACING
-    public static ImmutableList<BlockPos> getPlaceableBlocksRadius(ItemStack stack, BlockPos pos, PlayerEntity player, int radius) {
+    public static ImmutableList<BlockPos> getPlaceableBlocksRadius(ItemStack stack, BlockPos pos, Player player, int radius) {
 
         List<BlockPos> area;
-        World world = player.getCommandSenderWorld();
+        Level world = player.getCommandSenderWorld();
         Item tool = stack.getItem();
 
-        BlockRayTraceResult traceResult = RayTracer.retrace(player, RayTraceContext.FluidMode.NONE);
-        if (traceResult.getType() == RayTraceResult.Type.MISS || player.isSecondaryUseActive() || !canToolAffect(tool, stack, world, pos) || radius <= 0) {
+        BlockHitResult traceResult = RayTracer.retrace(player, ClipContext.Fluid.NONE);
+        if (traceResult.getType() == HitResult.Type.MISS || player.isSecondaryUseActive() || !canToolAffect(tool, stack, world, pos) || radius <= 0) {
             return ImmutableList.of();
         }
         int yMin = -1;
@@ -289,14 +289,14 @@ public class AreaEffectHelper {
     // endregion
 
     // region HOE
-    public static ImmutableList<BlockPos> getTillableBlocksRadius(ItemStack stack, BlockPos pos, PlayerEntity player, int radius) {
+    public static ImmutableList<BlockPos> getTillableBlocksRadius(ItemStack stack, BlockPos pos, Player player, int radius) {
 
         List<BlockPos> area;
-        World world = player.getCommandSenderWorld();
+        Level world = player.getCommandSenderWorld();
         boolean weeding = getItemEnchantmentLevel(WEEDING, stack) > 0;
 
-        BlockRayTraceResult traceResult = RayTracer.retrace(player, RayTraceContext.FluidMode.NONE);
-        if (traceResult.getType() == RayTraceResult.Type.MISS || traceResult.getDirection() == DOWN || player.isSecondaryUseActive() || !canHoeAffect(world, pos, weeding) || radius <= 0) {
+        BlockHitResult traceResult = RayTracer.retrace(player, ClipContext.Fluid.NONE);
+        if (traceResult.getType() == HitResult.Type.MISS || traceResult.getDirection() == DOWN || player.isSecondaryUseActive() || !canHoeAffect(world, pos, weeding) || radius <= 0) {
             return ImmutableList.of();
         }
         area = BlockPos.betweenClosedStream(pos.offset(-radius, 0, -radius), pos.offset(radius, 0, radius))
@@ -307,10 +307,10 @@ public class AreaEffectHelper {
         return ImmutableList.copyOf(area);
     }
 
-    public static ImmutableList<BlockPos> getTillableBlocksLine(ItemStack stack, BlockPos pos, PlayerEntity player, int length) {
+    public static ImmutableList<BlockPos> getTillableBlocksLine(ItemStack stack, BlockPos pos, Player player, int length) {
 
         List<BlockPos> area;
-        World world = player.getCommandSenderWorld();
+        Level world = player.getCommandSenderWorld();
         boolean weeding = getItemEnchantmentLevel(WEEDING, stack) > 0;
 
         if (player.isSecondaryUseActive() || !canHoeAffect(world, pos, weeding) || length <= 0) {
@@ -350,10 +350,10 @@ public class AreaEffectHelper {
     // endregion
 
     // region SICKLE
-    public static ImmutableList<BlockPos> getBlocksCentered(ItemStack stack, BlockPos pos, PlayerEntity player, int radius, int height) {
+    public static ImmutableList<BlockPos> getBlocksCentered(ItemStack stack, BlockPos pos, Player player, int radius, int height) {
 
         List<BlockPos> area;
-        World world = player.getCommandSenderWorld();
+        Level world = player.getCommandSenderWorld();
         Item tool = stack.getItem();
 
         if (player.isSecondaryUseActive() || !canToolAffect(tool, stack, world, pos) || (radius <= 0 && height <= 0)) {
@@ -369,16 +369,16 @@ public class AreaEffectHelper {
     // endregion
 
     // region HELPERS
-    private static boolean canToolAffect(Item toolItem, ItemStack toolStack, World world, BlockPos pos) {
+    private static boolean canToolAffect(Item toolItem, ItemStack toolStack, Level world, BlockPos pos) {
 
         BlockState state = world.getBlockState(pos);
         if (state.getDestroySpeed(world, pos) < 0) {
             return false;
         }
-        return toolItem.canHarvestBlock(toolStack, state) || !state.requiresCorrectToolForDrops() && toolItem.getDestroySpeed(toolStack, state) > 1.0F;
+        return toolItem.isCorrectToolForDrops(toolStack, state) || !state.requiresCorrectToolForDrops() && toolItem.getDestroySpeed(toolStack, state) > 1.0F;
     }
 
-    private static boolean canHoeAffect(World world, BlockPos pos, boolean weeding) {
+    private static boolean canHoeAffect(Level world, BlockPos pos, boolean weeding) {
 
         BlockState state = world.getBlockState(pos);
         if (HoeItem.TILLABLES.containsKey(state.getBlock())) {
@@ -389,10 +389,10 @@ public class AreaEffectHelper {
         return false;
     }
 
-    private static boolean isBucketable(Item toolItem, ItemStack toolStack, World world, BlockPos pos) {
+    private static boolean isBucketable(Item toolItem, ItemStack toolStack, Level world, BlockPos pos) {
 
         BlockState state = world.getBlockState(pos);
-        return state.getBlock() instanceof IBucketPickupHandler;
+        return state.getBlock() instanceof BucketPickup;
     }
     // endregion
 }

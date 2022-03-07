@@ -4,14 +4,13 @@ import cofh.core.client.gui.element.listbox.IListBoxElement;
 import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.client.gui.GuiColor;
 import cofh.lib.client.gui.IGuiAccess;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.screen.Screen;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.screens.Screen;
+import org.lwjgl.opengl.GL11;
 
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-
-import static org.lwjgl.opengl.GL11.*;
 
 public class ElementListBox extends ElementBase {
 
@@ -151,38 +150,34 @@ public class ElementListBox extends ElementBase {
     }
 
     @Override
-    public void drawBackground(MatrixStack matrixStack, int mouseX, int mouseY) {
+    public void drawBackground(PoseStack matrixStack, int mouseX, int mouseY) {
 
         drawColoredModalRect(posX() - 1, posY() - 1, posX() + width + 1, posY() + height + 1, borderColor);
         drawColoredModalRect(posX(), posY(), posX() + width, posY() + height, backgroundColor);
     }
 
     @Override
-    public void drawForeground(MatrixStack matrixStack, int mouseX, int mouseY) {
+    public void drawForeground(PoseStack matrixStack, int mouseX, int mouseY) {
 
         int heightDrawn = 0;
         int nextElement = _firstIndexDisplayed;
 
-        glPushMatrix();
-        glDisable(GL_LIGHTING);
-
-        glEnable(GL_STENCIL_TEST);
+        GL11.glEnable(GL11.GL_STENCIL_TEST);
         RenderHelper.drawStencil(matrixStack, getContentLeft(), getContentTop(), getContentRight(), getContentBottom(), 1);
 
-        glPushMatrix();
-        glTranslated(-scrollHoriz, 0, 0);
+        matrixStack.pushPose();
+        matrixStack.translate(-scrollHoriz, 0, 0);
 
         int e = _elements.size();
         while (nextElement < e && heightDrawn <= getContentHeight()) {
             heightDrawn += drawElement(matrixStack, nextElement, getContentLeft(), getContentTop() + heightDrawn);
             ++nextElement;
         }
-        glPopMatrix();
-        glDisable(GL_STENCIL_TEST);
-        glPopMatrix();
+        matrixStack.popPose();
+        GL11.glDisable(GL11.GL_STENCIL_TEST);
     }
 
-    protected int drawElement(MatrixStack matrixStack, int elementIndex, int x, int y) {
+    protected int drawElement(PoseStack matrixStack, int elementIndex, int x, int y) {
 
         IListBoxElement element = _elements.get(elementIndex);
         if (elementIndex == _selectedIndex) {

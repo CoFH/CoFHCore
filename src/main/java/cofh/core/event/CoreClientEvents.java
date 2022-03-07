@@ -5,15 +5,16 @@ import cofh.lib.client.renderer.entity.ITranslucentRenderer;
 import cofh.lib.util.Utils;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import net.minecraft.block.Block;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -25,13 +26,14 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static cofh.lib.util.constants.Constants.*;
 import static cofh.lib.util.constants.NBTTags.TAG_STORED_ENCHANTMENTS;
 import static cofh.lib.util.helpers.StringHelper.*;
-import static net.minecraft.util.text.TextFormatting.DARK_GRAY;
-import static net.minecraft.util.text.TextFormatting.GRAY;
-import static net.minecraftforge.common.util.Constants.NBT.TAG_COMPOUND;
+import static net.minecraft.ChatFormatting.DARK_GRAY;
+import static net.minecraft.ChatFormatting.GRAY;
+import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 
 @Mod.EventBusSubscriber (value = Dist.CLIENT, modid = ID_COFH_CORE)
 public class CoreClientEvents {
@@ -57,7 +59,7 @@ public class CoreClientEvents {
     @SubscribeEvent
     public static void handleItemTooltipEvent(ItemTooltipEvent event) {
 
-        List<ITextComponent> tooltip = event.getToolTip();
+        List<Component> tooltip = event.getToolTip();
         if (tooltip.isEmpty()) {
             return;
         }
@@ -66,9 +68,8 @@ public class CoreClientEvents {
         if (CoreConfig.enableKeywords && NAMESPACES.contains(Utils.getItemNamespace(stack.getItem()))) {
             String keywordKey = stack.getDescriptionId() + ".keyword";
             if (canLocalize(keywordKey)) {
-                if (tooltip.get(0) instanceof IFormattableTextComponent) {
-                    IFormattableTextComponent formatted = (IFormattableTextComponent) tooltip.get(0);
-                    formatted.append(getKeywordTextComponent(keywordKey));
+                if (tooltip.get(0) instanceof MutableComponent mutable) {
+                    mutable.append(getKeywordTextComponent(keywordKey));
                 }
             }
         }
@@ -80,7 +81,7 @@ public class CoreClientEvents {
         }
         if (CoreConfig.enableEnchantmentDescriptions) {
             if (stack.getTag() != null) {
-                ListNBT list = stack.getTag().getList(TAG_STORED_ENCHANTMENTS, TAG_COMPOUND);
+                ListTag list = stack.getTag().getList(TAG_STORED_ENCHANTMENTS, TAG_COMPOUND);
                 if (list.size() == 1) {
                     Enchantment ench = ForgeRegistries.ENCHANTMENTS.getValue(ResourceLocation.tryParse(list.getCompound(0).getString("id")));
                     if (ench != null && ench.getRegistryName() != null) {
@@ -100,8 +101,8 @@ public class CoreClientEvents {
         if (CoreConfig.enableItemTags && event.getFlags().isAdvanced()) {
             Item item = event.getItemStack().getItem();
 
-            Set<ResourceLocation> blockTags = Block.byItem(item).getTags();
-            Set<ResourceLocation> itemTags = item.getTags();
+            Set<ResourceLocation> blockTags = Block.byItem(item).builtInRegistryHolder().tags().map(TagKey::location).collect(Collectors.toSet());
+            Set<ResourceLocation> itemTags = item.builtInRegistryHolder().tags().map(TagKey::location).collect(Collectors.toSet());
 
             if (!blockTags.isEmpty() || !itemTags.isEmpty()) {
                 if (Screen.hasControlDown()) {
@@ -132,12 +133,11 @@ public class CoreClientEvents {
     @SubscribeEvent
     public static void handleRenderTooltipEvent(RenderTooltipEvent.Pre event) {
 
-        if (event.getLines().isEmpty()) {
+        if (event.getComponents().isEmpty()) {
             return;
         }
-        if (event.getLines().get(0) instanceof IFormattableTextComponent) {
-            IFormattableTextComponent formatted = (IFormattableTextComponent) event.getLines().get(0);
-            formatted.getSiblings().removeIf(string -> string.getStyle().equals(INVIS_STYLE));
+        if (event.getComponents().get(0) instanceof MutableComponent mutable) {
+            mutable.getSiblings().removeIf(string -> string.getStyle().equals(INVIS_STYLE));
         }
     }
 

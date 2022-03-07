@@ -1,11 +1,11 @@
 package cofh.lib.item.impl;
 
 import cofh.lib.item.ICoFHItem;
-import net.minecraft.item.HoeItem;
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.HoeItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tier;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -18,14 +18,14 @@ public class HoeItemCoFH extends HoeItem implements ICoFHItem {
 
     protected BooleanSupplier showInGroups = TRUE;
 
-    protected Supplier<ItemGroup> displayGroup;
+    protected Supplier<CreativeModeTab> displayGroup;
 
-    public HoeItemCoFH(IItemTier tier, int attackDamageIn, float attackSpeedIn, Properties builder) {
+    public HoeItemCoFH(Tier tier, int attackDamageIn, float attackSpeedIn, Properties builder) {
 
         super(tier, attackDamageIn, attackSpeedIn, builder);
     }
 
-    public HoeItemCoFH setDisplayGroup(Supplier<ItemGroup> displayGroup) {
+    public HoeItemCoFH setDisplayGroup(Supplier<CreativeModeTab> displayGroup) {
 
         this.displayGroup = displayGroup;
         return this;
@@ -38,7 +38,7 @@ public class HoeItemCoFH extends HoeItem implements ICoFHItem {
     }
 
     @Override
-    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
 
         if (!showInGroups.getAsBoolean() || displayGroup != null && displayGroup.get() != null && displayGroup.get() != group) {
             return;
@@ -47,7 +47,7 @@ public class HoeItemCoFH extends HoeItem implements ICoFHItem {
     }
 
     @Override
-    public Collection<ItemGroup> getCreativeTabs() {
+    public Collection<CreativeModeTab> getCreativeTabs() {
 
         return displayGroup != null && displayGroup.get() != null ? Collections.singletonList(displayGroup.get()) : super.getCreativeTabs();
     }

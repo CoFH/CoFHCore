@@ -2,24 +2,24 @@ package cofh.core.event;
 
 import cofh.lib.capability.templates.AreaEffectItemWrapper;
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import com.mojang.blaze3d.vertex.MatrixApplyingVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.SheetedDecalTextureGenerator;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.PlayerController;
-import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.renderer.BlockRendererDispatcher;
+import net.minecraft.client.multiplayer.MultiPlayerGameMode;
+import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.client.renderer.model.ModelBakery;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
+import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.DrawHighlightEvent;
+import net.minecraftforge.client.event.DrawSelectionEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -39,12 +39,12 @@ public class AreaEffectClientEvents {
     }
 
     @SubscribeEvent (priority = EventPriority.LOW)
-    public static void renderBlockHighlights(DrawHighlightEvent.HighlightBlock event) {
+    public static void renderBlockHighlights(DrawSelectionEvent.HighlightBlock event) {
 
         if (event.isCanceled()) {
             return;
         }
-        PlayerEntity player = Minecraft.getInstance().player;
+        Player player = Minecraft.getInstance().player;
         if (player == null) {
             return;
         }
@@ -52,16 +52,16 @@ public class AreaEffectClientEvents {
         if (!validAreaEffectItem(stack)) {
             return;
         }
-        ActiveRenderInfo renderInfo = Minecraft.getInstance().gameRenderer.getMainCamera();
+        Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
         ImmutableList<BlockPos> areaBlocks = stack.getCapability(AREA_EFFECT_ITEM_CAPABILITY).orElse(new AreaEffectItemWrapper(stack)).getAreaEffectBlocks(event.getTarget().getBlockPos(), player);
 
-        WorldRenderer worldRender = event.getContext();
-        MatrixStack matrix = event.getMatrix();
-        IVertexBuilder vertexBuilder = worldRender.renderBuffers.bufferSource().getBuffer(RenderType.lines());
-        Entity viewEntity = renderInfo.getEntity();
-        World world = player.level;
+        LevelRenderer levelRenderer = event.getLevelRenderer();
+        PoseStack matrix = event.getPoseStack();
+        VertexConsumer vertexBuilder = levelRenderer.renderBuffers.bufferSource().getBuffer(RenderType.lines());
+        Entity viewEntity = camera.getEntity();
+        Level world = player.level;
 
-        Vector3d vec3d = renderInfo.getPosition();
+        Vec3 vec3d = camera.getPosition();
         double d0 = vec3d.x();
         double d1 = vec3d.y();
         double d2 = vec3d.z();
@@ -69,44 +69,44 @@ public class AreaEffectClientEvents {
         matrix.pushPose();
         for (BlockPos pos : areaBlocks) {
             if (world.getWorldBorder().isWithinBounds(pos)) {
-                worldRender.renderHitOutline(matrix, vertexBuilder, viewEntity, d0, d1, d2, pos, world.getBlockState(pos));
+                levelRenderer.renderHitOutline(matrix, vertexBuilder, viewEntity, d0, d1, d2, pos, world.getBlockState(pos));
             }
         }
         matrix.popPose();
 
-        PlayerController controller = Minecraft.getInstance().gameMode;
-        if (controller == null || !controller.isDestroying) {
+        MultiPlayerGameMode gamemode = Minecraft.getInstance().gameMode;
+        if (gamemode == null || !gamemode.isDestroying) {
             return;
         }
         if (!validAreaEffectMiningItem(stack)) {
             return;
         }
-        drawBlockDamageTexture(controller, event.getContext(), event.getMatrix(), Minecraft.getInstance().gameRenderer.getMainCamera(), player.getCommandSenderWorld(), areaBlocks);
+        drawBlockDamageTexture(gamemode, event.getLevelRenderer(), event.getPoseStack(), Minecraft.getInstance().gameRenderer.getMainCamera(), player.getCommandSenderWorld(), areaBlocks);
     }
 
     // region HELPERS
-    private static void drawBlockDamageTexture(PlayerController controller, WorldRenderer worldRender, MatrixStack matrixStackIn, ActiveRenderInfo renderInfo, World world, List<BlockPos> areaBlocks) {
+    private static void drawBlockDamageTexture(MultiPlayerGameMode gameMode, LevelRenderer levelRenderer, PoseStack posestack, Camera camera, Level level, List<BlockPos> areaBlocks) {
 
-        double d0 = renderInfo.getPosition().x;
-        double d1 = renderInfo.getPosition().y;
-        double d2 = renderInfo.getPosition().z;
+        double d0 = camera.getPosition().x;
+        double d1 = camera.getPosition().y;
+        double d2 = camera.getPosition().z;
 
-        int progress = (int) (controller.destroyProgress * 10.0F) - 1;
+        int progress = (int) (gameMode.destroyProgress * 10.0F) - 1;
         if (progress < 0 || progress > 10) {
             return;
         }
         progress = Math.min(progress + 1, 9); // Ensure that for whatever reason the progress level doesn't go OOB.
 
-        BlockRendererDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
-        IVertexBuilder vertexBuilder = worldRender.renderBuffers.crumblingBufferSource().getBuffer(ModelBakery.DESTROY_TYPES.get(progress));
+        BlockRenderDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
+        VertexConsumer vertexBuilder = levelRenderer.renderBuffers.crumblingBufferSource().getBuffer(ModelBakery.DESTROY_TYPES.get(progress));
 
         for (BlockPos pos : areaBlocks) {
-            matrixStackIn.pushPose();
-            matrixStackIn.translate((double) pos.getX() - d0, (double) pos.getY() - d1, (double) pos.getZ() - d2);
-            MatrixStack.Entry matrixEntry = matrixStackIn.last();
-            IVertexBuilder matrixBuilder = new MatrixApplyingVertexBuilder(vertexBuilder, matrixEntry.pose(), matrixEntry.normal());
-            dispatcher.renderBreakingTexture(world.getBlockState(pos), pos, world, matrixStackIn, matrixBuilder);
-            matrixStackIn.popPose();
+            posestack.pushPose();
+            posestack.translate((double) pos.getX() - d0, (double) pos.getY() - d1, (double) pos.getZ() - d2);
+            PoseStack.Pose matrixEntry = posestack.last();
+            VertexConsumer matrixBuilder = new SheetedDecalTextureGenerator(vertexBuilder, matrixEntry.pose(), matrixEntry.normal());
+            dispatcher.renderBreakingTexture(level.getBlockState(pos), pos, level, posestack, matrixBuilder);
+            posestack.popPose();
         }
     }
     // endregion

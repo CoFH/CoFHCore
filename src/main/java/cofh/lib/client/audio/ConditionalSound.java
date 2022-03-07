@@ -1,16 +1,16 @@
 package cofh.lib.client.audio;
 
-import net.minecraft.client.audio.TickableSound;
-import net.minecraft.entity.Entity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 import java.util.function.BooleanSupplier;
 
 import static cofh.lib.util.constants.Constants.FALSE;
 
-public class ConditionalSound extends TickableSound {
+public class ConditionalSound extends AbstractTickableSoundInstance {
 
     boolean beginFadeOut;
     boolean donePlaying;
@@ -21,7 +21,7 @@ public class ConditionalSound extends TickableSound {
 
     BooleanSupplier condition = FALSE;
 
-    public ConditionalSound(SoundEvent soundIn, SoundCategory categoryIn, TileEntity tile, BooleanSupplier condition) {
+    public ConditionalSound(SoundEvent soundIn, SoundSource categoryIn, BlockEntity tile, BooleanSupplier condition) {
 
         super(soundIn, categoryIn);
 
@@ -33,7 +33,7 @@ public class ConditionalSound extends TickableSound {
         this.condition = condition;
     }
 
-    public ConditionalSound(SoundEvent soundIn, SoundCategory categoryIn, Entity entity, BooleanSupplier condition) {
+    public ConditionalSound(SoundEvent soundIn, SoundSource categoryIn, Entity entity, BooleanSupplier condition) {
 
         super(soundIn, categoryIn);
 

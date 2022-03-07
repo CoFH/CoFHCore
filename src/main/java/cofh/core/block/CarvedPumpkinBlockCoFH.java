@@ -1,10 +1,10 @@
 package cofh.core.block;
 
 import cofh.core.util.ProxyUtils;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.CarvedPumpkinBlock;
-import net.minecraft.util.Util;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.Util;
+import net.minecraft.core.Registry;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CarvedPumpkinBlock;
 
 public class CarvedPumpkinBlockCoFH extends CarvedPumpkinBlock {
 

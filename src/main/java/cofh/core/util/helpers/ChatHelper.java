@@ -3,10 +3,10 @@ package cofh.core.util.helpers;
 import cofh.core.network.packet.client.IndexedChatPacket;
 import cofh.core.util.ProxyUtils;
 import cofh.lib.util.Utils;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.Util;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 
 import java.util.List;
 
@@ -17,15 +17,15 @@ public class ChatHelper {
 
     private static final boolean indexChatMessages = true;
 
-    public static void sendIndexedChatMessageToPlayer(PlayerEntity player, ITextComponent message) {
+    public static void sendIndexedChatMessageToPlayer(Player player, Component message) {
 
         if (player.level == null || Utils.isFakePlayer(player)) {
             return;
         }
         if (indexChatMessages) {
             if (Utils.isServerWorld(player.level)) {
-                if (player instanceof ServerPlayerEntity) {
-                    IndexedChatPacket.sendToClient(message, TEMP_INDEX_SERVER, (ServerPlayerEntity) player);
+                if (player instanceof ServerPlayer) {
+                    IndexedChatPacket.sendToClient(message, TEMP_INDEX_SERVER, (ServerPlayer) player);
                 }
             } else {
                 ProxyUtils.addIndexedChatMessage(message, TEMP_INDEX_CLIENT);
@@ -35,7 +35,7 @@ public class ChatHelper {
         }
     }
 
-    public static void sendIndexedChatMessagesToPlayer(PlayerEntity player, List<ITextComponent> messages) {
+    public static void sendIndexedChatMessagesToPlayer(Player player, List<Component> messages) {
 
         if (player.level == null || Utils.isFakePlayer(player)) {
             return;
@@ -43,15 +43,15 @@ public class ChatHelper {
         if (indexChatMessages) {
             for (int i = 0; i < messages.size(); ++i) {
                 if (Utils.isServerWorld(player.level)) {
-                    if (player instanceof ServerPlayerEntity) {
-                        IndexedChatPacket.sendToClient(messages.get(i), TEMP_INDEX_SERVER + i, (ServerPlayerEntity) player);
+                    if (player instanceof ServerPlayer) {
+                        IndexedChatPacket.sendToClient(messages.get(i), TEMP_INDEX_SERVER + i, (ServerPlayer) player);
                     }
                 } else {
                     ProxyUtils.addIndexedChatMessage(messages.get(i), TEMP_INDEX_CLIENT + i);
                 }
             }
         } else {
-            for (ITextComponent message : messages) {
+            for (Component message : messages) {
                 player.sendMessage(message, Util.NIL_UUID);
             }
         }

@@ -4,7 +4,7 @@ import cofh.core.util.helpers.GuiHelper;
 import cofh.lib.client.gui.IGuiAccess;
 import cofh.lib.inventory.container.slot.SlotCoFH;
 import cofh.lib.util.helpers.MathHelper;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -50,7 +50,7 @@ public class ElementAugmentSlots extends ElementBase {
     }
 
     @Override
-    public void drawBackground(MatrixStack matrixStack, int mouseX, int mouseY) {
+    public void drawBackground(PoseStack matrixStack, int mouseX, int mouseY) {
 
         for (ElementBase slot : slots) {
             if (slot.visible()) {
@@ -60,7 +60,7 @@ public class ElementAugmentSlots extends ElementBase {
     }
 
     @Override
-    public void drawForeground(MatrixStack matrixStack, int mouseX, int mouseY) {
+    public void drawForeground(PoseStack matrixStack, int mouseX, int mouseY) {
 
         for (ElementBase slot : slots) {
             if (slot.visible()) {

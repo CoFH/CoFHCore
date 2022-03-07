@@ -1,7 +1,7 @@
 package cofh.lib.item;
 
 import cofh.lib.util.helpers.AugmentableHelper;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 

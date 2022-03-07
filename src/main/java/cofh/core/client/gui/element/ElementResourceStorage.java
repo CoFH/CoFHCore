@@ -4,13 +4,12 @@ import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.client.gui.IGuiAccess;
 import cofh.lib.util.IResourceStorage;
 import cofh.lib.util.helpers.MathHelper;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
 import java.util.function.BooleanSupplier;
@@ -19,8 +18,8 @@ import static cofh.core.CoFHCore.LOG;
 import static cofh.lib.util.constants.Constants.FALSE;
 import static cofh.lib.util.constants.Constants.TRUE;
 import static cofh.lib.util.helpers.StringHelper.format;
-import static net.minecraft.client.gui.screen.Screen.hasAltDown;
-import static net.minecraft.client.gui.screen.Screen.hasShiftDown;
+import static net.minecraft.client.gui.screens.Screen.hasAltDown;
+import static net.minecraft.client.gui.screens.Screen.hasShiftDown;
 
 public abstract class ElementResourceStorage extends ElementBase {
 
@@ -109,7 +108,7 @@ public abstract class ElementResourceStorage extends ElementBase {
     }
 
     @Override
-    public void drawBackground(MatrixStack matrixStack, int mouseX, int mouseY) {
+    public void drawBackground(PoseStack matrixStack, int mouseX, int mouseY) {
 
         drawStorage();
         drawUnderlayTexture();
@@ -118,24 +117,24 @@ public abstract class ElementResourceStorage extends ElementBase {
     }
 
     @Override
-    public void addTooltip(List<ITextComponent> tooltipList, int mouseX, int mouseY) {
+    public void addTooltip(List<Component> tooltipList, int mouseX, int mouseY) {
 
         if (storage.isCreative()) {
-            tooltipList.add(new TranslationTextComponent("info.cofh.infinite").withStyle(TextFormatting.LIGHT_PURPLE).withStyle(TextFormatting.ITALIC));
+            tooltipList.add(new TranslatableComponent("info.cofh.infinite").withStyle(ChatFormatting.LIGHT_PURPLE).withStyle(ChatFormatting.ITALIC));
         } else {
-            tooltipList.add(new StringTextComponent(format(storage.getStored()) + " / " + format(storage.getCapacity()) + " " + storage.getUnit()));
+            tooltipList.add(new TextComponent(format(storage.getStored()) + " / " + format(storage.getCapacity()) + " " + storage.getUnit()));
         }
         if (clearable.getAsBoolean() && clearStorage != FALSE && (hasAltDown() || hasShiftDown())) {
-            tooltipList.add(new TranslationTextComponent("info.cofh.click_to_clear").withStyle(TextFormatting.GRAY));
+            tooltipList.add(new TranslatableComponent("info.cofh.click_to_clear").withStyle(ChatFormatting.GRAY));
         } else if (claimable.getAsBoolean()) {
-            tooltipList.add(new TranslationTextComponent("info.cofh.click_to_claim").withStyle(TextFormatting.GRAY));
+            tooltipList.add(new TranslatableComponent("info.cofh.click_to_claim").withStyle(ChatFormatting.GRAY));
         }
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
 
-        if (clearable.getAsBoolean() && hasShiftDown() && Screen.hasAltDown()) {
+        if (clearable.getAsBoolean() && hasShiftDown() && hasAltDown()) {
             return clearStorage.getAsBoolean();
         }
         if (claimable.getAsBoolean()) {
@@ -154,7 +153,8 @@ public abstract class ElementResourceStorage extends ElementBase {
     protected void drawStorage() {
 
         if (drawStorage.getAsBoolean() && texture != null) {
-            RenderHelper.bindTexture(texture);
+            RenderHelper.setPosTexShader();
+            RenderHelper.setShaderTexture0(texture);
             drawTexturedModalRect(posX(), posY(), 0, 0, width, height);
         }
     }
@@ -162,7 +162,8 @@ public abstract class ElementResourceStorage extends ElementBase {
     protected void drawUnderlayTexture() {
 
         if (drawUnderlay.getAsBoolean() && underlayTexture != null) {
-            RenderHelper.bindTexture(underlayTexture);
+            RenderHelper.setPosTexShader();
+            RenderHelper.setShaderTexture0(underlayTexture);
             drawTexturedModalRect(posX(), posY(), 0, 0, width, height);
         }
     }
@@ -172,7 +173,8 @@ public abstract class ElementResourceStorage extends ElementBase {
     protected void drawOverlayTexture() {
 
         if (drawOverlay.getAsBoolean() && overlayTexture != null) {
-            RenderHelper.bindTexture(overlayTexture);
+            RenderHelper.setPosTexShader();
+            RenderHelper.setShaderTexture0(overlayTexture);
             drawTexturedModalRect(posX(), posY(), 0, 0, width, height);
         }
     }

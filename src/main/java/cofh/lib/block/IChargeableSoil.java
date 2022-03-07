@@ -1,22 +1,22 @@
 package cofh.lib.block;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.extensions.IForgeBlock;
 
 import static cofh.lib.util.constants.Constants.CHARGED;
 
 public interface IChargeableSoil extends IForgeBlock {
 
-    static void charge(BlockState state, World worldIn, BlockPos pos) {
+    static void charge(BlockState state, Level worldIn, BlockPos pos) {
 
         int charge = state.getValue(CHARGED);
         if (charge < 4) {
             worldIn.setBlock(pos, state.setValue(CHARGED, charge + 1), 2);
-        } else if (worldIn instanceof ServerWorld) {
-            state.getBlock().tick(state, (ServerWorld) worldIn, pos, worldIn.random);
+        } else if (worldIn instanceof ServerLevel serverLevel) {
+            state.getBlock().tick(state, serverLevel, pos, worldIn.random);
         }
     }
 

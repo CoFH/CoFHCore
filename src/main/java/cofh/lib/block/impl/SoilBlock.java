@@ -1,17 +1,17 @@
 package cofh.lib.block.impl;
 
-import net.minecraft.block.AttachedStemBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.state.StateContainer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.AttachedStemBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.IPlantable;
@@ -34,14 +34,14 @@ public class SoilBlock extends Block {
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 
         super.createBlockStateDefinition(builder);
         builder.add(CHARGED);
     }
 
     @Override
-    public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
+    public void tick(BlockState state, ServerLevel worldIn, BlockPos pos, Random rand) {
 
         BlockPos abovePos = pos.above();
         BlockState aboveState = worldIn.getBlockState(abovePos);
@@ -58,23 +58,23 @@ public class SoilBlock extends Block {
         }
     }
 
-    public static void charge(BlockState state, World worldIn, BlockPos pos) {
+    public static void charge(BlockState state, Level worldIn, BlockPos pos) {
 
         int charge = state.getValue(CHARGED);
         if (charge < 4) {
             worldIn.setBlock(pos, state.setValue(CHARGED, charge + 1), 2);
-        } else if (worldIn instanceof ServerWorld) {
-            state.getBlock().tick(state, (ServerWorld) worldIn, pos, worldIn.random);
+        } else if (worldIn instanceof ServerLevel) {
+            state.getBlock().tick(state, (ServerLevel) worldIn, pos, worldIn.random);
         }
     }
 
     @Override
-    public boolean canSustainPlant(BlockState state, IBlockReader world, BlockPos pos, Direction facing, IPlantable plantable) {
+    public boolean canSustainPlant(BlockState state, BlockGetter world, BlockPos pos, Direction facing, IPlantable plantable) {
 
         return canSustainPlant(state, world, pos, facing, plantable, false);
     }
 
-    protected boolean canSustainPlant(BlockState state, IBlockReader world, BlockPos pos, Direction facing, IPlantable plantable, boolean tilled) {
+    protected boolean canSustainPlant(BlockState state, BlockGetter world, BlockPos pos, Direction facing, IPlantable plantable, boolean tilled) {
 
         if (plantable.getPlant(world, pos.relative(facing)).getBlock() instanceof AttachedStemBlock) {
             return true;
@@ -102,13 +102,13 @@ public class SoilBlock extends Block {
     }
 
     @Override
-    public boolean isFertile(BlockState state, IBlockReader world, BlockPos pos) {
+    public boolean isFertile(BlockState state, BlockGetter world, BlockPos pos) {
 
         return true;
     }
 
     @OnlyIn (Dist.CLIENT)
-    public boolean isViewBlocking(BlockState state, IBlockReader worldIn, BlockPos pos) {
+    public boolean isViewBlocking(BlockState state, BlockGetter worldIn, BlockPos pos) {
 
         return true;
     }

@@ -9,6 +9,7 @@ import net.minecraftforge.common.ForgeConfigSpec.IntValue;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import static cofh.lib.util.constants.Constants.MAX_ENCHANT_LEVEL;
@@ -250,7 +251,7 @@ public class CoreConfig {
 
     // region CONFIGURATION
     @SubscribeEvent
-    public static void configLoading(final ModConfig.Loading event) {
+    public static void configLoading(final ModConfigEvent.Loading event) {
 
         switch (event.getConfig().getType()) {
             case CLIENT:
@@ -262,7 +263,7 @@ public class CoreConfig {
     }
 
     @SubscribeEvent
-    public static void configReloading(final ModConfig.Reloading event) {
+    public static void configReloading(final ModConfigEvent.Reloading event) {
 
         switch (event.getConfig().getType()) {
             case CLIENT:

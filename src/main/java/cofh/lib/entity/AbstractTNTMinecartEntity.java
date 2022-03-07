@@ -1,5 +1,6 @@
 package cofh.lib.entity;
 
+<<<<<<< HEAD
 import cofh.lib.block.IDetonatable;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -10,15 +11,26 @@ import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
+=======
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+>>>>>>> caa1a35 (Initial 1.18.2 compile pass.)
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.vehicle.AbstractMinecart;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -34,12 +46,12 @@ public abstract class AbstractTNTMinecartEntity extends AbstractMinecartEntityCo
     public int effectDuration = 300;
     protected boolean detonated = false;
 
-    public AbstractTNTMinecartEntity(EntityType<?> type, World worldIn) {
+    public AbstractTNTMinecartEntity(EntityType<?> type, Level worldIn) {
 
         super(type, worldIn);
     }
 
-    public AbstractTNTMinecartEntity(EntityType<?> type, World worldIn, double posX, double posY, double posZ) {
+    public AbstractTNTMinecartEntity(EntityType<?> type, Level worldIn, double posX, double posY, double posZ) {
 
         super(type, worldIn, posX, posY, posZ);
     }
@@ -59,10 +71,10 @@ public abstract class AbstractTNTMinecartEntity extends AbstractMinecartEntityCo
             --this.fuse;
             this.level.addParticle(ParticleTypes.SMOKE, this.getX(), this.getY() + 0.5D, this.getZ(), 0.0D, 0.0D, 0.0D);
         } else if (this.fuse == 0) {
-            this.explodeCart(getHorizontalDistanceSqr(this.getDeltaMovement()));
+            this.explodeCart(getDeltaMovement().horizontalDistanceSqr());
         }
         if (this.horizontalCollision) {
-            double d0 = getHorizontalDistanceSqr(this.getDeltaMovement());
+            double d0 = getDeltaMovement().horizontalDistanceSqr();
             if (d0 >= (double) 0.01F) {
                 this.explodeCart(d0);
             }
@@ -73,10 +85,9 @@ public abstract class AbstractTNTMinecartEntity extends AbstractMinecartEntityCo
     public boolean hurt(DamageSource source, float amount) {
 
         Entity entity = source.getDirectEntity();
-        if (entity instanceof AbstractArrowEntity) {
-            AbstractArrowEntity abstractarrowentity = (AbstractArrowEntity) entity;
-            if (abstractarrowentity.isOnFire()) {
-                this.explodeCart(abstractarrowentity.getDeltaMovement().lengthSqr());
+        if (entity instanceof AbstractArrow arrowEntity) {
+            if (arrowEntity.isOnFire()) {
+                this.explodeCart(arrowEntity.getDeltaMovement().lengthSqr());
             }
         }
         return super.hurt(source, amount);
@@ -85,7 +96,7 @@ public abstract class AbstractTNTMinecartEntity extends AbstractMinecartEntityCo
     @Override
     public void destroy(DamageSource source) {
 
-        double d0 = getHorizontalDistanceSqr(this.getDeltaMovement());
+        double d0 = this.getDeltaMovement().horizontalDistanceSqr();
         if (!source.isFire() && !source.isExplosion() && !(d0 >= (double) 0.01F)) {
             detonated = true;
             super.destroy(source);
@@ -101,13 +112,13 @@ public abstract class AbstractTNTMinecartEntity extends AbstractMinecartEntityCo
     }
 
     @Override
-    public boolean causeFallDamage(float distance, float damageMultiplier) {
+    public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
 
         if (distance >= 3.0F) {
             float f = distance / 10.0F;
             this.explodeCart(f * f);
         }
-        return super.causeFallDamage(distance, damageMultiplier);
+        return super.causeFallDamage(distance, damageMultiplier, source);
     }
 
     @Override
@@ -130,19 +141,19 @@ public abstract class AbstractTNTMinecartEntity extends AbstractMinecartEntityCo
     }
 
     @Override
-    public float getBlockExplosionResistance(Explosion explosionIn, IBlockReader worldIn, BlockPos pos, BlockState blockStateIn, FluidState p_180428_5_, float p_180428_6_) {
+    public float getBlockExplosionResistance(Explosion explosionIn, BlockGetter worldIn, BlockPos pos, BlockState blockStateIn, FluidState p_180428_5_, float p_180428_6_) {
 
         return !this.isIgnited() || !blockStateIn.is(BlockTags.RAILS) && !worldIn.getBlockState(pos.above()).is(BlockTags.RAILS) ? super.getBlockExplosionResistance(explosionIn, worldIn, pos, blockStateIn, p_180428_5_, p_180428_6_) : 0.0F;
     }
 
     @Override
-    public boolean shouldBlockExplode(Explosion explosionIn, IBlockReader worldIn, BlockPos pos, BlockState blockStateIn, float p_174816_5_) {
+    public boolean shouldBlockExplode(Explosion explosionIn, BlockGetter worldIn, BlockPos pos, BlockState blockStateIn, float p_174816_5_) {
 
         return (!this.isIgnited() || !blockStateIn.is(BlockTags.RAILS) && !worldIn.getBlockState(pos.above()).is(BlockTags.RAILS)) && super.shouldBlockExplode(explosionIn, worldIn, pos, blockStateIn, p_174816_5_);
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundNBT compound) {
+    public void readAdditionalSaveData(CompoundTag compound) {
 
         super.readAdditionalSaveData(compound);
 
@@ -152,7 +163,7 @@ public abstract class AbstractTNTMinecartEntity extends AbstractMinecartEntityCo
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundNBT compound) {
+    public void addAdditionalSaveData(CompoundTag compound) {
 
         super.addAdditionalSaveData(compound);
 
@@ -162,7 +173,7 @@ public abstract class AbstractTNTMinecartEntity extends AbstractMinecartEntityCo
     @Override
     public Type getMinecartType() {
 
-        return AbstractMinecartEntity.Type.TNT;
+        return AbstractMinecart.Type.TNT;
     }
 
     public void ignite() {
@@ -171,7 +182,7 @@ public abstract class AbstractTNTMinecartEntity extends AbstractMinecartEntityCo
         if (!this.level.isClientSide) {
             this.level.broadcastEntityEvent(this, (byte) 10);
             if (!this.isSilent()) {
-                this.level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                this.level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.TNT_PRIMED, SoundSource.BLOCKS, 1.0F, 1.0F);
             }
         }
     }

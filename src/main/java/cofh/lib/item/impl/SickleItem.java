@@ -2,22 +2,25 @@ package cofh.lib.item.impl;
 
 import cofh.lib.capability.templates.AreaEffectMiningItemWrapper;
 import cofh.lib.item.ICoFHItem;
+import cofh.lib.util.constants.Constants;
 import com.google.common.collect.ImmutableSet;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ToolItem;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.DiggerItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
@@ -28,15 +31,16 @@ import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 import static cofh.lib.util.constants.Constants.TRUE;
-import static cofh.lib.util.constants.ToolTypes.SICKLE;
 
-public class SickleItem extends ToolItem implements ICoFHItem {
+// TODO Sickle Tool Type.
+public class SickleItem extends DiggerItem implements ICoFHItem {
 
     protected BooleanSupplier showInGroups = TRUE;
 
-    protected Supplier<ItemGroup> displayGroup;
+    protected Supplier<CreativeModeTab> displayGroup;
 
-    public static final Set<Block> EFFECTIVE_BLOCKS = ImmutableSet.of();
+    @Deprecated // TOOD move to Tags class somewhere and generate.
+    public static final TagKey<Block> EFFECTIVE_BLOCKS = BlockTags.create(new ResourceLocation(Constants.ID_THERMAL, "mineable/sickle"));
     public static final Set<Material> EFFECTIVE_MATERIALS = ImmutableSet.of(Material.LEAVES, Material.PLANT, Material.REPLACEABLE_PLANT, Material.WEB);
 
     private static final float DEFAULT_ATTACK_DAMAGE = 2.5F;
@@ -47,29 +51,29 @@ public class SickleItem extends ToolItem implements ICoFHItem {
     private final int radius;
     private final int height;
 
-    public SickleItem(IItemTier tier, float attackDamageIn, float attackSpeedIn, int radius, int height, Properties builder) {
+    public SickleItem(Tier tier, float attackDamageIn, float attackSpeedIn, int radius, int height, Properties builder) {
 
-        super(attackDamageIn, attackSpeedIn, tier, EFFECTIVE_BLOCKS, builder.addToolType(SICKLE, tier.getLevel()).durability(tier.getUses() * 4));
+        super(attackDamageIn, attackSpeedIn, tier, EFFECTIVE_BLOCKS, builder.durability(tier.getUses() * 4));
         this.radius = radius;
         this.height = height;
     }
 
-    public SickleItem(IItemTier tier, float attackDamageIn, float attackSpeedIn, Properties builder) {
+    public SickleItem(Tier tier, float attackDamageIn, float attackSpeedIn, Properties builder) {
 
-        this(tier, attackDamageIn, attackSpeedIn, DEFAULT_BASE_RADIUS, DEFAULT_BASE_HEIGHT, builder.addToolType(SICKLE, tier.getLevel()));
+        this(tier, attackDamageIn, attackSpeedIn, DEFAULT_BASE_RADIUS, DEFAULT_BASE_HEIGHT, builder);
     }
 
-    public SickleItem(IItemTier tier, float attackDamageIn, Properties builder) {
+    public SickleItem(Tier tier, float attackDamageIn, Properties builder) {
 
-        this(tier, attackDamageIn, DEFAULT_ATTACK_SPEED, DEFAULT_BASE_RADIUS, DEFAULT_BASE_HEIGHT, builder.addToolType(SICKLE, tier.getLevel()));
+        this(tier, attackDamageIn, DEFAULT_ATTACK_SPEED, DEFAULT_BASE_RADIUS, DEFAULT_BASE_HEIGHT, builder);
     }
 
-    public SickleItem(IItemTier tier, Properties builder) {
+    public SickleItem(Tier tier, Properties builder) {
 
-        this(tier, DEFAULT_ATTACK_DAMAGE, DEFAULT_ATTACK_SPEED, DEFAULT_BASE_RADIUS, DEFAULT_BASE_HEIGHT, builder.addToolType(SICKLE, tier.getLevel()));
+        this(tier, DEFAULT_ATTACK_DAMAGE, DEFAULT_ATTACK_SPEED, DEFAULT_BASE_RADIUS, DEFAULT_BASE_HEIGHT, builder);
     }
 
-    public SickleItem setDisplayGroup(Supplier<ItemGroup> displayGroup) {
+    public SickleItem setDisplayGroup(Supplier<CreativeModeTab> displayGroup) {
 
         this.displayGroup = displayGroup;
         return this;
@@ -82,7 +86,7 @@ public class SickleItem extends ToolItem implements ICoFHItem {
     }
 
     @Override
-    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
 
         if (!showInGroups.getAsBoolean() || displayGroup != null && displayGroup.get() != null && displayGroup.get() != group) {
             return;
@@ -91,7 +95,7 @@ public class SickleItem extends ToolItem implements ICoFHItem {
     }
 
     @Override
-    public Collection<ItemGroup> getCreativeTabs() {
+    public Collection<CreativeModeTab> getCreativeTabs() {
 
         return displayGroup != null && displayGroup.get() != null ? Collections.singletonList(displayGroup.get()) : super.getCreativeTabs();
     }
@@ -99,17 +103,18 @@ public class SickleItem extends ToolItem implements ICoFHItem {
     @Override
     public boolean isCorrectToolForDrops(BlockState state) {
 
-        if (state.getHarvestTool() == SICKLE) {
-            return getTier().getLevel() >= state.getHarvestLevel();
-        }
+        // TODO Tags are used for this now
+//        if (state.getHarvestTool() == SICKLE) {
+//            return getTier().getLevel() >= state.getHarvestLevel();
+//        }
         return EFFECTIVE_MATERIALS.contains(state.getMaterial());
     }
 
-    public boolean mineBlock(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity entity) {
+    public boolean mineBlock(ItemStack stack, Level world, BlockState state, BlockPos pos, LivingEntity entity) {
 
-        if (!world.isClientSide && !state.getBlock().is(BlockTags.FIRE)) {
+        if (!world.isClientSide && !state.is(BlockTags.FIRE)) {
             stack.hurtAndBreak(1, entity, (p_220036_0_) -> {
-                p_220036_0_.broadcastBreakEvent(EquipmentSlotType.MAINHAND);
+                p_220036_0_.broadcastBreakEvent(EquipmentSlot.MAINHAND);
             });
         }
         return EFFECTIVE_MATERIALS.contains(state.getMaterial());
@@ -127,7 +132,7 @@ public class SickleItem extends ToolItem implements ICoFHItem {
     }
 
     @Nullable
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
 
         return new AreaEffectMiningItemWrapper(stack, radius, height, AreaEffectMiningItemWrapper.Type.SICKLE);
     }

@@ -2,7 +2,7 @@ package cofh.lib.fluid;
 
 import cofh.lib.util.IResourceStorage;
 import cofh.lib.util.helpers.MathHelper;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -110,14 +110,14 @@ public class FluidStorageCoFH implements IFluidHandler, IFluidStackAccess, IReso
     }
 
     // region NBT
-    public FluidStorageCoFH read(CompoundNBT nbt) {
+    public FluidStorageCoFH read(CompoundTag nbt) {
 
         FluidStack fluid = FluidStack.loadFluidStackFromNBT(nbt);
         setFluidStack(fluid);
         return this;
     }
 
-    public CompoundNBT write(CompoundNBT nbt) {
+    public CompoundTag write(CompoundTag nbt) {
 
         fluid.writeToNBT(nbt);
         nbt.putInt(TAG_CAPACITY, baseCapacity);

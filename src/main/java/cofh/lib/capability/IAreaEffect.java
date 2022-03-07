@@ -1,8 +1,8 @@
 package cofh.lib.capability;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
 
 /**
  * Implement this interface as a capability for an Item which should be compatible with CoFH's AOE overlay rendering/handling.
@@ -12,6 +12,6 @@ import net.minecraft.util.math.BlockPos;
  */
 public interface IAreaEffect {
 
-    ImmutableList<BlockPos> getAreaEffectBlocks(BlockPos pos, PlayerEntity player);
+    ImmutableList<BlockPos> getAreaEffectBlocks(BlockPos pos, Player player);
 
 }

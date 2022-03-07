@@ -3,7 +3,7 @@ package cofh.lib.util.helpers;
 import cofh.core.util.filter.EmptyFilter;
 import cofh.lib.util.filter.IFilter;
 import cofh.lib.util.filter.IFilterableTile;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import static cofh.lib.util.constants.NBTTags.TAG_FILTER_TYPE;
 import static cofh.lib.util.helpers.AugmentableHelper.getPropertyWithDefault;

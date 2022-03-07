@@ -1,12 +1,12 @@
 package cofh.lib.inventory;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;
 
-public final class FalseIInventory implements IInventory {
+public final class FalseIInventory implements Container {
 
     public static FalseIInventory INSTANCE = new FalseIInventory();
 
@@ -55,7 +55,7 @@ public final class FalseIInventory implements IInventory {
     }
 
     @Override
-    public boolean stillValid(@Nonnull PlayerEntity player) {
+    public boolean stillValid(@Nonnull Player player) {
 
         return false;
     }

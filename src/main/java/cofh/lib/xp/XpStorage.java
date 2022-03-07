@@ -2,8 +2,8 @@ package cofh.lib.xp;
 
 import cofh.lib.util.IResourceStorage;
 import cofh.lib.util.helpers.MathHelper;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.common.util.INBTSerializable;
 
 import java.util.function.BooleanSupplier;
@@ -18,7 +18,7 @@ import static cofh.lib.util.constants.NBTTags.TAG_XP_MAX;
  *
  * @author King Lemming
  */
-public class XpStorage implements IXpStorage, IResourceStorage, INBTSerializable<CompoundNBT> {
+public class XpStorage implements IXpStorage, IResourceStorage, INBTSerializable<CompoundTag> {
 
     protected final int baseCapacity;
 
@@ -69,13 +69,13 @@ public class XpStorage implements IXpStorage, IResourceStorage, INBTSerializable
     }
 
     // region NETWORK
-    public void readFromBuffer(PacketBuffer buffer) {
+    public void readFromBuffer(FriendlyByteBuf buffer) {
 
         setCapacity(buffer.readInt());
         setXpStored(buffer.readInt());
     }
 
-    public void writeToBuffer(PacketBuffer buffer) {
+    public void writeToBuffer(FriendlyByteBuf buffer) {
 
         buffer.writeInt(getMaxXpStored());
         buffer.writeInt(getXpStored());
@@ -83,7 +83,7 @@ public class XpStorage implements IXpStorage, IResourceStorage, INBTSerializable
     // endregion
 
     // region NBT
-    public XpStorage read(CompoundNBT nbt) {
+    public XpStorage read(CompoundTag nbt) {
 
         this.xp = nbt.getInt(TAG_XP);
         if (xp > capacity) {
@@ -92,7 +92,7 @@ public class XpStorage implements IXpStorage, IResourceStorage, INBTSerializable
         return this;
     }
 
-    public CompoundNBT write(CompoundNBT nbt) {
+    public CompoundTag write(CompoundTag nbt) {
 
         if (this.capacity <= 0) {
             return nbt;
@@ -101,7 +101,7 @@ public class XpStorage implements IXpStorage, IResourceStorage, INBTSerializable
         return nbt;
     }
 
-    public CompoundNBT writeWithParams(CompoundNBT nbt) {
+    public CompoundTag writeWithParams(CompoundTag nbt) {
 
         if (this.capacity <= 0) {
             return nbt;
@@ -112,13 +112,13 @@ public class XpStorage implements IXpStorage, IResourceStorage, INBTSerializable
     }
 
     @Override
-    public CompoundNBT serializeNBT() {
+    public CompoundTag serializeNBT() {
 
-        return write(new CompoundNBT());
+        return write(new CompoundTag());
     }
 
     @Override
-    public void deserializeNBT(CompoundNBT nbt) {
+    public void deserializeNBT(CompoundTag nbt) {
 
         read(nbt);
     }

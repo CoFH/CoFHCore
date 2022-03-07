@@ -4,9 +4,9 @@ import cofh.core.inventory.container.TileItemFilterContainer;
 import cofh.lib.util.filter.IFilter;
 import cofh.lib.util.filter.IFilterableTile;
 import cofh.lib.util.filter.ITileFilterFactory;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 
 import javax.annotation.Nullable;
 
@@ -25,7 +25,7 @@ public class TileItemFilter extends AbstractItemFilter {
     // region INamedContainerProvider
     @Nullable
     @Override
-    public Container createMenu(int i, PlayerInventory inventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int i, Inventory inventory, Player player) {
 
         return new TileItemFilterContainer(i, tile.world(), tile.pos(), inventory, player);
     }

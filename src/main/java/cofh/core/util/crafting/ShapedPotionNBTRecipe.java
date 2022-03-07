@@ -1,19 +1,19 @@
 package cofh.core.util.crafting;
 
 import com.google.gson.JsonObject;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.ICraftingRecipe;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapedRecipe;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.potion.PotionUtils;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.crafting.IShapedRecipe;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
@@ -22,7 +22,7 @@ import java.util.Map;
 import static cofh.core.CoFHCore.RECIPE_SERIALIZERS;
 import static cofh.lib.util.references.CoreIDs.ID_CRAFTING_POTION;
 
-public class ShapedPotionNBTRecipe implements ICraftingRecipe, IShapedRecipe<CraftingInventory> {
+public class ShapedPotionNBTRecipe implements CraftingRecipe, IShapedRecipe<CraftingContainer> {
 
     private final ShapedRecipeInternal wrappedRecipe;
 
@@ -32,7 +32,7 @@ public class ShapedPotionNBTRecipe implements ICraftingRecipe, IShapedRecipe<Cra
     }
 
     @Override
-    public boolean matches(CraftingInventory inv, World worldIn) {
+    public boolean matches(CraftingContainer inv, Level worldIn) {
 
         // boolean flag
         boolean potionItem = false;
@@ -50,7 +50,7 @@ public class ShapedPotionNBTRecipe implements ICraftingRecipe, IShapedRecipe<Cra
     }
 
     @Override
-    public ItemStack assemble(CraftingInventory inv) {
+    public ItemStack assemble(CraftingContainer inv) {
 
         ItemStack result = wrappedRecipe.getResultItem().copy();
 
@@ -89,7 +89,7 @@ public class ShapedPotionNBTRecipe implements ICraftingRecipe, IShapedRecipe<Cra
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
 
         return RECIPE_SERIALIZERS.get(ID_CRAFTING_POTION);
     }
@@ -107,21 +107,22 @@ public class ShapedPotionNBTRecipe implements ICraftingRecipe, IShapedRecipe<Cra
     }
 
     // region SERIALIZER
-    public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<ShapedPotionNBTRecipe> {
+    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<ShapedPotionNBTRecipe> {
 
         public ShapedPotionNBTRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
 
-            String s = JSONUtils.getAsString(json, "group", "");
-            Map<String, Ingredient> map = ShapedRecipeInternal.keyFromJson(JSONUtils.getAsJsonObject(json, "key"));
-            String[] astring = ShapedRecipeInternal.shrink(ShapedRecipeInternal.patternFromJson(JSONUtils.getAsJsonArray(json, "pattern")));
+            String s = GsonHelper.getAsString(json, "group", "");
+            Map<String, Ingredient> map = ShapedRecipeInternal.keyFromJson(GsonHelper.getAsJsonObject(json, "key"));
+            String[] astring = ShapedRecipeInternal.shrink(ShapedRecipeInternal.patternFromJson(GsonHelper.getAsJsonArray(json, "pattern")));
             int i = astring[0].length();
             int j = astring.length;
             NonNullList<Ingredient> nonnulllist = ShapedRecipeInternal.dissolvePattern(astring, map, i, j);
-            ItemStack itemstack = ShapedRecipe.itemFromJson(JSONUtils.getAsJsonObject(json, "result"));
+            ItemStack itemstack = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result"));
             return new ShapedPotionNBTRecipe(recipeId, s, i, j, nonnulllist, itemstack);
         }
 
-        public ShapedPotionNBTRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+        @Override
+        public ShapedPotionNBTRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
 
             int i = buffer.readVarInt();
             int j = buffer.readVarInt();
@@ -135,7 +136,8 @@ public class ShapedPotionNBTRecipe implements ICraftingRecipe, IShapedRecipe<Cra
             return new ShapedPotionNBTRecipe(recipeId, s, i, j, nonnulllist, itemstack);
         }
 
-        public void toNetwork(PacketBuffer buffer, ShapedPotionNBTRecipe recipe) {
+        @Override
+        public void toNetwork(FriendlyByteBuf buffer, ShapedPotionNBTRecipe recipe) {
 
             buffer.writeVarInt(recipe.getRecipeWidth());
             buffer.writeVarInt(recipe.getRecipeHeight());

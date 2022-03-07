@@ -1,18 +1,18 @@
 package cofh.lib.network.packet;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.management.PlayerList;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.LogicalSidedProvider;
-import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.players.PlayerList;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
 /**
  * Packet sent FROM Servers TO Clients
@@ -31,7 +31,7 @@ public interface IPacketClient extends IPacket {
      */
     default void sendToClients() {
 
-        MinecraftServer server = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
+        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
         PlayerList list = server.getPlayerList();
         list.broadcastAll(toVanillaPacket(NetworkDirection.PLAY_TO_CLIENT));
     }
@@ -41,7 +41,7 @@ public interface IPacketClient extends IPacket {
      *
      * @param player The player to send the packet to.
      */
-    default void sendToPlayer(ServerPlayerEntity player) {
+    default void sendToPlayer(ServerPlayer player) {
 
         player.connection.send(toVanillaPacket(NetworkDirection.PLAY_TO_CLIENT));
     }
@@ -64,10 +64,10 @@ public interface IPacketClient extends IPacket {
      */
     default void sendToOps() {
 
-        net.minecraft.network.IPacket<?> packet = null;
-        MinecraftServer server = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
+        Packet<?> packet = null;
+        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
         PlayerList playerList = server.getPlayerList();
-        for (ServerPlayerEntity player : playerList.getPlayers()) {
+        for (ServerPlayer player : playerList.getPlayers()) {
             if (playerList.isOp(player.getGameProfile())) {
                 if (packet == null) { // So we don't serialize multiple times.
                     packet = toVanillaPacket(NetworkDirection.PLAY_TO_CLIENT);
@@ -81,26 +81,26 @@ public interface IPacketClient extends IPacket {
 
     /**
      * Sends this packet to all players around the specified point.
-     * This method is an overload of {@link #sendToAllAround(double, double, double, double, RegistryKey<World>)}
+     * This method is an overload of {@link #sendToAllAround(double, double, double, double, ResourceKey<Level>)}
      *
      * @param pos   The pos.
      * @param range The range.
      * @param dim   The dimension
      */
-    default void sendToAllAround(BlockPos pos, double range, RegistryKey<World> dim) {
+    default void sendToAllAround(BlockPos pos, double range, ResourceKey<Level> dim) {
 
         sendToAllAround(pos.getX(), pos.getY(), pos.getZ(), range, dim);
     }
 
     /**
      * Sends this packet to all players around the specified point.
-     * This method is an overload of {@link #sendToAllAround(double, double, double, double, RegistryKey<World>)}
+     * This method is an overload of {@link #sendToAllAround(double, double, double, double, ResourceKey<Level>)}
      *
      * @param pos   The pos.
      * @param range The range.
      * @param dim   The dimension
      */
-    default void sendToAllAround(Vector3d pos, double range, RegistryKey<World> dim) {
+    default void sendToAllAround(Vec3 pos, double range, ResourceKey<Level> dim) {
 
         sendToAllAround(pos.x, pos.y, pos.z, range, dim);
     }
@@ -114,9 +114,9 @@ public interface IPacketClient extends IPacket {
      * @param range The range.
      * @param dim   The dimension
      */
-    default void sendToAllAround(double x, double y, double z, double range, RegistryKey<World> dim) {
+    default void sendToAllAround(double x, double y, double z, double range, ResourceKey<Level> dim) {
 
-        MinecraftServer server = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
+        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
         PlayerList list = server.getPlayerList();
         list.broadcast(null, x, y, z, range, dim, toVanillaPacket(NetworkDirection.PLAY_TO_CLIENT));
     }
@@ -126,36 +126,36 @@ public interface IPacketClient extends IPacket {
 
     /**
      * Sends this packet to all clients watching the chunk.
-     * This method is an overload of {@link #sendToChunk(ServerWorld, BlockPos)}
+     * This method is an overload of {@link #sendToChunk(ServerLevel, BlockPos)}
      *
      * @param tile The tile, used as a reference for the chunk.
      */
-    default void sendToChunk(TileEntity tile) {
+    default void sendToChunk(BlockEntity tile) {
 
-        sendToChunk((ServerWorld) tile.getLevel(), tile.getBlockPos());
+        sendToChunk((ServerLevel) tile.getLevel(), tile.getBlockPos());
     }
 
     /**
      * Sends this packet to all clients watching the chunk.
-     * This method is an overload of {@link #sendToChunk(ServerWorld, int, int)}
+     * This method is an overload of {@link #sendToChunk(ServerLevel, int, int)}
      *
      * @param world The world the chunk is in.
      * @param pos   The pos, This is a position of a block, not a chunk.
      */
-    default void sendToChunk(ServerWorld world, BlockPos pos) {
+    default void sendToChunk(ServerLevel world, BlockPos pos) {
 
         sendToChunk(world, pos.getX() >> 4, pos.getZ() >> 4);
     }
 
     /**
      * Sends this packet to all clients watching the chunk.
-     * This method is an overload of {@link #sendToChunk(ServerWorld, ChunkPos)}
+     * This method is an overload of {@link #sendToChunk(ServerLevel, ChunkPos)}
      *
      * @param world  The world.
      * @param chunkX The chunk's X coord.
      * @param chunkZ The chunk'z Z coord.
      */
-    default void sendToChunk(ServerWorld world, int chunkX, int chunkZ) {
+    default void sendToChunk(ServerLevel world, int chunkX, int chunkZ) {
 
         sendToChunk(world, new ChunkPos(chunkX, chunkZ));
     }
@@ -166,10 +166,10 @@ public interface IPacketClient extends IPacket {
      * @param world The world.
      * @param pos   The pos.
      */
-    default void sendToChunk(ServerWorld world, ChunkPos pos) {
+    default void sendToChunk(ServerLevel world, ChunkPos pos) {
 
-        net.minecraft.network.IPacket<?> packet = toVanillaPacket(NetworkDirection.PLAY_TO_CLIENT);
-        world.getChunkSource().chunkMap.getPlayers(pos, false)//
+        Packet<?> packet = toVanillaPacket(NetworkDirection.PLAY_TO_CLIENT);
+        world.getChunkSource().chunkMap.getPlayers(pos, false)
                 .forEach(e -> e.connection.send(packet));
     }
     // endregion

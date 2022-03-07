@@ -5,9 +5,9 @@ import cofh.core.util.ProxyUtils;
 import cofh.lib.network.packet.IPacketClient;
 import cofh.lib.network.packet.PacketBase;
 import cofh.lib.util.helpers.StringHelper;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 
 import static cofh.lib.util.constants.Constants.PACKET_CHAT;
 
@@ -28,20 +28,20 @@ public class IndexedChatPacket extends PacketBase implements IPacketClient {
     }
 
     @Override
-    public void write(PacketBuffer buf) {
+    public void write(FriendlyByteBuf buf) {
 
         buf.writeInt(index);
         buf.writeUtf(message);
     }
 
     @Override
-    public void read(PacketBuffer buf) {
+    public void read(FriendlyByteBuf buf) {
 
         index = buf.readInt();
         message = buf.readUtf(Short.MAX_VALUE);
     }
 
-    public static void sendToClient(ITextComponent chat, int index, ServerPlayerEntity player) {
+    public static void sendToClient(Component chat, int index, ServerPlayer player) {
 
         IndexedChatPacket packet = new IndexedChatPacket();
         packet.index = index;

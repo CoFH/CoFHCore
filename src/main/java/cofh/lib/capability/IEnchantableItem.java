@@ -1,6 +1,6 @@
 package cofh.lib.capability;
 
-import net.minecraft.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantment;
 
 /**
  * Implement this interface as a capability for Items which have explicit enchantment support.

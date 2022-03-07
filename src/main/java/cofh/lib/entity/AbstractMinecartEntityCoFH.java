@@ -1,5 +1,6 @@
 package cofh.lib.entity;
 
+<<<<<<< HEAD
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
@@ -11,28 +12,49 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
+=======
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.vehicle.AbstractMinecart;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.network.NetworkHooks;
+>>>>>>> caa1a35 (Initial 1.18.2 compile pass.)
 
 import java.util.Map;
 
 import static cofh.lib.util.constants.NBTTags.TAG_ENCHANTMENTS;
+<<<<<<< HEAD
 import static cofh.lib.util.references.CoreReferences.HOLDING;
 import static net.minecraftforge.common.util.Constants.NBT.TAG_COMPOUND;
+=======
+import static net.minecraft.nbt.Tag.TAG_COMPOUND;
+>>>>>>> caa1a35 (Initial 1.18.2 compile pass.)
 
-public abstract class AbstractMinecartEntityCoFH extends AbstractMinecartEntity {
+public abstract class AbstractMinecartEntityCoFH extends AbstractMinecart {
 
-    protected ListNBT enchantments = new ListNBT();
+    protected ListTag enchantments = new ListTag();
 
-    protected AbstractMinecartEntityCoFH(EntityType<?> type, World worldIn) {
+    protected AbstractMinecartEntityCoFH(EntityType<?> type, Level worldIn) {
 
         super(type, worldIn);
     }
 
-    protected AbstractMinecartEntityCoFH(EntityType<?> type, World worldIn, double posX, double posY, double posZ) {
+    protected AbstractMinecartEntityCoFH(EntityType<?> type, Level worldIn, double posX, double posY, double posZ) {
 
         super(type, worldIn, posX, posY, posZ);
     }
 
+<<<<<<< HEAD
     public AbstractMinecartEntityCoFH onPlaced(ItemStack stack) {
+=======
+    public AbstractMinecartEntityCoFH setEnchantments(ListTag enchantments) {
+>>>>>>> caa1a35 (Initial 1.18.2 compile pass.)
 
         this.enchantments = stack.getEnchantmentTags();
         return this;
@@ -56,7 +78,7 @@ public abstract class AbstractMinecartEntityCoFH extends AbstractMinecartEntity 
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundNBT compound) {
+    public void readAdditionalSaveData(CompoundTag compound) {
 
         super.readAdditionalSaveData(compound);
 
@@ -64,7 +86,7 @@ public abstract class AbstractMinecartEntityCoFH extends AbstractMinecartEntity 
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundNBT compound) {
+    public void addAdditionalSaveData(CompoundTag compound) {
 
         super.addAdditionalSaveData(compound);
 
@@ -74,15 +96,25 @@ public abstract class AbstractMinecartEntityCoFH extends AbstractMinecartEntity 
     @Override
     public void destroy(DamageSource source) {
 
-        this.remove();
+        this.remove(Entity.RemovalReason.KILLED);
         if (this.level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
+<<<<<<< HEAD
             ItemStack stack = createItemStackTag(getCartItem());
+=======
+            ItemStack stack = getPickResult();
+            if (this.hasCustomName()) {
+                stack.setHoverName(this.getCustomName());
+            }
+            if (!this.enchantments.isEmpty()) {
+                stack.addTagElement(TAG_ENCHANTMENTS, enchantments);
+            }
+>>>>>>> caa1a35 (Initial 1.18.2 compile pass.)
             this.spawnAtLocation(stack);
         }
     }
 
     @Override
-    public IPacket<?> getAddEntityPacket() {
+    public Packet<?> getAddEntityPacket() {
 
         return NetworkHooks.getEntitySpawningPacket(this);
     }

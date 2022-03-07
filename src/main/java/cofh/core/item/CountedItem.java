@@ -1,7 +1,7 @@
 package cofh.core.item;
 
 import cofh.core.util.ProxyUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 public class CountedItem extends ItemCoFH {
 
@@ -9,7 +9,7 @@ public class CountedItem extends ItemCoFH {
 
         super(builder);
 
-        ProxyUtils.registerItemModelProperty(this, new ResourceLocation("count"), (stack, world, living) -> ((float) stack.getCount()) / stack.getMaxStackSize());
+        ProxyUtils.registerItemModelProperty(this, new ResourceLocation("count"), (stack, world, living, seed) -> ((float) stack.getCount()) / stack.getMaxStackSize());
     }
 
 }

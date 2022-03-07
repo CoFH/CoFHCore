@@ -3,14 +3,14 @@ package cofh.lib.tileentity;
 import cofh.lib.util.helpers.XpHelper;
 import cofh.lib.xp.EmptyXpStorage;
 import cofh.lib.xp.XpStorage;
-import net.minecraft.entity.item.ExperienceOrbEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.ExperienceOrb;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 public interface ITileXpHandler {
 
-    default boolean claimXP(PlayerEntity player) {
+    default boolean claimXP(Player player) {
 
         if (!getXpStorage().isEmpty()) {
             int xp = getXpStorage().getStored();
@@ -21,15 +21,15 @@ public interface ITileXpHandler {
         return false;
     }
 
-    default void spawnXpOrbs(World world, int xp, Vector3d pos) {
+    default void spawnXpOrbs(Level world, int xp, Vec3 pos) {
 
         if (world == null) {
             return;
         }
         while (xp > 0) {
-            int orbAmount = ExperienceOrbEntity.getExperienceValue(xp);
+            int orbAmount = ExperienceOrb.getExperienceValue(xp);
             xp -= orbAmount;
-            world.addFreshEntity(new ExperienceOrbEntity(world, pos.x, pos.y, pos.z, orbAmount));
+            world.addFreshEntity(new ExperienceOrb(world, pos.x, pos.y, pos.z, orbAmount));
         }
     }
 

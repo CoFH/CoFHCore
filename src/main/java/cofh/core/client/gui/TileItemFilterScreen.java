@@ -6,11 +6,11 @@ import cofh.core.client.gui.element.SimpleTooltip;
 import cofh.core.inventory.container.TileItemFilterContainer;
 import cofh.core.network.packet.server.FilterGuiOpenPacket;
 import cofh.lib.util.helpers.FilterHelper;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.Slot;
 
 import java.util.Collections;
 
@@ -28,7 +28,7 @@ public class TileItemFilterScreen extends ContainerScreenCoFH<TileItemFilterCont
     public static final String TEX_IGNORE_NBT = ID_COFH_CORE + ":textures/gui/filters/filter_ignore_nbt.png";
     public static final String TEX_USE_NBT = ID_COFH_CORE + ":textures/gui/filters/filter_use_nbt.png";
 
-    public TileItemFilterScreen(TileItemFilterContainer container, PlayerInventory inv, ITextComponent titleIn) {
+    public TileItemFilterScreen(TileItemFilterContainer container, Inventory inv, Component titleIn) {
 
         super(container, inv, titleIn);
 
@@ -83,7 +83,7 @@ public class TileItemFilterScreen extends ContainerScreenCoFH<TileItemFilterCont
         }
                 .setSize(20, 20)
                 .setTexture(TEX_DENY_LIST, 40, 20)
-                .setTooltipFactory(new SimpleTooltip(new TranslationTextComponent("info.cofh.filter.allowlist.0")))
+                .setTooltipFactory(new SimpleTooltip(new TranslatableComponent("info.cofh.filter.allowlist.0")))
                 .setVisible(() -> !menu.getAllowList()));
 
         addElement(new ElementButton(this, 132, 22) {
@@ -98,7 +98,7 @@ public class TileItemFilterScreen extends ContainerScreenCoFH<TileItemFilterCont
         }
                 .setSize(20, 20)
                 .setTexture(TEX_ALLOW_LIST, 40, 20)
-                .setTooltipFactory(new SimpleTooltip(new TranslationTextComponent("info.cofh.filter.allowlist.1")))
+                .setTooltipFactory(new SimpleTooltip(new TranslatableComponent("info.cofh.filter.allowlist.1")))
                 .setVisible(() -> menu.getAllowList()));
 
         addElement(new ElementButton(this, 132, 44) {
@@ -113,7 +113,7 @@ public class TileItemFilterScreen extends ContainerScreenCoFH<TileItemFilterCont
         }
                 .setSize(20, 20)
                 .setTexture(TEX_IGNORE_NBT, 40, 20)
-                .setTooltipFactory(new SimpleTooltip(new TranslationTextComponent("info.cofh.filter.checkNBT.0")))
+                .setTooltipFactory(new SimpleTooltip(new TranslatableComponent("info.cofh.filter.checkNBT.0")))
                 .setVisible(() -> !menu.getCheckNBT()));
 
         addElement(new ElementButton(this, 132, 44) {
@@ -128,7 +128,7 @@ public class TileItemFilterScreen extends ContainerScreenCoFH<TileItemFilterCont
         }
                 .setSize(20, 20)
                 .setTexture(TEX_USE_NBT, 40, 20)
-                .setTooltipFactory(new SimpleTooltip(new TranslationTextComponent("info.cofh.filter.checkNBT.1")))
+                .setTooltipFactory(new SimpleTooltip(new TranslatableComponent("info.cofh.filter.checkNBT.1")))
                 .setVisible(() -> menu.getCheckNBT()));
     }
     // endregion

@@ -3,9 +3,9 @@ package cofh.lib.util.control;
 import cofh.lib.util.SocialUtils;
 import cofh.lib.util.helpers.SecurityHelper;
 import com.mojang.authlib.GameProfile;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.scoreboard.Team;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.scores.Team;
 
 import java.util.UUID;
 
@@ -62,7 +62,7 @@ public interface ISecurable {
                 case PRIVATE:
                     return ownerID.equals(otherID);
                 case FRIENDS:
-                    return ownerID.equals(otherID) || entity instanceof ServerPlayerEntity && SocialUtils.isFriendOrSelf(owner, (ServerPlayerEntity) entity);
+                    return ownerID.equals(otherID) || entity instanceof ServerPlayer player && SocialUtils.isFriendOrSelf(owner, player);
                 case TEAM:
                     if (ownerID.equals(otherID)) {
                         return true;

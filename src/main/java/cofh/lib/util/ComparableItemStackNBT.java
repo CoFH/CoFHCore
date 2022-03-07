@@ -1,7 +1,7 @@
 package cofh.lib.util;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * Extension of {@link ComparableItemStack} except NBT sensitive.
@@ -12,7 +12,7 @@ import net.minecraft.nbt.CompoundNBT;
  */
 public class ComparableItemStackNBT extends ComparableItemStack {
 
-    public CompoundNBT tag;
+    public CompoundTag tag;
 
     public ComparableItemStackNBT(ItemStack stack) {
 

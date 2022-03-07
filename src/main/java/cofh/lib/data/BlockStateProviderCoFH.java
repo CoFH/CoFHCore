@@ -1,8 +1,8 @@
 package cofh.lib.data;
 
-import net.minecraft.block.*;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.*;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
@@ -82,12 +82,12 @@ public abstract class BlockStateProviderCoFH extends BlockStateProvider {
         axisBlock((RotatedPillarBlock) block.get(), modBlockLoc(texture, subfolder));
     }
 
-    protected void stairsBlock(Supplier<? extends StairsBlock> block, String name) {
+    protected void stairsBlock(Supplier<? extends StairBlock> block, String name) {
 
         stairsBlock(block, name, name);
     }
 
-    protected void stairsBlock(Supplier<? extends StairsBlock> block, String side, String topBottom) {
+    protected void stairsBlock(Supplier<? extends StairBlock> block, String side, String topBottom) {
 
         stairsBlock(block.get(), modBlockLoc(side), modBlockLoc(topBottom), modBlockLoc(topBottom));
     }

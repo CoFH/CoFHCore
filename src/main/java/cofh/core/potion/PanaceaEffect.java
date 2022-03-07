@@ -2,10 +2,10 @@ package cofh.core.potion;
 
 import cofh.lib.potion.EffectCoFH;
 import cofh.lib.util.Utils;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.EffectType;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.PotionEvent;
 
@@ -14,7 +14,7 @@ import java.util.Iterator;
 
 public class PanaceaEffect extends EffectCoFH {
 
-    public PanaceaEffect(EffectType typeIn, int liquidColorIn) {
+    public PanaceaEffect(MobEffectCategory typeIn, int liquidColorIn) {
 
         super(typeIn, liquidColorIn);
     }
@@ -37,11 +37,11 @@ public class PanaceaEffect extends EffectCoFH {
         if (Utils.isClientWorld(entity.level)) {
             return;
         }
-        Iterator<EffectInstance> iterator = entity.getActiveEffectsMap().values().iterator();
+        Iterator<MobEffectInstance> iterator = entity.getActiveEffectsMap().values().iterator();
 
         while (iterator.hasNext()) {
-            EffectInstance effect = iterator.next();
-            if (!effect.isAmbient() && effect.getEffect().getCategory() == EffectType.HARMFUL && !MinecraftForge.EVENT_BUS.post(new PotionEvent.PotionRemoveEvent(entity, effect))) {
+            MobEffectInstance effect = iterator.next();
+            if (!effect.isAmbient() && effect.getEffect().getCategory() == MobEffectCategory.HARMFUL && !MinecraftForge.EVENT_BUS.post(new PotionEvent.PotionRemoveEvent(entity, effect))) {
                 entity.onEffectRemoved(effect);
                 iterator.remove();
             }

@@ -7,28 +7,27 @@ import com.google.common.collect.Sets;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Transformation;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.minecraft.client.renderer.model.*;
-import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemStack;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.TransformationMatrix;
+import net.minecraft.client.resources.model.*;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.*;
 import net.minecraftforge.client.model.geometry.IModelGeometry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.resource.IResourceType;
-import net.minecraftforge.resource.VanillaResourceType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -71,20 +70,20 @@ public final class DynamicFluidContainerModel implements IModelGeometry<DynamicF
     }
 
     @Override
-    public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> spriteGetter, IModelTransform modelTransform, ItemOverrideList overrides, ResourceLocation modelLocation) {
+    public BakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelTransform, ItemOverrides overrides, ResourceLocation modelLocation) {
 
-        RenderMaterial particleLocation = owner.isTexturePresent("particle") ? owner.resolveTexture("particle") : null;
-        RenderMaterial baseLocation = owner.isTexturePresent("base") ? owner.resolveTexture("base") : null;
-        RenderMaterial fluidMaskLocation = owner.isTexturePresent("fluid_mask") ? owner.resolveTexture("fluid_mask") : null;
-        RenderMaterial coverLocation = owner.isTexturePresent("cover") ? owner.resolveTexture("cover") : null;
+        Material particleLocation = owner.isTexturePresent("particle") ? owner.resolveTexture("particle") : null;
+        Material baseLocation = owner.isTexturePresent("base") ? owner.resolveTexture("base") : null;
+        Material fluidMaskLocation = owner.isTexturePresent("fluid_mask") ? owner.resolveTexture("fluid_mask") : null;
+        Material coverLocation = owner.isTexturePresent("cover") ? owner.resolveTexture("cover") : null;
 
-        IModelTransform transformsFromModel = owner.getCombinedTransform();
+        ModelState transformsFromModel = owner.getCombinedTransform();
         Fluid fluid = fluidStack.getFluid();
 
         TextureAtlasSprite fluidSprite = fluid != Fluids.EMPTY ? spriteGetter.apply(ForgeHooksClient.getBlockMaterial(fluid.getAttributes().getStillTexture())) : null;
         TextureAtlasSprite coverSprite = (coverLocation != null && (!coverIsMask || baseLocation != null)) ? spriteGetter.apply(coverLocation) : null;
 
-        ImmutableMap<TransformType, TransformationMatrix> transformMap = PerspectiveMapWrapper.getTransforms(new ModelTransformComposition(transformsFromModel, modelTransform));
+        ImmutableMap<TransformType, Transformation> transformMap = PerspectiveMapWrapper.getTransforms(new CompositeModelState(transformsFromModel, modelTransform));
         TextureAtlasSprite particleSprite = particleLocation != null ? spriteGetter.apply(particleLocation) : null;
 
         if (particleSprite == null) {
@@ -95,11 +94,11 @@ public final class DynamicFluidContainerModel implements IModelGeometry<DynamicF
         }
         // if the fluid is lighter than air, will manipulate the initial state to be rotated 180deg to turn it upside down
         if (flipGas && fluid != Fluids.EMPTY && fluid.getAttributes().isLighterThanAir()) {
-            modelTransform = new SimpleModelTransform(
+            modelTransform = new SimpleModelState(
                     modelTransform.getRotation().blockCornerToCenter().compose(
-                            new TransformationMatrix(null, new Quaternion(0, 0, 1, 0), null, null)).blockCenterToCorner());
+                            new Transformation(null, new Quaternion(0, 0, 1, 0), null, null)).blockCenterToCorner());
         }
-        TransformationMatrix transform = modelTransform.getRotation();
+        Transformation transform = modelTransform.getRotation();
         ItemMultiLayerBakedModel.Builder builder = ItemMultiLayerBakedModel.builder(owner, particleSprite, new ContainedFluidOverrideHandler(overrides, bakery, owner, this), transformMap);
 
         if (baseLocation != null) {
@@ -133,9 +132,9 @@ public final class DynamicFluidContainerModel implements IModelGeometry<DynamicF
     }
 
     @Override
-    public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
+    public Collection<Material> getTextures(IModelConfiguration owner, Function<ResourceLocation, UnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
 
-        Set<RenderMaterial> texs = Sets.newHashSet();
+        Set<Material> texs = Sets.newHashSet();
 
         if (owner.isTexturePresent("particle")) {
             texs.add(owner.resolveTexture("particle"));
@@ -155,18 +154,7 @@ public final class DynamicFluidContainerModel implements IModelGeometry<DynamicF
     public static class Loader implements IModelLoader<DynamicFluidContainerModel> {
 
         @Override
-        public IResourceType getResourceType() {
-
-            return VanillaResourceType.MODELS;
-        }
-
-        @Override
-        public void onResourceManagerReload(IResourceManager resourceManager) {
-            // no need to clear cache since we create a new model instance
-        }
-
-        @Override
-        public void onResourceManagerReload(IResourceManager resourceManager, Predicate<IResourceType> resourcePredicate) {
+        public void onResourceManagerReload(ResourceManager resourceManager) {
             // no need to clear cache since we create a new model instance
         }
 
@@ -203,15 +191,15 @@ public final class DynamicFluidContainerModel implements IModelGeometry<DynamicF
 
     }
 
-    private static final class ContainedFluidOverrideHandler extends ItemOverrideList {
+    private static final class ContainedFluidOverrideHandler extends ItemOverrides {
 
-        private final Int2ObjectMap<IBakedModel> cache = new Int2ObjectOpenHashMap<>(); // contains all the baked models since they'll never change
-        private final ItemOverrideList nested;
+        private final Int2ObjectMap<BakedModel> cache = new Int2ObjectOpenHashMap<>(); // contains all the baked models since they'll never change
+        private final ItemOverrides nested;
         private final ModelBakery bakery;
         private final IModelConfiguration owner;
         private final DynamicFluidContainerModel parent;
 
-        private ContainedFluidOverrideHandler(ItemOverrideList nested, ModelBakery bakery, IModelConfiguration owner, DynamicFluidContainerModel parent) {
+        private ContainedFluidOverrideHandler(ItemOverrides nested, ModelBakery bakery, IModelConfiguration owner, DynamicFluidContainerModel parent) {
 
             this.nested = nested;
             this.bakery = bakery;
@@ -220,9 +208,9 @@ public final class DynamicFluidContainerModel implements IModelGeometry<DynamicF
         }
 
         @Override
-        public IBakedModel resolve(IBakedModel originalModel, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
+        public BakedModel resolve(BakedModel originalModel, ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity, int seed) {
 
-            IBakedModel overrideModel = nested.resolve(originalModel, stack, world, entity);
+            BakedModel overrideModel = nested.resolve(originalModel, stack, world, entity, seed);
             if (overrideModel != originalModel) {
                 return overrideModel;
             }
@@ -231,7 +219,7 @@ public final class DynamicFluidContainerModel implements IModelGeometry<DynamicF
                         int fluidHash = FluidHelper.fluidHashcode(fluidStack);
                         if (!cache.containsKey(fluidHash)) {
                             DynamicFluidContainerModel unbaked = this.parent.withFluid(fluidStack);
-                            IBakedModel bakedModel = unbaked.bake(owner, bakery, ModelLoader.defaultTextureGetter(), ModelRotation.X0_Y0, this, new ResourceLocation(ID_COFH_CORE, "fluid_container_override"));
+                            BakedModel bakedModel = unbaked.bake(owner, bakery, ForgeModelBakery.defaultTextureGetter(), BlockModelRotation.X0_Y0, this, new ResourceLocation(ID_COFH_CORE, "fluid_container_override"));
                             cache.put(fluidHash, bakedModel);
                             return bakedModel;
                         }

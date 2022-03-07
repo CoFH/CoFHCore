@@ -1,15 +1,15 @@
 package cofh.core.command;
 
 import com.mojang.brigadier.builder.ArgumentBuilder;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.command.arguments.EntityArgument;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.ChestContainer;
-import net.minecraft.inventory.container.SimpleNamedContainerProvider;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ChestMenu;
 
 import static cofh.lib.util.constants.Constants.CMD_PLAYER;
 
@@ -17,9 +17,9 @@ public class SubCommandEnderChest {
 
     public static int permissionLevel = 2;
 
-    static final TranslationTextComponent TITLE = new TranslationTextComponent("container.enderchest");
+    static final TranslatableComponent TITLE = new TranslatableComponent("container.enderchest");
 
-    static ArgumentBuilder<CommandSource, ?> register() {
+    static ArgumentBuilder<CommandSourceStack, ?> register() {
 
         return Commands.literal("enderchest")
                 .requires(source -> source.hasPermission(permissionLevel))
@@ -30,14 +30,14 @@ public class SubCommandEnderChest {
                         .executes(context -> openContainer(context.getSource().getPlayerOrException(), EntityArgument.getPlayer(context, CMD_PLAYER))));
     }
 
-    private static int openContainer(PlayerEntity user, PlayerEntity target) {
+    private static int openContainer(Player user, Player target) {
 
-        IFormattableTextComponent title = TITLE.copy();
+        MutableComponent title = TITLE.copy();
 
         if (user != target) {
             title.append(" - ").append(target.getDisplayName());
         }
-        user.openMenu(new SimpleNamedContainerProvider((id, player, inv) -> ChestContainer.threeRows(id, player, target.getEnderChestInventory()), title));
+        user.openMenu(new SimpleMenuProvider((id, player, inv) -> ChestMenu.threeRows(id, player, target.getEnderChestInventory()), title));
         user.awardStat(Stats.OPEN_ENDERCHEST);
         return 1;
     }

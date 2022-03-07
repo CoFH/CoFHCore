@@ -5,10 +5,10 @@ import cofh.core.client.gui.element.ElementAugmentSlots;
 import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.client.gui.IGuiAccess;
 import cofh.lib.inventory.container.slot.SlotCoFH;
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -50,7 +50,7 @@ public class AugmentPanel extends PanelBase {
     }
 
     @Override
-    protected void drawForeground(MatrixStack matrixStack) {
+    protected void drawForeground(PoseStack matrixStack) {
 
         drawPanelIcon(matrixStack, CoreTextures.ICON_AUGMENT);
         if (!fullyOpen) {
@@ -58,11 +58,11 @@ public class AugmentPanel extends PanelBase {
         }
         getFontRenderer().drawShadow(matrixStack, localize("info.cofh.augmentation"), sideOffset() + 18, 6, headerColor);
 
-        RenderHelper.resetColor();
+        RenderHelper.resetShaderColor();
     }
 
     @Override
-    protected void drawBackground(MatrixStack matrixStack) {
+    protected void drawBackground(PoseStack matrixStack) {
 
         super.drawBackground(matrixStack);
 
@@ -72,16 +72,17 @@ public class AugmentPanel extends PanelBase {
         float colorR = (backgroundColor >> 16 & 255) / 255.0F * 0.6F;
         float colorG = (backgroundColor >> 8 & 255) / 255.0F * 0.6F;
         float colorB = (backgroundColor & 255) / 255.0F * 0.6F;
-        RenderSystem.color4f(colorR, colorG, colorB, 1.0F);
+        RenderHelper.setPosTexShader();
+        RenderSystem.setShaderColor(colorR, colorG, colorB, 1.0F);
         gui.drawTexturedModalRect(sideOffset() + slotsBorderX1, slotsBorderY1, 16, 20, slotsBorderX2 - slotsBorderX1, slotsBorderY2 - slotsBorderY1);
-        RenderHelper.resetColor();
+        RenderHelper.resetShaderColor();
     }
 
     @Override
-    public void addTooltip(List<ITextComponent> tooltipList, int mouseX, int mouseY) {
+    public void addTooltip(List<Component> tooltipList, int mouseX, int mouseY) {
 
         if (!fullyOpen) {
-            tooltipList.add(new TranslationTextComponent("info.cofh.augmentation"));
+            tooltipList.add(new TranslatableComponent("info.cofh.augmentation"));
         }
     }
 

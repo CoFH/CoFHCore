@@ -2,13 +2,14 @@ package cofh.core.block;
 
 import cofh.core.tileentity.TileCoFH;
 import cofh.lib.block.IWrenchable;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.StateContainer;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
+import net.minecraft.core.Direction;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
@@ -17,13 +18,13 @@ import static cofh.lib.util.constants.Constants.FACING_HORIZONTAL;
 
 public class TileBlockActive4Way extends TileBlockActive implements IWrenchable {
 
-    public TileBlockActive4Way(Properties builder, Supplier<? extends TileCoFH> supplier) {
+    public TileBlockActive4Way(Properties builder, Class<? extends TileCoFH> tileClass, Supplier<BlockEntityType<? extends TileCoFH>> blockEntityType) {
 
-        super(builder, supplier);
+        super(builder, tileClass, blockEntityType);
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 
         super.createBlockStateDefinition(builder);
         builder.add(FACING_HORIZONTAL);
@@ -31,7 +32,7 @@ public class TileBlockActive4Way extends TileBlockActive implements IWrenchable 
 
     @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
 
         return this.defaultBlockState().setValue(FACING_HORIZONTAL, context.getPlayer() != null ? context.getPlayer().getMotionDirection().getOpposite() : Direction.NORTH);
     }

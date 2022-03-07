@@ -2,6 +2,7 @@ package cofh.lib.util.references;
 
 import cofh.core.inventory.container.HeldItemFilterContainer;
 import cofh.core.inventory.container.TileItemFilterContainer;
+<<<<<<< HEAD
 import cofh.lib.entity.BlackHoleEntity;
 import cofh.lib.entity.ElectricArcEntity;
 import cofh.lib.entity.ElectricFieldEntity;
@@ -15,6 +16,21 @@ import net.minecraft.item.Item;
 import net.minecraft.particles.BasicParticleType;
 import net.minecraft.potion.Effect;
 import net.minecraft.tileentity.TileEntityType;
+=======
+import cofh.core.tileentity.EnderAirTile;
+import cofh.core.tileentity.GlowAirTile;
+import cofh.core.tileentity.LightningAirTile;
+import cofh.core.tileentity.SignalAirTile;
+import cofh.lib.entity.KnifeEntity;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.material.FlowingFluid;
+>>>>>>> caa1a35 (Initial 1.18.2 compile pass.)
 import net.minecraftforge.registries.ObjectHolder;
 
 import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
@@ -52,10 +68,10 @@ public class CoreReferences {
     //    public static final ContainerType<TileFluidFilterContainer> TILE_FLUID_FILTER_CONTAINER = null;
 
     @ObjectHolder (ID_CONTAINER_HELD_ITEM_FILTER)
-    public static final ContainerType<HeldItemFilterContainer> HELD_ITEM_FILTER_CONTAINER = null;
+    public static final MenuType<HeldItemFilterContainer> HELD_ITEM_FILTER_CONTAINER = null;
 
     @ObjectHolder (ID_CONTAINER_TILE_ITEM_FILTER)
-    public static final ContainerType<TileItemFilterContainer> TILE_ITEM_FILTER_CONTAINER = null;
+    public static final MenuType<TileItemFilterContainer> TILE_ITEM_FILTER_CONTAINER = null;
     // endregion
 
     // region FLUIDS
@@ -77,60 +93,60 @@ public class CoreReferences {
 
     // region TILES
     @ObjectHolder (ID_SIGNAL_AIR)
-    public static final TileEntityType<?> SIGNAL_AIR_TILE = null;
+    public static final BlockEntityType<SignalAirTile> SIGNAL_AIR_TILE = null;
 
     @ObjectHolder (ID_GLOW_AIR)
-    public static final TileEntityType<?> GLOW_AIR_TILE = null;
+    public static final BlockEntityType<GlowAirTile> GLOW_AIR_TILE = null;
 
     @ObjectHolder (ID_ENDER_AIR)
-    public static final TileEntityType<?> ENDER_AIR_TILE = null;
+    public static final BlockEntityType<EnderAirTile> ENDER_AIR_TILE = null;
 
     @ObjectHolder (ID_LIGHTNING_AIR)
-    public static final TileEntityType<?> LIGHTNING_AIR_TILE = null;
+    public static final BlockEntityType<LightningAirTile> LIGHTNING_AIR_TILE = null;
     // endregion
 
     // region EFFECTS
     @ObjectHolder (ID_EFFECT_EXPLOSION_RESISTANCE)
-    public static final Effect EXPLOSION_RESISTANCE = null;
+    public static final MobEffect EXPLOSION_RESISTANCE = null;
 
     @ObjectHolder (ID_EFFECT_LIGHTNING_RESISTANCE)
-    public static final Effect LIGHTNING_RESISTANCE = null;
+    public static final MobEffect LIGHTNING_RESISTANCE = null;
 
     @ObjectHolder (ID_EFFECT_MAGIC_RESISTANCE)
-    public static final Effect MAGIC_RESISTANCE = null;
+    public static final MobEffect MAGIC_RESISTANCE = null;
 
     @ObjectHolder (ID_EFFECT_AMPLIFICATION)
-    public static final Effect AMPLIFICATION = null;
+    public static final MobEffect AMPLIFICATION = null;
 
     @ObjectHolder (ID_EFFECT_CHILLED)
-    public static final Effect CHILLED = null;
+    public static final MobEffect CHILLED = null;
 
     @ObjectHolder (ID_EFFECT_CLARITY)
-    public static final Effect CLARITY = null;
+    public static final MobEffect CLARITY = null;
 
     @ObjectHolder (ID_EFFECT_ENDERFERENCE)
-    public static final Effect ENDERFERENCE = null;
+    public static final MobEffect ENDERFERENCE = null;
 
     @ObjectHolder (ID_EFFECT_LOVE)
-    public static final Effect LOVE = null;
+    public static final MobEffect LOVE = null;
 
     @ObjectHolder (ID_EFFECT_PANACEA)
-    public static final Effect PANACEA = null;
+    public static final MobEffect PANACEA = null;
 
     @ObjectHolder (ID_EFFECT_SHOCKED)
-    public static final Effect SHOCKED = null;
+    public static final MobEffect SHOCKED = null;
 
     @ObjectHolder (ID_EFFECT_SLIMED)
-    public static final Effect SLIMED = null;
+    public static final MobEffect SLIMED = null;
 
     @ObjectHolder (ID_EFFECT_SUNDERED)
-    public static final Effect SUNDERED = null;
+    public static final MobEffect SUNDERED = null;
 
     @ObjectHolder (ID_EFFECT_SUPERCHARGE)
-    public static final Effect SUPERCHARGE = null;
+    public static final MobEffect SUPERCHARGE = null;
 
     @ObjectHolder (ID_EFFECT_WRENCHED)
-    public static final Effect WRENCHED = null;
+    public static final MobEffect WRENCHED = null;
     // endregion
 
     // region ENCHANTMENTS

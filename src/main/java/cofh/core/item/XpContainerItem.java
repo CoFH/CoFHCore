@@ -5,16 +5,15 @@ import cofh.lib.fluid.FluidContainerItemWrapper;
 import cofh.lib.fluid.IFluidContainerItem;
 import cofh.lib.item.ContainerType;
 import cofh.lib.util.Utils;
-import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.xp.IXpContainerItem;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -47,7 +46,7 @@ public class XpContainerItem extends ItemCoFH implements IXpContainerItem, IFlui
     }
 
     @Override
-    protected void tooltipDelegate(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    protected void tooltipDelegate(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 
         tooltip.add(getTextComponent(localize("info.cofh.amount") + ": " + getScaledNumber(getStoredXp(stack)) + " / " + getScaledNumber(getCapacityXP(stack))));
     }
@@ -65,29 +64,29 @@ public class XpContainerItem extends ItemCoFH implements IXpContainerItem, IFlui
     }
 
     @Override
-    public boolean showDurabilityBar(ItemStack stack) {
+    public boolean isBarVisible(ItemStack stack) {
 
         return !isCreative(stack, XP) && getStoredXp(stack) > 0;
     }
 
     @Override
-    public double getDurabilityForDisplay(ItemStack stack) {
+    public int getBarWidth(ItemStack stack) {
 
-        return MathHelper.clamp(1.0D - getStoredXp(stack) / (double) getCapacityXP(stack), 0.0D, 1.0D);
+        return (int) Math.round(13.0D - getStoredXp(stack) * 13D / (double) getCapacityXP(stack));
     }
 
     @Override
-    public int getRGBDurabilityForDisplay(ItemStack stack) {
+    public int getBarColor(ItemStack stack) {
 
         return RGB_DURABILITY_XP;
     }
 
     @Override
-    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
 
         ItemStack stack = player.getItemInHand(hand);
         if (Utils.isFakePlayer(player)) {
-            return ActionResult.fail(stack);
+            return InteractionResultHolder.fail(stack);
         }
         int xp;
         int curLevel = player.experienceLevel;
@@ -120,11 +119,11 @@ public class XpContainerItem extends ItemCoFH implements IXpContainerItem, IFlui
                 modifyXp(stack, xp);
             }
         }
-        return ActionResult.success(stack);
+        return InteractionResultHolder.success(stack);
     }
 
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
 
         return new FluidContainerItemWrapper(stack, this);
     }

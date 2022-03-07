@@ -2,9 +2,9 @@ package cofh.lib.inventory;
 
 import cofh.lib.util.IInventoryCallback;
 import cofh.lib.util.StorageGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
@@ -15,7 +15,7 @@ import java.util.List;
 
 import static cofh.lib.util.constants.NBTTags.TAG_ITEM_INV;
 import static cofh.lib.util.constants.NBTTags.TAG_SLOT;
-import static net.minecraftforge.common.util.Constants.NBT.TAG_COMPOUND;
+import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 
 /**
  * Inventory abstraction using CoFH Item Storage objects.
@@ -101,14 +101,14 @@ public class SimpleItemInv extends SimpleItemHandler {
     }
 
     // region NBT
-    public SimpleItemInv read(CompoundNBT nbt) {
+    public SimpleItemInv read(CompoundTag nbt) {
 
         for (ItemStorageCoFH slot : slots) {
             slot.setItemStack(ItemStack.EMPTY);
         }
-        ListNBT list = nbt.getList(tag, TAG_COMPOUND);
+        ListTag list = nbt.getList(tag, TAG_COMPOUND);
         for (int i = 0; i < list.size(); ++i) {
-            CompoundNBT slotTag = list.getCompound(i);
+            CompoundTag slotTag = list.getCompound(i);
             int slot = slotTag.getByte(TAG_SLOT);
             if (slot >= 0 && slot < slots.size()) {
                 slots.get(slot).read(slotTag);
@@ -117,15 +117,15 @@ public class SimpleItemInv extends SimpleItemHandler {
         return this;
     }
 
-    public CompoundNBT write(CompoundNBT nbt) {
+    public CompoundTag write(CompoundTag nbt) {
 
         if (slots.size() <= 0) {
             return nbt;
         }
-        ListNBT list = new ListNBT();
+        ListTag list = new ListTag();
         for (int i = 0; i < slots.size(); ++i) {
             if (!slots.get(i).isEmpty()) {
-                CompoundNBT slotTag = new CompoundNBT();
+                CompoundTag slotTag = new CompoundTag();
                 slotTag.putByte(TAG_SLOT, (byte) i);
                 slots.get(i).write(slotTag);
                 list.add(slotTag);
@@ -141,25 +141,25 @@ public class SimpleItemInv extends SimpleItemHandler {
     // endregion
 
     // region HELPERS
-    public CompoundNBT writeSlotsToNBT(CompoundNBT nbt, int startIndex, int endIndex) {
+    public CompoundTag writeSlotsToNBT(CompoundTag nbt, int startIndex, int endIndex) {
 
         return writeSlotsToNBT(nbt, tag, startIndex, endIndex);
     }
 
-    public CompoundNBT writeSlotsToNBT(CompoundNBT nbt, String saveTag, int startIndex) {
+    public CompoundTag writeSlotsToNBT(CompoundTag nbt, String saveTag, int startIndex) {
 
         return writeSlotsToNBT(nbt, saveTag, startIndex, slots.size());
     }
 
-    public CompoundNBT writeSlotsToNBT(CompoundNBT nbt, String saveTag, int startIndex, int endIndex) {
+    public CompoundTag writeSlotsToNBT(CompoundTag nbt, String saveTag, int startIndex, int endIndex) {
 
         if (startIndex < 0 || startIndex >= endIndex || startIndex >= slots.size()) {
             return nbt;
         }
-        ListNBT list = new ListNBT();
+        ListTag list = new ListTag();
         for (int i = startIndex; i < Math.min(endIndex, slots.size()); ++i) {
             if (!slots.get(i).isEmpty()) {
-                CompoundNBT slotTag = new CompoundNBT();
+                CompoundTag slotTag = new CompoundTag();
                 slotTag.putByte(TAG_SLOT, (byte) i);
                 slots.get(i).write(slotTag);
                 list.add(slotTag);
@@ -175,42 +175,42 @@ public class SimpleItemInv extends SimpleItemHandler {
     // endregion
 
     // region UNORDERED METHODS
-    public SimpleItemInv readSlotsUnordered(ListNBT list, int startIndex) {
+    public SimpleItemInv readSlotsUnordered(ListTag list, int startIndex) {
 
         return readSlotsUnordered(list, startIndex, slots.size());
     }
 
-    public SimpleItemInv readSlotsUnordered(ListNBT list, int startIndex, int endIndex) {
+    public SimpleItemInv readSlotsUnordered(ListTag list, int startIndex, int endIndex) {
 
         if (startIndex < 0 || startIndex >= endIndex || startIndex >= slots.size()) {
             return this;
         }
         for (int i = 0; i < Math.min(Math.min(endIndex, slots.size()) - startIndex, list.size()); ++i) {
-            CompoundNBT slotTag = list.getCompound(i);
+            CompoundTag slotTag = list.getCompound(i);
             slots.get(startIndex + i).read(slotTag);
         }
         return this;
     }
 
-    public CompoundNBT writeSlotsToNBTUnordered(CompoundNBT nbt, int startIndex, int endIndex) {
+    public CompoundTag writeSlotsToNBTUnordered(CompoundTag nbt, int startIndex, int endIndex) {
 
         return writeSlotsToNBTUnordered(nbt, tag, startIndex, endIndex);
     }
 
-    public CompoundNBT writeSlotsToNBTUnordered(CompoundNBT nbt, String saveTag, int startIndex) {
+    public CompoundTag writeSlotsToNBTUnordered(CompoundTag nbt, String saveTag, int startIndex) {
 
         return writeSlotsToNBTUnordered(nbt, saveTag, startIndex, slots.size());
     }
 
-    public CompoundNBT writeSlotsToNBTUnordered(CompoundNBT nbt, String saveTag, int startIndex, int endIndex) {
+    public CompoundTag writeSlotsToNBTUnordered(CompoundTag nbt, String saveTag, int startIndex, int endIndex) {
 
         if (startIndex < 0 || startIndex >= endIndex || startIndex >= slots.size()) {
             return nbt;
         }
-        ListNBT list = new ListNBT();
+        ListTag list = new ListTag();
         for (int i = startIndex; i < Math.min(endIndex, slots.size()); ++i) {
             if (!slots.get(i).isEmpty()) {
-                CompoundNBT slotTag = new CompoundNBT();
+                CompoundTag slotTag = new CompoundTag();
                 slots.get(i).write(slotTag);
                 list.add(slotTag);
             }

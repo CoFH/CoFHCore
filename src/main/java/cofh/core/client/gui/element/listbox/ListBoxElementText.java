@@ -1,7 +1,7 @@
 package cofh.core.client.gui.element.listbox;
 
 import cofh.core.client.gui.element.ElementListBox;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 
 public class ListBoxElementText implements IListBoxElement {
@@ -32,7 +32,7 @@ public class ListBoxElementText implements IListBoxElement {
     }
 
     @Override
-    public void draw(MatrixStack matrixStack, ElementListBox listBox, int x, int y, int backColor, int textColor) {
+    public void draw(PoseStack matrixStack, ElementListBox listBox, int x, int y, int backColor, int textColor) {
 
         listBox.getFontRenderer().drawShadow(matrixStack, text, x, y, textColor);
     }

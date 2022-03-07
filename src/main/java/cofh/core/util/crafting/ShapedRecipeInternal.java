@@ -3,17 +3,17 @@ package cofh.core.util.crafting;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.*;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.ICraftingRecipe;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.World;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.crafting.IShapedRecipe;
 
 import java.util.Map;
@@ -23,7 +23,7 @@ import java.util.Set;
 /**
  * Copy of ShapedRecipe, but no dedicated serializer. Intended for recipes which wrap a Shaped Recipe and modify the output.
  */
-public class ShapedRecipeInternal implements ICraftingRecipe, IShapedRecipe<CraftingInventory> {
+public class ShapedRecipeInternal implements CraftingRecipe, IShapedRecipe<CraftingContainer> {
 
     public static final int MAX_WIDTH = 3;
     public static final int MAX_HEIGHT = 3;
@@ -50,9 +50,9 @@ public class ShapedRecipeInternal implements ICraftingRecipe, IShapedRecipe<Craf
         return this.id;
     }
 
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
 
-        return IRecipeSerializer.SHAPED_RECIPE;
+        return RecipeSerializer.SHAPED_RECIPE;
     }
 
     public String getGroup() {
@@ -75,7 +75,7 @@ public class ShapedRecipeInternal implements ICraftingRecipe, IShapedRecipe<Craf
         return p_194133_1_ >= this.width && p_194133_2_ >= this.height;
     }
 
-    public boolean matches(CraftingInventory p_77569_1_, World p_77569_2_) {
+    public boolean matches(CraftingContainer p_77569_1_, Level p_77569_2_) {
 
         for (int i = 0; i <= p_77569_1_.getWidth() - this.width; ++i) {
             for (int j = 0; j <= p_77569_1_.getHeight() - this.height; ++j) {
@@ -92,7 +92,7 @@ public class ShapedRecipeInternal implements ICraftingRecipe, IShapedRecipe<Craf
         return false;
     }
 
-    public boolean matches(CraftingInventory p_77573_1_, int p_77573_2_, int p_77573_3_, boolean p_77573_4_) {
+    public boolean matches(CraftingContainer p_77573_1_, int p_77573_2_, int p_77573_3_, boolean p_77573_4_) {
 
         for (int i = 0; i < p_77573_1_.getWidth(); ++i) {
             for (int j = 0; j < p_77573_1_.getHeight(); ++j) {
@@ -116,7 +116,7 @@ public class ShapedRecipeInternal implements ICraftingRecipe, IShapedRecipe<Craf
         return true;
     }
 
-    public ItemStack assemble(CraftingInventory p_77572_1_) {
+    public ItemStack assemble(CraftingContainer p_77572_1_) {
 
         return this.getResultItem().copy();
     }
@@ -232,7 +232,7 @@ public class ShapedRecipeInternal implements ICraftingRecipe, IShapedRecipe<Craf
             throw new JsonSyntaxException("Invalid pattern: empty pattern not allowed");
         } else {
             for (int i = 0; i < astring.length; ++i) {
-                String s = JSONUtils.convertToString(p_192407_0_.get(i), "pattern[" + i + "]");
+                String s = GsonHelper.convertToString(p_192407_0_.get(i), "pattern[" + i + "]");
                 if (s.length() > MAX_WIDTH) {
                     throw new JsonSyntaxException("Invalid pattern: too many columns, " + MAX_WIDTH + " is maximum");
                 }
@@ -270,14 +270,14 @@ public class ShapedRecipeInternal implements ICraftingRecipe, IShapedRecipe<Craf
 
     public static ItemStack itemFromJson(JsonObject p_199798_0_) {
 
-        String s = JSONUtils.getAsString(p_199798_0_, "item");
+        String s = GsonHelper.getAsString(p_199798_0_, "item");
         Item item = Registry.ITEM.getOptional(new ResourceLocation(s)).orElseThrow(() -> {
             return new JsonSyntaxException("Unknown item '" + s + "'");
         });
         if (p_199798_0_.has("data")) {
             throw new JsonParseException("Disallowed data tag found");
         } else {
-            int i = JSONUtils.getAsInt(p_199798_0_, "count", 1);
+            int i = GsonHelper.getAsInt(p_199798_0_, "count", 1);
             return net.minecraftforge.common.crafting.CraftingHelper.getItemStack(p_199798_0_, true);
         }
     }
