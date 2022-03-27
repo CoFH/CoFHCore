@@ -1,12 +1,10 @@
 package cofh.core.event;
 
-import cofh.core.client.particle.FrostParticle;
-import cofh.core.client.particle.PlasmaBallParticle;
-import cofh.core.client.particle.ShockwaveParticle;
-import cofh.core.client.particle.SparkParticle;
+import cofh.core.client.particle.*;
 import cofh.lib.client.model.DynamicFluidContainerModel;
 import cofh.lib.item.IColorableItem;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
@@ -51,11 +49,13 @@ public class CoreClientSetupEvents {
     @SubscribeEvent
     public static void registerParticleFactories(final ParticleFactoryRegisterEvent event) {
 
-        Minecraft.getInstance().particleEngine.register(FROST_PARTICLE, FrostParticle.Factory::new);
-        Minecraft.getInstance().particleEngine.register(SPARK_PARTICLE, SparkParticle.Factory::new);
-        Minecraft.getInstance().particleEngine.register(PLASMA_PARTICLE, PlasmaBallParticle.Factory::new);
-        Minecraft.getInstance().particleEngine.register(SHOCKWAVE_PARTICLE, ShockwaveParticle.Factory::new);
-        //Minecraft.getInstance().particleEngine.register(WIND_PARTICLE, WindParticle.Factory::new);
+        ParticleManager manager = Minecraft.getInstance().particleEngine;
+        manager.register(FROST_PARTICLE, FrostParticle.Factory::new);
+        manager.register(SPARK_PARTICLE, SparkParticle.Factory::new);
+        manager.register(PLASMA_PARTICLE, PlasmaBallParticle.Factory::new);
+        manager.register(SHOCKWAVE_PARTICLE, ShockwaveParticle.Factory::new);
+        manager.register(BLAST_WAVE_PARTICLE, BlastWaveParticle.Factory::new);
+        manager.register(VORTEX_PARTICLE, VortexParticle.Factory::new);
     }
 
     // region HELPERS

@@ -32,7 +32,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import static cofh.lib.capability.CapabilityArchery.AMMO_ITEM_CAPABILITY;
-import static cofh.lib.util.constants.Constants.CROSSBOW_AMMO;
+import static cofh.lib.util.constants.NBTTags.TAG_AMMO;
 
 public class CrossbowItemCoFH extends CrossbowItem implements ICoFHItem {
 
@@ -119,7 +119,7 @@ public class CrossbowItemCoFH extends CrossbowItem implements ICoFHItem {
 
         ItemStack stack = player.getItemInHand(hand);
         if (isLoaded(stack)) {
-            setLoaded(stack, shootLoadedAmmo(world, player, hand, stack));
+            setLoaded(stack, !shootLoadedAmmo(world, player, hand, stack));
             return ActionResult.consume(stack);
         } else if (!ArcheryHelper.findAmmo(player, stack).isEmpty() || player.abilities.instabuild) {
             player.startUsingItem(hand);
@@ -159,6 +159,12 @@ public class CrossbowItemCoFH extends CrossbowItem implements ICoFHItem {
         }
     }
 
+    @Override
+    public boolean useOnRelease(ItemStack stack) {
+
+        return true;
+    }
+
     // region HELPER
     public boolean loadAmmo(LivingEntity living, ItemStack crossbow) {
 
@@ -166,12 +172,10 @@ public class CrossbowItemCoFH extends CrossbowItem implements ICoFHItem {
             PlayerEntity player = (PlayerEntity) living;
             ItemStack ammo = ArcheryHelper.findAmmo(player, crossbow);
             if (!ammo.isEmpty() && ammo.getItem() instanceof FireworkRocketItem) {
-                crossbow.getOrCreateTag().put(CROSSBOW_AMMO, ammo.save(new CompoundNBT()));
                 if (!player.abilities.instabuild) {
                     ammo.shrink(1);
                 }
-                setCharged(crossbow, true);
-                return true;
+                return loadAmmo(player, crossbow, ammo);
             }
             IArcheryAmmoItem ammoCap = ammo.getCapability(AMMO_ITEM_CAPABILITY).orElse(new ArcheryAmmoItemWrapper(ammo));
             boolean infinite = player.abilities.instabuild
@@ -181,27 +185,37 @@ public class CrossbowItemCoFH extends CrossbowItem implements ICoFHItem {
                 if (ammo.isEmpty()) {
                     ammo = new ItemStack(Items.ARROW);
                 }
-                crossbow.getOrCreateTag().put(CROSSBOW_AMMO, ammo.save(new CompoundNBT()));
-                setCharged(crossbow, true);
                 if (!infinite) {
                     ammoCap.onArrowLoosed(player);
                     if (ammo.isEmpty()) {
                         player.inventory.removeItem(ammo);
                     }
                 }
-                return true;
+                return loadAmmo(player, crossbow, ammo);
             }
         }
         return false;
     }
 
+    public boolean loadAmmo(PlayerEntity player, ItemStack crossbow, ItemStack ammo) {
+
+        crossbow.getOrCreateTag().put(TAG_AMMO, ammo.save(new CompoundNBT()));
+        setCharged(crossbow, true);
+        return true;
+    }
+
     public ItemStack getLoadedAmmo(ItemStack crossbow) {
 
         CompoundNBT nbt = crossbow.getTag();
-        if (nbt != null && nbt.contains(CROSSBOW_AMMO)) {
-            return ItemStack.of(nbt.getCompound(CROSSBOW_AMMO));
+        if (nbt != null && nbt.contains(TAG_AMMO)) {
+            return ItemStack.of(nbt.getCompound(TAG_AMMO));
         }
         return ItemStack.EMPTY;
+    }
+
+    public void removeLoadedAmmo(ItemStack crossbow) {
+
+        crossbow.removeTagKey(TAG_AMMO);
     }
 
     // Overrideable forms of isCharged() and setCharged() in CrossbowItem.
@@ -215,7 +229,7 @@ public class CrossbowItemCoFH extends CrossbowItem implements ICoFHItem {
         return CrossbowItem.isCharged(crossbow);
     }
 
-    // Returns true if the crossbow should still be charged after this method is called.
+    // Returns true if the shot succeeded (i.e. if the crossbow should be unloaded after this method is called).
     public boolean shootLoadedAmmo(World world, LivingEntity living, Hand hand, ItemStack crossbow) {
 
         //TODO: dmg/acc/vel modifiers
@@ -236,7 +250,7 @@ public class CrossbowItemCoFH extends CrossbowItem implements ICoFHItem {
                             projectile = new FireworkRocketEntity(world, ammo, shooter, shooter.getX(), shooter.getEyeY() - (double) 0.15F, shooter.getZ(), true);
                             damage += 3;
                         } else {
-                            return true;
+                            return false;
                         }
 
                         world.addFreshEntity(shootProjectile(shooter, projectile, getBaseSpeed(ammo), 1.0F, i * 10.F));
@@ -248,8 +262,8 @@ public class CrossbowItemCoFH extends CrossbowItem implements ICoFHItem {
                 onCrossbowShot(shooter, hand, crossbow, damage);
             }
         }
-        crossbow.removeTagKey(CROSSBOW_AMMO);
-        return false;
+        removeLoadedAmmo(crossbow);
+        return true;
     }
 
     public float getBaseSpeed(ItemStack ammo) {

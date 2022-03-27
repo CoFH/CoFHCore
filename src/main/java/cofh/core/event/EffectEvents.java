@@ -1,5 +1,7 @@
 package cofh.core.event;
 
+import cofh.core.network.packet.client.EffectAddedPacket;
+import cofh.core.network.packet.client.EffectRemovedPacket;
 import cofh.lib.potion.CustomParticleEffect;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -11,6 +13,7 @@ import net.minecraftforge.event.entity.EntityStruckByLightningEvent;
 import net.minecraftforge.event.entity.living.EntityTeleportEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.PotionColorCalculationEvent;
+import net.minecraftforge.event.entity.living.PotionEvent;
 import net.minecraftforge.event.entity.player.PlayerXpEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -121,6 +124,23 @@ public class EffectEvents {
             } else {
                 event.setColor(PotionUtils.getColor(nonCustom));
             }
+        }
+    }
+
+    @SubscribeEvent (priority = EventPriority.HIGH)
+    public static void handlePotionAddEvent(PotionEvent.PotionAddedEvent event) {
+
+        if (event.getPotionEffect().getEffect() instanceof CustomParticleEffect) {
+            EffectAddedPacket.sendToClient(event.getEntityLiving(), event.getPotionEffect());
+        }
+    }
+
+    @SubscribeEvent (priority = EventPriority.HIGH)
+    public static void handlePotionRemoveEvent(PotionEvent.PotionRemoveEvent event) {
+
+        EffectInstance effect = event.getPotionEffect();
+        if (effect != null && effect.getEffect() instanceof CustomParticleEffect) {
+            EffectRemovedPacket.sendToClient(event.getEntityLiving(), event.getPotionEffect());
         }
     }
 

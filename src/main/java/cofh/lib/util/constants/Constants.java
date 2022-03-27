@@ -189,6 +189,9 @@ public class Constants {
 
     public static final int PACKET_ITEM_MODE_CHANGE = 64;
     public static final int PACKET_ITEM_LEFT_CLICK = 65;
+
+    public static final int PACKET_EFFECT_ADD = 96;
+    public static final int PACKET_EFFECT_REMOVE = 97;
     // endregion
 
     // region CONSTANTS
@@ -201,7 +204,6 @@ public class Constants {
 
     public static final String DAMAGE_ARROW = "arrow";
     public static final String DAMAGE_PLAYER = "player";
-    public static final String CROSSBOW_AMMO = "ammo";
 
     public static final UUID EMPTY_UUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
 

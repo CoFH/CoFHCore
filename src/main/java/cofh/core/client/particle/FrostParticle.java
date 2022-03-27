@@ -21,11 +21,8 @@ public class FrostParticle extends SpriteTexturedParticle {
         zd = zSpeedIn;
         this.gravity = random.nextFloat() * 0.02F + 0.01F;
 
-        float bScale = 1.0F - (random.nextFloat() * 0.15F);
-        float rgScale = bScale - (random.nextFloat() * 0.15F);
-        this.rCol = rgScale;
-        this.gCol = rgScale;
-        this.bCol = bScale;
+        bCol = 1.0F - (random.nextFloat() * 0.15F);
+        rCol = gCol = bCol - (random.nextFloat() * 0.15F);
     }
 
     @Override

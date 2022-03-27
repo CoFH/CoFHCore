@@ -39,10 +39,16 @@ public abstract class AbstractSpellEntity extends Entity {
         }
         if (tickCount > duration) {
             this.remove();
+        } else {
+            activeTick();
         }
     }
 
     public void onCast() {
+
+    }
+
+    public void activeTick() {
 
     }
 

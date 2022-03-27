@@ -18,7 +18,8 @@ public class CoreParticles {
         PARTICLES.register(ID_PARTICLE_SPARK, () -> new BasicParticleType(false));
         PARTICLES.register(ID_PARTICLE_PLASMA, () -> new BasicParticleType(false));
         PARTICLES.register(ID_PARTICLE_SHOCKWAVE, () -> new BasicParticleType(false));
-        //PARTICLES.register(ID_PARTICLE_WIND, () -> new BasicParticleType(false));
+        PARTICLES.register(ID_PARTICLE_BLAST_WAVE, () -> new BasicParticleType(false));
+        PARTICLES.register(ID_PARTICLE_VORTEX, () -> new BasicParticleType(false));
     }
 
 }
