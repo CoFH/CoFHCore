@@ -1,6 +1,7 @@
 package cofh.lib.entity;
 
 import cofh.lib.block.IDetonatable;
+import cofh.lib.util.references.CoreReferences;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ProjectileItemEntity;
@@ -51,7 +52,9 @@ public abstract class AbstractGrenadeEntity extends ProjectileItemEntity impleme
         if (!level.isClientSide) {
             this.detonate(result.getLocation());
             this.remove();
-        } else if (result.getType() != RayTraceResult.Type.ENTITY && this.tickCount >= 10) {
+        } else if (result.getType() != RayTraceResult.Type.ENTITY && this.tickCount >= 5) {
+            //TODO: blast wave
+            this.level.addParticle(CoreReferences.BLAST_WAVE_PARTICLE, this.getX(), this.getY(), this.getZ(), 1.0D, radius + 1, 3.0F);
             this.level.addParticle(ParticleTypes.EXPLOSION, this.getX(), this.getY(), this.getZ(), 1.0D, 0.0D, 0.0D);
             this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.GENERIC_EXPLODE, SoundCategory.BLOCKS, 0.5F, (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F, false);
         }

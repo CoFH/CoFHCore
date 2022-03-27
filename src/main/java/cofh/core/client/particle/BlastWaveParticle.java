@@ -12,7 +12,6 @@ import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.particles.BasicParticleType;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.api.distmarker.Dist;
@@ -21,17 +20,17 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 
 @OnlyIn(Dist.CLIENT)
-public class ShockwaveParticle extends Particle {
+public class BlastWaveParticle extends Particle {
 
     protected float heightScale;
     protected float speed;
 
-    private ShockwaveParticle(ClientWorld worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double speed, double radius, double heightScale) {
+    private BlastWaveParticle(ClientWorld worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double speed, double radius, double heightScale) {
 
         super(worldIn, xCoordIn, yCoordIn, zCoordIn, radius, speed, heightScale);
-        this.lifetime = MathHelper.ceil((radius + 6) / speed);
+        this.lifetime = MathHelper.ceil(radius / speed);
         this.speed = (float) speed;
-        this.setSize((float) radius * 2, (float) heightScale); //TODO: bbheight?
+        this.setSize((float) radius * 2, (float) heightScale);
         this.heightScale = (float) heightScale;
 
         hasPhysics = false;
@@ -41,14 +40,17 @@ public class ShockwaveParticle extends Particle {
     @Override
     public void render(IVertexBuilder builder, ActiveRenderInfo info, float partialTicks) {
 
-        BlockPos origin = new BlockPos(x, y, z);
+        float time = age + partialTicks;
+        float progress = time / lifetime;
         Vector3d camPos = info.getPosition();
 
         MatrixStack matrixStack = new MatrixStack();
-        matrixStack.translate(origin.getX() - camPos.x, origin.getY() - camPos.y, origin.getZ() - camPos.z);
+        matrixStack.translate(x - camPos.x, y - camPos.y, z - camPos.z);
         IRenderTypeBuffer.Impl buffer = Minecraft.getInstance().renderBuffers().bufferSource();
 
-        VFXHelper.renderShockwave(matrixStack, buffer, level, origin, (age + partialTicks) * speed, bbWidth * 0.5F, heightScale);
+        float remaining = 1.0F - progress;
+        float scale = 1.0F - remaining * remaining * remaining;
+        VFXHelper.renderCyclone(matrixStack, buffer, getLightColor(partialTicks), bbWidth * 0.5F * scale, heightScale * scale, 3, 0.3F, time, 0.5F * (1.0F - progress * progress * progress));
 
         buffer.endBatch();
     }
@@ -70,7 +72,7 @@ public class ShockwaveParticle extends Particle {
         @Override
         public Particle createParticle(BasicParticleType data, ClientWorld world, double x, double y, double z, double speed, double radius, double heightScale) {
 
-            return new ShockwaveParticle(world, x, y, z, speed, radius, heightScale);
+            return new BlastWaveParticle(world, x, y, z, speed, radius, heightScale);
         }
     }
 

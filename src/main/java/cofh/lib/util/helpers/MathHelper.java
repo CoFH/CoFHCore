@@ -183,6 +183,25 @@ public final class MathHelper {
         return 1 / sqrt(a);
     }
 
+    public static float distSqr(float ...a) {
+
+        float d = 0.0F;
+        for (float f : a) {
+            d += f * f;
+        }
+        return d;
+    }
+
+    public static float dist(float ...a) {
+
+        return sqrt(distSqr(a));
+    }
+
+    public static float invDist(float ...a) {
+
+        return 1 / dist(a);
+    }
+
     // A cross between a sin and a square wave function. Has period 4, returns a value between -1 and 1.
     public static float bevel(float f) {
 
@@ -191,6 +210,11 @@ public final class MathHelper {
             return -net.minecraft.util.math.MathHelper.cos((float) Math.PI * 1.5F * f);
         }
         return ((floor >> 1) & 1) == 0 ? 1 : -1;
+    }
+
+    public static float frac(float f) {
+
+        return f - floor(f);
     }
 
     /**

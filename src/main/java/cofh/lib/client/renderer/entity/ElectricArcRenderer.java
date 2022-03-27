@@ -1,24 +1,17 @@
 package cofh.lib.client.renderer.entity;
 
-import cofh.core.util.helpers.RenderHelper;
+import cofh.core.util.helpers.vfx.VFXHelper;
 import cofh.lib.entity.ElectricArcEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.RenderState;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.culling.ClippingHelper;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.renderer.vertex.VertexFormat;
+import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
 
-import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
-
-public class ElectricArcRenderer extends EntityRenderer<ElectricArcEntity> {
-
-    public static final ResourceLocation TEXTURE = new ResourceLocation(ID_COFH_CORE + ":textures/entity/lightning_segment.png");
-    public static final RenderType RENDER_TYPE = LightningRenderType.lightning(TEXTURE);
+public class ElectricArcRenderer extends EntityRenderer<ElectricArcEntity> implements ITranslucentRenderer {
 
     public ElectricArcRenderer(EntityRendererManager manager) {
 
@@ -26,54 +19,30 @@ public class ElectricArcRenderer extends EntityRenderer<ElectricArcEntity> {
     }
 
     @Override
-    public void render(ElectricArcEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
+    public void render(ElectricArcEntity entityIn, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
 
-        matrixStackIn.pushPose();
+        stack.pushPose();
         float time = entityIn.tickCount + partialTicks;
-        RenderHelper.renderArcs(matrixStackIn, bufferIn.getBuffer(RENDER_TYPE), packedLightIn, new Vector3f(0, 8, 0), new Vector3f(0, -1, 0),
-                2, 0.4F, RenderHelper.getSeedWithTime(entityIn.seed, time), RenderHelper.getTaperOffsetFromTimes(time, ElectricArcEntity.defaultDuration, 3));
-        matrixStackIn.popPose();
-        super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
+
+        VFXHelper.renderArcs(stack, bufferIn, packedLightIn, new Vector3f(0, 8, 0), new Vector3f(0, -1, 0),
+                3, 0.2F, entityIn.seed, 0xA4FFFC52, VFXHelper.getTaperOffsetFromTimes(time, ElectricArcEntity.defaultDuration, 3));
+        //RenderHelper.renderVortex(matrixStackIn, bufferIn, packedLightIn, 0.75F, 1.5F, 0.5F, 75, 0.02F, time, 0.5F);
+        //RenderHelper.renderCyclone(matrixStackIn, bufferIn, packedLightIn, 0.75F, 0.5F, 10, 0.02F, time, 0.5F);
+        stack.popPose();
+
+        super.render(entityIn, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
     }
 
     @Override
     public ResourceLocation getTextureLocation(ElectricArcEntity entity) {
 
-        return TEXTURE;
+        return PlayerContainer.BLOCK_ATLAS;
     }
 
-    public static class LightningRenderType extends RenderType {
+    @Override
+    public boolean shouldRender(ElectricArcEntity entity, ClippingHelper clip, double x, double y, double z) {
 
-        public LightningRenderType(String p_i225992_1_, VertexFormat p_i225992_2_, int p_i225992_3_, int p_i225992_4_, boolean p_i225992_5_, boolean p_i225992_6_, Runnable p_i225992_7_, Runnable p_i225992_8_) {
-
-            super(p_i225992_1_, p_i225992_2_, p_i225992_3_, p_i225992_4_, p_i225992_5_, p_i225992_6_, p_i225992_7_, p_i225992_8_);
-        }
-
-        public static RenderType lightning(ResourceLocation texture) {
-
-            return RenderType.create("lightning",
-                    DefaultVertexFormats.NEW_ENTITY, 7, 256, true, true,
-                    RenderType.State.builder().setTextureState(new RenderState.TextureState(texture, false, false))
-                            .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
-                            .setOutputState(ITEM_ENTITY_TARGET)
-                            .setAlphaState(DEFAULT_ALPHA)
-                            .setCullState(NO_CULL)
-                            .setDepthTestState(LEQUAL_DEPTH_TEST)
-                            .createCompositeState(true));
-        }
-
-        public static RenderType lightning() {
-
-            return RenderType.create("lightning",
-                    DefaultVertexFormats.NEW_ENTITY, 7, 256, true, true,
-                    RenderType.State.builder()
-                            .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
-                            .setOutputState(ITEM_ENTITY_TARGET)
-                            .setAlphaState(DEFAULT_ALPHA)
-                            .setDepthTestState(LEQUAL_DEPTH_TEST)
-                            .createCompositeState(true));
-        }
-
+        return super.shouldRender(entity, clip, x, y, z);
     }
 
 }
