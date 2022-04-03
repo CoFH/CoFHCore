@@ -56,41 +56,41 @@ public class ElementSlot extends ElementBase {
     }
 
     @Override
-    public void drawBackground(PoseStack matrixStack, int mouseX, int mouseY) {
+    public void drawBackground(PoseStack poseStack, int mouseX, int mouseY) {
 
-        drawSlot();
-        drawUnderlayTexture();
+        drawSlot(poseStack);
+        drawUnderlayTexture(poseStack);
 
     }
 
     @Override
-    public void drawForeground(PoseStack matrixStack, int mouseX, int mouseY) {
+    public void drawForeground(PoseStack poseStack, int mouseX, int mouseY) {
 
-        drawOverlayTexture();
+        drawOverlayTexture(poseStack);
     }
 
-    protected void drawSlot() {
+    protected void drawSlot(PoseStack poseStack) {
 
         RenderHelper.setPosTexShader();
         RenderHelper.setShaderTexture0(texture);
-        drawTexturedModalRect(posX(), posY(), 0, 0, width, height);
+        drawTexturedModalRect(poseStack, posX(), posY(), 0, 0, width, height);
     }
 
-    protected void drawUnderlayTexture() {
+    protected void drawUnderlayTexture(PoseStack poseStack) {
 
         if (drawUnderlay.getAsBoolean() && underlayTexture != null) {
             RenderHelper.setPosTexShader();
             RenderHelper.setShaderTexture0(underlayTexture);
-            drawTexturedModalRect(posX(), posY(), 0, 0, width, height);
+            drawTexturedModalRect(poseStack, posX(), posY(), 0, 0, width, height);
         }
     }
 
-    protected void drawOverlayTexture() {
+    protected void drawOverlayTexture(PoseStack poseStack) {
 
         if (drawOverlay.getAsBoolean() && overlayTexture != null) {
             RenderHelper.setPosTexShader();
             RenderHelper.setShaderTexture0(overlayTexture);
-            drawTexturedModalRect(posX(), posY(), 0, 0, width, height);
+            drawTexturedModalRect(poseStack, posX(), posY(), 0, 0, width, height);
         }
     }
 

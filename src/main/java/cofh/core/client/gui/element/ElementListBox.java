@@ -150,10 +150,10 @@ public class ElementListBox extends ElementBase {
     }
 
     @Override
-    public void drawBackground(PoseStack matrixStack, int mouseX, int mouseY) {
+    public void drawBackground(PoseStack poseStack, int mouseX, int mouseY) {
 
-        drawColoredModalRect(posX() - 1, posY() - 1, posX() + width + 1, posY() + height + 1, borderColor);
-        drawColoredModalRect(posX(), posY(), posX() + width, posY() + height, backgroundColor);
+        drawColoredModalRect(poseStack, posX() - 1, posY() - 1, posX() + width + 1, posY() + height + 1, borderColor);
+        drawColoredModalRect(poseStack, posX(), posY(), posX() + width, posY() + height, backgroundColor);
     }
 
     @Override

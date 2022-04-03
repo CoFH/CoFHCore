@@ -49,13 +49,13 @@ public class HeldItemFilterScreen extends ContainerScreenCoFH<HeldItemFilterCont
     }
 
     @Override
-    protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY) {
+    protected void renderLabels(PoseStack poseStack, int mouseX, int mouseY) {
 
-        super.renderLabels(matrixStack, mouseX, mouseY);
+        super.renderLabels(poseStack, mouseX, mouseY);
 
         GlStateManager._enableBlend();
         RenderHelper.setShaderTexture0(SLOT_OVERLAY);
-        drawTexturedModalRect(menu.lockedSlot.x, menu.lockedSlot.y, 0, 0, 16, 16, 16, 16);
+        drawTexturedModalRect(poseStack, menu.lockedSlot.x, menu.lockedSlot.y, 0, 0, 16, 16, 16, 16);
         GlStateManager._disableBlend();
     }
 

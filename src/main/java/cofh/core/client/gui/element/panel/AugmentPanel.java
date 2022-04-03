@@ -62,9 +62,9 @@ public class AugmentPanel extends PanelBase {
     }
 
     @Override
-    protected void drawBackground(PoseStack matrixStack) {
+    protected void drawBackground(PoseStack poseStack) {
 
-        super.drawBackground(matrixStack);
+        super.drawBackground(poseStack);
 
         if (!fullyOpen) {
             return;
@@ -74,7 +74,7 @@ public class AugmentPanel extends PanelBase {
         float colorB = (backgroundColor & 255) / 255.0F * 0.6F;
         RenderHelper.setPosTexShader();
         RenderSystem.setShaderColor(colorR, colorG, colorB, 1.0F);
-        gui.drawTexturedModalRect(sideOffset() + slotsBorderX1, slotsBorderY1, 16, 20, slotsBorderX2 - slotsBorderX1, slotsBorderY2 - slotsBorderY1);
+        gui.drawTexturedModalRect(poseStack, sideOffset() + slotsBorderX1, slotsBorderY1, 16, 20, slotsBorderX2 - slotsBorderX1, slotsBorderY2 - slotsBorderY1);
         RenderHelper.resetShaderColor();
     }
 

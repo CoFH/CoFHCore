@@ -116,9 +116,9 @@ public class ConfigPanel extends PanelBase {
     }
 
     @Override
-    protected void drawBackground(PoseStack matrixStack) {
+    protected void drawBackground(PoseStack poseStack) {
 
-        super.drawBackground(matrixStack);
+        super.drawBackground(poseStack);
 
         if (!fullyOpen) {
             return;
@@ -130,10 +130,10 @@ public class ConfigPanel extends PanelBase {
         RenderSystem.setShaderColor(colorR, colorG, colorB, 1.0F);
 
         if (myTransfer == null) {
-            gui.drawTexturedModalRect(16, 20, 16, 20, 64, 64);
+            gui.drawTexturedModalRect(poseStack, 16, 20, 16, 20, 64, 64);
         } else {
-            gui.drawTexturedModalRect(28, 20, 16, 20, 64, 64);
-            gui.drawTexturedModalRect(6, 32, 16, 20, 20, 40);
+            gui.drawTexturedModalRect(poseStack, 28, 20, 16, 20, 64, 64);
+            gui.drawTexturedModalRect(poseStack, 6, 32, 16, 20, 20, 40);
         }
         RenderHelper.resetShaderColor();
     }

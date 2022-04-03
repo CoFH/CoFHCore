@@ -9,6 +9,7 @@ import cofh.lib.client.gui.IGuiAccess;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
+import com.mojang.math.Matrix4f;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -85,7 +86,7 @@ public class ContainerScreenCoFH<T extends AbstractContainerMenu> extends Abstra
         RenderHelper.resetShaderColor();
         RenderHelper.setShaderTexture0(texture);
 
-        drawTexturedModalRect(leftPos, topPos, 0, 0, imageWidth, imageHeight);
+        drawTexturedModalRect(matrixStack, leftPos, topPos, 0, 0, imageWidth, imageHeight);
 
         matrixStack.pushPose();
         matrixStack.translate(leftPos, topPos, 0.0F);
@@ -475,7 +476,7 @@ public class ContainerScreenCoFH<T extends AbstractContainerMenu> extends Abstra
     }
 
     @Override
-    public void drawSizedRect(int x1, int y1, int x2, int y2, int color) {
+    public void drawSizedRect(PoseStack poseStack, int x1, int y1, int x2, int y2, int color) {
 
         int temp;
 
@@ -498,18 +499,19 @@ public class ContainerScreenCoFH<T extends AbstractContainerMenu> extends Abstra
         RenderSystem.setShader(GameRenderer::getPositionShader);
         RenderSystem.setShaderColor(r, g, b, a);
 
+        Matrix4f mat = poseStack.last().pose();
         BufferBuilder buffer = Tesselator.getInstance().getBuilder();
         buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
-        buffer.vertex(x1, y2, getBlitOffset()).endVertex();
-        buffer.vertex(x2, y2, getBlitOffset()).endVertex();
-        buffer.vertex(x2, y1, getBlitOffset()).endVertex();
-        buffer.vertex(x1, y1, getBlitOffset()).endVertex();
+        buffer.vertex(mat, x1, y2, getBlitOffset()).endVertex();
+        buffer.vertex(mat, x2, y2, getBlitOffset()).endVertex();
+        buffer.vertex(mat, x2, y1, getBlitOffset()).endVertex();
+        buffer.vertex(mat, x1, y1, getBlitOffset()).endVertex();
         Tesselator.getInstance().end();
         RenderSystem.enableTexture();
     }
 
     @Override
-    public void drawColoredModalRect(int x1, int y1, int x2, int y2, int color) {
+    public void drawColoredModalRect(PoseStack poseStack, int x1, int y1, int x2, int y2, int color) {
 
         int temp;
         if (x1 < x2) {
@@ -532,43 +534,48 @@ public class ContainerScreenCoFH<T extends AbstractContainerMenu> extends Abstra
         RenderSystem.setShader(GameRenderer::getPositionShader);
         RenderSystem.setShaderColor(r, g, b, a);
 
+        Matrix4f mat = poseStack.last().pose();
         BufferBuilder buffer = Tesselator.getInstance().getBuilder();
         buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
-        buffer.vertex(x1, y2, getBlitOffset()).endVertex();
-        buffer.vertex(x2, y2, getBlitOffset()).endVertex();
-        buffer.vertex(x2, y1, getBlitOffset()).endVertex();
-        buffer.vertex(x1, y1, getBlitOffset()).endVertex();
+        buffer.vertex(mat, x1, y2, getBlitOffset()).endVertex();
+        buffer.vertex(mat, x2, y2, getBlitOffset()).endVertex();
+        buffer.vertex(mat, x2, y1, getBlitOffset()).endVertex();
+        buffer.vertex(mat, x1, y1, getBlitOffset()).endVertex();
         Tesselator.getInstance().end();
         RenderSystem.enableTexture();
         RenderSystem.disableBlend();
     }
 
     @Override
-    public void drawTexturedModalRect(int x, int y, int textureX, int textureY, int width, int height) {
+    public void drawTexturedModalRect(PoseStack poseStack, int x, int y, int textureX, int textureY, int width, int height) {
 
         float f = 0.00390625F;
         float f1 = 0.00390625F;
         Tesselator tessellator = Tesselator.getInstance();
+
+        Matrix4f mat = poseStack.last().pose();
         BufferBuilder bufferbuilder = tessellator.getBuilder();
         bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        bufferbuilder.vertex(x + 0, (y + height), this.getBlitOffset()).uv(((float) (textureX + 0) * 0.00390625F), ((float) (textureY + height) * 0.00390625F)).endVertex();
-        bufferbuilder.vertex((x + width), (y + height), this.getBlitOffset()).uv(((float) (textureX + width) * 0.00390625F), ((float) (textureY + height) * 0.00390625F)).endVertex();
-        bufferbuilder.vertex((x + width), (y + 0), this.getBlitOffset()).uv(((float) (textureX + width) * 0.00390625F), ((float) (textureY + 0) * 0.00390625F)).endVertex();
-        bufferbuilder.vertex((x + 0), (y + 0), this.getBlitOffset()).uv(((float) (textureX + 0) * 0.00390625F), ((float) (textureY + 0) * 0.00390625F)).endVertex();
+        bufferbuilder.vertex(mat, x + 0, (y + height), this.getBlitOffset()).uv(((float) (textureX + 0) * 0.00390625F), ((float) (textureY + height) * 0.00390625F)).endVertex();
+        bufferbuilder.vertex(mat, (x + width), (y + height), this.getBlitOffset()).uv(((float) (textureX + width) * 0.00390625F), ((float) (textureY + height) * 0.00390625F)).endVertex();
+        bufferbuilder.vertex(mat, (x + width), (y + 0), this.getBlitOffset()).uv(((float) (textureX + width) * 0.00390625F), ((float) (textureY + 0) * 0.00390625F)).endVertex();
+        bufferbuilder.vertex(mat, (x + 0), (y + 0), this.getBlitOffset()).uv(((float) (textureX + 0) * 0.00390625F), ((float) (textureY + 0) * 0.00390625F)).endVertex();
         tessellator.end();
     }
 
     @Override
-    public void drawTexturedModalRect(int x, int y, int u, int v, int width, int height, float texW, float texH) {
+    public void drawTexturedModalRect(PoseStack poseStack, int x, int y, int u, int v, int width, int height, float texW, float texH) {
 
         float texU = 1 / texW;
         float texV = 1 / texH;
         BufferBuilder buffer = Tesselator.getInstance().getBuilder();
+
+        Matrix4f mat = poseStack.last().pose();
         buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        buffer.vertex(x, y + height, this.getBlitOffset()).uv((u) * texU, (v + height) * texV).endVertex();
-        buffer.vertex(x + width, y + height, this.getBlitOffset()).uv((u + width) * texU, (v + height) * texV).endVertex();
-        buffer.vertex(x + width, y, this.getBlitOffset()).uv((u + width) * texU, (v) * texV).endVertex();
-        buffer.vertex(x, y, this.getBlitOffset()).uv((u) * texU, (v) * texV).endVertex();
+        buffer.vertex(mat, x, y + height, this.getBlitOffset()).uv((u) * texU, (v + height) * texV).endVertex();
+        buffer.vertex(mat, x + width, y + height, this.getBlitOffset()).uv((u + width) * texU, (v + height) * texV).endVertex();
+        buffer.vertex(mat, x + width, y, this.getBlitOffset()).uv((u + width) * texU, (v) * texV).endVertex();
+        buffer.vertex(mat, x, y, this.getBlitOffset()).uv((u) * texU, (v) * texV).endVertex();
         Tesselator.getInstance().end();
     }
     // endregion

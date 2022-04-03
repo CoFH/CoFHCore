@@ -90,9 +90,9 @@ public class RSControlPanel extends PanelBase {
     }
 
     @Override
-    protected void drawBackground(PoseStack matrixStack) {
+    protected void drawBackground(PoseStack poseStack) {
 
-        super.drawBackground(matrixStack);
+        super.drawBackground(poseStack);
 
         if (!fullyOpen) {
             return;
@@ -102,7 +102,7 @@ public class RSControlPanel extends PanelBase {
         float colorB = (backgroundColor & 255) / 255.0F * 0.6F;
         RenderHelper.setPosTexShader();
         RenderSystem.setShaderColor(colorR, colorG, colorB, 1.0F);
-        gui.drawTexturedModalRect(24, 16, 16, 20, 64, 24);
+        gui.drawTexturedModalRect(poseStack, 24, 16, 16, 20, 64, 24);
         RenderHelper.resetShaderColor();
     }
 

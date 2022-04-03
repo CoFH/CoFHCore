@@ -1,6 +1,7 @@
 package cofh.lib.client.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Matrix4f;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.world.entity.player.Player;
@@ -21,12 +22,12 @@ public interface IGuiAccess {
 
     void drawIcon(PoseStack matrixStack, TextureAtlasSprite icon, int color, int x, int y);
 
-    void drawSizedRect(int x1, int y1, int x2, int y2, int color);
+    void drawSizedRect(PoseStack poseStack, int x1, int y1, int x2, int y2, int color);
 
-    void drawColoredModalRect(int x1, int y1, int x2, int y2, int color);
+    void drawColoredModalRect(PoseStack poseStack, int x1, int y1, int x2, int y2, int color);
 
-    void drawTexturedModalRect(int x, int y, int u, int v, int width, int height);
+    void drawTexturedModalRect(PoseStack poseStack, int x, int y, int u, int v, int width, int height);
 
-    void drawTexturedModalRect(int x, int y, int u, int v, int width, int height, float texW, float texH);
+    void drawTexturedModalRect(PoseStack poseStack, int x, int y, int u, int v, int width, int height, float texW, float texH);
 
 }

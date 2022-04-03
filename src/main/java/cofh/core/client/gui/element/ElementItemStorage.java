@@ -3,6 +3,7 @@ package cofh.core.client.gui.element;
 import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.client.gui.IGuiAccess;
 import cofh.lib.inventory.ItemStorageCoFH;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 public class ElementItemStorage extends ElementResourceStorage {
 
@@ -13,7 +14,7 @@ public class ElementItemStorage extends ElementResourceStorage {
     }
 
     @Override
-    protected void drawResource() {
+    protected void drawResource(PoseStack poseStack) {
 
         if (storage.isCreative() && creativeTexture != null) {
             RenderHelper.setShaderTexture0(creativeTexture);
@@ -22,7 +23,7 @@ public class ElementItemStorage extends ElementResourceStorage {
         }
         int resourceHeight = height - 2;
         int amount = getScaled(resourceHeight);
-        drawTexturedModalRect(posX(), posY() + 1 + resourceHeight - amount, width, 1 + resourceHeight - amount, width, amount);
+        drawTexturedModalRect(poseStack, posX(), posY() + 1 + resourceHeight - amount, width, 1 + resourceHeight - amount, width, amount);
     }
 
 }

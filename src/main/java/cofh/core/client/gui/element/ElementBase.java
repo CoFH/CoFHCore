@@ -2,6 +2,7 @@ package cofh.core.client.gui.element;
 
 import cofh.lib.client.gui.IGuiAccess;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Matrix4f;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -195,19 +196,19 @@ public abstract class ElementBase {
     // endregion
 
     // region HELPERS
-    public void drawSizedRect(int x, int y, int width, int height, int color) {
+    public void drawSizedRect(PoseStack poseStack, int x, int y, int width, int height, int color) {
 
-        gui.drawSizedRect(x, y, width, height, color);
+        gui.drawSizedRect(poseStack, x, y, width, height, color);
     }
 
-    public void drawColoredModalRect(int x, int y, int width, int height, int color) {
+    public void drawColoredModalRect(PoseStack poseStack, int x, int y, int width, int height, int color) {
 
-        gui.drawColoredModalRect(x, y, width, height, color);
+        gui.drawColoredModalRect(poseStack, x, y, width, height, color);
     }
 
-    public void drawTexturedModalRect(int x, int y, int u, int v, int width, int height) {
+    public void drawTexturedModalRect(PoseStack poseStack, int x, int y, int u, int v, int width, int height) {
 
-        gui.drawTexturedModalRect(x, y, u, v, width, height, texW, texH);
+        gui.drawTexturedModalRect(poseStack, x, y, u, v, width, height, texW, texH);
     }
 
     public Font getFontRenderer() {
