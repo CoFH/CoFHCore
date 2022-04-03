@@ -31,7 +31,7 @@ public class ElementTexture extends ElementBase {
 
         RenderHelper.setPosTexShader();
         RenderHelper.setShaderTexture0(texture);
-        drawTexturedModalRect(posX(), posY(), texU, texV, width, height);
+        drawTexturedModalRect(matrixStack, posX(), posY(), texU, texV, width, height);
     }
 
 }

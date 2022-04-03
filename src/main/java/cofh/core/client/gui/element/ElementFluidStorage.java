@@ -5,6 +5,7 @@ import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.client.gui.IGuiAccess;
 import cofh.lib.fluid.FluidStorageCoFH;
 import cofh.lib.util.helpers.StringHelper;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
 
@@ -28,7 +29,7 @@ public class ElementFluidStorage extends ElementResourceStorage {
     }
 
     @Override
-    protected void drawResource() {
+    protected void drawResource(PoseStack poseStack) {
 
         int resourceHeight = height - 2;
         int resourceWidth = width - 2;
@@ -45,16 +46,16 @@ public class ElementFluidStorage extends ElementResourceStorage {
     }
 
     @Override
-    protected void drawOverlayTexture() {
+    protected void drawOverlayTexture(PoseStack poseStack) {
 
         if (!drawOverlay.getAsBoolean()) {
             return;
         }
         if (storage.isCreative() && creativeTexture != null) {
             RenderHelper.setShaderTexture0(creativeTexture);
-            drawTexturedModalRect(posX(), posY(), 0, 0, width, height);
+            drawTexturedModalRect(poseStack, posX(), posY(), 0, 0, width, height);
         } else {
-            super.drawOverlayTexture();
+            super.drawOverlayTexture(poseStack);
         }
     }
 

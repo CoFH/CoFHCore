@@ -108,12 +108,12 @@ public abstract class ElementResourceStorage extends ElementBase {
     }
 
     @Override
-    public void drawBackground(PoseStack matrixStack, int mouseX, int mouseY) {
+    public void drawBackground(PoseStack poseStack, int mouseX, int mouseY) {
 
-        drawStorage();
-        drawUnderlayTexture();
-        drawResource();
-        drawOverlayTexture();
+        drawStorage(poseStack);
+        drawUnderlayTexture(poseStack);
+        drawResource(poseStack);
+        drawOverlayTexture(poseStack);
     }
 
     @Override
@@ -150,32 +150,32 @@ public abstract class ElementResourceStorage extends ElementBase {
         return fraction > 0 ? Math.max(minDisplay, amount) : amount;
     }
 
-    protected void drawStorage() {
+    protected void drawStorage(PoseStack poseStack) {
 
         if (drawStorage.getAsBoolean() && texture != null) {
             RenderHelper.setPosTexShader();
             RenderHelper.setShaderTexture0(texture);
-            drawTexturedModalRect(posX(), posY(), 0, 0, width, height);
+            drawTexturedModalRect(poseStack, posX(), posY(), 0, 0, width, height);
         }
     }
 
-    protected void drawUnderlayTexture() {
+    protected void drawUnderlayTexture(PoseStack poseStack) {
 
         if (drawUnderlay.getAsBoolean() && underlayTexture != null) {
             RenderHelper.setPosTexShader();
             RenderHelper.setShaderTexture0(underlayTexture);
-            drawTexturedModalRect(posX(), posY(), 0, 0, width, height);
+            drawTexturedModalRect(poseStack, posX(), posY(), 0, 0, width, height);
         }
     }
 
-    protected abstract void drawResource();
+    protected abstract void drawResource(PoseStack poseStack);
 
-    protected void drawOverlayTexture() {
+    protected void drawOverlayTexture(PoseStack poseStack) {
 
         if (drawOverlay.getAsBoolean() && overlayTexture != null) {
             RenderHelper.setPosTexShader();
             RenderHelper.setShaderTexture0(overlayTexture);
-            drawTexturedModalRect(posX(), posY(), 0, 0, width, height);
+            drawTexturedModalRect(poseStack, posX(), posY(), 0, 0, width, height);
         }
     }
 

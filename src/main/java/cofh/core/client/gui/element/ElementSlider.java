@@ -70,14 +70,14 @@ public abstract class ElementSlider extends ElementBase {
     }
 
     @Override
-    public void drawBackground(PoseStack matrixStack, int mouseX, int mouseY) {
+    public void drawBackground(PoseStack poseStack, int mouseX, int mouseY) {
 
-        drawColoredModalRect(posX() - 1, posY() - 1, posX() + width + 1, posY() + height + 1, borderColor);
-        drawColoredModalRect(posX(), posY(), posX() + width, posY() + height, backgroundColor);
+        drawColoredModalRect(poseStack, posX() - 1, posY() - 1, posX() + width + 1, posY() + height + 1, borderColor);
+        drawColoredModalRect(poseStack, posX(), posY(), posX() + width, posY() + height, backgroundColor);
         RenderHelper.resetShaderColor();
     }
 
-    protected void drawSlider(int mouseX, int mouseY, int sliderX, int sliderY) {
+    protected void drawSlider(PoseStack poseStack, int mouseX, int mouseY, int sliderX, int sliderY) {
 
         int sliderMidX = _sliderWidth / 2;
         int sliderMidY = _sliderHeight / 2;
@@ -93,19 +93,19 @@ public abstract class ElementSlider extends ElementBase {
         }
         RenderHelper.setPosTexShader();
         RenderHelper.resetShaderColor();
-        drawTexturedModalRect(sliderX, sliderY, 0, 0, sliderMidX, sliderMidY);
-        drawTexturedModalRect(sliderX, sliderY + sliderMidY, 0, 256 - sliderEndY, sliderMidX, sliderEndY);
-        drawTexturedModalRect(sliderX + sliderMidX, sliderY, 256 - sliderEndX, 0, sliderEndX, sliderMidY);
-        drawTexturedModalRect(sliderX + sliderMidX, sliderY + sliderMidY, 256 - sliderEndX, 256 - sliderEndY, sliderEndX, sliderEndY);
+        drawTexturedModalRect(poseStack, sliderX, sliderY, 0, 0, sliderMidX, sliderMidY);
+        drawTexturedModalRect(poseStack, sliderX, sliderY + sliderMidY, 0, 256 - sliderEndY, sliderMidX, sliderEndY);
+        drawTexturedModalRect(poseStack, sliderX + sliderMidX, sliderY, 256 - sliderEndX, 0, sliderEndX, sliderMidY);
+        drawTexturedModalRect(poseStack, sliderX + sliderMidX, sliderY + sliderMidY, 256 - sliderEndX, 256 - sliderEndY, sliderEndX, sliderEndY);
     }
 
     @Override
-    public void drawForeground(PoseStack matrixStack, int mouseX, int mouseY) {
+    public void drawForeground(PoseStack poseStack, int mouseX, int mouseY) {
 
         int sliderX = posX() + getSliderX();
         int sliderY = posY() + getSliderY();
 
-        drawSlider(mouseX, mouseY, sliderX, sliderY);
+        drawSlider(poseStack, mouseX, mouseY, sliderX, sliderY);
         RenderHelper.resetShaderColor();
     }
 
