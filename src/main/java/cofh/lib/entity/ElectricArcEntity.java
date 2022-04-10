@@ -16,7 +16,7 @@ import static cofh.lib.util.references.CoreReferences.SHOCKED;
 
 public class ElectricArcEntity extends AbstractAoESpellEntity {
 
-    public static final int defaultDuration = 1000;
+    public static final int defaultDuration = 10;
     protected boolean cosmetic = false;
     public float damage = 5.0F;
     public long seed = random.nextLong();
@@ -43,15 +43,17 @@ public class ElectricArcEntity extends AbstractAoESpellEntity {
     @Override
     public void activeTick() {
 
-        if (level.isClientSide) {
-            level.addParticle(CoreReferences.SPARK_PARTICLE, this.getX() + random.nextGaussian() * radius, this.getY() + random.nextFloat() * 0.25F, this.getZ() + random.nextGaussian() * radius, 0.0D, 0.0D, 0.0D);
-        }
+        //if (level.isClientSide) {
+        //}
     }
 
     @Override
     public void onCast() {
 
         if (level.isClientSide) {
+            for (int i = 0; i < 10; ++i) {
+                level.addParticle(CoreReferences.SPIRAL_PARTICLE, this.getX(), this.getY(), this.getZ(), 1.0D, 1.0D, 1.0D);
+            }
             level.addParticle(CoreReferences.PLASMA_PARTICLE, this.getX(), this.getY() + 8, this.getZ(), 0.0D, 0.0D, 0.0D);
         } else {
             strike();

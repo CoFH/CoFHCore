@@ -64,7 +64,8 @@ public class CoreIDs {
     public static final String ID_PARTICLE_PLASMA = "plasma_ball";
     public static final String ID_PARTICLE_SHOCKWAVE = "shockwave";
     public static final String ID_PARTICLE_BLAST_WAVE = "blast_wave";
-    public static final String ID_PARTICLE_VORTEX = "vortex";
+    public static final String ID_PARTICLE_VORTEX = "wind_vortex";
+    public static final String ID_PARTICLE_SPIRAL = "wind_spiral";
 
     public static final String ID_SOUND_ELECTRICITY = ID_COFH_CORE + ":misc.electricity";
 

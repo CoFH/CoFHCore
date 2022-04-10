@@ -24,10 +24,16 @@ public class ElectricArcRenderer extends EntityRenderer<ElectricArcEntity> imple
         stack.pushPose();
         float time = entityIn.tickCount + partialTicks;
 
-        VFXHelper.renderArcs(stack, bufferIn, packedLightIn, new Vector3f(0, 8, 0), new Vector3f(0, -1, 0),
-                3, 0.2F, entityIn.seed, 0xA4FFFC52, VFXHelper.getTaperOffsetFromTimes(time, ElectricArcEntity.defaultDuration, 3));
-        //RenderHelper.renderVortex(matrixStackIn, bufferIn, packedLightIn, 0.75F, 1.5F, 0.5F, 75, 0.02F, time, 0.5F);
-        //RenderHelper.renderCyclone(matrixStackIn, bufferIn, packedLightIn, 0.75F, 0.5F, 10, 0.02F, time, 0.5F);
+        //VFXHelper.transformVertical(stack, new Vector3f(0, 0, 0), new Vector3f(0, 8, 0));
+        //VFXHelper.renderStraightArcs(stack, bufferIn, packedLightIn, 1, 0.02F, entityIn.seed, 0xA4FFFC52, -0.5F);
+        //stack.scale(1, 1, 3);
+        //stack.mulPose(Vector3f.YP.rotationDegrees(time * 10));
+        //stack.mulPose(Vector3f.ZP.rotationDegrees(time * 5));
+        //VFXHelper.renderCyclone(stack, bufferIn.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLightIn, 10, 0.03F, time * 0.01F, 0.2F);
+        //builder.vertex(pose,0, 1, 0).color(255, 255, 255, 128).endVertex();
+        //VFXHelper.transformVertical(stack, new Vector3f(1, 1, 0));
+        //VFXHelper.renderCyclone(stack, bufferIn.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLightIn, 1, 0.03F, 100, 0.5F);
+
         stack.popPose();
 
         super.render(entityIn, entityYaw, partialTicks, stack, bufferIn, packedLightIn);

@@ -164,6 +164,9 @@ public class CoreReferences {
 
     @ObjectHolder(ID_PARTICLE_VORTEX)
     public static final BasicParticleType VORTEX_PARTICLE = null;
+
+    @ObjectHolder(ID_PARTICLE_SPIRAL)
+    public static final BasicParticleType SPIRAL_PARTICLE = null;
     // endregion
 
     // region ENTITIES

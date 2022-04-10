@@ -16,12 +16,15 @@ public final class MathHelper {
     public static final Random RANDOM = new Random();
     public static final double PI = Math.PI;
     public static final double PI_2 = Math.PI * 2.0D;
+    public static final float F_PI = (float) Math.PI;
+    public static final float F_TAU = (float) Math.PI * 2.0F;
     public static final double PHI = 1.618033988749894;
     public static final double TO_DEG = 57.29577951308232;
     public static final double TO_RAD = 0.017453292519943;
     public static final double SQRT_2 = 1.414213562373095;
 
     public static final double[] SIN_TABLE = new double[65536];
+    public static final float[] ASIN_TABLE = new float[65536];
 
     static {
         for (int i = 0; i < 65536; ++i) {
@@ -31,6 +34,10 @@ public final class MathHelper {
         SIN_TABLE[16384] = 1;
         SIN_TABLE[32768] = 0;
         SIN_TABLE[49152] = -1;
+
+        for (int i = 0; i < 65536; ++i) {
+            ASIN_TABLE[i] = (float) Math.asin((i - 32768) / 32768D);
+        }
     }
 
     // region RANDOMS
@@ -76,15 +83,50 @@ public final class MathHelper {
     }
     // endregion
 
+    // region TRIGONOMETRY
     public static double sin(double d) {
 
         return SIN_TABLE[(int) ((float) d * 10430.378F) & 65535];
+    }
+
+    public static float sin(float d) {
+
+        return net.minecraft.util.math.MathHelper.sin(d);
     }
 
     public static double cos(double d) {
 
         return SIN_TABLE[(int) ((float) d * 10430.378F + 16384.0F) & 65535];
     }
+
+    public static float cos(float d) {
+
+        return net.minecraft.util.math.MathHelper.cos(d);
+    }
+
+    public static float asin(float d) {
+
+        return ASIN_TABLE[(int) (d * 32768.0F + 32768.0F) & 65535];
+    }
+    // endregion
+
+    // region EASING
+    public static float easeInCubic(float a) {
+
+        return a * a * a;
+    }
+
+    public static float easeOutCubic(float a) {
+
+        a = 1.0F - a;
+        return 1.0F - a * a * a;
+    }
+
+    public static float easeInOutCubic(float a) {
+
+        return a < 0.5 ? 4 * easeInCubic(a) : 4 * easeInCubic(a - 1) + 1;
+    }
+    // endregion
 
     public static int clamp(int a, int min, int max) {
 
@@ -146,16 +188,6 @@ public final class MathHelper {
         return a + Math.signum(b - a) * d;
     }
 
-    public static double clip(double value, double min, double max) {
-
-        if (value > max) {
-            value = max;
-        } else if (value < min) {
-            value = min;
-        }
-        return value;
-    }
-
     public static boolean between(double a, double x, double b) {
 
         return a <= x && x <= b;
@@ -205,9 +237,9 @@ public final class MathHelper {
     // A cross between a sin and a square wave function. Has period 4, returns a value between -1 and 1.
     public static float bevel(float f) {
 
-        int floor = net.minecraft.util.math.MathHelper.floor(f);
+        int floor = floor(f);
         if (f - floor < 0.66667F && (floor & 1) == 0) {
-            return -net.minecraft.util.math.MathHelper.cos((float) Math.PI * 1.5F * f);
+            return -cos(F_PI * 1.5F * f);
         }
         return ((floor >> 1) & 1) == 0 ? 1 : -1;
     }

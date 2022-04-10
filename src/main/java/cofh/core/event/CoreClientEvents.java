@@ -3,6 +3,7 @@ package cofh.core.event;
 import cofh.core.init.CoreConfig;
 import cofh.lib.client.renderer.entity.ITranslucentRenderer;
 import cofh.lib.util.Utils;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.screen.Screen;
@@ -37,6 +38,7 @@ public class CoreClientEvents {
 
     public static int renderTime;
     public static float renderFrame;
+    public static MatrixStack levelStack = new MatrixStack();
 
     private static final Set<String> NAMESPACES = new ObjectOpenHashSet<>();
 

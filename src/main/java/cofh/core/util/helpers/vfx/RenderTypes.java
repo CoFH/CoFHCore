@@ -12,7 +12,7 @@ public class RenderTypes {
     public static final ResourceLocation LIN_GLOW_TEXTURE = new ResourceLocation(ID_COFH_CORE, "textures/render/glow_linear.png");
     public static final ResourceLocation RND_GLOW_TEXTURE = new ResourceLocation(ID_COFH_CORE, "textures/render/glow_round.png");
 
-    public static final RenderType BLANK_TRANSLUCENT = RenderType.create("blank",
+    public static final RenderType FLAT_TRANSLUCENT = RenderType.create("flat",
             DefaultVertexFormats.NEW_ENTITY, 7, 256, true, true,
             RenderType.State.builder().setTextureState(NO_TEXTURE)
                     .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
