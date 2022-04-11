@@ -16,26 +16,24 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.SplittableRandom;
 
 @OnlyIn(Dist.CLIENT)
 public class WindVortexParticle extends LevelMatrixStackParticle {
 
-    protected int length;
+    protected static final float defaultLifetime = 8.0F;
+    protected float fLifetime;
+    protected int seed;
     protected float scale;
     protected float height;
-    protected float width;
 
-    private WindVortexParticle(ClientWorld level, double xPos, double yPos, double zPos, double speed, double scale, double height) {
+    private WindVortexParticle(ClientWorld level, double xPos, double yPos, double zPos, double speed, double width, double height) {
 
-        super(level, xPos, yPos, zPos, speed, scale, height);
-        this.lifetime = 1000; // MathHelper.ceil(10 / speed);
-        this.length = random.nextInt(16) + 16;
-        this.height = (float) height * random.nextFloat();
-        this.scale = (float) (scale * (1.0F + random.nextGaussian() * 0.1F));
-        this.width = random.nextFloat() * 0.01F + 0.02F;
-        this.setSize(this.scale * 4, this.height);
+        super(level, xPos, yPos, zPos, speed, width, height);
+        this.fLifetime = defaultLifetime / (float) speed;
+        this.lifetime = MathHelper.ceil(fLifetime * 1.2F);
+        this.seed = random.nextInt();
+        this.setSize((float) (width * (1.0F + random.nextGaussian() * 0.1F)), (float) height * random.nextFloat()); // TODO
 
         hasPhysics = false;
         xd = yd = zd = 0;
@@ -45,34 +43,38 @@ public class WindVortexParticle extends LevelMatrixStackParticle {
     }
 
     @Override
-    public void render(MatrixStack stack, IRenderTypeBuffer buffer, int packedLightIn, float partialTicks) {
+    public void render(MatrixStack stack, IRenderTypeBuffer buffer, int packedLight, float partialTicks) {
 
-        float time = age + partialTicks;
-        float progress = time / lifetime;
+        SplittableRandom rand = new SplittableRandom(this.seed);
+        float time = age + partialTicks - (float) rand.nextDouble(this.fLifetime * 0.2F);
+        if (time < 0 || time > fLifetime) {
+            return;
+        }
+        float progress = time / fLifetime;
+        float easeSin = 1.0F - MathHelper.sin(progress * MathHelper.F_PI * 0.5F);
+        float easePlat = MathHelper.easePlateau(progress);
 
-        //stack.scale(scale, height, scale);
-        stack.mulPose(Vector3f.YP.rotation(roll));
-        float a = 0.5F; //alpha * MathHelper.clamp(3.0F * (0.5F - Math.abs(progress - 0.5F)), 0.0F, 1.0F);
-        int argb = ((int) (a * 255.0F) << 24) | ((int) (255.0F * rCol) << 16) | ((int) (255.0F * gCol) << 8) | ((int) (255.0F * bCol));
-        List<Vector4f> nodes = new ArrayList<>();
-        int num = (int) (3.0F * Math.max(progress - 0.66F, 0.0F) * length);
-        float increment = 1.0F / 48.0F;
-        float i = Math.min(0.66F, progress);
-        for (; i >= 0.33F && num < length; i -= increment, ++num) {
-            nodes.add(new Vector4f(MathHelper.cos(9.4248F * (i - 0.33F)) * 0.5F, (1.0F - i * 1.5F) * height, MathHelper.sin(9.4248F * (i - 0.33F)) * 0.75F, 1.0F));
+        float a = alpha * easePlat;
+        float halfHeight = 0.5F * bbHeight;
+        stack.scale(bbWidth, halfHeight, bbWidth);
+        stack.pushPose();
+
+        float hScale = easeSin + 0.5F;
+        if (halfHeight > 0) {
+            stack.translate(0, rand.nextDouble(-halfHeight, halfHeight), 0);
         }
-        for (; i >= 0 && num < length; i -= increment, ++num) {
-            nodes.add(new Vector4f(MathHelper.cos(4.7124F * (i - 0.33F)) * 2.0F - 1.5F, (1.0F - i * 1.5F) * height, MathHelper.sin(4.7124F * (i - 0.33F)) * 2.0F, 1.0F));
+        stack.scale(hScale, 2.0F, hScale);
+        stack.mulPose(Vector3f.YP.rotation(roll + progress * (float) rand.nextDouble(2.0F, 3.0F)));
+        Vector4f[] poss = new Vector4f[rand.nextInt(10, 20)];
+        for (int i = 0; i < poss.length; ++i) {
+            float rot = i * 0.1309F;
+            float r = 0.95F + i * 0.08F;
+            poss[i] = new Vector4f(r * MathHelper.cos(rot), easeSin + i * 0.05F, r * MathHelper.sin(rot), 1.0F);
         }
-        if (i < 0 && num < length) {
-            nodes.add(new Vector4f(-1.25F, height, -2.0F, 1.0F));
-        }
-        //for (int i = 0; i < 25; ++i) {
-        //    float rot = i * 0.1309F;
-        //    float r = i * 0.02F;
-        //    nodes.add(new Vector4f(r * MathHelper.cos(rot), i * 0.04F, r * MathHelper.sin(rot), 1.0F));
-        //}
-        VFXHelper.renderStreamLine(stack, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLightIn, nodes.toArray(new Vector4f[nodes.size()]), argb, VFXHelper.getWidthFunc(width));
+        VFXHelper.renderStreamLine(stack, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLight, poss, VFXHelper.packARGB(a, rCol, gCol, bCol), VFXHelper.getWidthFunc((float) rand.nextDouble(0.02F, 0.04F)));
+
+        stack.popPose();
+        VFXHelper.renderCyclone(stack, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLight, 1, (float) rand.nextDouble(0.02F, 0.04F), progress * 0.5F + (float) rand.nextDouble(420F), a);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -84,9 +86,9 @@ public class WindVortexParticle extends LevelMatrixStackParticle {
 
         @Nullable
         @Override
-        public Particle createParticle(BasicParticleType data, ClientWorld world, double x, double y, double z, double speed, double scale, double height) {
+        public Particle createParticle(BasicParticleType data, ClientWorld world, double x, double y, double z, double speed, double width, double height) {
 
-            return new WindVortexParticle(world, x, y, z, speed, scale, height);
+            return new WindVortexParticle(world, x, y, z, speed, width, height);
         }
     }
 

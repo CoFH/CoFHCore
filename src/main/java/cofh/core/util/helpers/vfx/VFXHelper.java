@@ -106,10 +106,6 @@ public final class VFXHelper {
         float normalize = MathHelper.invDist(x, y) * width;
         x *= normalize;
         y *= normalize;
-        //if (x * y) {
-        //    x = -x;
-        //    y = -y;
-        //}
         return new Vector2f(-y, x);
     }
 
@@ -192,6 +188,28 @@ public final class VFXHelper {
         stack.scale(scale, scale, scale);
     }
     // endregion
+
+    public static void renderTest(MatrixStack stack, IRenderTypeBuffer buffer) {
+
+        IVertexBuilder builder = buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT);
+        Vector4f center = new Vector4f(0, 0, 0, 1);
+        center.transform(stack.last().pose());
+        Matrix3f normal = stack.last().normal();
+        float xp = center.x() + 0.5F;
+        float xn = center.x() - 0.5F;
+        float yp = center.y() + 0.5F;
+        float yn = center.y() - 0.5F;
+        float z = center.z();
+        int r = 255;
+        int g = 0;
+        int b = 255;
+        int a = 128;
+        int packedLight = 0x00F000F0;
+        builder.vertex(xp, yp, z).color(r, g, b, a).uv(0, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
+        builder.vertex(xn, yp, z).color(r, g, b, a).uv(0, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
+        builder.vertex(xn, yn, z).color(r, g, b, a).uv(1, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
+        builder.vertex(xp, yn, z).color(r, g, b, a).uv(1, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
+    }
 
     // region SHOCKWAVE
     private static final SortedMap<Float, List<int[]>> shockwaveOffsets = getOffsets(16);
@@ -506,7 +524,7 @@ public final class VFXHelper {
 
     public static Function<Float, Float> getWidthFunc(float width) {
 
-        return index -> width * MathHelper.bevel(index * 2.0F + 0.33334F);
+        return index -> width * MathHelper.easePlateau(index);
     }
 
     /**

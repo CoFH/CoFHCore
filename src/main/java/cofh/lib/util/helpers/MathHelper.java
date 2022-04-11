@@ -126,6 +126,11 @@ public final class MathHelper {
 
         return a < 0.5 ? 4 * easeInCubic(a) : 4 * easeInCubic(a - 1) + 1;
     }
+
+    public static float easePlateau(float a) {
+
+        return a <= 0.3333F ? sin(a * F_PI * 1.5F) : (a > 0.66666F ? sin((a * 1.5F - 0.5F) * F_PI) : 1);
+    }
     // endregion
 
     public static int clamp(int a, int min, int max) {
