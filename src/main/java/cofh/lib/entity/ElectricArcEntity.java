@@ -43,17 +43,15 @@ public class ElectricArcEntity extends AbstractAoESpellEntity {
     @Override
     public void activeTick() {
 
-        //if (level.isClientSide) {
-        //}
+        if (level.isClientSide) {
+            level.addParticle(CoreReferences.SPARK_PARTICLE, this.getX() + random.nextGaussian() * radius, this.getY() + random.nextFloat() * 0.25F, this.getZ() + random.nextGaussian() * radius, 0.0D, 0.0D, 0.0D);
+        }
     }
 
     @Override
     public void onCast() {
 
         if (level.isClientSide) {
-            for (int i = 0; i < 10; ++i) {
-                level.addParticle(CoreReferences.SPIRAL_PARTICLE, this.getX(), this.getY(), this.getZ(), 1.0D, 1.0D, 1.0D);
-            }
             level.addParticle(CoreReferences.PLASMA_PARTICLE, this.getX(), this.getY() + 8, this.getZ(), 0.0D, 0.0D, 0.0D);
         } else {
             strike();

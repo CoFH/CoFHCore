@@ -24,8 +24,8 @@ public class ElectricArcRenderer extends EntityRenderer<ElectricArcEntity> imple
         stack.pushPose();
         float time = entityIn.tickCount + partialTicks;
 
-        //VFXHelper.transformVertical(stack, new Vector3f(0, 0, 0), new Vector3f(0, 8, 0));
-        //VFXHelper.renderStraightArcs(stack, bufferIn, packedLightIn, 1, 0.02F, entityIn.seed, 0xA4FFFC52, -0.5F);
+        VFXHelper.transformVertical(stack, new Vector3f(0, 7.9F, 0), new Vector3f(0, -0.9F, 0));
+        VFXHelper.renderStraightArcs(stack, bufferIn, packedLightIn, 2, 0.02F, VFXHelper.getSeedWithTime(entityIn.seed, time), 0xA4FFFC52, 0);
         //stack.scale(1, 1, 3);
         //stack.mulPose(Vector3f.YP.rotationDegrees(time * 10));
         //stack.mulPose(Vector3f.ZP.rotationDegrees(time * 5));

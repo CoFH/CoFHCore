@@ -188,12 +188,13 @@ public final class VFXHelper {
         Vector3f diff = end.copy();
         diff.sub(start);
         float scale = length(diff);
-        transformVertical(stack, diff);
         stack.translate(start.x(), start.y(), start.z());
+        transformVertical(stack, diff);
         stack.scale(scale, scale, scale);
     }
     // endregion
 
+    // Renders a billboarded translucent magenta square. Useful for preventing insanity.
     public static void renderTest(MatrixStack stack, IRenderTypeBuffer buffer) {
 
         IVertexBuilder builder = buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT);
