@@ -39,6 +39,11 @@ public final class VFXHelper {
         return MathHelper.dist(vec.x(), vec.y(), vec.z());
     }
 
+    public static Vector4f subtract(Vector4f a, Vector4f b) {
+
+        return new Vector4f(a.x() - b.x(), a.y() - b.y(), a.z() - b.z(), a.w() - b.w());
+    }
+
     public static int packARGB(float a, float r, float g, float b) {
 
         return packARGB((int) (255.0F * a), (int) (255.0F * r), (int) (255.0F * g), (int) (255.0F * b));
@@ -408,39 +413,37 @@ public final class VFXHelper {
             Matrix4f pose = stackEntry.pose();
             Matrix3f normal = stackEntry.normal();
 
-            //Vector4f end = new Vector4f(0.0F, 0.0F, 0.0F, 1.0F);
-            //end.transform(pose);
-            //float sz = end.z();
-            //end = new Vector4f(0.0F, 1.0F, 0.0F, 1.0F);
-            //end.transform(pose);
-            //float ez = end.z();
+            Vector4f start = new Vector4f(0, 0, 0, 1);
+            start.transform(pose);
+            Vector4f end = new Vector4f(0, 1, 0, 1);
+            end.transform(pose);
+            Vector2f perp = axialPerp(start, end, 1.0F);
 
             //These are calculated first so they are not affected by differing taper values.
             Vector3f[][] randomArcs = new Vector3f[nodeCount][arcCount];
             float[] rotations = new float[arcCount];
             for (int i = 0; i < arcCount; ++i) {
                 randomArcs[i] = arcs[rand.nextInt(arcs.length)];
-                rotations[i] = (float) rand.nextDouble();
+                rotations[i] = (float) rand.nextDouble(360.0F);
             }
-
-            Vector4f perp = new Vector4f(0.0F, 1.0F, 0.0F, 0.0F);
-            perp.transform(pose);
-            float invLength = MathHelper.invDist(perp.x(), perp.y());
-            float xPerp = -perp.y() * invLength;
-            float yPerp = perp.x() * invLength;
 
             float incr = 1.0F / nodeCount;
             for (int i = 0; i < arcCount; ++i) {
-                matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(rotations[i] * 360.0F));
+                matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(rotations[i]));
                 Vector3f[] arc = randomArcs[i];
                 VFXNode[] nodes = new VFXNode[last - first];
                 for (int j = first; j < last; ++j) {
-                    Vector4f pos = new Vector4f(arc[j].x(), arc[j].y(), arc[j].z(), 1.0F);
+                    Vector4f center = new Vector4f(0, arc[j].y(), 0, 1.0F);
+                    center.transform(pose);
+                    Vector4f pos = new Vector4f(arc[j]);
                     pos.transform(pose);
+                    float dot = subtract(pos, center).dot(new Vector4f(perp.x, perp.y, 0, 0));
+                    float xc = center.x() + perp.x * dot * 2.0F;
+                    float yc = center.y() + perp.y * dot * 2.0F;
                     float width = arcWidth * ((float) rand.nextDouble() * 0.6F + 0.7F) * MathHelper.clamp(4.0F * (0.75F - Math.abs(j * incr - 0.5F - taperOffset)), 0.0F, 1.0F);
-                    float xw = xPerp * width;
-                    float yw = yPerp * width;
-                    nodes[j - first] = new VFXNode(pos.x() + xw, pos.x() - xw, pos.y() + yw, pos.y() - yw, pos.z(), width);
+                    float xw = perp.x * width;
+                    float yw = perp.y * width;
+                    nodes[j - first] = new VFXNode(xc + xw, xc - xw, yc + yw, yc - yw, center.z(), width);
                 }
                 renderArc(normal, buffer, packedLightIn, nodes, arcWidth, argb);
             }
@@ -507,7 +510,7 @@ public final class VFXHelper {
             float eccentricity = 0.3F * (y[i] - y[i - 1]);
             float centering = Math.min(1, 3.0F - 3.0F * i / nodes.length);
             nodes[i] = new Vector3f(centering * nodes[i - 1].x() + eccentricity * boundedGaussian(random, 1.65F),
-                    y[i], 0);
+                    y[i], centering * nodes[i - 1].z() + eccentricity * boundedGaussian(random, 1.65F));
         }
         return nodes;
     }

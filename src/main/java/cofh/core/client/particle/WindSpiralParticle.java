@@ -53,8 +53,8 @@ public class WindSpiralParticle extends LevelMatrixStackParticle {
         if (time < 0 || time > fLifetime) {
             return;
         }
-        stack.mulPose(Vector3f.XP.rotation(xRot)); //TODO: rotations
-        stack.mulPose(Vector3f.YP.rotation(yRot));
+        stack.mulPose(Vector3f.YP.rotationDegrees(-yRot + 180));
+        stack.mulPose(Vector3f.XP.rotationDegrees(-xRot - 90));
         stack.pushPose();
 
         float progress = time / fLifetime;
@@ -63,7 +63,7 @@ public class WindSpiralParticle extends LevelMatrixStackParticle {
         float easePlat = MathHelper.easePlateau(progress);
         float offset = (float) rand.nextDouble(0.0F, 0.8F);
         float expand = (progress + offset) * (float) rand.nextDouble(0.3F, 0.5F);
-        stack.translate(0, expand * (float) rand.nextDouble(1.0F, 1.5F), 0);
+        stack.translate(0, expand * (float) rand.nextDouble(1.5F, 2.0F) - 0.75F, 0);
         stack.scale(expand, offset * (float) rand.nextDouble(0.5F, 1.0F), expand);
         stack.mulPose(Vector3f.YP.rotation(roll + progress * (float) rand.nextDouble(6.0F, 9.0F))); //TODO rotations
         int argb = VFXHelper.packARGB(alpha * easeCub, rCol, gCol, bCol);
@@ -86,6 +86,7 @@ public class WindSpiralParticle extends LevelMatrixStackParticle {
 
         }
 
+        // The xRot and yRot values should come from the player that casts the wind spell.
         @Nullable
         @Override
         public Particle createParticle(BasicParticleType data, ClientWorld world, double x, double y, double z, double speed, double yRot, double xRot) {
