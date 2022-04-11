@@ -748,25 +748,35 @@ public final class VFXHelper {
             return (yp + yn) * 0.5F;
         }
 
-        public VFXNode renderStart(Matrix3f normal, IVertexBuilder builder, int packedLight, int a, int r, int g, int b, float uFrom, float vFrom, float uTo, float vTo) {
+        public VFXNode renderStart(Matrix3f normal, IVertexBuilder builder, int packedLight, int a, int r, int g, int b, float u0, float v0, float u1, float v1) {
 
-            builder.vertex(xp, yp, z).color(r, g, b, a).uv(uFrom, vFrom).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
-            builder.vertex(xn, yn, z).color(r, g, b, a).uv(uTo, vFrom).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
+            builder.vertex(xp, yp, z).color(r, g, b, a).uv(u0, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
+            builder.vertex(xn, yn, z).color(r, g, b, a).uv(u1, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
             return this;
         }
 
-        public VFXNode renderEnd(Matrix3f normal, IVertexBuilder builder, int packedLight, int a, int r, int g, int b, float uFrom, float vFrom, float uTo, float vTo) {
+        public VFXNode renderEnd(Matrix3f normal, IVertexBuilder builder, int packedLight, int a, int r, int g, int b, float u0, float v0, float u1, float v1) {
 
-            builder.vertex(xn, yn, z).color(r, g, b, a).uv(uTo, vTo).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
-            builder.vertex(xp, yp, z).color(r, g, b, a).uv(uFrom, vTo).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
+            builder.vertex(xn, yn, z).color(r, g, b, a).uv(u1, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
+            builder.vertex(xp, yp, z).color(r, g, b, a).uv(u0, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
             return this;
         }
 
-        public VFXNode renderMid(Matrix3f normal, IVertexBuilder builder, int packedLight, int a, int r, int g, int b, float uFrom, float vFrom, float uTo, float vTo) {
+        public VFXNode renderMid(Matrix3f normal, IVertexBuilder builder, int packedLight, int a, int r, int g, int b, float u0, float v0, float u1, float v1, float u2, float v2, float u3, float v3) {
 
-            renderEnd(normal, builder, packedLight, a, r, g, b, uFrom, vFrom, uTo, vTo);
-            renderStart(normal, builder, packedLight, a, r, g, b, uFrom, vFrom, uTo, vTo);
+            renderEnd(normal, builder, packedLight, a, r, g, b, u0, v0, u1, v1);
+            renderStart(normal, builder, packedLight, a, r, g, b, u2, v2, u3, v3);
             return this;
+        }
+
+        public VFXNode renderMid(Matrix3f normal, IVertexBuilder builder, int packedLight, int a, int r, int g, int b, float u0, float v0, float u1, float v1, float u2, float v2) {
+
+            return renderMid(normal, builder, packedLight, a, r, g, b, u0, v0, u1, v1, u1, v1, u2, v2);
+        }
+
+        public VFXNode renderMid(Matrix3f normal, IVertexBuilder builder, int packedLight, int a, int r, int g, int b, float u0, float v0, float u1, float v1) {
+
+            return renderMid(normal, builder, packedLight, a, r, g, b, u0, v0, u1, v1, u0, v0, u1, v1);
         }
 
         public VFXNode renderStart(Matrix3f normal, IVertexBuilder builder, int packedLight, int a, int r, int g, int b) {

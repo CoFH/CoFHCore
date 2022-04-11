@@ -65,7 +65,7 @@ public class WindSpiralParticle extends LevelMatrixStackParticle {
         float expand = (progress + offset) * (float) rand.nextDouble(0.3F, 0.5F);
         stack.translate(0, expand * (float) rand.nextDouble(1.5F, 2.0F) - 0.75F, 0);
         stack.scale(expand, offset * (float) rand.nextDouble(0.5F, 1.0F), expand);
-        stack.mulPose(Vector3f.YP.rotation(roll + progress * (float) rand.nextDouble(6.0F, 9.0F))); //TODO rotations
+        stack.mulPose(Vector3f.YP.rotation(roll + progress * (float) rand.nextDouble(6.0F, 9.0F)));
         int argb = VFXHelper.packARGB(alpha * easeCub, rCol, gCol, bCol);
         int length = (int) (3 + easePlat * 20);
         Vector4f[] poss = new Vector4f[length];
