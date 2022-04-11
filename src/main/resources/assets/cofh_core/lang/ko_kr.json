@@ -6,7 +6,7 @@
   "attribute.name.cofh.fall_distance": "낙하한 거리",
   "attribute.name.cofh.hazard_resistance": "방호 횟수",
   "attribute.name.cofh.sting_resistance": "쏘임 방어 횟수",
-  
+
   "death.attack.knife": "%1$s이(가) %2$s만큼 칼에 찔렸습니다!",
   "death.attack.knife.item": "%2$s이(가) %3$s을(를) 사용하여 %1$s을(를) 찔렀습니다!",
 

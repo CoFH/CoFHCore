@@ -36,8 +36,8 @@ public class ContainerScreenCoFH<T extends Container> extends ContainerScreen<T>
     protected int mX;
     protected int mY;
 
-    protected String name;
-    protected String info;
+    protected String name = "";
+    protected String info = "";
     protected ResourceLocation texture;
     protected PlayerEntity player;
 
