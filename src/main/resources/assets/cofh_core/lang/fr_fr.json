@@ -64,7 +64,7 @@
   "info.cofh.item_tags": "Balises d'objet",
   "info.cofh.hold_ctrl_for_tags": "Maintenez §e§oCtrl§r§7 pour les balises",
   "info.cofh.hold_shift_for_details": "Maintenez §e§oMaj§r§7 pour les détails",
-  
+
   "info.cofh.mode_change": "Appuyez sur '%s' pour changer de mode.",
   "info.cofh.use_sneak_activate": "Utilisez-le en étant accroupi pour l'activer.",
   "info.cofh_use_sneak_deactivate": "Utilisez-le en étant accroupi pour le désactiver.",
