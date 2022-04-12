@@ -66,7 +66,7 @@ public class WindSpiralParticle extends LevelMatrixStackParticle {
         stack.translate(0, expand * (float) rand.nextDouble(1.5F, 2.0F) - 0.75F, 0);
         stack.scale(expand, offset * (float) rand.nextDouble(0.5F, 1.0F), expand);
         stack.mulPose(Vector3f.YP.rotation(roll + progress * (float) rand.nextDouble(6.0F, 9.0F)));
-        int argb = VFXHelper.packARGB(alpha * easeCub, rCol, gCol, bCol);
+        int rgba = VFXHelper.packRGBA(rCol, gCol, bCol, alpha * easeCub);
         int length = (int) (3 + easePlat * 20);
         Vector4f[] poss = new Vector4f[length];
         for (int i = 0; i < length; ++i) {
@@ -74,7 +74,7 @@ public class WindSpiralParticle extends LevelMatrixStackParticle {
             float r = 1.0F + i * 0.02F;
             poss[i] = new Vector4f(r * MathHelper.cos(rot), i * 0.03F, r * MathHelper.sin(rot), 1.0F);
         }
-        VFXHelper.renderStreamLine(stack, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLightIn, poss, argb, VFXHelper.getWidthFunc((easeSin * 0.08F + 0.01F) * (float) rand.nextDouble(0.3F, 1.0F)));
+        VFXHelper.renderStreamLine(stack, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLightIn, poss, rgba, VFXHelper.getWidthFunc((easeSin * 0.08F + 0.01F) * (float) rand.nextDouble(0.3F, 1.0F)));
 
         stack.popPose();
     }

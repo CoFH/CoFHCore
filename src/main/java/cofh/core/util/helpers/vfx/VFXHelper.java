@@ -6,6 +6,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
@@ -44,14 +45,14 @@ public final class VFXHelper {
         return new Vector4f(a.x() - b.x(), a.y() - b.y(), a.z() - b.z(), a.w() - b.w());
     }
 
-    public static int packARGB(float a, float r, float g, float b) {
+    public static int packRGBA(float r, float g, float b, float a) {
 
-        return packARGB((int) (255.0F * a), (int) (255.0F * r), (int) (255.0F * g), (int) (255.0F * b));
+        return packRGBA((int) (255.0F * r), (int) (255.0F * g), (int) (255.0F * b), (int) (255.0F * a));
     }
 
-    public static int packARGB(int a, int r, int g, int b) {
+    public static int packRGBA(int r, int g, int b, int a) {
 
-        return (a << 24) | (r << 16) | (g << 8) | b;
+        return (r << 24) | (g << 16) | (b << 8) | a;
     }
 
     public static Vector4f mid(Vector4f a, Vector4f b) {
@@ -60,69 +61,61 @@ public final class VFXHelper {
     }
 
     // region HELPERS
-    private static void renderNodes(Matrix3f normal, IVertexBuilder builder, int packedLight, VFXNode[] nodes, int a, int r, int g, int b) {
+    private static void renderNodes(Matrix3f normal, IVertexBuilder builder, int packedLight, VFXNode[] nodes, int r, int g, int b, int a) {
 
-        nodes[0].renderStart(normal, builder, packedLight, a, r, g, b);
+        nodes[0].renderStart(normal, builder, packedLight, r, g, b, a);
         int count = nodes.length - 1;
         for (int i = 1; i < count; ++i) {
-            nodes[i].renderMid(normal, builder, packedLight, a, r, g, b);
+            nodes[i].renderMid(normal, builder, packedLight, r, g, b, a);
         }
-        nodes[count].renderEnd(normal, builder, packedLight, a, r, g, b);
-    }
-
-    private static void renderSkeleton(Matrix3f normal, IVertexBuilder builder, int packedLight, VFXNode[] nodes) {
-
-        VFXNode node = nodes[0];
-        float xm = node.xMid();
-        float ym = node.yMid();
-
-        builder.vertex(node.xp, node.yp, node.z).color(255, 0, 0, 255).endVertex();
-        builder.vertex(xm, ym, node.z).color(255, 0, 0, 255).endVertex();
-        builder.vertex(xm, ym, node.z).color(0, 0, 255, 255).endVertex();
-        builder.vertex(node.xn, node.yn, node.z).color(0, 0, 255, 255).endVertex();
-        builder.vertex(xm, ym, node.z).color(255, 255, 255, 255).endVertex();
-        for (int i = 1; i < nodes.length - 1; ++i) {
-            node = nodes[i];
-            xm = node.xMid();
-            ym = node.yMid();
-            builder.vertex(xm, ym, node.z).color(255, 255, 255, 255).endVertex();
-            builder.vertex(node.xp, node.yp, node.z).color(255, 0, 0, 255).endVertex();
-            builder.vertex(xm, ym, node.z).color(255, 0, 0, 255).endVertex();
-            builder.vertex(xm, ym, node.z).color(0, 0, 255, 255).endVertex();
-            builder.vertex(node.xn, node.yn, node.z).color(0, 0, 255, 255).endVertex();
-            builder.vertex(xm, ym, node.z).color(255, 255, 255, 255).endVertex();
-        }
-        node = nodes[nodes.length - 1];
-        xm = node.xMid();
-        ym = node.yMid();
-        builder.vertex(xm, ym, node.z).color(255, 255, 255, 255).endVertex();
-        builder.vertex(node.xp, node.yp, node.z).color(255, 0, 0, 255).endVertex();
-        builder.vertex(xm, ym, node.z).color(255, 0, 0, 255).endVertex();
-        builder.vertex(xm, ym, node.z).color(0, 0, 255, 255).endVertex();
-        builder.vertex(node.xn, node.yn, node.z).color(0, 0, 255, 255).endVertex();
+        nodes[count].renderEnd(normal, builder, packedLight, r, g, b, a);
     }
 
     public static Vector2f axialPerp(Vector4f start, Vector4f end, float width) {
 
-        width *= 0.5F;
-        float ratio = end.z() / start.z();
-        float x = end.x() - start.x() * ratio;
-        float y = end.y() - start.y() * ratio;
-        float normalize = MathHelper.invDist(x, y) * width;
-        x *= normalize;
-        y *= normalize;
+        float x = -start.x();
+        float y = -start.y();
+        if (Math.abs(start.z()) > 0) {
+            float ratio = end.z() / start.z();
+            x = end.x() + x * ratio;
+            y = end.y() + y * ratio;
+        } else if (Math.abs(end.z()) <= 0) {
+            x += end.x();
+            y += end.y();
+        }
+        if (start.z() > 0) {
+            x = -x;
+            y = -y;
+        }
+        if (x * x + y * y > 0F) {
+            float normalize = width * 0.5F / MathHelper.dist(x, y);
+            x *= normalize;
+            y *= normalize;
+        }
         return new Vector2f(-y, x);
     }
 
     public static Vector2f axialPerp(Vector3f start, Vector3f end, float width) {
 
-        width *= 0.5F;
-        float ratio = end.z() / start.z();
-        float x = end.x() - start.x() * ratio;
-        float y = end.y() - start.y() * ratio;
-        float normalize = MathHelper.invDist(x, y) * width;
-        x *= normalize;
-        y *= normalize;
+        float x = -start.x();
+        float y = -start.y();
+        if (Math.abs(start.z()) > 0) {
+            float ratio = end.z() / start.z();
+            x = end.x() + x * ratio;
+            y = end.y() + y * ratio;
+        } else if (Math.abs(end.z()) <= 0) {
+            x += end.x();
+            y += end.y();
+        }
+        if (start.z() > 0) {
+            x = -x;
+            y = -y;
+        }
+        if (x * x + y * y > 0F) {
+            float normalize = width * 0.5F / MathHelper.dist(x, y);
+            x *= normalize;
+            y *= normalize;
+        }
         return new Vector2f(-y, x);
     }
 
@@ -194,7 +187,11 @@ public final class VFXHelper {
     }
     // endregion
 
-    // Renders a billboarded translucent magenta square. Useful for preventing insanity.
+    // region DEBUG
+
+    /**
+     * Renders a billboarded translucent magenta square. Useful for preventing insanity.
+     */
     public static void renderTest(MatrixStack stack, IRenderTypeBuffer buffer) {
 
         IVertexBuilder builder = buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT);
@@ -216,6 +213,49 @@ public final class VFXHelper {
         builder.vertex(xn, yn, z).color(r, g, b, a).uv(1, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
         builder.vertex(xp, yn, z).color(r, g, b, a).uv(1, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
     }
+
+    public static void renderTest(MatrixStack stack) {
+
+        renderTest(stack, Minecraft.getInstance().renderBuffers().bufferSource());
+    }
+
+    private static void renderSkeleton(IVertexBuilder builder, VFXNode[] nodes) {
+
+        VFXNode node = nodes[0];
+        float xm = node.xMid();
+        float ym = node.yMid();
+
+        builder.vertex(node.xp, node.yp, node.z).color(255, 0, 0, 255).endVertex();
+        builder.vertex(xm, ym, node.z).color(255, 0, 0, 255).endVertex();
+        builder.vertex(xm, ym, node.z).color(0, 0, 255, 255).endVertex();
+        builder.vertex(node.xn, node.yn, node.z).color(0, 0, 255, 255).endVertex();
+        builder.vertex(xm, ym, node.z).color(255, 255, 255, 255).endVertex();
+        for (int i = 1; i < nodes.length - 1; ++i) {
+            node = nodes[i];
+            xm = node.xMid();
+            ym = node.yMid();
+            builder.vertex(xm, ym, node.z).color(255, 255, 255, 255).endVertex();
+            builder.vertex(node.xp, node.yp, node.z).color(255, 0, 0, 255).endVertex();
+            builder.vertex(xm, ym, node.z).color(255, 0, 0, 255).endVertex();
+            builder.vertex(xm, ym, node.z).color(0, 0, 255, 255).endVertex();
+            builder.vertex(node.xn, node.yn, node.z).color(0, 0, 255, 255).endVertex();
+            builder.vertex(xm, ym, node.z).color(255, 255, 255, 255).endVertex();
+        }
+        node = nodes[nodes.length - 1];
+        xm = node.xMid();
+        ym = node.yMid();
+        builder.vertex(xm, ym, node.z).color(255, 255, 255, 255).endVertex();
+        builder.vertex(node.xp, node.yp, node.z).color(255, 0, 0, 255).endVertex();
+        builder.vertex(xm, ym, node.z).color(255, 0, 0, 255).endVertex();
+        builder.vertex(xm, ym, node.z).color(0, 0, 255, 255).endVertex();
+        builder.vertex(node.xn, node.yn, node.z).color(0, 0, 255, 255).endVertex();
+    }
+
+    private static void renderSkeleton(VFXNode[] nodes) {
+
+        renderSkeleton(Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(RenderType.LINES), nodes);
+    }
+    // endregion
 
     // region SHOCKWAVE
     private static final SortedMap<Float, List<int[]>> shockwaveOffsets = getOffsets(16);
@@ -314,7 +354,7 @@ public final class VFXHelper {
     // region ELECTRICITY
     private static final Vector3f[][] arcs = getRandomArcs(new Random(), 16, 50);
 
-    private static void renderArcGlow(Matrix3f normal, IRenderTypeBuffer buffer, int packedLight, VFXNode[] nodes, float width, int a, int r, int g, int b) {
+    private static void renderArcGlow(Matrix3f normal, IRenderTypeBuffer buffer, int packedLight, VFXNode[] nodes, float width, int r, int g, int b, int a) {
 
         IVertexBuilder builder = buffer.getBuffer(RenderTypes.LINEAR_GLOW);
         Function<VFXNode, Float> glowWidth = node -> (width * 0.3F + node.width * 0.7F) / node.width;
@@ -328,17 +368,18 @@ public final class VFXHelper {
         };
         int count = nodes.length - 1;
 
-        posGlow.apply(nodes[0]).renderStart(normal, builder, packedLight, a, r, g, b, 0, 0, 0.5F, 1);
+        // Sides
+        posGlow.apply(nodes[0]).renderStart(normal, builder, packedLight, r, g, b, a, 0, 0, 0.5F, 1);
         for (int i = 1; i < count; ++i) {
-            posGlow.apply(nodes[i]).renderMid(normal, builder, packedLight, a, r, g, b, 0, 0, 0.5F, 1);
+            posGlow.apply(nodes[i]).renderMid(normal, builder, packedLight, r, g, b, a, 0, 0, 0.5F, 1);
         }
-        posGlow.apply(nodes[count]).renderEnd(normal, builder, packedLight, a, r, g, b, 0, 0, 0.5F, 1);
+        posGlow.apply(nodes[count]).renderEnd(normal, builder, packedLight, r, g, b, a, 0, 0, 0.5F, 1);
 
-        negGlow.apply(nodes[0]).renderStart(normal, builder, packedLight, a, r, g, b, 0.5F, 0, 1, 1);
+        negGlow.apply(nodes[0]).renderStart(normal, builder, packedLight, r, g, b, a, 0.5F, 0, 1, 1);
         for (int i = 1; i < count; ++i) {
-            negGlow.apply(nodes[i]).renderMid(normal, builder, packedLight, a, r, g, b, 0.5F, 0, 1, 1);
+            negGlow.apply(nodes[i]).renderMid(normal, builder, packedLight, r, g, b, a, 0.5F, 0, 1, 1);
         }
-        negGlow.apply(nodes[count]).renderEnd(normal, builder, packedLight, a, r, g, b, 0.5F, 0, 1, 1);
+        negGlow.apply(nodes[count]).renderEnd(normal, builder, packedLight, r, g, b, a, 0.5F, 0, 1, 1);
 
         // Ends
         VFXNode node = nodes[count];
@@ -384,10 +425,10 @@ public final class VFXHelper {
         builder.vertex(node.xn - yw, node.yn + xw, node.z).color(r, g, b, a).uv(1, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
     }
 
-    public static void renderArc(Matrix3f normal, IRenderTypeBuffer buffer, int packedLight, VFXNode[] nodes, float width, int argb) {
+    public static void renderArc(Matrix3f normal, IRenderTypeBuffer buffer, int packedLight, VFXNode[] nodes, float width, int rgba) {
 
         renderNodes(normal, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLight, nodes, 0xFF, 0xFF, 0xFF, 0xFF);
-        renderArcGlow(normal, buffer, packedLight, nodes, width, (argb >> 24) & 0xFF, (argb >> 16) & 0xFF, (argb >> 8) & 0xFF, argb & 0xFF);
+        renderArcGlow(normal, buffer, packedLight, nodes, width, (rgba >> 24) & 0xFF, (rgba >> 16) & 0xFF, (rgba >> 8) & 0xFF, rgba & 0xFF);
     }
 
     /**
@@ -396,11 +437,11 @@ public final class VFXHelper {
      * @param arcCount      Number of individual arcs.
      * @param arcWidth      Average width of each arc. 0.4F recommended.
      * @param seed          Seed for randomization. Should be changed based on the time.
-     * @param argb          Color/alpha for the glow surrounding the white core.
+     * @param rgba          Color/alpha for the glow surrounding the white core.
      * @param taperOffset   Value between -1.25F and 1.25F that determines the threshold for tapering.
      *                      Generally, negative at the start of an animation, 0 in the middle (no taper), and positive at the end.
      */
-    public static void renderStraightArcs(MatrixStack matrixStackIn, IRenderTypeBuffer buffer, int packedLightIn, int arcCount, float arcWidth, long seed, int argb, float taperOffset) {
+    public static void renderStraightArcs(MatrixStack matrixStackIn, IRenderTypeBuffer buffer, int packedLightIn, int arcCount, float arcWidth, long seed, int rgba, float taperOffset) {
 
         SplittableRandom rand = new SplittableRandom(seed);
         matrixStackIn.pushPose();
@@ -439,24 +480,24 @@ public final class VFXHelper {
                     Vector4f pos = new Vector4f(arc[j]);
                     pos.transform(pose);
                     float dot = subtract(pos, center).dot(new Vector4f(perp.x, perp.y, 0, 0));
-                    float xc = center.x() + perp.x * dot * 2.0F;
-                    float yc = center.y() + perp.y * dot * 2.0F;
+                    float xc = center.x() + perp.x * dot * 3.0F;
+                    float yc = center.y() + perp.y * dot * 3.0F;
                     float width = arcWidth * ((float) rand.nextDouble() * 0.6F + 0.7F) * MathHelper.clamp(4.0F * (0.75F - Math.abs(j * incr - 0.5F - taperOffset)), 0.0F, 1.0F);
                     float xw = perp.x * width;
                     float yw = perp.y * width;
                     nodes[j - first] = new VFXNode(xc + xw, xc - xw, yc + yw, yc - yw, center.z(), width);
                 }
-                renderArc(normal, buffer, packedLightIn, nodes, arcWidth, argb);
+                renderArc(normal, buffer, packedLightIn, nodes, arcWidth, rgba);
             }
         }
         matrixStackIn.popPose();
     }
 
-    public static void renderStraightArcs(MatrixStack matrixStackIn, IRenderTypeBuffer buffer, int packedLightIn, float length, int arcCount, float arcWidth, long seed, int argb, float taperOffset) {
+    public static void renderStraightArcs(MatrixStack matrixStackIn, IRenderTypeBuffer buffer, int packedLightIn, float length, int arcCount, float arcWidth, long seed, int rgba, float taperOffset) {
 
         matrixStackIn.pushPose();
         matrixStackIn.scale(length, length, length);
-        renderStraightArcs(matrixStackIn, buffer, packedLightIn, arcCount, arcWidth / Math.abs(length), seed, argb, taperOffset);
+        renderStraightArcs(matrixStackIn, buffer, packedLightIn, arcCount, arcWidth / Math.abs(length), seed, rgba, taperOffset);
         matrixStackIn.popPose();
     }
 
@@ -539,18 +580,18 @@ public final class VFXHelper {
      * @param widthFunc     Function that determines stream width at each node based on the order of nodes.
      *                      Input is a float representing the normalized index of the node (0F for the first node, 1F for the last).
      */
-    public static void renderStreamLine(MatrixStack stack, IVertexBuilder builder, int packedLight, Vector4f[] poss, int argb, Function<Float, Float> widthFunc) {
+    public static void renderStreamLine(MatrixStack stack, IVertexBuilder builder, int packedLight, Vector4f[] poss, int rgba, Function<Float, Float> widthFunc) {
 
         if (poss.length < 3) {
             return;
         }
-        int a = (argb >> 24) & 0xFF;
+        int a = rgba & 0xFF;
         if (a <= 0) {
             return;
         }
-        int r = (argb >> 16) & 0xFF;
-        int g = (argb >> 8) & 0xFF;
-        int b = argb & 0xFF;
+        int r = (rgba >> 24) & 0xFF;
+        int g = (rgba >> 16) & 0xFF;
+        int b = (rgba >> 8) & 0xFF;
 
         MatrixStack.Entry stackEntry = stack.last();
         Matrix4f pose = stackEntry.pose();
@@ -568,12 +609,12 @@ public final class VFXHelper {
             float width = widthFunc.apply(increment * i);
             nodes[i] = new VFXNode(mid(start, end), axialPerp(start, end, width), width);
         }
-        renderNodes(normal, builder, packedLight, nodes, a, r, g, b);
+        renderNodes(normal, builder, packedLight, nodes, r, g, b, a);
     }
 
-    public static void renderStreamLine(MatrixStack stack, IRenderTypeBuffer buffer, int packedLight, Vector4f[] poss, int argb, Function<Float, Float> widthFunc) {
+    public static void renderStreamLine(MatrixStack stack, IRenderTypeBuffer buffer, int packedLight, Vector4f[] poss, int rgba, Function<Float, Float> widthFunc) {
 
-        renderStreamLine(stack, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLight, poss, argb, widthFunc);
+        renderStreamLine(stack, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLight, poss, rgba, widthFunc);
     }
 
     /**
@@ -595,7 +636,7 @@ public final class VFXHelper {
             float relRot = ((float) rand.nextDouble() - 0.5F) * time * 0.5F + 2 * i;
             float scale = 1.0F + ((float) rand.nextDouble() + MathHelper.sin(time * 0.1F + i)) * 0.1F;
             float width = streamWidth * ((float) rand.nextDouble() * 0.8F + 0.6F) / scale;
-            int alpha = (int) MathHelper.clamp((64 + rand.nextInt(64)) * alphaScale * (MathHelper.bevel((float) rand.nextDouble() * 4 + time * 0.06F) + 1.0F), 0, 255);
+            int alpha = (int) MathHelper.clamp((64 + rand.nextInt(64)) * alphaScale * (MathHelper.bevel((float) rand.nextDouble(4.0F) + time * 0.06F) + 1.0F), 0, 255);
             int value = rand.nextInt(32) + 224;
             float y = ((float) rand.nextDouble() + MathHelper.cos(time * 0.2F + i)) * 0.16F;
             int length = rand.nextInt(WIND_SEGMENTS / 2) + WIND_SEGMENTS / 2;
@@ -608,7 +649,7 @@ public final class VFXHelper {
                     float angle = j * WIND_INCR;
                     nodes[j] = new Vector4f(MathHelper.cos(angle) * 0.5F, y, MathHelper.sin(angle) * 0.5F, 1.0F);
                 }
-                renderStreamLine(stack, builder, packedLight, nodes, packARGB(alpha, value, value, value), getWidthFunc(width));
+                renderStreamLine(stack, builder, packedLight, nodes, packRGBA(value, value, value, alpha), getWidthFunc(width));
                 stack.popPose();
             }
         }
@@ -623,93 +664,6 @@ public final class VFXHelper {
         renderCyclone(stack, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLight, streamCount, streamWidth, time, alphaScale);
         stack.popPose();
     }
-
-    /*
-     * Renders a unit wind vortex that rotates about the Y axis.
-     *
-     * @param streamCount   The average number of visible streamlines. The actual number will be twice this, to account for fading in and out.
-     * @param streamWidth   The average width of streamlines.
-     * @param time          Streamlines rotate on average once every 10 time units. Negate to rotate in the opposite direction. Offset for different "seeds."
-     * @param alphaScale    Value between 0.0F and 1.0F for the alpha scale. 0.5F recommended.
-     */
-    //public static void renderVortex(MatrixStack stack, IRenderTypeBuffer buffer, int packedLight, int streamCount, float streamWidth, float outerRadius, float time, float alphaScale) {
-    //
-    //    streamCount *= 2;
-    //    Random rand = new Random(69420);
-    //    MatrixStack.Entry stackEntry = stack.last();
-    //    Matrix4f pose = stackEntry.pose();
-    //    Matrix3f normal = stackEntry.normal();
-    //    IVertexBuilder builder = buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT); //TODO
-    //
-    //    Vector4f perp = new Vector4f(0.0F, 1.0F, 0.0F, 0.0F);
-    //    perp.transform(pose);
-    //    float invLength = MathHelper.invSqrt(perp.x() * perp.x() + perp.y() * perp.y());
-    //    float xPerp = perp.x() * invLength;
-    //    float yPerp = perp.y() * invLength;
-    //
-    //    float rotSpeed = 0.314159F / outerRadius;
-    //    stack.pushPose();
-    //    //stack.mulPose(Vector3f.YP.rotation(time * 0.62832F));
-    //    float offset = outerRadius - 0.5F;
-    //    Quaternion rot = Vector3f.YP.rotation(2);
-    //    for (int i = 0; i < streamCount; ++i) {
-    //        float rotOffset = (float) rand.nextDouble() * 6.2832F + time * rotSpeed + 2 * i;
-    //        float scale = 1.0F + (float) rand.nextGaussian() * 0.05F;
-    //        float width = streamWidth * ((float) rand.nextDouble() * 0.8F + 0.6F) / scale;
-    //        int alpha = (int) MathHelper.clamp((64 + rand.nextInt(64)) * alphaScale * MathHelper.clamp(16.0F * Math.abs(MathHelper.frac((rotOffset - 2.4F) * 0.159F) - 0.5F) - 6.0F, 0.0F, 1.0F), 0, 255);
-    //        int brightness = rand.nextInt(32) + 224;
-    //        float height = (float) (rand.nextGaussian() + MathHelper.cos(time * 0.1F + i)) * 0.16F;
-    //        int length = rand.nextInt(4) + 3;
-    //        if (alpha > 0) {
-    //            stack.pushPose();
-    //            stack.scale(scale, scale, scale);
-    //            stack.mulPose(Vector3f.YP.rotation(2 * i));
-    //
-    //            stack.pushPose();
-    //            stack.translate(offset, 0, 0);
-    //            stack.mulPose(Vector3f.YP.rotation(rotOffset));
-    //            float increment = 1.0F / length;
-    //            pose = stack.last().pose();
-    //            for (int j = 0; j <= length; ++j) {
-    //                float angle = j * 0.19635F; //j * 2 * PI / 32
-    //                Vector4f node = new Vector4f((float) MathHelper.cos(angle) * outerRadius, height, (float) MathHelper.sin(angle) * outerRadius, 1.0F);
-    //                node.transform(pose);
-    //
-    //                float perpWidth = width * MathHelper.clamp(3.0F * (0.5F - Math.abs(j * increment - 0.5F)), 0.0F, 1.0F);
-    //                float xWidth = xPerp * perpWidth;
-    //                float yWidth = yPerp * perpWidth;
-    //                float xPos = node.x() + xWidth;
-    //                float yPos = node.y() + yWidth;
-    //                float xNeg = node.x() - xWidth;
-    //                float yNeg = node.y() - yWidth;
-    //                float z = node.z();
-    //
-    //                if (j != 0) {
-    //                    builder.vertex(xNeg, yNeg, z).color(brightness, brightness, brightness, alpha).uv(1, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
-    //                    builder.vertex(xPos, yPos, z).color(brightness, brightness, brightness, alpha).uv(0, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
-    //                }
-    //                if (j != length) {
-    //                    builder.vertex(xPos, yPos, z).color(brightness, brightness, brightness, alpha).uv(0, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
-    //                    builder.vertex(xNeg, yNeg, z).color(brightness, brightness, brightness, alpha).uv(1, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
-    //                }
-    //            }
-    //            stack.popPose();
-    //            stack.popPose();
-    //        }
-    //        stack.mulPose(rot);
-    //    }
-    //    stack.popPose();
-    //}
-    //
-    //public static void renderVortex(MatrixStack stack, IRenderTypeBuffer buffer, int packedLight, float inRadius, float outRadius, float height, int streamCount, float streamWidth, float time, float alphaScale) {
-    //
-    //    stack.pushPose();
-    //    float diameter = inRadius * 2;
-    //    stack.scale(diameter, height, diameter);
-    //    renderVortex(stack, buffer, packedLight, streamCount, streamWidth, outRadius / inRadius, time, alphaScale);
-    //    stack.popPose();
-    //}
-    // endregion
 
     public static class VFXNode {
 
@@ -748,50 +702,50 @@ public final class VFXHelper {
             return (yp + yn) * 0.5F;
         }
 
-        public VFXNode renderStart(Matrix3f normal, IVertexBuilder builder, int packedLight, int a, int r, int g, int b, float u0, float v0, float u1, float v1) {
+        public VFXNode renderStart(Matrix3f normal, IVertexBuilder builder, int packedLight, int r, int g, int b, int a, float u0, float v0, float u1, float v1) {
 
             builder.vertex(xp, yp, z).color(r, g, b, a).uv(u0, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
             builder.vertex(xn, yn, z).color(r, g, b, a).uv(u1, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
             return this;
         }
 
-        public VFXNode renderEnd(Matrix3f normal, IVertexBuilder builder, int packedLight, int a, int r, int g, int b, float u0, float v0, float u1, float v1) {
+        public VFXNode renderEnd(Matrix3f normal, IVertexBuilder builder, int packedLight, int r, int g, int b, int a, float u0, float v0, float u1, float v1) {
 
             builder.vertex(xn, yn, z).color(r, g, b, a).uv(u1, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
             builder.vertex(xp, yp, z).color(r, g, b, a).uv(u0, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
             return this;
         }
 
-        public VFXNode renderMid(Matrix3f normal, IVertexBuilder builder, int packedLight, int a, int r, int g, int b, float u0, float v0, float u1, float v1, float u2, float v2, float u3, float v3) {
+        public VFXNode renderMid(Matrix3f normal, IVertexBuilder builder, int packedLight, int r, int g, int b, int a, float u0, float v0, float u1, float v1, float u2, float v2, float u3, float v3) {
 
-            renderEnd(normal, builder, packedLight, a, r, g, b, u0, v0, u1, v1);
-            renderStart(normal, builder, packedLight, a, r, g, b, u2, v2, u3, v3);
+            renderEnd(normal, builder, packedLight, r, g, b, a, u0, v0, u1, v1);
+            renderStart(normal, builder, packedLight, r, g, b, a, u2, v2, u3, v3);
             return this;
         }
 
-        public VFXNode renderMid(Matrix3f normal, IVertexBuilder builder, int packedLight, int a, int r, int g, int b, float u0, float v0, float u1, float v1, float u2, float v2) {
+        public VFXNode renderMid(Matrix3f normal, IVertexBuilder builder, int packedLight, int r, int g, int b, int a, float u0, float v0, float u1, float v1, float u2, float v2) {
 
-            return renderMid(normal, builder, packedLight, a, r, g, b, u0, v0, u1, v1, u1, v1, u2, v2);
+            return renderMid(normal, builder, packedLight, r, g, b, a, u0, v0, u1, v1, u1, v1, u2, v2);
         }
 
-        public VFXNode renderMid(Matrix3f normal, IVertexBuilder builder, int packedLight, int a, int r, int g, int b, float u0, float v0, float u1, float v1) {
+        public VFXNode renderMid(Matrix3f normal, IVertexBuilder builder, int packedLight, int r, int g, int b, int a, float u0, float v0, float u1, float v1) {
 
-            return renderMid(normal, builder, packedLight, a, r, g, b, u0, v0, u1, v1, u0, v0, u1, v1);
+            return renderMid(normal, builder, packedLight, r, g, b, a, u0, v0, u1, v1, u0, v0, u1, v1);
         }
 
-        public VFXNode renderStart(Matrix3f normal, IVertexBuilder builder, int packedLight, int a, int r, int g, int b) {
+        public VFXNode renderStart(Matrix3f normal, IVertexBuilder builder, int packedLight, int r, int g, int b, int a) {
 
-            return renderStart(normal, builder, packedLight, a, r, g, b, 0, 0, 1, 1);
+            return renderStart(normal, builder, packedLight, r, g, b, a, 0, 0, 1, 1);
         }
 
-        public VFXNode renderEnd(Matrix3f normal, IVertexBuilder builder, int packedLight, int a, int r, int g, int b) {
+        public VFXNode renderEnd(Matrix3f normal, IVertexBuilder builder, int packedLight, int r, int g, int b, int a) {
 
-            return renderEnd(normal, builder, packedLight, a, r, g, b, 0, 0, 1, 1);
+            return renderEnd(normal, builder, packedLight, r, g, b, a, 0, 0, 1, 1);
         }
 
-        public VFXNode renderMid(Matrix3f normal, IVertexBuilder builder, int packedLight, int a, int r, int g, int b) {
+        public VFXNode renderMid(Matrix3f normal, IVertexBuilder builder, int packedLight, int r, int g, int b, int a) {
 
-            return renderMid(normal, builder, packedLight, a, r, g, b, 0, 0, 1, 1);
+            return renderMid(normal, builder, packedLight, r, g, b, a, 0, 0, 1, 1);
         }
 
     }

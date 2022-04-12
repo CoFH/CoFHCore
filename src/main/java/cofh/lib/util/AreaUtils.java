@@ -86,16 +86,10 @@ public class AreaUtils {
         boolean succeeded = false;
         BlockState state = world.getBlockState(pos);
 
-        if (AreaUtils.isUnlitCampfire(state)) {
-            succeeded |= world.setBlockAndUpdate(pos, state.setValue(BlockStateProperties.LIT, true));
-        }
         if (state.isAir(world, pos)) {
             if (AbstractFireBlock.canBePlacedAt(world, pos, face)) {
                 succeeded |= world.setBlock(pos, AbstractFireBlock.getState(world, pos), 11);
             }
-        }
-        if (state.getBlock() == ICE || state.getBlock() == FROSTED_ICE) {
-            succeeded |= world.setBlockAndUpdate(pos, WATER.defaultBlockState());
         }
         return succeeded;
     };
@@ -105,10 +99,14 @@ public class AreaUtils {
         boolean succeeded = false;
         BlockState state = world.getBlockState(pos);
         if (isUnlitCampfire(state)) {
-            world.setBlockAndUpdate(pos, state.setValue(BlockStateProperties.LIT, true));
+            succeeded = world.setBlockAndUpdate(pos, state.setValue(BlockStateProperties.LIT, true));
         } else if (isUnlitTNT(state)) {
             state.getBlock().catchFire(state, world, pos, Direction.UP, entity instanceof LivingEntity ? (LivingEntity) entity : null);
-            world.setBlockAndUpdate(pos, AIR.defaultBlockState());
+            succeeded = world.setBlockAndUpdate(pos, AIR.defaultBlockState());
+        } else if (state.getBlock() == ICE || state.getBlock() == FROSTED_ICE) {
+            succeeded = world.setBlockAndUpdate(pos, WATER.defaultBlockState());
+        } else if (state.getBlock() == SNOW) {
+            succeeded = world.setBlockAndUpdate(pos, AIR.defaultBlockState());
         }
         return succeeded;
     };

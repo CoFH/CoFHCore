@@ -33,7 +33,7 @@ public class WindVortexParticle extends LevelMatrixStackParticle {
         this.fLifetime = defaultLifetime / (float) speed;
         this.lifetime = MathHelper.ceil(fLifetime * 1.2F);
         this.seed = random.nextInt();
-        this.setSize((float) (width * (1.0F + random.nextGaussian() * 0.1F)), (float) height * random.nextFloat()); // TODO
+        this.setSize((float) (width * (1.0F + random.nextGaussian() * 0.1F)), (float) height * random.nextFloat());
 
         hasPhysics = false;
         xd = yd = zd = 0;
@@ -71,7 +71,7 @@ public class WindVortexParticle extends LevelMatrixStackParticle {
             float r = 0.95F + i * 0.08F;
             poss[i] = new Vector4f(r * MathHelper.cos(rot), easeSin + i * 0.05F, r * MathHelper.sin(rot), 1.0F);
         }
-        VFXHelper.renderStreamLine(stack, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLight, poss, VFXHelper.packARGB(a, rCol, gCol, bCol), VFXHelper.getWidthFunc((float) rand.nextDouble(0.02F, 0.04F)));
+        VFXHelper.renderStreamLine(stack, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLight, poss, VFXHelper.packRGBA(rCol, gCol, bCol, a), VFXHelper.getWidthFunc((float) rand.nextDouble(0.02F, 0.04F)));
 
         stack.popPose();
         VFXHelper.renderCyclone(stack, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLight, 1, (float) rand.nextDouble(0.02F, 0.04F), progress * 0.5F + (float) rand.nextDouble(420F), a);

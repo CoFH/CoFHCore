@@ -31,7 +31,7 @@ public class ElectricFieldEntity extends AbstractAoESpellEntity {
     @Override
     public void tick() {
 
-        if (!level.isClientSide && random.nextInt(20) == 0) {
+        if (!level.isClientSide && random.nextInt(16) == 0) {
             summonArc();
         }
         super.tick();
