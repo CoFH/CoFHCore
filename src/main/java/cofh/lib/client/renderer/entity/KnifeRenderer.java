@@ -1,8 +1,8 @@
 package cofh.lib.client.renderer.entity;
 
+import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.entity.KnifeEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -17,7 +17,7 @@ import net.minecraft.util.math.vector.Vector3f;
 
 public class KnifeRenderer extends EntityRenderer<KnifeEntity> {
 
-    protected static final ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
+    protected static final ItemRenderer itemRenderer = RenderHelper.renderItem();
 
     public KnifeRenderer(EntityRendererManager manager) {
 

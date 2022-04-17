@@ -16,7 +16,9 @@ import cofh.lib.capability.CapabilityArchery;
 import cofh.lib.capability.CapabilityAreaEffect;
 import cofh.lib.capability.CapabilityEnchantableItem;
 import cofh.lib.capability.CapabilityShieldItem;
+import cofh.lib.client.renderer.entity.ElectricArcRenderer;
 import cofh.lib.client.renderer.entity.KnifeRenderer;
+import cofh.lib.client.renderer.entity.NothingRenderer;
 import cofh.lib.item.impl.SpawnEggItemCoFH;
 import cofh.lib.loot.TileNBTSync;
 import cofh.lib.network.PacketHandler;
@@ -33,6 +35,7 @@ import net.minecraft.particles.ParticleType;
 import net.minecraft.potion.Effect;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -67,6 +70,7 @@ public class CoFHCore {
     public static final DeferredRegisterCoFH<Enchantment> ENCHANTMENTS = DeferredRegisterCoFH.create(ForgeRegistries.ENCHANTMENTS, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<ParticleType<?>> PARTICLES = DeferredRegisterCoFH.create(ForgeRegistries.PARTICLE_TYPES, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<IRecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegisterCoFH.create(ForgeRegistries.RECIPE_SERIALIZERS, ID_COFH_CORE);
+    public static final DeferredRegisterCoFH<SoundEvent> SOUND_EVENTS = DeferredRegisterCoFH.create(ForgeRegistries.SOUND_EVENTS, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<TileEntityType<?>> TILE_ENTITIES = DeferredRegisterCoFH.create(ForgeRegistries.TILE_ENTITIES, ID_COFH_CORE);
 
     public static boolean curiosLoaded = false;
@@ -89,11 +93,12 @@ public class CoFHCore {
         ITEMS.register(modEventBus);
         ENTITIES.register(modEventBus);
 
+        PARTICLES.register(modEventBus);
         CONTAINERS.register(modEventBus);
         EFFECTS.register(modEventBus);
         ENCHANTMENTS.register(modEventBus);
-        // PARTICLES.register(modEventBus);
         RECIPE_SERIALIZERS.register(modEventBus);
+        SOUND_EVENTS.register(modEventBus);
         TILE_ENTITIES.register(modEventBus);
 
         CoreConfig.register();
@@ -103,11 +108,12 @@ public class CoFHCore {
         CoreItems.register();
         CoreEntities.register();
 
+        CoreParticles.register();
         CoreContainers.register();
         CoreEffects.register();
         CoreEnchantments.register();
-        // CoreParticles.register();
         CoreRecipeSerializers.register();
+        CoreSounds.register();
 
         CuriosProxy.register();
     }
@@ -138,6 +144,9 @@ public class CoFHCore {
 
         PACKET_HANDLER.registerPacket(PACKET_ITEM_MODE_CHANGE, ItemModeChangePacket::new);
         PACKET_HANDLER.registerPacket(PACKET_ITEM_LEFT_CLICK, ItemLeftClickPacket::new);
+
+        PACKET_HANDLER.registerPacket(PACKET_EFFECT_ADD, EffectAddedPacket::new);
+        PACKET_HANDLER.registerPacket(PACKET_EFFECT_REMOVE, EffectRemovedPacket::new);
     }
 
     // region INITIALIZATION
@@ -179,6 +188,9 @@ public class CoFHCore {
     private void registerEntityRenderingHandlers() {
 
         RenderingRegistry.registerEntityRenderingHandler(KNIFE_ENTITY, KnifeRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ELECTRIC_ARC_ENTITY, ElectricArcRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ELECTRIC_FIELD_ENTITY, NothingRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(BLACK_HOLE_ENTITY, NothingRenderer::new);
     }
     // endregion
 }

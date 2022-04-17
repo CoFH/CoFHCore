@@ -1,5 +1,6 @@
 package cofh.lib.entity;
 
+import cofh.lib.block.IDetonatable;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -23,12 +24,14 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import static cofh.lib.util.constants.NBTTags.TAG_FUSE;
 
-public abstract class AbstractTNTMinecartEntity extends AbstractMinecartEntityCoFH {
+public abstract class AbstractTNTMinecartEntity extends AbstractMinecartEntityCoFH implements IDetonatable {
 
     protected static final int CLOUD_DURATION = 20;
 
     protected int radius = 8;
     protected int fuse = -1;
+    public int effectAmplifier = 1;
+    public int effectDuration = 300;
     protected boolean detonated = false;
 
     public AbstractTNTMinecartEntity(EntityType<?> type, World worldIn) {
@@ -196,6 +199,16 @@ public abstract class AbstractTNTMinecartEntity extends AbstractMinecartEntityCo
         explode();
     }
 
-    protected abstract void explode();
+    protected void explode() {
+
+        if (level.isClientSide) {
+            this.level.addParticle(ParticleTypes.EXPLOSION_EMITTER, this.getX(), this.getY(), this.getZ(), 1.0D, 0.0D, 0.0D);
+            this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.GENERIC_EXPLODE, SoundCategory.BLOCKS, 2.0F, (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F, false);
+        } else {
+            this.detonate(this.position());
+            this.remove();
+            this.spawnAtLocation(getCartItem());
+        }
+    }
 
 }

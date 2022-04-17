@@ -1,5 +1,6 @@
 package cofh.core.mixin;
 
+import cofh.core.event.CoreClientEvents;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.ActiveRenderInfo;
@@ -31,6 +32,17 @@ public abstract class WorldRendererMixin {
     private void disableTransparencyShaderDepth(MatrixStack p1, float p2, long p3, boolean p4, ActiveRenderInfo p5, GameRenderer p6, LightTexture p7, Matrix4f p8, CallbackInfo ci) {
 
         GlStateManager._depthMask(false);
+    }
+
+    @Inject (
+            method = "renderLevel",
+            at = @At (
+                    value = "HEAD"
+            )
+    )
+    private void updateMatrixStack(MatrixStack p1, float p2, long p3, boolean p4, ActiveRenderInfo p5, GameRenderer p6, LightTexture p7, Matrix4f p8, CallbackInfo ci) {
+
+        CoreClientEvents.levelStack = p1;
     }
 
 }

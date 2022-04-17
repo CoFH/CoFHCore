@@ -24,6 +24,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -35,6 +36,7 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.tags.ITag;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Hand;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
@@ -93,6 +95,21 @@ public class Utils {
     public static boolean isCreativePlayer(Entity entity) {
 
         return entity instanceof PlayerEntity && ((PlayerEntity) entity).abilities.instabuild;
+    }
+
+    public static EquipmentSlotType handToEquipSlot(Hand hand) {
+
+        return hand.equals(Hand.MAIN_HAND) ? EquipmentSlotType.MAINHAND : EquipmentSlotType.OFFHAND;
+    }
+
+    public static Hand otherHand(Hand hand) {
+
+        return hand.equals(Hand.MAIN_HAND) ? Hand.OFF_HAND : Hand.MAIN_HAND;
+    }
+
+    public static EquipmentSlotType otherHand(EquipmentSlotType slot) {
+
+        return slot.equals(EquipmentSlotType.MAINHAND) ? EquipmentSlotType.OFFHAND : EquipmentSlotType.MAINHAND;
     }
 
     public static String createPrettyJSON(String jsonString) {

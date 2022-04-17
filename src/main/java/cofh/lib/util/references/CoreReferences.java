@@ -2,6 +2,9 @@ package cofh.lib.util.references;
 
 import cofh.core.inventory.container.HeldItemFilterContainer;
 import cofh.core.inventory.container.TileItemFilterContainer;
+import cofh.lib.entity.BlackHoleEntity;
+import cofh.lib.entity.ElectricArcEntity;
+import cofh.lib.entity.ElectricFieldEntity;
 import cofh.lib.entity.KnifeEntity;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
@@ -9,6 +12,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
+import net.minecraft.particles.BasicParticleType;
 import net.minecraft.potion.Effect;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.registries.ObjectHolder;
@@ -140,12 +144,47 @@ public class CoreReferences {
     // endregion
 
     // region PARTICLES
-    //    @ObjectHolder(ID_PARTICLE_SNOW)
-    //    public static final BasicParticleType SNOW = null;
+    //@ObjectHolder(ID_PARTICLE_SNOW)
+    //public static final BasicParticleType SNOW = null;
+
+    @ObjectHolder (ID_PARTICLE_FROST)
+    public static final BasicParticleType FROST_PARTICLE = null;
+
+    @ObjectHolder (ID_PARTICLE_SPARK)
+    public static final BasicParticleType SPARK_PARTICLE = null;
+
+    @ObjectHolder (ID_PARTICLE_PLASMA)
+    public static final BasicParticleType PLASMA_PARTICLE = null;
+
+    @ObjectHolder (ID_PARTICLE_SHOCKWAVE)
+    public static final BasicParticleType SHOCKWAVE_PARTICLE = null;
+
+    @ObjectHolder(ID_PARTICLE_BLAST_WAVE)
+    public static final BasicParticleType BLAST_WAVE_PARTICLE = null;
+
+    @ObjectHolder(ID_PARTICLE_VORTEX)
+    public static final BasicParticleType VORTEX_PARTICLE = null;
+
+    @ObjectHolder(ID_PARTICLE_SPIRAL)
+    public static final BasicParticleType SPIRAL_PARTICLE = null;
     // endregion
 
     // region ENTITIES
     @ObjectHolder (ID_KNIFE)
     public static final EntityType<KnifeEntity> KNIFE_ENTITY = null;
+
+    @ObjectHolder (ID_ELECTRIC_ARC)
+    public static final EntityType<ElectricArcEntity> ELECTRIC_ARC_ENTITY = null;
+
+    @ObjectHolder (ID_ELECTRIC_FIELD)
+    public static final EntityType<ElectricFieldEntity> ELECTRIC_FIELD_ENTITY = null;
+
+    @ObjectHolder (ID_BLACK_HOLE)
+    public static final EntityType<BlackHoleEntity> BLACK_HOLE_ENTITY = null;
+    // endregion
+
+    // region SOUND EVENTS
+    //@ObjectHolder (ID_SOUND_ELECTRICITY)
+    //public static final SoundEvent ELECTRICITY_SOUND = null;
     // endregion
 }
