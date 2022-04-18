@@ -159,13 +159,13 @@ public class CoreReferences {
     @ObjectHolder (ID_PARTICLE_SHOCKWAVE)
     public static final BasicParticleType SHOCKWAVE_PARTICLE = null;
 
-    @ObjectHolder(ID_PARTICLE_BLAST_WAVE)
+    @ObjectHolder (ID_PARTICLE_BLAST_WAVE)
     public static final BasicParticleType BLAST_WAVE_PARTICLE = null;
 
-    @ObjectHolder(ID_PARTICLE_VORTEX)
+    @ObjectHolder (ID_PARTICLE_VORTEX)
     public static final BasicParticleType VORTEX_PARTICLE = null;
 
-    @ObjectHolder(ID_PARTICLE_SPIRAL)
+    @ObjectHolder (ID_PARTICLE_SPIRAL)
     public static final BasicParticleType SPIRAL_PARTICLE = null;
     // endregion
 

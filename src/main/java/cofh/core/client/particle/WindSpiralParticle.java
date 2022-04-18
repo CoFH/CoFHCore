@@ -18,7 +18,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 import java.util.SplittableRandom;
 
-@OnlyIn(Dist.CLIENT)
+@OnlyIn (Dist.CLIENT)
 public class WindSpiralParticle extends LevelMatrixStackParticle {
 
     protected static final float defaultLifetime = 10.0F;
@@ -80,7 +80,7 @@ public class WindSpiralParticle extends LevelMatrixStackParticle {
         stack.popPose();
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @OnlyIn (Dist.CLIENT)
     public static class Factory implements IParticleFactory<BasicParticleType> {
 
         public Factory(IAnimatedSprite sprite) {
@@ -94,6 +94,7 @@ public class WindSpiralParticle extends LevelMatrixStackParticle {
 
             return new WindSpiralParticle(world, x, y, z, speed, yRot, xRot);
         }
+
     }
 
 }

@@ -26,4 +26,5 @@ public abstract class CustomParticleEffect extends EffectCoFH {
 
         return 3;
     }
+
 }

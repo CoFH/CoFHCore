@@ -102,7 +102,7 @@ public class ElectricArcEntity extends AbstractAoESpellEntity {
         return this;
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @OnlyIn (Dist.CLIENT)
     public boolean shouldRenderAtSqrDistance(double distSqr) {
 
         double d0 = 64.0D * getViewScale();

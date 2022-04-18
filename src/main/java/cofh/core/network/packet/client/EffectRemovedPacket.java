@@ -36,7 +36,7 @@ public class EffectRemovedPacket extends PacketBase implements IPacketClient {
 
     @Override
     public void write(PacketBuffer buf) {
-        
+
         buf.writeInt(entity.getId());
         buf.writeResourceLocation(effect.getEffect().getRegistryName());
     }
@@ -65,4 +65,5 @@ public class EffectRemovedPacket extends PacketBase implements IPacketClient {
 
         sendToClient(entity, effect.getEffect());
     }
+
 }

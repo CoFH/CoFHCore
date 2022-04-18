@@ -8,7 +8,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
-@OnlyIn(Dist.CLIENT)
+@OnlyIn (Dist.CLIENT)
 public class FrostParticle extends SpriteTexturedParticle {
 
     private FrostParticle(ClientWorld worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn) {
@@ -38,7 +38,7 @@ public class FrostParticle extends SpriteTexturedParticle {
         return IParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @OnlyIn (Dist.CLIENT)
     public static class Factory implements IParticleFactory<BasicParticleType> {
 
         private final IAnimatedSprite spriteSet;
@@ -57,6 +57,7 @@ public class FrostParticle extends SpriteTexturedParticle {
             particle.setAlpha(world.random.nextFloat() * 0.2F + 0.7F);
             return particle;
         }
+
     }
 
 }

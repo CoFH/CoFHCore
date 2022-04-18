@@ -32,7 +32,7 @@ public class EffectAddedPacket extends PacketBase implements IPacketClient {
 
     @Override
     public void write(PacketBuffer buf) {
-        
+
         buf.writeInt(entity.getId());
         buf.writeResourceLocation(effect.getEffect().getRegistryName());
         buf.writeInt(effect.getDuration());
@@ -57,4 +57,5 @@ public class EffectAddedPacket extends PacketBase implements IPacketClient {
             packet.sendToClients();
         }
     }
+
 }

@@ -8,7 +8,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
-@OnlyIn(Dist.CLIENT)
+@OnlyIn (Dist.CLIENT)
 public class SparkParticle extends SpriteTexturedParticle {
 
     private final IAnimatedSprite spriteSet;
@@ -43,12 +43,12 @@ public class SparkParticle extends SpriteTexturedParticle {
     }
 
     @Override
-    public int getLightColor(float pTicks){
+    public int getLightColor(float pTicks) {
 
         return 15728880;
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @OnlyIn (Dist.CLIENT)
     public static class Factory implements IParticleFactory<BasicParticleType> {
 
         private final IAnimatedSprite spriteSet;
@@ -64,6 +64,7 @@ public class SparkParticle extends SpriteTexturedParticle {
 
             return new SparkParticle(world, x, y, z, dx, dy, dz, spriteSet);
         }
+
     }
 
 }

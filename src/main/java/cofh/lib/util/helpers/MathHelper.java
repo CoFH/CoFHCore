@@ -220,7 +220,7 @@ public final class MathHelper {
         return 1 / sqrt(a);
     }
 
-    public static float distSqr(float ...a) {
+    public static float distSqr(float... a) {
 
         float d = 0.0F;
         for (float f : a) {
@@ -229,12 +229,12 @@ public final class MathHelper {
         return d;
     }
 
-    public static float dist(float ...a) {
+    public static float dist(float... a) {
 
         return sqrt(distSqr(a));
     }
 
-    public static float invDist(float ...a) {
+    public static float invDist(float... a) {
 
         return 1 / dist(a);
     }

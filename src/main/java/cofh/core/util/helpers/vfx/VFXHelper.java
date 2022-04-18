@@ -264,12 +264,12 @@ public final class VFXHelper {
     /**
      * Renders a block shockwave that radially propagates from the origin.
      *
-     * @param origin        Center of the shockwave.
-     * @param time          Travels outward 1 block per unit time. Blocks take 5 units to complete their trajectory.
-     *                      Scale this value based on how fast you want the animation to play.
-     * @param radius        The maximum radius of the shockwave. Hard limit of 16.
-     * @param heightScale   Adjusts how high the blocks travel.
-     * @param canRender     Predicate for filtering which blocks are to be rendered.
+     * @param origin      Center of the shockwave.
+     * @param time        Travels outward 1 block per unit time. Blocks take 5 units to complete their trajectory.
+     *                    Scale this value based on how fast you want the animation to play.
+     * @param radius      The maximum radius of the shockwave. Hard limit of 16.
+     * @param heightScale Adjusts how high the blocks travel.
+     * @param canRender   Predicate for filtering which blocks are to be rendered.
      */
     public static void renderShockwave(MatrixStack stack, IRenderTypeBuffer buffer, IBlockDisplayReader world, BlockPos origin, float time, float radius, float heightScale, Predicate<BlockPos> canRender) {
 
@@ -434,12 +434,12 @@ public final class VFXHelper {
     /**
      * Renders straight electric arcs in a unit column towards positive y.
      *
-     * @param arcCount      Number of individual arcs.
-     * @param arcWidth      Average width of each arc. 0.4F recommended.
-     * @param seed          Seed for randomization. Should be changed based on the time.
-     * @param rgba          Color/alpha for the glow surrounding the white core.
-     * @param taperOffset   Value between -1.25F and 1.25F that determines the threshold for tapering.
-     *                      Generally, negative at the start of an animation, 0 in the middle (no taper), and positive at the end.
+     * @param arcCount    Number of individual arcs.
+     * @param arcWidth    Average width of each arc. 0.4F recommended.
+     * @param seed        Seed for randomization. Should be changed based on the time.
+     * @param rgba        Color/alpha for the glow surrounding the white core.
+     * @param taperOffset Value between -1.25F and 1.25F that determines the threshold for tapering.
+     *                    Generally, negative at the start of an animation, 0 in the middle (no taper), and positive at the end.
      */
     public static void renderStraightArcs(MatrixStack matrixStackIn, IRenderTypeBuffer buffer, int packedLightIn, int arcCount, float arcWidth, long seed, int rgba, float taperOffset) {
 
@@ -575,10 +575,10 @@ public final class VFXHelper {
     /**
      * Renders an axially billboarded streamline that generally (not exactly, for performance reasons) follows the given node positions.
      *
-     * @param poss          Desired positions of the nodes. Technically speaking, n positions are connected into n - 1 lines, used to determine the billboard angle.
-     *                      The actual nodes that are rendered are midpoints of these lines. If all of that means nothing to you, you're not alone.
-     * @param widthFunc     Function that determines stream width at each node based on the order of nodes.
-     *                      Input is a float representing the normalized index of the node (0F for the first node, 1F for the last).
+     * @param poss      Desired positions of the nodes. Technically speaking, n positions are connected into n - 1 lines, used to determine the billboard angle.
+     *                  The actual nodes that are rendered are midpoints of these lines. If all of that means nothing to you, you're not alone.
+     * @param widthFunc Function that determines stream width at each node based on the order of nodes.
+     *                  Input is a float representing the normalized index of the node (0F for the first node, 1F for the last).
      */
     public static void renderStreamLine(MatrixStack stack, IVertexBuilder builder, int packedLight, Vector4f[] poss, int rgba, Function<Float, Float> widthFunc) {
 
@@ -620,10 +620,10 @@ public final class VFXHelper {
     /**
      * Renders a unit wind cyclone that rotates about the Y axis.
      *
-     * @param streamCount   The average number of visible streamlines. The actual number will be twice this, to account for fading in and out.
-     * @param streamWidth   The average width of streamlines.
-     * @param time          Streamlines rotate on average once every time unit. Negate to rotate in the opposite direction. Offset for different "seeds."
-     * @param alphaScale    Value between 0.0F and 1.0F for the alpha scale. 0.5F recommended.
+     * @param streamCount The average number of visible streamlines. The actual number will be twice this, to account for fading in and out.
+     * @param streamWidth The average width of streamlines.
+     * @param time        Streamlines rotate on average once every time unit. Negate to rotate in the opposite direction. Offset for different "seeds."
+     * @param alphaScale  Value between 0.0F and 1.0F for the alpha scale. 0.5F recommended.
      */
     public static void renderCyclone(MatrixStack stack, IVertexBuilder builder, int packedLight, int streamCount, float streamWidth, float time, float alphaScale) {
 

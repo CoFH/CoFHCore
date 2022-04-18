@@ -15,7 +15,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 import java.util.SplittableRandom;
 
-@OnlyIn(Dist.CLIENT)
+@OnlyIn (Dist.CLIENT)
 public class BlastWaveParticle extends LevelMatrixStackParticle {
 
     protected float fLifetime;
@@ -43,7 +43,7 @@ public class BlastWaveParticle extends LevelMatrixStackParticle {
         VFXHelper.renderCyclone(stack, buffer, getLightColor(partialTicks), bbWidth * 0.5F * easeSin, bbHeight * easeSin, 2, 0.2F * easeCub, time * 0.05F + (float) rand.nextDouble(69F), 0.5F * MathHelper.easePlateau(progress));
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @OnlyIn (Dist.CLIENT)
     public static class Factory implements IParticleFactory<BasicParticleType> {
 
         public Factory(IAnimatedSprite sprite) {
@@ -56,6 +56,7 @@ public class BlastWaveParticle extends LevelMatrixStackParticle {
 
             return new BlastWaveParticle(world, x, y, z, speed, radius, heightScale);
         }
+
     }
 
 }

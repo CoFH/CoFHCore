@@ -40,7 +40,7 @@ public class AreaUtils {
     public static final int HORZ_MAX = 32;
     public static final int VERT_MAX = 16;
     public static final Set<BlockState> REPLACEABLE_AIR = new ObjectOpenHashSet<>(new BlockState[]{AIR.defaultBlockState(), CAVE_AIR.defaultBlockState()});
-    
+
     public static final IEffectApplier igniteEntities = (target, duration, power, source) -> {
 
         if (!target.fireImmune() && !target.isInWater() && target.getRemainingFireTicks() <= 0) {
@@ -53,7 +53,7 @@ public class AreaUtils {
     };
 
     public static final IEffectApplier chillEntities = (target, duration, power, source) -> {
-        
+
         if (target.getRemainingFireTicks() > 0) {
             target.setRemainingFireTicks(0);
         }
@@ -64,7 +64,7 @@ public class AreaUtils {
     };
 
     public static final IEffectApplier sunderEntities = (target, duration, power, source) -> {
-        
+
         if (target instanceof LivingEntity) {
             LivingEntity living = (LivingEntity) target;
             living.addEffect(new EffectInstance(SUNDERED, duration, power));
@@ -211,7 +211,7 @@ public class AreaUtils {
     public static final IBlockTransformer signalAirTransform = getConversionTransform(REPLACEABLE_AIR, SIGNAL_AIR.defaultBlockState(), false);
     public static final IBlockTransformer glowAirTransform = getConversionTransform(REPLACEABLE_AIR, GLOW_AIR.defaultBlockState(), false);
     public static final IEffectApplier glowEntities = (target, duration, power, source) -> {
-        
+
         if (target instanceof LivingEntity) {
             LivingEntity living = (LivingEntity) target;
             living.addEffect(new EffectInstance(Effects.GLOWING, duration, power));
@@ -372,6 +372,7 @@ public class AreaUtils {
 
             applyEffectNearby(worldIn, pos, radius, duration, amplifier, null);
         }
+
     }
 
     public interface IBlockTransformer {
@@ -427,18 +428,9 @@ public class AreaUtils {
                 }
             }
         }
+
     }
     // endregion INTERFACES
-
-
-
-
-
-
-
-
-
-
 
     // region BURNING
     public static void igniteNearbyEntities(Entity entity, World worldIn, BlockPos pos, int radius, int duration) {

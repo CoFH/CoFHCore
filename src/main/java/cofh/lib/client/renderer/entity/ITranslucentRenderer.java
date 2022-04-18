@@ -21,7 +21,7 @@ import net.minecraft.util.math.vector.Vector3d;
  */
 public interface ITranslucentRenderer {
 
-    public static void renderTranslucent(MatrixStack stack, float partialTicks, WorldRenderer levelRenderer, Matrix4f projection) {
+    static void renderTranslucent(MatrixStack stack, float partialTicks, WorldRenderer levelRenderer, Matrix4f projection) {
 
         Minecraft mc = Minecraft.getInstance();
         EntityRendererManager dispatcher = mc.getEntityRenderDispatcher();

@@ -15,7 +15,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
-@OnlyIn(Dist.CLIENT)
+@OnlyIn (Dist.CLIENT)
 public class ShockwaveParticle extends CustomRenderParticle {
 
     protected float heightScale;
@@ -39,7 +39,7 @@ public class ShockwaveParticle extends CustomRenderParticle {
         VFXHelper.renderShockwave(stack, buffer, level, new BlockPos(x, y, z), (age + partialTicks) * speed, bbWidth * 0.5F, heightScale);
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @OnlyIn (Dist.CLIENT)
     public static class Factory implements IParticleFactory<BasicParticleType> {
 
         public Factory(IAnimatedSprite sprite) {
@@ -52,6 +52,7 @@ public class ShockwaveParticle extends CustomRenderParticle {
 
             return new ShockwaveParticle(world, x, y, z, speed, radius, heightScale);
         }
+
     }
 
 }

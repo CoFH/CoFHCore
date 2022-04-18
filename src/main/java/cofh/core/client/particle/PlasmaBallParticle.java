@@ -9,7 +9,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
-@OnlyIn(Dist.CLIENT)
+@OnlyIn (Dist.CLIENT)
 public class PlasmaBallParticle extends SpriteTexturedParticle {
 
     private final IAnimatedSprite spriteSet;
@@ -44,7 +44,7 @@ public class PlasmaBallParticle extends SpriteTexturedParticle {
     }
 
     @Override
-    public int getLightColor(float pTicks){
+    public int getLightColor(float pTicks) {
 
         return 15728880;
     }
@@ -59,7 +59,7 @@ public class PlasmaBallParticle extends SpriteTexturedParticle {
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @OnlyIn (Dist.CLIENT)
     public static class Factory implements IParticleFactory<BasicParticleType> {
 
         private final IAnimatedSprite spriteSet;
@@ -76,6 +76,7 @@ public class PlasmaBallParticle extends SpriteTexturedParticle {
             PlasmaBallParticle particle = new PlasmaBallParticle(world, x, y, z, dx, dy, dz, spriteSet);
             return particle;
         }
+
     }
 
 }
