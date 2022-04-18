@@ -1,6 +1,7 @@
 package cofh.lib.block.impl;
 
 import cofh.lib.entity.AbstractTNTEntity;
+import cofh.lib.util.ITNTFactory;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.TNTBlock;
@@ -23,6 +24,11 @@ import javax.annotation.Nullable;
 public class TNTBlockCoFH extends TNTBlock {
 
     protected final ITNTFactory<? extends AbstractTNTEntity> factory;
+
+    public ITNTFactory<? extends AbstractTNTEntity> getFactory() {
+
+        return factory;
+    }
 
     public TNTBlockCoFH(ITNTFactory<? extends AbstractTNTEntity> factory, Properties properties) {
 
@@ -49,14 +55,6 @@ public class TNTBlockCoFH extends TNTBlock {
             worldIn.addFreshEntity(entity);
         }
     }
-
-    // region FACTORY
-    public interface ITNTFactory<T extends AbstractTNTEntity> {
-
-        T createTNT(World world, double posX, double posY, double posZ, @Nullable LivingEntity igniter);
-
-    }
-    // endregion
 
     // region DISPENSER BEHAVIOR
     public static final DefaultDispenseItemBehavior DISPENSER_BEHAVIOR = new DefaultDispenseItemBehavior() {
