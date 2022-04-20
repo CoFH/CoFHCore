@@ -171,6 +171,8 @@ public class Constants {
     public static final int PACKET_STATE = 4;
     public static final int PACKET_RENDER = 5;
 
+    public static final int PACKET_MODEL_UPDATE = 8;
+
     public static final int PACKET_CHAT = 16;
     public static final int PACKET_MOTION = 17;
 
