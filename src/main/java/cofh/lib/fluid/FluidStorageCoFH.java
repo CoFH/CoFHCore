@@ -55,7 +55,7 @@ public class FluidStorageCoFH implements IFluidHandler, IFluidStackAccess, IReso
 
         this.capacity = MathHelper.clamp(capacity, 0, MAX_CAPACITY);
         if (!isEmpty()) {
-            fluid.setAmount(Math.max(0, Math.min(capacity, getAmount())));
+            fluid.setAmount(MathHelper.clamp(getAmount(), 0, capacity));
         }
         return this;
     }
