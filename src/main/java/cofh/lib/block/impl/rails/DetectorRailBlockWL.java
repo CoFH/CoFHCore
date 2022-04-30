@@ -31,7 +31,8 @@ public class DetectorRailBlockWL extends DetectorRailBlockCoFH implements IWater
     @Override
     protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
 
-        builder.add(getShapeProperty(), POWERED, WATERLOGGED);
+        super.createBlockStateDefinition(builder);
+        builder.add(WATERLOGGED);
     }
 
     @Override

@@ -31,7 +31,8 @@ public class RailBlockWL extends RailBlockCoFH implements IWaterLoggable {
     @Override
     protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
 
-        builder.add(getShapeProperty(), WATERLOGGED);
+        super.createBlockStateDefinition(builder);
+        builder.add(WATERLOGGED);
     }
 
     @Override

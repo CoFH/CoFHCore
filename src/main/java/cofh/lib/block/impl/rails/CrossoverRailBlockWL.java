@@ -22,8 +22,6 @@ public class CrossoverRailBlockWL extends CrossoverRailBlock implements IWaterLo
 
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
-    protected float maxSpeed = 0.4F;
-
     public CrossoverRailBlockWL(Properties builder) {
 
         super(builder);
@@ -33,7 +31,8 @@ public class CrossoverRailBlockWL extends CrossoverRailBlock implements IWaterLo
     @Override
     protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
 
-        builder.add(getShapeProperty(), WATERLOGGED);
+        super.createBlockStateDefinition(builder);
+        builder.add(WATERLOGGED);
     }
 
     @Override
