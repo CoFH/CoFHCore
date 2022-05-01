@@ -1,5 +1,6 @@
 package cofh.lib.entity;
 
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
 import net.minecraft.item.ItemStack;
@@ -11,7 +12,10 @@ import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
+import java.util.Map;
+
 import static cofh.lib.util.constants.NBTTags.TAG_ENCHANTMENTS;
+import static cofh.lib.util.references.CoreReferences.HOLDING;
 import static net.minecraftforge.common.util.Constants.NBT.TAG_COMPOUND;
 
 public abstract class AbstractMinecartEntityCoFH extends AbstractMinecartEntity {
@@ -28,10 +32,27 @@ public abstract class AbstractMinecartEntityCoFH extends AbstractMinecartEntity 
         super(type, worldIn, posX, posY, posZ);
     }
 
-    public AbstractMinecartEntityCoFH setEnchantments(ListNBT enchantments) {
+    public AbstractMinecartEntityCoFH onPlaced(ItemStack stack) {
 
-        this.enchantments = enchantments;
+        this.enchantments = stack.getEnchantmentTags();
         return this;
+    }
+
+    protected float getHoldingMod(Map<Enchantment, Integer> enchantmentMap) {
+
+        int holding = enchantmentMap.getOrDefault(HOLDING, 0);
+        return 1 + holding / 2F;
+    }
+
+    public ItemStack createItemStackTag(ItemStack stack) {
+
+        if (this.hasCustomName()) {
+            stack.setHoverName(this.getCustomName());
+        }
+        if (!this.enchantments.isEmpty()) {
+            stack.addTagElement(TAG_ENCHANTMENTS, enchantments);
+        }
+        return stack;
     }
 
     @Override
@@ -55,13 +76,7 @@ public abstract class AbstractMinecartEntityCoFH extends AbstractMinecartEntity 
 
         this.remove();
         if (this.level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
-            ItemStack stack = getCartItem();
-            if (this.hasCustomName()) {
-                stack.setHoverName(this.getCustomName());
-            }
-            if (!this.enchantments.isEmpty()) {
-                stack.addTagElement(TAG_ENCHANTMENTS, enchantments);
-            }
+            ItemStack stack = createItemStackTag(getCartItem());
             this.spawnAtLocation(stack);
         }
     }

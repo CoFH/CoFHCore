@@ -56,7 +56,7 @@ public class MinecartItemCoFH extends ItemCoFH {
         if (stack.hasCustomHoverName()) {
             minecart.setCustomName(stack.getHoverName());
         }
-        minecart.setEnchantments(stack.getEnchantmentTags());
+        minecart.onPlaced(stack);
         world.addFreshEntity(minecart);
     }
 
