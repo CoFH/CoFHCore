@@ -9,7 +9,7 @@ public class CapabilityEnchantableItem {
 
     private static boolean registered = false;
 
-    public static Capability<IEnchantableItem> ENCHANTABLE_ITEM_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() { });
+    public static Capability<IEnchantableItem> ENCHANTABLE_ITEM_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {});
 
     public static void register(RegisterCapabilitiesEvent event) {
 
@@ -20,4 +20,5 @@ public class CapabilityEnchantableItem {
 
         event.register(IEnchantableItem.class);
     }
+
 }

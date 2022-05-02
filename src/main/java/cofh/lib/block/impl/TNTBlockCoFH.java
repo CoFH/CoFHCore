@@ -1,25 +1,7 @@
 package cofh.lib.block.impl;
 
 import cofh.lib.entity.AbstractTNTEntity;
-<<<<<<< HEAD
 import cofh.lib.util.ITNTFactory;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.DispenserBlock;
-import net.minecraft.block.TNTBlock;
-import net.minecraft.dispenser.DefaultDispenseItemBehavior;
-import net.minecraft.dispenser.IBlockSource;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.World;
-=======
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockSource;
 import net.minecraft.core.Direction;
@@ -36,7 +18,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.TntBlock;
 import net.minecraft.world.level.block.state.BlockState;
->>>>>>> caa1a35 (Initial 1.18.2 compile pass.)
 
 import javax.annotation.Nullable;
 
@@ -75,17 +56,6 @@ public class TNTBlockCoFH extends TntBlock {
         }
     }
 
-<<<<<<< HEAD
-=======
-    // region FACTORY
-    public interface ITNTFactory<T extends AbstractTNTEntity> {
-
-        T createTNT(Level world, double posX, double posY, double posZ, @Nullable LivingEntity igniter);
-
-    }
-    // endregion
-
->>>>>>> caa1a35 (Initial 1.18.2 compile pass.)
     // region DISPENSER BEHAVIOR
     public static final DefaultDispenseItemBehavior DISPENSER_BEHAVIOR = new DefaultDispenseItemBehavior() {
 

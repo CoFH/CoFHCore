@@ -5,14 +5,12 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DiggerItem;
-import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BucketPickup;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 
@@ -380,12 +378,13 @@ public class AreaEffectHelper {
 
     private static boolean canHoeAffect(Level world, BlockPos pos, boolean weeding) {
 
-        BlockState state = world.getBlockState(pos);
-        if (HoeItem.TILLABLES.containsKey(state.getBlock())) {
-            BlockPos up = pos.above();
-            BlockState stateUp = world.getBlockState(up);
-            return world.isEmptyBlock(up) || (weeding && (stateUp.getMaterial() == Material.PLANT || stateUp.getMaterial() == Material.REPLACEABLE_PLANT) && stateUp.getDestroySpeed(world, up) <= 0.0F);
-        }
+        // TODO King Lemming FIXME
+        //        BlockState state = world.getBlockState(pos);
+        //        if (HoeItem.TILLABLES.containsKey(state.getBlock())) {
+        //            BlockPos up = pos.above();
+        //            BlockState stateUp = world.getBlockState(up);
+        //            return world.isEmptyBlock(up) || (weeding && (stateUp.getMaterial() == Material.PLANT || stateUp.getMaterial() == Material.REPLACEABLE_PLANT) && stateUp.getDestroySpeed(world, up) <= 0.0F);
+        //        }
         return false;
     }
 

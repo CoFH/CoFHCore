@@ -16,7 +16,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.HitResult;
 
 import javax.annotation.Nullable;
-
 import java.util.function.Supplier;
 
 import static cofh.lib.util.constants.Constants.FACING_ALL;

@@ -65,18 +65,9 @@ public class GrenadeItem extends ItemCoFH {
     // region FACTORY
     public interface IGrenadeFactory<T extends AbstractGrenadeEntity> {
 
-<<<<<<< HEAD
-        T createGrenade(World world, double posX, double posY, double posZ);
-=======
         T createGrenade(Level world, LivingEntity living);
 
         T createGrenade(Level world, double posX, double posY, double posZ);
->>>>>>> caa1a35 (Initial 1.18.2 compile pass.)
-
-        default T createGrenade(World world, LivingEntity living) {
-
-            return createGrenade(world, living.getX(), living.getEyeY() - 0.1F, living.getZ());
-        }
 
     }
     // endregion

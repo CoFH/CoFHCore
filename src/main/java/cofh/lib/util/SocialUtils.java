@@ -62,9 +62,12 @@ public class SocialUtils {
 
         private final Map<String, Set<GameProfile>> friendLists = new TreeMap<>();
 
-        FriendData() { }
+        FriendData() {
+
+        }
 
         FriendData(CompoundTag nbt) {
+
             for (String player : nbt.getAllKeys()) {
                 ListTag list = nbt.getList(player, TAG_COMPOUND);
                 Set<GameProfile> friendList = new ObjectOpenHashSet<>();

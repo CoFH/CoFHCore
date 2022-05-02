@@ -30,19 +30,17 @@ public class LightningAirBlock extends AirBlock implements EntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> actualType) {
+
         return ICoFHTickableTile.createTicker(level, actualType, LIGHTNING_AIR_TILE, LightningAirTile.class);
     }
-<<<<<<< HEAD
 
-    //@OnlyIn(Dist.CLIENT)
-    //@Override
-    //public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+    //    @OnlyIn (Dist.CLIENT)
+    //    @Override
+    //    public void animateTick(BlockState stateIn, Level levelIn, BlockPos pos, Random rand) {
     //
-    //    if (rand.nextInt(4) == 0) {
-    //        worldIn.addParticle(CoreReferences.SPARK_PARTICLE, pos.getX() + rand.nextDouble(), pos.getY() + rand.nextDouble(), pos.getZ() + rand.nextDouble(), 0, 0, 0);
+    //        if (rand.nextInt(4) == 0) {
+    //            worldIn.addParticle(CoreReferences.SPARK_PARTICLE, pos.getX() + rand.nextDouble(), pos.getY() + rand.nextDouble(), pos.getZ() + rand.nextDouble(), 0, 0, 0);
+    //        }
     //    }
-    //}
 
-=======
->>>>>>> caa1a35 (Initial 1.18.2 compile pass.)
 }

@@ -16,32 +16,14 @@ import cofh.lib.capability.CapabilityArchery;
 import cofh.lib.capability.CapabilityAreaEffect;
 import cofh.lib.capability.CapabilityEnchantableItem;
 import cofh.lib.capability.CapabilityShieldItem;
-import cofh.lib.client.renderer.entity.ElectricArcRenderer;
-import cofh.lib.client.renderer.entity.KnifeRenderer;
-import cofh.lib.client.renderer.entity.NothingRenderer;
 import cofh.lib.item.impl.SpawnEggItemCoFH;
 import cofh.lib.loot.TileNBTSync;
 import cofh.lib.network.PacketHandler;
 import cofh.lib.util.DeferredRegisterCoFH;
-<<<<<<< HEAD
-import net.minecraft.block.Block;
-import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.EntityType;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.particles.ParticleType;
-import net.minecraft.potion.Effect;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-=======
 import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.inventory.MenuType;
@@ -51,7 +33,6 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.material.Fluid;
->>>>>>> caa1a35 (Initial 1.18.2 compile pass.)
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -67,7 +48,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import static cofh.lib.util.constants.Constants.*;
-import static cofh.lib.util.references.CoreReferences.*;
+import static cofh.lib.util.references.CoreReferences.HELD_ITEM_FILTER_CONTAINER;
+import static cofh.lib.util.references.CoreReferences.TILE_ITEM_FILTER_CONTAINER;
 
 @Mod (ID_COFH_CORE)
 public class CoFHCore {
@@ -85,14 +67,9 @@ public class CoFHCore {
     public static final DeferredRegisterCoFH<MobEffect> EFFECTS = DeferredRegisterCoFH.create(ForgeRegistries.MOB_EFFECTS, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<Enchantment> ENCHANTMENTS = DeferredRegisterCoFH.create(ForgeRegistries.ENCHANTMENTS, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<ParticleType<?>> PARTICLES = DeferredRegisterCoFH.create(ForgeRegistries.PARTICLE_TYPES, ID_COFH_CORE);
-<<<<<<< HEAD
-    public static final DeferredRegisterCoFH<IRecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegisterCoFH.create(ForgeRegistries.RECIPE_SERIALIZERS, ID_COFH_CORE);
-    public static final DeferredRegisterCoFH<SoundEvent> SOUND_EVENTS = DeferredRegisterCoFH.create(ForgeRegistries.SOUND_EVENTS, ID_COFH_CORE);
-    public static final DeferredRegisterCoFH<TileEntityType<?>> TILE_ENTITIES = DeferredRegisterCoFH.create(ForgeRegistries.TILE_ENTITIES, ID_COFH_CORE);
-=======
     public static final DeferredRegisterCoFH<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegisterCoFH.create(ForgeRegistries.RECIPE_SERIALIZERS, ID_COFH_CORE);
+    public static final DeferredRegisterCoFH<SoundEvent> SOUND_EVENTS = DeferredRegisterCoFH.create(ForgeRegistries.SOUND_EVENTS, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<BlockEntityType<?>> TILE_ENTITIES = DeferredRegisterCoFH.create(ForgeRegistries.BLOCK_ENTITIES, ID_COFH_CORE);
->>>>>>> caa1a35 (Initial 1.18.2 compile pass.)
 
     public static boolean curiosLoaded = false;
 
@@ -184,8 +161,6 @@ public class CoFHCore {
 
     private void commonSetup(final FMLCommonSetupEvent event) {
 
-        event.enqueueWork(SpawnEggItemCoFH::setup);
-
         event.enqueueWork(TileNBTSync::setup);
 
         ArmorEvents.setup();
@@ -214,15 +189,13 @@ public class CoFHCore {
     // region HELPERS
     private void registerEntityRenderingHandlers() {
 
-<<<<<<< HEAD
-        RenderingRegistry.registerEntityRenderingHandler(KNIFE_ENTITY, KnifeRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ELECTRIC_ARC_ENTITY, ElectricArcRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ELECTRIC_FIELD_ENTITY, NothingRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(BLACK_HOLE_ENTITY, NothingRenderer::new);
-=======
+        //        RenderingRegistry.registerEntityRenderingHandler(KNIFE_ENTITY, KnifeRenderer::new);
+        //        RenderingRegistry.registerEntityRenderingHandler(ELECTRIC_ARC_ENTITY, ElectricArcRenderer::new);
+        //        RenderingRegistry.registerEntityRenderingHandler(ELECTRIC_FIELD_ENTITY, NothingRenderer::new);
+        //        RenderingRegistry.registerEntityRenderingHandler(BLACK_HOLE_ENTITY, NothingRenderer::new);
+
         // TODO Covers, there is an event for this now.
-//        EntityRenderers.register(KNIFE_ENTITY, KnifeRenderer::new);
->>>>>>> caa1a35 (Initial 1.18.2 compile pass.)
+        //        EntityRenderers.register(KNIFE_ENTITY, KnifeRenderer::new);
     }
     // endregion
 }

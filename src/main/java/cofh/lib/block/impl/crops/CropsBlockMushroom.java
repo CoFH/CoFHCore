@@ -75,7 +75,7 @@ public class CropsBlockMushroom extends CropsBlockCoFH {
         return MathHelper.nextInt(worldIn.random, 0, 2);
     }
 
-    // region IGrowable
+    // region BonemealableBlock
     @Override
     public boolean isBonemealSuccess(Level worldIn, Random rand, BlockPos pos, BlockState state) {
 

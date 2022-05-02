@@ -4,45 +4,23 @@ import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.platform.GlStateManager.DestFactor;
 import com.mojang.blaze3d.platform.GlStateManager.SourceFactor;
 import com.mojang.blaze3d.systems.RenderSystem;
-<<<<<<< HEAD
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.texture.*;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.client.renderer.vertex.VertexFormatElement;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Matrix3f;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.Vector3f;
-=======
 import com.mojang.blaze3d.vertex.*;
+import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.renderer.texture.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
->>>>>>> caa1a35 (Initial 1.18.2 compile pass.)
 import net.minecraftforge.client.model.pipeline.LightUtil;
 import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
@@ -74,7 +52,7 @@ public final class RenderHelper {
 
     public static TextureAtlas textureMap() {
 
-        return Minecraft.getInstance().getModelManager().getAtlas(TextureAtlas.LOCATION_BLOCKS);
+        return Minecraft.getInstance().getModelManager().getAtlas(InventoryMenu.BLOCK_ATLAS);
     }
 
     public static Tesselator tesselator() {
@@ -87,7 +65,7 @@ public final class RenderHelper {
         return Minecraft.getInstance().getItemRenderer();
     }
 
-    public static BlockRendererDispatcher renderBlock() {
+    public static BlockRenderDispatcher renderBlock() {
 
         return Minecraft.getInstance().getBlockRenderer();
     }
@@ -459,12 +437,12 @@ public final class RenderHelper {
         RenderSystem.setShaderTexture(0, texture);
     }
 
-    public static void renderItemOnBlockSide(PoseStack matrixStackIn, ItemStack stack, Direction side, BlockPos pos) {
+    public static void renderItemOnBlockSide(PoseStack poseStackIn, ItemStack stack, Direction side, BlockPos pos) {
 
         if (stack.isEmpty() || side.getAxis() == Direction.Axis.Y) {
             return;
         }
-        matrixStackIn.pushPose();
+        poseStackIn.pushPose();
 
         int x = pos.getX();
         int y = pos.getY();
@@ -472,28 +450,28 @@ public final class RenderHelper {
 
         switch (side) {
             case NORTH:
-                matrixStackIn.translate(x + 0.75, y + 0.84375, z + RenderHelper.RENDER_OFFSET * 145);
+                poseStackIn.translate(x + 0.75, y + 0.84375, z + RenderHelper.RENDER_OFFSET * 145);
                 break;
             case SOUTH:
-                matrixStackIn.translate(x + 0.25, y + 0.84375, z + 1 - RenderHelper.RENDER_OFFSET * 145);
-                matrixStackIn.mulPose(new Quaternion(0, 180, 0, true));
+                poseStackIn.translate(x + 0.25, y + 0.84375, z + 1 - RenderHelper.RENDER_OFFSET * 145);
+                poseStackIn.mulPose(new Quaternion(0, 180, 0, true));
                 break;
             case WEST:
-                matrixStackIn.translate(x + RenderHelper.RENDER_OFFSET * 145, y + 0.84375, z + 0.25);
-                matrixStackIn.mulPose(new Quaternion(0, 90, 0, true));
+                poseStackIn.translate(x + RenderHelper.RENDER_OFFSET * 145, y + 0.84375, z + 0.25);
+                poseStackIn.mulPose(new Quaternion(0, 90, 0, true));
                 break;
             case EAST:
-                matrixStackIn.translate(x + 1 - RenderHelper.RENDER_OFFSET * 145, y + 0.84375, z + 0.75);
-                matrixStackIn.mulPose(new Quaternion(0, 270, 0, true));
+                poseStackIn.translate(x + 1 - RenderHelper.RENDER_OFFSET * 145, y + 0.84375, z + 0.75);
+                poseStackIn.mulPose(new Quaternion(0, 270, 0, true));
                 break;
             default:
         }
-        matrixStackIn.scale(0.03125F, 0.03125F, -RenderHelper.RENDER_OFFSET);
-        matrixStackIn.mulPose(new Quaternion(0, 0, 180, true));
+        poseStackIn.scale(0.03125F, 0.03125F, -RenderHelper.RENDER_OFFSET);
+        poseStackIn.mulPose(new Quaternion(0, 0, 180, true));
 
         // renderItem().renderAndDecorateItem(stack, 0, 0);
 
-        matrixStackIn.popPose();
+        poseStackIn.popPose();
 
         // What of this do I still need?
 
@@ -506,11 +484,11 @@ public final class RenderHelper {
     }
 
     // TODO Fix if required, 1.17 render changes are required.
-/*    private static void renderFastItem(@Nonnull ItemStack itemStack, BlockState state, int slot, MatrixStack matrix, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay, Direction side, float partialTickTime) {
+/*    private static void renderFastItem(@Nonnull ItemStack itemStack, BlockState state, int slot, PoseStack matrix, MultiBufferSource.BufferSource buffer, int combinedLight, int combinedOverlay, Direction side, float partialTickTime) {
 
         matrix.pushPose();
 
-        Consumer<IRenderTypeBuffer> finish = (IRenderTypeBuffer buf) -> {
+        Consumer<MultiBufferSource.BufferSource> finish = (IRenderTypeBuffer buf) -> {
             if (buf instanceof IRenderTypeBuffer.Impl)
                 ((IRenderTypeBuffer.Impl) buf).endBatch();
         };
@@ -538,9 +516,9 @@ public final class RenderHelper {
         matrix.popPose();
     }*/
 
-    public static void renderRectPrism(IVertexBuilder builder, MatrixStack stack, int packedLightIn, Vector3f start, Vector3f end, Vector3f perp) {
+    public static void renderRectPrism(VertexConsumer builder, PoseStack stack, int packedLightIn, Vector3f start, Vector3f end, Vector3f perp) {
 
-        MatrixStack.Entry stackEntry = stack.last();
+        PoseStack.Pose stackEntry = stack.last();
         Matrix4f pose = stackEntry.pose();
         Matrix3f normal = stackEntry.normal();
         float sx = start.x();
@@ -591,7 +569,7 @@ public final class RenderHelper {
         builder.vertex(pose, ex + p1x - p2x, ey + p1y - p2y, ez + p1z - p2z).color(255, 255, 255, 255).uv(0, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
     }
 
-    public static void renderRectPrism(IVertexBuilder builder, MatrixStack stack, int packedLightIn, Vector3f start, Vector3f end, float radius) {
+    public static void renderRectPrism(VertexConsumer builder, PoseStack stack, int packedLightIn, Vector3f start, Vector3f end, float radius) {
 
         Vector3f diff = end.copy();
         diff.sub(start);
@@ -607,7 +585,7 @@ public final class RenderHelper {
         renderRectPrism(builder, stack, packedLightIn, start, end, perp);
     }
 
-    public static void renderRectPrism(IVertexBuilder builder, MatrixStack stack, int packedLightIn, Vector3f start, Vector3f end, float radius, boolean coverEnds) {
+    public static void renderRectPrism(VertexConsumer builder, PoseStack stack, int packedLightIn, Vector3f start, Vector3f end, float radius, boolean coverEnds) {
 
         if (coverEnds) {
             Vector3f ext = end.copy();

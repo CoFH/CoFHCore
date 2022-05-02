@@ -27,7 +27,7 @@ import static cofh.lib.util.helpers.StringHelper.decompose;
  * @author King Lemming
  */
 
-@SuppressWarnings ({ "rawtypes", "unchecked" })
+@SuppressWarnings ({"rawtypes", "unchecked"})
 public class DeferredRegisterCoFH<T extends IForgeRegistryEntry<T>> {
 
     /**
@@ -350,13 +350,21 @@ public class DeferredRegisterCoFH<T extends IForgeRegistryEntry<T>> {
      */
     @Nullable
     public ResourceLocation getRegistryName() {
+
         return this.registryName;
     }
 
     private Supplier<IForgeRegistry<T>> makeRegistry(final ResourceLocation registryName, final Class<T> superType, final Supplier<RegistryBuilder<T>> sup) {
-        if (registryName == null) { throw new IllegalStateException("Cannot create a registry without specifying a registry name"); }
-        if (superType == null) { throw new IllegalStateException("Cannot create a registry without specifying a base type"); }
-        if (this.type != null || this.registryFactory != null) { throw new IllegalStateException("Cannot create a registry for a type that already exists"); }
+
+        if (registryName == null) {
+            throw new IllegalStateException("Cannot create a registry without specifying a registry name");
+        }
+        if (superType == null) {
+            throw new IllegalStateException("Cannot create a registry without specifying a base type");
+        }
+        if (this.type != null || this.registryFactory != null) {
+            throw new IllegalStateException("Cannot create a registry for a type that already exists");
+        }
 
         this.registryFactory = () -> sup.get().setName(registryName).setType(superType);
         return this::getForgeRegistry;
@@ -397,7 +405,7 @@ public class DeferredRegisterCoFH<T extends IForgeRegistryEntry<T>> {
             storedType = this.type;
         }
         if (storedType != null && event.getGenericType() == storedType.getRegistrySuperType()) {
-//            this.seenRegisterEvent = true;
+            //            this.seenRegisterEvent = true;
             @SuppressWarnings ("unchecked")
             IForgeRegistry<T> reg = (IForgeRegistry<T>) event.getRegistry();
             for (Map.Entry<RegistryObject<T>, Supplier<? extends T>> e : entries.entrySet()) {

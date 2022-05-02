@@ -1,10 +1,9 @@
-package cofh.core.potion;
+package cofh.core.effect;
 
-import cofh.lib.potion.EffectCoFH;
+import cofh.lib.effect.EffectCoFH;
 import cofh.lib.util.Utils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Animal;
@@ -29,7 +28,7 @@ public class LoveEffect extends EffectCoFH {
     public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier) {
 
         // TODO: Revisit if potion logic ever changes. Instant potions don't need this.
-        //        World world = entityLivingBaseIn.world;
+        //        Level level = entityLivingBaseIn.world;
         //        if (Utils.isServerWorld(world)) {
         //            if (entityLivingBaseIn instanceof AnimalEntity) {
         //                setLoveFlag(null, (AnimalEntity) entityLivingBaseIn);
@@ -46,11 +45,11 @@ public class LoveEffect extends EffectCoFH {
     }
 
     // TODO Covers, Client-side attributes moved to an EffectRenderer instance.
-//    @Override
-//    public boolean shouldRenderHUD(MobEffectInstance effect) {
-//
-//        return false;
-//    }
+    //    @Override
+    //    public boolean shouldRenderHUD(MobEffectInstance effect) {
+    //
+    //        return false;
+    //    }
 
     // region HELPERS
     private void setLoveFlag(Entity indirectSource, Animal animal) {

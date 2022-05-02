@@ -32,4 +32,5 @@ public class AttachedStemBlockCoFH extends AttachedStemBlock {
                 : !stateIn.canSurvive(worldIn, currentPos) ? Blocks.AIR.defaultBlockState()
                 : stateIn;
     }
+
 }

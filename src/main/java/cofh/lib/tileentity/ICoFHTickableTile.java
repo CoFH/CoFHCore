@@ -65,6 +65,7 @@ public interface ICoFHTickableTile {
          * Called server side.
          */
         void tickServer();
+
     }
 
     /**
@@ -79,5 +80,7 @@ public interface ICoFHTickableTile {
          * Called client side.
          */
         void tickClient();
+
     }
+
 }

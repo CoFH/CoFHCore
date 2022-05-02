@@ -214,7 +214,7 @@ public class AreaEffectEvents {
     //        return removed;
     //    }
     //
-    //    private static boolean removedByPlayer(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean willHarvest, FluidState fluid) {
+    //    private static boolean removedByPlayer(BlockState state, Level level, BlockPos pos, PlayerEntity player, boolean willHarvest, FluidState fluid) {
     //
     //        if (false) {
     //            state.getBlock().onBlockHarvested(world, pos, state, player);

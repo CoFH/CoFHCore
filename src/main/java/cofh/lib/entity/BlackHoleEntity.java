@@ -2,24 +2,24 @@ package cofh.lib.entity;
 
 import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.util.references.CoreReferences;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 import static cofh.lib.util.references.CoreReferences.BLACK_HOLE_ENTITY;
 
 public class BlackHoleEntity extends AbstractAoESpellEntity {
 
-    public BlackHoleEntity(EntityType<? extends BlackHoleEntity> type, World world) {
+    public BlackHoleEntity(EntityType<? extends BlackHoleEntity> type, Level level) {
 
-        super(type, world);
+        super(type, level);
         duration = 100;
     }
 
-    public BlackHoleEntity(World world, Vector3d pos, float radius) {
+    public BlackHoleEntity(Level level, Vec3 pos, float radius) {
 
-        this(BLACK_HOLE_ENTITY, world);
+        this(BLACK_HOLE_ENTITY, level);
         this.radius = radius;
         moveTo(pos);
     }
@@ -34,10 +34,10 @@ public class BlackHoleEntity extends AbstractAoESpellEntity {
             float rangeSqr = radius * radius;
             double inv = 1 / rangeSqr;
             for (Entity entity : level.getEntities(this, this.getBoundingBox().inflate(radius))) {
-                Vector3d diff = this.position().subtract(entity.position());
+                Vec3 diff = this.position().subtract(entity.position());
                 double distSqr = diff.lengthSqr();
                 if (distSqr < rangeSqr) {
-                    Vector3d velocity = entity.getDeltaMovement().scale(0.9F + distSqr * inv * 0.1F);
+                    Vec3 velocity = entity.getDeltaMovement().scale(0.9F + distSqr * inv * 0.1F);
                     entity.setDeltaMovement(velocity.add(diff.scale(0.05 * Math.min(MathHelper.invSqrt((float) distSqr), 1.0))));
                 }
             }

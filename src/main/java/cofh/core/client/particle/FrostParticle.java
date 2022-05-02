@@ -1,19 +1,19 @@
 package cofh.core.client.particle;
 
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.particles.BasicParticleType;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
 @OnlyIn (Dist.CLIENT)
-public class FrostParticle extends SpriteTexturedParticle {
+public class FrostParticle extends TextureSheetParticle {
 
-    private FrostParticle(ClientWorld worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn) {
+    private FrostParticle(ClientLevel levelIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn) {
 
-        super(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
+        super(levelIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
         lifetime = 40 + random.nextInt(20);
 
         xd = xSpeedIn;
@@ -33,28 +33,28 @@ public class FrostParticle extends SpriteTexturedParticle {
     }
 
     @Override
-    public IParticleRenderType getRenderType() {
+    public ParticleRenderType getRenderType() {
 
-        return IParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
     }
 
     @OnlyIn (Dist.CLIENT)
-    public static class Factory implements IParticleFactory<BasicParticleType> {
+    public static class Factory implements ParticleProvider<SimpleParticleType> {
 
-        private final IAnimatedSprite spriteSet;
+        private final SpriteSet spriteSet;
 
-        public Factory(IAnimatedSprite sprite) {
+        public Factory(SpriteSet sprite) {
 
             this.spriteSet = sprite;
         }
 
         @Nullable
         @Override
-        public Particle createParticle(BasicParticleType data, ClientWorld world, double x, double y, double z, double dx, double dy, double dz) {
+        public Particle createParticle(SimpleParticleType data, ClientLevel level, double x, double y, double z, double dx, double dy, double dz) {
 
-            FrostParticle particle = new FrostParticle(world, x, y, z, dx, dy, dz);
+            FrostParticle particle = new FrostParticle(level, x, y, z, dx, dy, dz);
             particle.pickSprite(spriteSet);
-            particle.setAlpha(world.random.nextFloat() * 0.2F + 0.7F);
+            particle.setAlpha(level.random.nextFloat() * 0.2F + 0.7F);
             return particle;
         }
 

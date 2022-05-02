@@ -1,22 +1,14 @@
 package cofh.core.event;
 
-<<<<<<< HEAD
 import cofh.core.network.packet.client.EffectAddedPacket;
 import cofh.core.network.packet.client.EffectRemovedPacket;
-import cofh.lib.potion.CustomParticleEffect;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.PotionUtils;
-import net.minecraft.util.DamageSource;
-=======
+import cofh.lib.effect.CustomParticleEffect;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
->>>>>>> caa1a35 (Initial 1.18.2 compile pass.)
+import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraftforge.event.entity.EntityStruckByLightningEvent;
 import net.minecraftforge.event.entity.EntityTeleportEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -119,13 +111,13 @@ public class EffectEvents {
     @SubscribeEvent (priority = EventPriority.HIGH)
     public static void handlePotionColorEvent(PotionColorCalculationEvent event) {
 
-        Collection<EffectInstance> effects = event.getEffects();
+        Collection<MobEffectInstance> effects = event.getEffects();
         if (effects.isEmpty()) {
             return;
         }
-        Predicate<EffectInstance> hasCustomParticle = effect -> effect.getEffect() instanceof CustomParticleEffect;
+        Predicate<MobEffectInstance> hasCustomParticle = effect -> effect.getEffect() instanceof CustomParticleEffect;
         if (effects.stream().anyMatch(hasCustomParticle)) {
-            List<EffectInstance> nonCustom = effects.stream().filter(hasCustomParticle.negate()).collect(Collectors.toList());
+            List<MobEffectInstance> nonCustom = effects.stream().filter(hasCustomParticle.negate()).collect(Collectors.toList());
             if (nonCustom.isEmpty()) {
                 event.shouldHideParticles(true);
             } else {
@@ -145,7 +137,7 @@ public class EffectEvents {
     @SubscribeEvent (priority = EventPriority.HIGH)
     public static void handlePotionRemoveEvent(PotionEvent.PotionRemoveEvent event) {
 
-        EffectInstance effect = event.getPotionEffect();
+        MobEffectInstance effect = event.getPotionEffect();
         if (effect != null && effect.getEffect() instanceof CustomParticleEffect) {
             EffectRemovedPacket.sendToClient(event.getEntityLiving(), event.getPotionEffect());
         }

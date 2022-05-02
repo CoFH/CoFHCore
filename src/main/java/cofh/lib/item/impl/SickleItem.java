@@ -104,9 +104,9 @@ public class SickleItem extends DiggerItem implements ICoFHItem {
     public boolean isCorrectToolForDrops(BlockState state) {
 
         // TODO Tags are used for this now
-//        if (state.getHarvestTool() == SICKLE) {
-//            return getTier().getLevel() >= state.getHarvestLevel();
-//        }
+        //        if (state.getHarvestTool() == SICKLE) {
+        //            return getTier().getLevel() >= state.getHarvestLevel();
+        //        }
         return EFFECTIVE_MATERIALS.contains(state.getMaterial());
     }
 

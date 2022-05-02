@@ -26,7 +26,7 @@ public class TileBlockActive extends TileBlockCoFH {
     }
 
     //    @OnlyIn(Dist.CLIENT)
-    //    public void animateTick(BlockState state, World world, BlockPos pos, Random rand) {
+    //    public void animateTick(BlockState state, Level level, BlockPos pos, Random rand) {
     //
     //        if (state.get(ACTIVE)) {
     //            TileCoFH tile = (TileCoFH) world.getTileEntity(pos);

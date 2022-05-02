@@ -1,10 +1,6 @@
 package cofh.core.mixin;
 
-<<<<<<< HEAD:src/main/java/cofh/core/mixin/WorldRendererMixin.java
 import cofh.core.event.CoreClientEvents;
-import com.mojang.blaze3d.matrix.MatrixStack;
-=======
->>>>>>> caa1a35 (Initial 1.18.2 compile pass.):src/main/java/cofh/core/mixin/LevelRendererMixin.java
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Matrix4f;
@@ -44,7 +40,7 @@ public abstract class LevelRendererMixin {
                     value = "HEAD"
             )
     )
-    private void updateMatrixStack(MatrixStack p1, float p2, long p3, boolean p4, ActiveRenderInfo p5, GameRenderer p6, LightTexture p7, Matrix4f p8, CallbackInfo ci) {
+    private void updateMatrixStack(PoseStack p1, float p2, long p3, boolean p4, Camera p5, GameRenderer p6, LightTexture p7, Matrix4f p8, CallbackInfo ci) {
 
         CoreClientEvents.levelStack = p1;
     }

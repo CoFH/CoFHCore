@@ -139,7 +139,7 @@ public class FeastBlock extends DirectionalBlock4Way {
     }
 
     //    @Override
-    //    public int getAnalogOutputSignal(BlockState stateIn, World worldIn, BlockPos pos) {
+    //    public int getAnalogOutputSignal(BlockState stateIn, Level levelIn, BlockPos pos) {
     //
     //        return (8 - stateIn.getValue(getBitesProperty())) * 2;
     //    }

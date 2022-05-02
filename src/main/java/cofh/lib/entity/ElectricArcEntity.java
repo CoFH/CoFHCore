@@ -1,13 +1,13 @@
 package cofh.lib.entity;
 
 import cofh.lib.util.references.CoreReferences;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -21,23 +21,23 @@ public class ElectricArcEntity extends AbstractAoESpellEntity {
     public float damage = 5.0F;
     public long seed = random.nextLong();
 
-    public ElectricArcEntity(EntityType<? extends ElectricArcEntity> type, World world) {
+    public ElectricArcEntity(EntityType<? extends ElectricArcEntity> type, Level level) {
 
-        super(type, world);
+        super(type, level);
         radius = 1.5F;
         duration = defaultDuration;
         noCulling = true;
     }
 
-    public ElectricArcEntity(World world, Vector3d pos) {
+    public ElectricArcEntity(Level level, Vec3 pos) {
 
-        this(ELECTRIC_ARC_ENTITY, world);
+        this(ELECTRIC_ARC_ENTITY, level);
         this.moveTo(pos);
     }
 
-    public ElectricArcEntity(World world, Entity target) {
+    public ElectricArcEntity(Level level, Entity target) {
 
-        this(world, target.position());
+        this(level, target.position());
     }
 
     @Override
@@ -77,7 +77,7 @@ public class ElectricArcEntity extends AbstractAoESpellEntity {
 
         if (entity.hurt(DamageSource.LIGHTNING_BOLT, this.damage)) {
             if (entity instanceof LivingEntity) {
-                ((LivingEntity) entity).addEffect(new EffectInstance(SHOCKED, 100, 0));
+                ((LivingEntity) entity).addEffect(new MobEffectInstance(SHOCKED, 100, 0));
             }
             return true;
         }

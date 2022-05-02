@@ -1,16 +1,11 @@
-package cofh.core.potion;
+package cofh.core.effect;
 
-<<<<<<< HEAD
-import cofh.lib.potion.CustomParticleEffect;
+import cofh.lib.effect.CustomParticleEffect;
 import cofh.lib.util.references.CoreReferences;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.potion.EffectType;
-=======
-import cofh.lib.potion.EffectCoFH;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
->>>>>>> caa1a35 (Initial 1.18.2 compile pass.)
 
 import static cofh.lib.util.constants.Constants.UUID_EFFECT_CHILLED_MOVEMENT_SPEED;
 
@@ -31,7 +26,7 @@ public class ChilledEffect extends CustomParticleEffect {
     }
 
     @Override
-    public IParticleData getParticle() {
+    public ParticleOptions getParticle() {
 
         return CoreReferences.FROST_PARTICLE;
     }

@@ -5,11 +5,11 @@ import cofh.core.util.ProxyUtils;
 import cofh.lib.network.packet.IPacketClient;
 import cofh.lib.network.packet.PacketBase;
 import cofh.lib.util.Utils;
-import net.minecraft.block.BlockState;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 import static cofh.lib.util.constants.Constants.NETWORK_UPDATE_DISTANCE;
 import static cofh.lib.util.constants.Constants.PACKET_MODEL_UPDATE;
@@ -29,39 +29,39 @@ public class ModelUpdatePacket extends PacketBase implements IPacketClient {
     @Override
     public void handleClient() {
 
-        World world = ProxyUtils.getClientWorld();
-        if (world == null) {
+        Level level = ProxyUtils.getClientWorld();
+        if (level == null) {
             CoFHCore.LOG.error("Client world is null! (Is this being called on the server?)");
             return;
         }
-        BlockState state = world.getBlockState(pos);
-        TileEntity tile = world.getBlockEntity(pos);
+        BlockState state = level.getBlockState(pos);
+        BlockEntity tile = level.getBlockEntity(pos);
         if (tile != null) {
             tile.requestModelDataUpdate();
         }
-        world.sendBlockUpdated(pos, state, state, 3);
+        level.sendBlockUpdated(pos, state, state, 3);
     }
 
     @Override
-    public void write(PacketBuffer buf) {
+    public void write(FriendlyByteBuf buf) {
 
         buf.writeBlockPos(pos);
     }
 
     @Override
-    public void read(PacketBuffer buf) {
+    public void read(FriendlyByteBuf buf) {
 
         pos = buf.readBlockPos();
     }
 
-    public static void sendToClient(World world, BlockPos pos) {
+    public static void sendToClient(Level level, BlockPos pos) {
 
-        if (world == null || Utils.isClientWorld(world)) {
+        if (level == null || Utils.isClientWorld(level)) {
             return;
         }
         ModelUpdatePacket packet = new ModelUpdatePacket();
         packet.pos = pos;
-        packet.sendToAllAround(packet.pos, NETWORK_UPDATE_DISTANCE, world.dimension());
+        packet.sendToAllAround(packet.pos, NETWORK_UPDATE_DISTANCE, level.dimension());
     }
 
 }

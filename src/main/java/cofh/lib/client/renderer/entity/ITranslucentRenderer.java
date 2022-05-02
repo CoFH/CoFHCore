@@ -1,17 +1,17 @@
 package cofh.lib.client.renderer.entity;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Matrix4f;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.client.renderer.culling.ClippingHelper;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.culling.Frustum;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec3;
 
 /**
  * Any entity renderers that have transparency should implement this interface in order to render (mostly) properly.
@@ -21,17 +21,17 @@ import net.minecraft.util.math.vector.Vector3d;
  */
 public interface ITranslucentRenderer {
 
-    static void renderTranslucent(MatrixStack stack, float partialTicks, WorldRenderer levelRenderer, Matrix4f projection) {
+    static void renderTranslucent(PoseStack stack, float partialTicks, LevelRenderer levelRenderer, Matrix4f projection) {
 
         Minecraft mc = Minecraft.getInstance();
-        EntityRendererManager dispatcher = mc.getEntityRenderDispatcher();
-        ClientWorld level = mc.level;
-        Vector3d renderPos = mc.gameRenderer.getMainCamera().getPosition();
-        IRenderTypeBuffer.Impl buffer = levelRenderer.renderBuffers.bufferSource();
+        EntityRenderDispatcher dispatcher = mc.getEntityRenderDispatcher();
+        ClientLevel level = mc.level;
+        Vec3 renderPos = mc.gameRenderer.getMainCamera().getPosition();
+        MultiBufferSource.BufferSource buffer = levelRenderer.renderBuffers.bufferSource();
 
-        ClippingHelper clip = levelRenderer.capturedFrustum;
+        Frustum clip = levelRenderer.capturedFrustum;
         if (clip == null) {
-            clip = new ClippingHelper(stack.last().pose(), projection);
+            clip = new Frustum(stack.last().pose(), projection);
             clip.prepare(renderPos.x, renderPos.y, renderPos.z);
         } else {
             clip.prepare(levelRenderer.frustumPos.x, levelRenderer.frustumPos.y, levelRenderer.frustumPos.z);
@@ -39,10 +39,10 @@ public interface ITranslucentRenderer {
         for (Entity entity : level.entitiesForRendering()) {
             EntityRenderer<? super Entity> renderer = dispatcher.getRenderer(entity);
             if (renderer instanceof ITranslucentRenderer && renderer.shouldRender(entity, clip, renderPos.x, renderPos.y, renderPos.z)) {
-                double x = MathHelper.lerp(partialTicks, entity.xOld, entity.getX());
-                double y = MathHelper.lerp(partialTicks, entity.yOld, entity.getY());
-                double z = MathHelper.lerp(partialTicks, entity.zOld, entity.getZ());
-                float f = MathHelper.lerp(partialTicks, entity.yRotO, entity.yRot);
+                double x = Mth.lerp(partialTicks, entity.xOld, entity.getX());
+                double y = Mth.lerp(partialTicks, entity.yOld, entity.getY());
+                double z = Mth.lerp(partialTicks, entity.zOld, entity.getZ());
+                float f = Mth.lerp(partialTicks, entity.yRotO, entity.yRot);
                 dispatcher.render(entity, x - renderPos.x, y - renderPos.y, z - renderPos.z, f, partialTicks, stack, buffer, dispatcher.getPackedLightCoords(entity, partialTicks));
             }
         }

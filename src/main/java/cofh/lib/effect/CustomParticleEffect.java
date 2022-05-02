@@ -1,12 +1,13 @@
-package cofh.lib.potion;
+package cofh.lib.effect;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.potion.EffectType;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.entity.LivingEntity;
 
 public abstract class CustomParticleEffect extends EffectCoFH {
 
-    public CustomParticleEffect(EffectType typeIn, int liquidColorIn) {
+    public CustomParticleEffect(MobEffectCategory typeIn, int liquidColorIn) {
 
         super(typeIn, liquidColorIn);
     }
@@ -20,7 +21,7 @@ public abstract class CustomParticleEffect extends EffectCoFH {
         }
     }
 
-    public abstract IParticleData getParticle();
+    public abstract ParticleOptions getParticle();
 
     public int getChance() {
 

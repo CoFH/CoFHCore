@@ -1,18 +1,18 @@
 package cofh.lib.block;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 
 public interface IDetonatable {
 
-    void detonate(Vector3d pos);
+    void detonate(Vec3 pos);
 
     interface IDetonateAction {
 
-        void detonate(World world, Entity explosive, @Nullable Entity owner, Vector3d pos, float radius, int duration, int amplifier);
+        void detonate(Level world, Entity explosive, @Nullable Entity owner, Vec3 pos, float radius, int duration, int amplifier);
 
     }
 

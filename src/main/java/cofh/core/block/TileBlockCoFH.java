@@ -55,6 +55,7 @@ public class TileBlockCoFH extends Block implements EntityBlock, IDismantleable 
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> actualType) {
+
         return ICoFHTickableTile.createTicker(level, actualType, blockEntityType.get(), tileClass);
     }
 

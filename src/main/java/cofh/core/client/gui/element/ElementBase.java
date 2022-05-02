@@ -2,7 +2,6 @@ package cofh.core.client.gui.element;
 
 import cofh.lib.client.gui.IGuiAccess;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Matrix4f;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;

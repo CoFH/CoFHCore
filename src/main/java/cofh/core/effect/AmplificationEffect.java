@@ -1,6 +1,6 @@
-package cofh.core.potion;
+package cofh.core.effect;
 
-import cofh.lib.potion.EffectCoFH;
+import cofh.lib.effect.EffectCoFH;
 import cofh.lib.util.Utils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.effect.MobEffectCategory;

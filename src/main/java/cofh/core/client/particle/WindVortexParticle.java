@@ -3,15 +3,15 @@ package cofh.core.client.particle;
 import cofh.core.util.helpers.vfx.RenderTypes;
 import cofh.core.util.helpers.vfx.VFXHelper;
 import cofh.lib.util.helpers.MathHelper;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.particle.IAnimatedSprite;
-import net.minecraft.client.particle.IParticleFactory;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
+import com.mojang.math.Vector4f;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.particles.BasicParticleType;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.math.vector.Vector4f;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -27,7 +27,7 @@ public class WindVortexParticle extends LevelMatrixStackParticle {
     protected float scale;
     protected float height;
 
-    private WindVortexParticle(ClientWorld level, double xPos, double yPos, double zPos, double speed, double width, double height) {
+    private WindVortexParticle(ClientLevel level, double xPos, double yPos, double zPos, double speed, double width, double height) {
 
         super(level, xPos, yPos, zPos, speed, width, height);
         this.fLifetime = defaultLifetime / (float) speed;
@@ -43,7 +43,7 @@ public class WindVortexParticle extends LevelMatrixStackParticle {
     }
 
     @Override
-    public void render(MatrixStack stack, IRenderTypeBuffer buffer, int packedLight, float partialTicks) {
+    public void render(PoseStack stack, MultiBufferSource buffer, int packedLight, float partialTicks) {
 
         SplittableRandom rand = new SplittableRandom(this.seed);
         float time = age + partialTicks - (float) rand.nextDouble(this.fLifetime * 0.2F);
@@ -78,17 +78,17 @@ public class WindVortexParticle extends LevelMatrixStackParticle {
     }
 
     @OnlyIn (Dist.CLIENT)
-    public static class Factory implements IParticleFactory<BasicParticleType> {
+    public static class Factory implements ParticleProvider<SimpleParticleType> {
 
-        public Factory(IAnimatedSprite sprite) {
+        public Factory(SpriteSet sprite) {
 
         }
 
         @Nullable
         @Override
-        public Particle createParticle(BasicParticleType data, ClientWorld world, double x, double y, double z, double speed, double width, double height) {
+        public Particle createParticle(SimpleParticleType data, ClientLevel level, double x, double y, double z, double speed, double width, double height) {
 
-            return new WindVortexParticle(world, x, y, z, speed, width, height);
+            return new WindVortexParticle(level, x, y, z, speed, width, height);
         }
 
     }

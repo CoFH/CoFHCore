@@ -3,7 +3,6 @@ package cofh.core.item;
 import cofh.lib.fluid.FluidContainerItemWrapper;
 import cofh.lib.fluid.IFluidContainerItem;
 import cofh.lib.item.IColorableItem;
-import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.util.helpers.StringHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;

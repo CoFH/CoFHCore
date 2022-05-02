@@ -1,22 +1,22 @@
 package cofh.core.client.particle;
 
 import cofh.lib.entity.ElectricArcEntity;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.particles.BasicParticleType;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
 @OnlyIn (Dist.CLIENT)
-public class PlasmaBallParticle extends SpriteTexturedParticle {
+public class PlasmaBallParticle extends TextureSheetParticle {
 
-    private final IAnimatedSprite spriteSet;
+    private final SpriteSet spriteSet;
 
-    private PlasmaBallParticle(ClientWorld worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn, IAnimatedSprite spriteSet) {
+    private PlasmaBallParticle(ClientLevel levelIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn, SpriteSet spriteSet) {
 
-        super(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
+        super(levelIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
         this.spriteSet = spriteSet;
         setSpriteFromAge(spriteSet);
         lifetime = ElectricArcEntity.defaultDuration;
@@ -38,9 +38,9 @@ public class PlasmaBallParticle extends SpriteTexturedParticle {
     }
 
     @Override
-    public IParticleRenderType getRenderType() {
+    public ParticleRenderType getRenderType() {
 
-        return IParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
     }
 
     @Override
@@ -50,7 +50,7 @@ public class PlasmaBallParticle extends SpriteTexturedParticle {
     }
 
     @Override
-    public void setSpriteFromAge(IAnimatedSprite sprite) {
+    public void setSpriteFromAge(SpriteSet sprite) {
 
         if (this.age == 0 || this.age == this.lifetime - 1) {
             this.setSprite(sprite.get(0, this.lifetime));
@@ -60,20 +60,20 @@ public class PlasmaBallParticle extends SpriteTexturedParticle {
     }
 
     @OnlyIn (Dist.CLIENT)
-    public static class Factory implements IParticleFactory<BasicParticleType> {
+    public static class Factory implements ParticleProvider<SimpleParticleType> {
 
-        private final IAnimatedSprite spriteSet;
+        private final SpriteSet spriteSet;
 
-        public Factory(IAnimatedSprite sprite) {
+        public Factory(SpriteSet sprite) {
 
             this.spriteSet = sprite;
         }
 
         @Nullable
         @Override
-        public Particle createParticle(BasicParticleType data, ClientWorld world, double x, double y, double z, double dx, double dy, double dz) {
+        public Particle createParticle(SimpleParticleType data, ClientLevel level, double x, double y, double z, double dx, double dy, double dz) {
 
-            PlasmaBallParticle particle = new PlasmaBallParticle(world, x, y, z, dx, dy, dz, spriteSet);
+            PlasmaBallParticle particle = new PlasmaBallParticle(level, x, y, z, dx, dy, dz, spriteSet);
             return particle;
         }
 

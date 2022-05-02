@@ -1,25 +1,25 @@
 package cofh.lib.entity;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.Level;
 
 public abstract class AbstractAoESpellEntity extends AbstractSpellEntity {
 
     protected float radius = 0;
 
-    public AbstractAoESpellEntity(EntityType<? extends AbstractAoESpellEntity> type, World world) {
+    public AbstractAoESpellEntity(EntityType<? extends AbstractAoESpellEntity> type, Level level) {
 
-        super(type, world);
+        super(type, level);
     }
 
     //@Override
-    //protected void readAdditionalSaveData(CompoundNBT nbt) {
+    //protected void readAdditionalSaveData(CompoundTag nbt) {
     //
     //    nbt.putFloat(NBTTags.TAG_AUGMENT_RADIUS, radius);
     //}
     //
     //@Override
-    //protected void addAdditionalSaveData(CompoundNBT nbt) {
+    //protected void addAdditionalSaveData(CompoundTag nbt) {
     //
     //    radius = nbt.getFloat(NBTTags.TAG_AUGMENT_RADIUS);
     //}

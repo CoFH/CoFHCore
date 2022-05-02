@@ -1,11 +1,12 @@
 package cofh.core.util.helpers.vfx;
 
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
-import static net.minecraft.client.renderer.RenderState.*;
+import static net.minecraft.client.renderer.RenderStateShard.*;
 
 public class RenderTypes {
 
@@ -13,8 +14,8 @@ public class RenderTypes {
     public static final ResourceLocation RND_GLOW_TEXTURE = new ResourceLocation(ID_COFH_CORE, "textures/render/glow_round.png");
 
     public static final RenderType FLAT_TRANSLUCENT = RenderType.create("flat",
-            DefaultVertexFormats.NEW_ENTITY, 7, 256, true, true,
-            RenderType.State.builder().setTextureState(NO_TEXTURE)
+            DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, true, true,
+            RenderType.CompositeState.builder().setTextureState(NO_TEXTURE)
                     .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
                     .setOutputState(ITEM_ENTITY_TARGET)
                     .setDepthTestState(LEQUAL_DEPTH_TEST)
@@ -22,8 +23,8 @@ public class RenderTypes {
                     .createCompositeState(true));
 
     public static final RenderType LINEAR_GLOW = RenderType.create("glow",
-            DefaultVertexFormats.NEW_ENTITY, 7, 256, true, true,
-            RenderType.State.builder().setTextureState(new TextureState(LIN_GLOW_TEXTURE, true, false))
+            DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, true, true,
+            RenderType.CompositeState.builder().setTextureState(new TextureStateShard(LIN_GLOW_TEXTURE, true, false))
                     .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
                     .setOutputState(ITEM_ENTITY_TARGET)
                     .setDepthTestState(LEQUAL_DEPTH_TEST)
@@ -31,8 +32,8 @@ public class RenderTypes {
                     .createCompositeState(true));
 
     public static final RenderType ROUND_GLOW = RenderType.create("glow",
-            DefaultVertexFormats.NEW_ENTITY, 7, 256, true, true,
-            RenderType.State.builder().setTextureState(new TextureState(RND_GLOW_TEXTURE, true, false))
+            DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, true, true,
+            RenderType.CompositeState.builder().setTextureState(new TextureStateShard(RND_GLOW_TEXTURE, true, false))
                     .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
                     .setOutputState(ITEM_ENTITY_TARGET)
                     .setDepthTestState(LEQUAL_DEPTH_TEST)

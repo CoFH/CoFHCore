@@ -1,6 +1,6 @@
 package cofh.core.command;
 
-import cofh.core.potion.PanaceaEffect;
+import cofh.core.effect.PanaceaEffect;
 import com.google.common.collect.ImmutableList;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import net.minecraft.commands.CommandSourceStack;

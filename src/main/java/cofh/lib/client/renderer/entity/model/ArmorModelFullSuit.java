@@ -42,9 +42,9 @@ public class ArmorModelFullSuit extends HumanoidModel<LivingEntity> {
 
     // TODO: Revisit if changes are made to Armor Rendering
     //    @Override
-    //    public void render(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+    //    public void render(MatrixStack poseStackIn, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
     //
-    //        super.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+    //        super.render(poseStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
     //    }
 
 }

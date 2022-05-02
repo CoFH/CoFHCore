@@ -1,15 +1,15 @@
 package cofh.lib.entity;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
@@ -19,15 +19,15 @@ public abstract class AbstractSpellEntity extends Entity {
     protected LivingEntity owner = null;
     protected int duration = 0;
 
-    public AbstractSpellEntity(EntityType<? extends AbstractSpellEntity> type, World world) {
+    public AbstractSpellEntity(EntityType<? extends AbstractSpellEntity> type, Level level) {
 
-        super(type, world);
+        super(type, level);
     }
 
     @Override
-    public SoundCategory getSoundSource() {
+    public SoundSource getSoundSource() {
 
-        return owner == null ? SoundCategory.NEUTRAL : owner.getSoundSource();
+        return owner == null ? SoundSource.NEUTRAL : owner.getSoundSource();
     }
 
     @Override
@@ -38,7 +38,7 @@ public abstract class AbstractSpellEntity extends Entity {
             this.firstTick = false;
         }
         if (tickCount > duration) {
-            this.remove();
+            this.remove(RemovalReason.KILLED);
         } else {
             activeTick();
         }
@@ -75,17 +75,17 @@ public abstract class AbstractSpellEntity extends Entity {
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundNBT nbt) {
+    protected void readAdditionalSaveData(CompoundTag nbt) {
 
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundNBT nbt) {
+    protected void addAdditionalSaveData(CompoundTag nbt) {
 
     }
 
     @Override
-    public IPacket<?> getAddEntityPacket() {
+    public Packet<?> getAddEntityPacket() {
 
         return NetworkHooks.getEntitySpawningPacket(this);
     }

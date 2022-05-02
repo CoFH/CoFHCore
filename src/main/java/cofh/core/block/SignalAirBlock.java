@@ -38,6 +38,7 @@ public class SignalAirBlock extends AirBlock implements EntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> actualType) {
+
         return ICoFHTickableTile.createTicker(level, actualType, SIGNAL_AIR_TILE, SignalAirTile.class);
     }
 

@@ -4,11 +4,11 @@ import cofh.core.CoFHCore;
 import cofh.lib.network.packet.IPacketClient;
 import cofh.lib.network.packet.PacketBase;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import static cofh.lib.util.constants.Constants.PACKET_EFFECT_REMOVE;
@@ -16,7 +16,7 @@ import static cofh.lib.util.constants.Constants.PACKET_EFFECT_REMOVE;
 public class EffectRemovedPacket extends PacketBase implements IPacketClient {
 
     protected LivingEntity entity;
-    protected Effect effect;
+    protected MobEffect effect;
 
     public EffectRemovedPacket() {
 
@@ -27,7 +27,7 @@ public class EffectRemovedPacket extends PacketBase implements IPacketClient {
     public void handleClient() {
 
         if (!entity.equals(Minecraft.getInstance().player)) {
-            EffectInstance existing = entity.removeEffectNoUpdate(effect);
+            MobEffectInstance existing = entity.removeEffectNoUpdate(effect);
             if (existing != null) {
                 entity.onEffectRemoved(existing);
             }
@@ -35,23 +35,23 @@ public class EffectRemovedPacket extends PacketBase implements IPacketClient {
     }
 
     @Override
-    public void write(PacketBuffer buf) {
+    public void write(FriendlyByteBuf buf) {
 
         buf.writeInt(entity.getId());
-        buf.writeResourceLocation(effect.getEffect().getRegistryName());
+        buf.writeResourceLocation(effect.getRegistryName());
     }
 
     @Override
-    public void read(PacketBuffer buf) {
+    public void read(FriendlyByteBuf buf) {
 
         Entity e = Minecraft.getInstance().player.level.getEntity(buf.readInt());
         if (e instanceof LivingEntity) {
             this.entity = (LivingEntity) e;
-            effect = ForgeRegistries.POTIONS.getValue(buf.readResourceLocation());
+            effect = ForgeRegistries.MOB_EFFECTS.getValue(buf.readResourceLocation());
         }
     }
 
-    public static void sendToClient(LivingEntity entity, Effect effect) {
+    public static void sendToClient(LivingEntity entity, MobEffect effect) {
 
         if (!entity.level.isClientSide) {
             EffectRemovedPacket packet = new EffectRemovedPacket();
@@ -61,7 +61,7 @@ public class EffectRemovedPacket extends PacketBase implements IPacketClient {
         }
     }
 
-    public static void sendToClient(LivingEntity entity, EffectInstance effect) {
+    public static void sendToClient(LivingEntity entity, MobEffectInstance effect) {
 
         sendToClient(entity, effect.getEffect());
     }

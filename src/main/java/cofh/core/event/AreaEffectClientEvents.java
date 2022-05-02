@@ -75,7 +75,7 @@ public class AreaEffectClientEvents {
         matrix.popPose();
 
         MultiPlayerGameMode gamemode = Minecraft.getInstance().gameMode;
-        if (gamemode == null || !gamemode.isDestroying) {
+        if (gamemode == null || !gamemode.isDestroying()) {
             return;
         }
         if (!validAreaEffectMiningItem(stack)) {

@@ -1,15 +1,15 @@
 package cofh.core.client.particle;
 
 import cofh.core.util.helpers.vfx.VFXHelper;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.particle.IAnimatedSprite;
-import net.minecraft.client.particle.IParticleFactory;
+import cofh.lib.util.helpers.MathHelper;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.particles.BasicParticleType;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -21,9 +21,9 @@ public class ShockwaveParticle extends CustomRenderParticle {
     protected float heightScale;
     protected float speed;
 
-    private ShockwaveParticle(ClientWorld worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double speed, double radius, double heightScale) {
+    private ShockwaveParticle(ClientLevel levelIn, double xCoordIn, double yCoordIn, double zCoordIn, double speed, double radius, double heightScale) {
 
-        super(worldIn, xCoordIn, yCoordIn, zCoordIn, radius, speed, heightScale);
+        super(levelIn, xCoordIn, yCoordIn, zCoordIn, radius, speed, heightScale);
         this.lifetime = MathHelper.ceil((radius + 6) / speed);
         this.speed = (float) speed;
         this.setSize((float) radius * 2, (float) heightScale); //TODO: bbheight?
@@ -34,23 +34,23 @@ public class ShockwaveParticle extends CustomRenderParticle {
     }
 
     @Override
-    public void render(MatrixStack stack, IRenderTypeBuffer buffer, int packedLightIn, float partialTicks) {
+    public void render(PoseStack stack, MultiBufferSource buffer, int packedLightIn, float partialTicks) {
 
         VFXHelper.renderShockwave(stack, buffer, level, new BlockPos(x, y, z), (age + partialTicks) * speed, bbWidth * 0.5F, heightScale);
     }
 
     @OnlyIn (Dist.CLIENT)
-    public static class Factory implements IParticleFactory<BasicParticleType> {
+    public static class Factory implements ParticleProvider<SimpleParticleType> {
 
-        public Factory(IAnimatedSprite sprite) {
+        public Factory(SpriteSet sprite) {
 
         }
 
         @Nullable
         @Override
-        public Particle createParticle(BasicParticleType data, ClientWorld world, double x, double y, double z, double speed, double radius, double heightScale) {
+        public Particle createParticle(SimpleParticleType data, ClientLevel level, double x, double y, double z, double speed, double radius, double heightScale) {
 
-            return new ShockwaveParticle(world, x, y, z, speed, radius, heightScale);
+            return new ShockwaveParticle(level, x, y, z, speed, radius, heightScale);
         }
 
     }

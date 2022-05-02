@@ -1,6 +1,6 @@
 package cofh.core.item;
 
-import cofh.lib.entity.AbstractMinecartEntityCoFH;
+import cofh.lib.entity.AbstractMinecartCoFH;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockSource;
 import net.minecraft.core.Direction;
@@ -19,9 +19,9 @@ import net.minecraft.world.level.block.state.properties.RailShape;
 
 public class MinecartItemCoFH extends ItemCoFH {
 
-    protected final IMinecartFactory<? extends AbstractMinecartEntityCoFH> factory;
+    protected final IMinecartFactory<? extends AbstractMinecartCoFH> factory;
 
-    public MinecartItemCoFH(IMinecartFactory<? extends AbstractMinecartEntityCoFH> factory, Properties builder) {
+    public MinecartItemCoFH(IMinecartFactory<? extends AbstractMinecartCoFH> factory, Properties builder) {
 
         super(builder);
         this.factory = factory;
@@ -52,7 +52,7 @@ public class MinecartItemCoFH extends ItemCoFH {
 
     protected void createMinecart(ItemStack stack, Level world, double posX, double posY, double posZ) {
 
-        AbstractMinecartEntityCoFH minecart = factory.createMinecart(world, posX, posY, posZ);
+        AbstractMinecartCoFH minecart = factory.createMinecart(world, posX, posY, posZ);
         if (stack.hasCustomHoverName()) {
             minecart.setCustomName(stack.getHoverName());
         }

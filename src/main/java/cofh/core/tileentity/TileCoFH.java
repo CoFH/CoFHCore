@@ -91,13 +91,13 @@ public class TileCoFH extends BlockEntity implements ITileCallback, ITilePacketH
     // TODO: Decide if this is necessary/prudent.
 
     //    @Override
-    //    public void read(BlockState state, CompoundNBT nbt) {
+    //    public void read(BlockState state, CompoundTag nbt) {
     //
     //        this.pos = new BlockPos(nbt.getInt("x"), nbt.getInt("y"), nbt.getInt("z"));
     //    }
     //
     //    @Override
-    //    public CompoundNBT write(CompoundNBT compound) {
+    //    public CompoundTag write(CompoundTag compound) {
     //
     //        ResourceLocation resourcelocation = TileEntityType.getId(this.getType());
     //        if (resourcelocation == null) {
@@ -112,9 +112,9 @@ public class TileCoFH extends BlockEntity implements ITileCallback, ITilePacketH
     //    }
     //
     //    @Override
-    //    public CompoundNBT getTileData() {
+    //    public CompoundTag getTileData() {
     //
-    //        return new CompoundNBT();
+    //        return new CompoundTag();
     //    }
     // endregion
 

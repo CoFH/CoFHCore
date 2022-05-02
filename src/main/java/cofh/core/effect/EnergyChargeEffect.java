@@ -1,7 +1,7 @@
-package cofh.core.potion;
+package cofh.core.effect;
 
 import cofh.lib.capability.CapabilityRedstoneFlux;
-import cofh.lib.potion.EffectCoFH;
+import cofh.lib.effect.EffectCoFH;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;

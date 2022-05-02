@@ -113,7 +113,7 @@ public class CropsBlockTall extends CropsBlockCoFH {
         return pos.getY() < 255 && super.canSurvive(state, worldIn, pos) && (worldIn.isEmptyBlock(pos.above()));
     }
 
-    // region IGrowable
+    // region BonemealableBlock
     @Override
     public boolean isBonemealSuccess(Level worldIn, Random rand, BlockPos pos, BlockState state) {
 

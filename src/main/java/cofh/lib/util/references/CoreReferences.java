@@ -2,26 +2,15 @@ package cofh.lib.util.references;
 
 import cofh.core.inventory.container.HeldItemFilterContainer;
 import cofh.core.inventory.container.TileItemFilterContainer;
-<<<<<<< HEAD
-import cofh.lib.entity.BlackHoleEntity;
-import cofh.lib.entity.ElectricArcEntity;
-import cofh.lib.entity.ElectricFieldEntity;
-import cofh.lib.entity.KnifeEntity;
-import net.minecraft.block.Block;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.EntityType;
-import net.minecraft.fluid.FlowingFluid;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.Item;
-import net.minecraft.particles.BasicParticleType;
-import net.minecraft.potion.Effect;
-import net.minecraft.tileentity.TileEntityType;
-=======
 import cofh.core.tileentity.EnderAirTile;
 import cofh.core.tileentity.GlowAirTile;
 import cofh.core.tileentity.LightningAirTile;
 import cofh.core.tileentity.SignalAirTile;
+import cofh.lib.entity.BlackHoleEntity;
+import cofh.lib.entity.ElectricArcEntity;
+import cofh.lib.entity.ElectricFieldEntity;
 import cofh.lib.entity.KnifeEntity;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.inventory.MenuType;
@@ -30,7 +19,6 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.material.FlowingFluid;
->>>>>>> caa1a35 (Initial 1.18.2 compile pass.)
 import net.minecraftforge.registries.ObjectHolder;
 
 import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
@@ -161,28 +149,28 @@ public class CoreReferences {
 
     // region PARTICLES
     //@ObjectHolder(ID_PARTICLE_SNOW)
-    //public static final BasicParticleType SNOW = null;
+    //public static final SimpleParticleType SNOW = null;
 
     @ObjectHolder (ID_PARTICLE_FROST)
-    public static final BasicParticleType FROST_PARTICLE = null;
+    public static final SimpleParticleType FROST_PARTICLE = null;
 
     @ObjectHolder (ID_PARTICLE_SPARK)
-    public static final BasicParticleType SPARK_PARTICLE = null;
+    public static final SimpleParticleType SPARK_PARTICLE = null;
 
     @ObjectHolder (ID_PARTICLE_PLASMA)
-    public static final BasicParticleType PLASMA_PARTICLE = null;
+    public static final SimpleParticleType PLASMA_PARTICLE = null;
 
     @ObjectHolder (ID_PARTICLE_SHOCKWAVE)
-    public static final BasicParticleType SHOCKWAVE_PARTICLE = null;
+    public static final SimpleParticleType SHOCKWAVE_PARTICLE = null;
 
     @ObjectHolder (ID_PARTICLE_BLAST_WAVE)
-    public static final BasicParticleType BLAST_WAVE_PARTICLE = null;
+    public static final SimpleParticleType BLAST_WAVE_PARTICLE = null;
 
     @ObjectHolder (ID_PARTICLE_VORTEX)
-    public static final BasicParticleType VORTEX_PARTICLE = null;
+    public static final SimpleParticleType VORTEX_PARTICLE = null;
 
     @ObjectHolder (ID_PARTICLE_SPIRAL)
-    public static final BasicParticleType SPIRAL_PARTICLE = null;
+    public static final SimpleParticleType SPIRAL_PARTICLE = null;
     // endregion
 
     // region ENTITIES

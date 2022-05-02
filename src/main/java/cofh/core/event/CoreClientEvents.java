@@ -3,7 +3,7 @@ package cofh.core.event;
 import cofh.core.init.CoreConfig;
 import cofh.lib.client.renderer.entity.ITranslucentRenderer;
 import cofh.lib.util.Utils;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.ListTag;
@@ -16,8 +16,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.RenderLevelLastEvent;
 import net.minecraftforge.client.event.RenderTooltipEvent;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -40,7 +40,7 @@ public class CoreClientEvents {
 
     public static int renderTime;
     public static float renderFrame;
-    public static MatrixStack levelStack = new MatrixStack();
+    public static PoseStack levelStack = new PoseStack();
 
     private static final Set<String> NAMESPACES = new ObjectOpenHashSet<>();
 
@@ -158,9 +158,9 @@ public class CoreClientEvents {
     }
 
     @SubscribeEvent
-    public static void renderTranslucentEntities(RenderWorldLastEvent event) {
+    public static void renderTranslucentEntities(RenderLevelLastEvent event) {
 
-        ITranslucentRenderer.renderTranslucent(event.getMatrixStack(), event.getPartialTicks(), event.getContext(), event.getProjectionMatrix());
+        ITranslucentRenderer.renderTranslucent(event.getPoseStack(), event.getPartialTick(), event.getLevelRenderer(), event.getProjectionMatrix());
     }
 
 }

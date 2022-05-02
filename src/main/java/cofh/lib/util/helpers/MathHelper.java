@@ -1,5 +1,7 @@
 package cofh.lib.util.helpers;
 
+import net.minecraft.util.Mth;
+
 import java.util.Random;
 
 /**
@@ -91,7 +93,7 @@ public final class MathHelper {
 
     public static float sin(float d) {
 
-        return net.minecraft.util.math.MathHelper.sin(d);
+        return Mth.sin(d);
     }
 
     public static double cos(double d) {
@@ -101,7 +103,7 @@ public final class MathHelper {
 
     public static float cos(float d) {
 
-        return net.minecraft.util.math.MathHelper.cos(d);
+        return Mth.cos(d);
     }
 
     public static float asin(float d) {

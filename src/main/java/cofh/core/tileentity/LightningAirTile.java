@@ -1,14 +1,6 @@
 package cofh.core.tileentity;
 
-<<<<<<< HEAD
 import cofh.lib.entity.ElectricArcEntity;
-import cofh.lib.util.helpers.MathHelper;
-import net.minecraft.block.Blocks;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.server.ServerWorld;
-=======
 import cofh.lib.tileentity.ICoFHTickableTile;
 import cofh.lib.util.Utils;
 import cofh.lib.util.helpers.MathHelper;
@@ -17,7 +9,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
->>>>>>> caa1a35 (Initial 1.18.2 compile pass.)
+import net.minecraft.world.phys.Vec3;
 
 import static cofh.lib.util.references.CoreReferences.LIGHTNING_AIR_TILE;
 
@@ -38,17 +30,17 @@ public class LightningAirTile extends BlockEntity implements ICoFHTickableTile {
             return;
         }
         if (--duration <= 0) {
-<<<<<<< HEAD
-            if (level.canSeeSky(worldPosition) && level instanceof ServerWorld) {
-                level.addFreshEntity(new ElectricArcEntity(level, Vector3d.atBottomCenterOf(getBlockPos())));
-=======
+
             if (level.canSeeSky(worldPosition) && level instanceof ServerLevel) {
-                Utils.spawnLightningBolt(level, worldPosition, null);
->>>>>>> caa1a35 (Initial 1.18.2 compile pass.)
+                level.addFreshEntity(new ElectricArcEntity(level, Vec3.atBottomCenterOf(getBlockPos())));
+
+                if (level.canSeeSky(worldPosition) && level instanceof ServerLevel) {
+                    Utils.spawnLightningBolt(level, worldPosition, null);
+                }
+                this.level.setBlockAndUpdate(worldPosition, Blocks.AIR.defaultBlockState());
+                this.level.removeBlockEntity(this.worldPosition);
+                this.setRemoved();
             }
-            this.level.setBlockAndUpdate(worldPosition, Blocks.AIR.defaultBlockState());
-            this.level.removeBlockEntity(this.worldPosition);
-            this.setRemoved();
         }
     }
 

@@ -4,10 +4,10 @@ import cofh.core.CoFHCore;
 import cofh.lib.network.packet.IPacketClient;
 import cofh.lib.network.packet.PacketBase;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.potion.EffectInstance;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import static cofh.lib.util.constants.Constants.PACKET_EFFECT_ADD;
@@ -15,7 +15,7 @@ import static cofh.lib.util.constants.Constants.PACKET_EFFECT_ADD;
 public class EffectAddedPacket extends PacketBase implements IPacketClient {
 
     protected LivingEntity entity;
-    protected EffectInstance effect;
+    protected MobEffectInstance effect;
 
     public EffectAddedPacket() {
 
@@ -26,12 +26,12 @@ public class EffectAddedPacket extends PacketBase implements IPacketClient {
     public void handleClient() {
 
         if (!entity.equals(Minecraft.getInstance().player)) {
-            entity.forceAddEffect(effect);
+            entity.forceAddEffect(effect, null);
         }
     }
 
     @Override
-    public void write(PacketBuffer buf) {
+    public void write(FriendlyByteBuf buf) {
 
         buf.writeInt(entity.getId());
         buf.writeResourceLocation(effect.getEffect().getRegistryName());
@@ -39,16 +39,16 @@ public class EffectAddedPacket extends PacketBase implements IPacketClient {
     }
 
     @Override
-    public void read(PacketBuffer buf) {
+    public void read(FriendlyByteBuf buf) {
 
         Entity e = Minecraft.getInstance().player.level.getEntity(buf.readInt());
         if (e instanceof LivingEntity) {
             this.entity = (LivingEntity) e;
-            effect = new EffectInstance(ForgeRegistries.POTIONS.getValue(buf.readResourceLocation()), buf.readInt());
+            effect = new MobEffectInstance(ForgeRegistries.MOB_EFFECTS.getValue(buf.readResourceLocation()), buf.readInt());
         }
     }
 
-    public static void sendToClient(LivingEntity entity, EffectInstance effect) {
+    public static void sendToClient(LivingEntity entity, MobEffectInstance effect) {
 
         if (!entity.level.isClientSide) {
             EffectAddedPacket packet = new EffectAddedPacket();

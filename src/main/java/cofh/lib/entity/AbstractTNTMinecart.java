@@ -1,23 +1,11 @@
 package cofh.lib.entity;
 
-<<<<<<< HEAD
 import cofh.lib.block.IDetonatable;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.particles.ParticleTypes;
-=======
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
->>>>>>> caa1a35 (Initial 1.18.2 compile pass.)
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -36,7 +24,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import static cofh.lib.util.constants.NBTTags.TAG_FUSE;
 
-public abstract class AbstractTNTMinecartEntity extends AbstractMinecartEntityCoFH implements IDetonatable {
+public abstract class AbstractTNTMinecart extends AbstractMinecartCoFH implements IDetonatable {
 
     protected static final int CLOUD_DURATION = 20;
 
@@ -46,12 +34,12 @@ public abstract class AbstractTNTMinecartEntity extends AbstractMinecartEntityCo
     public int effectDuration = 300;
     protected boolean detonated = false;
 
-    public AbstractTNTMinecartEntity(EntityType<?> type, Level worldIn) {
+    public AbstractTNTMinecart(EntityType<?> type, Level worldIn) {
 
         super(type, worldIn);
     }
 
-    public AbstractTNTMinecartEntity(EntityType<?> type, Level worldIn, double posX, double posY, double posZ) {
+    public AbstractTNTMinecart(EntityType<?> type, Level worldIn, double posX, double posY, double posZ) {
 
         super(type, worldIn, posX, posY, posZ);
     }
@@ -214,11 +202,11 @@ public abstract class AbstractTNTMinecartEntity extends AbstractMinecartEntityCo
 
         if (level.isClientSide) {
             this.level.addParticle(ParticleTypes.EXPLOSION_EMITTER, this.getX(), this.getY(), this.getZ(), 1.0D, 0.0D, 0.0D);
-            this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.GENERIC_EXPLODE, SoundCategory.BLOCKS, 2.0F, (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F, false);
+            this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 2.0F, (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F, false);
         } else {
             this.detonate(this.position());
-            this.remove();
-            this.spawnAtLocation(getCartItem());
+            this.remove(RemovalReason.KILLED);
+            this.spawnAtLocation(getPickResult());
         }
     }
 

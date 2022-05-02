@@ -1,4 +1,4 @@
-package cofh.lib.potion;
+package cofh.lib.effect;
 
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;

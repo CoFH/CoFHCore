@@ -210,7 +210,7 @@ public class CropsBlockCoFH extends CropBlock implements IHarvestable {
     }
     // endregion
 
-    // region IGrowable
+    // region BonemealableBlock
     @Override
     public boolean isValidBonemealTarget(BlockGetter worldIn, BlockPos pos, BlockState state, boolean isClient) {
 

@@ -1,29 +1,28 @@
 package cofh.core.client.particle;
 
 import cofh.lib.util.helpers.MathHelper;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.IParticleRenderType;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.world.phys.Vec3;
 
 public abstract class CustomRenderParticle extends Particle {
 
-    public CustomRenderParticle(ClientWorld level, double xPos, double yPos, double zPos, double xVel, double yVel, double zVel) {
+    public CustomRenderParticle(net.minecraft.client.multiplayer.ClientLevel level, double xPos, double yPos, double zPos, double xVel, double yVel, double zVel) {
 
         super(level, xPos, yPos, zPos, xVel, yVel, zVel);
     }
 
     @Override
-    public void render(IVertexBuilder builder, ActiveRenderInfo info, float partialTicks) {
+    public void render(VertexConsumer builder, Camera info, float partialTicks) {
 
-        Vector3d camPos = info.getPosition();
-        IRenderTypeBuffer.Impl buffer = Minecraft.getInstance().renderBuffers().bufferSource();
-        MatrixStack stack = new MatrixStack();
+        Vec3 camPos = info.getPosition();
+        MultiBufferSource.BufferSource buffer = Minecraft.getInstance().renderBuffers().bufferSource();
+        PoseStack stack = new PoseStack();
         stack.pushPose();
 
         double x = MathHelper.interpolate(this.xo, this.x, partialTicks) - camPos.x;
@@ -38,12 +37,12 @@ public abstract class CustomRenderParticle extends Particle {
         buffer.endBatch();
     }
 
-    public abstract void render(MatrixStack stack, IRenderTypeBuffer buffer, int packedLightIn, float partialTicks);
+    public abstract void render(PoseStack stack, MultiBufferSource buffer, int packedLightIn, float partialTicks);
 
     @Override
-    public IParticleRenderType getRenderType() {
+    public ParticleRenderType getRenderType() {
 
-        return IParticleRenderType.CUSTOM;
+        return ParticleRenderType.CUSTOM;
     }
 
 }

@@ -12,7 +12,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 
 import javax.annotation.Nullable;
-
 import java.util.function.Supplier;
 
 import static cofh.lib.util.constants.Constants.FACING_HORIZONTAL;
