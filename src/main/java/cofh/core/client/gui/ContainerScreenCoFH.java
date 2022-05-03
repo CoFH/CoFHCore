@@ -74,7 +74,7 @@ public class ContainerScreenCoFH<T extends AbstractContainerMenu> extends Abstra
         super.render(matrixStack, mouseX, mouseY, partialTick);
         renderTooltip(matrixStack, mouseX, mouseY);
 
-        if (showTooltips && getMinecraft().player.getInventory().getSelected().isEmpty()) {
+        if (showTooltips && this.menu.getCarried().isEmpty()) {
             drawTooltip(matrixStack);
         }
     }

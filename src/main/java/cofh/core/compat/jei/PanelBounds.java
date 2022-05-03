@@ -1,9 +1,8 @@
-/*
 package cofh.core.compat.jei;
 
 import cofh.core.client.gui.ContainerScreenCoFH;
 import mezz.jei.api.gui.handlers.IGuiContainerHandler;
-import net.minecraft.client.renderer.Rectangle2d;
+import net.minecraft.client.renderer.Rect2i;
 
 import java.util.List;
 
@@ -11,10 +10,10 @@ import java.util.List;
 public class PanelBounds implements IGuiContainerHandler<ContainerScreenCoFH<?>> {
 
     @Override
-    public List<Rectangle2d> getGuiExtraAreas(ContainerScreenCoFH containerScreen) {
+    public List<Rect2i> getGuiExtraAreas(ContainerScreenCoFH containerScreen) {
 
         return containerScreen.getPanelBounds();
     }
 
 }
-*/
+

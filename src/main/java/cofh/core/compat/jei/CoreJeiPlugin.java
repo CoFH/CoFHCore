@@ -1,4 +1,3 @@
-/*
 package cofh.core.compat.jei;
 
 import cofh.core.client.gui.ContainerScreenCoFH;
@@ -6,7 +5,6 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.registration.IGuiHandlerRegistration;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.ResourceLocation;
 
 import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
 
@@ -26,4 +24,4 @@ public class CoreJeiPlugin implements IModPlugin {
     }
 
 }
-*/
+

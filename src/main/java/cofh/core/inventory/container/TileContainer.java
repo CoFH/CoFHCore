@@ -5,7 +5,6 @@ import cofh.lib.inventory.container.ContainerCoFH;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -46,9 +45,7 @@ public class TileContainer extends ContainerCoFH {
         if (baseTile == null) {
             return;
         }
-        for (ContainerListener listener : this.containerListeners) {
-            baseTile.sendGuiNetworkData(this, listener);
-        }
+        baseTile.sendGuiNetworkData(this, player);
     }
 
     @Override
