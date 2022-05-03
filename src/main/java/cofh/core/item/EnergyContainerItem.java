@@ -79,7 +79,7 @@ public abstract class EnergyContainerItem extends ItemCoFH implements IEnergyCon
         if (stack.getTag() == null) {
             return 0;
         }
-        return (int) Math.round(13.0F - getEnergyStored(stack) * 13F / (double) getMaxEnergyStored(stack));
+        return (int) Math.round(13.0D * getEnergyStored(stack) / (double) getMaxEnergyStored(stack));
     }
 
     @Override

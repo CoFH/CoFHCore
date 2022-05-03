@@ -6,6 +6,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -45,7 +46,7 @@ public class ElectricFieldEntity extends AbstractAoESpellEntity {
         } else {
             Vec3 pos = this.position().add(random.nextGaussian() * radius * 0.5F, radius, random.nextGaussian() * radius * 0.5F);
             BlockHitResult raytrace = level.clip(new ClipContext(pos, pos.add(0, -2 * radius, 0), ClipContext.Block.COLLIDER, ClipContext.Fluid.ANY, this));
-            if (raytrace.getType().equals(BlockHitResult.Type.MISS)) {
+            if (raytrace.getType().equals(HitResult.Type.MISS)) {
                 return;
             }
             level.addFreshEntity((new ElectricArcEntity(level, raytrace.getLocation())).setOwner(this.getOwner()));

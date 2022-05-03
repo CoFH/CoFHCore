@@ -106,7 +106,7 @@ public class FluidContainerItem extends ItemCoFH implements IFluidContainerItem,
     @Override
     public int getBarWidth(ItemStack stack) {
 
-        return (int) Math.round(13.0D - getFluidAmount(stack) * 13.0D / (double) getCapacity(stack));
+        return (int) Math.round(13.0D * getFluidAmount(stack) / (double) getCapacity(stack));
     }
 
     @Override

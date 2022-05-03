@@ -13,7 +13,7 @@ public class AttachedStemBlockCoFH extends AttachedStemBlock {
 
     protected Supplier<Block> cropBlock = () -> Blocks.MELON;
 
-    public AttachedStemBlockCoFH(Supplier<Item> seed, Properties properties) {
+    public AttachedStemBlockCoFH(Properties properties, Supplier<Item> seed) {
 
         super((StemGrownBlock) Blocks.MELON, seed, properties);
     }

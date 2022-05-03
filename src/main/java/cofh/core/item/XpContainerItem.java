@@ -72,7 +72,7 @@ public class XpContainerItem extends ItemCoFH implements IXpContainerItem, IFlui
     @Override
     public int getBarWidth(ItemStack stack) {
 
-        return (int) Math.round(13.0D - getStoredXp(stack) * 13D / (double) getCapacityXP(stack));
+        return (int) Math.round(13.0D * getStoredXp(stack) / (double) getCapacityXP(stack));
     }
 
     @Override
