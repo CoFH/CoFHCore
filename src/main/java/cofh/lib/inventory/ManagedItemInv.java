@@ -50,9 +50,6 @@ public class ManagedItemInv extends SimpleItemInv {
 
     public void addSlot(ItemStorageCoFH slot, StorageGroup group) {
 
-        if (allHandler != null) {
-            return;
-        }
         slots.add(slot);
         switch (group) {
             case CATALYST:

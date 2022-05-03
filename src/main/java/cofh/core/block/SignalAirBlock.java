@@ -1,7 +1,7 @@
 package cofh.core.block;
 
-import cofh.core.tileentity.SignalAirTile;
-import cofh.lib.tileentity.ICoFHTickableTile;
+import cofh.core.block.entity.SignalAirTile;
+import cofh.lib.block.entity.ICoFHTickableTile;
 import cofh.lib.util.Utils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

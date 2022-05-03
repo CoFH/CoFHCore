@@ -1,12 +1,12 @@
-package cofh.core.tileentity;
+package cofh.core.block.entity;
 
 import cofh.core.network.packet.client.TileGuiPacket;
 import cofh.core.util.ProxyUtils;
 import cofh.core.util.helpers.FluidHelper;
-import cofh.lib.tileentity.IAreaEffectTile;
-import cofh.lib.tileentity.ITileCallback;
-import cofh.lib.tileentity.ITilePacketHandler;
-import cofh.lib.tileentity.ITileXpHandler;
+import cofh.lib.block.entity.IAreaEffectTile;
+import cofh.lib.block.entity.ITileCallback;
+import cofh.lib.block.entity.ITilePacketHandler;
+import cofh.lib.block.entity.ITileXpHandler;
 import cofh.lib.util.IConveyableData;
 import cofh.lib.util.Utils;
 import net.minecraft.core.BlockPos;
@@ -28,7 +28,6 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 public class TileCoFH extends BlockEntity implements ITileCallback, ITilePacketHandler, ITileXpHandler, IConveyableData {
 
@@ -87,37 +86,6 @@ public class TileCoFH extends BlockEntity implements ITileCallback, ITilePacketH
         }
     }
 
-    // region BASE OVERRIDES
-    // TODO: Decide if this is necessary/prudent.
-
-    //    @Override
-    //    public void read(BlockState state, CompoundTag nbt) {
-    //
-    //        this.pos = new BlockPos(nbt.getInt("x"), nbt.getInt("y"), nbt.getInt("z"));
-    //    }
-    //
-    //    @Override
-    //    public CompoundTag write(CompoundTag compound) {
-    //
-    //        ResourceLocation resourcelocation = TileEntityType.getId(this.getType());
-    //        if (resourcelocation == null) {
-    //            throw new RuntimeException(this.getClass() + " is missing a mapping! This is a bug!");
-    //        } else {
-    //            compound.putString("id", resourcelocation.toString());
-    //            compound.putInt("x", this.pos.getX());
-    //            compound.putInt("y", this.pos.getY());
-    //            compound.putInt("z", this.pos.getZ());
-    //            return compound;
-    //        }
-    //    }
-    //
-    //    @Override
-    //    public CompoundTag getTileData() {
-    //
-    //        return new CompoundTag();
-    //    }
-    // endregion
-
     // region HELPERS
     public boolean onActivatedDelegate(Level world, BlockPos pos, BlockState state, Player player, InteractionHand hand, BlockHitResult result) {
 
@@ -127,10 +95,6 @@ public class TileCoFH extends BlockEntity implements ITileCallback, ITilePacketH
     public boolean hasGuiPacket() {
 
         return true;
-    }
-
-    public void animateTick(BlockState state, Level worldIn, BlockPos pos, Random rand) {
-
     }
 
     protected Object getSound() {

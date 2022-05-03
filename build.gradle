@@ -6,7 +6,7 @@ buildscript {
         maven { url = "https://repo.spongepowered.org/maven" }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:4.1.+'
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
     }
 }
@@ -20,7 +20,7 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: "org.spongepowered.mixin"
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(8)
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 sourceSets.main.resources.srcDirs += "src/main/generated"
 
@@ -101,11 +101,11 @@ configurations {
 dependencies {
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
 
-//    compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
-//    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
-//
-//    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}")
-//    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}:api")
+    compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
+
+    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}")
+    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}:api")
 }
 
 signing {

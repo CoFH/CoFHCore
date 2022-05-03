@@ -1,10 +1,10 @@
 package cofh.core.network.packet.server;
 
 import cofh.core.CoFHCore;
-import cofh.core.tileentity.TileCoFH;
+import cofh.core.block.entity.TileCoFH;
+import cofh.lib.block.entity.ITileXpHandler;
 import cofh.lib.network.packet.IPacketServer;
 import cofh.lib.network.packet.PacketBase;
-import cofh.lib.tileentity.ITileXpHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;

@@ -1,6 +1,6 @@
 package cofh.core.util.control;
 
-import cofh.lib.tileentity.ITileCallback;
+import cofh.lib.block.entity.ITileCallback;
 import cofh.lib.util.control.ISecurable;
 import com.mojang.authlib.GameProfile;
 

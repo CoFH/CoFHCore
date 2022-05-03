@@ -1,6 +1,6 @@
 package cofh.lib.block;
 
-import cofh.lib.tileentity.ITileCallback;
+import cofh.lib.block.entity.ITileCallback;
 import cofh.lib.util.Utils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;

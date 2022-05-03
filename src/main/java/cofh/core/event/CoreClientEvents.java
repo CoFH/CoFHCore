@@ -131,14 +131,16 @@ public class CoreClientEvents {
     }
 
     @SubscribeEvent
-    public static void handleRenderTooltipEvent(RenderTooltipEvent.Pre event) {
+    public static void handleRenderTooltipEvent(RenderTooltipEvent.GatherComponents event) {
 
-        if (event.getComponents().isEmpty()) {
+        if (event.getTooltipElements().isEmpty()) {
             return;
         }
-        if (event.getComponents().get(0) instanceof MutableComponent mutable) {
-            mutable.getSiblings().removeIf(string -> string.getStyle().equals(INVIS_STYLE));
-        }
+        event.getTooltipElements().get(0).left().ifPresent((text) -> {
+            if (text instanceof MutableComponent mutable) {
+                mutable.getSiblings().removeIf(string -> string.getStyle().equals(INVIS_STYLE));
+            }
+        });
     }
 
     @SubscribeEvent

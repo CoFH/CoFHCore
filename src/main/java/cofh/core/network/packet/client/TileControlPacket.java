@@ -1,11 +1,11 @@
 package cofh.core.network.packet.client;
 
 import cofh.core.CoFHCore;
-import cofh.core.tileentity.TileCoFH;
+import cofh.core.block.entity.TileCoFH;
 import cofh.core.util.ProxyUtils;
+import cofh.lib.block.entity.ITilePacketHandler;
 import cofh.lib.network.packet.IPacketClient;
 import cofh.lib.network.packet.PacketBase;
-import cofh.lib.tileentity.ITilePacketHandler;
 import cofh.lib.util.Utils;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;

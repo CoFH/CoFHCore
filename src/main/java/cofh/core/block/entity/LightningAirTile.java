@@ -1,7 +1,7 @@
-package cofh.core.tileentity;
+package cofh.core.block.entity;
 
+import cofh.lib.block.entity.ICoFHTickableTile;
 import cofh.lib.entity.ElectricArcEntity;
-import cofh.lib.tileentity.ICoFHTickableTile;
 import cofh.lib.util.Utils;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.core.BlockPos;

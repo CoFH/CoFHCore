@@ -1,6 +1,6 @@
 package cofh.core.block;
 
-import cofh.core.tileentity.TileCoFH;
+import cofh.core.block.entity.TileCoFH;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;

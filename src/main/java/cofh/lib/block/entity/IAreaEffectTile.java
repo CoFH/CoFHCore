@@ -1,4 +1,4 @@
-package cofh.lib.tileentity;
+package cofh.lib.block.entity;
 
 import cofh.lib.util.control.ISecurable;
 import net.minecraft.core.BlockPos;

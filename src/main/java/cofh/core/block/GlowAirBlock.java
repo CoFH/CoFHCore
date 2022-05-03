@@ -1,7 +1,7 @@
 package cofh.core.block;
 
-import cofh.core.tileentity.GlowAirTile;
-import cofh.lib.tileentity.ICoFHTickableTile;
+import cofh.core.block.entity.GlowAirTile;
+import cofh.lib.block.entity.ICoFHTickableTile;
 import cofh.lib.util.Utils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;

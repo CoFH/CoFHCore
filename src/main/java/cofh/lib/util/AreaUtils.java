@@ -454,7 +454,7 @@ public class AreaUtils {
         BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 
         for (BlockPos blockpos : BlockPos.betweenClosed(pos.offset(-f, -v, -f), pos.offset(f, v, f))) {
-            double distance = blockpos.distSqr(pos);
+            double distance = blockpos.distToCenterSqr(entity.position());
             if (distance < f2) {
                 mutable.set(blockpos.getX(), blockpos.getY() + 1, blockpos.getZ());
                 BlockState blockstate1 = levelIn.getBlockState(mutable);
@@ -474,7 +474,7 @@ public class AreaUtils {
         float f2 = f * f;
 
         for (BlockPos blockpos : BlockPos.betweenClosed(pos.offset(-f, -v, -f), pos.offset(f, v, f))) {
-            double distance = blockpos.distSqr(pos);
+            double distance = blockpos.distToCenterSqr(entity.position());
             if (distance < f2) {
                 BlockState state = levelIn.getBlockState(blockpos);
                 if (campfire && isUnlitCampfire(state)) {
@@ -508,7 +508,7 @@ public class AreaUtils {
         BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 
         for (BlockPos blockpos : BlockPos.betweenClosed(pos.offset(-f, -v, -f), pos.offset(f, v, f))) {
-            double distance = blockpos.distSqr(pos);
+            double distance = blockpos.distToCenterSqr(entity.position());
             if (distance < f2) {
                 mutable.set(blockpos.getX(), blockpos.getY() + 1, blockpos.getZ());
                 BlockState blockstate1 = levelIn.getBlockState(mutable);
@@ -528,7 +528,7 @@ public class AreaUtils {
         float f2 = f * f;
 
         for (BlockPos blockpos : BlockPos.betweenClosed(pos.offset(-f, -v, -f), pos.offset(f, v, f))) {
-            double distance = blockpos.distSqr(pos);
+            double distance = blockpos.distToCenterSqr(entity.position());
             if (distance < f2) {
                 BlockState state = levelIn.getBlockState(blockpos);
                 if (campfire && isLitCampfire(state)) {
@@ -549,7 +549,7 @@ public class AreaUtils {
         BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 
         for (BlockPos blockpos : BlockPos.betweenClosed(pos.offset(-f, -v, -f), pos.offset(f, v, f))) {
-            double distance = blockpos.distSqr(pos);
+            double distance = blockpos.distToCenterSqr(entity.position());
             if (distance < f2) {
                 mutable.set(blockpos.getX(), blockpos.getY() + 1, blockpos.getZ());
                 BlockState blockstate1 = level.getBlockState(mutable);
@@ -575,7 +575,7 @@ public class AreaUtils {
         float f2 = f * f;
 
         for (BlockPos blockpos : BlockPos.betweenClosed(pos.offset(-f, -v, -f), pos.offset(f, v, f))) {
-            double distance = blockpos.distSqr(pos);
+            double distance = blockpos.distToCenterSqr(entity.position());
             if (distance < f2) {
                 BlockState blockstate2 = levelIn.getBlockState(blockpos);
                 boolean isFull = blockstate2.getBlock() == WATER && blockstate2.getValue(LiquidBlock.LEVEL) == 0;
@@ -601,7 +601,7 @@ public class AreaUtils {
         BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 
         for (BlockPos blockpos : BlockPos.betweenClosed(pos.offset(-f, -v, -f), pos.offset(f, v, f))) {
-            double distance = blockpos.distSqr(pos);
+            double distance = blockpos.distToCenterSqr(entity.position());
             if (distance < f2) {
                 mutable.set(blockpos.getX(), blockpos.getY() + 1, blockpos.getZ());
                 BlockState blockstate1 = levelIn.getBlockState(mutable);
@@ -630,7 +630,7 @@ public class AreaUtils {
         float f2 = f * f;
 
         for (BlockPos blockpos : BlockPos.betweenClosed(pos.offset(-f, -v, -f), pos.offset(f, v, f))) {
-            double distance = blockpos.distSqr(pos);
+            double distance = blockpos.distToCenterSqr(entity.position());
             if (distance < f2) {
                 BlockState blockstate2 = levelIn.getBlockState(blockpos);
                 boolean isFull = blockstate2.getBlock() == LAVA && blockstate2.getValue(LiquidBlock.LEVEL) == 0;
@@ -675,7 +675,7 @@ public class AreaUtils {
 
         if (requireAir) {
             for (BlockPos iterPos : BlockPos.betweenClosed(pos.offset(-f, -v, -f), pos.offset(f, v, f))) {
-                double distance = iterPos.distSqr(pos);
+                double distance = iterPos.distToCenterSqr(entity.position());
                 if (distance < f2) {
                     mutable.set(iterPos.getX(), iterPos.getY() + 1, iterPos.getZ());
                     BlockState blockstate1 = levelIn.getBlockState(mutable);
@@ -688,7 +688,7 @@ public class AreaUtils {
             }
         } else {
             for (BlockPos iterPos : BlockPos.betweenClosed(pos.offset(-f, -v, -f), pos.offset(f, v, f))) {
-                double distance = iterPos.distSqr(pos);
+                double distance = iterPos.distToCenterSqr(entity.position());
                 if (distance < f2) {
                     if (levelIn.getBlockState(iterPos) == replaceable) {
                         levelIn.setBlockAndUpdate(iterPos, replacement);
@@ -707,7 +707,7 @@ public class AreaUtils {
 
         if (requireAir) {
             for (BlockPos blockpos : BlockPos.betweenClosed(pos.offset(-f, -v, -f), pos.offset(f, v, f))) {
-                double distance = blockpos.distSqr(pos);
+                double distance = blockpos.distToCenterSqr(entity.position());
                 if (distance < f2) {
                     mutable.set(blockpos.getX(), blockpos.getY() + 1, blockpos.getZ());
                     BlockState blockstate1 = levelIn.getBlockState(mutable);
@@ -774,7 +774,7 @@ public class AreaUtils {
             if (count >= max) {
                 return;
             }
-            double distance = blockpos.distSqr(pos);
+            double distance = blockpos.distToCenterSqr(entity.position());
             if (distance < f2) {
                 mutable.set(blockpos.getX(), blockpos.getY() + 1, blockpos.getZ());
                 BlockState blockstate1 = levelIn.getBlockState(mutable);
@@ -808,7 +808,7 @@ public class AreaUtils {
             if (grow >= count) {
                 return;
             }
-            double distance = iterPos.distSqr(pos);
+            double distance = iterPos.distToCenterSqr(entity.position());
             if (distance < f2) {
                 mutable.set(iterPos.getX(), iterPos.getY() + 1, iterPos.getZ());
                 blockstate1 = levelIn.getBlockState(mutable);
@@ -836,7 +836,7 @@ public class AreaUtils {
 
         BlockState state;
         for (BlockPos iterPos : BlockPos.betweenClosed(pos.offset(-f, -v, -f), pos.offset(f, v, f))) {
-            double distance = iterPos.distSqr(pos);
+            double distance = iterPos.distToCenterSqr(entity.position());
             if (distance < f2) {
                 state = levelIn.getBlockState(iterPos);
                 if (state.getBlock() instanceof BonemealableBlock) {
@@ -894,7 +894,7 @@ public class AreaUtils {
             if (grow >= count) {
                 return;
             }
-            double distance = iterPos.distSqr(pos);
+            double distance = iterPos.distToCenterSqr(entity.position());
             if (distance < f2) {
                 state = levelIn.getBlockState(iterPos);
                 if (state.getBlock() instanceof BonemealableBlock) {

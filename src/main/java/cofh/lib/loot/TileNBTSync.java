@@ -1,6 +1,6 @@
 package cofh.lib.loot;
 
-import cofh.lib.tileentity.ITileCallback;
+import cofh.lib.block.entity.ITileCallback;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import net.minecraft.core.Registry;

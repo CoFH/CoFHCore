@@ -1,6 +1,6 @@
-package cofh.core.tileentity;
+package cofh.core.block.entity;
 
-import cofh.lib.tileentity.ICoFHTickableTile;
+import cofh.lib.block.entity.ICoFHTickableTile;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Blocks;

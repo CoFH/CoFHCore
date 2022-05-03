@@ -16,7 +16,6 @@ import cofh.lib.capability.CapabilityArchery;
 import cofh.lib.capability.CapabilityAreaEffect;
 import cofh.lib.capability.CapabilityEnchantableItem;
 import cofh.lib.capability.CapabilityShieldItem;
-import cofh.lib.item.impl.SpawnEggItemCoFH;
 import cofh.lib.loot.TileNBTSync;
 import cofh.lib.network.PacketHandler;
 import cofh.lib.util.DeferredRegisterCoFH;

@@ -1,6 +1,6 @@
 package cofh.core.util;
 
-import cofh.lib.tileentity.IAreaEffectTile;
+import cofh.lib.block.entity.IAreaEffectTile;
 import cofh.lib.util.IProxyItemPropertyGetter;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;

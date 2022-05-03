@@ -1,11 +1,11 @@
 package cofh.lib.util.references;
 
+import cofh.core.block.entity.EnderAirTile;
+import cofh.core.block.entity.GlowAirTile;
+import cofh.core.block.entity.LightningAirTile;
+import cofh.core.block.entity.SignalAirTile;
 import cofh.core.inventory.container.HeldItemFilterContainer;
 import cofh.core.inventory.container.TileItemFilterContainer;
-import cofh.core.tileentity.EnderAirTile;
-import cofh.core.tileentity.GlowAirTile;
-import cofh.core.tileentity.LightningAirTile;
-import cofh.core.tileentity.SignalAirTile;
 import cofh.lib.entity.BlackHoleEntity;
 import cofh.lib.entity.ElectricArcEntity;
 import cofh.lib.entity.ElectricFieldEntity;

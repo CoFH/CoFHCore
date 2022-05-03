@@ -1,9 +1,9 @@
 package cofh.core.util.helpers;
 
+import cofh.core.block.entity.TileCoFH;
 import cofh.core.client.gui.element.*;
 import cofh.core.network.packet.server.ClaimXPPacket;
 import cofh.core.network.packet.server.StorageClearPacket;
-import cofh.core.tileentity.TileCoFH;
 import cofh.lib.client.gui.IGuiAccess;
 import cofh.lib.energy.EnergyStorageCoFH;
 import cofh.lib.fluid.FluidStorageCoFH;

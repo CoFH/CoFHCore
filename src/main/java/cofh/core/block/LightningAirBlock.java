@@ -1,7 +1,7 @@
 package cofh.core.block;
 
-import cofh.core.tileentity.LightningAirTile;
-import cofh.lib.tileentity.ICoFHTickableTile;
+import cofh.core.block.entity.LightningAirTile;
+import cofh.lib.block.entity.ICoFHTickableTile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AirBlock;

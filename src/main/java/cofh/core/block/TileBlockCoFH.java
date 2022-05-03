@@ -1,11 +1,11 @@
 package cofh.core.block;
 
-import cofh.core.tileentity.TileCoFH;
+import cofh.core.block.entity.TileCoFH;
 import cofh.core.util.helpers.ChatHelper;
 import cofh.lib.block.IDismantleable;
+import cofh.lib.block.entity.ICoFHTickableTile;
+import cofh.lib.block.entity.ITileCallback;
 import cofh.lib.item.IPlacementItem;
-import cofh.lib.tileentity.ICoFHTickableTile;
-import cofh.lib.tileentity.ITileCallback;
 import cofh.lib.util.RayTracer;
 import cofh.lib.util.Utils;
 import cofh.lib.util.helpers.SecurityHelper;

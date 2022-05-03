@@ -1,7 +1,7 @@
 package cofh.core.util;
 
 import cofh.core.event.CoreClientSetupEvents;
-import cofh.lib.tileentity.IAreaEffectTile;
+import cofh.lib.block.entity.IAreaEffectTile;
 import cofh.lib.util.IProxyItemPropertyGetter;
 import cofh.lib.util.helpers.SoundHelper;
 import cofh.lib.util.helpers.StringHelper;

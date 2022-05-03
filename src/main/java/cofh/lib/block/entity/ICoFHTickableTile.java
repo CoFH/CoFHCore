@@ -1,4 +1,4 @@
-package cofh.lib.tileentity;
+package cofh.lib.block.entity;
 
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;

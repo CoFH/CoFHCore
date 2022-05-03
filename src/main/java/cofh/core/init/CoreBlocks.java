@@ -1,10 +1,10 @@
 package cofh.core.init;
 
 import cofh.core.block.*;
-import cofh.core.tileentity.EnderAirTile;
-import cofh.core.tileentity.GlowAirTile;
-import cofh.core.tileentity.LightningAirTile;
-import cofh.core.tileentity.SignalAirTile;
+import cofh.core.block.entity.EnderAirTile;
+import cofh.core.block.entity.GlowAirTile;
+import cofh.core.block.entity.LightningAirTile;
+import cofh.core.block.entity.SignalAirTile;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 

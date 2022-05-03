@@ -1,4 +1,4 @@
-package cofh.lib.tileentity;
+package cofh.lib.block.entity;
 
 import cofh.lib.util.helpers.XpHelper;
 import cofh.lib.xp.EmptyXpStorage;

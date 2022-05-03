@@ -2,7 +2,6 @@ package cofh.core.effect;
 
 import cofh.lib.effect.CustomParticleEffect;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.effect.MobEffectCategory;
 
