@@ -3,7 +3,6 @@
 488dd370028945cb1cedf5c6fcd5307156c6544f data/cofh_core/recipes/ectoplasm.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/blocks/ores/apatite.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/blocks/ores/cinnabar.json
-74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/blocks/ores/copper.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/blocks/ores/lead.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/blocks/ores/nickel.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/blocks/ores/niter.json
@@ -22,7 +21,6 @@
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/blocks/storage_blocks/cinnabar.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/blocks/storage_blocks/coal_coke.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/blocks/storage_blocks/constantan.json
-74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/blocks/storage_blocks/copper.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/blocks/storage_blocks/electrum.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/blocks/storage_blocks/enderium.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/blocks/storage_blocks/gunpowder.json
@@ -159,7 +157,6 @@ b7e73768417943cffbbb1c99aa5cad85ba45b179 data/forge/tags/items/foods/meat/cooked
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/items/gems/sulfur.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/items/ingots/bronze.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/items/ingots/constantan.json
-74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/items/ingots/copper.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/items/ingots/electrum.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/items/ingots/enderium.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/items/ingots/invar.json
@@ -184,7 +181,6 @@ b7e73768417943cffbbb1c99aa5cad85ba45b179 data/forge/tags/items/foods/meat/cooked
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/items/nuggets/tin.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/items/ores/apatite.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/items/ores/cinnabar.json
-74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/items/ores/copper.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/items/ores/lead.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/items/ores/nickel.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/items/ores/niter.json
@@ -240,7 +236,6 @@ b7e73768417943cffbbb1c99aa5cad85ba45b179 data/forge/tags/items/foods/meat/cooked
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/items/storage_blocks/cinnabar.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/items/storage_blocks/coal_coke.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/items/storage_blocks/constantan.json
-74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/items/storage_blocks/copper.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/items/storage_blocks/electrum.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/items/storage_blocks/enderium.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/items/storage_blocks/gunpowder.json

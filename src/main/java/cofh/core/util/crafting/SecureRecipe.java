@@ -2,7 +2,7 @@ package cofh.core.util.crafting;
 
 import cofh.lib.util.control.ISecurable.AccessMode;
 import cofh.lib.util.helpers.SecurityHelper;
-import cofh.lib.util.references.ItemTagsCoFH;
+import cofh.lib.util.references.CoFHTags;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
@@ -24,8 +24,8 @@ public class SecureRecipe extends CustomRecipe {
     @Override
     public boolean matches(CraftingContainer inv, Level worldIn) {
 
-        Ingredient ingredientSecure = Ingredient.of(ItemTagsCoFH.LOCKS);
-        Ingredient ingredientSecurable = Ingredient.of(ItemTagsCoFH.SECURABLE);
+        Ingredient ingredientSecure = Ingredient.of(CoFHTags.Items.LOCKS);
+        Ingredient ingredientSecurable = Ingredient.of(CoFHTags.Items.SECURABLE);
 
         // boolean flag
         boolean lockItem = false;
@@ -47,7 +47,7 @@ public class SecureRecipe extends CustomRecipe {
     @Override
     public ItemStack assemble(CraftingContainer inv) {
 
-        Ingredient ingredientSecurable = Ingredient.of(ItemTagsCoFH.SECURABLE);
+        Ingredient ingredientSecurable = Ingredient.of(CoFHTags.Items.SECURABLE);
 
         ItemStack result = ItemStack.EMPTY;
         for (int i = 0; i < inv.getContainerSize(); ++i) {

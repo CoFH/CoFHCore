@@ -42,9 +42,20 @@ public abstract class ItemModelProviderCoFH extends ItemModelProvider {
     protected void metalSet(DeferredRegisterCoFH<Item> reg, String prefix, boolean vanilla) {
 
         if (!vanilla) {
+            generated(reg.getSup("raw_" + prefix));
             generated(reg.getSup(prefix + "_ingot"));
             generated(reg.getSup(prefix + "_nugget"));
         }
+        generated(reg.getSup(prefix + "_dust"));
+        generated(reg.getSup(prefix + "_gear"));
+        //        generated(reg.getSup(prefix + "_plate"));
+        //        generated(reg.getSup(prefix + "_coin"));
+    }
+
+    protected void alloySet(DeferredRegisterCoFH<Item> reg, String prefix) {
+
+        generated(reg.getSup(prefix + "_ingot"));
+        generated(reg.getSup(prefix + "_nugget"));
         generated(reg.getSup(prefix + "_dust"));
         generated(reg.getSup(prefix + "_gear"));
         //        generated(reg.getSup(prefix + "_plate"));

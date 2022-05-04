@@ -1,5 +1,6 @@
 package cofh.lib.util.recipes;
 
+import cofh.core.util.crafting.IngredientWithCount;
 import cofh.lib.fluid.FluidIngredient;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -61,9 +62,7 @@ public abstract class RecipeJsonUtils {
                     count = object.get(AMOUNT).getAsInt();
                 }
                 if (count > 1) {
-                    for (ItemStack stack : ingredient.getItems()) {
-                        stack.setCount(count);
-                    }
+                    return new IngredientWithCount(ingredient, count);
                 }
             } catch (Throwable t) {
                 ingredient = Ingredient.of(ItemStack.EMPTY);

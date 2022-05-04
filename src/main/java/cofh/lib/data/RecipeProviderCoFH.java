@@ -187,6 +187,9 @@ public class RecipeProviderCoFH extends RecipeProvider implements IConditionBuil
         Item block = reg.get(type + "_block");
         Item nugget = reg.get(type + "_nugget");
 
+        Item raw = reg.get("raw_" + type);
+        Item rawBlock = reg.get("raw_" + type + "_block");
+
         TagKey<Item> ingotTag = forgeTag("ingots/" + type);
         TagKey<Item> gemTag = forgeTag("gems/" + type);
         TagKey<Item> nuggetTag = forgeTag("nuggets/" + type);
@@ -203,6 +206,11 @@ public class RecipeProviderCoFH extends RecipeProvider implements IConditionBuil
                 generateStorageRecipes(consumer, ingot, nugget, nuggetTag, "_from_nuggets", "_from_ingot");
             } else if (gem != null) {
                 generateStorageRecipes(consumer, gem, nugget, nuggetTag, "_from_nuggets", "_from_gem");
+            }
+        }
+        if (rawBlock != null) {
+            if (raw != null) {
+                generateStorageRecipes(consumer, block, ingot, ingotTag, "", "_from_block");
             }
         }
         generateGearRecipe(reg, consumer, type);
