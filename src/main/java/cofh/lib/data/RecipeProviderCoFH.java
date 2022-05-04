@@ -193,6 +193,7 @@ public class RecipeProviderCoFH extends RecipeProvider implements IConditionBuil
         TagKey<Item> ingotTag = forgeTag("ingots/" + type);
         TagKey<Item> gemTag = forgeTag("gems/" + type);
         TagKey<Item> nuggetTag = forgeTag("nuggets/" + type);
+        TagKey<Item> rawTag = forgeTag("raw_materials/" + type);
 
         if (block != null) {
             if (ingot != null) {
@@ -210,7 +211,7 @@ public class RecipeProviderCoFH extends RecipeProvider implements IConditionBuil
         }
         if (rawBlock != null) {
             if (raw != null) {
-                generateStorageRecipes(consumer, block, ingot, ingotTag, "", "_from_block");
+                generateStorageRecipes(consumer, rawBlock, raw, rawTag, "", "_from_block");
             }
         }
         generateGearRecipe(reg, consumer, type);
@@ -290,6 +291,7 @@ public class RecipeProviderCoFH extends RecipeProvider implements IConditionBuil
     protected void generateSmeltingAndBlastingRecipes(DeferredRegisterCoFH<Item> reg, Consumer<FinishedRecipe> consumer, String material, float xp, String folder) {
 
         Item ore = reg.get(material + "_ore");
+        Item raw = reg.get("raw_" + material);
         Item ingot = reg.get(material + "_ingot");
         Item gem = reg.get(material);
         Item dust = reg.get(material + "_dust");
@@ -297,6 +299,9 @@ public class RecipeProviderCoFH extends RecipeProvider implements IConditionBuil
         if (ingot != null) {
             if (dust != null) {
                 generateSmeltingAndBlastingRecipes(reg, consumer, dust, ingot, 0, folder, "_dust");
+            }
+            if (raw != null) {
+                generateSmeltingAndBlastingRecipes(reg, consumer, raw, ingot, 0, folder, "_raw");
             }
             if (ore != null) {
                 generateSmeltingAndBlastingRecipes(reg, consumer, ore, ingot, xp, folder, "_ore");

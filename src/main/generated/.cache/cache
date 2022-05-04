@@ -29,6 +29,10 @@
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/blocks/storage_blocks/lumium.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/blocks/storage_blocks/nickel.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/blocks/storage_blocks/niter.json
+74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/blocks/storage_blocks/raw_lead.json
+74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/blocks/storage_blocks/raw_nickel.json
+74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/blocks/storage_blocks/raw_silver.json
+74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/blocks/storage_blocks/raw_tin.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/blocks/storage_blocks/ruby.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/blocks/storage_blocks/sapphire.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/blocks/storage_blocks/signalum.json
@@ -244,6 +248,10 @@ b7e73768417943cffbbb1c99aa5cad85ba45b179 data/forge/tags/items/foods/meat/cooked
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/items/storage_blocks/lumium.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/items/storage_blocks/nickel.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/items/storage_blocks/niter.json
+74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/items/storage_blocks/raw_lead.json
+74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/items/storage_blocks/raw_nickel.json
+74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/items/storage_blocks/raw_silver.json
+74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/items/storage_blocks/raw_tin.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/items/storage_blocks/ruby.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/items/storage_blocks/sapphire.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data/forge/tags/items/storage_blocks/signalum.json

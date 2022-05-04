@@ -23,15 +23,24 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import static cofh.lib.util.constants.Constants.BUCKET_VOLUME;
+
 public class FluidIngredient implements Predicate<FluidStack> {
 
     public static final FluidIngredient EMPTY = new FluidIngredient(Stream.empty());
     private final IFluidList[] values;
     private FluidStack[] fluidStacks;
+    private int amount = BUCKET_VOLUME;
 
     protected FluidIngredient(Stream<? extends IFluidList> fluidLists) {
 
         this.values = fluidLists.toArray(IFluidList[]::new);
+    }
+
+    public FluidIngredient setAmount(int amount) {
+
+        this.amount = amount;
+        return this;
     }
 
     public FluidStack[] getFluids() {
@@ -44,6 +53,9 @@ public class FluidIngredient implements Predicate<FluidStack> {
 
         if (this.fluidStacks == null) {
             this.fluidStacks = Arrays.stream(this.values).flatMap((ingredientList) -> ingredientList.getFluids().stream()).distinct().toArray(FluidStack[]::new);
+        }
+        for (FluidStack stack : fluidStacks) {
+            stack.setAmount(amount);
         }
     }
 

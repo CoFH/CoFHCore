@@ -129,12 +129,6 @@ public class TileCoFH extends BlockEntity implements ITileCallback, ITilePacketH
 
         return saveWithoutMetadata();
     }
-
-    @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
-
-        load(pkt.getTag());
-    }
     // endregion
 
     // region ITileCallback

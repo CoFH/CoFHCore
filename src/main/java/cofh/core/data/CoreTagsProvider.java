@@ -59,6 +59,10 @@ public class CoreTagsProvider {
             tag(CoFHTags.Blocks.STORAGE_BLOCKS_LUMIUM);
             tag(CoFHTags.Blocks.STORAGE_BLOCKS_NICKEL);
             tag(CoFHTags.Blocks.STORAGE_BLOCKS_NITER);
+            tag(CoFHTags.Blocks.STORAGE_BLOCKS_RAW_LEAD);
+            tag(CoFHTags.Blocks.STORAGE_BLOCKS_RAW_NICKEL);
+            tag(CoFHTags.Blocks.STORAGE_BLOCKS_RAW_SILVER);
+            tag(CoFHTags.Blocks.STORAGE_BLOCKS_RAW_TIN);
             tag(CoFHTags.Blocks.STORAGE_BLOCKS_RUBY);
             tag(CoFHTags.Blocks.STORAGE_BLOCKS_SAPPHIRE);
             tag(CoFHTags.Blocks.STORAGE_BLOCKS_SIGNALUM);
@@ -282,6 +286,10 @@ public class CoreTagsProvider {
             copy(CoFHTags.Blocks.STORAGE_BLOCKS_LUMIUM, CoFHTags.Items.STORAGE_BLOCKS_LUMIUM);
             copy(CoFHTags.Blocks.STORAGE_BLOCKS_NICKEL, CoFHTags.Items.STORAGE_BLOCKS_NICKEL);
             copy(CoFHTags.Blocks.STORAGE_BLOCKS_NITER, CoFHTags.Items.STORAGE_BLOCKS_NITER);
+            copy(CoFHTags.Blocks.STORAGE_BLOCKS_RAW_LEAD, CoFHTags.Items.STORAGE_BLOCKS_RAW_LEAD);
+            copy(CoFHTags.Blocks.STORAGE_BLOCKS_RAW_NICKEL, CoFHTags.Items.STORAGE_BLOCKS_RAW_NICKEL);
+            copy(CoFHTags.Blocks.STORAGE_BLOCKS_RAW_SILVER, CoFHTags.Items.STORAGE_BLOCKS_RAW_SILVER);
+            copy(CoFHTags.Blocks.STORAGE_BLOCKS_RAW_TIN, CoFHTags.Items.STORAGE_BLOCKS_RAW_TIN);
             copy(CoFHTags.Blocks.STORAGE_BLOCKS_RUBY, CoFHTags.Items.STORAGE_BLOCKS_RUBY);
             copy(CoFHTags.Blocks.STORAGE_BLOCKS_SAPPHIRE, CoFHTags.Items.STORAGE_BLOCKS_SAPPHIRE);
             copy(CoFHTags.Blocks.STORAGE_BLOCKS_SIGNALUM, CoFHTags.Items.STORAGE_BLOCKS_SIGNALUM);

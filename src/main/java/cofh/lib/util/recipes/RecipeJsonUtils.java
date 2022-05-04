@@ -100,9 +100,7 @@ public abstract class RecipeJsonUtils {
                     amount = object.get(COUNT).getAsInt();
                 }
                 if (amount > 0) {
-                    for (FluidStack stack : ingredient.getFluids()) {
-                        stack.setAmount(amount);
-                    }
+                    ingredient.setAmount(amount);
                 }
             } catch (Throwable t) {
                 ingredient = FluidIngredient.of(FluidStack.EMPTY);
