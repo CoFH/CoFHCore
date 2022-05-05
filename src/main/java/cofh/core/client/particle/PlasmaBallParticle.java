@@ -1,6 +1,6 @@
 package cofh.core.client.particle;
 
-import cofh.lib.entity.ElectricArcEntity;
+import cofh.lib.entity.ElectricArc;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.core.particles.SimpleParticleType;
@@ -19,7 +19,7 @@ public class PlasmaBallParticle extends TextureSheetParticle {
         super(levelIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
         this.spriteSet = spriteSet;
         setSpriteFromAge(spriteSet);
-        lifetime = ElectricArcEntity.defaultDuration;
+        lifetime = ElectricArc.defaultDuration;
         scale(3.0F);
 
         xd = xSpeedIn;

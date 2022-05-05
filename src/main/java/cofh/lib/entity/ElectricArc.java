@@ -14,14 +14,14 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import static cofh.lib.util.references.CoreReferences.ELECTRIC_ARC_ENTITY;
 import static cofh.lib.util.references.CoreReferences.SHOCKED;
 
-public class ElectricArcEntity extends AbstractAoESpellEntity {
+public class ElectricArc extends AbstractAoESpell {
 
     public static final int defaultDuration = 10;
     protected boolean cosmetic = false;
     public float damage = 5.0F;
     public long seed = random.nextLong();
 
-    public ElectricArcEntity(EntityType<? extends ElectricArcEntity> type, Level level) {
+    public ElectricArc(EntityType<? extends ElectricArc> type, Level level) {
 
         super(type, level);
         radius = 1.5F;
@@ -29,13 +29,13 @@ public class ElectricArcEntity extends AbstractAoESpellEntity {
         noCulling = true;
     }
 
-    public ElectricArcEntity(Level level, Vec3 pos) {
+    public ElectricArc(Level level, Vec3 pos) {
 
         this(ELECTRIC_ARC_ENTITY, level);
         this.moveTo(pos);
     }
 
-    public ElectricArcEntity(Level level, Entity target) {
+    public ElectricArc(Level level, Entity target) {
 
         this(level, target.position());
     }
@@ -84,19 +84,19 @@ public class ElectricArcEntity extends AbstractAoESpellEntity {
         return false;
     }
 
-    public ElectricArcEntity setDamage(float damage) {
+    public ElectricArc setDamage(float damage) {
 
         this.damage = damage;
         return this;
     }
 
-    public ElectricArcEntity setRadius(float radius) {
+    public ElectricArc setRadius(float radius) {
 
         this.radius = radius;
         return this;
     }
 
-    public ElectricArcEntity setCosmetic(boolean cosmetic) {
+    public ElectricArc setCosmetic(boolean cosmetic) {
 
         this.cosmetic = cosmetic;
         return this;

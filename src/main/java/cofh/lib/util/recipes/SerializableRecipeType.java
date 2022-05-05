@@ -18,10 +18,4 @@ public class SerializableRecipeType<T extends SerializableRecipe> implements Rec
         return registryName.toString();
     }
 
-    public void register() {
-
-        // TODO Lemming, Vanilla Registries now get Frozen, we likely need to manually un-freeze this to register things.
-        //        Registry.register(Registry.RECIPE_TYPE, registryName, this);
-    }
-
 }

@@ -162,7 +162,7 @@ public class CoreClientEvents {
     @SubscribeEvent
     public static void renderTranslucentEntities(RenderLevelLastEvent event) {
 
-        ITranslucentRenderer.renderTranslucent(event.getPoseStack(), event.getPartialTick(), event.getLevelRenderer(), event.getProjectionMatrix());
+        // ITranslucentRenderer.renderTranslucent(event.getPoseStack(), event.getPartialTick(), event.getLevelRenderer(), event.getProjectionMatrix());
     }
 
 }

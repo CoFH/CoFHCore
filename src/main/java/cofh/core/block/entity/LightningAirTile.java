@@ -1,7 +1,7 @@
 package cofh.core.block.entity;
 
 import cofh.lib.block.entity.ICoFHTickableTile;
-import cofh.lib.entity.ElectricArcEntity;
+import cofh.lib.entity.ElectricArc;
 import cofh.lib.util.Utils;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.core.BlockPos;
@@ -32,7 +32,7 @@ public class LightningAirTile extends BlockEntity implements ICoFHTickableTile {
         if (--duration <= 0) {
 
             if (level.canSeeSky(worldPosition) && level instanceof ServerLevel) {
-                level.addFreshEntity(new ElectricArcEntity(level, Vec3.atBottomCenterOf(getBlockPos())));
+                level.addFreshEntity(new ElectricArc(level, Vec3.atBottomCenterOf(getBlockPos())));
 
                 if (level.canSeeSky(worldPosition) && level instanceof ServerLevel) {
                     Utils.spawnLightningBolt(level, worldPosition, null);

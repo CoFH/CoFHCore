@@ -6,9 +6,9 @@ import cofh.core.block.entity.LightningAirTile;
 import cofh.core.block.entity.SignalAirTile;
 import cofh.core.inventory.container.HeldItemFilterContainer;
 import cofh.core.inventory.container.TileItemFilterContainer;
-import cofh.lib.entity.BlackHoleEntity;
-import cofh.lib.entity.ElectricArcEntity;
-import cofh.lib.entity.ElectricFieldEntity;
+import cofh.lib.entity.BlackHole;
+import cofh.lib.entity.ElectricArc;
+import cofh.lib.entity.ElectricField;
 import cofh.lib.entity.KnifeEntity;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.world.effect.MobEffect;
@@ -178,13 +178,13 @@ public class CoreReferences {
     public static final EntityType<KnifeEntity> KNIFE_ENTITY = null;
 
     @ObjectHolder (ID_ELECTRIC_ARC)
-    public static final EntityType<ElectricArcEntity> ELECTRIC_ARC_ENTITY = null;
+    public static final EntityType<ElectricArc> ELECTRIC_ARC_ENTITY = null;
 
     @ObjectHolder (ID_ELECTRIC_FIELD)
-    public static final EntityType<ElectricFieldEntity> ELECTRIC_FIELD_ENTITY = null;
+    public static final EntityType<ElectricField> ELECTRIC_FIELD_ENTITY = null;
 
     @ObjectHolder (ID_BLACK_HOLE)
-    public static final EntityType<BlackHoleEntity> BLACK_HOLE_ENTITY = null;
+    public static final EntityType<BlackHole> BLACK_HOLE_ENTITY = null;
     // endregion
 
     // region SOUND EVENTS

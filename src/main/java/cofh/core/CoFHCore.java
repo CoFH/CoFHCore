@@ -16,6 +16,8 @@ import cofh.lib.capability.CapabilityArchery;
 import cofh.lib.capability.CapabilityAreaEffect;
 import cofh.lib.capability.CapabilityEnchantableItem;
 import cofh.lib.capability.CapabilityShieldItem;
+import cofh.lib.client.renderer.entity.ElectricArcRenderer;
+import cofh.lib.client.renderer.entity.NothingRenderer;
 import cofh.lib.loot.TileNBTSync;
 import cofh.lib.network.PacketHandler;
 import cofh.lib.util.DeferredRegisterCoFH;
@@ -32,6 +34,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -47,8 +50,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import static cofh.lib.util.constants.Constants.*;
-import static cofh.lib.util.references.CoreReferences.HELD_ITEM_FILTER_CONTAINER;
-import static cofh.lib.util.references.CoreReferences.TILE_ITEM_FILTER_CONTAINER;
+import static cofh.lib.util.references.CoreReferences.*;
 
 @Mod (ID_COFH_CORE)
 public class CoFHCore {
@@ -80,7 +82,9 @@ public class CoFHCore {
 
         final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        modEventBus.addListener(this::registerCapabilities);
+        modEventBus.addListener(this::entityLayerSetup);
+        modEventBus.addListener(this::entityRendererSetup);
+        modEventBus.addListener(this::capSetup);
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::clientSetup);
 
@@ -150,7 +154,23 @@ public class CoFHCore {
     }
 
     // region INITIALIZATION
-    private void registerCapabilities(RegisterCapabilitiesEvent event) {
+    private void entityLayerSetup(final EntityRenderersEvent.RegisterLayerDefinitions event) {
+
+    }
+
+    private void entityRendererSetup(final EntityRenderersEvent.RegisterRenderers event) {
+
+        event.registerEntityRenderer(ELECTRIC_ARC_ENTITY, ElectricArcRenderer::new);
+        event.registerEntityRenderer(ELECTRIC_FIELD_ENTITY, NothingRenderer::new);
+
+        //        EntityRenderers.register(ELECTRIC_ARC_ENTITY, ElectricArcRenderer::new);
+        //        EntityRenderers.register(ELECTRIC_FIELD_ENTITY, NothingRenderer::new);
+
+        //        RenderingRegistry.registerEntityRenderingHandler(KNIFE_ENTITY, KnifeRenderer::new);
+        //        RenderingRegistry.registerEntityRenderingHandler(BLACK_HOLE_ENTITY, NothingRenderer::new);
+    }
+
+    private void capSetup(RegisterCapabilitiesEvent event) {
 
         CapabilityArchery.register(event);
         CapabilityAreaEffect.register(event);
@@ -176,25 +196,11 @@ public class CoFHCore {
         CoreKeys.register();
 
         ProxyClient.registerItemModelProperties();
-        this.registerEntityRenderingHandlers();
     }
 
     private void registerCommands(final RegisterCommandsEvent event) {
 
         CoFHCommand.initialize(event.getDispatcher());
-    }
-    // endregion
-
-    // region HELPERS
-    private void registerEntityRenderingHandlers() {
-
-        //        RenderingRegistry.registerEntityRenderingHandler(KNIFE_ENTITY, KnifeRenderer::new);
-        //        EntityRenderers.register(ELECTRIC_ARC_ENTITY, ElectricArcRenderer::new);
-        //        EntityRenderers.register(ELECTRIC_FIELD_ENTITY, NothingRenderer::new);
-        //        RenderingRegistry.registerEntityRenderingHandler(BLACK_HOLE_ENTITY, NothingRenderer::new);
-
-        // TODO Covers, there is an event for this now.
-        //        EntityRenderers.register(KNIFE_ENTITY, KnifeRenderer::new);
     }
     // endregion
 }

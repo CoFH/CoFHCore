@@ -13,14 +13,14 @@ import java.util.List;
 
 import static cofh.lib.util.references.CoreReferences.ELECTRIC_FIELD_ENTITY;
 
-public class ElectricFieldEntity extends AbstractAoESpellEntity {
+public class ElectricField extends AbstractAoESpell {
 
-    public ElectricFieldEntity(EntityType<? extends ElectricFieldEntity> type, Level level) {
+    public ElectricField(EntityType<? extends ElectricField> type, Level level) {
 
         super(type, level);
     }
 
-    public ElectricFieldEntity(Level level, Vec3 pos, float radius, int duration) {
+    public ElectricField(Level level, Vec3 pos, float radius, int duration) {
 
         this(ELECTRIC_FIELD_ENTITY, level);
         this.moveTo(pos);
@@ -42,14 +42,14 @@ public class ElectricFieldEntity extends AbstractAoESpellEntity {
         double radiusSqr = radius * radius;
         List<Entity> entities = level.getEntities(this, this.getBoundingBox().inflate(radius), EntitySelector.LIVING_ENTITY_STILL_ALIVE.and((entity) -> entity.distanceToSqr(this) < radiusSqr));
         if (random.nextInt(5) < entities.size()) {
-            level.addFreshEntity((new ElectricArcEntity(level, entities.get(random.nextInt(entities.size())))).setOwner(this.getOwner()));
+            level.addFreshEntity((new ElectricArc(level, entities.get(random.nextInt(entities.size())))).setOwner(this.getOwner()));
         } else {
             Vec3 pos = this.position().add(random.nextGaussian() * radius * 0.5F, radius, random.nextGaussian() * radius * 0.5F);
             BlockHitResult raytrace = level.clip(new ClipContext(pos, pos.add(0, -2 * radius, 0), ClipContext.Block.COLLIDER, ClipContext.Fluid.ANY, this));
             if (raytrace.getType().equals(HitResult.Type.MISS)) {
                 return;
             }
-            level.addFreshEntity((new ElectricArcEntity(level, raytrace.getLocation())).setOwner(this.getOwner()));
+            level.addFreshEntity((new ElectricArc(level, raytrace.getLocation())).setOwner(this.getOwner()));
         }
     }
 

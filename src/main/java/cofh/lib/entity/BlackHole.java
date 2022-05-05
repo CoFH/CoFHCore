@@ -9,15 +9,15 @@ import net.minecraft.world.phys.Vec3;
 
 import static cofh.lib.util.references.CoreReferences.BLACK_HOLE_ENTITY;
 
-public class BlackHoleEntity extends AbstractAoESpellEntity {
+public class BlackHole extends AbstractAoESpell {
 
-    public BlackHoleEntity(EntityType<? extends BlackHoleEntity> type, Level level) {
+    public BlackHole(EntityType<? extends BlackHole> type, Level level) {
 
         super(type, level);
         duration = 100;
     }
 
-    public BlackHoleEntity(Level level, Vec3 pos, float radius) {
+    public BlackHole(Level level, Vec3 pos, float radius) {
 
         this(BLACK_HOLE_ENTITY, level);
         this.radius = radius;

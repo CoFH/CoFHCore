@@ -111,26 +111,6 @@ public class DeferredRegisterCoFH<T extends IForgeRegistryEntry<T>> {
 
     public synchronized <I extends T> RegistryObject<I> register(final ResourceLocation resourceLoc, final Supplier<I> sup) {
 
-        //        if (seenRegisterEvent)
-        //            throw new IllegalStateException("Cannot register new entries to DeferredRegister after RegistryEvent.Register has been fired.");
-        //        Objects.requireNonNull(name);
-        //        Objects.requireNonNull(sup);
-        //        final ResourceLocation key = new ResourceLocation(modid, name);
-        //
-        //        RegistryObject<I> ret;
-        //        if (this.type != null)
-        //            ret = RegistryObject.of(key, this.type);
-        //        else if (this.superType != null)
-        //            ret = RegistryObject.of(key, this.superType, this.modid);
-        //        else
-        //            throw new IllegalStateException("Could not create RegistryObject in DeferredRegister");
-        //
-        //        if (entries.putIfAbsent((RegistryObject<T>) ret, () -> sup.get().setRegistryName(key)) != null) {
-        //            throw new IllegalArgumentException("Duplicate registration " + name);
-        //        }
-        //
-        //        return ret;
-
         if (registryObjects.containsKey(resourceLoc)) {
             return registryObjects.get(resourceLoc);
         }
@@ -143,7 +123,6 @@ public class DeferredRegisterCoFH<T extends IForgeRegistryEntry<T>> {
         } else {
             throw new IllegalStateException("Could not create RegistryObject in DeferredRegister");
         }
-
         entries.put((RegistryObject<T>) ret, () -> sup.get().setRegistryName(resourceLoc));
         registryObjects.put(resourceLoc, ret);
         return ret;
