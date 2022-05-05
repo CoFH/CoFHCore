@@ -189,8 +189,8 @@ public class CoFHCore {
     private void registerEntityRenderingHandlers() {
 
         //        RenderingRegistry.registerEntityRenderingHandler(KNIFE_ENTITY, KnifeRenderer::new);
-        //        RenderingRegistry.registerEntityRenderingHandler(ELECTRIC_ARC_ENTITY, ElectricArcRenderer::new);
-        //        RenderingRegistry.registerEntityRenderingHandler(ELECTRIC_FIELD_ENTITY, NothingRenderer::new);
+        //        EntityRenderers.register(ELECTRIC_ARC_ENTITY, ElectricArcRenderer::new);
+        //        EntityRenderers.register(ELECTRIC_FIELD_ENTITY, NothingRenderer::new);
         //        RenderingRegistry.registerEntityRenderingHandler(BLACK_HOLE_ENTITY, NothingRenderer::new);
 
         // TODO Covers, there is an event for this now.

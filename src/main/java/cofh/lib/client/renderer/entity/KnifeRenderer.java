@@ -19,9 +19,9 @@ public class KnifeRenderer extends EntityRenderer<KnifeEntity> {
 
     protected static final ItemRenderer itemRenderer = RenderHelper.renderItem();
 
-    public KnifeRenderer(EntityRendererProvider.Context manager) {
+    public KnifeRenderer(EntityRendererProvider.Context ctx) {
 
-        super(manager);
+        super(ctx);
     }
 
     @Override

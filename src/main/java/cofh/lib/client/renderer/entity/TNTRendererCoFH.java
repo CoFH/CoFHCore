@@ -18,9 +18,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn (Dist.CLIENT)
 public class TNTRendererCoFH extends EntityRenderer<AbstractTNTEntity> {
 
-    public TNTRendererCoFH(EntityRendererProvider.Context renderManagerIn) {
+    public TNTRendererCoFH(EntityRendererProvider.Context ctx) {
 
-        super(renderManagerIn);
+        super(ctx);
         this.shadowRadius = 0.5F;
     }
 

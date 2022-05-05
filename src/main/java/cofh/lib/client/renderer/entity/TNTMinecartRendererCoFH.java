@@ -3,6 +3,7 @@ package cofh.lib.client.renderer.entity;
 import cofh.lib.entity.AbstractTNTMinecart;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MinecartRenderer;
@@ -12,9 +13,9 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class TNTMinecartRendererCoFH extends MinecartRenderer<AbstractTNTMinecart> {
 
-    public TNTMinecartRendererCoFH(EntityRendererProvider.Context renderManagerIn, ModelLayerLocation modelLayerLocation) {
+    public TNTMinecartRendererCoFH(EntityRendererProvider.Context renderManagerIn) {
 
-        super(renderManagerIn, modelLayerLocation);
+        super(renderManagerIn, ModelLayers.TNT_MINECART);
     }
 
     @Override

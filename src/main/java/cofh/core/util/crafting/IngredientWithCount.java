@@ -2,11 +2,11 @@ package cofh.core.util.crafting;
 
 import com.google.gson.JsonElement;
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.crafting.AbstractIngredient;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
+import net.minecraftforge.common.crafting.VanillaIngredientSerializer;
 
 import javax.annotation.Nullable;
 
@@ -53,12 +53,6 @@ public class IngredientWithCount extends AbstractIngredient {
     }
 
     @Override
-    public void toNetwork(FriendlyByteBuf buf) {
-
-        wrappedIngredient.toNetwork(buf);
-    }
-
-    @Override
     public boolean isEmpty() {
 
         return wrappedIngredient.isEmpty();
@@ -73,7 +67,7 @@ public class IngredientWithCount extends AbstractIngredient {
     @Override
     public IIngredientSerializer<? extends Ingredient> getSerializer() {
 
-        return wrappedIngredient.getSerializer();
+        return wrappedIngredient.isVanilla() ? VanillaIngredientSerializer.INSTANCE : wrappedIngredient.getSerializer();
     }
 
     @Override

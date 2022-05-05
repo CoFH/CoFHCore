@@ -31,7 +31,7 @@ public class CrossoverRailBlock extends BaseRailBlock implements IDismantleable 
     public CrossoverRailBlock(Properties builder) {
 
         super(true, builder);
-        this.registerDefaultState(this.stateDefinition.any().setValue(getShapeProperty(), RailShape.NORTH_SOUTH));
+        this.registerDefaultState(this.stateDefinition.any().setValue(getShapeProperty(), RailShape.NORTH_SOUTH).setValue(WATERLOGGED, Boolean.valueOf(false)));
     }
 
     public CrossoverRailBlock speed(float maxSpeed) {
@@ -43,7 +43,7 @@ public class CrossoverRailBlock extends BaseRailBlock implements IDismantleable 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 
-        builder.add(getShapeProperty());
+        builder.add(getShapeProperty(), WATERLOGGED);
     }
 
     @Override

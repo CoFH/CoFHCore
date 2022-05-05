@@ -11,9 +11,9 @@ import net.minecraft.world.inventory.InventoryMenu;
 
 public class NothingRenderer extends EntityRenderer<Entity> {
 
-    public NothingRenderer(EntityRendererProvider.Context manager) {
+    public NothingRenderer(EntityRendererProvider.Context ctx) {
 
-        super(manager);
+        super(ctx);
     }
 
     @Override
