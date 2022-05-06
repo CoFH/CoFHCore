@@ -254,7 +254,7 @@ public class ShapedRecipeInternal implements CraftingRecipe, IShapedRecipe<Craft
 
         for (Entry<String, JsonElement> entry : p_192408_0_.entrySet()) {
             if (entry.getKey().length() != 1) {
-                throw new JsonSyntaxException("Invalid key entry: '" + (String) entry.getKey() + "' is an invalid symbol (must be 1 character only).");
+                throw new JsonSyntaxException("Invalid key entry: '" + entry.getKey() + "' is an invalid symbol (must be 1 character only).");
             }
 
             if (" ".equals(entry.getKey())) {

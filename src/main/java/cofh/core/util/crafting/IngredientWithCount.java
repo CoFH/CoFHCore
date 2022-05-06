@@ -12,8 +12,8 @@ import javax.annotation.Nullable;
 
 public class IngredientWithCount extends AbstractIngredient {
 
-    private Ingredient wrappedIngredient;
-    private int count;
+    private final Ingredient wrappedIngredient;
+    private final int count;
 
     public IngredientWithCount(Ingredient ingredient, int count) {
 

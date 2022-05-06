@@ -1,6 +1,6 @@
 package cofh.core.item;
 
-import cofh.core.init.CoreConfig;
+import cofh.core.config.CoreClientConfig;
 import cofh.lib.item.ICoFHItem;
 import cofh.lib.util.helpers.SecurityHelper;
 import com.google.common.collect.Sets;
@@ -99,9 +99,9 @@ public class ItemCoFH extends Item implements ICoFHItem {
             tooltip.add(getTextComponent("info.cofh.claimable").withStyle(GREEN).withStyle(ITALIC));
         }
         if (!additionalTooltips.isEmpty()) {
-            if (Screen.hasShiftDown() || CoreConfig.alwaysShowDetails) {
+            if (Screen.hasShiftDown() || CoreClientConfig.alwaysShowDetails) {
                 tooltip.addAll(additionalTooltips);
-            } else if (CoreConfig.holdShiftForDetails) {
+            } else if (CoreClientConfig.holdShiftForDetails) {
                 tooltip.add(getTextComponent("info.cofh.hold_shift_for_details").withStyle(GRAY));
             }
         }

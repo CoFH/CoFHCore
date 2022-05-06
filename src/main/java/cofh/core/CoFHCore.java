@@ -5,6 +5,10 @@ import cofh.core.client.gui.TileItemFilterScreen;
 import cofh.core.command.CoFHCommand;
 import cofh.core.compat.curios.CuriosProxy;
 import cofh.core.compat.quark.QuarkFlags;
+import cofh.core.config.CoreClientConfig;
+import cofh.core.config.CoreCommandConfig;
+import cofh.core.config.CoreEnchantConfig;
+import cofh.core.config.CoreServerConfig;
 import cofh.core.event.ArmorEvents;
 import cofh.core.init.*;
 import cofh.core.network.packet.client.*;
@@ -18,11 +22,11 @@ import cofh.lib.capability.CapabilityEnchantableItem;
 import cofh.lib.capability.CapabilityShieldItem;
 import cofh.lib.client.renderer.entity.ElectricArcRenderer;
 import cofh.lib.client.renderer.entity.NothingRenderer;
+import cofh.lib.config.ConfigManager;
 import cofh.lib.loot.TileNBTSync;
 import cofh.lib.network.PacketHandler;
 import cofh.lib.util.DeferredRegisterCoFH;
 import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -38,9 +42,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
-import net.minecraftforge.common.loot.CanToolPerformAction;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
-import net.minecraftforge.common.loot.LootTableIdCondition;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -63,6 +65,7 @@ public class CoFHCore {
     public static final PacketHandler PACKET_HANDLER = new PacketHandler(new ResourceLocation(ID_COFH_CORE, "general"));
     public static final Logger LOG = LogManager.getLogger(ID_COFH_CORE);
     public static final Proxy PROXY = DistExecutor.unsafeRunForDist(() -> ProxyClient::new, () -> Proxy::new);
+    public static final ConfigManager CONFIG_MANAGER = new ConfigManager();
 
     public static final DeferredRegisterCoFH<Block> BLOCKS = DeferredRegisterCoFH.create(ForgeRegistries.BLOCKS, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<Fluid> FLUIDS = DeferredRegisterCoFH.create(ForgeRegistries.FLUIDS, ID_COFH_CORE);
@@ -87,12 +90,12 @@ public class CoFHCore {
 
         final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        modEventBus.addListener(this::registerLootData);
         modEventBus.addListener(this::entityLayerSetup);
         modEventBus.addListener(this::entityRendererSetup);
         modEventBus.addListener(this::capSetup);
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::clientSetup);
+        modEventBus.addGenericListener(GlobalLootModifierSerializer.class, this::registerLootData);
 
         MinecraftForge.EVENT_BUS.addListener(this::registerCommands);
 
@@ -109,7 +112,12 @@ public class CoFHCore {
         SOUND_EVENTS.register(modEventBus);
         TILE_ENTITIES.register(modEventBus);
 
-        CoreConfig.register();
+        CONFIG_MANAGER.register(modEventBus)
+                .addClientConfig(new CoreClientConfig())
+                .addServerConfig(new CoreServerConfig())
+                .addServerConfig(new CoreCommandConfig())
+                .addServerConfig(new CoreEnchantConfig());
+        CONFIG_MANAGER.setupClient();
 
         CoreBlocks.register();
         CoreFluids.register();
@@ -191,6 +199,8 @@ public class CoFHCore {
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
+
+        CONFIG_MANAGER.setupServer();
 
         event.enqueueWork(TileNBTSync::setup);
 

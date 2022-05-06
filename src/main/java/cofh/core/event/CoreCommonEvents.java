@@ -1,6 +1,7 @@
 package cofh.core.event;
 
-import cofh.core.init.CoreConfig;
+import cofh.core.config.CoreEnchantConfig;
+import cofh.core.config.CoreServerConfig;
 import cofh.lib.util.Utils;
 import cofh.lib.util.helpers.XpHelper;
 import net.minecraft.world.entity.Entity;
@@ -44,7 +45,7 @@ public class CoreCommonEvents {
         if (event.isCanceled()) {
             return;
         }
-        if (!CoreConfig.improvedFeatherFalling) {
+        if (!CoreEnchantConfig.improvedFeatherFalling) {
             return;
         }
         Entity entity = event.getEntity();
@@ -79,14 +80,14 @@ public class CoreCommonEvents {
         if (event.isCanceled()) {
             return;
         }
-        if (!CoreConfig.enableFishingExhaustion) {
+        if (!CoreServerConfig.enableFishingExhaustion) {
             return;
         }
         Entity player = event.getHookEntity().getOwner();
         if (!(player instanceof Player) || player instanceof FakePlayer) {
             return;
         }
-        ((Player) player).causeFoodExhaustion(CoreConfig.amountFishingExhaustion);
+        ((Player) player).causeFoodExhaustion(CoreServerConfig.amountFishingExhaustion);
     }
 
     @SubscribeEvent (priority = EventPriority.LOW)
@@ -102,7 +103,7 @@ public class CoreCommonEvents {
         player.take(orb, 1);
 
         // Improved Mending
-        if (CoreConfig.improvedMending) {
+        if (CoreEnchantConfig.improvedMending) {
             Map.Entry<EquipmentSlot, ItemStack> entry = getMostDamagedItem(player);
             if (entry != null) {
                 ItemStack itemstack = entry.getValue();
@@ -127,10 +128,10 @@ public class CoreCommonEvents {
         if (event.isCanceled()) {
             return;
         }
-        if (!CoreConfig.enableSaplingGrowthMod) {
+        if (!CoreServerConfig.enableSaplingGrowthMod) {
             return;
         }
-        if (event.getRand().nextInt(CoreConfig.amountSaplingGrowthMod) != 0) {
+        if (event.getRand().nextInt(CoreServerConfig.amountSaplingGrowthMod) != 0) {
             event.setResult(Event.Result.DENY);
         }
     }

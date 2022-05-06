@@ -1,6 +1,6 @@
 package cofh.core.event;
 
-import cofh.core.init.CoreConfig;
+import cofh.core.config.CoreClientConfig;
 import cofh.lib.util.Utils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
@@ -64,7 +64,7 @@ public class CoreClientEvents {
         }
         ItemStack stack = event.getItemStack();
 
-        if (CoreConfig.enableKeywords && NAMESPACES.contains(Utils.getItemNamespace(stack.getItem()))) {
+        if (CoreClientConfig.enableKeywords && NAMESPACES.contains(Utils.getItemNamespace(stack.getItem()))) {
             String keywordKey = stack.getDescriptionId() + ".keyword";
             if (canLocalize(keywordKey)) {
                 if (tooltip.get(0) instanceof MutableComponent mutable) {
@@ -72,13 +72,13 @@ public class CoreClientEvents {
                 }
             }
         }
-        if (CoreConfig.enableItemDescriptions && NAMESPACES.contains(Utils.getItemNamespace(stack.getItem()))) {
+        if (CoreClientConfig.enableItemDescriptions && NAMESPACES.contains(Utils.getItemNamespace(stack.getItem()))) {
             String infoKey = stack.getDescriptionId() + ".desc";
             if (canLocalize(infoKey)) {
                 tooltip.add(1, getInfoTextComponent(infoKey));
             }
         }
-        if (CoreConfig.enableEnchantmentDescriptions) {
+        if (CoreClientConfig.enableEnchantmentDescriptions) {
             if (stack.getTag() != null) {
                 ListTag list = stack.getTag().getList(TAG_STORED_ENCHANTMENTS, TAG_COMPOUND);
                 if (list.size() == 1) {
@@ -97,7 +97,7 @@ public class CoreClientEvents {
         //
         //            }
         //        }
-        if (CoreConfig.enableItemTags && event.getFlags().isAdvanced()) {
+        if (CoreClientConfig.enableItemTags && event.getFlags().isAdvanced()) {
             Item item = event.getItemStack().getItem();
 
             Set<ResourceLocation> blockTags = Block.byItem(item).builtInRegistryHolder().tags().map(TagKey::location).collect(Collectors.toSet());

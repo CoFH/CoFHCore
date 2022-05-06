@@ -1,6 +1,6 @@
 package cofh.core.item;
 
-import cofh.core.init.CoreConfig;
+import cofh.core.config.CoreClientConfig;
 import cofh.lib.item.ICoFHItem;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.NonNullList;
@@ -99,9 +99,9 @@ public class BlockItemCoFH extends BlockItem implements ICoFHItem {
         tooltipDelegate(stack, worldIn, additionalTooltips, flagIn);
 
         if (!additionalTooltips.isEmpty()) {
-            if (Screen.hasShiftDown() || CoreConfig.alwaysShowDetails) {
+            if (Screen.hasShiftDown() || CoreClientConfig.alwaysShowDetails) {
                 tooltip.addAll(additionalTooltips);
-            } else if (CoreConfig.holdShiftForDetails) {
+            } else if (CoreClientConfig.holdShiftForDetails) {
                 tooltip.add(getTextComponent("info.cofh.hold_shift_for_details").withStyle(GRAY));
             }
         }
