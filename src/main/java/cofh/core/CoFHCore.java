@@ -22,6 +22,7 @@ import cofh.lib.loot.TileNBTSync;
 import cofh.lib.network.PacketHandler;
 import cofh.lib.util.DeferredRegisterCoFH;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -37,7 +38,11 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
+import net.minecraftforge.common.loot.CanToolPerformAction;
+import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
+import net.minecraftforge.common.loot.LootTableIdCondition;
 import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModList;
@@ -82,6 +87,7 @@ public class CoFHCore {
 
         final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
+        modEventBus.addListener(this::registerLootData);
         modEventBus.addListener(this::entityLayerSetup);
         modEventBus.addListener(this::entityRendererSetup);
         modEventBus.addListener(this::capSetup);
@@ -154,6 +160,12 @@ public class CoFHCore {
     }
 
     // region INITIALIZATION
+    private void registerLootData(final RegistryEvent.Register<GlobalLootModifierSerializer<?>> event) {
+
+        CoreFlags.manager().setup();
+        QuarkFlags.setup();
+    }
+
     private void entityLayerSetup(final EntityRenderersEvent.RegisterLayerDefinitions event) {
 
     }
@@ -183,7 +195,6 @@ public class CoFHCore {
         event.enqueueWork(TileNBTSync::setup);
 
         ArmorEvents.setup();
-        QuarkFlags.setup();
 
         FluidHelper.init();
     }

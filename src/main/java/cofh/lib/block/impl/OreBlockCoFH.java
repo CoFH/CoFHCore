@@ -14,14 +14,14 @@ public class OreBlockCoFH extends Block {
     protected int minXp = 0;
     protected int maxXp = 0;
 
-    public OreBlockCoFH() {
+    public static OreBlockCoFH createStoneOre() {
 
-        this(Properties.of(Material.STONE, MaterialColor.STONE).strength(3.0F, 3.0F).sound(SoundType.STONE).requiresCorrectToolForDrops());
+        return new OreBlockCoFH(Properties.of(Material.STONE, MaterialColor.STONE).strength(3.0F, 3.0F).sound(SoundType.STONE).requiresCorrectToolForDrops());
     }
 
-    public OreBlockCoFH(MaterialColor color) {
+    public static OreBlockCoFH createDeepslateOre() {
 
-        this(Properties.of(Material.STONE, color).strength(3.0F, 3.0F).sound(SoundType.STONE).requiresCorrectToolForDrops());
+        return new OreBlockCoFH(Properties.of(Material.STONE, MaterialColor.DEEPSLATE).strength(4.5F, 3.0F).sound(SoundType.DEEPSLATE).requiresCorrectToolForDrops());
     }
 
     public OreBlockCoFH(Properties properties) {

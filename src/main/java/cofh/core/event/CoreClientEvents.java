@@ -1,7 +1,6 @@
 package cofh.core.event;
 
 import cofh.core.init.CoreConfig;
-import cofh.lib.client.renderer.entity.ITranslucentRenderer;
 import cofh.lib.util.Utils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;

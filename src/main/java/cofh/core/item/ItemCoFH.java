@@ -3,6 +3,7 @@ package cofh.core.item;
 import cofh.core.init.CoreConfig;
 import cofh.lib.item.ICoFHItem;
 import cofh.lib.util.helpers.SecurityHelper;
+import com.google.common.collect.Sets;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
@@ -14,12 +15,16 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ToolAction;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.function.BooleanSupplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static cofh.lib.util.constants.Constants.TRUE;
 import static cofh.lib.util.helpers.StringHelper.getTextComponent;
@@ -118,6 +123,11 @@ public class ItemCoFH extends Item implements ICoFHItem {
     public int getBurnTime(ItemStack itemStack, RecipeType<?> recipeType) {
 
         return burnTime;
+    }
+
+    protected static Set<ToolAction> toolActions(ToolAction... actions) {
+
+        return Stream.of(actions).collect(Collectors.toCollection(Sets::newIdentityHashSet));
     }
 
     //    @Override

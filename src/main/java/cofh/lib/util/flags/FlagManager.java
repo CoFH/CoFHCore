@@ -1,6 +1,7 @@
 package cofh.lib.util.flags;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.minecraftforge.common.crafting.CraftingHelper;
@@ -27,8 +28,11 @@ public class FlagManager {
         id = new ResourceLocation(modId, path);
         CraftingHelper.register(new FlagRecipeCondition.Serializer(this, id));
         flagConditionType = new LootItemConditionType(new FlagLootCondition.Serializer(this));
-        // TODO Lemming, Vanilla Registries now get Frozen, we likely need to manually un-freeze this to register things.
-        //        Registry.register(Registry.LOOT_CONDITION_TYPE, id, flagConditionType);
+    }
+
+    public void setup() {
+
+        Registry.register(Registry.LOOT_CONDITION_TYPE, id, flagConditionType);
     }
 
     private BooleanSupplier getOrCreateFlag(String flag) {
