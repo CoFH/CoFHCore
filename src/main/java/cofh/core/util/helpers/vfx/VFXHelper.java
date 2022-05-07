@@ -1,23 +1,36 @@
 package cofh.core.util.helpers.vfx;
 
+import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.util.helpers.MathHelper;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
 import com.mojang.math.Vector4f;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec2;
+import net.minecraftforge.client.ForgeHooksClient;
+import net.minecraftforge.client.model.data.EmptyModelData;
 
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
+
+import static net.minecraft.client.renderer.RenderStateShard.*;
+import static net.minecraft.client.renderer.RenderStateShard.RENDERTYPE_TRANSLUCENT_SHADER;
 
 /**
  * The cooler version of RenderHelper.
@@ -190,7 +203,8 @@ public final class VFXHelper {
      */
     public static void renderTest(PoseStack stack, MultiBufferSource buffer) {
 
-        VertexConsumer builder = buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT);
+        RenderType type = RenderTypes.FLAT_TRANSLUCENT;
+        VertexConsumer builder = buffer.getBuffer(type);
         Vector4f center = new Vector4f(0, 0, 0, 1);
         center.transform(stack.last().pose());
         Matrix3f normal = stack.last().normal();
@@ -267,48 +281,47 @@ public final class VFXHelper {
      * @param heightScale Adjusts how high the blocks travel.
      * @param canRender   Predicate for filtering which blocks are to be rendered.
      */
-    public static void renderShockwave(PoseStack stack, MultiBufferSource buffer, BlockAndTintGetter world, BlockPos origin, float time, float radius, float heightScale, Predicate<BlockPos> canRender) {
+    public static void renderShockwave(PoseStack stack, MultiBufferSource buffer, BlockAndTintGetter level, BlockPos origin, float time, float radius, float heightScale, Predicate<BlockPos> canRender) {
 
-        // TODO: Hekera FIXME
-        //        SortedMap<Float, List<int[]>> blocks = shockwaveOffsets.subMap(Math.min(time - 5, radius), Math.min(time, radius + 1));
-        //        for (Float dist : blocks.keySet()) {
-        //            float progress = time - dist;
-        //            double height = heightScale * 0.16 * (radius - dist * 0.5F) * progress * (5 - progress) / radius;
-        //            for (int[] offset : blocks.get(dist)) {
-        //                for (int y = 1; y >= -1; --y) {
-        //                    BlockPos pos = origin.offset(offset[0], y, offset[1]);
-        //                    BlockState state = world.getBlockState(pos);
-        //                    if (canRender.test(pos)) {
-        //                        if (state.getRenderShape() == RenderShape.MODEL) {
-        //                            stack.pushPose();
-        //                            stack.translate(offset[0], height + y, offset[1]);
-        //                            stack.scale(1.01F, 1.01F, 1.01F);
-        //                            for (RenderType type : chunkRenderTypes) {
-        //                                if (RenderTypeLookup.canRenderInLayer(state, type)) {
-        //                                    ForgeHooksClient.setRenderLayer(type);
-        //                                    BlockRenderDispatcher renderer = RenderHelper.renderBlock();
-        //                                    renderer.getModelRenderer().renderModel(world, renderer.getBlockModel(state), state, pos.relative(Direction.UP), stack, buffer.getBuffer(type), false, new Random(), state.getSeed(pos), OverlayTexture.NO_OVERLAY, EmptyModelData.INSTANCE);
-        //                                }
-        //                            }
-        //                            stack.popPose();
-        //                        }
-        //                        break;
-        //                    }
-        //                }
-        //            }
-        //        }
-        //        ForgeHooksClient.setRenderLayer(null);
+        BlockRenderDispatcher renderer = RenderHelper.renderBlock();
+        SortedMap<Float, List<int[]>> blocks = shockwaveOffsets.subMap(Math.min(time - 5, radius), Math.min(time, radius + 1));
+        for (Float dist : blocks.keySet()) {
+            float progress = time - dist;
+            double height = heightScale * 0.16 * (radius - dist * 0.5F) * progress * (5 - progress) / radius;
+            for (int[] offset : blocks.get(dist)) {
+                for (int y = 1; y >= -1; --y) {
+                    BlockPos pos = origin.offset(offset[0], y, offset[1]);
+                    BlockState state = level.getBlockState(pos);
+                    if (canRender.test(pos)) {
+                        if (state.getRenderShape() == RenderShape.MODEL) {
+                            stack.pushPose();
+                            stack.translate(offset[0], height + y, offset[1]);
+                            stack.scale(1.01F, 1.01F, 1.01F);
+                            for (RenderType type : chunkRenderTypes) {
+                                if (ItemBlockRenderTypes.canRenderInLayer(state, type)) {
+                                    ForgeHooksClient.setRenderType(type);
+                                    renderer.renderBatched(state, pos.relative(Direction.UP), level, stack, buffer.getBuffer(type),false, new Random(), EmptyModelData.INSTANCE);
+                                    //renderer.getModelRenderer().renderModel(stack.last(), buffer.getBuffer(type), state, renderer.getBlockModel(state), pos.relative(Direction.UP), stack, , false, new Random(), state.getSeed(pos), EmptyModelData.INSTANCE);
+                                }
+                            }
+                            stack.popPose();
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+        ForgeHooksClient.setRenderType(null);
     }
 
     public static void renderShockwave(PoseStack stack, MultiBufferSource buffer, BlockAndTintGetter world, BlockPos origin, float time, float radius, float heightScale) {
 
-        // TODO: Hekera FIXME
-        //        renderShockwave(stack, buffer, world, origin, time, radius, heightScale, pos -> {
-        //            BlockState state = world.getBlockState(pos);
-        //            return !state.isAir() && state.isRedstoneConductor(world, pos) && state.getHarvestLevel() <= 5 &&
-        //                    state.isCollisionShapeFullBlock(world, pos) && !state.hasBlockEntity() &&
-        //                    !world.getBlockState(pos.above()).isCollisionShapeFullBlock(world, pos.above());
-        //        });
+        renderShockwave(stack, buffer, world, origin, time, radius, heightScale, pos -> {
+            BlockState state = world.getBlockState(pos);
+            return !state.isAir() && state.isRedstoneConductor(world, pos) && //TODO: hardness/blast resist?
+                    state.isCollisionShapeFullBlock(world, pos) && !state.hasBlockEntity() &&
+                    !world.getBlockState(pos.above()).isCollisionShapeFullBlock(world, pos.above());
+        });
     }
 
     private static SortedMap<Float, List<int[]>> getOffsets(int maxRadius) {

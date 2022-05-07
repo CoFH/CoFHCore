@@ -49,7 +49,7 @@ public class WindSpiralParticle extends LevelMatrixStackParticle {
     public void render(PoseStack stack, MultiBufferSource buffer, int packedLightIn, float partialTicks) {
 
         SplittableRandom rand = new SplittableRandom(this.seed);
-        float time = age + partialTicks - (float) rand.nextDouble(0, this.fLifetime * 0.25F);
+        float time = age + partialTicks - (float) rand.nextDouble(0, this.fLifetime * 0.25F + 0.001F);
         if (time < 0 || time > fLifetime) {
             return;
         }

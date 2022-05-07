@@ -1,6 +1,7 @@
 package cofh.core.event;
 
 import cofh.core.config.CoreClientConfig;
+import cofh.lib.client.renderer.entity.ITranslucentRenderer;
 import cofh.lib.util.Utils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
@@ -161,7 +162,7 @@ public class CoreClientEvents {
     @SubscribeEvent
     public static void renderTranslucentEntities(RenderLevelLastEvent event) {
 
-        // ITranslucentRenderer.renderTranslucent(event.getPoseStack(), event.getPartialTick(), event.getLevelRenderer(), event.getProjectionMatrix());
+        ITranslucentRenderer.renderTranslucent(event.getPoseStack(), event.getPartialTick(), event.getLevelRenderer(), event.getProjectionMatrix());
     }
 
 }

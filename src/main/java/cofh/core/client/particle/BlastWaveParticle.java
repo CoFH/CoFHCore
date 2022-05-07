@@ -1,5 +1,6 @@
 package cofh.core.client.particle;
 
+import cofh.core.util.helpers.vfx.VFXHelper;
 import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -40,8 +41,7 @@ public class BlastWaveParticle extends LevelMatrixStackParticle {
         float easeSin = MathHelper.sin(progress * MathHelper.F_PI * 0.5F);
         float easeCub = MathHelper.easeOutCubic(progress);
 
-        // TODO Hekera FIX
-        // VFXHelper.renderCyclone(stack, buffer, getLightColor(partialTicks), bbWidth * 0.5F * easeSin, bbHeight * easeSin, 2, 0.2F * easeCub, time * 0.05F + (float) rand.nextDouble(69F), 0.5F * MathHelper.easePlateau(progress));
+        VFXHelper.renderCyclone(stack, buffer, getLightColor(partialTicks), bbWidth * 0.5F * easeSin, bbHeight * easeSin, 2, 0.2F * easeCub, time * 0.05F + (float) rand.nextDouble(69F), 0.5F * MathHelper.easePlateau(progress));
     }
 
     @OnlyIn (Dist.CLIENT)
