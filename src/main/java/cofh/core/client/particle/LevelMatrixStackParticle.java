@@ -1,18 +1,8 @@
 package cofh.core.client.particle;
 
-import cofh.core.CoFHCore;
-import cofh.core.event.CoreClientEvents;
-import cofh.lib.util.helpers.MathHelper;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Camera;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.world.phys.Vec3;
-import org.apache.logging.log4j.Level;
 
 public abstract class LevelMatrixStackParticle extends CustomRenderParticle {
 

@@ -2,10 +2,8 @@ package cofh.core.util.helpers.vfx;
 
 import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.util.helpers.MathHelper;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
@@ -28,9 +26,6 @@ import net.minecraftforge.client.model.data.EmptyModelData;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
-
-import static net.minecraft.client.renderer.RenderStateShard.*;
-import static net.minecraft.client.renderer.RenderStateShard.RENDERTYPE_TRANSLUCENT_SHADER;
 
 /**
  * The cooler version of RenderHelper.

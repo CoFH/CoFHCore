@@ -10,6 +10,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.HoneyBlock;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.network.NetworkHooks;
 
@@ -51,11 +52,20 @@ public abstract class AbstractGrenadeEntity extends ThrowableItemProjectile impl
 
         if (!level.isClientSide) {
             this.detonate(result.getLocation());
+            this.level.broadcastEntityEvent(this, (byte) 3);
             this.remove(RemovalReason.KILLED);
-        } else if (result.getType() != HitResult.Type.ENTITY || this.tickCount >= 5) {
+        }
+    }
+
+    @Override
+    public void handleEntityEvent(byte event) {
+
+        if (event == 3) {
             this.level.addParticle(CoreReferences.BLAST_WAVE_PARTICLE, this.getX(), this.getY(), this.getZ(), 1.0D, 2 * radius, 1.5F);
             this.level.addParticle(ParticleTypes.EXPLOSION, this.getX(), this.getY(), this.getZ(), 1.0D, 0.0D, 0.0D);
             this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 0.5F, (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F, false);
+        } else {
+            super.handleEntityEvent(event);
         }
     }
 
