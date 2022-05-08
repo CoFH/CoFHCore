@@ -60,7 +60,7 @@ public class ElectricArc extends AbstractAoESpell {
 
     public boolean strike() {
 
-        //TODO: sounds
+        // TODO: sounds
         //this.level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.LIGHTNING_BOLT_THUNDER, getSoundSource(), 2.0F, 0.8F + this.random.nextFloat() * 0.2F);
         //this.level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.LIGHTNING_BOLT_IMPACT, getSoundSource(), 2.0F, 0.5F + this.random.nextFloat() * 0.2F);
         if (cosmetic) {

@@ -44,13 +44,6 @@ public class LoveEffect extends EffectCoFH {
         }
     }
 
-    // TODO Covers, Client-side attributes moved to an EffectRenderer instance.
-    //    @Override
-    //    public boolean shouldRenderHUD(MobEffectInstance effect) {
-    //
-    //        return false;
-    //    }
-
     // region HELPERS
     private void setLoveFlag(Entity indirectSource, Animal animal) {
 

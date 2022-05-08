@@ -295,7 +295,7 @@ public final class VFXHelper {
                             for (RenderType type : chunkRenderTypes) {
                                 if (ItemBlockRenderTypes.canRenderInLayer(state, type)) {
                                     ForgeHooksClient.setRenderType(type);
-                                    renderer.renderBatched(state, pos.relative(Direction.UP), level, stack, buffer.getBuffer(type),false, new Random(), EmptyModelData.INSTANCE);
+                                    renderer.renderBatched(state, pos.relative(Direction.UP), level, stack, buffer.getBuffer(type), false, new Random(), EmptyModelData.INSTANCE);
                                     //renderer.getModelRenderer().renderModel(stack.last(), buffer.getBuffer(type), state, renderer.getBlockModel(state), pos.relative(Direction.UP), stack, , false, new Random(), state.getSeed(pos), EmptyModelData.INSTANCE);
                                 }
                             }
@@ -313,7 +313,7 @@ public final class VFXHelper {
 
         renderShockwave(stack, buffer, world, origin, time, radius, heightScale, pos -> {
             BlockState state = world.getBlockState(pos);
-            return !state.isAir() && state.isRedstoneConductor(world, pos) && //TODO: hardness/blast resist?
+            return !state.isAir() && state.isRedstoneConductor(world, pos) && // TODO: hardness/blast resist?
                     state.isCollisionShapeFullBlock(world, pos) && !state.hasBlockEntity() &&
                     !world.getBlockState(pos.above()).isCollisionShapeFullBlock(world, pos.above());
         });

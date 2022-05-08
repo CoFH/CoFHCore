@@ -27,7 +27,7 @@ public class BlackHole extends AbstractAoESpell {
     @Override
     public void tick() {
 
-        //TODO particle
+        // TODO particle
         if (level.isClientSide) {
             this.level.addParticle(CoreReferences.FROST_PARTICLE, this.getRandomX(0.5D), this.getRandomY(), this.getRandomZ(0.5D), 0.0D, 0.0D, 0.0D);
         } else {

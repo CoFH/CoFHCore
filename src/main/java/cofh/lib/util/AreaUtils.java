@@ -116,7 +116,7 @@ public class AreaUtils {
 
         boolean succeeded = false;
         BlockState state = world.getBlockState(pos);
-        //TODO separate config values pain
+        // TODO separate config values pain
         boolean permanentWater = true;
         boolean permanentLava = true;
 
@@ -155,7 +155,7 @@ public class AreaUtils {
 
         boolean succeeded = false;
         BlockState state = world.getBlockState(pos);
-        //TODO separate config values pain
+        // TODO separate config values pain
         boolean permanentWater = true;
         boolean permanentLava = true;
         BlockState frozenWater = permanentWater ? ICE.defaultBlockState() : FROSTED_ICE.defaultBlockState();

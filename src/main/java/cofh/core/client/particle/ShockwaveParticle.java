@@ -26,7 +26,7 @@ public class ShockwaveParticle extends CustomRenderParticle {
         super(levelIn, xCoordIn, yCoordIn, zCoordIn, radius, speed, heightScale);
         this.lifetime = MathHelper.ceil((radius + 6) / speed);
         this.speed = (float) speed;
-        this.setSize((float) radius * 2, (float) heightScale); //TODO: bbheight?
+        this.setSize((float) radius * 2, (float) heightScale); // TODO: bbheight?
         this.heightScale = (float) heightScale;
 
         hasPhysics = false;

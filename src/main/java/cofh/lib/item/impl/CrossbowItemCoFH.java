@@ -235,7 +235,7 @@ public class CrossbowItemCoFH extends CrossbowItem implements ICoFHItem {
     // Returns true if the shot succeeded (i.e. if the crossbow should be unloaded after this method is called).
     public boolean shootLoadedAmmo(Level level, LivingEntity living, InteractionHand hand, ItemStack crossbow) {
 
-        //TODO: dmg/acc/vel modifiers
+        // TODO: dmg/acc/vel modifiers
         if (living instanceof Player) {
             Player shooter = (Player) living;
             ItemStack ammo = getLoadedAmmo(crossbow);
