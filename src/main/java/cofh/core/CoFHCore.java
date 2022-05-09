@@ -21,6 +21,7 @@ import cofh.lib.capability.CapabilityAreaEffect;
 import cofh.lib.capability.CapabilityEnchantableItem;
 import cofh.lib.capability.CapabilityShieldItem;
 import cofh.lib.client.renderer.entity.ElectricArcRenderer;
+import cofh.lib.client.renderer.entity.KnifeRenderer;
 import cofh.lib.client.renderer.entity.NothingRenderer;
 import cofh.lib.config.ConfigManager;
 import cofh.lib.loot.TileNBTSync;
@@ -183,11 +184,7 @@ public class CoFHCore {
         event.registerEntityRenderer(ELECTRIC_ARC_ENTITY, ElectricArcRenderer::new);
         event.registerEntityRenderer(ELECTRIC_FIELD_ENTITY, NothingRenderer::new);
 
-        //        EntityRenderers.register(ELECTRIC_ARC_ENTITY, ElectricArcRenderer::new);
-        //        EntityRenderers.register(ELECTRIC_FIELD_ENTITY, NothingRenderer::new);
-
-        //        RenderingRegistry.registerEntityRenderingHandler(KNIFE_ENTITY, KnifeRenderer::new);
-        //        RenderingRegistry.registerEntityRenderingHandler(BLACK_HOLE_ENTITY, NothingRenderer::new);
+        event.registerEntityRenderer(KNIFE_ENTITY, KnifeRenderer::new);
     }
 
     private void capSetup(RegisterCapabilitiesEvent event) {

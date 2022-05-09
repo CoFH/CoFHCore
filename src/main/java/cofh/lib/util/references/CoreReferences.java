@@ -9,7 +9,7 @@ import cofh.core.inventory.container.TileItemFilterContainer;
 import cofh.lib.entity.BlackHole;
 import cofh.lib.entity.ElectricArc;
 import cofh.lib.entity.ElectricField;
-import cofh.lib.entity.KnifeEntity;
+import cofh.lib.entity.Knife;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
@@ -175,7 +175,7 @@ public class CoreReferences {
 
     // region ENTITIES
     @ObjectHolder (ID_KNIFE)
-    public static final EntityType<KnifeEntity> KNIFE_ENTITY = null;
+    public static final EntityType<Knife> KNIFE_ENTITY = null;
 
     @ObjectHolder (ID_ELECTRIC_ARC)
     public static final EntityType<ElectricArc> ELECTRIC_ARC_ENTITY = null;

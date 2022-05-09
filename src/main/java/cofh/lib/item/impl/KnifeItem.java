@@ -1,6 +1,6 @@
 package cofh.lib.item.impl;
 
-import cofh.lib.entity.KnifeEntity;
+import cofh.lib.entity.Knife;
 import net.minecraft.core.Position;
 import net.minecraft.core.dispenser.AbstractProjectileDispenseBehavior;
 import net.minecraft.sounds.SoundEvents;
@@ -72,12 +72,12 @@ public class KnifeItem extends SwordItemCoFH {
                 return;
             }
             if (!world.isClientSide) {
-                KnifeEntity knifeEntity = new KnifeEntity(world, player, stack);
-                knifeEntity.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, power * 3.0F, 0.1F);
+                Knife knife = new Knife(world, player, stack);
+                knife.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, power * 3.0F, 0.1F);
                 if (player.getAbilities().instabuild) {
-                    knifeEntity.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
+                    knife.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
                 }
-                world.addFreshEntity(knifeEntity);
+                world.addFreshEntity(knife);
             }
             world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.TRIDENT_THROW, SoundSource.PLAYERS, 1.0F, 1.0F / (random.nextFloat() * 0.4F + 1.2F) + power * 0.5F);
             if (!player.getAbilities().instabuild) {
@@ -93,7 +93,7 @@ public class KnifeItem extends SwordItemCoFH {
         @Override
         protected Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
 
-            KnifeEntity knife = new KnifeEntity(worldIn, position.x(), position.y(), position.z(), stackIn);
+            Knife knife = new Knife(worldIn, position.x(), position.y(), position.z(), stackIn);
             knife.pickup = AbstractArrow.Pickup.ALLOWED;
             return knife;
         }

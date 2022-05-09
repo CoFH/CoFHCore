@@ -15,11 +15,13 @@ import net.minecraftforge.common.extensions.IForgeItem;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import static cofh.core.init.CoreKeys.MULTIMODE_DECREMENT;
 import static cofh.core.init.CoreKeys.MULTIMODE_INCREMENT;
 import static cofh.lib.util.constants.NBTTags.*;
 import static cofh.lib.util.helpers.AugmentableHelper.getPropertyWithDefault;
 import static cofh.lib.util.helpers.KeyHelper.getKeynameFromKeycode;
 import static cofh.lib.util.helpers.StringHelper.*;
+import static net.minecraft.ChatFormatting.RED;
 import static net.minecraft.ChatFormatting.YELLOW;
 
 /**
@@ -77,9 +79,29 @@ public interface ICoFHItem extends IForgeItem {
         }
     }
 
-    default void addIncrementModeChangeTooltip(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    default void addModeChangeTooltip(IMultiModeItem item, ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 
-        tooltip.add(new TranslatableComponent("info.cofh.mode_change", getKeynameFromKeycode(MULTIMODE_INCREMENT.getKey().getValue())).withStyle(YELLOW));
+        if (item.getNumModes(stack) <= 2) {
+            addIncrementModeChangeTooltip(item, stack, worldIn, tooltip, flagIn);
+            return;
+        }
+        tooltip.add(new TranslatableComponent("info.cofh.mode_change", getKeynameFromKeycode(MULTIMODE_INCREMENT.getKey().getValue()), getKeynameFromKeycode(MULTIMODE_DECREMENT.getKey().getValue())).withStyle(YELLOW));
+
+        if (MULTIMODE_INCREMENT.getKey().getValue() == -1) {
+            tooltip.add(new TranslatableComponent("info.cofh.key_not_bound", localize("key.cofh.mode_change_increment")).withStyle(RED));
+        }
+        if (MULTIMODE_DECREMENT.getKey().getValue() == -1) {
+            tooltip.add(new TranslatableComponent("info.cofh.key_not_bound", localize("key.cofh.mode_change_decrement")).withStyle(RED));
+        }
+    }
+
+    default void addIncrementModeChangeTooltip(IMultiModeItem item, ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+
+        tooltip.add(new TranslatableComponent("info.cofh.mode_toggle", getKeynameFromKeycode(MULTIMODE_INCREMENT.getKey().getValue())).withStyle(YELLOW));
+
+        if (MULTIMODE_INCREMENT.getKey().getValue() == -1) {
+            tooltip.add(new TranslatableComponent("info.cofh.key_not_bound", localize("key.cofh.mode_change_increment")).withStyle(RED));
+        }
     }
 
     default boolean isActive(ItemStack stack) {

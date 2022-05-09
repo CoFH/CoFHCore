@@ -24,7 +24,7 @@ public class ItemModeChangePacket extends PacketBase implements IPacketServer {
         if (!ItemHelper.isPlayerHoldingMultiModeItem(player)) {
             return;
         }
-        if (decr && ItemHelper.decrHeldMultiModeItemState(player) || ItemHelper.incrHeldMultiModeItemState(player)) {
+        if (decr && ItemHelper.decrHeldMultiModeItemState(player) || !decr && ItemHelper.incrHeldMultiModeItemState(player)) {
             ItemHelper.onHeldMultiModeItemChange(player);
         }
     }

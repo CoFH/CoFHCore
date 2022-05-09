@@ -3,7 +3,7 @@ package cofh.lib.entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 
-public abstract class AbstractAoESpell extends AbstractSpellEntity {
+public abstract class AbstractAoESpell extends AbstractSpell {
 
     protected float radius = 0;
 

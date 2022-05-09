@@ -32,23 +32,23 @@ import javax.annotation.Nullable;
 
 import static cofh.lib.util.references.CoreReferences.KNIFE_ENTITY;
 
-public class KnifeEntity extends AbstractArrow {
+public class Knife extends AbstractArrow {
 
-    protected static final EntityDataAccessor<ItemStack> DATA_ITEM_STACK = SynchedEntityData.defineId(KnifeEntity.class, EntityDataSerializers.ITEM_STACK);
+    protected static final EntityDataAccessor<ItemStack> DATA_ITEM_STACK = SynchedEntityData.defineId(Knife.class, EntityDataSerializers.ITEM_STACK);
     protected int hitTime = -1;
 
-    public KnifeEntity(EntityType<? extends AbstractArrow> type, Level worldIn) {
+    public Knife(EntityType<? extends AbstractArrow> type, Level worldIn) {
 
         super(type, worldIn);
     }
 
-    public KnifeEntity(Level world, double x, double y, double z, ItemStack stack) {
+    public Knife(Level world, double x, double y, double z, ItemStack stack) {
 
         super(KNIFE_ENTITY, x, y, z, world);
         this.entityData.set(DATA_ITEM_STACK, stack.copy());
     }
 
-    public KnifeEntity(Level world, LivingEntity owner, ItemStack stack) {
+    public Knife(Level world, LivingEntity owner, ItemStack stack) {
 
         super(KNIFE_ENTITY, owner, world);
         this.entityData.set(DATA_ITEM_STACK, stack.copy());
@@ -161,7 +161,6 @@ public class KnifeEntity extends AbstractArrow {
                     target.setSecondsOnFire(4 * Utils.getItemEnchantmentLevel(Enchantments.FIRE_ASPECT, stack));
                 }
             }
-
             this.setDeltaMovement(this.getDeltaMovement().multiply(-0.01D, -0.1D, -0.01D));
             this.playSound(SoundEvents.TRIDENT_HIT, 1.0F, 1.0F);
         }

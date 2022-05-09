@@ -13,13 +13,13 @@ import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
-public abstract class AbstractSpellEntity extends Entity {
+public abstract class AbstractSpell extends Entity {
 
     @Nullable
     protected LivingEntity owner = null;
     protected int duration = 0;
 
-    public AbstractSpellEntity(EntityType<? extends AbstractSpellEntity> type, Level level) {
+    public AbstractSpell(EntityType<? extends AbstractSpell> type, Level level) {
 
         super(type, level);
     }
@@ -52,7 +52,7 @@ public abstract class AbstractSpellEntity extends Entity {
 
     }
 
-    public AbstractSpellEntity setOwner(LivingEntity owner) {
+    public AbstractSpell setOwner(LivingEntity owner) {
 
         this.owner = owner;
         return this;

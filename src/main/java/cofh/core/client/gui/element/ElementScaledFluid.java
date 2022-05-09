@@ -36,25 +36,25 @@ public class ElementScaledFluid extends ElementScaled {
         switch (direction) {
             case TOP:
                 // vertical top -> bottom
-                RenderHelper.drawFluid(posX(), posY(), fluid, width, quantity);
+                RenderHelper.drawFluid(guiLeft() + posX(), guiTop() + posY(), fluid, width, quantity);
                 RenderHelper.setShaderTexture0(texture);
                 drawTexturedModalRect(poseStack, posX(), posY(), width, 0, width, quantity);
                 return;
             case BOTTOM:
                 // vertical bottom -> top
-                RenderHelper.drawFluid(posX(), posY() + height - quantity, fluid, width, quantity);
+                RenderHelper.drawFluid(guiLeft() + posX(), guiTop() + posY() + height - quantity, fluid, width, quantity);
                 RenderHelper.setShaderTexture0(texture);
                 drawTexturedModalRect(poseStack, posX(), posY() + height - quantity, width, height - quantity, width, quantity);
                 return;
             case LEFT:
                 // horizontal left -> right
-                RenderHelper.drawFluid(posX(), posY(), fluid, quantity, height);
+                RenderHelper.drawFluid(guiLeft() + posX(), guiTop() + posY(), fluid, quantity, height);
                 RenderHelper.setShaderTexture0(texture);
                 drawTexturedModalRect(poseStack, posX(), posY(), width, 0, quantity, height);
                 return;
             case RIGHT:
                 // horizontal right -> left
-                RenderHelper.drawFluid(posX() + width - quantity, posY(), fluid, quantity, height);
+                RenderHelper.drawFluid(guiLeft() + posX() + width - quantity, guiTop() + posY(), fluid, quantity, height);
                 RenderHelper.setShaderTexture0(texture);
                 drawTexturedModalRect(poseStack, posX() + width - quantity, posY(), width + width - quantity, 0, quantity, height);
         }

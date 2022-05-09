@@ -1,7 +1,7 @@
 package cofh.core.item;
 
 import cofh.core.util.ProxyUtils;
-import cofh.lib.entity.AbstractGrenadeEntity;
+import cofh.lib.entity.AbstractGrenade;
 import net.minecraft.core.Position;
 import net.minecraft.core.dispenser.AbstractProjectileDispenseBehavior;
 import net.minecraft.resources.ResourceLocation;
@@ -21,12 +21,12 @@ import static cofh.lib.util.helpers.ItemHelper.cloneStack;
 
 public class GrenadeItem extends ItemCoFH {
 
-    protected final IGrenadeFactory<? extends AbstractGrenadeEntity> factory;
+    protected final IGrenadeFactory<? extends AbstractGrenade> factory;
 
     protected int radius = 4;
     protected int cooldown = 20;
 
-    public GrenadeItem(IGrenadeFactory<? extends AbstractGrenadeEntity> factory, Properties builder) {
+    public GrenadeItem(IGrenadeFactory<? extends AbstractGrenade> factory, Properties builder) {
 
         super(builder);
         this.factory = factory;
@@ -53,7 +53,7 @@ public class GrenadeItem extends ItemCoFH {
 
     protected void createGrenade(ItemStack stack, Level world, Player player) {
 
-        AbstractGrenadeEntity grenade = factory.createGrenade(world, player);
+        AbstractGrenade grenade = factory.createGrenade(world, player);
         ItemStack throwStack = cloneStack(stack, 1);
         throwStack.setDamageValue(1);
         grenade.setItem(throwStack);
@@ -63,7 +63,7 @@ public class GrenadeItem extends ItemCoFH {
     }
 
     // region FACTORY
-    public interface IGrenadeFactory<T extends AbstractGrenadeEntity> {
+    public interface IGrenadeFactory<T extends AbstractGrenade> {
 
         T createGrenade(Level world, LivingEntity living);
 
@@ -79,7 +79,7 @@ public class GrenadeItem extends ItemCoFH {
         protected Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
 
             GrenadeItem grenadeItem = ((GrenadeItem) stackIn.getItem());
-            AbstractGrenadeEntity grenade = grenadeItem.factory.createGrenade(worldIn, position.x(), position.y(), position.z());
+            AbstractGrenade grenade = grenadeItem.factory.createGrenade(worldIn, position.x(), position.y(), position.z());
             ItemStack throwStack = cloneStack(stackIn, 1);
             throwStack.setDamageValue(1);
             grenade.setItem(throwStack);

@@ -1,7 +1,7 @@
 package cofh.lib.client.renderer.entity;
 
 import cofh.core.util.helpers.RenderHelper;
-import cofh.lib.entity.KnifeEntity;
+import cofh.lib.entity.Knife;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -15,7 +15,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.phys.Vec3;
 
-public class KnifeRenderer extends EntityRenderer<KnifeEntity> {
+public class KnifeRenderer extends EntityRenderer<Knife> {
 
     protected static final ItemRenderer itemRenderer = RenderHelper.renderItem();
 
@@ -25,7 +25,7 @@ public class KnifeRenderer extends EntityRenderer<KnifeEntity> {
     }
 
     @Override
-    public void render(KnifeEntity entityIn, float entityYaw, float partialTicks, PoseStack poseStackIn, MultiBufferSource bufferIn, int packedLightIn) {
+    public void render(Knife entityIn, float entityYaw, float partialTicks, PoseStack poseStackIn, MultiBufferSource bufferIn, int packedLightIn) {
 
         poseStackIn.pushPose();
         poseStackIn.mulPose(Vector3f.YP.rotationDegrees(Mth.lerp(partialTicks, entityIn.yRotO, entityIn.getYRot()) + 90));
@@ -47,7 +47,7 @@ public class KnifeRenderer extends EntityRenderer<KnifeEntity> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(KnifeEntity entity) {
+    public ResourceLocation getTextureLocation(Knife entity) {
 
         return InventoryMenu.BLOCK_ATLAS;
     }
