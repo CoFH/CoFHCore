@@ -52,7 +52,7 @@
   "info.cofh.heads": "Heads",
   "info.cofh.infinite": "Infinite",
   "info.cofh.infinite_source": "Infinite Source",
-  "info.cofh.key_not_bound": "CoFH - %s is not set.",
+  "info.cofh.key_not_bound": "Keybind: CoFH - '%s' is not set.",
   "info.cofh.none": "None",
   "info.cofh.optional_catalyst": "Optional Catalyst",
   "info.cofh.output": "Output",

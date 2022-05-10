@@ -211,9 +211,9 @@ public class CoFHCore {
         MenuScreens.register(HELD_ITEM_FILTER_CONTAINER, HeldItemFilterScreen::new);
         MenuScreens.register(TILE_ITEM_FILTER_CONTAINER, TileItemFilterScreen::new);
 
-        CoreKeys.register();
+        event.enqueueWork(CoreKeys::register);
 
-        ProxyClient.registerItemModelProperties();
+        event.enqueueWork(ProxyClient::registerItemModelProperties);
     }
 
     private void registerCommands(final RegisterCommandsEvent event) {
