@@ -52,6 +52,7 @@
   "info.cofh.heads": "Heads",
   "info.cofh.infinite": "Infinite",
   "info.cofh.infinite_source": "Infinite Source",
+  "info.cofh.key_not_bound": "Keybind: CoFH - '%s' is not set.",
   "info.cofh.none": "None",
   "info.cofh.optional_catalyst": "Optional Catalyst",
   "info.cofh.output": "Output",
@@ -69,7 +70,8 @@
   "info.cofh.hold_ctrl_for_tags": "Hold §e§oCtrl§r§7 for Tags",
   "info.cofh.hold_shift_for_details": "Hold §e§oShift§r§7 for Details",
 
-  "info.cofh.mode_change": "Press '%s' to change mode.",
+  "info.cofh.mode_change": "Press '%s' or '%s' to change mode.",
+  "info.cofh.mode_toggle": "Press '%s' to change mode.",
   "info.cofh.use_sneak_activate": "Use while sneaking to activate.",
   "info.cofh_use_sneak_deactivate": "Use while sneaking to deactivate.",
 
@@ -164,8 +166,8 @@
   "info.cofh_core.item_filter.0": "Place items in slots to add them to the filter list.",
   "info.cofh_core.item_filter.1": "Additional options can be used to fine-tune behavior.",
 
-  "key.cofh.mode_change_increment": "Cycle Mode Forward",
-  "key.cofh.mode_change_decrement": "Cycle Mode Reverse",
+  "key.cofh.mode_change_increment": "Cycle Mode Up",
+  "key.cofh.mode_change_decrement": "Cycle Mode Down",
 
   "_comment": "========================================================================================================",
   "_comment": "Minecraft",

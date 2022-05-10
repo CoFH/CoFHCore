@@ -69,7 +69,8 @@ public interface IMultiModeItem {
      */
     default boolean decrMode(ItemStack stack) {
 
-        if (getNumModes(stack) <= 1) {
+        // Decrement is only available if there are 3 or more modes. Otherwise, it's just a toggle.
+        if (getNumModes(stack) <= 2) {
             return false;
         }
         if (!stack.hasTag()) {
@@ -77,7 +78,7 @@ public interface IMultiModeItem {
         }
         int curMode = getMode(stack);
         --curMode;
-        if (curMode <= 0) {
+        if (curMode < 0) {
             curMode = getNumModes(stack) - 1;
         }
         stack.getTag().putInt("Mode", curMode);
