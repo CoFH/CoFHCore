@@ -1,5 +1,3 @@
-// TODO
-
 package cofh.core.client;
 
 import com.mojang.blaze3d.vertex.VertexFormat;

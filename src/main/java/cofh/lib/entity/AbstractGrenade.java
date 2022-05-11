@@ -52,7 +52,7 @@ public abstract class AbstractGrenade extends ThrowableItemProjectile implements
         if (!level.isClientSide) {
             this.detonate(result.getLocation());
             this.level.broadcastEntityEvent(this, (byte) 3);
-            this.remove(RemovalReason.KILLED);
+            this.discard();
         }
     }
 

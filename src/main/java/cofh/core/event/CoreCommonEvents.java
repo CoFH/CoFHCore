@@ -118,7 +118,7 @@ public class CoreCommonEvents {
         if (orb.value > 0) {
             player.giveExperiencePoints(orb.value);
         }
-        orb.remove(Entity.RemovalReason.KILLED);
+        orb.discard();
         event.setCanceled(true);
     }
 

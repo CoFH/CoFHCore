@@ -53,7 +53,7 @@ public abstract class AbstractTNTEntity extends PrimedTnt implements IDetonatabl
             this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 2.0F, (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F, false);
         } else {
             this.detonate(this.position());
-            this.remove(RemovalReason.KILLED);
+            this.discard();
         }
     }
 

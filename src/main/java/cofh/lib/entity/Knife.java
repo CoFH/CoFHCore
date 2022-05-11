@@ -99,7 +99,7 @@ public class Knife extends AbstractArrow {
                     if (!this.level.isClientSide && this.pickup == AbstractArrow.Pickup.ALLOWED) {
                         this.spawnAtLocation(this.getPickupItem(), 0.1F);
                     }
-                    this.remove(RemovalReason.KILLED);
+                    this.discard();
                 }
             }
         }

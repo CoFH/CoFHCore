@@ -15,6 +15,9 @@ public class ConfigManager {
     protected List<IBaseConfig> serverSubConfigs = new ArrayList<>();
     protected List<IBaseConfig> clientSubConfigs = new ArrayList<>();
 
+    protected boolean clientInit = false;
+    protected boolean serverInit = false;
+
     protected final ForgeConfigSpec.Builder serverConfig = new ForgeConfigSpec.Builder();
     protected ForgeConfigSpec serverSpec;
 
@@ -40,25 +43,31 @@ public class ConfigManager {
     }
 
     /**
-     * Must be called in Mod Constructor.
+     * Must be called in Mod Constructor or NewRegistryEvent at latest.
      */
     public void setupClient() {
 
-        genClientConfig();
-        clientSpec = clientConfig.build();
-        refreshClientConfig();
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, clientSpec);
+        if (!clientInit) {
+            genClientConfig();
+            clientSpec = clientConfig.build();
+            refreshClientConfig();
+            ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, clientSpec);
+            clientInit = true;
+        }
     }
 
     /**
-     * Must be called in Mod Constructor or Common Setup event.
+     * Must be called in Mod Constructor or Common Setup event at latest.
      */
     public void setupServer() {
 
-        genServerConfig();
-        serverSpec = serverConfig.build();
-        refreshServerConfig();
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, serverSpec);
+        if (!serverInit) {
+            genServerConfig();
+            serverSpec = serverConfig.build();
+            refreshServerConfig();
+            ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, serverSpec);
+            serverInit = true;
+        }
     }
 
     public ForgeConfigSpec getServerSpec() {

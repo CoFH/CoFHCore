@@ -38,7 +38,7 @@ public abstract class AbstractSpell extends Entity {
             this.firstTick = false;
         }
         if (tickCount > duration) {
-            this.remove(RemovalReason.KILLED);
+            this.discard();
         } else {
             activeTick();
         }

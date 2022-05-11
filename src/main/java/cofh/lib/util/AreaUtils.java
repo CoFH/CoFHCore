@@ -158,6 +158,7 @@ public class AreaUtils {
         // TODO separate config values pain
         boolean permanentWater = true;
         boolean permanentLava = true;
+        
         BlockState frozenWater = permanentWater ? ICE.defaultBlockState() : FROSTED_ICE.defaultBlockState();
         BlockState frozenLava = permanentLava ? OBSIDIAN.defaultBlockState() : GLOSSED_MAGMA.defaultBlockState();
 

@@ -4,6 +4,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AttachedStemBlock;
@@ -12,12 +15,13 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.PlantType;
+import net.minecraftforge.common.ToolAction;
+import net.minecraftforge.common.ToolActions;
 
 import java.util.Random;
+import java.util.function.Supplier;
 
 import static cofh.lib.util.constants.Constants.CHARGED;
 import static cofh.lib.util.constants.Constants.FUNGUS;
@@ -26,11 +30,18 @@ import static net.minecraftforge.common.PlantType.*;
 public class SoilBlock extends Block {
 
     protected static final VoxelShape SHAPE_TILLED = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 15.0D, 16.0D);
+    protected Supplier<Block> otherBlock = () -> Blocks.DIRT;
 
     public SoilBlock(Properties properties) {
 
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(CHARGED, 0));
+    }
+
+    public SoilBlock otherBlock(Supplier<Block> dirt) {
+
+        this.otherBlock = dirt;
+        return this;
     }
 
     @Override
@@ -107,10 +118,18 @@ public class SoilBlock extends Block {
         return true;
     }
 
-    @OnlyIn (Dist.CLIENT)
-    public boolean isViewBlocking(BlockState state, BlockGetter worldIn, BlockPos pos) {
+    @Override
+    public BlockState getToolModifiedState(BlockState state, UseOnContext context, ToolAction toolAction, boolean simulate) {
 
-        return true;
+        BlockState toolModifiedState = getToolModifiedState(state, context.getLevel(), context.getClickedPos(),
+                context.getPlayer(), context.getItemInHand(), toolAction);
+
+        if (ToolActions.HOE_TILL == toolAction && context.getItemInHand().canPerformAction(ToolActions.HOE_TILL)) {
+            if (context.getLevel().getBlockState(context.getClickedPos().above()).isAir()) {
+                return otherBlock.get().defaultBlockState();
+            }
+        }
+        return toolModifiedState;
     }
 
 }

@@ -1,6 +1,8 @@
 package cofh.lib.client.renderer.entity.model;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
@@ -10,13 +12,14 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.common.util.Lazy;
 
 import java.util.function.Function;
 
 public class ArmorModelFullSuit extends HumanoidModel<LivingEntity> {
 
-    // public static ArmorModelFullSuit DEFAULT = new ArmorModelFullSuit(1.0F);
-    // public static ArmorModelFullSuit LARGE = new ArmorModelFullSuit(1.2F);
+    public static final Lazy<HumanoidModel<LivingEntity>> DEFAULT = Lazy.of(() -> new ArmorModelFullSuit(Minecraft.getInstance().getEntityModels().bakeLayer(ModelLayers.PLAYER_OUTER_ARMOR), 1.0F));
+    public static final Lazy<HumanoidModel<LivingEntity>> LARGE = Lazy.of(() -> new ArmorModelFullSuit(Minecraft.getInstance().getEntityModels().bakeLayer(ModelLayers.PLAYER_OUTER_ARMOR), 1.2F));
 
     private final float modelSize;
 

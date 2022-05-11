@@ -6,7 +6,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.piston.MovingPistonBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -19,17 +18,9 @@ import java.util.function.Supplier;
 
 public class TilledSoilBlock extends SoilBlock {
 
-    protected Supplier<Block> dirt = () -> Blocks.DIRT;
-
     public TilledSoilBlock(Properties properties) {
 
         super(properties);
-    }
-
-    public TilledSoilBlock dirt(Supplier<Block> dirt) {
-
-        this.dirt = dirt;
-        return this;
     }
 
     @Override
@@ -74,7 +65,7 @@ public class TilledSoilBlock extends SoilBlock {
 
     public void turnToDirt(BlockState state, Level worldIn, BlockPos pos) {
 
-        worldIn.setBlockAndUpdate(pos, pushEntitiesUp(state, dirt.get().defaultBlockState(), worldIn, pos));
+        worldIn.setBlockAndUpdate(pos, pushEntitiesUp(state, otherBlock.get().defaultBlockState(), worldIn, pos));
     }
 
 }
