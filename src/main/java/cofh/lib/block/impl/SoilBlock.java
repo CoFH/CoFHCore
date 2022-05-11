@@ -4,8 +4,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -121,8 +119,7 @@ public class SoilBlock extends Block {
     @Override
     public BlockState getToolModifiedState(BlockState state, UseOnContext context, ToolAction toolAction, boolean simulate) {
 
-        BlockState toolModifiedState = getToolModifiedState(state, context.getLevel(), context.getClickedPos(),
-                context.getPlayer(), context.getItemInHand(), toolAction);
+        BlockState toolModifiedState = getToolModifiedState(state, context.getLevel(), context.getClickedPos(), context.getPlayer(), context.getItemInHand(), toolAction);
 
         if (ToolActions.HOE_TILL == toolAction && context.getItemInHand().canPerformAction(ToolActions.HOE_TILL)) {
             if (context.getLevel().getBlockState(context.getClickedPos().above()).isAir()) {
