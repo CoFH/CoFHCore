@@ -9,9 +9,9 @@ import java.util.OptionalDouble;
 public class CoreRenderType extends RenderType {
 
     // Dummy
-    public CoreRenderType(String p_173178_, VertexFormat p_173179_, VertexFormat.Mode p_173180_, int p_173181_, boolean p_173182_, boolean p_173183_, Runnable p_173184_, Runnable p_173185_) {
+    public CoreRenderType(String name, VertexFormat format, VertexFormat.Mode mode, int bufferSize, boolean affectsCrumbling, boolean sortOnUpload, Runnable setupState, Runnable clearState) {
 
-        super(p_173178_, p_173179_, p_173180_, p_173181_, p_173182_, p_173183_, p_173184_, p_173185_);
+        super(name, format, mode, bufferSize, affectsCrumbling, sortOnUpload, setupState, clearState);
     }
 
     public static final RenderStateShard.LineStateShard THICK_LINES = new RenderStateShard.LineStateShard(OptionalDouble.of(2.5D));

@@ -1,6 +1,5 @@
 package cofh.core.init;
 
-import cofh.core.item.ItemCoFH;
 import cofh.lib.item.impl.DyeableHorseArmorItemCoFH;
 import cofh.lib.item.impl.HorseArmorItemCoFH;
 import cofh.lib.item.impl.ShearsItemCoFH;
@@ -9,9 +8,6 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 
 import static cofh.core.CoFHCore.ITEMS;
-import static cofh.core.init.CoreFlags.FLAG_ECTOPLASM;
-import static cofh.core.init.CoreFlags.getFlag;
-import static cofh.lib.util.references.CoreIDs.ID_ECTOPLASM;
 
 public class CoreItems {
 
@@ -21,7 +17,6 @@ public class CoreItems {
 
     public static void register() {
 
-        ITEMS.register(ID_ECTOPLASM, () -> new ItemCoFH(new Item.Properties().tab(CreativeModeTab.TAB_BREWING)).setShowInGroups(getFlag(FLAG_ECTOPLASM)));
     }
 
     public static void registerHorseArmorOverrides() {

@@ -22,7 +22,6 @@ public class CoreBlockStateProvider extends BlockStateProviderCoFH {
     @Override
     protected void registerStatesAndModels() {
 
-        // simpleBlock(BLOCKS.getSup(ID_GLOSSED_MAGMA));
     }
 
 }

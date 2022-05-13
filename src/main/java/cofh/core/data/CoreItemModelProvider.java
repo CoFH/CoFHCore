@@ -4,9 +4,7 @@ import cofh.lib.data.ItemModelProviderCoFH;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
-import static cofh.core.CoFHCore.ITEMS;
 import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
-import static cofh.lib.util.references.CoreIDs.ID_ECTOPLASM;
 
 public class CoreItemModelProvider extends ItemModelProviderCoFH {
 
@@ -24,9 +22,6 @@ public class CoreItemModelProvider extends ItemModelProviderCoFH {
     @Override
     protected void registerModels() {
 
-        // blockItem(BLOCKS.getSup(ID_GLOSSED_MAGMA));
-
-        generated(ITEMS.getSup(ID_ECTOPLASM));
     }
 
 }

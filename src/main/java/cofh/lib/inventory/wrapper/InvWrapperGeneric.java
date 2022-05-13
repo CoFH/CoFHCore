@@ -11,7 +11,7 @@ import java.util.List;
 
 public class InvWrapperGeneric implements Container {
 
-    private NonNullList<ItemStack> stackList;
+    private final NonNullList<ItemStack> stackList;
 
     private final AbstractContainerMenu eventHandler;
 

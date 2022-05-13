@@ -142,11 +142,6 @@ public class CoreReferences {
     public static final Enchantment HOLDING = null;
     // endregion
 
-    // region ITEMS
-    @ObjectHolder (ID_ECTOPLASM)
-    public static final Item ECTOPLASM = null;
-    // endregion
-
     // region PARTICLES
     //@ObjectHolder(ID_PARTICLE_SNOW)
     //public static final SimpleParticleType SNOW = null;

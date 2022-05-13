@@ -23,6 +23,7 @@ import cofh.lib.capability.CapabilityShieldItem;
 import cofh.lib.client.renderer.entity.ElectricArcRenderer;
 import cofh.lib.client.renderer.entity.KnifeRenderer;
 import cofh.lib.client.renderer.entity.NothingRenderer;
+import cofh.lib.client.renderer.entity.model.ArmorFullSuitModel;
 import cofh.lib.config.ConfigManager;
 import cofh.lib.loot.TileNBTSync;
 import cofh.lib.network.PacketHandler;
@@ -57,6 +58,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import static cofh.lib.client.renderer.entity.model.ArmorFullSuitModel.ARMOR_FULL_SUIT_LAYER;
 import static cofh.lib.util.constants.Constants.*;
 import static cofh.lib.util.references.CoreReferences.*;
 
@@ -177,6 +179,7 @@ public class CoFHCore {
 
     private void entityLayerSetup(final EntityRenderersEvent.RegisterLayerDefinitions event) {
 
+        event.registerLayerDefinition(ARMOR_FULL_SUIT_LAYER, ArmorFullSuitModel::createBodyLayer);
     }
 
     private void entityRendererSetup(final EntityRenderersEvent.RegisterRenderers event) {

@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class ConfigOptions {
 
-    private Map<String, ForgeConfigSpec.ConfigValue<?>> configs = new Object2ObjectOpenHashMap<>();
+    private final Map<String, ForgeConfigSpec.ConfigValue<?>> configs = new Object2ObjectOpenHashMap<>();
 
     public Boolean getBoolean(String key) {
 
