@@ -107,10 +107,10 @@ public class CoFHCore {
         ITEMS.register(modEventBus);
         ENTITIES.register(modEventBus);
 
-        PARTICLES.register(modEventBus);
         CONTAINERS.register(modEventBus);
         EFFECTS.register(modEventBus);
         ENCHANTMENTS.register(modEventBus);
+        PARTICLES.register(modEventBus);
         RECIPE_SERIALIZERS.register(modEventBus);
         SOUND_EVENTS.register(modEventBus);
         TILE_ENTITIES.register(modEventBus);
