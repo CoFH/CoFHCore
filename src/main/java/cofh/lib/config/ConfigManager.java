@@ -70,6 +70,16 @@ public class ConfigManager {
         }
     }
 
+    public boolean isClientInit() {
+
+        return clientInit;
+    }
+
+    public boolean isServerInit() {
+
+        return serverInit;
+    }
+
     public ForgeConfigSpec getServerSpec() {
 
         return serverSpec;
