@@ -121,6 +121,7 @@ public class CoFHCore {
                 .addServerConfig(new CoreCommandConfig())
                 .addServerConfig(new CoreEnchantConfig());
         CONFIG_MANAGER.setupClient();
+        CONFIG_MANAGER.setupServer();
 
         CoreBlocks.register();
         CoreFluids.register();
@@ -200,22 +201,18 @@ public class CoFHCore {
 
     private void commonSetup(final FMLCommonSetupEvent event) {
 
-        CONFIG_MANAGER.setupServer();
-
         event.enqueueWork(TileNBTSync::setup);
-
-        ArmorEvents.setup();
-
-        FluidHelper.init();
+        event.enqueueWork(ArmorEvents::setup);
+        event.enqueueWork(FluidHelper::setup);
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {
 
-        MenuScreens.register(HELD_ITEM_FILTER_CONTAINER, HeldItemFilterScreen::new);
-        MenuScreens.register(TILE_ITEM_FILTER_CONTAINER, TileItemFilterScreen::new);
-
+        event.enqueueWork(() -> {
+            MenuScreens.register(HELD_ITEM_FILTER_CONTAINER, HeldItemFilterScreen::new);
+            MenuScreens.register(TILE_ITEM_FILTER_CONTAINER, TileItemFilterScreen::new);
+        });
         event.enqueueWork(CoreKeys::register);
-
         event.enqueueWork(ProxyClient::registerItemModelProperties);
     }
 

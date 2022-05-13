@@ -211,7 +211,7 @@ public class FluidHelper {
     // endregion
 
     // region CAPABILITY HELPERS
-    public static void init() {
+    public static void setup() {
 
         BOTTLE_DRAIN_MAP.put(Items.POTION, (stack -> PotionFluid.getPotionFluidFromItem(BOTTLE_VOLUME, stack)));
         BOTTLE_DRAIN_MAP.put(Items.HONEY_BOTTLE, (stack -> new FluidStack(FLUID_HONEY, BOTTLE_VOLUME)));
