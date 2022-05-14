@@ -48,22 +48,22 @@ public class OreConfig implements IBaseConfig {
 
     public int getCount() {
 
-        return !enable.getAsBoolean() ? 0 : configCount.get();
+        return !enable.getAsBoolean() ? 0 : configCount == null ? count : configCount.get();
     }
 
     public int getMinY() {
 
-        return !enable.getAsBoolean() ? 0 : configMinY.get();
+        return !enable.getAsBoolean() ? 0 : configMinY == null ? minY : configMinY.get();
     }
 
     public int getMaxY() {
 
-        return !enable.getAsBoolean() ? 0 : configMaxY.get();
+        return !enable.getAsBoolean() ? 0 : configMaxY == null ? maxY : configMaxY.get();
     }
 
     public int getSize() {
 
-        return !enable.getAsBoolean() ? 0 : configSize.get();
+        return !enable.getAsBoolean() ? 0 : configSize == null ? size : configSize.get();
     }
 
     public boolean shouldGenerate() {
