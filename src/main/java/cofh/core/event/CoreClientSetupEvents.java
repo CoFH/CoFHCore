@@ -50,6 +50,7 @@ public class CoreClientSetupEvents {
     public static void registerParticleFactories(final ParticleFactoryRegisterEvent event) {
 
         ParticleEngine manager = Minecraft.getInstance().particleEngine;
+
         manager.register(FROST_PARTICLE, FrostParticle.Factory::new);
         manager.register(SPARK_PARTICLE, SparkParticle.Factory::new);
         manager.register(PLASMA_PARTICLE, PlasmaBallParticle.Factory::new);

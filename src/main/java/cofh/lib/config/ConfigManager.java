@@ -12,21 +12,32 @@ import java.util.List;
 
 public class ConfigManager {
 
+    protected List<IBaseConfig> commonSubConfigs = new ArrayList<>();
     protected List<IBaseConfig> serverSubConfigs = new ArrayList<>();
     protected List<IBaseConfig> clientSubConfigs = new ArrayList<>();
 
+    protected boolean commonInit = false;
     protected boolean clientInit = false;
     protected boolean serverInit = false;
 
-    protected final ForgeConfigSpec.Builder serverConfig = new ForgeConfigSpec.Builder();
-    protected ForgeConfigSpec serverSpec;
+    protected final ForgeConfigSpec.Builder commonConfig = new ForgeConfigSpec.Builder();
+    protected ForgeConfigSpec commonSpec;
 
     protected final ForgeConfigSpec.Builder clientConfig = new ForgeConfigSpec.Builder();
     protected ForgeConfigSpec clientSpec;
 
+    protected final ForgeConfigSpec.Builder serverConfig = new ForgeConfigSpec.Builder();
+    protected ForgeConfigSpec serverSpec;
+
     public ConfigManager register(IEventBus bus) {
 
         bus.register(this);
+        return this;
+    }
+
+    public ConfigManager addCommonConfig(IBaseConfig config) {
+
+        commonSubConfigs.add(config);
         return this;
     }
 
@@ -40,6 +51,17 @@ public class ConfigManager {
 
         serverSubConfigs.add(config);
         return this;
+    }
+
+    public void setupCommon() {
+
+        if (!commonInit) {
+            genCommonConfig();
+            commonSpec = commonConfig.build();
+            refreshCommonConfig();
+            ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, commonSpec);
+            commonInit = true;
+        }
     }
 
     /**
@@ -90,6 +112,13 @@ public class ConfigManager {
         return clientSpec;
     }
 
+    protected void genCommonConfig() {
+
+        for (IBaseConfig cfg : commonSubConfigs) {
+            cfg.apply(commonConfig);
+        }
+    }
+
     protected void genServerConfig() {
 
         for (IBaseConfig cfg : serverSubConfigs) {
@@ -102,6 +131,11 @@ public class ConfigManager {
         for (IBaseConfig cfg : clientSubConfigs) {
             cfg.apply(clientConfig);
         }
+    }
+
+    protected void refreshCommonConfig() {
+
+        commonSubConfigs.forEach(IBaseConfig::refresh);
     }
 
     protected void refreshServerConfig() {
@@ -119,11 +153,9 @@ public class ConfigManager {
     public void configLoading(ModConfigEvent.Loading event) {
 
         switch (event.getConfig().getType()) {
-            case CLIENT:
-                refreshClientConfig();
-                break;
-            case SERVER:
-                refreshServerConfig();
+            case COMMON -> refreshCommonConfig();
+            case CLIENT -> refreshClientConfig();
+            case SERVER -> refreshServerConfig();
         }
     }
 
@@ -131,11 +163,9 @@ public class ConfigManager {
     public void configReloading(ModConfigEvent.Reloading event) {
 
         switch (event.getConfig().getType()) {
-            case CLIENT:
-                refreshClientConfig();
-                break;
-            case SERVER:
-                refreshServerConfig();
+            case COMMON -> refreshCommonConfig();
+            case CLIENT -> refreshClientConfig();
+            case SERVER -> refreshServerConfig();
         }
     }
     // endregion

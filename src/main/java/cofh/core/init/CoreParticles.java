@@ -13,7 +13,6 @@ public class CoreParticles {
 
     public static void register() {
 
-        //PARTICLES.register(ID_PARTICLE_SNOW, () -> new SimpleParticleType(true));
         PARTICLES.register(ID_PARTICLE_FROST, () -> new SimpleParticleType(false));
         PARTICLES.register(ID_PARTICLE_SPARK, () -> new SimpleParticleType(false));
         PARTICLES.register(ID_PARTICLE_PLASMA, () -> new SimpleParticleType(false));

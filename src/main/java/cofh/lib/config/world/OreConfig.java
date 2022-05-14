@@ -6,10 +6,13 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.List;
+import java.util.function.BooleanSupplier;
+
+import static cofh.lib.util.constants.Constants.FALSE;
 
 public class OreConfig implements IBaseConfig {
 
-    public static final OreConfig EMPTY_CONFIG = new OreConfig("invalid", 0, 0, 0, 0, List.of());
+    public static final OreConfig EMPTY_CONFIG = new OreConfig("invalid", 0, 0, 0, 0, List.of(), FALSE);
 
     protected String name;
     protected int count;
@@ -17,6 +20,7 @@ public class OreConfig implements IBaseConfig {
     protected int maxY;
     protected int size;
     // protected List<ResourceKey<Level>> dimensions;
+    protected BooleanSupplier enable;
 
     // private Set<ResourceKey<Level>> storedDimension = null;
 
@@ -26,7 +30,7 @@ public class OreConfig implements IBaseConfig {
     private ForgeConfigSpec.IntValue configSize;
     // private ForgeConfigSpec.ConfigValue<List<? extends String>> configDimensions;
 
-    public OreConfig(String name, int count, int minY, int maxY, int size, List<ResourceKey<Level>> dimensions) {
+    public OreConfig(String name, int count, int minY, int maxY, int size, List<ResourceKey<Level>> dimensions, BooleanSupplier enable) {
 
         this.name = name;
         this.count = count;
@@ -34,6 +38,7 @@ public class OreConfig implements IBaseConfig {
         this.maxY = maxY;
         this.size = size;
         // this.dimensions = dimensions;
+        this.enable = enable;
     }
 
     public String getName() {
@@ -43,27 +48,27 @@ public class OreConfig implements IBaseConfig {
 
     public int getCount() {
 
-        return configCount.get();
+        return !enable.getAsBoolean() ? 0 : configCount.get();
     }
 
     public int getMinY() {
 
-        return configMinY.get();
+        return !enable.getAsBoolean() ? 0 : configMinY.get();
     }
 
     public int getMaxY() {
 
-        return configMaxY.get();
+        return !enable.getAsBoolean() ? 0 : configMaxY.get();
     }
 
     public int getSize() {
 
-        return configSize.get();
+        return !enable.getAsBoolean() ? 0 : configSize.get();
     }
 
     public boolean shouldGenerate() {
 
-        return getCount() > 0;
+        return enable.getAsBoolean() && getCount() > 0;
     }
 
     //    public Set<ResourceKey<Level>> getDimensions() {
@@ -77,15 +82,17 @@ public class OreConfig implements IBaseConfig {
     @Override
     public void apply(ForgeConfigSpec.Builder builder) {
 
-        builder.push(name);
+        if (enable.getAsBoolean()) {
+            builder.push(name);
 
-        configCount = builder.comment("Max number of veins per chunk; set to 0 to disable.").defineInRange("Vein Count", count, 0, 256);
-        configSize = builder.comment("Max size of the vein.").defineInRange("Vein Size", size, 1, 256);
-        configMinY = builder.comment("Minimum Y spawn.").defineInRange("Min Y", minY, -2048, 2048);
-        configMaxY = builder.comment("Maximum Y spawn.").defineInRange("Max Y", maxY, -2048, 2048);
-        // configDimensions = builder.comment("The dimensions that this ore should spawn in as a list (default [\"minecraft:overworld\"])").defineList("Valid Dimensions", dimensions.stream().map(ResourceKey::location).map(ResourceLocation::toString).collect(Collectors.toList()), (o) -> o instanceof String);
+            configCount = builder.comment("Max number of veins per chunk; set to 0 to disable.").defineInRange("Vein Count", count, 0, 256);
+            configSize = builder.comment("Max size of the vein.").defineInRange("Vein Size", size, 1, 256);
+            configMinY = builder.comment("Minimum Y spawn.").defineInRange("Min Y", minY, -2048, 2048);
+            configMaxY = builder.comment("Maximum Y spawn.").defineInRange("Max Y", maxY, -2048, 2048);
+            // configDimensions = builder.comment("The dimensions that this ore should spawn in as a list (default [\"minecraft:overworld\"])").defineList("Valid Dimensions", dimensions.stream().map(ResourceKey::location).map(ResourceLocation::toString).collect(Collectors.toList()), (o) -> o instanceof String);
 
-        builder.pop();
+            builder.pop();
+        }
     }
 
     @Override
