@@ -158,7 +158,7 @@ public abstract class ContainerCoFH extends AbstractContainerMenu {
                 if (dragType == 2) {
                     slot.set(ItemStack.EMPTY);
                 } else {
-                    slot.set(player.getInventory().getSelected().isEmpty() ? ItemStack.EMPTY : player.getInventory().getSelected().copy());
+                    slot.set(this.getCarried().isEmpty() ? ItemStack.EMPTY : this.getCarried().copy());
                 }
                 return;
             }
