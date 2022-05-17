@@ -85,10 +85,10 @@ public class OreConfig implements IBaseConfig {
         if (enable.getAsBoolean()) {
             builder.push(name);
 
-            configCount = builder.comment("Max number of veins per chunk; set to 0 to disable.").defineInRange("Vein Count", count, 0, 256);
-            configSize = builder.comment("Max size of the vein.").defineInRange("Vein Size", size, 1, 256);
-            configMinY = builder.comment("Minimum Y spawn.").defineInRange("Min Y", minY, -2048, 2048);
-            configMaxY = builder.comment("Maximum Y spawn.").defineInRange("Max Y", maxY, -2048, 2048);
+            configCount = builder.comment("Max number of veins per chunk; set to 0 to disable.").defineInRange("Vein Count", count, 0, 64);
+            configSize = builder.comment("Max size of the vein.").defineInRange("Vein Size", size, 1, 64);
+            configMinY = builder.comment("Minimum Y spawn.").defineInRange("Min Y", minY, -2032, 2031);
+            configMaxY = builder.comment("Maximum Y spawn.").defineInRange("Max Y", maxY, -2032, 2031);
             // configDimensions = builder.comment("The dimensions that this ore should spawn in as a list (default [\"minecraft:overworld\"])").defineList("Valid Dimensions", dimensions.stream().map(ResourceKey::location).map(ResourceLocation::toString).collect(Collectors.toList()), (o) -> o instanceof String);
 
             builder.pop();
