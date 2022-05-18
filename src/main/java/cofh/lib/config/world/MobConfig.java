@@ -6,10 +6,15 @@ import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.List;
+import java.util.function.BooleanSupplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static cofh.lib.util.constants.Constants.FALSE;
+
 public class MobConfig implements IBaseConfig {
+
+    public static final MobConfig EMPTY_CONFIG = new MobConfig("invalid", 0, 0, 0, List.of(), FALSE);
 
     protected String name;
     protected int chance;
@@ -17,13 +22,14 @@ public class MobConfig implements IBaseConfig {
     protected int max;
     protected List<String> biomes;
     protected BiomeDictionary.Type restriction;
+    protected BooleanSupplier enable;
 
     protected ForgeConfigSpec.IntValue configChance;
     protected ForgeConfigSpec.IntValue configMin;
     protected ForgeConfigSpec.IntValue configMax;
     protected ForgeConfigSpec.ConfigValue<String> configBiomes;
 
-    public MobConfig(String name, int chance, int min, int max, List<String> biomes) {
+    public MobConfig(String name, int chance, int min, int max, List<String> biomes, BooleanSupplier enable) {
 
         this(name, chance, min, max, biomes, BiomeDictionary.Type.OVERWORLD);
     }

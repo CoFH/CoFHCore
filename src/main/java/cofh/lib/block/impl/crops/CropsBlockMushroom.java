@@ -2,9 +2,11 @@ package cofh.lib.block.impl.crops;
 
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
@@ -44,7 +46,7 @@ public class CropsBlockMushroom extends CropsBlockCoFH {
     public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, Random random) {
 
         int age = getAge(state);
-        if (age < getMaxAge() && ForgeHooks.onCropsGrowPre(worldIn, pos, state, random.nextInt(20 - age) == 0)) {
+        if (age < getMaxAge() && ForgeHooks.onCropsGrowPre(worldIn, pos, state, random.nextInt(20 + age) == 0)) {
             int newAge = age + 1 == getPostHarvestAge() ? getMaxAge() : age + 1;
             worldIn.setBlock(pos, getStateForAge(newAge), newAge == getMaxAge() ? 3 : 2);
             ForgeHooks.onCropsGrowPost(worldIn, pos, state);
@@ -75,11 +77,32 @@ public class CropsBlockMushroom extends CropsBlockCoFH {
         return MathHelper.nextInt(worldIn.random, 0, 2);
     }
 
+    @Override
+    public boolean canSurvive(BlockState state, LevelReader worldIn, BlockPos pos) {
+
+        BlockPos blockpos = pos.below();
+        if (state.getBlock() == this) { //Forge: This function is called during world gen and placement, before this block is set, so if we are not 'here' then assume it's the pre-check.
+            return worldIn.getBlockState(blockpos).canSustainPlant(worldIn, blockpos, Direction.UP, this);
+        }
+        return this.mayPlaceOn(worldIn.getBlockState(blockpos), worldIn, blockpos);
+    }
+
     // region BonemealableBlock
+    @Override
+    public boolean isValidBonemealTarget(BlockGetter worldIn, BlockPos pos, BlockState state, boolean isClient) {
+
+        return false;
+    }
+
     @Override
     public boolean isBonemealSuccess(Level worldIn, Random rand, BlockPos pos, BlockState state) {
 
         return false;
+    }
+
+    @Override
+    public void performBonemeal(ServerLevel worldIn, Random rand, BlockPos pos, BlockState state) {
+
     }
     // endregion
 }
