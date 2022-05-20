@@ -161,7 +161,7 @@ public abstract class AbstractItemFilter implements IFilter, IFilterOptions {
     }
     // endregion
 
-    // region INamedContainerProvider
+    // region MenuProvider
     @Override
     public Component getDisplayName() {
 

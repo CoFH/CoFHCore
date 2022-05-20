@@ -18,7 +18,7 @@ public class HeldItemFilter extends AbstractItemFilter {
         super(size);
     }
 
-    // region INamedContainerProvider
+    // region MenuProvider
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int i, Inventory inventory, Player player) {

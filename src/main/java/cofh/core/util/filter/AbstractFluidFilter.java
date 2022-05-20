@@ -154,7 +154,7 @@ public abstract class AbstractFluidFilter implements IFilter, IFilterOptions {
     }
     // endregion
 
-    // region INamedContainerProvider
+    // region MenuProvider
     @Override
     public Component getDisplayName() {
 

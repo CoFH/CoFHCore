@@ -25,7 +25,7 @@ public class EmptyFilter implements IFilter {
         return nbt;
     }
 
-    // region INamedContainerProvider
+    // region MenuProvider
     @Override
     public Component getDisplayName() {
 

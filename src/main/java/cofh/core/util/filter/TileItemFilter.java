@@ -22,7 +22,7 @@ public class TileItemFilter extends AbstractItemFilter {
         this.tile = tile;
     }
 
-    // region INamedContainerProvider
+    // region MenuProvider
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int i, Inventory inventory, Player player) {

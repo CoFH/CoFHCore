@@ -7,7 +7,7 @@ import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 
 public class CapabilityEnchantableItem {
 
-    public static Capability<IEnchantableItem> ENCHANTABLE_ITEM_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {});
+    public static final Capability<IEnchantableItem> ENCHANTABLE_ITEM_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {});
 
     public static void register(RegisterCapabilitiesEvent event) {
 
