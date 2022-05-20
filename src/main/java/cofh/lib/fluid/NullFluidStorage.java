@@ -37,7 +37,7 @@ public class NullFluidStorage extends FluidStorageCoFH {
         if (resource.isEmpty() || !isFluidValid(resource) || !enabled.getAsBoolean()) {
             return 0;
         }
-        return resource.getAmount();
+        return Math.min(resource.getAmount(), getCapacity());
     }
 
     @Nonnull
