@@ -298,10 +298,10 @@ public class RecipeProviderCoFH extends RecipeProvider implements IConditionBuil
 
         if (ingot != null) {
             if (dust != null) {
-                generateSmeltingAndBlastingRecipes(reg, consumer, dust, ingot, 0, folder, "_dust");
+                generateSmeltingAndBlastingRecipes(reg, consumer, dust, ingot, 0.0F, folder, "_dust");
             }
             if (raw != null) {
-                generateSmeltingAndBlastingRecipes(reg, consumer, raw, ingot, 0, folder, "_raw");
+                generateSmeltingAndBlastingRecipes(reg, consumer, raw, ingot, 0.7F, folder, "_raw");
             }
             if (ore != null) {
                 generateSmeltingAndBlastingRecipes(reg, consumer, ore, ingot, xp, folder, "_ore");
