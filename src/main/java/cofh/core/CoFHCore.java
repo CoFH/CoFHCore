@@ -28,6 +28,7 @@ import cofh.lib.config.ConfigManager;
 import cofh.lib.loot.TileNBTSync;
 import cofh.lib.network.PacketHandler;
 import cofh.lib.util.DeferredRegisterCoFH;
+import cofh.lib.util.Utils;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.resources.ResourceLocation;
@@ -49,7 +50,6 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -87,7 +87,7 @@ public class CoFHCore {
 
     public CoFHCore() {
 
-        curiosLoaded = ModList.get().isLoaded(ID_CURIOS);
+        curiosLoaded = Utils.isModLoaded(ID_CURIOS);
 
         registerPackets();
 

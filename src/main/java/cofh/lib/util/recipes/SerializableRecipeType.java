@@ -1,5 +1,6 @@
 package cofh.lib.util.recipes;
 
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeType;
 
@@ -16,6 +17,11 @@ public class SerializableRecipeType<T extends SerializableRecipe> implements Rec
     public String toString() {
 
         return registryName.toString();
+    }
+
+    public void register() {
+
+        Registry.register(Registry.RECIPE_TYPE, registryName, this);
     }
 
 }

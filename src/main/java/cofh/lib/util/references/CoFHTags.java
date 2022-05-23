@@ -47,11 +47,13 @@ public class CoFHTags {
         public static final TagKey<Block> STORAGE_BLOCKS_RAW_NICKEL = forgeTag("storage_blocks/raw_nickel");
         public static final TagKey<Block> STORAGE_BLOCKS_RAW_SILVER = forgeTag("storage_blocks/raw_silver");
         public static final TagKey<Block> STORAGE_BLOCKS_RAW_TIN = forgeTag("storage_blocks/raw_tin");
+        public static final TagKey<Block> STORAGE_BLOCKS_ROSE_GOLD = forgeTag("storage_blocks/rose_gold");
         public static final TagKey<Block> STORAGE_BLOCKS_RUBY = forgeTag("storage_blocks/ruby");
         public static final TagKey<Block> STORAGE_BLOCKS_SAPPHIRE = forgeTag("storage_blocks/sapphire");
         public static final TagKey<Block> STORAGE_BLOCKS_SIGNALUM = forgeTag("storage_blocks/signalum");
         public static final TagKey<Block> STORAGE_BLOCKS_SILVER = forgeTag("storage_blocks/silver");
         public static final TagKey<Block> STORAGE_BLOCKS_SLAG = forgeTag("storage_blocks/slag");
+        public static final TagKey<Block> STORAGE_BLOCKS_STEEL = forgeTag("storage_blocks/steel");
         public static final TagKey<Block> STORAGE_BLOCKS_SUGAR_CANE = forgeTag("storage_blocks/sugar_cane");
         public static final TagKey<Block> STORAGE_BLOCKS_SULFUR = forgeTag("storage_blocks/sulfur");
         public static final TagKey<Block> STORAGE_BLOCKS_TAR = forgeTag("storage_blocks/tar");
@@ -83,8 +85,10 @@ public class CoFHTags {
         public static final TagKey<Item> COINS_LUMIUM = forgeTag("coins/lumium");
         public static final TagKey<Item> COINS_NETHERITE = forgeTag("coins/netherite");
         public static final TagKey<Item> COINS_NICKEL = forgeTag("coins/nickel");
+        public static final TagKey<Item> COINS_ROSE_GOLD = forgeTag("coins/rose_gold");
         public static final TagKey<Item> COINS_SIGNALUM = forgeTag("coins/signalum");
         public static final TagKey<Item> COINS_SILVER = forgeTag("coins/silver");
+        public static final TagKey<Item> COINS_STEEL = forgeTag("coins/steel");
         public static final TagKey<Item> COINS_TIN = forgeTag("coins/tin");
 
         public static final TagKey<Item> CROPS_AMARANTH = forgeTag("crops/amaranth");
@@ -126,10 +130,12 @@ public class CoFHTags {
         public static final TagKey<Item> DUSTS_NICKEL = forgeTag("dusts/nickel");
         public static final TagKey<Item> DUSTS_NITER = forgeTag("dusts/niter");
         public static final TagKey<Item> DUSTS_QUARTZ = forgeTag("dusts/quartz");
+        public static final TagKey<Item> DUSTS_ROSE_GOLD = forgeTag("dusts/rose_gold");
         public static final TagKey<Item> DUSTS_RUBY = forgeTag("dusts/ruby");
         public static final TagKey<Item> DUSTS_SAPPHIRE = forgeTag("dusts/sapphire");
         public static final TagKey<Item> DUSTS_SIGNALUM = forgeTag("dusts/signalum");
         public static final TagKey<Item> DUSTS_SILVER = forgeTag("dusts/silver");
+        public static final TagKey<Item> DUSTS_STEEL = forgeTag("dusts/steel");
         public static final TagKey<Item> DUSTS_SULFUR = forgeTag("dusts/sulfur");
         public static final TagKey<Item> DUSTS_TIN = forgeTag("dusts/tin");
         public static final TagKey<Item> DUSTS_WOOD = forgeTag("dusts/wood");
@@ -152,10 +158,12 @@ public class CoFHTags {
         public static final TagKey<Item> GEARS_NETHERITE = forgeTag("gears/netherite");
         public static final TagKey<Item> GEARS_NICKEL = forgeTag("gears/nickel");
         public static final TagKey<Item> GEARS_QUARTZ = forgeTag("gears/quartz");
+        public static final TagKey<Item> GEARS_ROSE_GOLD = forgeTag("gears/rose_gold");
         public static final TagKey<Item> GEARS_RUBY = forgeTag("gears/ruby");
         public static final TagKey<Item> GEARS_SAPPHIRE = forgeTag("gears/sapphire");
         public static final TagKey<Item> GEARS_SIGNALUM = forgeTag("gears/signalum");
         public static final TagKey<Item> GEARS_SILVER = forgeTag("gears/silver");
+        public static final TagKey<Item> GEARS_STEEL = forgeTag("gears/steel");
         public static final TagKey<Item> GEARS_TIN = forgeTag("gears/tin");
 
         public static final TagKey<Item> GEMS_APATITE = forgeTag("gems/apatite");
@@ -173,8 +181,10 @@ public class CoFHTags {
         public static final TagKey<Item> INGOTS_LEAD = forgeTag("ingots/lead");
         public static final TagKey<Item> INGOTS_LUMIUM = forgeTag("ingots/lumium");
         public static final TagKey<Item> INGOTS_NICKEL = forgeTag("ingots/nickel");
+        public static final TagKey<Item> INGOTS_ROSE_GOLD = forgeTag("ingots/rose_gold");
         public static final TagKey<Item> INGOTS_SIGNALUM = forgeTag("ingots/signalum");
         public static final TagKey<Item> INGOTS_SILVER = forgeTag("ingots/silver");
+        public static final TagKey<Item> INGOTS_STEEL = forgeTag("ingots/steel");
         public static final TagKey<Item> INGOTS_TIN = forgeTag("ingots/tin");
 
         public static final TagKey<Item> NUGGETS_BRONZE = forgeTag("nuggets/bronze");
@@ -191,10 +201,12 @@ public class CoFHTags {
         public static final TagKey<Item> NUGGETS_NETHERITE = forgeTag("nuggets/netherite");
         public static final TagKey<Item> NUGGETS_NICKEL = forgeTag("nuggets/nickel");
         // public static final TagKey<Item> NUGGETS_QUARTZ = forgeTag("nuggets/quartz");
+        public static final TagKey<Item> NUGGETS_ROSE_GOLD = forgeTag("nuggets/rose_gold");
         // public static final TagKey<Item> NUGGETS_RUBY = forgeTag("nuggets/ruby");
         // public static final TagKey<Item> NUGGETS_SAPPHIRE = forgeTag("nuggets/sapphire");
         public static final TagKey<Item> NUGGETS_SIGNALUM = forgeTag("nuggets/signalum");
         public static final TagKey<Item> NUGGETS_SILVER = forgeTag("nuggets/silver");
+        public static final TagKey<Item> NUGGETS_STEEL = forgeTag("nuggets/steel");
         public static final TagKey<Item> NUGGETS_TIN = forgeTag("nuggets/tin");
 
         public static final TagKey<Item> ORES_APATITE = forgeTag("ores/apatite");
@@ -226,10 +238,12 @@ public class CoFHTags {
         public static final TagKey<Item> PLATES_NETHERITE = forgeTag("plates/netherite");
         public static final TagKey<Item> PLATES_NICKEL = forgeTag("plates/nickel");
         // public static final TagKey<Item> PLATES_QUARTZ = forgeTag("plates/quartz");
+        public static final TagKey<Item> PLATES_ROSE_GOLD = forgeTag("plates/rose_gold");
         // public static final TagKey<Item> PLATES_RUBY = forgeTag("plates/ruby");
         // public static final TagKey<Item> PLATES_SAPPHIRE = forgeTag("plates/sapphire");
         public static final TagKey<Item> PLATES_SIGNALUM = forgeTag("plates/signalum");
         public static final TagKey<Item> PLATES_SILVER = forgeTag("plates/silver");
+        public static final TagKey<Item> PLATES_STEEL = forgeTag("plates/steel");
         public static final TagKey<Item> PLATES_TIN = forgeTag("plates/tin");
 
         public static final TagKey<Item> RAW_MATERIALS_LEAD = forgeTag("raw_materials/lead");
@@ -277,11 +291,13 @@ public class CoFHTags {
         public static final TagKey<Item> STORAGE_BLOCKS_RAW_NICKEL = forgeTag("storage_blocks/raw_nickel");
         public static final TagKey<Item> STORAGE_BLOCKS_RAW_SILVER = forgeTag("storage_blocks/raw_silver");
         public static final TagKey<Item> STORAGE_BLOCKS_RAW_TIN = forgeTag("storage_blocks/raw_tin");
+        public static final TagKey<Item> STORAGE_BLOCKS_ROSE_GOLD = forgeTag("storage_blocks/rose_gold");
         public static final TagKey<Item> STORAGE_BLOCKS_RUBY = forgeTag("storage_blocks/ruby");
         public static final TagKey<Item> STORAGE_BLOCKS_SAPPHIRE = forgeTag("storage_blocks/sapphire");
         public static final TagKey<Item> STORAGE_BLOCKS_SIGNALUM = forgeTag("storage_blocks/signalum");
         public static final TagKey<Item> STORAGE_BLOCKS_SILVER = forgeTag("storage_blocks/silver");
         public static final TagKey<Item> STORAGE_BLOCKS_SLAG = forgeTag("storage_blocks/slag");
+        public static final TagKey<Item> STORAGE_BLOCKS_STEEL = forgeTag("storage_blocks/steel");
         public static final TagKey<Item> STORAGE_BLOCKS_SUGAR_CANE = forgeTag("storage_blocks/sugar_cane");
         public static final TagKey<Item> STORAGE_BLOCKS_SULFUR = forgeTag("storage_blocks/sulfur");
         public static final TagKey<Item> STORAGE_BLOCKS_TAR = forgeTag("storage_blocks/tar");
@@ -302,6 +318,8 @@ public class CoFHTags {
         public static final TagKey<Item> ARMOR_ELECTRUM = forgeTag("armor/electrum");
         public static final TagKey<Item> ARMOR_INVAR = forgeTag("armor/invar");
         public static final TagKey<Item> ARMOR_CONSTANTAN = forgeTag("armor/constantan");
+        public static final TagKey<Item> ARMOR_STEEL = forgeTag("armor/steel");
+        public static final TagKey<Item> ARMOR_ROSE_GOLD = forgeTag("armor/rose_gold");
 
         public static final TagKey<Item> TOOLS_IRON = forgeTag("tools/iron");
         public static final TagKey<Item> TOOLS_GOLD = forgeTag("tools/gold");
@@ -316,6 +334,8 @@ public class CoFHTags {
         public static final TagKey<Item> TOOLS_ELECTRUM = forgeTag("tools/electrum");
         public static final TagKey<Item> TOOLS_INVAR = forgeTag("tools/invar");
         public static final TagKey<Item> TOOLS_CONSTANTAN = forgeTag("tools/constantan");
+        public static final TagKey<Item> TOOLS_STEEL = forgeTag("tools/steel");
+        public static final TagKey<Item> TOOLS_ROSE_GOLD = forgeTag("tools/rose_gold");
 
         public static final TagKey<Item> TOOLS_WRENCH = forgeTag("tools/wrench");
 
