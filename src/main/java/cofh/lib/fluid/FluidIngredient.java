@@ -10,6 +10,7 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -55,7 +56,9 @@ public class FluidIngredient implements Predicate<FluidStack> {
             this.fluidStacks = Arrays.stream(this.values).flatMap((ingredientList) -> ingredientList.getFluids().stream()).distinct().toArray(FluidStack[]::new);
         }
         for (FluidStack stack : fluidStacks) {
-            stack.setAmount(amount);
+            if (stack.getRawFluid() != Fluids.EMPTY) {
+                stack.setAmount(amount);
+            }
         }
     }
 
