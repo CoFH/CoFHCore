@@ -3,8 +3,8 @@ package cofh.lib.util.flags;
 import com.google.gson.JsonObject;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
@@ -14,11 +14,11 @@ import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
 public class TagExistsRecipeCondition implements ICondition {
 
     private static final ResourceLocation NAME = new ResourceLocation(ID_COFH_CORE, "tag_exists");
-    private final TagKey<Item> tag_name;
+    private final TagKey<Item> tag;
 
-    public TagExistsRecipeCondition(TagKey<Item> location) {
+    public TagExistsRecipeCondition(ResourceLocation tag) {
 
-        this.tag_name = location;
+        this.tag = TagKey.create(Registry.ITEM_REGISTRY, tag);
     }
 
     @Override
@@ -28,15 +28,21 @@ public class TagExistsRecipeCondition implements ICondition {
     }
 
     @Override
+    public boolean test(ICondition.IContext context) {
+
+        return !context.getTag(tag).getValues().isEmpty();
+    }
+
+    @Override
     public boolean test() {
 
-        return Registry.ITEM.getTag(tag_name).filter(e -> e.size() != 0).isPresent();
+        return test(IContext.EMPTY);
     }
 
     @Override
     public String toString() {
 
-        return "tag_exists(\"" + tag_name + "\")";
+        return "tag_exists(\"" + tag.location() + "\")";
     }
 
     // region SERIALIZER
@@ -51,13 +57,13 @@ public class TagExistsRecipeCondition implements ICondition {
         @Override
         public void write(JsonObject json, TagExistsRecipeCondition value) {
 
-            json.addProperty("tag", value.tag_name.toString());
+            json.addProperty("tag", value.tag.location().toString());
         }
 
         @Override
         public TagExistsRecipeCondition read(JsonObject json) {
 
-            return new TagExistsRecipeCondition(ItemTags.create(new ResourceLocation(json.getAsJsonPrimitive("tag").getAsString())));
+            return new TagExistsRecipeCondition(new ResourceLocation(GsonHelper.getAsString(json, "tag")));
         }
 
         @Override

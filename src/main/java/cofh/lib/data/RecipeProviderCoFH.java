@@ -474,7 +474,7 @@ public class RecipeProviderCoFH extends RecipeProvider implements IConditionBuil
 
         public ConditionalRecipeConsumer tagExists(TagKey<Item> tag) {
 
-            this.conditions.add(new TagExistsRecipeCondition(tag));
+            this.conditions.add(new TagExistsRecipeCondition(tag.location()));
             return this;
         }
 
