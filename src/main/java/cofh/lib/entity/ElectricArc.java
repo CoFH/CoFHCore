@@ -52,7 +52,7 @@ public class ElectricArc extends AbstractAoESpell {
     public void onCast() {
 
         if (level.isClientSide) {
-            level.addParticle(CoreReferences.PLASMA_PARTICLE, this.getX(), this.getY() + 8, this.getZ(), 0.0D, 0.0D, 0.0D);
+            level.addParticle(CoreReferences.PLASMA_PARTICLE, this.getX(), this.getY() + 6, this.getZ(), 0.0D, 0.0D, 0.0D);
         } else {
             strike();
         }

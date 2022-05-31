@@ -58,6 +58,9 @@ public class CoreClientSetupEvents {
         manager.register(BLAST_WAVE_PARTICLE, BlastWaveParticle.Factory::new);
         manager.register(VORTEX_PARTICLE, WindVortexParticle.Factory::new);
         manager.register(SPIRAL_PARTICLE, WindSpiralParticle.Factory::new);
+        manager.register(STRAIGHT_ARC_PARTICLE, ArcParticle.Factory::new);
+        manager.register(MIST_PARTICLE, MistParticle::iceMist);
+
     }
 
     // region HELPERS

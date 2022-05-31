@@ -6,10 +6,7 @@ import cofh.core.block.entity.LightningAirTile;
 import cofh.core.block.entity.SignalAirTile;
 import cofh.core.inventory.container.HeldItemFilterContainer;
 import cofh.core.inventory.container.TileItemFilterContainer;
-import cofh.lib.entity.BlackHole;
-import cofh.lib.entity.ElectricArc;
-import cofh.lib.entity.ElectricField;
-import cofh.lib.entity.Knife;
+import cofh.lib.entity.*;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
@@ -165,6 +162,30 @@ public class CoreReferences {
 
     @ObjectHolder (ID_PARTICLE_SPIRAL)
     public static final SimpleParticleType SPIRAL_PARTICLE = null;
+
+    @ObjectHolder (ID_PARTICLE_STRAIGHT_ARC)
+    public static final SimpleParticleType STRAIGHT_ARC_PARTICLE = null;
+
+    @ObjectHolder (ID_PARTICLE_CIRCLE_ARC)
+    public static final SimpleParticleType CIRCLE_ARC_PARTICLE = null;
+
+    @ObjectHolder (ID_PARTICLE_CURRENT)
+    public static final SimpleParticleType CURRENT_PARTICLE = null;
+
+    @ObjectHolder (ID_PARTICLE_MIST)
+    public static final SimpleParticleType MIST_PARTICLE = null;
+
+    @ObjectHolder (ID_PARTICLE_FLAME)
+    public static final SimpleParticleType FLAME_PARTICLE = null;
+
+    @ObjectHolder (ID_PARTICLE_BLAST)
+    public static final SimpleParticleType BLAST_PARTICLE = null;
+
+    @ObjectHolder (ID_PARTICLE_BEAM)
+    public static final SimpleParticleType BEAM_PARTICLE = null;
+
+    @ObjectHolder (ID_PARTICLE_BULLET)
+    public static final SimpleParticleType BULLET_PARTICLE = null;
     // endregion
 
     // region ENTITIES

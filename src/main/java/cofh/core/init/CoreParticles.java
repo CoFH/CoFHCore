@@ -20,6 +20,14 @@ public class CoreParticles {
         PARTICLES.register(ID_PARTICLE_BLAST_WAVE, () -> new SimpleParticleType(false));
         PARTICLES.register(ID_PARTICLE_VORTEX, () -> new SimpleParticleType(false));
         PARTICLES.register(ID_PARTICLE_SPIRAL, () -> new SimpleParticleType(false));
+        //PARTICLES.register(ID_PARTICLE_CURRENT, () -> new SimpleParticleType(false));
+        PARTICLES.register(ID_PARTICLE_STRAIGHT_ARC, () -> new SimpleParticleType(false));
+        //PARTICLES.register(ID_PARTICLE_CIRCLE_ARC, () -> new SimpleParticleType(false));
+        //PARTICLES.register(ID_PARTICLE_FLAME, () -> new SimpleParticleType(false));
+        PARTICLES.register(ID_PARTICLE_MIST, () -> new SimpleParticleType(false));
+        //PARTICLES.register(ID_PARTICLE_BLAST, () -> new SimpleParticleType(false));
+        //PARTICLES.register(ID_PARTICLE_BEAM, () -> new SimpleParticleType(false));
+        //PARTICLES.register(ID_PARTICLE_BULLET, () -> new SimpleParticleType(false));
     }
 
 }

@@ -2,8 +2,10 @@ package cofh.core.util.helpers.vfx;
 
 import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.util.helpers.MathHelper;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
@@ -11,6 +13,7 @@ import com.mojang.math.Vector4f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -27,6 +30,8 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import static net.minecraft.client.renderer.RenderStateShard.*;
+
 /**
  * The cooler version of RenderHelper.
  *
@@ -42,6 +47,16 @@ public final class VFXHelper {
     public static float length(Vector3f vec) {
 
         return MathHelper.dist(vec.x(), vec.y(), vec.z());
+    }
+
+    public static VFXNode interpolate(VFXNode a, VFXNode b, float d) {
+
+        return new VFXNode(MathHelper.interpolate(a.xp, b.xp, d), MathHelper.interpolate(a.xn, b.xn, d), MathHelper.interpolate(a.yp, b.yp, d), MathHelper.interpolate(a.yn, b.yn, d), MathHelper.interpolate(a.z, b.z, d), MathHelper.interpolate(a.width, b.width, d));
+    }
+
+    private static VFXNode interpolateCap(VFXNode a, VFXNode b) {
+
+        return interpolate(a, b, 1.0F + b.width * 0.5F / MathHelper.dist(a.xMid() - b.xMid(), a.yMid() - b.yMid(), a.z - b.z)); //TODO
     }
 
     public static Vector4f subtract(Vector4f a, Vector4f b) {
@@ -73,6 +88,22 @@ public final class VFXHelper {
             nodes[i].renderMid(normal, builder, packedLight, r, g, b, a);
         }
         nodes[count].renderEnd(normal, builder, packedLight, r, g, b, a);
+    }
+
+    private static void renderNodesCapped(Matrix3f normal, MultiBufferSource buffer, RenderType midType, RenderType capType, int packedLight, VFXNode[] nodes, int r, int g, int b, int a) {
+
+        if (nodes.length < 2) {
+            return;
+        }
+        VertexConsumer consumer = buffer.getBuffer(midType);
+        renderNodes(normal, consumer, packedLight, nodes, r, g, b, a);
+
+        consumer = buffer.getBuffer(capType);
+        interpolateCap(nodes[1], nodes[0]).renderStart(normal, consumer, packedLight, r, g, b, a, 0, 0, 1.0F, 0.5F);
+        nodes[0].renderEnd(normal, consumer, packedLight, r, g, b, a, 0, 0, 1.0F, 0.5F);
+        nodes[nodes.length - 1].renderStart(normal, consumer, packedLight, r, g, b, a, 0, 0.5F, 1.0F, 1.0F);
+        //System.out.println(interpolateCap(new VFXNode(1, 0, 1, 0, 0), new VFXNode(0, -1, 2, 1, -1)));
+        interpolateCap(nodes[nodes.length - 2], nodes[nodes.length - 1]).renderEnd(normal, consumer, packedLight, r, g, b, a, 0, 0.5F, 1.0F, 1.0F);
     }
 
     public static Vec2 axialPerp(Vector4f start, Vector4f end, float width) {
@@ -296,7 +327,6 @@ public final class VFXHelper {
                                 if (ItemBlockRenderTypes.canRenderInLayer(state, type)) {
                                     ForgeHooksClient.setRenderType(type);
                                     renderer.renderBatched(state, pos.relative(Direction.UP), level, stack, buffer.getBuffer(type), false, new Random(), EmptyModelData.INSTANCE);
-                                    //renderer.getModelRenderer().renderModel(stack.last(), buffer.getBuffer(type), state, renderer.getBlockModel(state), pos.relative(Direction.UP), stack, , false, new Random(), state.getSeed(pos), EmptyModelData.INSTANCE);
                                 }
                             }
                             stack.popPose();
@@ -358,96 +388,21 @@ public final class VFXHelper {
     // endregion
 
     // region ELECTRICITY
-    private static final Vector3f[][] arcs = getRandomArcs(new Random(), 16, 50);
-
-    private static void renderArcGlow(Matrix3f normal, MultiBufferSource buffer, int packedLight, VFXNode[] nodes, float width, int r, int g, int b, int a) {
-
-        VertexConsumer builder = buffer.getBuffer(RenderTypes.LINEAR_GLOW);
-        Function<VFXNode, Float> glowWidth = node -> (width * 0.3F + node.width * 0.7F) / node.width;
-        Function<VFXNode, VFXNode> posGlow = node -> {
-            float w = glowWidth.apply(node);
-            return new VFXNode(node.xp + (node.xp - node.xn) * w, node.xp, node.yp + (node.yp - node.yn) * w, node.yp, node.z, w);
-        };
-        Function<VFXNode, VFXNode> negGlow = node -> {
-            float w = glowWidth.apply(node);
-            return new VFXNode(node.xn, node.xn - (node.xp - node.xn) * w, node.yn, node.yn - (node.yp - node.yn) * w, node.z, w);
-        };
-        int count = nodes.length - 1;
-
-        // Sides
-        posGlow.apply(nodes[0]).renderStart(normal, builder, packedLight, r, g, b, a, 0, 0, 0.5F, 1);
-        for (int i = 1; i < count; ++i) {
-            posGlow.apply(nodes[i]).renderMid(normal, builder, packedLight, r, g, b, a, 0, 0, 0.5F, 1);
-        }
-        posGlow.apply(nodes[count]).renderEnd(normal, builder, packedLight, r, g, b, a, 0, 0, 0.5F, 1);
-
-        negGlow.apply(nodes[0]).renderStart(normal, builder, packedLight, r, g, b, a, 0.5F, 0, 1, 1);
-        for (int i = 1; i < count; ++i) {
-            negGlow.apply(nodes[i]).renderMid(normal, builder, packedLight, r, g, b, a, 0.5F, 0, 1, 1);
-        }
-        negGlow.apply(nodes[count]).renderEnd(normal, builder, packedLight, r, g, b, a, 0.5F, 0, 1, 1);
-
-        // Ends
-        VFXNode node = nodes[count];
-        float nw = glowWidth.apply(node);
-        float xw = (node.xp - node.xn) * nw;
-        float yw = (node.yp - node.yn) * nw;
-
-        builder.vertex(node.xn, node.yn, node.z).color(r, g, b, a).uv(0.5F, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
-        builder.vertex(node.xn + yw, node.yn - xw, node.z).color(r, g, b, a).uv(1, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
-        builder.vertex(node.xp + yw, node.yp - xw, node.z).color(r, g, b, a).uv(1, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
-        builder.vertex(node.xp, node.yp, node.z).color(r, g, b, a).uv(0.5F, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
-
-        builder = buffer.getBuffer(RenderTypes.ROUND_GLOW);
-        builder.vertex(node.xp, node.yp, node.z).color(r, g, b, a).uv(0.5F, 0.5F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
-        builder.vertex(node.xp + yw, node.yp - xw, node.z).color(r, g, b, a).uv(0.5F, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
-        builder.vertex(node.xp + xw + yw, node.yp + yw - xw, node.z).color(r, g, b, a).uv(1, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
-        builder.vertex(node.xp + xw, node.yp + yw, node.z).color(r, g, b, a).uv(1, 0.5F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
-
-        builder.vertex(node.xn, node.yn, node.z).color(r, g, b, a).uv(0.5F, 0.5F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
-        builder.vertex(node.xn - xw, node.yn - yw, node.z).color(r, g, b, a).uv(0.5F, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
-        builder.vertex(node.xn - xw + yw, node.yn - yw - xw, node.z).color(r, g, b, a).uv(1, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
-        builder.vertex(node.xn + yw, node.yn - xw, node.z).color(r, g, b, a).uv(1, 0.5F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
-
-        node = nodes[0];
-        nw = glowWidth.apply(node);
-        xw = (node.xp - node.xn) * nw;
-        yw = (node.yp - node.yn) * nw;
-
-        builder.vertex(node.xp, node.yp, node.z).color(r, g, b, a).uv(0.5F, 0.5F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
-        builder.vertex(node.xp + xw, node.yp + yw, node.z).color(r, g, b, a).uv(0.5F, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
-        builder.vertex(node.xp + xw - yw, node.yp + yw + xw, node.z).color(r, g, b, a).uv(1, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
-        builder.vertex(node.xp - yw, node.yp + xw, node.z).color(r, g, b, a).uv(1, 0.5F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
-
-        builder.vertex(node.xn, node.yn, node.z).color(r, g, b, a).uv(0.5F, 0.5F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
-        builder.vertex(node.xn - yw, node.yn + xw, node.z).color(r, g, b, a).uv(0.5F, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
-        builder.vertex(node.xn - xw - yw, node.yn - yw + xw, node.z).color(r, g, b, a).uv(1, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
-        builder.vertex(node.xn - xw, node.yn - yw, node.z).color(r, g, b, a).uv(1, 0.5F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
-
-        builder = buffer.getBuffer(RenderTypes.LINEAR_GLOW);
-        builder.vertex(node.xn, node.yn, node.z).color(r, g, b, a).uv(0.5F, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
-        builder.vertex(node.xp, node.yp, node.z).color(r, g, b, a).uv(0.5F, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
-        builder.vertex(node.xp - yw, node.yp + xw, node.z).color(r, g, b, a).uv(1, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
-        builder.vertex(node.xn - yw, node.yn + xw, node.z).color(r, g, b, a).uv(1, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
-    }
-
-    public static void renderArc(Matrix3f normal, MultiBufferSource buffer, int packedLight, VFXNode[] nodes, float width, int rgba) {
-
-        renderNodes(normal, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLight, nodes, 0xFF, 0xFF, 0xFF, 0xFF);
-        renderArcGlow(normal, buffer, packedLight, nodes, width, (rgba >> 24) & 0xFF, (rgba >> 16) & 0xFF, (rgba >> 8) & 0xFF, rgba & 0xFF);
-    }
+    private static final Vector3f[][] arcs = getRandomArcs(new Random(), 8, 48);
 
     /**
      * Renders straight electric arcs in a unit column towards positive y.
      *
      * @param arcCount    Number of individual arcs.
      * @param arcWidth    Average width of each arc. 0.4F recommended.
+     * @param widthVar    Absolute variance in the width of the arc.
      * @param seed        Seed for randomization. Should be changed based on the time.
-     * @param rgba        Color/alpha for the glow surrounding the white core.
+     * @param coreRGBA    Color/alpha for the center part of the arc.
+     * @param glowRGBA    Color/alpha for the glow surrounding the core.
      * @param taperOffset Value between -1.25F and 1.25F that determines the threshold for tapering.
      *                    Generally, negative at the start of an animation, 0 in the middle (no taper), and positive at the end.
      */
-    public static void renderStraightArcs(PoseStack poseStackIn, MultiBufferSource buffer, int packedLightIn, int arcCount, float arcWidth, long seed, int rgba, float taperOffset) {
+    public static void renderStraightArcs(PoseStack poseStackIn, MultiBufferSource buffer, int packedLight, int arcCount, float arcWidth, float widthVar, long seed, int coreRGBA, int glowRGBA, float taperOffset) {
 
         SplittableRandom rand = new SplittableRandom(seed);
         poseStackIn.pushPose();
@@ -479,7 +434,8 @@ public final class VFXHelper {
             for (int i = 0; i < arcCount; ++i) {
                 poseStackIn.mulPose(Vector3f.YP.rotationDegrees(rotations[i]));
                 Vector3f[] arc = randomArcs[i];
-                VFXNode[] nodes = new VFXNode[last - first];
+                VFXNode[] outer = new VFXNode[last - first];
+                VFXNode[] inner = new VFXNode[last - first];
                 for (int j = first; j < last; ++j) {
                     Vector4f center = new Vector4f(0, arc[j].y(), 0, 1.0F);
                     center.transform(pose);
@@ -488,22 +444,32 @@ public final class VFXHelper {
                     float dot = subtract(pos, center).dot(new Vector4f(perp.x, perp.y, 0, 0));
                     float xc = center.x() + perp.x * dot * 3.0F;
                     float yc = center.y() + perp.y * dot * 3.0F;
-                    float width = arcWidth * ((float) rand.nextDouble() * 0.6F + 0.7F) * MathHelper.clamp(4.0F * (0.75F - Math.abs(j * incr - 0.5F - taperOffset)), 0.0F, 1.0F);
+                    float width = Math.max(arcWidth + (float) rand.nextDouble(-1.0F, 1.0F) * widthVar, 0) * MathHelper.clamp(4.0F * (0.75F - Math.abs(j * incr - 0.5F - taperOffset)), 0.0F, 1.0F);
                     float xw = perp.x * width;
                     float yw = perp.y * width;
-                    nodes[j - first] = new VFXNode(xc + xw, xc - xw, yc + yw, yc - yw, center.z(), width);
+                    inner[j - first] = new VFXNode(xc + xw, xc - xw, yc + yw, yc - yw, center.z(), width);
+                    width = Math.max(width, arcWidth);
+                    xw += perp.x * width;
+                    yw += perp.y * width;
+                    outer[j - first] = new VFXNode(xc + xw, xc - xw, yc + yw, yc - yw, center.z(), width);
                 }
-                renderArc(normal, buffer, packedLightIn, nodes, arcWidth, rgba);
+                renderNodesCapped(normal, buffer, RenderTypes.LINEAR_GLOW, RenderTypes.ROUND_GLOW, packedLight, outer, (glowRGBA >> 24) & 0xFF, (glowRGBA >> 16) & 0xFF, (glowRGBA >> 8) & 0xFF, glowRGBA & 0xFF);
+                renderNodesCapped(normal, buffer, RenderTypes.LINEAR_GLOW, RenderTypes.ROUND_GLOW, packedLight, inner, (coreRGBA >> 24) & 0xFF, (coreRGBA >> 16) & 0xFF, (coreRGBA >> 8) & 0xFF, coreRGBA & 0xFF);
             }
         }
         poseStackIn.popPose();
     }
 
-    public static void renderStraightArcs(PoseStack poseStackIn, MultiBufferSource buffer, int packedLightIn, float length, int arcCount, float arcWidth, long seed, int rgba, float taperOffset) {
+    public static void renderStraightArcs(PoseStack poseStackIn, MultiBufferSource buffer, int packedLightIn, int arcCount, float arcWidth, long seed, int coreRGBA, int glowRGBA, float taperOffset) {
+
+        renderStraightArcs(poseStackIn, buffer, packedLightIn, arcCount, arcWidth, 0.3F * arcWidth, seed, coreRGBA, glowRGBA, taperOffset);
+    }
+
+    public static void renderStraightArcs(PoseStack poseStackIn, MultiBufferSource buffer, int packedLightIn, float length, int arcCount, float arcWidth, long seed, int coreRGBA, int glowRGBA, float taperOffset) {
 
         poseStackIn.pushPose();
         poseStackIn.scale(length, length, length);
-        renderStraightArcs(poseStackIn, buffer, packedLightIn, arcCount, arcWidth / Math.abs(length), seed, rgba, taperOffset);
+        renderStraightArcs(poseStackIn, buffer, packedLightIn, arcCount, arcWidth / Math.abs(length), seed, coreRGBA, glowRGBA, taperOffset);
         poseStackIn.popPose();
     }
 
@@ -514,7 +480,7 @@ public final class VFXHelper {
 
     public static long getSeedWithTime(long seed, float time) {
 
-        return getSeedWithTime(seed, time, 0.8F);
+        return getSeedWithTime(seed, time, 0.75F);
     }
 
     public static float getTaperOffsetFromTimes(float time, float endTime, float taperTime) {
@@ -544,11 +510,22 @@ public final class VFXHelper {
 
     private static Vector3f[] getRandomNodes(Random random, int count) {
 
-        float[] y = new float[count];
-        for (int i = 0; i < y.length; ++i) {
-            y[i] = random.nextFloat();
+        SortedSet<Float> ySet = new TreeSet<>();
+        float e = 0.25F / count;
+        ySet.add(0.0F);
+        ySet.add(1.0F);
+        count -= 2;
+        for (int i = 0; i < count * 3 && ySet.size() < count; ++i) {
+            float next = random.nextFloat();
+            if (ySet.subSet(next - e, next + e).size() <= 0) {
+                ySet.add(next);
+            }
         }
-        Arrays.sort(y);
+        for (int i = count - ySet.size(); i > 0; --i) {
+            ySet.add(random.nextFloat());
+        }
+
+        Float[] y = ySet.toArray(Float[]::new);
         Vector3f[] nodes = new Vector3f[y.length];
 
         nodes[0] = new Vector3f(0, 0, 0);
@@ -571,7 +548,7 @@ public final class VFXHelper {
 
     // region WIND
     private static final int WIND_SEGMENTS = 48;
-    private static final float WIND_INCR = MathHelper.F_TAU / WIND_SEGMENTS;
+    public static final float WIND_INCR = MathHelper.F_TAU / WIND_SEGMENTS;
 
     public static Function<Float, Float> getWidthFunc(float width) {
 
@@ -752,6 +729,12 @@ public final class VFXHelper {
         public VFXNode renderMid(Matrix3f normal, VertexConsumer builder, int packedLight, int r, int g, int b, int a) {
 
             return renderMid(normal, builder, packedLight, r, g, b, a, 0, 0, 1, 1);
+        }
+
+        @Override
+        public String toString() {
+
+            return "{" + xp + ", " + xn + "}, {" + yp + ", " + yn + "}, " + z;
         }
 
     }

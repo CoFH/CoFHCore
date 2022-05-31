@@ -19,7 +19,7 @@ public class PlasmaBallParticle extends TextureSheetParticle {
         super(levelIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
         this.spriteSet = spriteSet;
         setSpriteFromAge(spriteSet);
-        lifetime = ElectricArc.defaultDuration;
+        lifetime = 10;
         scale(3.0F);
 
         xd = xSpeedIn;
@@ -46,7 +46,7 @@ public class PlasmaBallParticle extends TextureSheetParticle {
     @Override
     public int getLightColor(float pTicks) {
 
-        return 15728880;
+        return 0x00F000F0;
     }
 
     @Override

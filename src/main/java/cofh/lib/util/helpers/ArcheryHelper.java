@@ -214,9 +214,14 @@ public final class ArcheryHelper {
         return findHitEntities(world, projectile, startPos, endPos, projectile.getBoundingBox().expandTowards(projectile.getDeltaMovement()).inflate(1.5D), padding, filter);
     }
 
-    public static Stream<EntityHitResult> findHitEntities(Level world, Projectile projectile, Vec3 startPos, Vec3 endPos, AABB searchArea, Vec3 padding, Predicate<Entity> filter) {
+    public static Stream<EntityHitResult> findHitEntities(Level world, Entity exclude, Vec3 startPos, Vec3 endPos, Vec3 padding, Predicate<Entity> filter) {
 
-        return world.getEntities(projectile, searchArea, filter).stream()
+        return findHitEntities(world, exclude, startPos, endPos, new AABB(startPos, endPos).inflate(1.5D), padding, filter);
+    }
+
+    public static Stream<EntityHitResult> findHitEntities(Level world, Entity exclude, Vec3 startPos, Vec3 endPos, AABB searchArea, Vec3 padding, Predicate<Entity> filter) {
+
+        return world.getEntities(exclude, searchArea, filter).stream()
                 .map(entity -> entity.getBoundingBox().inflate(padding.x(), padding.y(), padding.z()).clip(startPos, endPos).map(Vec3 -> new EntityHitResult(entity, Vec3)).orElse(null))
                 .filter(Objects::nonNull);
     }

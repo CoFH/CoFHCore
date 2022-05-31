@@ -29,6 +29,7 @@ public abstract class CustomRenderParticle extends Particle {
         double y = MathHelper.interpolate(this.yo, this.y, partialTicks) - camPos.y;
         double z = MathHelper.interpolate(this.zo, this.z, partialTicks) - camPos.z;
         stack.translate(x, y, z);
+
         stack.pushPose();
         render(stack, buffer, getLightColor(partialTicks), partialTicks);
         stack.popPose();

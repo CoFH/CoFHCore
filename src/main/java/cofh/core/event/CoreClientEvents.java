@@ -40,7 +40,6 @@ public class CoreClientEvents {
 
     public static int renderTime;
     public static float renderFrame;
-    public static PoseStack levelStack = new PoseStack();
 
     private static final Set<String> NAMESPACES = new ObjectOpenHashSet<>();
 

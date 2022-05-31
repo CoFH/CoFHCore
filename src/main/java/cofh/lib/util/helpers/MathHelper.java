@@ -231,12 +231,31 @@ public final class MathHelper {
         return d;
     }
 
+    public static double distSqr(double... a) {
+
+        double d = 0.0F;
+        for (double f : a) {
+            d += f * f;
+        }
+        return d;
+    }
+
     public static float dist(float... a) {
 
         return sqrt(distSqr(a));
     }
 
+    public static double dist(double... a) {
+
+        return Math.sqrt(distSqr(a));
+    }
+
     public static float invDist(float... a) {
+
+        return 1 / dist(a);
+    }
+
+    public static double invDist(double... a) {
 
         return 1 / dist(a);
     }

@@ -28,6 +28,7 @@ public class RenderTypes {
                     .setShaderState(RENDERTYPE_LINES_SHADER)
                     .createCompositeState(false));
 
+    //TODO: entity vs particle
     public static final RenderType FLAT_TRANSLUCENT = RenderType.create("flat",
             DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true,
             RenderType.CompositeState.builder().setTextureState(new TextureStateShard(BLANK_TEXTURE, false, false))
