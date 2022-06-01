@@ -172,8 +172,8 @@ public class CoreReferences {
     @ObjectHolder (ID_PARTICLE_CURRENT)
     public static final SimpleParticleType CURRENT_PARTICLE = null;
 
-    @ObjectHolder (ID_PARTICLE_MIST)
-    public static final SimpleParticleType MIST_PARTICLE = null;
+    @ObjectHolder (ID_PARTICLE_ICE_MIST)
+    public static final SimpleParticleType ICE_MIST_PARTICLE = null;
 
     @ObjectHolder (ID_PARTICLE_FLAME)
     public static final SimpleParticleType FLAME_PARTICLE = null;

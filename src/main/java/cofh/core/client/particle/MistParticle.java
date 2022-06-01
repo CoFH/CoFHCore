@@ -1,13 +1,21 @@
 package cofh.core.client.particle;
 
+import cofh.core.util.helpers.vfx.RenderTypes;
 import cofh.lib.util.helpers.MathHelper;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
+import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 @OnlyIn (Dist.CLIENT)
@@ -16,41 +24,43 @@ public class MistParticle extends TextureSheetParticle {
     private MistParticle(ClientLevel levelIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn) {
 
         super(levelIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
-        lifetime = 100;
+        lifetime = 40;
 
-        xd = xSpeedIn;
-        yd = ySpeedIn;
-        zd = zSpeedIn;
+        float var = 0.05F;
+        xd = xSpeedIn + random.nextFloat(-var, var);
+        yd = ySpeedIn + random.nextFloat(-var, var);
+        zd = zSpeedIn + random.nextFloat(-var, var);
 
-        rCol = gCol = 0.95F - (random.nextFloat() * 0.05F);
         oRoll = roll = random.nextFloat() * MathHelper.F_TAU;
-        scale(20);
-        setAlpha(level.random.nextFloat() * 1.0F);
+        scale(random.nextFloat(3.0F, 9.0F));
     }
 
     @Override
-    public void tick() {
+    public void render(VertexConsumer consumer, Camera info, float partialTicks) {
 
-        super.tick();
-        oRoll = roll;
-        roll += 0.1F;
-        alpha *= .975F;
+        float progress = (age + partialTicks) / lifetime;
+        float q = 2 * progress - 1;
+        q *= q;
+        this.alpha = Math.max(0.2F * (1 - q * q) * MathHelper.cos(0.25F * MathHelper.F_PI * progress), 0);
+        this.quadSize = this.bbWidth * MathHelper.sin(0.25F * MathHelper.F_PI * (progress + 1));
+        super.render(consumer, info, partialTicks);
     }
 
     @Override
     public ParticleRenderType getRenderType() {
 
-        return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        return RenderTypes.PARTICLE_SHEET_TRANSLUCENT_BLEND;
     }
 
+    @Nonnull
     public static ParticleProvider<SimpleParticleType> iceMist(SpriteSet spriteSet) {
 
         return (data, level, x, y, z, dx, dy, dz) -> {
-            MistParticle particle = new MistParticle(level, x, y, z, dx, dy, dz);
-            particle.pickSprite(spriteSet);
-            //particle.setSize(1.0F, 1.0F);
-            //particle.setAlpha(level.random.nextFloat() * 0.2F);
-            return particle;
+            MistParticle p = new MistParticle(level, x, y, z, dx, dy, dz);
+            p.pickSprite(spriteSet);
+            p.rCol = 0.5F - p.random.nextFloat(0.1F);
+            p.gCol = 0.8F - p.random.nextFloat(0.1F);
+            return p;
         };
     }
 
