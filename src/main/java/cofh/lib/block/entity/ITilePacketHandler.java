@@ -2,7 +2,7 @@ package cofh.lib.block.entity;
 
 import net.minecraft.network.FriendlyByteBuf;
 
-public interface ITilePacketHandler {
+public interface ITilePacketHandler extends ITileLocation {
 
     // CONFIG
     default FriendlyByteBuf getConfigPacket(FriendlyByteBuf buffer) {

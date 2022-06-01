@@ -1,7 +1,6 @@
 package cofh.core.network.packet.server;
 
 import cofh.core.CoFHCore;
-import cofh.core.block.entity.TileCoFH;
 import cofh.lib.block.entity.ITilePacketHandler;
 import cofh.lib.network.packet.IPacketServer;
 import cofh.lib.network.packet.PacketBase;
@@ -51,7 +50,7 @@ public class TileConfigPacket extends PacketBase implements IPacketServer {
         pos = buffer.readBlockPos();
     }
 
-    public static void sendToServer(TileCoFH tile) {
+    public static void sendToServer(ITilePacketHandler tile) {
 
         TileConfigPacket packet = new TileConfigPacket();
         packet.pos = tile.pos();

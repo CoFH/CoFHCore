@@ -17,15 +17,7 @@ import javax.annotation.Nullable;
 /**
  * Mostly a sneaky way to reduce some stupid but useful boilerplate. :)
  */
-public interface ITileCallback extends IInventoryCallback {
-
-    Block block();
-
-    BlockState state();
-
-    BlockPos pos();
-
-    Level world();
+public interface ITileCallback extends IInventoryCallback, ITileLocation {
 
     default int invSize() {
 

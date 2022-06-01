@@ -1,7 +1,6 @@
 package cofh.core.network.packet.client;
 
 import cofh.core.CoFHCore;
-import cofh.core.block.entity.TileCoFH;
 import cofh.core.util.ProxyUtils;
 import cofh.lib.block.entity.ITilePacketHandler;
 import cofh.lib.network.packet.IPacketClient;
@@ -54,7 +53,7 @@ public class TileGuiPacket extends PacketBase implements IPacketClient {
         pos = buffer.readBlockPos();
     }
 
-    public static void sendToClient(TileCoFH tile, ServerPlayer player) {
+    public static void sendToClient(ITilePacketHandler tile, ServerPlayer player) {
 
         if (tile.world() == null || Utils.isClientWorld(tile.world())) {
             return;

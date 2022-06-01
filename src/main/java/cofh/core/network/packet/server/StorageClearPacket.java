@@ -1,7 +1,6 @@
 package cofh.core.network.packet.server;
 
 import cofh.core.CoFHCore;
-import cofh.core.block.entity.TileCoFH;
 import cofh.lib.block.entity.ITileCallback;
 import cofh.lib.network.packet.IPacketServer;
 import cofh.lib.network.packet.PacketBase;
@@ -64,7 +63,7 @@ public class StorageClearPacket extends PacketBase implements IPacketServer {
         storageIndex = buf.readInt();
     }
 
-    public static boolean sendToServer(TileCoFH tile, StorageType storageType, int storageIndex) {
+    public static boolean sendToServer(ITileCallback tile, StorageType storageType, int storageIndex) {
 
         if (tile == null) {
             return false;

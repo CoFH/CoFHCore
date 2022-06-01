@@ -4,6 +4,8 @@ import cofh.core.block.entity.TileCoFH;
 import cofh.core.client.gui.element.*;
 import cofh.core.network.packet.server.ClaimXPPacket;
 import cofh.core.network.packet.server.StorageClearPacket;
+import cofh.lib.block.entity.ITileCallback;
+import cofh.lib.block.entity.ITileXpHandler;
 import cofh.lib.client.gui.IGuiAccess;
 import cofh.lib.energy.EnergyStorageCoFH;
 import cofh.lib.fluid.FluidStorageCoFH;
@@ -42,7 +44,7 @@ public class GuiHelper {
                 .setSize(width, height);
     }
 
-    public static ElementResourceStorage setClearable(ElementEnergyStorage storage, TileCoFH tile, int coil) {
+    public static ElementResourceStorage setClearable(ElementEnergyStorage storage, ITileCallback tile, int coil) {
 
         return storage.setClearStorage(() -> StorageClearPacket.sendToServer(tile, ENERGY, coil));
     }
@@ -104,7 +106,7 @@ public class GuiHelper {
         return (ElementFluidStorage) new ElementFluidStorage(gui, posX, posY, storage).setUnderlayTexture(underlayTexture, drawUnderlay).setOverlayTexture(overlayTexture).setSize(width, height).setTexture(texture, texW, texH);
     }
 
-    public static ElementResourceStorage setClearable(ElementFluidStorage storage, TileCoFH tile, int tank) {
+    public static ElementResourceStorage setClearable(ElementFluidStorage storage, ITileCallback tile, int tank) {
 
         return storage.setClearStorage(() -> StorageClearPacket.sendToServer(tile, FLUID, tank));
     }
@@ -191,7 +193,7 @@ public class GuiHelper {
                 .setSize(width, height);
     }
 
-    public static ElementResourceStorage setClearable(ElementItemStorage storage, TileCoFH tile, int slot) {
+    public static ElementResourceStorage setClearable(ElementItemStorage storage, ITileCallback tile, int slot) {
 
         return storage.setClearStorage(() -> StorageClearPacket.sendToServer(tile, ITEM, slot));
     }
@@ -210,7 +212,7 @@ public class GuiHelper {
                 .setTexture(texture, texW, texH);
     }
 
-    public static ElementResourceStorage setClaimable(ElementXpStorage storage, TileCoFH tile) {
+    public static ElementResourceStorage setClaimable(ElementXpStorage storage, ITileXpHandler tile) {
 
         return storage.setClaimStorage(() -> ClaimXPPacket.sendToServer(tile));
     }

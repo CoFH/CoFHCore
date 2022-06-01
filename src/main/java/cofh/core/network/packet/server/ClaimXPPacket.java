@@ -1,7 +1,6 @@
 package cofh.core.network.packet.server;
 
 import cofh.core.CoFHCore;
-import cofh.core.block.entity.TileCoFH;
 import cofh.lib.block.entity.ITileXpHandler;
 import cofh.lib.network.packet.IPacketServer;
 import cofh.lib.network.packet.PacketBase;
@@ -50,7 +49,7 @@ public class ClaimXPPacket extends PacketBase implements IPacketServer {
         pos = buf.readBlockPos();
     }
 
-    public static boolean sendToServer(TileCoFH tile) {
+    public static boolean sendToServer(ITileXpHandler tile) {
 
         if (tile == null) {
             return false;

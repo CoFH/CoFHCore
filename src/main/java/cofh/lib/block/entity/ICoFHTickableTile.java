@@ -49,7 +49,6 @@ public interface ICoFHTickableTile {
                 return (level1, pos, state, instance) -> ((IServerTickable) instance).tickServer();
             }
         }
-
         return null;
     }
 

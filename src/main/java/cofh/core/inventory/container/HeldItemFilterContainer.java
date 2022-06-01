@@ -87,7 +87,7 @@ public class HeldItemFilterContainer extends ContainerCoFH implements IFilterOpt
     @Override
     public boolean stillValid(Player playerIn) {
 
-        return true;
+        return lockedSlot.getItem() == filterStack;
     }
 
     @Override
