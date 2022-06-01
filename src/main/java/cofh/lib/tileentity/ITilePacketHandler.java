@@ -2,7 +2,7 @@ package cofh.lib.tileentity;
 
 import net.minecraft.network.PacketBuffer;
 
-public interface ITilePacketHandler {
+public interface ITilePacketHandler extends ITileLocation {
 
     // CONFIG
     default PacketBuffer getConfigPacket(PacketBuffer buffer) {
