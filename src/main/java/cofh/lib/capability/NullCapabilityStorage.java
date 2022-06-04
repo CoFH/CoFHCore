@@ -8,7 +8,7 @@ import net.minecraftforge.common.capabilities.Capability;
  * A {@link Capability.IStorage} implementation, that does nothing.
  * Useful in cases where you don't need the capability to be saved.
  * <p>
- * Yoinked from CCL with permission :)
+ * Copied from CCL with permission :)
  * <p>
  * Created by covers1624 on 5/5/20.
  */

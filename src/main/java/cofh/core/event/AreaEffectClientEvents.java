@@ -39,7 +39,7 @@ public class AreaEffectClientEvents {
     }
 
     @SubscribeEvent (priority = EventPriority.LOW)
-    public static void renderBlockHighlights(DrawHighlightEvent.HighlightBlock event) {
+    public static void onBlockHighlight(DrawHighlightEvent.HighlightBlock event) {
 
         if (event.isCanceled()) {
             return;
