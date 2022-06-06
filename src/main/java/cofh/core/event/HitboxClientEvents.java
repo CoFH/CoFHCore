@@ -39,20 +39,19 @@ public class HitboxClientEvents {
 
             stack.pushPose();
             stack.translate(pos.getX(), pos.getY(), pos.getZ());
-            Matrix4f mat = stack.last().pose();
 
-            bufferShapeHitBox(mat, event.getBuffers(), event.getInfo(), voxelHit.shape);
+            bufferShapeHitBox(stack, event.getBuffers(), event.getInfo(), voxelHit.shape);
 
             stack.popPose();
         }
     }
 
     // region HELPERS
-    private static void bufferShapeHitBox(Matrix4f mat, IRenderTypeBuffer buffers, ActiveRenderInfo renderInfo, VoxelShape shape) {
+    private static void bufferShapeHitBox(MatrixStack pStack, IRenderTypeBuffer buffers, ActiveRenderInfo renderInfo, VoxelShape shape) {
 
         Vector3d eye = renderInfo.getPosition();
-        mat.translate(new Vector3f((float) -eye.x, (float) -eye.y, (float) -eye.z));
-        bufferShapeOutline(buffers.getBuffer(RenderType.lines()), mat, shape, 0.0F, 0.0F, 0.0F, 0.4F);
+        pStack.translate((float) -eye.x, (float) -eye.y, (float) -eye.z);
+        bufferShapeOutline(buffers.getBuffer(RenderType.lines()), pStack.last().pose(), shape, 0.0F, 0.0F, 0.0F, 0.4F);
     }
 
     private static void bufferShapeOutline(IVertexBuilder builder, Matrix4f mat, VoxelShape shape, float r, float g, float b, float a) {
