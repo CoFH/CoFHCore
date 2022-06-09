@@ -236,7 +236,7 @@ public class FluidStorageCoFH implements IFluidHandler, IFluidStackAccess, IReso
     }
     // endregion
 
-    // IResourceStorage
+    // region IResourceStorage
     @Override
     public boolean clear() {
 
