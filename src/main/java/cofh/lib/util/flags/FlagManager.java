@@ -41,14 +41,18 @@ public class FlagManager {
         return FLAGS.get(flag);
     }
 
-    public synchronized void setFlag(String flag, boolean enable) {
+    public void setFlag(String flag, boolean enable) {
 
-        FLAGS.put(flag, enable ? TRUE : FALSE);
+        synchronized (FLAGS) {
+            FLAGS.put(flag, enable ? TRUE : FALSE);
+        }
     }
 
-    public synchronized void setFlag(String flag, BooleanSupplier condition) {
+    public void setFlag(String flag, BooleanSupplier condition) {
 
-        FLAGS.put(flag, condition == null ? FALSE : condition);
+        synchronized (FLAGS) {
+            FLAGS.put(flag, condition == null ? FALSE : condition);
+        }
     }
 
     public BooleanSupplier getFlag(String flag) {

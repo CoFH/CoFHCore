@@ -291,6 +291,8 @@ public class RecipeProviderCoFH extends RecipeProvider implements IConditionBuil
     protected void generateSmeltingAndBlastingRecipes(DeferredRegisterCoFH<Item> reg, Consumer<FinishedRecipe> consumer, String material, float xp, String folder) {
 
         Item ore = reg.get(material + "_ore");
+        Item deep = reg.get("deepslate_" + material + "_ore");
+
         Item raw = reg.get("raw_" + material);
         Item ingot = reg.get(material + "_ingot");
         Item gem = reg.get(material);
@@ -306,9 +308,15 @@ public class RecipeProviderCoFH extends RecipeProvider implements IConditionBuil
             if (ore != null) {
                 generateSmeltingAndBlastingRecipes(reg, consumer, ore, ingot, xp, folder, "_ore");
             }
+            if (deep != null) {
+                generateSmeltingAndBlastingRecipes(reg, consumer, deep, ingot, xp, folder, "_deepslate_ore");
+            }
         } else if (gem != null) {
             if (ore != null) {
                 generateSmeltingAndBlastingRecipes(reg, consumer, ore, gem, xp, folder, "_ore");
+            }
+            if (deep != null) {
+                generateSmeltingAndBlastingRecipes(reg, consumer, deep, gem, xp, folder, "_deepslate_ore");
             }
         }
     }

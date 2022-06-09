@@ -3,7 +3,6 @@ package cofh.core.event;
 import cofh.core.config.CoreClientConfig;
 import cofh.lib.client.renderer.entity.ITranslucentRenderer;
 import cofh.lib.util.Utils;
-import com.mojang.blaze3d.vertex.PoseStack;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.ListTag;
@@ -15,6 +14,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderLevelLastEvent;
 import net.minecraftforge.client.event.RenderTooltipEvent;
@@ -24,6 +24,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -99,8 +100,9 @@ public class CoreClientEvents {
         //        }
         if (CoreClientConfig.enableItemTags && event.getFlags().isAdvanced()) {
             Item item = event.getItemStack().getItem();
+            Block block = Block.byItem(item);
 
-            Set<ResourceLocation> blockTags = Block.byItem(item).builtInRegistryHolder().tags().map(TagKey::location).collect(Collectors.toSet());
+            Set<ResourceLocation> blockTags = block == Blocks.AIR ? Collections.emptySet() : Block.byItem(item).builtInRegistryHolder().tags().map(TagKey::location).collect(Collectors.toSet());
             Set<ResourceLocation> itemTags = item.builtInRegistryHolder().tags().map(TagKey::location).collect(Collectors.toSet());
 
             if (!blockTags.isEmpty() || !itemTags.isEmpty()) {
