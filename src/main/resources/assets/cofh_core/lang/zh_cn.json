@@ -1,12 +1,12 @@
 {
-    "_comment": "========================================================================================================",
-    "_comment": "CoFH General / Lib",
-    "_comment": "========================================================================================================",
-  
+  "_comment": "========================================================================================================",
+  "_comment": "CoFH General / Lib",
+  "_comment": "========================================================================================================",
+
   "attribute.name.cofh.fall_distance": "掉落距离",
   "attribute.name.cofh.hazard_resistance": "毒害抗性",
   "attribute.name.cofh.sting_resistance": "叮咬抗性",
-  
+
   "death.attack.knife": "%1$s被%2$s刀了！",
   "death.attack.knife.item": "%1$s被%2$s用%3$s捅死了！",
 
@@ -30,7 +30,7 @@
   "commands.cofh.repair.success.multiple": "已修复%s个实体的盔甲",
   "commands.cofh.zap.success.single": "已向%s降下天谴",
   "commands.cofh.zap.success.multiple": "已向%s个实体降下天谴",
-  
+
   "info.cofh.another_player": "另一玩家",
   "info.cofh.amount": "数量",
   "info.cofh.amount_unmodifiable": "不可变数量",
@@ -82,7 +82,7 @@
   "info.cofh.energy_prod": "能量输出",
   "info.cofh.energy_stored": "能量存储",
   "info.cofh.energy_use": "能量消耗",
-  
+
   "info.cofh.fluid_filter": "流体过滤",
   "info.cofh.item_filter": "物品过滤",
   "info.cofh.filter.allowlist.0": "黑名单",
@@ -126,7 +126,7 @@
   "info.cofh.high": "高",
   "info.cofh.low": "低",
   "info.cofh.signal_required": "需要红石信号",
-  
+
   "_comment": "========================================================================================================",
   "_comment": "CoFH Core",
   "_comment": "========================================================================================================",
@@ -168,7 +168,7 @@
 
   "key.cofh.mode_change_increment": "循环至下一个模式",
   "key.cofh.mode_change_decrement": "循环至上一个模式",
-  
+
   "_comment": "========================================================================================================",
   "_comment": "Minecraft",
   "_comment": "========================================================================================================",

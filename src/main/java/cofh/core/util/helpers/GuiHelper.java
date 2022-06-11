@@ -1,6 +1,5 @@
 package cofh.core.util.helpers;
 
-import cofh.core.block.entity.TileCoFH;
 import cofh.core.client.gui.element.*;
 import cofh.core.network.packet.server.ClaimXPPacket;
 import cofh.core.network.packet.server.StorageClearPacket;

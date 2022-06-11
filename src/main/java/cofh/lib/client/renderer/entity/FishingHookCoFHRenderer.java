@@ -17,8 +17,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FishingHook;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 
 public class FishingHookCoFHRenderer extends FishingHookRenderer {
@@ -54,11 +52,11 @@ public class FishingHookCoFHRenderer extends FishingHookRenderer {
         int i = fromRightArm(player) ? 1 : -1;
 
         float f = player.getAttackAnim(partialTicks);
-        float f1 = Mth.sin(Mth.sqrt(f) * (float)Math.PI);
-        float f2 = Mth.lerp(partialTicks, player.yBodyRotO, player.yBodyRot) * ((float)Math.PI / 180F);
-        double d0 = (double)Mth.sin(f2);
-        double d1 = (double)Mth.cos(f2);
-        double d2 = (double)i * 0.35D;
+        float f1 = Mth.sin(Mth.sqrt(f) * (float) Math.PI);
+        float f2 = Mth.lerp(partialTicks, player.yBodyRotO, player.yBodyRot) * ((float) Math.PI / 180F);
+        double d0 = (double) Mth.sin(f2);
+        double d1 = (double) Mth.cos(f2);
+        double d2 = (double) i * 0.35D;
         double d3 = 0.8D;
         double d4;
         double d5;
@@ -66,32 +64,32 @@ public class FishingHookCoFHRenderer extends FishingHookRenderer {
         float f3;
         if ((this.entityRenderDispatcher.options == null || this.entityRenderDispatcher.options.getCameraType().isFirstPerson()) && player == Minecraft.getInstance().player) {
             double d7 = 960.0D / this.entityRenderDispatcher.options.fov;
-            Vec3 vec3 = this.entityRenderDispatcher.camera.getNearPlane().getPointOnPlane((float)i * 0.525F, -0.1F);
+            Vec3 vec3 = this.entityRenderDispatcher.camera.getNearPlane().getPointOnPlane((float) i * 0.525F, -0.1F);
             vec3 = vec3.scale(d7);
             vec3 = vec3.yRot(f1 * 0.5F);
             vec3 = vec3.xRot(-f1 * 0.7F);
-            d4 = Mth.lerp((double)partialTicks, player.xo, player.getX()) + vec3.x;
-            d5 = Mth.lerp((double)partialTicks, player.yo, player.getY()) + vec3.y;
-            d6 = Mth.lerp((double)partialTicks, player.zo, player.getZ()) + vec3.z;
+            d4 = Mth.lerp((double) partialTicks, player.xo, player.getX()) + vec3.x;
+            d5 = Mth.lerp((double) partialTicks, player.yo, player.getY()) + vec3.y;
+            d6 = Mth.lerp((double) partialTicks, player.zo, player.getZ()) + vec3.z;
             f3 = player.getEyeHeight();
         } else {
-            d4 = Mth.lerp((double)partialTicks, player.xo, player.getX()) - d1 * d2 - d0 * 0.8D;
-            d5 = player.yo + (double)player.getEyeHeight() + (player.getY() - player.yo) * (double)partialTicks - 0.45D;
-            d6 = Mth.lerp((double)partialTicks, player.zo, player.getZ()) - d0 * d2 + d1 * 0.8D;
+            d4 = Mth.lerp((double) partialTicks, player.xo, player.getX()) - d1 * d2 - d0 * 0.8D;
+            d5 = player.yo + (double) player.getEyeHeight() + (player.getY() - player.yo) * (double) partialTicks - 0.45D;
+            d6 = Mth.lerp((double) partialTicks, player.zo, player.getZ()) - d0 * d2 + d1 * 0.8D;
             f3 = player.isCrouching() ? -0.1875F : 0.0F;
         }
 
-        double d9 = Mth.lerp((double)partialTicks, hook.xo, hook.getX());
-        double d10 = Mth.lerp((double)partialTicks, hook.yo, hook.getY()) + 0.25D;
-        double d8 = Mth.lerp((double)partialTicks, hook.zo, hook.getZ());
-        float f4 = (float)(d4 - d9);
-        float f5 = (float)(d5 - d10) + f3;
-        float f6 = (float)(d6 - d8);
+        double d9 = Mth.lerp((double) partialTicks, hook.xo, hook.getX());
+        double d10 = Mth.lerp((double) partialTicks, hook.yo, hook.getY()) + 0.25D;
+        double d8 = Mth.lerp((double) partialTicks, hook.zo, hook.getZ());
+        float f4 = (float) (d4 - d9);
+        float f5 = (float) (d5 - d10) + f3;
+        float f6 = (float) (d6 - d8);
         VertexConsumer vertexconsumer1 = buffer.getBuffer(RenderType.lineStrip());
         PoseStack.Pose posestack$pose1 = stack.last();
         int j = 16;
 
-        for(int k = 0; k <= 16; ++k) {
+        for (int k = 0; k <= 16; ++k) {
             stringVertex(f4, f5, f6, vertexconsumer1, posestack$pose1, fraction(k, 16), fraction(k + 1, 16));
         }
 
@@ -106,14 +104,17 @@ public class FishingHookCoFHRenderer extends FishingHookRenderer {
 
     //TODO Hek: ATs
     protected static float fraction(int p_114691_, int p_114692_) {
-        return (float)p_114691_ / (float)p_114692_;
+
+        return (float) p_114691_ / (float) p_114692_;
     }
 
     protected static void vertex(VertexConsumer p_114712_, Matrix4f p_114713_, Matrix3f p_114714_, int p_114715_, float p_114716_, int p_114717_, int p_114718_, int p_114719_) {
-        p_114712_.vertex(p_114713_, p_114716_ - 0.5F, (float)p_114717_ - 0.5F, 0.0F).color(255, 255, 255, 255).uv((float)p_114718_, (float)p_114719_).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(p_114715_).normal(p_114714_, 0.0F, 1.0F, 0.0F).endVertex();
+
+        p_114712_.vertex(p_114713_, p_114716_ - 0.5F, (float) p_114717_ - 0.5F, 0.0F).color(255, 255, 255, 255).uv((float) p_114718_, (float) p_114719_).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(p_114715_).normal(p_114714_, 0.0F, 1.0F, 0.0F).endVertex();
     }
 
     protected static void stringVertex(float p_174119_, float p_174120_, float p_174121_, VertexConsumer p_174122_, PoseStack.Pose p_174123_, float p_174124_, float p_174125_) {
+
         float f = p_174119_ * p_174124_;
         float f1 = p_174120_ * (p_174124_ * p_174124_ + p_174124_) * 0.5F + 0.25F;
         float f2 = p_174121_ * p_174124_;

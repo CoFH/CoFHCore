@@ -1,9 +1,7 @@
 package cofh.core.client.particle;
 
 import cofh.core.util.helpers.vfx.VFXHelper;
-import cofh.lib.entity.ElectricArc;
 import cofh.lib.util.helpers.MathHelper;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -11,7 +9,6 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;

@@ -22,4 +22,5 @@ public class CoreShaders {
 
         event.registerShader(new ShaderInstance(event.getResourceManager(), new ResourceLocation(ID_COFH_CORE, "particle"), DefaultVertexFormat.PARTICLE), s -> CoreShaders.PARTICLE_TRANSLUCENT = s);
     }
+
 }

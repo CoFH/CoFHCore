@@ -1,6 +1,5 @@
 package cofh.core.mixin;
 
-import cofh.core.event.CoreClientEvents;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Matrix4f;

@@ -1,16 +1,8 @@
 package cofh.core.init;
 
 import cofh.core.client.particle.*;
-import com.mojang.datafixers.util.Pair;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ParticleEngine;
-import net.minecraft.client.particle.ParticleProvider;
-import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.ArrayList;
@@ -18,9 +10,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import static cofh.core.CoFHCore.PARTICLES;
-import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
 import static cofh.lib.util.references.CoreIDs.*;
-import static cofh.lib.util.references.CoreReferences.*;
 
 public class CoreParticles {
 
