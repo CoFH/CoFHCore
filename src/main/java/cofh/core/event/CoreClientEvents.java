@@ -3,8 +3,16 @@ package cofh.core.event;
 import cofh.core.config.CoreClientConfig;
 import cofh.lib.client.renderer.entity.ITranslucentRenderer;
 import cofh.lib.util.Utils;
+import cofh.lib.util.raytracer.VoxelShapeBlockHitResult;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Matrix4f;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import net.minecraft.client.Camera;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -15,11 +23,16 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.DrawSelectionEvent;
 import net.minecraftforge.client.event.RenderLevelLastEvent;
 import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -166,4 +179,38 @@ public class CoreClientEvents {
         ITranslucentRenderer.renderTranslucent(event.getPoseStack(), event.getPartialTick(), event.getLevelRenderer(), event.getProjectionMatrix());
     }
 
+    @SubscribeEvent (priority = EventPriority.LOW)
+    public static void renderSubHitboxes(DrawSelectionEvent.HighlightBlock event) {
+
+        BlockHitResult hit = event.getTarget();
+        if (hit instanceof VoxelShapeBlockHitResult voxelHit) {
+            PoseStack stack = event.getPoseStack();
+            BlockPos pos = voxelHit.getBlockPos();
+            event.setCanceled(true);
+
+            stack.pushPose();
+            stack.translate(pos.getX(), pos.getY(), pos.getZ());
+
+            bufferShapeHitBox(stack, event.getMultiBufferSource(), event.getCamera(), voxelHit.shape);
+
+            stack.popPose();
+        }
+    }
+
+    // region HELPERS
+    private static void bufferShapeHitBox(PoseStack pStack, MultiBufferSource buffers, Camera renderInfo, VoxelShape shape) {
+
+        Vec3 eye = renderInfo.getPosition();
+        pStack.translate((float) -eye.x, (float) -eye.y, (float) -eye.z);
+        bufferShapeOutline(buffers.getBuffer(RenderType.lines()), pStack.last().pose(), shape, 0.0F, 0.0F, 0.0F, 0.4F);
+    }
+
+    private static void bufferShapeOutline(VertexConsumer builder, Matrix4f mat, VoxelShape shape, float r, float g, float b, float a) {
+
+        shape.forAllEdges((x1, y1, z1, x2, y2, z2) -> {
+            builder.vertex(mat, (float) x1, (float) y1, (float) z1).color(r, g, b, a).endVertex();
+            builder.vertex(mat, (float) x2, (float) y2, (float) z2).color(r, g, b, a).endVertex();
+        });
+    }
+    // endregion
 }

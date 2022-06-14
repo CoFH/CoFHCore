@@ -119,6 +119,8 @@ public class TileBlockCoFH extends Block implements EntityBlock, IDismantleable 
     @Override
     public void setPlacedBy(Level worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
 
+        System.out.println("setPlacedBy!");
+
         if (!(placer instanceof Player player) || Utils.isClientWorld(worldIn)) {
             return;
         }
@@ -130,6 +132,12 @@ public class TileBlockCoFH extends Block implements EntityBlock, IDismantleable 
         if (tile != null) {
             tile.onPlacedBy(worldIn, pos, state, placer, stack);
         }
+    }
+
+    @Override
+    public void onPlace(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+
+        System.out.println("onPlace!");
     }
 
     @Override
