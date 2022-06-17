@@ -182,7 +182,7 @@ public class Utils {
     }*/
 
     // region TIME CHECKS
-    public static final int TIME_CONSTANT = 32;
+    public static final int TIME_CONSTANT = 40;
     public static final int TIME_CONSTANT_HALF = TIME_CONSTANT / 2;
     public static final int TIME_CONSTANT_QUARTER = TIME_CONSTANT / 4;
 
@@ -203,17 +203,17 @@ public class Utils {
         }
     }
 
-    public static boolean timeCheck(Level world) {
+    public static boolean timeCheck() {
 
         return timeConstant == 0;
     }
 
-    public static boolean timeCheckHalf(Level world) {
+    public static boolean timeCheckHalf() {
 
         return timeConstantHalf == 0;
     }
 
-    public static boolean timeCheckQuarter(Level world) {
+    public static boolean timeCheckQuarter() {
 
         return timeConstantQuarter == 0;
     }

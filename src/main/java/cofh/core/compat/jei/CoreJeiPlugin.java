@@ -4,6 +4,7 @@ import cofh.core.client.gui.ContainerScreenCoFH;
 import cofh.lib.util.references.CoreReferences;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.registration.IAdvancedRegistration;
 import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
 import net.minecraft.resources.ResourceLocation;
@@ -23,6 +24,12 @@ public class CoreJeiPlugin implements IModPlugin {
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
 
         registration.addGenericGuiContainerHandler(ContainerScreenCoFH.class, new PanelBounds());
+    }
+
+    @Override
+    public void registerAdvanced(IAdvancedRegistration registration) {
+
+        // registration.addRecipeManagerPlugin(new PotionNBTRecipeManagerPlugin());
     }
 
     @Override
