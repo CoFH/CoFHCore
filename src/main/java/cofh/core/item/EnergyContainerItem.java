@@ -37,6 +37,12 @@ public abstract class EnergyContainerItem extends ItemCoFH implements IEnergyCon
         this(builder, maxEnergy, maxTransfer, maxTransfer);
     }
 
+    public EnergyContainerItem setMaxEnergy(int maxEnergy) {
+
+        this.maxEnergy = maxEnergy;
+        return this;
+    }
+
     @Override
     protected void tooltipDelegate(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 

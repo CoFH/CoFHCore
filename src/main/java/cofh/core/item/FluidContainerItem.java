@@ -43,6 +43,12 @@ public class FluidContainerItem extends ItemCoFH implements IFluidContainerItem,
         this(builder, fluidCapacity, e -> true);
     }
 
+    public FluidContainerItem setFluidCapacity(int fluidCapacity) {
+
+        this.fluidCapacity = fluidCapacity;
+        return this;
+    }
+
     @Override
     protected void tooltipDelegate(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 
