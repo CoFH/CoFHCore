@@ -9,10 +9,6 @@ public class CoreIDs {
     }
 
     // region IDS
-    public static final String ID_ATTR_FALL_DISTANCE = "fall_distance";
-    public static final String ID_ATTR_HAZARD_RESISTANCE = "hazard_resistance";
-    public static final String ID_ATTR_STING_RESISTANCE = "sting_resistance";
-
     public static final String ID_GLOSSED_MAGMA = "glossed_magma";
     public static final String ID_SIGNAL_AIR = "signal_air";
     public static final String ID_GLOW_AIR = "glow_air";
@@ -24,8 +20,6 @@ public class CoreIDs {
     public static final String ID_FLUID_POTION = "potion";
     public static final String ID_FLUID_STEAM = "steam";
     public static final String ID_FLUID_XP = "experience";
-
-    public static final String ID_CONTAINER_HELD_INVENTORY = "held_inventory";
 
     public static final String ID_CONTAINER_HELD_FLUID_FILTER = "held_fluid_filter";
     public static final String ID_CONTAINER_TILE_FLUID_FILTER = "tile_fluid_filter";

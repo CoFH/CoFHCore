@@ -19,6 +19,7 @@ public class FilterGuiOpenPacket extends PacketBase implements IPacketServer {
 
     protected BlockPos pos;
     protected byte mode;
+    protected byte guiId;
 
     public FilterGuiOpenPacket() {
 
@@ -35,9 +36,9 @@ public class FilterGuiOpenPacket extends PacketBase implements IPacketServer {
         BlockEntity tile = world.getBlockEntity(pos);
         if (tile instanceof IFilterableTile) {
             if (mode == TILE) {
-                ((IFilterableTile) tile).openGui(player);
+                ((IFilterableTile) tile).openGui(player, guiId);
             } else if (mode == FILTER) {
-                ((IFilterableTile) tile).openFilterGui(player);
+                ((IFilterableTile) tile).openFilterGui(player, guiId);
             }
         }
     }
@@ -47,6 +48,7 @@ public class FilterGuiOpenPacket extends PacketBase implements IPacketServer {
 
         buf.writeBlockPos(pos);
         buf.writeByte(mode);
+        buf.writeByte(guiId);
     }
 
     @Override
@@ -56,21 +58,22 @@ public class FilterGuiOpenPacket extends PacketBase implements IPacketServer {
         mode = buf.readByte();
     }
 
-    public static void openFilterGui(IFilterableTile tile) {
+    public static void openFilterGui(IFilterableTile tile, byte filterId) {
 
-        sendToServer(tile, FILTER);
+        sendToServer(tile, FILTER, filterId);
     }
 
-    public static void openTileGui(IFilterableTile tile) {
+    public static void openTileGui(IFilterableTile tile, byte filterId) {
 
-        sendToServer(tile, TILE);
+        sendToServer(tile, TILE, filterId);
     }
 
-    protected static void sendToServer(IFilterableTile tile, byte mode) {
+    protected static void sendToServer(IFilterableTile tile, byte mode, byte guiId) {
 
         FilterGuiOpenPacket packet = new FilterGuiOpenPacket();
         packet.pos = tile.pos();
         packet.mode = mode;
+        packet.guiId = guiId;
         packet.sendToServer();
     }
 

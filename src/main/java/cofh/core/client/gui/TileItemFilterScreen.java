@@ -52,20 +52,20 @@ public class TileItemFilterScreen extends ContainerScreenCoFH<TileItemFilterCont
                 .setUV(24, 0)
                 .setSize(24, 21)
                 .setTexture(TAB_TOP, 48, 32)
-                .setVisible(() -> FilterHelper.hasFilter(menu.getFilterableTile())));
+                .setVisible(() -> FilterHelper.hasFilter(menu.getFilterableTile(), 0)));
         addElement(new ElementTexture(this, 8, -17) {
 
             @Override
             public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
 
-                FilterGuiOpenPacket.openTileGui(menu.getFilterableTile());
+                FilterGuiOpenPacket.openTileGui(menu.getFilterableTile(), (byte) 0);
                 return true;
             }
         }
                 .setSize(16, 16)
                 .setTexture(NAV_BACK, 16, 16)
                 .setTooltipFactory((element, mouseX, mouseY) -> Collections.singletonList(menu.getFilterableTile().getDisplayName()))
-                .setVisible(() -> FilterHelper.hasFilter(menu.getFilterableTile())));
+                .setVisible(() -> FilterHelper.hasFilter(menu.getFilterableTile(), 0)));
     }
 
     // region ELEMENTS

@@ -1,22 +1,17 @@
 package cofh.lib.util.filter;
 
-import net.minecraft.core.BlockPos;
+import cofh.lib.block.entity.ITileLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
-import net.minecraft.world.level.Level;
 
-public interface IFilterableTile extends MenuProvider {
+public interface IFilterableTile extends ITileLocation, MenuProvider {
 
-    IFilter getFilter();
+    IFilter getFilter(int filterId);
 
-    void onFilterChanged();
+    void onFilterChanged(int filterId);
 
-    boolean openGui(ServerPlayer player);
+    boolean openGui(ServerPlayer player, int guiId);
 
-    boolean openFilterGui(ServerPlayer player);
-
-    BlockPos pos();
-
-    Level world();
+    boolean openFilterGui(ServerPlayer player, int filterId);
 
 }

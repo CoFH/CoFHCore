@@ -24,9 +24,9 @@ public class FilterHelper {
         return getPropertyWithDefault(stack, TAG_FILTER_TYPE, "");
     }
 
-    public static boolean hasFilter(IFilterableTile filterable) {
+    public static boolean hasFilter(IFilterableTile filterable, int id) {
 
-        IFilter filter = filterable.getFilter();
+        IFilter filter = filterable.getFilter(id);
         return filter != null && filter != EmptyFilter.INSTANCE;
     }
 

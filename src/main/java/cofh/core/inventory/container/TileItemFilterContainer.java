@@ -29,7 +29,7 @@ public class TileItemFilterContainer extends TileContainer implements IFilterOpt
         allowSwap = false;
 
         filterable = (IFilterableTile) world.getBlockEntity(pos);
-        filter = (AbstractItemFilter) filterable.getFilter();
+        filter = (AbstractItemFilter) filterable.getFilter(0);
 
         int slots = filter.size();
         filterInventory = new InvWrapperGeneric(this, filter.getItems(), slots);
@@ -65,7 +65,7 @@ public class TileItemFilterContainer extends TileContainer implements IFilterOpt
     @Override
     public boolean stillValid(Player player) {
 
-        if (!FilterHelper.hasFilter(filterable)) {
+        if (!FilterHelper.hasFilter(filterable, 0)) {
             return false;
         }
         return super.stillValid(player);
@@ -75,7 +75,7 @@ public class TileItemFilterContainer extends TileContainer implements IFilterOpt
     public void removed(Player playerIn) {
 
         filter.setItems(filterInventory.getStacks());
-        filterable.onFilterChanged();
+        filterable.onFilterChanged(0);
         super.removed(playerIn);
     }
 

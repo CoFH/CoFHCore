@@ -118,7 +118,6 @@ public class ArmorEvents {
     //        }
     //    }
 
-    // TODO: Adjust?
     // region HELPERS
     private static void attemptDamagePlayerArmor(Entity entity, float amount) {
 
