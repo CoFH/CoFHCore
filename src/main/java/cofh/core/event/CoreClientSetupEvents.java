@@ -1,6 +1,6 @@
 package cofh.core.event;
 
-import cofh.core.init.CoreParticles;
+import cofh.core.client.particle.*;
 import cofh.lib.client.model.DynamicFluidContainerModel;
 import cofh.lib.item.IColorableItem;
 import net.minecraft.client.Minecraft;
@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
+import static cofh.lib.util.references.CoreReferences.*;
 
 @Mod.EventBusSubscriber (value = Dist.CLIENT, modid = ID_COFH_CORE, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CoreClientSetupEvents {
@@ -49,8 +50,17 @@ public class CoreClientSetupEvents {
     public static void registerParticleFactories(final ParticleFactoryRegisterEvent event) {
 
         ParticleEngine manager = Minecraft.getInstance().particleEngine;
-        CoreParticles.factoryRegistration.forEach(r -> r.accept(manager));
-        CoreParticles.factoryRegistration = null;
+
+        manager.register(FROST_PARTICLE, FrostParticle.Factory::new);
+        manager.register(SPARK_PARTICLE, SparkParticle.Factory::new);
+        manager.register(PLASMA_PARTICLE, PlasmaBallParticle.Factory::new);
+        manager.register(SHOCKWAVE_PARTICLE, ShockwaveParticle.Factory::new);
+        manager.register(BLAST_WAVE_PARTICLE, BlastWaveParticle.Factory::new);
+        manager.register(VORTEX_PARTICLE, WindVortexParticle.Factory::new);
+        manager.register(SPIRAL_PARTICLE, WindSpiralParticle.Factory::new);
+        manager.register(STRAIGHT_ARC_PARTICLE, ArcParticle.Factory::new);
+        manager.register(MIST_PARTICLE, MistParticle::iceMist);
+
     }
 
     // region HELPERS

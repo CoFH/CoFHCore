@@ -1,15 +1,8 @@
 package cofh.core.util.helpers.vfx;
 
-import cofh.core.init.CoreShaders;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
 
 import static cofh.core.client.CoreRenderType.THICK_LINES;
@@ -65,26 +58,5 @@ public class RenderTypes {
                     .setWriteMaskState(COLOR_WRITE)
                     .setShaderState(NEW_ENTITY_SHADER)
                     .createCompositeState(false));
-
-    public static ParticleRenderType PARTICLE_SHEET_TRANSLUCENT_BLEND = new ParticleRenderType() {
-
-        @Override
-        public void begin(BufferBuilder builder, TextureManager manager) { //TODO translucent blocks
-
-            RenderSystem.depthMask(false);
-            RenderSystem.enableBlend();
-            RenderSystem.setShader(() -> CoreShaders.PARTICLE_TRANSLUCENT);
-            RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_PARTICLES);
-            builder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
-        }
-
-        @Override
-        public void end(Tesselator tess) {
-
-            tess.end();
-            RenderSystem.depthMask(true);
-            RenderSystem.disableBlend();
-        }
-    };
 
 }
