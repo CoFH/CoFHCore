@@ -1,11 +1,6 @@
 package cofh.core.client.particle;
 
 import cofh.lib.util.helpers.MathHelper;
-<<<<<<< HEAD
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.Camera;
-=======
->>>>>>> parent of 4283c98 (mist particle, particle blend shader)
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.ParticleRenderType;
@@ -14,12 +9,6 @@ import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-<<<<<<< HEAD
-import javax.annotation.Nonnull;
-=======
-import javax.annotation.Nullable;
->>>>>>> parent of 4283c98 (mist particle, particle blend shader)
 
 @OnlyIn (Dist.CLIENT)
 public class MistParticle extends TextureSheetParticle {

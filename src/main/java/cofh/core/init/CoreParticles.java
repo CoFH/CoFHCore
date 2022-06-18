@@ -1,17 +1,6 @@
 package cofh.core.init;
 
-<<<<<<< HEAD
-import cofh.core.client.particle.*;
-import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraftforge.registries.RegistryObject;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
-=======
-import net.minecraft.core.particles.SimpleParticleType;
->>>>>>> parent of 4283c98 (mist particle, particle blend shader)
 
 import static cofh.core.CoFHCore.PARTICLES;
 import static cofh.lib.util.references.CoreIDs.*;
