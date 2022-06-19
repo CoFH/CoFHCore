@@ -5,6 +5,7 @@ import cofh.lib.util.Utils;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -26,14 +27,13 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.PlantType;
 
 import java.util.List;
-import java.util.Random;
 import java.util.function.Supplier;
 
 import static cofh.lib.util.constants.Constants.AGE_0_7;
 import static cofh.lib.util.constants.Constants.CROPS_BY_AGE;
 import static net.minecraft.world.item.enchantment.Enchantments.BLOCK_FORTUNE;
 
-public class CropsBlockCoFH extends CropBlock implements IHarvestable {
+public class CropBlockCoFH extends CropBlock implements IHarvestable {
 
     protected final PlantType type;
     protected int growLight;
@@ -42,7 +42,7 @@ public class CropsBlockCoFH extends CropBlock implements IHarvestable {
     protected Supplier<Item> crop = () -> Items.AIR;
     protected Supplier<Item> seed = () -> Items.AIR;
 
-    public CropsBlockCoFH(Properties builder, PlantType type, int growLight, float growMod) {
+    public CropBlockCoFH(Properties builder, PlantType type, int growLight, float growMod) {
 
         super(builder);
         this.type = type;
@@ -50,29 +50,29 @@ public class CropsBlockCoFH extends CropBlock implements IHarvestable {
         this.growMod = growMod;
     }
 
-    public CropsBlockCoFH(Properties builder, int growLight, float growMod) {
+    public CropBlockCoFH(Properties builder, int growLight, float growMod) {
 
         this(builder, PlantType.CROP, growLight, growMod);
     }
 
-    public CropsBlockCoFH(Properties builder) {
+    public CropBlockCoFH(Properties builder) {
 
         this(builder, PlantType.CROP, 9, 1.0F);
     }
 
-    public CropsBlockCoFH growMod(float growMod) {
+    public CropBlockCoFH growMod(float growMod) {
 
         this.growMod = growMod;
         return this;
     }
 
-    public CropsBlockCoFH crop(Supplier<Item> crop) {
+    public CropBlockCoFH crop(Supplier<Item> crop) {
 
         this.crop = crop;
         return this;
     }
 
-    public CropsBlockCoFH seed(Supplier<Item> seed) {
+    public CropBlockCoFH seed(Supplier<Item> seed) {
 
         this.seed = seed;
         return this;
@@ -95,7 +95,7 @@ public class CropsBlockCoFH extends CropBlock implements IHarvestable {
     }
 
     @Override
-    public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, Random random) {
+    public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, RandomSource rand) {
 
         if (!worldIn.isAreaLoaded(pos, 1)) {
             return;
@@ -104,7 +104,7 @@ public class CropsBlockCoFH extends CropBlock implements IHarvestable {
             if (!canHarvest(state)) {
                 int age = getAge(state);
                 float growthChance = MathHelper.maxF(getGrowthSpeed(this, worldIn, pos) * growMod, 0.1F);
-                if (ForgeHooks.onCropsGrowPre(worldIn, pos, state, random.nextInt((int) (25.0F / growthChance) + 1) == 0)) {
+                if (ForgeHooks.onCropsGrowPre(worldIn, pos, state, rand.nextInt((int) (25.0F / growthChance) + 1) == 0)) {
                     int newAge = age + 1 == getPostHarvestAge() ? getMaxAge() : age + 1;
                     worldIn.setBlock(pos, getStateForAge(newAge), 2);
                     ForgeHooks.onCropsGrowPost(worldIn, pos, state);
@@ -218,13 +218,13 @@ public class CropsBlockCoFH extends CropBlock implements IHarvestable {
     }
 
     @Override
-    public boolean isBonemealSuccess(Level worldIn, Random rand, BlockPos pos, BlockState state) {
+    public boolean isBonemealSuccess(Level worldIn, RandomSource rand, BlockPos pos, BlockState state) {
 
         return true;
     }
 
     @Override
-    public void performBonemeal(ServerLevel worldIn, Random rand, BlockPos pos, BlockState state) {
+    public void performBonemeal(ServerLevel worldIn, RandomSource rand, BlockPos pos, BlockState state) {
 
         if (canHarvest(state)) {
             return;

@@ -10,6 +10,7 @@ import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile.UncheckedModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.function.Supplier;
 
@@ -81,7 +82,7 @@ public abstract class ItemModelProviderCoFH extends ItemModelProvider {
     // region HELPERS
     protected String name(Supplier<? extends ItemLike> item) {
 
-        return item.get().asItem().getRegistryName().getPath();
+        return ForgeRegistries.ITEMS.getKey(item.get().asItem()).getPath();
     }
 
     protected ResourceLocation itemTexture(Supplier<? extends ItemLike> item) {

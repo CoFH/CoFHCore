@@ -9,8 +9,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -70,7 +68,7 @@ public class SecurityPanel extends PanelBase {
         }
                 .setSize(18, 18)
                 .setTexture(TEX_ACCESS_PUBLIC, 54, 18)
-                .setTooltipFactory(new SimpleTooltip(new TranslatableComponent("info.cofh.access_public")))
+                .setTooltipFactory(new SimpleTooltip(Component.translatable("info.cofh.access_public")))
                 .setEnabled(() -> mySecurable.getAccess() != PUBLIC));
 
         addElement(new ElementButton(gui, 57, 21) {
@@ -85,7 +83,7 @@ public class SecurityPanel extends PanelBase {
         }
                 .setSize(18, 18)
                 .setTexture(TEX_ACCESS_PRIVATE, 54, 18)
-                .setTooltipFactory(new SimpleTooltip(new TranslatableComponent("info.cofh.access_private")))
+                .setTooltipFactory(new SimpleTooltip(Component.translatable("info.cofh.access_private")))
                 .setEnabled(() -> mySecurable.getAccess() != PRIVATE));
 
         addElement(new ElementButton(gui, 37, 41) {
@@ -100,7 +98,7 @@ public class SecurityPanel extends PanelBase {
         }
                 .setSize(18, 18)
                 .setTexture(TEX_ACCESS_FRIENDS, 54, 18)
-                .setTooltipFactory(new SimpleTooltip(new TranslatableComponent("info.cofh.access_friends")))
+                .setTooltipFactory(new SimpleTooltip(Component.translatable("info.cofh.access_friends")))
                 .setEnabled(() -> mySecurable.getAccess() != FRIENDS));
 
         addElement(new ElementButton(gui, 57, 41) {
@@ -115,7 +113,7 @@ public class SecurityPanel extends PanelBase {
         }
                 .setSize(18, 18)
                 .setTexture(TEX_ACCESS_TEAM, 54, 18)
-                .setTooltipFactory(new SimpleTooltip(new TranslatableComponent("info.cofh.access_team")))
+                .setTooltipFactory(new SimpleTooltip(Component.translatable("info.cofh.access_team")))
                 .setEnabled(() -> mySecurable.getAccess() != TEAM));
 
         tooltip = (element, mouseX, mouseY) -> {
@@ -123,19 +121,19 @@ public class SecurityPanel extends PanelBase {
             ArrayList<Component> tooltipList = new ArrayList<>();
 
             if (!fullyOpen) {
-                tooltipList.add(new TranslatableComponent("info.cofh.owner").append(new TextComponent(": " + mySecurable.getOwnerName())));
+                tooltipList.add(Component.translatable("info.cofh.owner").append(Component.literal(": " + mySecurable.getOwnerName())));
                 switch (mySecurable.getAccess()) {
                     case PUBLIC:
-                        tooltipList.add(new TranslatableComponent("info.cofh.access_public").withStyle(ChatFormatting.YELLOW));
+                        tooltipList.add(Component.translatable("info.cofh.access_public").withStyle(ChatFormatting.YELLOW));
                         break;
                     case PRIVATE:
-                        tooltipList.add(new TranslatableComponent("info.cofh.access_private").withStyle(ChatFormatting.YELLOW));
+                        tooltipList.add(Component.translatable("info.cofh.access_private").withStyle(ChatFormatting.YELLOW));
                         break;
                     case FRIENDS:
-                        tooltipList.add(new TranslatableComponent("info.cofh.access_friends").withStyle(ChatFormatting.YELLOW));
+                        tooltipList.add(Component.translatable("info.cofh.access_friends").withStyle(ChatFormatting.YELLOW));
                         break;
                     case TEAM:
-                        tooltipList.add(new TranslatableComponent("info.cofh.access_team").withStyle(ChatFormatting.YELLOW));
+                        tooltipList.add(Component.translatable("info.cofh.access_team").withStyle(ChatFormatting.YELLOW));
                         break;
                 }
             }

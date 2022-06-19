@@ -6,7 +6,7 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Collection;
@@ -44,9 +44,9 @@ public class SubCommandHeal {
             entity.setHealth(entity.getMaxHealth());
         }
         if (targets.size() == 1) {
-            source.sendSuccess(new TranslatableComponent("commands.cofh.heal.success.single", targets.iterator().next().getDisplayName()), true);
+            source.sendSuccess(Component.translatable("commands.cofh.heal.success.single", targets.iterator().next().getDisplayName()), true);
         } else {
-            source.sendSuccess(new TranslatableComponent("commands.cofh.heal.success.multiple", targets.size()), true);
+            source.sendSuccess(Component.translatable("commands.cofh.heal.success.multiple", targets.size()), true);
         }
         return targets.size();
     }

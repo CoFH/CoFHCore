@@ -12,8 +12,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -33,6 +31,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.client.RenderProperties;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
@@ -467,7 +466,7 @@ public class FluidHelper {
             lores.add(EMPTY_POTION);
         } else {
             for (MobEffectInstance effectinstance : list) {
-                MutableComponent mutableComponent = new TranslatableComponent(effectinstance.getDescriptionId());
+                MutableComponent mutableComponent = Component.translatable(effectinstance.getDescriptionId());
                 MobEffect effect = effectinstance.getEffect();
                 Map<Attribute, AttributeModifier> map = effect.getAttributeModifiers();
                 if (!map.isEmpty()) {
@@ -478,17 +477,17 @@ public class FluidHelper {
                     }
                 }
                 if (effectinstance.getAmplifier() > 0) {
-                    mutableComponent = new TranslatableComponent("potion.withAmplifier", mutableComponent, new TranslatableComponent("potion.potency." + effectinstance.getAmplifier()));
+                    mutableComponent = Component.translatable("potion.withAmplifier", mutableComponent, Component.translatable("potion.potency." + effectinstance.getAmplifier()));
                 }
                 if (effectinstance.getDuration() > 20) {
-                    mutableComponent = new TranslatableComponent("potion.withDuration", mutableComponent, MobEffectUtil.formatDuration(effectinstance, durationFactor));
+                    mutableComponent = Component.translatable("potion.withDuration", mutableComponent, MobEffectUtil.formatDuration(effectinstance, durationFactor));
                 }
                 lores.add(mutableComponent.withStyle(effect.getCategory().getTooltipFormatting()));
             }
         }
         if (!list1.isEmpty()) {
-            lores.add(TextComponent.EMPTY);
-            lores.add((new TranslatableComponent("potion.whenDrank")).withStyle(ChatFormatting.DARK_PURPLE));
+            lores.add(Component.empty());
+            lores.add((Component.translatable("potion.whenDrank")).withStyle(ChatFormatting.DARK_PURPLE));
 
             for (Pair<Attribute, AttributeModifier> pair : list1) {
                 AttributeModifier attributemodifier2 = pair.getSecond();
@@ -500,47 +499,42 @@ public class FluidHelper {
                     d1 = attributemodifier2.getAmount() * 100.0D;
                 }
                 if (d0 > 0.0D) {
-                    lores.add((new TranslatableComponent("attribute.modifier.plus." + attributemodifier2.getOperation().toValue(), ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(d1), new TranslatableComponent(pair.getFirst().getDescriptionId()))).withStyle(ChatFormatting.BLUE));
+                    lores.add((Component.translatable("attribute.modifier.plus." + attributemodifier2.getOperation().toValue(), ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(d1), Component.translatable(pair.getFirst().getDescriptionId()))).withStyle(ChatFormatting.BLUE));
                 } else if (d0 < 0.0D) {
                     d1 = d1 * -1.0D;
-                    lores.add((new TranslatableComponent("attribute.modifier.take." + attributemodifier2.getOperation().toValue(), ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(d1), new TranslatableComponent(pair.getFirst().getDescriptionId()))).withStyle(ChatFormatting.RED));
+                    lores.add((Component.translatable("attribute.modifier.take." + attributemodifier2.getOperation().toValue(), ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(d1), Component.translatable(pair.getFirst().getDescriptionId()))).withStyle(ChatFormatting.RED));
                 }
             }
         }
     }
 
-    public static final MutableComponent EMPTY_POTION = (new TranslatableComponent("effect.none")).withStyle(ChatFormatting.GRAY);
+    public static final MutableComponent EMPTY_POTION = (Component.translatable("effect.none")).withStyle(ChatFormatting.GRAY);
     // endregion
 
     // region PROPERTY HELPERS
     public static int color(FluidStack stack) {
 
-        return !stack.isEmpty() && stack.getFluid() != null ? stack.getFluid().getAttributes().getColor(stack) : 0;
+        return !stack.isEmpty() && stack.getFluid() != null ? RenderProperties.get(stack.getFluid()).getColorTint(stack) : 0;
     }
 
     public static int luminosity(FluidStack stack) {
 
-        return !stack.isEmpty() && stack.getFluid() != null ? stack.getFluid().getAttributes().getLuminosity(stack) : 0;
+        return !stack.isEmpty() && stack.getFluid() != null ? stack.getFluid().getFluidType().getLightLevel(stack) : 0;
     }
 
     public static int density(FluidStack stack) {
 
-        return !stack.isEmpty() && stack.getFluid() != null ? stack.getFluid().getAttributes().getDensity(stack) : 0;
-    }
-
-    public static boolean gaseous(FluidStack stack) {
-
-        return !stack.isEmpty() && stack.getFluid() != null && stack.getFluid().getAttributes().isGaseous();
+        return !stack.isEmpty() && stack.getFluid() != null ? stack.getFluid().getFluidType().getDensity(stack) : 0;
     }
 
     public static int temperature(FluidStack stack) {
 
-        return !stack.isEmpty() && stack.getFluid() != null ? stack.getFluid().getAttributes().getTemperature(stack) : 0;
+        return !stack.isEmpty() && stack.getFluid() != null ? stack.getFluid().getFluidType().getTemperature(stack) : 0;
     }
 
     public static int viscosity(FluidStack stack) {
 
-        return !stack.isEmpty() && stack.getFluid() != null ? stack.getFluid().getAttributes().getViscosity(stack) : 0;
+        return !stack.isEmpty() && stack.getFluid() != null ? stack.getFluid().getFluidType().getViscosity(stack) : 0;
     }
     // endregion
 

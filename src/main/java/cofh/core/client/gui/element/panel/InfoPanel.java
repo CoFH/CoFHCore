@@ -4,7 +4,6 @@ import cofh.core.client.gui.CoreTextures;
 import cofh.lib.client.gui.IGuiAccess;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 
 public class InfoPanel extends PanelScrolledText {
 
@@ -40,7 +39,7 @@ public class InfoPanel extends PanelScrolledText {
     @Override
     public Component getTitle() {
 
-        return new TranslatableComponent("info.cofh.information");
+        return Component.translatable("info.cofh.information");
     }
 
 }

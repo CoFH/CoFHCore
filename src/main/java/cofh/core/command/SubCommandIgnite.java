@@ -6,7 +6,7 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 
 import java.util.Collection;
@@ -44,9 +44,9 @@ public class SubCommandIgnite {
             entity.setSecondsOnFire(duration);
         }
         if (targets.size() == 1) {
-            source.sendSuccess(new TranslatableComponent("commands.cofh.ignite.success.single", targets.iterator().next().getDisplayName()), true);
+            source.sendSuccess(Component.translatable("commands.cofh.ignite.success.single", targets.iterator().next().getDisplayName()), true);
         } else {
-            source.sendSuccess(new TranslatableComponent("commands.cofh.ignite.success.multiple", targets.size()), true);
+            source.sendSuccess(Component.translatable("commands.cofh.ignite.success.multiple", targets.size()), true);
         }
         return targets.size();
     }

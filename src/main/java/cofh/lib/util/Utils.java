@@ -9,13 +9,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.mojang.datafixers.util.Either;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -33,14 +31,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
@@ -51,7 +47,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.nio.file.Path;
-import java.util.Optional;
 import java.util.Random;
 
 import static cofh.lib.util.constants.Constants.MAX_CAPACITY;
@@ -156,30 +151,6 @@ public class Utils {
 
         return item.is(CoFHTags.Items.TOOLS_WRENCH);
     }
-
-    public static boolean hasBiomeType(Level world, BlockPos pos, BiomeDictionary.Type type) {
-
-        Either<ResourceKey<Biome>, Biome> biomeEither = world.getBiome(pos).unwrap();
-        Optional<ResourceKey<Biome>> biomeKey = biomeEither.left();
-        if (biomeKey.isEmpty()) {
-            Optional<? extends Registry<Biome>> biomeReg = world.registryAccess().registry(Registry.BIOME_REGISTRY);
-            if (biomeReg.isPresent()) {
-                biomeKey = biomeEither.right().flatMap(e -> biomeReg.get().getResourceKey(e));
-            }
-        }
-        return biomeKey.filter(biomeResourceKey -> BiomeDictionary.hasType(biomeResourceKey, type)).isPresent();
-    }
-
-    // TODO these need to be replaced with Registry/Holder usages?
-/*    public static boolean isTagPopulated(ITag tag) {
-
-        return !isTagEmpty(tag);
-    }
-
-    public static boolean isTagEmpty(ITag tag) {
-
-        return tag == null || tag.getValues().isEmpty();
-    }*/
 
     // region TIME CHECKS
     public static final int TIME_CONSTANT = 40;
@@ -394,6 +365,11 @@ public class Utils {
     // endregion
 
     // region ENCHANT UTILS
+    public static Enchantment getEnchantment(String modId, String enchantId) {
+
+        return ForgeRegistries.ENCHANTMENTS.getValue(new ResourceLocation(modId, enchantId));
+    }
+
     public static int getEnchantedCapacity(int amount, int holding) {
 
         return MathHelper.clamp(amount + amount * holding / 2, 0, MAX_CAPACITY);
@@ -453,22 +429,26 @@ public class Utils {
     // region NAMESPACE
     public static String getItemNamespace(Item item) {
 
-        return item.getRegistryName() == null ? "" : item.getRegistryName().getNamespace();
+        ResourceLocation loc = ForgeRegistries.ITEMS.getKey(item);
+        return loc == null ? "" : loc.getNamespace();
     }
 
     public static String getItemNamespace(ItemStack stack) {
 
-        return stack.getItem().getRegistryName() == null ? "" : stack.getItem().getRegistryName().getNamespace();
+        ResourceLocation loc = ForgeRegistries.ITEMS.getKey(stack.getItem());
+        return loc == null ? "" : loc.getNamespace();
     }
 
     public static String getFluidNamespace(Fluid fluid) {
 
-        return fluid.getRegistryName() == null ? "" : fluid.getRegistryName().getNamespace();
+        ResourceLocation loc = ForgeRegistries.FLUIDS.getKey(fluid);
+        return loc == null ? "" : loc.getNamespace();
     }
 
     public static String getFluidNamespace(FluidStack stack) {
 
-        return stack.getFluid().getRegistryName() == null ? "" : stack.getFluid().getRegistryName().getNamespace();
+        ResourceLocation loc = ForgeRegistries.FLUIDS.getKey(stack.getFluid());
+        return loc == null ? "" : loc.getNamespace();
     }
     // endregion
 }

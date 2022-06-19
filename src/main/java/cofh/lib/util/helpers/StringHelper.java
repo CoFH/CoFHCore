@@ -4,8 +4,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
@@ -55,9 +53,9 @@ public final class StringHelper {
     public static MutableComponent getFluidName(FluidStack stack) {
 
         Fluid fluid = stack.getFluid();
-        MutableComponent name = fluid.getAttributes().getDisplayName(stack).copy();
+        MutableComponent name = fluid.getFluidType().getDescription(stack).copy();
 
-        switch (fluid.getAttributes().getRarity(stack)) {
+        switch (fluid.getFluidType().getRarity(stack)) {
             case UNCOMMON:
                 name.withStyle(ChatFormatting.YELLOW);
                 break;
@@ -140,12 +138,12 @@ public final class StringHelper {
 
     public static MutableComponent getEmptyLine() {
 
-        return new TextComponent("");
+        return Component.literal("");
     }
 
     public static MutableComponent getTextComponent(String key) {
 
-        return canLocalize(key) ? new TranslatableComponent(key) : new TextComponent(key);
+        return canLocalize(key) ? Component.translatable(key) : Component.literal(key);
     }
 
     public static MutableComponent getInfoTextComponent(String key) {

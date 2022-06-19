@@ -12,7 +12,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -142,7 +141,7 @@ public class ConfigPanel extends PanelBase {
     public void addTooltip(List<Component> tooltipList, int mouseX, int mouseY) {
 
         if (!fullyOpen) {
-            tooltipList.add(new TranslatableComponent("info.cofh.configuration"));
+            tooltipList.add(Component.translatable("info.cofh.configuration"));
             return;
         }
         if (myTransfer == null) {
@@ -153,15 +152,15 @@ public class ConfigPanel extends PanelBase {
 
         if (8 <= x && x < 24 && 34 <= y && y < 50) {
             if (myTransfer.hasTransferIn()) {
-                tooltipList.add(myTransfer.getTransferIn() ? new TranslatableComponent("info.cofh.transfer_in_enabled") : new TranslatableComponent("info.cofh.transfer_in_disabled"));
+                tooltipList.add(myTransfer.getTransferIn() ? Component.translatable("info.cofh.transfer_in_enabled") : Component.translatable("info.cofh.transfer_in_disabled"));
             } else {
-                tooltipList.add(new TranslatableComponent("info.cofh.transfer_in_unavailable"));
+                tooltipList.add(Component.translatable("info.cofh.transfer_in_unavailable"));
             }
         } else if (8 <= x && x < 24 && 54 <= y && y < 68) {
             if (myTransfer.hasTransferOut()) {
-                tooltipList.add(myTransfer.getTransferOut() ? new TranslatableComponent("info.cofh.transfer_out_enabled") : new TranslatableComponent("info.cofh.transfer_out_disabled"));
+                tooltipList.add(myTransfer.getTransferOut() ? Component.translatable("info.cofh.transfer_out_enabled") : Component.translatable("info.cofh.transfer_out_disabled"));
             } else {
-                tooltipList.add(new TranslatableComponent("info.cofh.transfer_out_unavailable"));
+                tooltipList.add(Component.translatable("info.cofh.transfer_out_unavailable"));
             }
         }
     }

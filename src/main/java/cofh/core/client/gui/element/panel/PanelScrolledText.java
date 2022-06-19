@@ -6,7 +6,6 @@ import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.FormattedCharSequence;
 
 import java.util.List;
@@ -28,7 +27,7 @@ public abstract class PanelScrolledText extends PanelBase {
 
         maxHeight = 92;
 
-        myText = getFontRenderer().split(new TextComponent(info), maxWidth - 16);
+        myText = getFontRenderer().split(Component.literal(info), maxWidth - 16);
         numLines = Math.min(myText.size(), (maxHeight - 24) / getFontRenderer().lineHeight);
         maxFirstLine = myText.size() - numLines;
         scrollable = maxFirstLine > 0;

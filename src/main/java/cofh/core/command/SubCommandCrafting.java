@@ -3,7 +3,8 @@ package cofh.core.command;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.CraftingMenu;
@@ -12,7 +13,7 @@ public class SubCommandCrafting {
 
     public static int permissionLevel = 2;
 
-    static final TranslatableComponent TITLE = new TranslatableComponent("container.crafting");
+    static final MutableComponent TITLE = Component.translatable("container.crafting");
 
     static ArgumentBuilder<CommandSourceStack, ?> register() {
 

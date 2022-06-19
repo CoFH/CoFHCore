@@ -7,7 +7,6 @@ import cofh.core.util.helpers.RenderHelper;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
@@ -74,7 +73,7 @@ public class HeldItemFilterScreen extends ContainerScreenCoFH<HeldItemFilterCont
         }
                 .setSize(20, 20)
                 .setTexture(TEX_DENY_LIST, 40, 20)
-                .setTooltipFactory(new SimpleTooltip(new TranslatableComponent("info.cofh.filter.allowlist.0")))
+                .setTooltipFactory(new SimpleTooltip(Component.translatable("info.cofh.filter.allowlist.0")))
                 .setVisible(() -> !menu.getAllowList()));
 
         addElement(new ElementButton(this, 132, 22) {
@@ -89,7 +88,7 @@ public class HeldItemFilterScreen extends ContainerScreenCoFH<HeldItemFilterCont
         }
                 .setSize(20, 20)
                 .setTexture(TEX_ALLOW_LIST, 40, 20)
-                .setTooltipFactory(new SimpleTooltip(new TranslatableComponent("info.cofh.filter.allowlist.1")))
+                .setTooltipFactory(new SimpleTooltip(Component.translatable("info.cofh.filter.allowlist.1")))
                 .setVisible(() -> menu.getAllowList()));
 
         addElement(new ElementButton(this, 132, 44) {
@@ -104,7 +103,7 @@ public class HeldItemFilterScreen extends ContainerScreenCoFH<HeldItemFilterCont
         }
                 .setSize(20, 20)
                 .setTexture(TEX_IGNORE_NBT, 40, 20)
-                .setTooltipFactory(new SimpleTooltip(new TranslatableComponent("info.cofh.filter.checkNBT.0")))
+                .setTooltipFactory(new SimpleTooltip(Component.translatable("info.cofh.filter.checkNBT.0")))
                 .setVisible(() -> !menu.getCheckNBT()));
 
         addElement(new ElementButton(this, 132, 44) {
@@ -119,7 +118,7 @@ public class HeldItemFilterScreen extends ContainerScreenCoFH<HeldItemFilterCont
         }
                 .setSize(20, 20)
                 .setTexture(TEX_USE_NBT, 40, 20)
-                .setTooltipFactory(new SimpleTooltip(new TranslatableComponent("info.cofh.filter.checkNBT.1")))
+                .setTooltipFactory(new SimpleTooltip(Component.translatable("info.cofh.filter.checkNBT.1")))
                 .setVisible(() -> menu.getCheckNBT()));
     }
     // endregion

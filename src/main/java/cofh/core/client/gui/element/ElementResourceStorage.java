@@ -7,8 +7,6 @@ import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
@@ -120,14 +118,14 @@ public abstract class ElementResourceStorage extends ElementBase {
     public void addTooltip(List<Component> tooltipList, int mouseX, int mouseY) {
 
         if (storage.isCreative()) {
-            tooltipList.add(new TranslatableComponent("info.cofh.infinite").withStyle(ChatFormatting.LIGHT_PURPLE).withStyle(ChatFormatting.ITALIC));
+            tooltipList.add(Component.translatable("info.cofh.infinite").withStyle(ChatFormatting.LIGHT_PURPLE).withStyle(ChatFormatting.ITALIC));
         } else {
-            tooltipList.add(new TextComponent(format(storage.getStored()) + " / " + format(storage.getCapacity()) + " " + storage.getUnit()));
+            tooltipList.add(Component.literal(format(storage.getStored()) + " / " + format(storage.getCapacity()) + " " + storage.getUnit()));
         }
         if (clearable.getAsBoolean() && clearStorage != FALSE && (hasAltDown() || hasShiftDown())) {
-            tooltipList.add(new TranslatableComponent("info.cofh.click_to_clear").withStyle(ChatFormatting.GRAY));
+            tooltipList.add(Component.translatable("info.cofh.click_to_clear").withStyle(ChatFormatting.GRAY));
         } else if (claimable.getAsBoolean()) {
-            tooltipList.add(new TranslatableComponent("info.cofh.click_to_claim").withStyle(ChatFormatting.GRAY));
+            tooltipList.add(Component.translatable("info.cofh.click_to_claim").withStyle(ChatFormatting.GRAY));
         }
     }
 

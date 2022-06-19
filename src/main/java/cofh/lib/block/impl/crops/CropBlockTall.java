@@ -25,20 +25,20 @@ import java.util.Random;
 import static cofh.lib.util.constants.Constants.*;
 import static net.minecraft.world.item.enchantment.Enchantments.BLOCK_FORTUNE;
 
-public class CropsBlockTall extends CropsBlockCoFH {
+public class CropBlockTall extends CropBlockCoFH {
 
-    public CropsBlockTall(Properties builder, PlantType type, int growLight, float growMod) {
+    public CropBlockTall(Properties builder, PlantType type, int growLight, float growMod) {
 
         super(builder, type, growLight, growMod);
         this.registerDefaultState(this.stateDefinition.any().setValue(this.getAgeProperty(), 0).setValue(TOP, false));
     }
 
-    public CropsBlockTall(Properties builder, int growLight, float growMod) {
+    public CropBlockTall(Properties builder, int growLight, float growMod) {
 
         this(builder, PlantType.CROP, growLight, growMod);
     }
 
-    public CropsBlockTall(Properties builder) {
+    public CropBlockTall(Properties builder) {
 
         this(builder, 9, 1.25F);
     }

@@ -10,7 +10,7 @@ import cofh.lib.util.RayTracer;
 import cofh.lib.util.Utils;
 import cofh.lib.util.helpers.SecurityHelper;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -70,7 +70,7 @@ public class TileBlockCoFH extends Block implements EntityBlock, IDismantleable 
             return InteractionResult.PASS;
         }
         if (!((TileCoFH) tile).canPlayerChange(player) && SecurityHelper.hasSecurity(tile)) {
-            ChatHelper.sendIndexedChatMessageToPlayer(player, new TranslatableComponent("info.cofh.secure_warning", SecurityHelper.getOwnerName(tile)));
+            ChatHelper.sendIndexedChatMessageToPlayer(player, Component.translatable("info.cofh.secure_warning", SecurityHelper.getOwnerName(tile)));
             return InteractionResult.PASS;
         }
         if (Utils.isWrench(player.getItemInHand(handIn))) {

@@ -7,7 +7,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
@@ -42,9 +42,9 @@ public class SubCommandZap {
             }
         }
         if (targets.size() == 1) {
-            source.sendSuccess(new TranslatableComponent("commands.cofh.zap.success.single", targets.iterator().next().getDisplayName()), true);
+            source.sendSuccess(Component.translatable("commands.cofh.zap.success.single", targets.iterator().next().getDisplayName()), true);
         } else {
-            source.sendSuccess(new TranslatableComponent("commands.cofh.zap.success.multiple", targets.size()), true);
+            source.sendSuccess(Component.translatable("commands.cofh.zap.success.multiple", targets.size()), true);
         }
         return zappedEntities;
     }

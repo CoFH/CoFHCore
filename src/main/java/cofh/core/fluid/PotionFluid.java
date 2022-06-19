@@ -5,7 +5,6 @@ import cofh.lib.fluid.FluidCoFH;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -131,7 +130,7 @@ public class PotionFluid extends FluidCoFH {
             if (potion == Potions.EMPTY || potion == Potions.WATER) {
                 return super.getDisplayName(stack);
             }
-            return new TranslatableComponent(potion.getName(Items.POTION.getDescriptionId() + ".effect."));
+            return Component.translatable(potion.getName(Items.POTION.getDescriptionId() + ".effect."));
         }
 
         public Rarity getRarity(FluidStack stack) {

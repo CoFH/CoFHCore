@@ -8,7 +8,6 @@ import cofh.lib.inventory.container.slot.SlotCoFH;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -82,7 +81,7 @@ public class AugmentPanel extends PanelBase {
     public void addTooltip(List<Component> tooltipList, int mouseX, int mouseY) {
 
         if (!fullyOpen) {
-            tooltipList.add(new TranslatableComponent("info.cofh.augmentation"));
+            tooltipList.add(Component.translatable("info.cofh.augmentation"));
         }
     }
 

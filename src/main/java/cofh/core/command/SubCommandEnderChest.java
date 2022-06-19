@@ -4,8 +4,8 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
@@ -17,7 +17,7 @@ public class SubCommandEnderChest {
 
     public static int permissionLevel = 2;
 
-    static final TranslatableComponent TITLE = new TranslatableComponent("container.enderchest");
+    static final MutableComponent TITLE = Component.translatable("container.enderchest");
 
     static ArgumentBuilder<CommandSourceStack, ?> register() {
 

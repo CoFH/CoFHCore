@@ -8,7 +8,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.List;
 
@@ -110,21 +109,21 @@ public class RSControlPanel extends PanelBase {
     public void addTooltip(List<Component> tooltipList, int mouseX, int mouseY) {
 
         if (!fullyOpen) {
-            tooltipList.add(new TranslatableComponent("info.cofh.redstone_control"));
+            tooltipList.add(Component.translatable("info.cofh.redstone_control"));
 
             switch (myRSControllable.getMode()) {
                 case DISABLED:
-                    tooltipList.add(new TranslatableComponent("info.cofh.disabled").withStyle(ChatFormatting.YELLOW));
+                    tooltipList.add(Component.translatable("info.cofh.disabled").withStyle(ChatFormatting.YELLOW));
                     break;
                 case LOW:
-                    tooltipList.add(new TranslatableComponent("info.cofh.low").withStyle(ChatFormatting.YELLOW));
+                    tooltipList.add(Component.translatable("info.cofh.low").withStyle(ChatFormatting.YELLOW));
                     break;
                 case HIGH:
-                    tooltipList.add(new TranslatableComponent("info.cofh.high").withStyle(ChatFormatting.YELLOW));
+                    tooltipList.add(Component.translatable("info.cofh.high").withStyle(ChatFormatting.YELLOW));
                     break;
                 default:
             }
-            tooltipList.add(new TranslatableComponent("info.cofh.current_signal", myRSControllable.getPower())
+            tooltipList.add(Component.translatable("info.cofh.current_signal", myRSControllable.getPower())
                     .withStyle(myRSControllable.getMode() == DISABLED
                             ? ChatFormatting.YELLOW
                             : myRSControllable.getState()
@@ -136,11 +135,11 @@ public class RSControlPanel extends PanelBase {
         int y = mouseY - this.posY();
 
         if (28 <= x && x < 44 && 20 <= y && y < 36) {
-            tooltipList.add(new TranslatableComponent("info.cofh.ignored"));
+            tooltipList.add(Component.translatable("info.cofh.ignored"));
         } else if (48 <= x && x < 64 && 20 <= y && y < 36) {
-            tooltipList.add(new TranslatableComponent("info.cofh.low"));
+            tooltipList.add(Component.translatable("info.cofh.low"));
         } else if (68 <= x && x < 84 && 20 <= y && y < 36) {
-            tooltipList.add(new TranslatableComponent("info.cofh.high"));
+            tooltipList.add(Component.translatable("info.cofh.high"));
         }
     }
 

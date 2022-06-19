@@ -10,8 +10,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.PlantType;
-import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidType;
 
 import java.util.UUID;
 import java.util.function.BooleanSupplier;
@@ -125,8 +125,8 @@ public class Constants {
 
     // region GLOBALS
     public static final int AOE_BREAK_FACTOR = 8;
-    public static final int BOTTLE_VOLUME = FluidAttributes.BUCKET_VOLUME / 4;
-    public static final int BUCKET_VOLUME = FluidAttributes.BUCKET_VOLUME;
+    public static final int BOTTLE_VOLUME = FluidType.BUCKET_VOLUME / 4;
+    public static final int BUCKET_VOLUME = FluidType.BUCKET_VOLUME;
     public static final int ENTITY_TRACKING_DISTANCE = 64;
     public static final int ITEM_TIMER_DURATION = 40;
     public static final int MAGMATIC_TEMPERATURE = 1000;

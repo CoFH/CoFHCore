@@ -19,19 +19,19 @@ import java.util.Random;
 
 import static cofh.lib.util.constants.Constants.*;
 
-public class CropsBlockMushroom extends CropsBlockCoFH {
+public class CropBlockMushroom extends CropBlockCoFH {
 
-    public CropsBlockMushroom(Properties builder, PlantType type, int growLight, float growMod) {
+    public CropBlockMushroom(Properties builder, PlantType type, int growLight, float growMod) {
 
         super(builder, type, growLight, growMod);
     }
 
-    public CropsBlockMushroom(Properties builder, int growLight, float growMod) {
+    public CropBlockMushroom(Properties builder, int growLight, float growMod) {
 
         this(builder, FUNGUS, growLight, growMod);
     }
 
-    public CropsBlockMushroom(Properties properties) {
+    public CropBlockMushroom(Properties properties) {
 
         this(properties, 0, 1.0F);
     }

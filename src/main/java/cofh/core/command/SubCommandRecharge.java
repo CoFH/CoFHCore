@@ -5,7 +5,7 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 
@@ -35,9 +35,9 @@ public class SubCommandRecharge {
             entity.addEffect(new MobEffectInstance(SUPERCHARGE, 1200, 0, false, false));
         }
         if (targets.size() == 1) {
-            source.sendSuccess(new TranslatableComponent("commands.cofh.recharge.success.single", targets.iterator().next().getDisplayName()), true);
+            source.sendSuccess(Component.translatable("commands.cofh.recharge.success.single", targets.iterator().next().getDisplayName()), true);
         } else {
-            source.sendSuccess(new TranslatableComponent("commands.cofh.recharge.success.multiple", targets.size()), true);
+            source.sendSuccess(Component.translatable("commands.cofh.recharge.success.multiple", targets.size()), true);
         }
         return targets.size();
     }

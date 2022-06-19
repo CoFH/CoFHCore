@@ -19,9 +19,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static cofh.lib.capability.CapabilityAreaEffect.AREA_EFFECT_ITEM_CAPABILITY;
+import static cofh.lib.util.Utils.getEnchantment;
 import static cofh.lib.util.Utils.getItemEnchantmentLevel;
-import static cofh.lib.util.references.EnsorcReferences.*;
-import static net.minecraft.core.Direction.DOWN;
+import static cofh.lib.util.constants.Constants.ID_ENSORCELLATION;
+import static cofh.lib.util.references.EnsorcIDs.ID_EXCAVATING;
 
 public class AreaEffectHelper {
 
@@ -44,17 +45,9 @@ public class AreaEffectHelper {
      */
     public static ImmutableList<BlockPos> getAreaEffectBlocks(ItemStack stack, BlockPos pos, Player player) {
 
-        int encExcavating = getItemEnchantmentLevel(EXCAVATING, stack);
+        int encExcavating = getItemEnchantmentLevel(getEnchantment(ID_ENSORCELLATION, ID_EXCAVATING), stack);
         if (encExcavating > 0) {
             return getBreakableBlocksRadius(stack, pos, player, encExcavating);
-        }
-        int encTilling = getItemEnchantmentLevel(TILLING, stack);
-        if (encTilling > 0) {
-            return getTillableBlocksRadius(stack, pos, player, encTilling);
-        }
-        int encFurrowing = getItemEnchantmentLevel(FURROWING, stack);
-        if (encFurrowing > 0) {
-            return getTillableBlocksLine(stack, pos, player, encFurrowing * 2);
         }
         return ImmutableList.of();
     }
@@ -282,67 +275,6 @@ public class AreaEffectHelper {
                         .collect(Collectors.toList());
                 break;
         }
-        return ImmutableList.copyOf(area);
-    }
-    // endregion
-
-    // region HOE
-    public static ImmutableList<BlockPos> getTillableBlocksRadius(ItemStack stack, BlockPos pos, Player player, int radius) {
-
-        List<BlockPos> area;
-        Level world = player.getCommandSenderWorld();
-        boolean weeding = getItemEnchantmentLevel(WEEDING, stack) > 0;
-
-        BlockHitResult traceResult = RayTracer.retrace(player, ClipContext.Fluid.NONE);
-        if (traceResult.getType() == HitResult.Type.MISS || traceResult.getDirection() == DOWN || player.isSecondaryUseActive() || !canHoeAffect(world, pos, weeding) || radius <= 0) {
-            return ImmutableList.of();
-        }
-        area = BlockPos.betweenClosedStream(pos.offset(-radius, 0, -radius), pos.offset(radius, 0, radius))
-                .filter(blockPos -> canHoeAffect(world, blockPos, weeding))
-                .map(BlockPos::immutable)
-                .collect(Collectors.toList());
-        area.remove(pos);
-        return ImmutableList.copyOf(area);
-    }
-
-    public static ImmutableList<BlockPos> getTillableBlocksLine(ItemStack stack, BlockPos pos, Player player, int length) {
-
-        List<BlockPos> area;
-        Level world = player.getCommandSenderWorld();
-        boolean weeding = getItemEnchantmentLevel(WEEDING, stack) > 0;
-
-        if (player.isSecondaryUseActive() || !canHoeAffect(world, pos, weeding) || length <= 0) {
-            return ImmutableList.of();
-        }
-        switch (player.getDirection()) {
-            case SOUTH:
-                area = BlockPos.betweenClosedStream(pos.offset(0, 0, 1), pos.offset(0, 0, length + 1))
-                        .filter(blockPos -> canHoeAffect(world, blockPos, weeding))
-                        .map(BlockPos::immutable)
-                        .collect(Collectors.toList());
-                break;
-            case WEST:
-                area = BlockPos.betweenClosedStream(pos.offset(-1, 0, 0), pos.offset(-(length + 1), 0, 0))
-                        .filter(blockPos -> canHoeAffect(world, blockPos, weeding))
-                        .map(BlockPos::immutable)
-                        .collect(Collectors.toList());
-                break;
-            case NORTH:
-                area = BlockPos.betweenClosedStream(pos.offset(0, 0, -1), pos.offset(0, 0, -(length + 1)))
-                        .filter(blockPos -> canHoeAffect(world, blockPos, weeding))
-                        .map(BlockPos::immutable)
-                        .collect(Collectors.toList());
-                break;
-            case EAST:
-                area = BlockPos.betweenClosedStream(pos.offset(1, 0, 0), pos.offset(length + 1, 0, 0))
-                        .filter(blockPos -> canHoeAffect(world, blockPos, weeding))
-                        .map(BlockPos::immutable)
-                        .collect(Collectors.toList());
-                break;
-            default:
-                area = ImmutableList.of();
-        }
-        area.remove(pos);
         return ImmutableList.copyOf(area);
     }
     // endregion

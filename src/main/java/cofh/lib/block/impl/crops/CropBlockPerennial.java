@@ -7,28 +7,28 @@ import net.minecraftforge.common.PlantType;
 
 import static cofh.lib.util.constants.Constants.AGE_0_10;
 
-public class CropsBlockPerennial extends CropsBlockCoFH {
+public class CropBlockPerennial extends CropBlockCoFH {
 
     public static final int DEFAULT_POST_HARVEST_AGE = 7;
 
     public int postHarvestAge = DEFAULT_POST_HARVEST_AGE;
 
-    public CropsBlockPerennial(Properties builder, PlantType type, int growLight, float growMod) {
+    public CropBlockPerennial(Properties builder, PlantType type, int growLight, float growMod) {
 
         super(builder, type, growLight, growMod);
     }
 
-    public CropsBlockPerennial(Properties builder, int growLight, float growMod) {
+    public CropBlockPerennial(Properties builder, int growLight, float growMod) {
 
         this(builder, PlantType.CROP, growLight, growMod);
     }
 
-    public CropsBlockPerennial(Properties builder) {
+    public CropBlockPerennial(Properties builder) {
 
         this(builder, 9, 0.80F);
     }
 
-    public CropsBlockPerennial postHarvestAge(int postHarvestAge) {
+    public CropBlockPerennial postHarvestAge(int postHarvestAge) {
 
         this.postHarvestAge = postHarvestAge;
         return this;

@@ -2,7 +2,6 @@ package cofh.lib.item;
 
 import cofh.lib.util.helpers.SecurityHelper;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -85,22 +84,22 @@ public interface ICoFHItem extends IForgeItem {
             addIncrementModeChangeTooltip(item, stack, worldIn, tooltip, flagIn);
             return;
         }
-        tooltip.add(new TranslatableComponent("info.cofh.mode_change", getKeynameFromKeycode(MULTIMODE_INCREMENT.getKey().getValue()), getKeynameFromKeycode(MULTIMODE_DECREMENT.getKey().getValue())).withStyle(YELLOW));
+        tooltip.add(Component.translatable("info.cofh.mode_change", getKeynameFromKeycode(MULTIMODE_INCREMENT.getKey().getValue()), getKeynameFromKeycode(MULTIMODE_DECREMENT.getKey().getValue())).withStyle(YELLOW));
 
         if (MULTIMODE_INCREMENT.getKey().getValue() == -1) {
-            tooltip.add(new TranslatableComponent("info.cofh.key_not_bound", localize("key.cofh.mode_change_increment")).withStyle(RED));
+            tooltip.add(Component.translatable("info.cofh.key_not_bound", localize("key.cofh.mode_change_increment")).withStyle(RED));
         }
         if (MULTIMODE_DECREMENT.getKey().getValue() == -1) {
-            tooltip.add(new TranslatableComponent("info.cofh.key_not_bound", localize("key.cofh.mode_change_decrement")).withStyle(RED));
+            tooltip.add(Component.translatable("info.cofh.key_not_bound", localize("key.cofh.mode_change_decrement")).withStyle(RED));
         }
     }
 
     default void addIncrementModeChangeTooltip(IMultiModeItem item, ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 
-        tooltip.add(new TranslatableComponent("info.cofh.mode_toggle", getKeynameFromKeycode(MULTIMODE_INCREMENT.getKey().getValue())).withStyle(YELLOW));
+        tooltip.add(Component.translatable("info.cofh.mode_toggle", getKeynameFromKeycode(MULTIMODE_INCREMENT.getKey().getValue())).withStyle(YELLOW));
 
         if (MULTIMODE_INCREMENT.getKey().getValue() == -1) {
-            tooltip.add(new TranslatableComponent("info.cofh.key_not_bound", localize("key.cofh.mode_change_increment")).withStyle(RED));
+            tooltip.add(Component.translatable("info.cofh.key_not_bound", localize("key.cofh.mode_change_increment")).withStyle(RED));
         }
     }
 

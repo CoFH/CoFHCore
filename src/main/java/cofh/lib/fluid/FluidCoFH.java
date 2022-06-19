@@ -28,7 +28,7 @@ public abstract class FluidCoFH {
         stillFluid = reg.register(key, () -> new ForgeFlowingFluid.Source(properties));
         flowingFluid = reg.register(flowing(key), () -> new ForgeFlowingFluid.Flowing(properties));
 
-        properties = new ForgeFlowingFluid.Properties(stillFluid, flowingFluid, attributes);
+        properties = new ForgeFlowingFluid.Properties(stillFluid, flowingFluid);
     }
 
     // region HELPERS

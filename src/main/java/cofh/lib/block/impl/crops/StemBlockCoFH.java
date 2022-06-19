@@ -54,7 +54,7 @@ public class StemBlockCoFH extends StemBlock {
             return;
         }
         if (worldIn.getRawBrightness(pos, 0) >= growLight) {
-            float growthChance = MathHelper.maxF(CropsBlockCoFH.getGrowthChanceProxy(this, worldIn, pos) * growMod, 0.1F);
+            float growthChance = MathHelper.maxF(CropBlockCoFH.getGrowthChanceProxy(this, worldIn, pos) * growMod, 0.1F);
             if (ForgeHooks.onCropsGrowPre(worldIn, pos, state, random.nextInt((int) (25.0F / growthChance) + 1) == 0)) {
                 int i = state.getValue(AGE);
                 if (i < 7) {

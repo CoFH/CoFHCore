@@ -6,7 +6,7 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Collection;
@@ -63,15 +63,15 @@ public class SubCommandInvis {
         }
         if (flag) {
             if (targets.size() == 1) {
-                source.sendSuccess(new TranslatableComponent("commands.cofh.invis.success.single", targets.iterator().next().getDisplayName()), true);
+                source.sendSuccess(Component.translatable("commands.cofh.invis.success.single", targets.iterator().next().getDisplayName()), true);
             } else {
-                source.sendSuccess(new TranslatableComponent("commands.cofh.invis.success.multiple", targets.size()), true);
+                source.sendSuccess(Component.translatable("commands.cofh.invis.success.multiple", targets.size()), true);
             }
         } else {
             if (targets.size() == 1) {
-                source.sendSuccess(new TranslatableComponent("commands.cofh.invis.remove.single", targets.iterator().next().getDisplayName()), true);
+                source.sendSuccess(Component.translatable("commands.cofh.invis.remove.single", targets.iterator().next().getDisplayName()), true);
             } else {
-                source.sendSuccess(new TranslatableComponent("commands.cofh.invis.remove.multiple", targets.size()), true);
+                source.sendSuccess(Component.translatable("commands.cofh.invis.remove.multiple", targets.size()), true);
             }
         }
         return targets.size();

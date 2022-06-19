@@ -45,9 +45,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
-import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
@@ -55,6 +53,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegisterEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -98,7 +97,7 @@ public class CoFHCore {
         modEventBus.addListener(this::capSetup);
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::clientSetup);
-        modEventBus.addGenericListener(GlobalLootModifierSerializer.class, this::registerLootData);
+        modEventBus.addListener(this::registerLootData);
 
         MinecraftForge.EVENT_BUS.addListener(this::registerCommands);
 
@@ -172,10 +171,12 @@ public class CoFHCore {
     }
 
     // region INITIALIZATION
-    private void registerLootData(final RegistryEvent.Register<GlobalLootModifierSerializer<?>> event) {
+    private void registerLootData(final RegisterEvent event) {
 
-        CoreFlags.manager().setup();
-        QuarkFlags.setup();
+        if (event.getRegistryKey() == ForgeRegistries.Keys.LOOT_MODIFIER_SERIALIZERS) {
+            CoreFlags.manager().setup();
+            QuarkFlags.setup();
+        }
     }
 
     private void entityLayerSetup(final EntityRenderersEvent.RegisterLayerDefinitions event) {

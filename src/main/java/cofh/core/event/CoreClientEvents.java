@@ -97,7 +97,7 @@ public class CoreClientEvents {
                 ListTag list = stack.getTag().getList(TAG_STORED_ENCHANTMENTS, TAG_COMPOUND);
                 if (list.size() == 1) {
                     Enchantment ench = ForgeRegistries.ENCHANTMENTS.getValue(ResourceLocation.tryParse(list.getCompound(0).getString("id")));
-                    if (ench != null && ench.getRegistryName() != null) {
+                    if (ench != null && ForgeRegistries.ENCHANTMENTS.getKey(ench) != null) {
                         String enchKey = ench.getDescriptionId() + ".desc";
                         if (canLocalize(enchKey)) {
                             tooltip.add(getInfoTextComponent(enchKey));

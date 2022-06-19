@@ -11,8 +11,8 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
@@ -166,7 +166,7 @@ public class FluidIngredient implements Predicate<FluidStack> {
             if (fluid == null) {
                 throw new JsonSyntaxException("Unknown fluid '" + resourcelocation1 + "'");
             }
-            int amount = FluidAttributes.BUCKET_VOLUME;
+            int amount = FluidType.BUCKET_VOLUME;
             if (jsonObject.has("amount")) {
                 amount = jsonObject.get("amount").getAsInt();
             } else if (jsonObject.has("count")) {
@@ -176,7 +176,7 @@ public class FluidIngredient implements Predicate<FluidStack> {
         } else if (jsonObject.has("fluid_tag")) {
             ResourceLocation resourcelocation = new ResourceLocation(GsonHelper.getAsString(jsonObject, "fluid_tag"));
             TagKey<Fluid> key = FluidTags.create(resourcelocation);
-            int amount = FluidAttributes.BUCKET_VOLUME;
+            int amount = FluidType.BUCKET_VOLUME;
             if (jsonObject.has("amount")) {
                 amount = jsonObject.get("amount").getAsInt();
             } else if (jsonObject.has("count")) {

@@ -7,7 +7,6 @@ import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -158,7 +157,7 @@ public abstract class AbstractFluidFilter implements IFilter, IFilterOptions {
     @Override
     public Component getDisplayName() {
 
-        return new TranslatableComponent("info.cofh.fluid_filter");
+        return Component.translatable("info.cofh.fluid_filter");
     }
     // endregion
 }
