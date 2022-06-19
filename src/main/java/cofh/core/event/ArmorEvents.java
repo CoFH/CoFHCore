@@ -21,9 +21,9 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.util.Set;
 
+import static cofh.core.init.CoreMobEffects.CHILLED;
+import static cofh.core.init.CoreMobEffects.SHOCKED;
 import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
-import static cofh.lib.util.references.CoreReferences.CHILLED;
-import static cofh.lib.util.references.CoreReferences.SHOCKED;
 import static net.minecraft.world.effect.MobEffects.POISON;
 import static net.minecraft.world.effect.MobEffects.WITHER;
 
@@ -194,8 +194,8 @@ public class ArmorEvents {
         HAZARD_EFFECTS.add(POISON);
         HAZARD_EFFECTS.add(WITHER);
 
-        HAZARD_EFFECTS.add(CHILLED);
-        HAZARD_EFFECTS.add(SHOCKED);
+        HAZARD_EFFECTS.add(CHILLED.get());
+        HAZARD_EFFECTS.add(SHOCKED.get());
     }
 
 }

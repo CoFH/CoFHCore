@@ -2,7 +2,6 @@ package cofh.lib.block.impl;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -14,7 +13,6 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.ToolAction;
 
 public class TilledSoilBlock extends SoilBlock {
 
@@ -61,12 +59,6 @@ public class TilledSoilBlock extends SoilBlock {
 
         BlockState blockstate = worldIn.getBlockState(pos.above());
         return !blockstate.getMaterial().isSolid() || blockstate.getBlock() instanceof FenceGateBlock || blockstate.getBlock() instanceof MovingPistonBlock;
-    }
-
-    @Override
-    public BlockState getToolModifiedState(BlockState state, UseOnContext context, ToolAction toolAction, boolean simulate) {
-
-        return getToolModifiedState(state, context.getLevel(), context.getClickedPos(), context.getPlayer(), context.getItemInHand(), toolAction);
     }
 
     public void turnToDirt(BlockState state, Level worldIn, BlockPos pos) {

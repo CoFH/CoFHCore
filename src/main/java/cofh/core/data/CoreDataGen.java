@@ -17,36 +17,20 @@ public class CoreDataGen {
 
         TileNBTSync.setup();
 
-        if (event.includeServer()) {
-            registerServerProviders(event);
-        }
-        if (event.includeClient()) {
-            registerClientProviders(event);
-        }
-    }
-
-    private static void registerServerProviders(GatherDataEvent event) {
-
         DataGenerator gen = event.getGenerator();
         ExistingFileHelper exFileHelper = event.getExistingFileHelper();
 
         CoreTagsProvider.Block blockTags = new CoreTagsProvider.Block(gen, exFileHelper);
 
-        gen.addProvider(blockTags);
-        gen.addProvider(new CoreTagsProvider.Item(gen, blockTags, exFileHelper));
-        gen.addProvider(new CoreTagsProvider.Fluid(gen, exFileHelper));
+        gen.addProvider(event.includeServer(), blockTags);
+        gen.addProvider(event.includeServer(), new CoreTagsProvider.Item(gen, blockTags, exFileHelper));
+        gen.addProvider(event.includeServer(), new CoreTagsProvider.Fluid(gen, exFileHelper));
 
-        gen.addProvider(new CoreLootTableProvider(gen));
-        gen.addProvider(new CoreRecipeProvider(gen));
-    }
+        gen.addProvider(event.includeServer(), new CoreLootTableProvider(gen));
+        gen.addProvider(event.includeServer(), new CoreRecipeProvider(gen));
 
-    private static void registerClientProviders(GatherDataEvent event) {
-
-        DataGenerator gen = event.getGenerator();
-        ExistingFileHelper exFileHelper = event.getExistingFileHelper();
-
-        gen.addProvider(new CoreBlockStateProvider(gen, exFileHelper));
-        gen.addProvider(new CoreItemModelProvider(gen, exFileHelper));
+        gen.addProvider(event.includeClient(), new CoreBlockStateProvider(gen, exFileHelper));
+        gen.addProvider(event.includeClient(), new CoreItemModelProvider(gen, exFileHelper));
     }
 
 }

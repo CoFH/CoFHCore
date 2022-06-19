@@ -1,5 +1,6 @@
 package cofh.lib.data;
 
+import cofh.lib.util.Utils;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
@@ -22,18 +23,18 @@ public abstract class BlockStateProviderCoFH extends BlockStateProvider {
     // region HELPERS
     protected String name(Supplier<? extends Block> block) {
 
-        return block.get().getRegistryName().getPath();
+        return Utils.getName(block.get());
     }
 
     protected ResourceLocation blockTexture(Supplier<? extends Block> block) {
 
-        ResourceLocation base = block.get().getRegistryName();
+        ResourceLocation base = Utils.getRegistryName(block.get());
         return new ResourceLocation(base.getNamespace(), ModelProvider.BLOCK_FOLDER + "/" + base.getPath());
     }
 
     protected ResourceLocation blockTexture(Supplier<? extends Block> block, String subfolder) {
 
-        ResourceLocation base = block.get().getRegistryName();
+        ResourceLocation base = Utils.getRegistryName(block.get());
         return new ResourceLocation(base.getNamespace(), ModelProvider.BLOCK_FOLDER + "/" + subfolder + "/" + base.getPath());
     }
 
@@ -104,7 +105,7 @@ public abstract class BlockStateProviderCoFH extends BlockStateProvider {
 
     protected void slabBlock(Supplier<? extends SlabBlock> block, Supplier<? extends Block> doubleslab, String side, String end) {
 
-        slabBlock(block.get(), doubleslab.get().getRegistryName(), modBlockLoc(side), modBlockLoc(end), modBlockLoc(end));
+        slabBlock(block.get(), Utils.getRegistryName(doubleslab.get()), modBlockLoc(side), modBlockLoc(end), modBlockLoc(end));
     }
 
     protected void doorBlock(Supplier<? extends DoorBlock> block) {

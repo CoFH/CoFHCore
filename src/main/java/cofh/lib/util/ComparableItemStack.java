@@ -4,6 +4,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
+import static cofh.lib.util.Utils.getRegistryName;
+
 /**
  * This class allows for OreDictionary-compatible ItemStack comparisons and Integer-based Hashes without collisions.
  * <p>
@@ -36,23 +38,9 @@ public class ComparableItemStack {
         this.stackSize = other.stackSize;
     }
 
-    public boolean isEqual(ComparableItemStack other) {
-
-        if (other == null) {
-            return false;
-        }
-        if (item == other.item) {
-            return true;
-        }
-        if (item != null && other.item != null) {
-            return item.delegate.get() == other.item.delegate.get();
-        }
-        return false;
-    }
-
     public boolean isItemEqual(ComparableItemStack other) {
 
-        return other != null && isEqual(other);
+        return other != null && item == other.item;
     }
 
     public boolean isStackEqual(ComparableItemStack other) {
@@ -96,7 +84,7 @@ public class ComparableItemStack {
         } else {
             builder.append(item.getClass().getName()).append('@');
             builder.append(System.identityHashCode(item)).append(' ');
-            builder.append('[').append(item.getRegistryName()).append(']');
+            builder.append('[').append(getRegistryName(item)).append(']');
         }
         builder.append('}');
 

@@ -2,7 +2,9 @@ package cofh.core.init;
 
 import cofh.core.inventory.container.HeldItemFilterContainer;
 import cofh.core.inventory.container.TileItemFilterContainer;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
+import net.minecraftforge.registries.RegistryObject;
 
 import static cofh.core.CoFHCore.CONTAINERS;
 import static cofh.core.util.ProxyUtils.getClientPlayer;
@@ -18,8 +20,11 @@ public class CoreContainers {
 
     public static void register() {
 
-        CONTAINERS.register(ID_CONTAINER_HELD_ITEM_FILTER, () -> IForgeMenuType.create((windowId, inv, data) -> new HeldItemFilterContainer(windowId, inv, getClientPlayer())));
-        CONTAINERS.register(ID_CONTAINER_TILE_ITEM_FILTER, () -> IForgeMenuType.create((windowId, inv, data) -> new TileItemFilterContainer(windowId, getClientWorld(), data.readBlockPos(), inv, getClientPlayer())));
+        HELD_ITEM_FILTER = CONTAINERS.register(ID_CONTAINER_HELD_ITEM_FILTER, () -> IForgeMenuType.create((windowId, inv, data) -> new HeldItemFilterContainer(windowId, inv, getClientPlayer())));
+        TILE_ITEM_FILTER = CONTAINERS.register(ID_CONTAINER_TILE_ITEM_FILTER, () -> IForgeMenuType.create((windowId, inv, data) -> new TileItemFilterContainer(windowId, getClientWorld(), data.readBlockPos(), inv, getClientPlayer())));
     }
+
+    public static RegistryObject<MenuType<HeldItemFilterContainer>> HELD_ITEM_FILTER;
+    public static RegistryObject<MenuType<TileItemFilterContainer>> TILE_ITEM_FILTER;
 
 }

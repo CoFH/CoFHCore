@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -18,7 +19,6 @@ import net.minecraftforge.common.PlantType;
 import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.ToolActions;
 
-import java.util.Random;
 import java.util.function.Supplier;
 
 import static cofh.lib.util.constants.Constants.CHARGED;
@@ -50,7 +50,7 @@ public class SoilBlock extends Block {
     }
 
     @Override
-    public void tick(BlockState state, ServerLevel worldIn, BlockPos pos, Random rand) {
+    public void tick(BlockState state, ServerLevel worldIn, BlockPos pos, RandomSource rand) {
 
         BlockPos abovePos = pos.above();
         BlockState aboveState = worldIn.getBlockState(abovePos);
@@ -119,14 +119,12 @@ public class SoilBlock extends Block {
     @Override
     public BlockState getToolModifiedState(BlockState state, UseOnContext context, ToolAction toolAction, boolean simulate) {
 
-        BlockState toolModifiedState = getToolModifiedState(state, context.getLevel(), context.getClickedPos(), context.getPlayer(), context.getItemInHand(), toolAction);
-
         if (ToolActions.HOE_TILL == toolAction && context.getItemInHand().canPerformAction(ToolActions.HOE_TILL)) {
             if (context.getLevel().getBlockState(context.getClickedPos().above()).isAir()) {
                 return otherBlock.get().defaultBlockState();
             }
         }
-        return toolModifiedState;
+        return state;
     }
 
 }

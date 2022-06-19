@@ -78,7 +78,7 @@ public class CoreClientEvents {
         }
         ItemStack stack = event.getItemStack();
 
-        if (CoreClientConfig.enableKeywords && NAMESPACES.contains(Utils.getItemNamespace(stack.getItem()))) {
+        if (CoreClientConfig.enableKeywords && NAMESPACES.contains(Utils.getModId(stack.getItem()))) {
             String keywordKey = stack.getDescriptionId() + ".keyword";
             if (canLocalize(keywordKey)) {
                 if (tooltip.get(0) instanceof MutableComponent mutable) {
@@ -86,7 +86,7 @@ public class CoreClientEvents {
                 }
             }
         }
-        if (CoreClientConfig.enableItemDescriptions && NAMESPACES.contains(Utils.getItemNamespace(stack.getItem()))) {
+        if (CoreClientConfig.enableItemDescriptions && NAMESPACES.contains(Utils.getModId(stack.getItem()))) {
             String infoKey = stack.getDescriptionId() + ".desc";
             if (canLocalize(infoKey)) {
                 tooltip.add(1, getInfoTextComponent(infoKey));

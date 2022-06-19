@@ -1,8 +1,7 @@
 package cofh.lib.util.helpers;
 
 import net.minecraft.util.Mth;
-
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 
 /**
  * Contains various math-related helper functions. Often faster than conventional implementations.
@@ -15,7 +14,7 @@ public final class MathHelper {
 
     }
 
-    public static final Random RANDOM = new Random();
+    public static final RandomSource RANDOM = RandomSource.create();
     public static final double PI = Math.PI;
     public static final double PI_2 = Math.PI * 2.0D;
     public static final float F_PI = (float) Math.PI;
@@ -43,9 +42,9 @@ public final class MathHelper {
     }
 
     // region RANDOMS
-    public static int nextInt(Random random, int min, int max) {
+    public static int nextInt(RandomSource rand, int min, int max) {
 
-        return min >= max ? min : random.nextInt(max - min + 1) + min;
+        return min >= max ? min : rand.nextInt(max - min + 1) + min;
     }
 
     public static int binomialDist(int trials, double success) {
@@ -64,9 +63,9 @@ public final class MathHelper {
         return nextInt(RANDOM, min, max);
     }
 
-    public static float nextFloat(Random random, float min, float max) {
+    public static float nextFloat(RandomSource rand, float min, float max) {
 
-        return min >= max ? min : random.nextFloat() * (max - min) + min;
+        return min >= max ? min : rand.nextFloat() * (max - min) + min;
     }
 
     public static float nextFloat(float min, float max) {
@@ -74,9 +73,9 @@ public final class MathHelper {
         return nextFloat(RANDOM, min, max);
     }
 
-    public static double nextDouble(Random random, double min, double max) {
+    public static double nextDouble(RandomSource rand, double min, double max) {
 
-        return min >= max ? min : random.nextDouble() * (max - min) + min;
+        return min >= max ? min : rand.nextDouble() * (max - min) + min;
     }
 
     public static double nextDouble(double min, double max) {

@@ -6,7 +6,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-import static cofh.lib.util.references.CoreReferences.ENDER_AIR_TILE;
+import static cofh.core.CoFHCore.TILE_ENTITIES;
+import static cofh.lib.util.references.CoreIDs.ID_ENDER_AIR;
 
 public class EnderAirTile extends BlockEntity implements ICoFHTickableTile {
 
@@ -14,7 +15,7 @@ public class EnderAirTile extends BlockEntity implements ICoFHTickableTile {
 
     public EnderAirTile(BlockPos pos, BlockState state) {
 
-        super(ENDER_AIR_TILE, pos, state);
+        super(TILE_ENTITIES.get(ID_ENDER_AIR), pos, state);
     }
 
     @Override

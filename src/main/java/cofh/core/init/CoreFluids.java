@@ -1,8 +1,7 @@
 package cofh.core.init;
 
-import cofh.core.fluid.HoneyFluid;
-import cofh.core.fluid.PotionFluid;
-import cofh.core.fluid.XPFluid;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.registries.RegistryObject;
 
 public class CoreFluids {
 
@@ -12,10 +11,10 @@ public class CoreFluids {
 
     public static void register() {
 
-        HoneyFluid.create();
-        // MilkFluid.create();
-        PotionFluid.create();
-        XPFluid.create();
     }
+
+    public static RegistryObject<Fluid> EXPERIENCE;
+    public static RegistryObject<Fluid> HONEY;
+    public static RegistryObject<Fluid> POTION;
 
 }

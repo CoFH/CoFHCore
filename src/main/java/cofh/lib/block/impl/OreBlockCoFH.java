@@ -2,6 +2,7 @@ package cofh.lib.block.impl;
 
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -36,21 +37,16 @@ public class OreBlockCoFH extends Block {
         return this;
     }
 
-    protected int getExperience() {
+    @Override
+    public int getExpDrop(BlockState state, LevelReader level, RandomSource randomSource, BlockPos pos, int fortuneLevel, int silkTouchLevel) {
 
-        if (maxXp <= 0) {
+        if (silkTouchLevel > 0 || maxXp <= 0) {
             return 0;
         }
         if (minXp >= maxXp) {
             return minXp;
         }
-        return MathHelper.nextInt(minXp, maxXp);
-    }
-
-    @Override
-    public int getExpDrop(BlockState state, LevelReader reader, BlockPos pos, int fortune, int silktouch) {
-
-        return silktouch == 0 ? getExperience() : 0;
+        return MathHelper.nextInt(randomSource, minXp, maxXp);
     }
 
 }

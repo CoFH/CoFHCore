@@ -4,8 +4,8 @@ import cofh.lib.config.IBaseConfig;
 import cofh.lib.enchantment.EnchantmentCoFH;
 import net.minecraftforge.common.ForgeConfigSpec;
 
+import static cofh.core.init.CoreEnchantments.HOLDING;
 import static cofh.lib.util.constants.Constants.MAX_ENCHANT_LEVEL;
-import static cofh.lib.util.references.CoreReferences.HOLDING;
 
 public class CoreEnchantConfig implements IBaseConfig {
 
@@ -46,10 +46,11 @@ public class CoreEnchantConfig implements IBaseConfig {
         improvedFeatherFalling = serverImprovedFeatherFalling.get();
         improvedMending = serverImprovedMending.get();
 
-        if (HOLDING instanceof EnchantmentCoFH) {
-            ((EnchantmentCoFH) HOLDING).setEnable(enableHolding.get());
-            ((EnchantmentCoFH) HOLDING).setTreasureEnchantment(treasureHolding.get());
-            ((EnchantmentCoFH) HOLDING).setMaxLevel(levelHolding.get());
+        if (HOLDING != null) {
+            EnchantmentCoFH encHolding = (EnchantmentCoFH) HOLDING.get();
+            encHolding.setEnable(enableHolding.get());
+            encHolding.setTreasureEnchantment(treasureHolding.get());
+            encHolding.setMaxLevel(levelHolding.get());
         }
     }
 

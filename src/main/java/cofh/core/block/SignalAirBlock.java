@@ -6,6 +6,7 @@ import cofh.lib.util.Utils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AirBlock;
@@ -18,9 +19,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Random;
-
-import static cofh.lib.util.references.CoreReferences.SIGNAL_AIR_TILE;
+import static cofh.core.init.CoreTileEntities.SIGNAL_AIR_TILE;
 
 public class SignalAirBlock extends AirBlock implements EntityBlock {
 
@@ -39,7 +38,7 @@ public class SignalAirBlock extends AirBlock implements EntityBlock {
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> actualType) {
 
-        return ICoFHTickableTile.createTicker(level, actualType, SIGNAL_AIR_TILE, SignalAirTile.class);
+        return ICoFHTickableTile.createTicker(level, actualType, SIGNAL_AIR_TILE.get(), SignalAirTile.class);
     }
 
     @Override
@@ -56,7 +55,7 @@ public class SignalAirBlock extends AirBlock implements EntityBlock {
 
     @OnlyIn (Dist.CLIENT)
     @Override
-    public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, Random rand) {
+    public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, RandomSource rand) {
 
         if (rand.nextInt(8) == 0) {
             Utils.spawnBlockParticlesClient(worldIn, DustParticleOptions.REDSTONE, pos, rand, 2);

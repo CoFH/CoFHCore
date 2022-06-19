@@ -10,6 +10,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import static cofh.lib.util.Utils.getRegistryName;
 import static cofh.lib.util.constants.Constants.PACKET_EFFECT_ADD;
 
 public class EffectAddedPacket extends PacketBase implements IPacketClient {
@@ -34,7 +35,7 @@ public class EffectAddedPacket extends PacketBase implements IPacketClient {
     public void write(FriendlyByteBuf buf) {
 
         buf.writeInt(entity.getId());
-        buf.writeResourceLocation(effect.getEffect().getRegistryName());
+        buf.writeResourceLocation(getRegistryName(effect.getEffect()));
         buf.writeInt(effect.getDuration());
     }
 

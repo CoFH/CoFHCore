@@ -1,6 +1,7 @@
 package cofh.lib.data;
 
 import cofh.lib.util.DeferredRegisterCoFH;
+import cofh.lib.util.Utils;
 import cofh.lib.util.flags.FlagManager;
 import cofh.lib.util.flags.FlagRecipeCondition;
 import cofh.lib.util.flags.TagExistsRecipeCondition;
@@ -11,7 +12,6 @@ import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.Registry;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.HashCache;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
@@ -30,7 +30,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -45,29 +44,36 @@ public class RecipeProviderCoFH extends RecipeProvider implements IConditionBuil
     protected final String modid;
     protected FlagManager manager;
 
+    protected boolean advancements = false;
+
     public RecipeProviderCoFH(DataGenerator generatorIn, String modid) {
 
         super(generatorIn);
         this.modid = modid;
     }
 
+    public RecipeProviderCoFH generateAdvancements(boolean advancements) {
+
+        this.advancements = advancements;
+        return this;
+    }
+
     @Override
     public void run(CachedOutput cache) {
 
-        Path path = this.generator.getOutputFolder();
         Set<ResourceLocation> set = Sets.newHashSet();
         buildCraftingRecipes((recipe) -> {
             if (!set.add(recipe.getId())) {
-                LOGGER.error("Duplicate recipe " + recipe.getId());
+                throw new IllegalStateException("Duplicate recipe " + recipe.getId());
             } else {
-                saveRecipe(cache, recipe.serializeRecipe(), path.resolve("data/" + recipe.getId().getNamespace() + "/recipes/" + recipe.getId().getPath() + ".json"));
+                saveRecipe(cache, recipe.serializeRecipe(), this.recipePathProvider.json(recipe.getId()));
+                if (advancements) {
+                    JsonObject jsonobject = recipe.serializeAdvancement();
+                    if (jsonobject != null) {
+                        saveAdvancement(cache, jsonobject, this.advancementPathProvider.json(recipe.getAdvancementId()));
+                    }
+                }
             }
-            // We do not generate advancements - they add a LOT of time to server connection.
-
-            // JsonObject jsonobject = recipe.getAdvancementJson();
-            // if (jsonobject != null) {
-            //     saveRecipeAdvancement(cache, jsonobject, path.resolve("data/" + recipe.getID().getNamespace() + "/advancements/" + recipe.getAdvancementID().getPath() + ".json"));
-            // }
         });
     }
 
@@ -363,12 +369,12 @@ public class RecipeProviderCoFH extends RecipeProvider implements IConditionBuil
 
     protected static String name(Block block) {
 
-        return block.getRegistryName() == null ? "" : block.getRegistryName().getPath();
+        return Utils.getName(block);
     }
 
     protected static String name(Item item) {
 
-        return item.getRegistryName() == null ? "" : item.getRegistryName().getPath();
+        return Utils.getName(item);
     }
     // endregion
 

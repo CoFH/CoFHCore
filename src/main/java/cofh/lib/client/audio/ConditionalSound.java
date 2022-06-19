@@ -1,5 +1,6 @@
 package cofh.lib.client.audio;
 
+import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -23,7 +24,7 @@ public class ConditionalSound extends AbstractTickableSoundInstance {
 
     public ConditionalSound(SoundEvent soundIn, SoundSource categoryIn, BlockEntity tile, BooleanSupplier condition) {
 
-        super(soundIn, categoryIn);
+        super(soundIn, categoryIn, MathHelper.RANDOM);
 
         this.x = tile.getBlockPos().getX() + 0.5D;
         this.y = tile.getBlockPos().getY() + 0.5D;
@@ -35,7 +36,7 @@ public class ConditionalSound extends AbstractTickableSoundInstance {
 
     public ConditionalSound(SoundEvent soundIn, SoundSource categoryIn, Entity entity, BooleanSupplier condition) {
 
-        super(soundIn, categoryIn);
+        super(soundIn, categoryIn, MathHelper.RANDOM);
 
         this.x = entity.getX();
         this.y = entity.getY();

@@ -3,7 +3,6 @@ package cofh.core.util.helpers;
 import cofh.core.network.packet.client.IndexedChatPacket;
 import cofh.core.util.ProxyUtils;
 import cofh.lib.util.Utils;
-import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -31,7 +30,7 @@ public class ChatHelper {
                 ProxyUtils.addIndexedChatMessage(message, TEMP_INDEX_CLIENT);
             }
         } else {
-            player.sendMessage(message, Util.NIL_UUID);
+            player.sendSystemMessage(message);
         }
     }
 
@@ -52,7 +51,7 @@ public class ChatHelper {
             }
         } else {
             for (Component message : messages) {
-                player.sendMessage(message, Util.NIL_UUID);
+                player.sendSystemMessage(message);
             }
         }
     }

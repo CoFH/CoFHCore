@@ -21,6 +21,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import static cofh.core.init.CoreFluids.EXPERIENCE;
 import static cofh.lib.item.ContainerType.XP;
 import static cofh.lib.util.constants.Constants.MB_PER_XP;
 import static cofh.lib.util.constants.Constants.RGB_DURABILITY_XP;
@@ -28,7 +29,6 @@ import static cofh.lib.util.constants.NBTTags.TAG_FLUID;
 import static cofh.lib.util.helpers.ItemHelper.areItemStacksEqualIgnoreTags;
 import static cofh.lib.util.helpers.StringHelper.*;
 import static cofh.lib.util.helpers.XpHelper.*;
-import static cofh.lib.util.references.CoreReferences.FLUID_XP;
 
 /**
  * This class does not set an XP Timer on the player entity.
@@ -140,7 +140,7 @@ public class XpContainerItem extends ItemCoFH implements IXpContainerItem, IFlui
     public FluidStack getFluid(ItemStack container) {
 
         int xp = getStoredXp(container);
-        return xp > 0 ? new FluidStack(FLUID_XP, xp * MB_PER_XP) : FluidStack.EMPTY;
+        return xp > 0 ? new FluidStack(EXPERIENCE.get(), xp * MB_PER_XP) : FluidStack.EMPTY;
     }
 
     @Override
@@ -182,7 +182,7 @@ public class XpContainerItem extends ItemCoFH implements IXpContainerItem, IFlui
         if (action.execute() && !isCreative(container, ContainerType.FLUID)) {
             modifyXp(container, -drained);
         }
-        return new FluidStack(FLUID_XP, drained * MB_PER_XP);
+        return new FluidStack(EXPERIENCE.get(), drained * MB_PER_XP);
     }
     // endregion
 }

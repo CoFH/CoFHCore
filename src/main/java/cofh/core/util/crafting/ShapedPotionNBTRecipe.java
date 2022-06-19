@@ -15,7 +15,6 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.crafting.IShapedRecipe;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import java.util.Map;
 
@@ -107,7 +106,7 @@ public class ShapedPotionNBTRecipe implements CraftingRecipe, IShapedRecipe<Craf
     }
 
     // region SERIALIZER
-    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<ShapedPotionNBTRecipe> {
+    public static class Serializer implements RecipeSerializer<ShapedPotionNBTRecipe> {
 
         public ShapedPotionNBTRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
 

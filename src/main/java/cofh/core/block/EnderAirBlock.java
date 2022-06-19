@@ -6,6 +6,7 @@ import cofh.lib.util.Utils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ExperienceOrb;
@@ -22,10 +23,9 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Random;
-
-import static cofh.lib.util.references.CoreReferences.ENDERFERENCE;
-import static cofh.lib.util.references.CoreReferences.ENDER_AIR_TILE;
+import static cofh.core.CoFHCore.TILE_ENTITIES;
+import static cofh.core.init.CoreMobEffects.ENDERFERENCE;
+import static cofh.lib.util.references.CoreIDs.ID_ENDER_AIR;
 
 public class EnderAirBlock extends AirBlock implements EntityBlock {
 
@@ -47,12 +47,12 @@ public class EnderAirBlock extends AirBlock implements EntityBlock {
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> actualType) {
 
-        return ICoFHTickableTile.createTicker(level, actualType, ENDER_AIR_TILE, EnderAirTile.class);
+        return ICoFHTickableTile.createTicker(level, actualType, TILE_ENTITIES.get(ID_ENDER_AIR), EnderAirTile.class);
     }
 
     @OnlyIn (Dist.CLIENT)
     @Override
-    public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, Random rand) {
+    public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, RandomSource rand) {
 
         if (rand.nextInt(8) == 0) {
             Utils.spawnBlockParticlesClient(worldIn, ParticleTypes.PORTAL, pos, rand, 2);
@@ -73,7 +73,7 @@ public class EnderAirBlock extends AirBlock implements EntityBlock {
         if (!worldIn.getBlockState(randPos).getMaterial().isSolid()) {
             if (entityIn instanceof LivingEntity) {
                 if (Utils.teleportEntityTo(entityIn, randPos)) {
-                    ((LivingEntity) entityIn).addEffect(new MobEffectInstance(ENDERFERENCE, duration, 0, false, false));
+                    ((LivingEntity) entityIn).addEffect(new MobEffectInstance(ENDERFERENCE.get(), duration, 0, false, false));
                 }
             } else if (worldIn.getGameTime() % duration == 0) {
                 entityIn.setPos(randPos.getX(), randPos.getY(), randPos.getZ());

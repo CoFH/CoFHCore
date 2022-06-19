@@ -11,6 +11,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import static cofh.lib.util.Utils.getRegistryName;
 import static cofh.lib.util.constants.Constants.PACKET_EFFECT_REMOVE;
 
 public class EffectRemovedPacket extends PacketBase implements IPacketClient {
@@ -38,7 +39,7 @@ public class EffectRemovedPacket extends PacketBase implements IPacketClient {
     public void write(FriendlyByteBuf buf) {
 
         buf.writeInt(entity.getId());
-        buf.writeResourceLocation(effect.getRegistryName());
+        buf.writeResourceLocation(getRegistryName(effect));
     }
 
     @Override

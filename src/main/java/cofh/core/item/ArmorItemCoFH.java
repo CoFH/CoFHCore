@@ -12,6 +12,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -89,7 +90,7 @@ public class ArmorItemCoFH extends ArmorItem implements ICoFHItem {
     @Nullable
     public <A extends HumanoidModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot armorSlot, A _default) {
 
-        return (A) ProxyUtils.getModel(this.getRegistryName());
+        return (A) ProxyUtils.getModel(ForgeRegistries.ITEMS.getKey(this));
     }
 
 }

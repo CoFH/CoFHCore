@@ -30,7 +30,7 @@ import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
-import static cofh.lib.util.references.CoreReferences.KNIFE_ENTITY;
+import static cofh.core.init.CoreEntities.KNIFE;
 
 public class Knife extends AbstractArrow {
 
@@ -44,13 +44,13 @@ public class Knife extends AbstractArrow {
 
     public Knife(Level world, double x, double y, double z, ItemStack stack) {
 
-        super(KNIFE_ENTITY, x, y, z, world);
+        super(KNIFE.get(), x, y, z, world);
         this.entityData.set(DATA_ITEM_STACK, stack.copy());
     }
 
     public Knife(Level world, LivingEntity owner, ItemStack stack) {
 
-        super(KNIFE_ENTITY, owner, world);
+        super(KNIFE.get(), owner, world);
         this.entityData.set(DATA_ITEM_STACK, stack.copy());
     }
 

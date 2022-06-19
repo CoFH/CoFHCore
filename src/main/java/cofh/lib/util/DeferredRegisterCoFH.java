@@ -106,5 +106,4 @@ public class DeferredRegisterCoFH<T> {
         return registryObjects.get(resourceLoc);
     }
     // endregion
-
 }

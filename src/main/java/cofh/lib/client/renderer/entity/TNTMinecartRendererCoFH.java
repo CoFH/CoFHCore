@@ -4,6 +4,7 @@ import cofh.lib.entity.AbstractTNTMinecart;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MinecartRenderer;
 import net.minecraft.client.renderer.entity.TntMinecartRenderer;
@@ -12,9 +13,12 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class TNTMinecartRendererCoFH extends MinecartRenderer<AbstractTNTMinecart> {
 
+    private final BlockRenderDispatcher blockRenderer;
+
     public TNTMinecartRendererCoFH(EntityRendererProvider.Context renderManagerIn) {
 
         super(renderManagerIn, ModelLayers.TNT_MINECART);
+        this.blockRenderer = renderManagerIn.getBlockRenderDispatcher();
     }
 
     @Override
@@ -29,7 +33,7 @@ public class TNTMinecartRendererCoFH extends MinecartRenderer<AbstractTNTMinecar
             float f1 = 1.0F + f * 0.3F;
             poseStackIn.scale(f1, f1, f1);
         }
-        TntMinecartRenderer.renderWhiteSolidBlock(stateIn, poseStackIn, bufferIn, packedLightIn, i > -1 && i / 5 % 2 == 0);
+        TntMinecartRenderer.renderWhiteSolidBlock(blockRenderer, stateIn, poseStackIn, bufferIn, packedLightIn, i > -1 && i / 5 % 2 == 0);
     }
 
 }

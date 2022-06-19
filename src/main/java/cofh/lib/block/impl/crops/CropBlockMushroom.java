@@ -4,6 +4,7 @@ import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -14,8 +15,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.PlantType;
-
-import java.util.Random;
 
 import static cofh.lib.util.constants.Constants.*;
 
@@ -43,10 +42,10 @@ public class CropBlockMushroom extends CropBlockCoFH {
     }
 
     @Override
-    public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, Random random) {
+    public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, RandomSource rand) {
 
         int age = getAge(state);
-        if (age < getMaxAge() && ForgeHooks.onCropsGrowPre(worldIn, pos, state, random.nextInt(20 + age) == 0)) {
+        if (age < getMaxAge() && ForgeHooks.onCropsGrowPre(worldIn, pos, state, rand.nextInt(20 + age) == 0)) {
             int newAge = age + 1 == getPostHarvestAge() ? getMaxAge() : age + 1;
             worldIn.setBlock(pos, getStateForAge(newAge), newAge == getMaxAge() ? 3 : 2);
             ForgeHooks.onCropsGrowPost(worldIn, pos, state);
@@ -95,13 +94,13 @@ public class CropBlockMushroom extends CropBlockCoFH {
     }
 
     @Override
-    public boolean isBonemealSuccess(Level worldIn, Random rand, BlockPos pos, BlockState state) {
+    public boolean isBonemealSuccess(Level worldIn, RandomSource rand, BlockPos pos, BlockState state) {
 
         return false;
     }
 
     @Override
-    public void performBonemeal(ServerLevel worldIn, Random rand, BlockPos pos, BlockState state) {
+    public void performBonemeal(ServerLevel worldIn, RandomSource rand, BlockPos pos, BlockState state) {
 
     }
     // endregion

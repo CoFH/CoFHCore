@@ -7,7 +7,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-import static cofh.lib.util.references.CoreReferences.SIGNAL_AIR_TILE;
+import static cofh.core.CoFHCore.TILE_ENTITIES;
+import static cofh.lib.util.references.CoreIDs.ID_SIGNAL_AIR;
 
 public class SignalAirTile extends BlockEntity implements ICoFHTickableTile {
 
@@ -16,7 +17,7 @@ public class SignalAirTile extends BlockEntity implements ICoFHTickableTile {
 
     public SignalAirTile(BlockPos pos, BlockState state) {
 
-        super(SIGNAL_AIR_TILE, pos, state);
+        super(TILE_ENTITIES.get(ID_SIGNAL_AIR), pos, state);
     }
 
     @Override

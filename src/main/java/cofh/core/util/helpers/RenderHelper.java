@@ -22,6 +22,7 @@ import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.client.RenderProperties;
 import net.minecraftforge.client.model.pipeline.LightUtil;
 import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
@@ -98,16 +99,11 @@ public final class RenderHelper {
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 
-        int color = fluid.getFluid().getAttributes().getColor(fluid);
+        int color = FluidHelper.color(fluid);
         setPosTexShader();
         setBlockTextureSheet();
         setSahderColorFromInt(color);
-        drawTiledTexture(x, y, getTexture(fluid.getFluid().getAttributes().getStillTexture(fluid)), width, height);
-    }
-
-    public static int getFluidColor(FluidStack fluid) {
-
-        return fluid.getFluid().getAttributes().getColor(fluid);
+        drawTiledTexture(x, y, getTexture(RenderProperties.get(fluid.getFluid()).getStillTexture(fluid)), width, height);
     }
 
     public static void drawIcon(TextureAtlasSprite icon, double z) {
@@ -208,11 +204,12 @@ public final class RenderHelper {
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-        int color = fluid.getFluid().getAttributes().getColor(fluid);
+        int color = FluidHelper.color(fluid);
         setPosTexShader();
         setBlockTextureSheet();
         setSahderColorFromInt(color);
-        drawTiledTexture(matrixStack, x, y, getTexture(fluid.getFluid().getAttributes().getStillTexture(fluid)), width, height);
+
+        drawTiledTexture(matrixStack, x, y, getTexture(RenderProperties.get(fluid.getFluid()).getStillTexture(fluid)), width, height);
     }
 
     public static void drawIcon(PoseStack matrixStack, TextureAtlasSprite icon, float z) {
@@ -347,12 +344,12 @@ public final class RenderHelper {
 
     public static TextureAtlasSprite getFluidTexture(Fluid fluid) {
 
-        return getTexture(fluid.getAttributes().getStillTexture());
+        return getTexture(RenderProperties.get(fluid).getStillTexture());
     }
 
     public static TextureAtlasSprite getFluidTexture(FluidStack fluid) {
 
-        return getTexture(fluid.getFluid().getAttributes().getStillTexture(fluid));
+        return getTexture(RenderProperties.get(fluid.getFluid()).getStillTexture(fluid));
     }
 
     public static boolean textureExists(String location) {

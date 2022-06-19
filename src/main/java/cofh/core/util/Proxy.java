@@ -9,6 +9,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 
+import static cofh.lib.util.Utils.getRegistryName;
+
 public class Proxy {
 
     // region HELPERS
@@ -42,7 +44,7 @@ public class Proxy {
 
     public Object addModel(Item item, Object model) {
 
-        return item == null ? null : addModel(item.getRegistryName(), model);
+        return item == null ? null : addModel(getRegistryName(item), model);
     }
 
     protected Object addModel(ResourceLocation loc, Object model) {

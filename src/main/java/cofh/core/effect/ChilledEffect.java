@@ -1,11 +1,12 @@
 package cofh.core.effect;
 
 import cofh.lib.effect.CustomParticleEffect;
-import cofh.lib.util.references.CoreReferences;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 
+import static cofh.core.init.CoreParticles.FROST;
 import static cofh.lib.util.constants.Constants.UUID_EFFECT_CHILLED_MOVEMENT_SPEED;
 
 public class ChilledEffect extends CustomParticleEffect {
@@ -27,7 +28,7 @@ public class ChilledEffect extends CustomParticleEffect {
     @Override
     public ParticleOptions getParticle() {
 
-        return CoreReferences.FROST_PARTICLE;
+        return (SimpleParticleType) FROST.get();
     }
 
 }

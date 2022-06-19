@@ -25,10 +25,10 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.util.Map;
 
+import static cofh.core.init.CoreMobEffects.SLIMED;
 import static cofh.lib.util.Utils.getItemEnchantmentLevel;
 import static cofh.lib.util.Utils.getMaxEquippedEnchantmentLevel;
 import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
-import static cofh.lib.util.references.CoreReferences.SLIMED;
 import static net.minecraft.world.item.enchantment.Enchantments.FALL_PROTECTION;
 import static net.minecraft.world.item.enchantment.Enchantments.MENDING;
 
@@ -65,7 +65,7 @@ public class CoreCommonEvents {
         }
         if (event.getDistance() >= 3.0) {
             LivingEntity living = event.getEntityLiving();
-            if (living.hasEffect(SLIMED)) {
+            if (living.hasEffect(SLIMED.get())) {
                 Vec3 motion = living.getDeltaMovement();
                 living.setDeltaMovement(motion.x, 0.08 * Math.sqrt(event.getDistance() / 0.08), motion.z);
                 living.hurtMarked = true;

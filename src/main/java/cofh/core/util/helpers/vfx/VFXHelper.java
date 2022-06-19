@@ -321,7 +321,7 @@ public final class VFXHelper {
                             for (RenderType type : chunkRenderTypes) {
                                 if (ItemBlockRenderTypes.canRenderInLayer(state, type)) {
                                     ForgeHooksClient.setRenderType(type);
-                                    renderer.renderBatched(state, pos.relative(Direction.UP), level, stack, buffer.getBuffer(type), false, new Random(), EmptyModelData.INSTANCE);
+                                    renderer.renderBatched(state, pos.relative(Direction.UP), level, stack, buffer.getBuffer(type), false, MathHelper.RANDOM, EmptyModelData.INSTANCE);
                                 }
                             }
                             stack.popPose();

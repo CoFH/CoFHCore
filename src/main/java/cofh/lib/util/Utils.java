@@ -17,6 +17,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -47,7 +48,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.nio.file.Path;
-import java.util.Random;
 
 import static cofh.lib.util.constants.Constants.MAX_CAPACITY;
 import static cofh.lib.util.constants.NBTTags.TAG_ENCHANTMENTS;
@@ -191,7 +191,7 @@ public class Utils {
     // endregion
 
     // region PARTICLE UTILS
-    public static void spawnBlockParticlesClient(Level world, ParticleOptions particle, BlockPos pos, Random rand, int count) {
+    public static void spawnBlockParticlesClient(Level world, ParticleOptions particle, BlockPos pos, RandomSource rand, int count) {
 
         for (int i = 0; i < count; ++i) {
             double d0 = (double) pos.getX() + rand.nextDouble();
@@ -426,29 +426,88 @@ public class Utils {
     }
     // endregion
 
+    // region REGISTRY NAME
+    public static ResourceLocation getRegistryName(Block block) {
+
+        return ForgeRegistries.BLOCKS.getKey(block);
+    }
+
+    public static ResourceLocation getRegistryName(Item item) {
+
+        return ForgeRegistries.ITEMS.getKey(item);
+    }
+
+    public static ResourceLocation getRegistryName(Fluid fluid) {
+
+        return ForgeRegistries.FLUIDS.getKey(fluid);
+    }
+
+    public static ResourceLocation getRegistryName(MobEffect effect) {
+
+        return ForgeRegistries.MOB_EFFECTS.getKey(effect);
+    }
+
+    // endregion
+
     // region NAMESPACE
-    public static String getItemNamespace(Item item) {
+    public static String getModId(Block block) {
 
-        ResourceLocation loc = ForgeRegistries.ITEMS.getKey(item);
+        ResourceLocation loc = getRegistryName(block);
         return loc == null ? "" : loc.getNamespace();
     }
 
-    public static String getItemNamespace(ItemStack stack) {
+    public static String getName(Block block) {
 
-        ResourceLocation loc = ForgeRegistries.ITEMS.getKey(stack.getItem());
+        ResourceLocation loc = getRegistryName(block);
+        return loc == null ? "" : loc.getPath();
+    }
+
+    public static String getModId(Item item) {
+
+        ResourceLocation loc = getRegistryName(item);
         return loc == null ? "" : loc.getNamespace();
     }
 
-    public static String getFluidNamespace(Fluid fluid) {
+    public static String getModId(ItemStack stack) {
 
-        ResourceLocation loc = ForgeRegistries.FLUIDS.getKey(fluid);
+        ResourceLocation loc = getRegistryName(stack.getItem());
         return loc == null ? "" : loc.getNamespace();
     }
 
-    public static String getFluidNamespace(FluidStack stack) {
+    public static String getName(Item item) {
 
-        ResourceLocation loc = ForgeRegistries.FLUIDS.getKey(stack.getFluid());
+        ResourceLocation loc = getRegistryName(item);
+        return loc == null ? "" : loc.getPath();
+    }
+
+    public static String getName(ItemStack stack) {
+
+        ResourceLocation loc = getRegistryName(stack.getItem());
+        return loc == null ? "" : loc.getPath();
+    }
+
+    public static String getModId(Fluid fluid) {
+
+        ResourceLocation loc = getRegistryName(fluid);
         return loc == null ? "" : loc.getNamespace();
+    }
+
+    public static String getModId(FluidStack stack) {
+
+        ResourceLocation loc = getRegistryName(stack.getFluid());
+        return loc == null ? "" : loc.getNamespace();
+    }
+
+    public static String getName(Fluid fluid) {
+
+        ResourceLocation loc = getRegistryName(fluid);
+        return loc == null ? "" : loc.getPath();
+    }
+
+    public static String getName(FluidStack stack) {
+
+        ResourceLocation loc = getRegistryName(stack.getFluid());
+        return loc == null ? "" : loc.getPath();
     }
     // endregion
 }

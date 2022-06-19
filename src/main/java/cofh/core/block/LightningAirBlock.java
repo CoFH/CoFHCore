@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-import static cofh.lib.util.references.CoreReferences.LIGHTNING_AIR_TILE;
+import static cofh.core.init.CoreTileEntities.LIGHTNING_AIR_TILE;
 
 public class LightningAirBlock extends AirBlock implements EntityBlock {
 
@@ -31,7 +31,7 @@ public class LightningAirBlock extends AirBlock implements EntityBlock {
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> actualType) {
 
-        return ICoFHTickableTile.createTicker(level, actualType, LIGHTNING_AIR_TILE, LightningAirTile.class);
+        return ICoFHTickableTile.createTicker(level, actualType, LIGHTNING_AIR_TILE.get(), LightningAirTile.class);
     }
 
     //    @OnlyIn (Dist.CLIENT)

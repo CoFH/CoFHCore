@@ -1,6 +1,5 @@
 package cofh.core.util.helpers;
 
-import cofh.core.fluid.PotionFluid;
 import cofh.lib.fluid.FluidStorageCoFH;
 import cofh.lib.util.helpers.BlockHelper;
 import cofh.lib.util.helpers.ItemHelper;
@@ -55,8 +54,6 @@ import java.util.function.Predicate;
 import static cofh.lib.util.constants.Constants.BOTTLE_VOLUME;
 import static cofh.lib.util.constants.Constants.BUCKET_VOLUME;
 import static cofh.lib.util.constants.NBTTags.TAG_POTION;
-import static cofh.lib.util.references.CoreReferences.FLUID_HONEY;
-import static cofh.lib.util.references.CoreReferences.FLUID_XP;
 import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
 import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.SIMULATE;
 
@@ -212,9 +209,9 @@ public class FluidHelper {
     // region CAPABILITY HELPERS
     public static void setup() {
 
-        BOTTLE_DRAIN_MAP.put(Items.POTION, (stack -> PotionFluid.getPotionFluidFromItem(BOTTLE_VOLUME, stack)));
-        BOTTLE_DRAIN_MAP.put(Items.HONEY_BOTTLE, (stack -> new FluidStack(FLUID_HONEY, BOTTLE_VOLUME)));
-        BOTTLE_DRAIN_MAP.put(Items.EXPERIENCE_BOTTLE, (stack -> new FluidStack(FLUID_XP, BOTTLE_VOLUME)));
+        //        BOTTLE_DRAIN_MAP.put(Items.POTION, (stack -> PotionFluid.getPotionFluidFromItem(BOTTLE_VOLUME, stack)));
+        //        BOTTLE_DRAIN_MAP.put(Items.HONEY_BOTTLE, (stack -> new FluidStack(FLUID_HONEY, BOTTLE_VOLUME)));
+        //        BOTTLE_DRAIN_MAP.put(Items.EXPERIENCE_BOTTLE, (stack -> new FluidStack(FLUID_XP, BOTTLE_VOLUME)));
 
         BOTTLE_FILL_MAP.put(fluid -> fluid.getFluid() == net.minecraft.world.level.material.Fluids.WATER || hasPotionTag(fluid), fluid -> PotionUtils.setPotion(new ItemStack(Items.POTION), getPotionFromFluid(fluid)));
         BOTTLE_FILL_MAP.put(fluid -> fluid.getFluid().is(CoFHTags.Fluids.HONEY), fluid -> new ItemStack(Items.HONEY_BOTTLE));

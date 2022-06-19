@@ -11,7 +11,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
-import static cofh.lib.util.references.CoreReferences.LIGHTNING_AIR_TILE;
+import static cofh.core.CoFHCore.TILE_ENTITIES;
+import static cofh.lib.util.references.CoreIDs.ID_LIGHTNING_AIR;
 
 public class LightningAirTile extends BlockEntity implements ICoFHTickableTile {
 
@@ -19,7 +20,7 @@ public class LightningAirTile extends BlockEntity implements ICoFHTickableTile {
 
     public LightningAirTile(BlockPos pos, BlockState state) {
 
-        super(LIGHTNING_AIR_TILE, pos, state);
+        super(TILE_ENTITIES.get(ID_LIGHTNING_AIR), pos, state);
         duration = MathHelper.nextInt(MathHelper.RANDOM, 20, duration);
     }
 

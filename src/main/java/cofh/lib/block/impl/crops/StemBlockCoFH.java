@@ -4,6 +4,7 @@ import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.*;
@@ -11,7 +12,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.PlantType;
 
-import java.util.Random;
 import java.util.function.Supplier;
 
 public class StemBlockCoFH extends StemBlock {
@@ -48,19 +48,19 @@ public class StemBlockCoFH extends StemBlock {
     }
 
     @Override
-    public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, Random random) {
+    public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, RandomSource rand) {
 
         if (!worldIn.isAreaLoaded(pos, 1)) {
             return;
         }
         if (worldIn.getRawBrightness(pos, 0) >= growLight) {
             float growthChance = MathHelper.maxF(CropBlockCoFH.getGrowthChanceProxy(this, worldIn, pos) * growMod, 0.1F);
-            if (ForgeHooks.onCropsGrowPre(worldIn, pos, state, random.nextInt((int) (25.0F / growthChance) + 1) == 0)) {
+            if (ForgeHooks.onCropsGrowPre(worldIn, pos, state, rand.nextInt((int) (25.0F / growthChance) + 1) == 0)) {
                 int i = state.getValue(AGE);
                 if (i < 7) {
                     worldIn.setBlock(pos, state.setValue(AGE, i + 1), 2);
                 } else {
-                    Direction direction = Direction.Plane.HORIZONTAL.getRandomDirection(random);
+                    Direction direction = Direction.Plane.HORIZONTAL.getRandomDirection(rand);
                     BlockPos blockpos = pos.relative(direction);
                     BlockState soil = worldIn.getBlockState(blockpos.below());
                     Block block = soil.getBlock();
