@@ -4,6 +4,7 @@ import cofh.core.client.gui.ContainerScreenCoFH;
 import cofh.lib.util.references.CoreReferences;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.registration.IAdvancedRegistration;
 import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
@@ -17,7 +18,7 @@ public class CoreJeiPlugin implements IModPlugin {
     @Override
     public void registerFluidSubtypes(ISubtypeRegistration registration) {
 
-        registration.registerSubtypeInterpreter(CoreReferences.FLUID_POTION, FluidPotionSubtypeInterpreter.INSTANCE);
+        registration.registerSubtypeInterpreter(ForgeTypes.FLUID_STACK, CoreReferences.FLUID_POTION, FluidPotionSubtypeInterpreter.INSTANCE);
     }
 
     @Override
