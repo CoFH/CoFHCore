@@ -1,8 +1,8 @@
 package cofh.core.block;
 
 import cofh.core.block.entity.GlowAirTile;
-import cofh.lib.block.entity.ICoFHTickableTile;
-import cofh.lib.util.Utils;
+import cofh.lib.content.block.entity.ITickableTile;
+import cofh.core.util.Utils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;
@@ -36,7 +36,7 @@ public class GlowAirBlock extends AirBlock implements EntityBlock {
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> actualType) {
 
-        return ICoFHTickableTile.createTicker(level, actualType, GLOW_AIR_TILE.get(), GlowAirTile.class);
+        return ITickableTile.createTicker(level, actualType, GLOW_AIR_TILE.get(), GlowAirTile.class);
     }
 
     @OnlyIn (Dist.CLIENT)

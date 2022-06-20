@@ -8,8 +8,8 @@ import net.minecraftforge.common.crafting.CraftingHelper;
 
 import java.util.function.BooleanSupplier;
 
-import static cofh.lib.util.constants.Constants.FALSE;
-import static cofh.lib.util.constants.Constants.TRUE;
+import static cofh.lib.util.Constants.FALSE;
+import static cofh.lib.util.Constants.TRUE;
 
 public class FlagManager {
 

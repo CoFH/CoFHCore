@@ -1,13 +1,12 @@
 package cofh.core.inventory.container;
 
+import cofh.core.inventory.container.slot.SlotFalseCopy;
+import cofh.core.inventory.container.slot.SlotLocked;
+import cofh.lib.content.inventory.wrapper.InvWrapperGeneric;
 import cofh.core.network.packet.server.ContainerPacket;
 import cofh.core.util.filter.AbstractItemFilter;
-import cofh.lib.inventory.container.ContainerCoFH;
-import cofh.lib.inventory.container.slot.SlotFalseCopy;
-import cofh.lib.inventory.container.slot.SlotLocked;
-import cofh.lib.inventory.wrapper.InvWrapperGeneric;
-import cofh.lib.util.filter.IFilterOptions;
-import cofh.lib.util.filter.IFilterableItem;
+import cofh.core.util.filter.IFilterOptions;
+import cofh.core.util.filter.IFilterableItem;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -16,7 +15,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
 import static cofh.core.init.CoreContainers.HELD_ITEM_FILTER;
-import static cofh.lib.util.helpers.FilterHelper.hasFilter;
+import static cofh.core.util.helpers.FilterHelper.hasFilter;
 
 public class HeldItemFilterContainer extends ContainerCoFH implements IFilterOptions {
 

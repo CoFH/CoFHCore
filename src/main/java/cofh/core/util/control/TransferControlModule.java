@@ -1,15 +1,15 @@
 package cofh.core.util.control;
 
 import cofh.core.network.packet.server.TransferControlPacket;
-import cofh.lib.util.Utils;
+import cofh.core.util.Utils;
 import cofh.lib.util.control.ITransferControllable;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.function.BooleanSupplier;
 
-import static cofh.lib.util.constants.Constants.TRUE;
-import static cofh.lib.util.constants.NBTTags.*;
+import static cofh.lib.util.Constants.TRUE;
+import static cofh.lib.util.NBTTags.*;
 
 public class TransferControlModule implements ITransferControllable {
 

@@ -1,17 +1,17 @@
 package cofh.core.network.packet.server;
 
 import cofh.core.CoFHCore;
-import cofh.core.util.control.ISecurableTile;
-import cofh.lib.network.packet.IPacketServer;
-import cofh.lib.network.packet.PacketBase;
+import cofh.core.network.packet.IPacketServer;
+import cofh.core.network.packet.PacketBase;
 import cofh.lib.util.control.ISecurable.AccessMode;
+import cofh.core.util.control.ISecurableTile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-import static cofh.lib.util.constants.Constants.PACKET_SECURITY_CONTROL;
+import static cofh.lib.util.Constants.PACKET_SECURITY_CONTROL;
 
 public class SecurityControlPacket extends PacketBase implements IPacketServer {
 

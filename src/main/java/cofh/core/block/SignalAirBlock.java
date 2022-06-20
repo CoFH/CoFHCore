@@ -1,8 +1,8 @@
 package cofh.core.block;
 
+import cofh.lib.content.block.entity.ITickableTile;
 import cofh.core.block.entity.SignalAirTile;
-import cofh.lib.block.entity.ICoFHTickableTile;
-import cofh.lib.util.Utils;
+import cofh.core.util.Utils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -38,7 +38,7 @@ public class SignalAirBlock extends AirBlock implements EntityBlock {
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> actualType) {
 
-        return ICoFHTickableTile.createTicker(level, actualType, SIGNAL_AIR_TILE.get(), SignalAirTile.class);
+        return ITickableTile.createTicker(level, actualType, SIGNAL_AIR_TILE.get(), SignalAirTile.class);
     }
 
     @Override

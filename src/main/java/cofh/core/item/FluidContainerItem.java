@@ -1,10 +1,10 @@
 package cofh.core.item;
 
+import cofh.core.fluid.FluidContainerItemWrapper;
+import cofh.core.fluid.IFluidContainerItem;
 import cofh.core.util.helpers.FluidHelper;
-import cofh.lib.fluid.FluidContainerItemWrapper;
-import cofh.lib.fluid.IFluidContainerItem;
-import cofh.lib.item.IColorableItem;
 import cofh.lib.util.helpers.StringHelper;
+import cofh.lib.api.item.IColorableItem;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -18,11 +18,11 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Predicate;
 
+import static cofh.core.item.ContainerType.FLUID;
+import static cofh.lib.util.NBTTags.TAG_FLUID;
 import static cofh.core.util.helpers.FluidHelper.addPotionTooltip;
 import static cofh.core.util.helpers.FluidHelper.hasPotionTag;
-import static cofh.lib.item.ContainerType.FLUID;
-import static cofh.lib.util.constants.NBTTags.TAG_FLUID;
-import static cofh.lib.util.helpers.ItemHelper.areItemStacksEqualIgnoreTags;
+import static cofh.core.util.helpers.ItemHelper.areItemStacksEqualIgnoreTags;
 import static cofh.lib.util.helpers.StringHelper.*;
 
 public class FluidContainerItem extends ItemCoFH implements IFluidContainerItem, IColorableItem {

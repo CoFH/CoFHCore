@@ -1,7 +1,7 @@
 package cofh.core.item;
 
+import cofh.core.entity.AbstractGrenade;
 import cofh.core.util.ProxyUtils;
-import cofh.lib.entity.AbstractGrenade;
 import net.minecraft.core.Position;
 import net.minecraft.core.dispenser.AbstractProjectileDispenseBehavior;
 import net.minecraft.resources.ResourceLocation;
@@ -17,7 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
 
-import static cofh.lib.util.helpers.ItemHelper.cloneStack;
+import static cofh.core.util.helpers.ItemHelper.cloneStack;
 
 public class GrenadeItem extends ItemCoFH {
 

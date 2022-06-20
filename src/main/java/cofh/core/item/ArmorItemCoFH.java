@@ -1,7 +1,6 @@
 package cofh.core.item;
 
 import cofh.core.util.ProxyUtils;
-import cofh.lib.item.ICoFHItem;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -21,7 +20,7 @@ import java.util.UUID;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
-import static cofh.lib.util.constants.Constants.TRUE;
+import static cofh.lib.util.Constants.TRUE;
 
 public class ArmorItemCoFH extends ArmorItem implements ICoFHItem {
 

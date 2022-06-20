@@ -1,6 +1,6 @@
 package cofh.core.event;
 
-import cofh.lib.capability.templates.AreaEffectItemWrapper;
+import cofh.core.capability.templates.AreaEffectItemWrapper;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.SheetedDecalTextureGenerator;
@@ -26,10 +26,10 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.util.List;
 
-import static cofh.lib.capability.CapabilityAreaEffect.AREA_EFFECT_ITEM_CAPABILITY;
-import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
-import static cofh.lib.util.helpers.AreaEffectHelper.validAreaEffectItem;
-import static cofh.lib.util.helpers.AreaEffectHelper.validAreaEffectMiningItem;
+import static cofh.core.capability.CapabilityAreaEffect.AREA_EFFECT_ITEM_CAPABILITY;
+import static cofh.lib.util.Constants.ID_COFH_CORE;
+import static cofh.core.util.helpers.AreaEffectHelper.validAreaEffectItem;
+import static cofh.core.util.helpers.AreaEffectHelper.validAreaEffectMiningItem;
 
 @Mod.EventBusSubscriber (value = Dist.CLIENT, modid = ID_COFH_CORE)
 public class AreaEffectClientEvents {

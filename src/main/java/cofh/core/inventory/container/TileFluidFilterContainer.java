@@ -2,19 +2,19 @@
 //
 //import cofh.core.network.packet.server.ContainerPacket;
 //import cofh.core.util.filter.AbstractFluidFilter;
-//import cofh.lib.inventory.container.slot.SlotFalseCopy;
-//import cofh.lib.inventory.wrapper.InvWrapperGeneric;
-//import cofh.lib.util.filter.IFilterOptions;
-//import cofh.lib.util.filter.IFilterableTile;
-//import cofh.lib.util.helpers.FilterHelper;
-//import cofh.lib.util.helpers.MathHelper;
+//import cofh.core.inventory.container.slot.SlotFalseCopy;
+//import cofh.core.inventory.wrapper.InvWrapperGeneric;
+//import cofh.core.util.filter.IFilterOptions;
+//import cofh.core.util.filter.IFilterableTile;
+//import cofh.core.util.helpers.FilterHelper;
+//import cofh.core.util.helpers.MathHelper;
 //import net.minecraft.entity.player.PlayerEntity;
 //import net.minecraft.entity.player.PlayerInventory;
 //import net.minecraft.network.PacketBuffer;
 //import net.minecraft.util.math.BlockPos;
 //import net.minecraft.world.World;
 //
-//import static cofh.lib.util.references.CoreReferences.TILE_FLUID_FILTER_CONTAINER;
+//import static cofh.core.util.references.CoreReferences.TILE_FLUID_FILTER_CONTAINER;
 //
 //public class TileFluidFilterContainer extends TileContainer implements IFilterOptions {
 //

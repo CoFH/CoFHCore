@@ -1,13 +1,12 @@
 package cofh.core.data;
 
 import cofh.core.init.CoreFlags;
-import cofh.lib.data.RecipeProviderCoFH;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
 
 import java.util.function.Consumer;
 
-import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
+import static cofh.lib.util.Constants.ID_COFH_CORE;
 
 public class CoreRecipeProvider extends RecipeProviderCoFH {
 

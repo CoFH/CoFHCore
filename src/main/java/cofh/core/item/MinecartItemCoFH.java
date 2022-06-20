@@ -1,6 +1,6 @@
 package cofh.core.item;
 
-import cofh.lib.entity.AbstractMinecartCoFH;
+import cofh.core.entity.AbstractMinecartCoFH;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockSource;
 import net.minecraft.core.Direction;

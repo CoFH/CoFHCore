@@ -7,7 +7,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 import static cofh.core.CoFHCore.BLOCKS;
 import static cofh.lib.util.helpers.BlockHelper.lightValue;
-import static cofh.lib.util.references.CoreIDs.*;
+import static cofh.core.util.references.CoreIDs.*;
 import static net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy;
 
 public class CoreBlocks {

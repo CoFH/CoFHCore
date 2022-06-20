@@ -1,8 +1,8 @@
 package cofh.core.event;
 
+import cofh.core.client.model.DynamicFluidContainerModel;
 import cofh.core.client.particle.*;
-import cofh.lib.client.model.DynamicFluidContainerModel;
-import cofh.lib.item.IColorableItem;
+import cofh.lib.api.item.IColorableItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.client.particle.ParticleEngine;
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static cofh.core.init.CoreParticles.*;
-import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
+import static cofh.lib.util.Constants.ID_COFH_CORE;
 
 @Mod.EventBusSubscriber (value = Dist.CLIENT, modid = ID_COFH_CORE, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CoreClientSetupEvents {

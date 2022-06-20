@@ -1,13 +1,13 @@
 package cofh.core.network.packet.server;
 
 import cofh.core.CoFHCore;
-import cofh.lib.network.packet.IPacketServer;
-import cofh.lib.network.packet.PacketBase;
-import cofh.lib.util.helpers.ItemHelper;
+import cofh.core.network.packet.IPacketServer;
+import cofh.core.network.packet.PacketBase;
+import cofh.core.util.helpers.ItemHelper;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 
-import static cofh.lib.util.constants.Constants.PACKET_ITEM_LEFT_CLICK;
+import static cofh.lib.util.Constants.PACKET_ITEM_LEFT_CLICK;
 
 public class ItemLeftClickPacket extends PacketBase implements IPacketServer {
 

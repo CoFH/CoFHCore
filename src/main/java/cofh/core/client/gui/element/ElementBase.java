@@ -1,6 +1,6 @@
 package cofh.core.client.gui.element;
 
-import cofh.lib.client.gui.IGuiAccess;
+import cofh.core.client.gui.IGuiAccess;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.function.BooleanSupplier;
 import java.util.function.IntSupplier;
 
-import static cofh.lib.util.constants.Constants.TRUE;
+import static cofh.lib.util.Constants.TRUE;
 
 public abstract class ElementBase {
 

@@ -1,11 +1,11 @@
 package cofh.core.network.packet.client;
 
 import cofh.core.CoFHCore;
+import cofh.lib.content.block.entity.IPacketHandlerTile;
+import cofh.core.network.packet.IPacketClient;
+import cofh.core.network.packet.PacketBase;
 import cofh.core.util.ProxyUtils;
-import cofh.lib.block.entity.ITilePacketHandler;
-import cofh.lib.network.packet.IPacketClient;
-import cofh.lib.network.packet.PacketBase;
-import cofh.lib.util.Utils;
+import cofh.core.util.Utils;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -13,7 +13,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-import static cofh.lib.util.constants.Constants.PACKET_GUI;
+import static cofh.lib.util.Constants.PACKET_GUI;
 
 public class TileGuiPacket extends PacketBase implements IPacketClient {
 
@@ -34,8 +34,8 @@ public class TileGuiPacket extends PacketBase implements IPacketClient {
             return;
         }
         BlockEntity tile = world.getBlockEntity(pos);
-        if (tile instanceof ITilePacketHandler) {
-            ((ITilePacketHandler) tile).handleGuiPacket(buffer);
+        if (tile instanceof IPacketHandlerTile) {
+            ((IPacketHandlerTile) tile).handleGuiPacket(buffer);
         }
     }
 
@@ -53,7 +53,7 @@ public class TileGuiPacket extends PacketBase implements IPacketClient {
         pos = buffer.readBlockPos();
     }
 
-    public static void sendToClient(ITilePacketHandler tile, ServerPlayer player) {
+    public static void sendToClient(IPacketHandlerTile tile, ServerPlayer player) {
 
         if (tile.world() == null || Utils.isClientWorld(tile.world())) {
             return;

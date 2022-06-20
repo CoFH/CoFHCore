@@ -1,9 +1,9 @@
 package cofh.core.network.packet.server;
 
 import cofh.core.CoFHCore;
-import cofh.lib.block.entity.ITilePacketHandler;
-import cofh.lib.network.packet.IPacketServer;
-import cofh.lib.network.packet.PacketBase;
+import cofh.lib.content.block.entity.IPacketHandlerTile;
+import cofh.core.network.packet.IPacketServer;
+import cofh.core.network.packet.PacketBase;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -11,7 +11,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-import static cofh.lib.util.constants.Constants.PACKET_CONFIG;
+import static cofh.lib.util.Constants.PACKET_CONFIG;
 
 public class TileConfigPacket extends PacketBase implements IPacketServer {
 
@@ -31,8 +31,8 @@ public class TileConfigPacket extends PacketBase implements IPacketServer {
             return;
         }
         BlockEntity tile = world.getBlockEntity(pos);
-        if (tile instanceof ITilePacketHandler) {
-            ((ITilePacketHandler) tile).handleConfigPacket(buffer);
+        if (tile instanceof IPacketHandlerTile) {
+            ((IPacketHandlerTile) tile).handleConfigPacket(buffer);
         }
     }
 
@@ -50,7 +50,7 @@ public class TileConfigPacket extends PacketBase implements IPacketServer {
         pos = buffer.readBlockPos();
     }
 
-    public static void sendToServer(ITilePacketHandler tile) {
+    public static void sendToServer(IPacketHandlerTile tile) {
 
         TileConfigPacket packet = new TileConfigPacket();
         packet.pos = tile.pos();

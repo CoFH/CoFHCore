@@ -2,7 +2,7 @@ package cofh.core.util.crafting;
 
 import cofh.lib.util.control.ISecurable.AccessMode;
 import cofh.lib.util.helpers.SecurityHelper;
-import cofh.lib.util.references.CoFHTags;
+import cofh.lib.tags.ItemTagsCoFH;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
@@ -12,7 +12,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 
 import static cofh.core.CoFHCore.RECIPE_SERIALIZERS;
-import static cofh.lib.util.references.CoreIDs.ID_CRAFTING_SECURABLE;
+import static cofh.core.util.references.CoreIDs.ID_CRAFTING_SECURABLE;
 
 public class SecureRecipe extends CustomRecipe {
 
@@ -24,8 +24,8 @@ public class SecureRecipe extends CustomRecipe {
     @Override
     public boolean matches(CraftingContainer inv, Level worldIn) {
 
-        Ingredient ingredientSecure = Ingredient.of(CoFHTags.Items.LOCKS);
-        Ingredient ingredientSecurable = Ingredient.of(CoFHTags.Items.SECURABLE);
+        Ingredient ingredientSecure = Ingredient.of(ItemTagsCoFH.LOCKS);
+        Ingredient ingredientSecurable = Ingredient.of(ItemTagsCoFH.SECURABLE);
 
         // boolean flag
         boolean lockItem = false;
@@ -47,7 +47,7 @@ public class SecureRecipe extends CustomRecipe {
     @Override
     public ItemStack assemble(CraftingContainer inv) {
 
-        Ingredient ingredientSecurable = Ingredient.of(CoFHTags.Items.SECURABLE);
+        Ingredient ingredientSecurable = Ingredient.of(ItemTagsCoFH.SECURABLE);
 
         ItemStack result = ItemStack.EMPTY;
         for (int i = 0; i < inv.getContainerSize(); ++i) {

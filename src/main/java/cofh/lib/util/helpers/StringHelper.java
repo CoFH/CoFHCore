@@ -14,7 +14,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-import static cofh.lib.util.constants.Constants.INVIS_STYLE;
+import static cofh.lib.util.Constants.INVIS_STYLE;
 
 public final class StringHelper {
 

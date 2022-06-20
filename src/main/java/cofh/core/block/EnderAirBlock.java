@@ -1,8 +1,8 @@
 package cofh.core.block;
 
 import cofh.core.block.entity.EnderAirTile;
-import cofh.lib.block.entity.ICoFHTickableTile;
-import cofh.lib.util.Utils;
+import cofh.lib.content.block.entity.ITickableTile;
+import cofh.core.util.Utils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
@@ -25,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 
 import static cofh.core.CoFHCore.TILE_ENTITIES;
 import static cofh.core.init.CoreMobEffects.ENDERFERENCE;
-import static cofh.lib.util.references.CoreIDs.ID_ENDER_AIR;
+import static cofh.core.util.references.CoreIDs.ID_ENDER_AIR;
 
 public class EnderAirBlock extends AirBlock implements EntityBlock {
 
@@ -47,7 +47,7 @@ public class EnderAirBlock extends AirBlock implements EntityBlock {
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> actualType) {
 
-        return ICoFHTickableTile.createTicker(level, actualType, TILE_ENTITIES.get(ID_ENDER_AIR), EnderAirTile.class);
+        return ITickableTile.createTicker(level, actualType, TILE_ENTITIES.get(ID_ENDER_AIR), EnderAirTile.class);
     }
 
     @OnlyIn (Dist.CLIENT)

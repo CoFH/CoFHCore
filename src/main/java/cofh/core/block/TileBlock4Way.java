@@ -1,7 +1,6 @@
 package cofh.core.block;
 
 import cofh.core.block.entity.TileCoFH;
-import cofh.lib.block.IWrenchable;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
@@ -14,7 +13,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
-import static cofh.lib.util.constants.Constants.FACING_HORIZONTAL;
+import static cofh.lib.util.Constants.FACING_HORIZONTAL;
 
 public class TileBlock4Way extends TileBlockCoFH implements IWrenchable {
 

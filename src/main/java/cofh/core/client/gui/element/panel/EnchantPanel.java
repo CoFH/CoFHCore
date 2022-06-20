@@ -1,7 +1,7 @@
 package cofh.core.client.gui.element.panel;
 
 import cofh.core.client.gui.CoreTextures;
-import cofh.lib.client.gui.IGuiAccess;
+import cofh.core.client.gui.IGuiAccess;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
 

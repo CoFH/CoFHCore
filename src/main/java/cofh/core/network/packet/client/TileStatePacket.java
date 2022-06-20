@@ -1,11 +1,11 @@
 package cofh.core.network.packet.client;
 
 import cofh.core.CoFHCore;
+import cofh.lib.content.block.entity.IPacketHandlerTile;
+import cofh.core.network.packet.IPacketClient;
+import cofh.core.network.packet.PacketBase;
 import cofh.core.util.ProxyUtils;
-import cofh.lib.block.entity.ITilePacketHandler;
-import cofh.lib.network.packet.IPacketClient;
-import cofh.lib.network.packet.PacketBase;
-import cofh.lib.util.Utils;
+import cofh.core.util.Utils;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -13,8 +13,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-import static cofh.lib.util.constants.Constants.NETWORK_UPDATE_DISTANCE;
-import static cofh.lib.util.constants.Constants.PACKET_STATE;
+import static cofh.lib.util.Constants.NETWORK_UPDATE_DISTANCE;
+import static cofh.lib.util.Constants.PACKET_STATE;
 
 public class TileStatePacket extends PacketBase implements IPacketClient {
 
@@ -35,8 +35,8 @@ public class TileStatePacket extends PacketBase implements IPacketClient {
             return;
         }
         BlockEntity tile = world.getBlockEntity(pos);
-        if (tile instanceof ITilePacketHandler) {
-            ((ITilePacketHandler) tile).handleStatePacket(buffer);
+        if (tile instanceof IPacketHandlerTile) {
+            ((IPacketHandlerTile) tile).handleStatePacket(buffer);
             BlockState state = tile.getLevel().getBlockState(pos);
             tile.getLevel().sendBlockUpdated(pos, state, state, 3);
         }
@@ -56,7 +56,7 @@ public class TileStatePacket extends PacketBase implements IPacketClient {
         pos = buffer.readBlockPos();
     }
 
-    public static void sendToClient(ITilePacketHandler tile) {
+    public static void sendToClient(IPacketHandlerTile tile) {
 
         if (tile.world() == null || Utils.isClientWorld(tile.world())) {
             return;

@@ -1,16 +1,16 @@
 package cofh.core.util.helpers;
 
+import cofh.lib.content.block.entity.ITileCallback;
+import cofh.core.block.entity.ITileXpHandler;
+import cofh.core.client.gui.IGuiAccess;
 import cofh.core.client.gui.element.*;
+import cofh.core.energy.EnergyStorageCoFH;
+import cofh.core.fluid.FluidStorageCoFH;
+import cofh.core.inventory.ItemStorageCoFH;
 import cofh.core.network.packet.server.ClaimXPPacket;
 import cofh.core.network.packet.server.StorageClearPacket;
-import cofh.lib.block.entity.ITileCallback;
-import cofh.lib.block.entity.ITileXpHandler;
-import cofh.lib.client.gui.IGuiAccess;
-import cofh.lib.energy.EnergyStorageCoFH;
-import cofh.lib.fluid.FluidStorageCoFH;
-import cofh.lib.inventory.ItemStorageCoFH;
 import cofh.lib.util.control.IReconfigurable;
-import cofh.lib.xp.XpStorage;
+import cofh.core.xp.XpStorage;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.function.BooleanSupplier;
@@ -18,8 +18,8 @@ import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
 import static cofh.core.network.packet.server.StorageClearPacket.StorageType.*;
-import static cofh.lib.util.constants.Constants.PATH_ELEMENTS;
-import static cofh.lib.util.constants.Constants.TRUE;
+import static cofh.lib.util.Constants.PATH_ELEMENTS;
+import static cofh.lib.util.Constants.TRUE;
 import static cofh.lib.util.helpers.StringHelper.canLocalize;
 import static cofh.lib.util.helpers.StringHelper.localize;
 

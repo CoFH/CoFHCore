@@ -2,8 +2,8 @@ package cofh.core.event;
 
 import cofh.core.config.CoreEnchantConfig;
 import cofh.core.config.CoreServerConfig;
-import cofh.lib.util.Utils;
-import cofh.lib.util.helpers.XpHelper;
+import cofh.core.util.Utils;
+import cofh.core.util.helpers.XpHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ExperienceOrb;
@@ -26,9 +26,9 @@ import net.minecraftforge.fml.common.Mod;
 import java.util.Map;
 
 import static cofh.core.init.CoreMobEffects.SLIMED;
-import static cofh.lib.util.Utils.getItemEnchantmentLevel;
-import static cofh.lib.util.Utils.getMaxEquippedEnchantmentLevel;
-import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
+import static cofh.core.util.Utils.getItemEnchantmentLevel;
+import static cofh.core.util.Utils.getMaxEquippedEnchantmentLevel;
+import static cofh.lib.util.Constants.ID_COFH_CORE;
 import static net.minecraft.world.item.enchantment.Enchantments.FALL_PROTECTION;
 import static net.minecraft.world.item.enchantment.Enchantments.MENDING;
 

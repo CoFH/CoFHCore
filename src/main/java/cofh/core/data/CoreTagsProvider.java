@@ -1,6 +1,8 @@
 package cofh.core.data;
 
-import cofh.lib.util.references.CoFHTags;
+import cofh.lib.tags.BlockTagsCoFH;
+import cofh.lib.tags.FluidTagsCoFH;
+import cofh.lib.tags.ItemTagsCoFH;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.tags.FluidTagsProvider;
@@ -10,8 +12,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import static cofh.core.CoFHCore.FLUIDS;
-import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
-import static cofh.lib.util.references.CoreIDs.*;
+import static cofh.core.util.references.CoreIDs.*;
+import static cofh.lib.util.Constants.ID_COFH_CORE;
 
 public class CoreTagsProvider {
 
@@ -31,7 +33,7 @@ public class CoreTagsProvider {
         @Override
         protected void addTags() {
 
-            tag(CoFHTags.Blocks.PUMPKINS_CARVED).add(Blocks.CARVED_PUMPKIN);
+            tag(BlockTagsCoFH.PUMPKINS_CARVED).add(Blocks.CARVED_PUMPKIN);
         }
 
     }
@@ -52,33 +54,33 @@ public class CoreTagsProvider {
         @Override
         protected void addTags() {
 
-            copy(CoFHTags.Blocks.PUMPKINS_CARVED, CoFHTags.Items.PUMPKINS_CARVED);
+            copy(BlockTagsCoFH.PUMPKINS_CARVED, ItemTagsCoFH.PUMPKINS_CARVED);
 
-            tag(CoFHTags.Items.ARMOR_IRON).add(
+            tag(ItemTagsCoFH.ARMOR_IRON).add(
                     Items.IRON_BOOTS,
                     Items.IRON_CHESTPLATE,
                     Items.IRON_HELMET,
                     Items.IRON_LEGGINGS
             );
-            tag(CoFHTags.Items.ARMOR_GOLD).add(
+            tag(ItemTagsCoFH.ARMOR_GOLD).add(
                     Items.GOLDEN_BOOTS,
                     Items.GOLDEN_CHESTPLATE,
                     Items.GOLDEN_HELMET,
                     Items.GOLDEN_LEGGINGS
             );
-            tag(CoFHTags.Items.ARMOR_DIAMOND).add(
+            tag(ItemTagsCoFH.ARMOR_DIAMOND).add(
                     Items.DIAMOND_BOOTS,
                     Items.DIAMOND_CHESTPLATE,
                     Items.DIAMOND_HELMET,
                     Items.DIAMOND_LEGGINGS
             );
-            tag(CoFHTags.Items.ARMOR_NETHERITE).add(
+            tag(ItemTagsCoFH.ARMOR_NETHERITE).add(
                     Items.NETHERITE_BOOTS,
                     Items.NETHERITE_CHESTPLATE,
                     Items.NETHERITE_HELMET,
                     Items.NETHERITE_LEGGINGS
             );
-            tag(CoFHTags.Items.TOOLS_IRON).add(
+            tag(ItemTagsCoFH.TOOLS_IRON).add(
                     Items.IRON_AXE,
                     Items.IRON_HOE,
                     Items.IRON_PICKAXE,
@@ -86,44 +88,44 @@ public class CoreTagsProvider {
                     Items.IRON_SWORD,
                     Items.SHEARS
             );
-            tag(CoFHTags.Items.TOOLS_GOLD).add(
+            tag(ItemTagsCoFH.TOOLS_GOLD).add(
                     Items.GOLDEN_AXE,
                     Items.GOLDEN_HOE,
                     Items.GOLDEN_PICKAXE,
                     Items.GOLDEN_SHOVEL,
                     Items.GOLDEN_SWORD
             );
-            tag(CoFHTags.Items.TOOLS_DIAMOND).add(
+            tag(ItemTagsCoFH.TOOLS_DIAMOND).add(
                     Items.DIAMOND_AXE,
                     Items.DIAMOND_HOE,
                     Items.DIAMOND_PICKAXE,
                     Items.DIAMOND_SHOVEL,
                     Items.DIAMOND_SWORD
             );
-            tag(CoFHTags.Items.TOOLS_NETHERITE).add(
+            tag(ItemTagsCoFH.TOOLS_NETHERITE).add(
                     Items.NETHERITE_AXE,
                     Items.NETHERITE_HOE,
                     Items.NETHERITE_PICKAXE,
                     Items.NETHERITE_SHOVEL,
                     Items.NETHERITE_SWORD
             );
-            tag(CoFHTags.Items.COOKED_FISH).add(
+            tag(ItemTagsCoFH.COOKED_FISH).add(
                     Items.COOKED_COD,
                     Items.COOKED_SALMON
             );
-            tag(CoFHTags.Items.COOKED_MEAT).add(
+            tag(ItemTagsCoFH.COOKED_MEAT).add(
                     Items.COOKED_PORKCHOP,
                     Items.COOKED_BEEF,
                     Items.COOKED_RABBIT,
                     Items.COOKED_CHICKEN,
                     Items.COOKED_MUTTON
             );
-            tag(CoFHTags.Items.RAW_FISH).add(
+            tag(ItemTagsCoFH.RAW_FISH).add(
                     Items.COD,
                     Items.SALMON,
                     Items.TROPICAL_FISH
             );
-            tag(CoFHTags.Items.RAW_MEAT).add(
+            tag(ItemTagsCoFH.RAW_MEAT).add(
                     Items.PORKCHOP,
                     Items.BEEF,
                     Items.RABBIT,
@@ -150,9 +152,9 @@ public class CoreTagsProvider {
         @Override
         protected void addTags() {
 
-            tag(CoFHTags.Fluids.HONEY).add(FLUIDS.get(ID_FLUID_HONEY));
-            tag(CoFHTags.Fluids.POTION).add(FLUIDS.get(ID_FLUID_POTION));
-            tag(CoFHTags.Fluids.EXPERIENCE).add(FLUIDS.get(ID_FLUID_XP));
+            tag(FluidTagsCoFH.EXPERIENCE).add(FLUIDS.get(ID_FLUID_EXPERIENCE));
+            tag(FluidTagsCoFH.HONEY).add(FLUIDS.get(ID_FLUID_HONEY));
+            tag(FluidTagsCoFH.POTION).add(FLUIDS.get(ID_FLUID_POTION));
         }
 
     }

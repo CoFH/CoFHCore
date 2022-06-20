@@ -1,7 +1,7 @@
 package cofh.core.client.gui.element;
 
+import cofh.core.client.gui.IGuiAccess;
 import cofh.core.util.helpers.RenderHelper;
-import cofh.lib.client.gui.IGuiAccess;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraftforge.fluids.FluidStack;
 

@@ -1,7 +1,7 @@
 package cofh.core.event;
 
-import cofh.lib.capability.templates.AreaEffectItemWrapper;
-import cofh.lib.util.Utils;
+import cofh.core.capability.templates.AreaEffectItemWrapper;
+import cofh.core.util.Utils;
 import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.core.BlockPos;
@@ -20,9 +20,9 @@ import net.minecraftforge.fml.common.Mod;
 import java.util.List;
 import java.util.Set;
 
-import static cofh.lib.capability.CapabilityAreaEffect.AREA_EFFECT_ITEM_CAPABILITY;
-import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
-import static cofh.lib.util.helpers.AreaEffectHelper.validAreaEffectMiningItem;
+import static cofh.core.capability.CapabilityAreaEffect.AREA_EFFECT_ITEM_CAPABILITY;
+import static cofh.lib.util.Constants.ID_COFH_CORE;
+import static cofh.core.util.helpers.AreaEffectHelper.validAreaEffectMiningItem;
 
 @Mod.EventBusSubscriber (modid = ID_COFH_CORE)
 public class AreaEffectEvents {

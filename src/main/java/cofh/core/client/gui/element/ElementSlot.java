@@ -1,14 +1,14 @@
 package cofh.core.client.gui.element;
 
+import cofh.core.client.gui.IGuiAccess;
 import cofh.core.util.helpers.RenderHelper;
-import cofh.lib.client.gui.IGuiAccess;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.function.BooleanSupplier;
 
 import static cofh.core.CoFHCore.LOG;
-import static cofh.lib.util.constants.Constants.TRUE;
+import static cofh.lib.util.Constants.TRUE;
 
 public class ElementSlot extends ElementBase {
 

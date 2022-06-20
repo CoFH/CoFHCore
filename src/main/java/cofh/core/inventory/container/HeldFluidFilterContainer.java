@@ -2,20 +2,20 @@
 //
 //import cofh.core.network.packet.server.ContainerPacket;
 //import cofh.core.util.filter.AbstractFluidFilter;
-//import cofh.lib.inventory.container.ContainerCoFH;
-//import cofh.lib.inventory.container.slot.SlotFalseCopy;
-//import cofh.lib.inventory.container.slot.SlotLocked;
-//import cofh.lib.inventory.wrapper.InvWrapperGeneric;
-//import cofh.lib.util.filter.IFilterOptions;
-//import cofh.lib.util.filter.IFilterableItem;
-//import cofh.lib.util.helpers.MathHelper;
+//import cofh.core.inventory.container.ContainerCoFH;
+//import cofh.core.inventory.container.slot.SlotFalseCopy;
+//import cofh.core.inventory.container.slot.SlotLocked;
+//import cofh.core.inventory.wrapper.InvWrapperGeneric;
+//import cofh.core.util.filter.IFilterOptions;
+//import cofh.core.util.filter.IFilterableItem;
+//import cofh.core.util.helpers.MathHelper;
 //import net.minecraft.entity.player.PlayerEntity;
 //import net.minecraft.entity.player.PlayerInventory;
 //import net.minecraft.inventory.container.Slot;
 //import net.minecraft.item.ItemStack;
 //import net.minecraft.network.PacketBuffer;
 //
-//import static cofh.lib.util.references.CoreReferences.HELD_FLUID_FILTER_CONTAINER;
+//import static cofh.core.util.references.CoreReferences.HELD_FLUID_FILTER_CONTAINER;
 //
 //public class HeldFluidFilterContainer extends ContainerCoFH implements IFilterOptions {
 //

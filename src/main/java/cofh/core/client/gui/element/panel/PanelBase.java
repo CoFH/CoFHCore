@@ -1,8 +1,8 @@
 package cofh.core.client.gui.element.panel;
 
+import cofh.core.client.gui.IGuiAccess;
 import cofh.core.client.gui.element.ElementBase;
 import cofh.core.util.helpers.RenderHelper;
-import cofh.lib.client.gui.IGuiAccess;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.GameRenderer;
@@ -14,7 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.ArrayList;
 import java.util.List;
 
-import static cofh.lib.util.constants.Constants.PATH_ELEMENTS;
+import static cofh.lib.util.Constants.PATH_ELEMENTS;
 
 public abstract class PanelBase extends ElementBase {
 

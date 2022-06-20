@@ -11,7 +11,7 @@ import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ChestMenu;
 
-import static cofh.lib.util.constants.Constants.CMD_PLAYER;
+import static cofh.lib.util.Constants.CMD_PLAYER;
 
 public class SubCommandEnderChest {
 

@@ -1,7 +1,6 @@
 package cofh.core.item;
 
 import cofh.core.config.CoreClientConfig;
-import cofh.lib.item.ICoFHItem;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
@@ -23,7 +22,7 @@ import java.util.List;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
-import static cofh.lib.util.constants.Constants.TRUE;
+import static cofh.lib.util.Constants.TRUE;
 import static cofh.lib.util.helpers.StringHelper.getTextComponent;
 import static net.minecraft.ChatFormatting.GRAY;
 

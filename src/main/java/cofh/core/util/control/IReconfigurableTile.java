@@ -1,6 +1,6 @@
 package cofh.core.util.control;
 
-import cofh.lib.block.entity.ITileCallback;
+import cofh.lib.content.block.entity.ITileCallback;
 import cofh.lib.util.control.IReconfigurable;
 import net.minecraft.core.Direction;
 

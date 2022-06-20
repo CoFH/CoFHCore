@@ -1,17 +1,17 @@
 package cofh.core.network.packet.server;
 
 import cofh.core.CoFHCore;
-import cofh.core.util.control.IReconfigurableTile;
-import cofh.lib.network.packet.IPacketServer;
-import cofh.lib.network.packet.PacketBase;
+import cofh.core.network.packet.IPacketServer;
+import cofh.core.network.packet.PacketBase;
 import cofh.lib.util.control.IReconfigurable.SideConfig;
+import cofh.core.util.control.IReconfigurableTile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-import static cofh.lib.util.constants.Constants.PACKET_SIDE_CONFIG;
+import static cofh.lib.util.Constants.PACKET_SIDE_CONFIG;
 import static cofh.lib.util.control.IReconfigurable.SideConfig.SIDE_NONE;
 
 public class SideConfigPacket extends PacketBase implements IPacketServer {

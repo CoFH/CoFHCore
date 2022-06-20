@@ -35,4 +35,36 @@ public class TimeTracker {
         return lastMark == Long.MIN_VALUE;
     }
 
+    // region EMPTY CLASS
+    public static TimeTracker empty() {
+
+        if (EMPTY == null) {
+            EMPTY = new EmptyTimeTracker();
+        }
+        return EMPTY;
+    }
+
+    private static EmptyTimeTracker EMPTY;
+
+    private static class EmptyTimeTracker extends TimeTracker {
+
+        @Override
+        public boolean hasDelayPassed(Level world, int delay) {
+
+            return false;
+        }
+
+        @Override
+        public void markTime(Level world) {
+
+        }
+
+        @Override
+        public boolean notSet() {
+
+            return true;
+        }
+
+    }
+    // endregion
 }

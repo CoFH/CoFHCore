@@ -1,12 +1,12 @@
 package cofh.core.inventory.container;
 
+import cofh.core.inventory.container.slot.SlotFalseCopy;
+import cofh.lib.content.inventory.wrapper.InvWrapperGeneric;
 import cofh.core.network.packet.server.ContainerPacket;
 import cofh.core.util.filter.AbstractItemFilter;
-import cofh.lib.inventory.container.slot.SlotFalseCopy;
-import cofh.lib.inventory.wrapper.InvWrapperGeneric;
-import cofh.lib.util.filter.IFilterOptions;
-import cofh.lib.util.filter.IFilterableTile;
-import cofh.lib.util.helpers.FilterHelper;
+import cofh.core.util.filter.IFilterOptions;
+import cofh.core.util.filter.IFilterableTile;
+import cofh.core.util.helpers.FilterHelper;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;

@@ -11,10 +11,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 
+import static cofh.lib.util.Constants.PATH_ELEMENTS;
+import static cofh.lib.util.Constants.PATH_GUI;
 import static cofh.core.util.helpers.GuiHelper.createSlot;
 import static cofh.core.util.helpers.GuiHelper.generatePanelInfo;
-import static cofh.lib.util.constants.Constants.PATH_ELEMENTS;
-import static cofh.lib.util.constants.Constants.PATH_GUI;
 import static cofh.lib.util.helpers.SoundHelper.playClickSound;
 
 public class HeldItemFilterScreen extends ContainerScreenCoFH<HeldItemFilterContainer> {

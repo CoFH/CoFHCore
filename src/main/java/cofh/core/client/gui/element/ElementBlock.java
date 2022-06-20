@@ -1,7 +1,7 @@
 package cofh.core.client.gui.element;
 
+import cofh.core.client.gui.IGuiAccess;
 import cofh.core.util.helpers.RenderHelper;
-import cofh.lib.client.gui.IGuiAccess;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -11,8 +11,8 @@ import net.minecraftforge.fluids.FluidStack;
 
 import java.util.function.Supplier;
 
-import static cofh.lib.util.constants.Constants.BUCKET_VOLUME;
-import static cofh.lib.util.constants.Constants.EMPTY_BLOCK;
+import static cofh.lib.util.Constants.BUCKET_VOLUME;
+import static cofh.lib.util.Constants.EMPTY_BLOCK;
 
 public class ElementBlock extends ElementBase {
 

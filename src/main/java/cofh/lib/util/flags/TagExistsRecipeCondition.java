@@ -9,7 +9,7 @@ import net.minecraft.world.item.Item;
 import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
 
-import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
+import static cofh.lib.util.Constants.ID_COFH_CORE;
 
 public class TagExistsRecipeCondition implements ICondition {
 

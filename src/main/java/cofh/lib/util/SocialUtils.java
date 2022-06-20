@@ -13,8 +13,8 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.UUID;
 
-import static cofh.lib.util.constants.NBTTags.TAG_NAME;
-import static cofh.lib.util.constants.NBTTags.TAG_UUID;
+import static cofh.lib.util.NBTTags.TAG_NAME;
+import static cofh.lib.util.NBTTags.TAG_UUID;
 import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 
 public class SocialUtils {

@@ -1,7 +1,7 @@
 package cofh.core.item;
 
-import cofh.lib.energy.EnergyContainerItemWrapper;
-import cofh.lib.energy.IEnergyContainerItem;
+import cofh.core.energy.EnergyContainerItemWrapper;
+import cofh.core.energy.IEnergyContainerItem;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -12,8 +12,8 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import static cofh.lib.item.ContainerType.ENERGY;
-import static cofh.lib.util.constants.Constants.RGB_DURABILITY_FLUX;
+import static cofh.core.item.ContainerType.ENERGY;
+import static cofh.lib.util.Constants.RGB_DURABILITY_FLUX;
 import static cofh.lib.util.helpers.StringHelper.*;
 
 public abstract class EnergyContainerItem extends ItemCoFH implements IEnergyContainerItem {

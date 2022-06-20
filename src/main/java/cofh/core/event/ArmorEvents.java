@@ -23,7 +23,7 @@ import java.util.Set;
 
 import static cofh.core.init.CoreMobEffects.CHILLED;
 import static cofh.core.init.CoreMobEffects.SHOCKED;
-import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
+import static cofh.lib.util.Constants.ID_COFH_CORE;
 import static net.minecraft.world.effect.MobEffects.POISON;
 import static net.minecraft.world.effect.MobEffects.WITHER;
 

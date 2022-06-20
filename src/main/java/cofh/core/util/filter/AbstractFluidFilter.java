@@ -1,8 +1,6 @@
 package cofh.core.util.filter;
 
 import cofh.core.util.helpers.FluidHelper;
-import cofh.lib.util.filter.IFilter;
-import cofh.lib.util.filter.IFilterOptions;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -15,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import static cofh.lib.util.constants.NBTTags.*;
+import static cofh.lib.util.NBTTags.*;
 import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 
 public abstract class AbstractFluidFilter implements IFilter, IFilterOptions {

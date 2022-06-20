@@ -4,7 +4,7 @@ import cofh.lib.util.flags.FlagManager;
 
 import java.util.function.BooleanSupplier;
 
-import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
+import static cofh.lib.util.Constants.ID_COFH_CORE;
 
 public class CoreFlags {
 

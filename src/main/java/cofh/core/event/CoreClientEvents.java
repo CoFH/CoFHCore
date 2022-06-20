@@ -1,8 +1,8 @@
 package cofh.core.event;
 
-import cofh.core.config.CoreClientConfig;
 import cofh.lib.client.renderer.entity.ITranslucentRenderer;
-import cofh.lib.util.Utils;
+import cofh.core.config.CoreClientConfig;
+import cofh.core.util.Utils;
 import cofh.lib.util.raytracer.VoxelShapeBlockHitResult;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -42,8 +42,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static cofh.lib.util.constants.Constants.*;
-import static cofh.lib.util.constants.NBTTags.TAG_STORED_ENCHANTMENTS;
+import static cofh.lib.util.Constants.*;
+import static cofh.lib.util.NBTTags.TAG_STORED_ENCHANTMENTS;
 import static cofh.lib.util.helpers.StringHelper.*;
 import static net.minecraft.ChatFormatting.DARK_GRAY;
 import static net.minecraft.ChatFormatting.GRAY;

@@ -1,8 +1,8 @@
 package cofh.core.network.packet.client;
 
 import cofh.core.CoFHCore;
-import cofh.lib.network.packet.IPacketClient;
-import cofh.lib.network.packet.PacketBase;
+import cofh.core.network.packet.IPacketClient;
+import cofh.core.network.packet.PacketBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.effect.MobEffect;
@@ -11,8 +11,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import static cofh.lib.util.Utils.getRegistryName;
-import static cofh.lib.util.constants.Constants.PACKET_EFFECT_REMOVE;
+import static cofh.core.util.Utils.getRegistryName;
+import static cofh.lib.util.Constants.PACKET_EFFECT_REMOVE;
 
 public class EffectRemovedPacket extends PacketBase implements IPacketClient {
 

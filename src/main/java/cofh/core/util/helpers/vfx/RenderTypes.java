@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 
 import static cofh.core.client.CoreRenderType.THICK_LINES;
-import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
+import static cofh.lib.util.Constants.ID_COFH_CORE;
 import static net.minecraft.client.renderer.RenderStateShard.*;
 
 public class RenderTypes {

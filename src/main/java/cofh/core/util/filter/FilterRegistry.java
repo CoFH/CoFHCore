@@ -1,9 +1,5 @@
 package cofh.core.util.filter;
 
-import cofh.lib.util.filter.IFilter;
-import cofh.lib.util.filter.IFilterFactory;
-import cofh.lib.util.filter.IFilterableTile;
-import cofh.lib.util.filter.ITileFilterFactory;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.nbt.CompoundTag;
 

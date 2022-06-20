@@ -1,14 +1,14 @@
 package cofh.core.init;
 
-import cofh.lib.entity.ElectricArc;
-import cofh.lib.entity.ElectricField;
-import cofh.lib.entity.Knife;
+import cofh.core.entity.ElectricArc;
+import cofh.core.entity.ElectricField;
+import cofh.core.entity.Knife;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.registries.RegistryObject;
 
 import static cofh.core.CoFHCore.ENTITIES;
-import static cofh.lib.util.references.CoreIDs.*;
+import static cofh.core.util.references.CoreIDs.*;
 
 public class CoreEntities {
 

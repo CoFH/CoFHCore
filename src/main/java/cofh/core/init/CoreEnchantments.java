@@ -7,7 +7,7 @@ import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraftforge.registries.RegistryObject;
 
 import static cofh.core.CoFHCore.ENCHANTMENTS;
-import static cofh.lib.util.references.CoreIDs.ID_HOLDING;
+import static cofh.core.util.references.CoreIDs.ID_HOLDING;
 
 public class CoreEnchantments {
 

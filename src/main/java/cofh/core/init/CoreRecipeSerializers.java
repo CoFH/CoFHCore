@@ -7,8 +7,8 @@ import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
 import net.minecraftforge.common.crafting.CraftingHelper;
 
 import static cofh.core.CoFHCore.RECIPE_SERIALIZERS;
-import static cofh.lib.util.references.CoreIDs.ID_CRAFTING_POTION;
-import static cofh.lib.util.references.CoreIDs.ID_CRAFTING_SECURABLE;
+import static cofh.core.util.references.CoreIDs.ID_CRAFTING_POTION;
+import static cofh.core.util.references.CoreIDs.ID_CRAFTING_SECURABLE;
 
 public class CoreRecipeSerializers {
 

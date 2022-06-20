@@ -11,8 +11,8 @@ import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Collection;
 
-import static cofh.lib.util.constants.Constants.CMD_FLAG;
-import static cofh.lib.util.constants.Constants.CMD_TARGETS;
+import static cofh.lib.util.Constants.CMD_FLAG;
+import static cofh.lib.util.Constants.CMD_TARGETS;
 
 public class SubCommandInvis {
 

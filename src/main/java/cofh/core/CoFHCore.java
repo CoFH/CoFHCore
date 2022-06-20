@@ -1,34 +1,30 @@
 package cofh.core;
 
+import cofh.core.capability.CapabilityArchery;
+import cofh.core.capability.CapabilityAreaEffect;
+import cofh.core.capability.CapabilityEnchantableItem;
+import cofh.core.capability.CapabilityShieldItem;
 import cofh.core.client.gui.HeldItemFilterScreen;
 import cofh.core.client.gui.TileItemFilterScreen;
+import cofh.lib.client.renderer.entity.NothingRenderer;
+import cofh.core.client.renderer.entity.model.ArmorFullSuitModel;
+import cofh.core.client.renderer.entity.model.ElectricArcRenderer;
+import cofh.core.client.renderer.entity.model.KnifeRenderer;
 import cofh.core.command.CoFHCommand;
 import cofh.core.compat.curios.CuriosProxy;
 import cofh.core.compat.quark.QuarkFlags;
-import cofh.core.config.CoreClientConfig;
-import cofh.core.config.CoreCommandConfig;
-import cofh.core.config.CoreEnchantConfig;
-import cofh.core.config.CoreServerConfig;
+import cofh.core.config.*;
 import cofh.core.event.ArmorEvents;
 import cofh.core.init.*;
+import cofh.core.loot.TileNBTSync;
+import cofh.core.network.PacketHandler;
 import cofh.core.network.packet.client.*;
 import cofh.core.network.packet.server.*;
+import cofh.core.util.DeferredRegisterCoFH;
 import cofh.core.util.Proxy;
 import cofh.core.util.ProxyClient;
+import cofh.core.util.Utils;
 import cofh.core.util.helpers.FluidHelper;
-import cofh.lib.capability.CapabilityArchery;
-import cofh.lib.capability.CapabilityAreaEffect;
-import cofh.lib.capability.CapabilityEnchantableItem;
-import cofh.lib.capability.CapabilityShieldItem;
-import cofh.lib.client.renderer.entity.ElectricArcRenderer;
-import cofh.lib.client.renderer.entity.KnifeRenderer;
-import cofh.lib.client.renderer.entity.NothingRenderer;
-import cofh.lib.client.renderer.entity.model.ArmorFullSuitModel;
-import cofh.lib.config.ConfigManager;
-import cofh.lib.loot.TileNBTSync;
-import cofh.lib.network.PacketHandler;
-import cofh.lib.util.DeferredRegisterCoFH;
-import cofh.lib.util.Utils;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.resources.ResourceLocation;
@@ -57,11 +53,11 @@ import net.minecraftforge.registries.RegisterEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import static cofh.core.client.renderer.entity.model.ArmorFullSuitModel.ARMOR_FULL_SUIT_LAYER;
 import static cofh.core.init.CoreContainers.HELD_ITEM_FILTER;
 import static cofh.core.init.CoreContainers.TILE_ITEM_FILTER;
 import static cofh.core.init.CoreEntities.*;
-import static cofh.lib.client.renderer.entity.model.ArmorFullSuitModel.ARMOR_FULL_SUIT_LAYER;
-import static cofh.lib.util.constants.Constants.*;
+import static cofh.lib.util.Constants.*;
 
 @Mod (ID_COFH_CORE)
 public class CoFHCore {

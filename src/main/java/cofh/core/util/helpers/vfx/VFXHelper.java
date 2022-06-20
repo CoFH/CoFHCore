@@ -1,7 +1,7 @@
 package cofh.core.util.helpers.vfx;
 
-import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.util.helpers.MathHelper;
+import cofh.core.util.helpers.RenderHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix3f;
