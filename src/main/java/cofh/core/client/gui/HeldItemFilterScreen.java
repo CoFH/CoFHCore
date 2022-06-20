@@ -2,7 +2,7 @@ package cofh.core.client.gui;
 
 import cofh.core.client.gui.element.ElementButton;
 import cofh.core.client.gui.element.SimpleTooltip;
-import cofh.core.inventory.container.HeldItemFilterContainer;
+import cofh.core.content.inventory.container.HeldItemFilterContainer;
 import cofh.core.util.helpers.RenderHelper;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -11,10 +11,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 
-import static cofh.lib.util.Constants.PATH_ELEMENTS;
-import static cofh.lib.util.Constants.PATH_GUI;
 import static cofh.core.util.helpers.GuiHelper.createSlot;
 import static cofh.core.util.helpers.GuiHelper.generatePanelInfo;
+import static cofh.lib.util.Constants.PATH_ELEMENTS;
+import static cofh.lib.util.Constants.PATH_GUI;
 import static cofh.lib.util.helpers.SoundHelper.playClickSound;
 
 public class HeldItemFilterScreen extends ContainerScreenCoFH<HeldItemFilterContainer> {

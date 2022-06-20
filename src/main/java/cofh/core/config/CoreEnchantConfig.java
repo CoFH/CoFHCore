@@ -1,6 +1,6 @@
 package cofh.core.config;
 
-import cofh.core.enchantment.EnchantmentCoFH;
+import cofh.core.content.enchantment.EnchantmentCoFH;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import static cofh.core.init.CoreEnchantments.HOLDING;

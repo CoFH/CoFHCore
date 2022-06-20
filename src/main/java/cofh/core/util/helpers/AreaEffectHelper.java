@@ -21,8 +21,8 @@ import java.util.stream.Collectors;
 import static cofh.core.capability.CapabilityAreaEffect.AREA_EFFECT_ITEM_CAPABILITY;
 import static cofh.core.util.Utils.getEnchantment;
 import static cofh.core.util.Utils.getItemEnchantmentLevel;
-import static cofh.lib.util.Constants.ID_ENSORCELLATION;
 import static cofh.core.util.references.EnsorcIDs.ID_EXCAVATING;
+import static cofh.lib.util.Constants.ID_ENSORCELLATION;
 
 public class AreaEffectHelper {
 

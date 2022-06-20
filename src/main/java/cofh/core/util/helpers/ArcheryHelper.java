@@ -29,9 +29,9 @@ import static cofh.core.capability.CapabilityArchery.AMMO_ITEM_CAPABILITY;
 import static cofh.core.capability.CapabilityArchery.BOW_ITEM_CAPABILITY;
 import static cofh.core.util.Utils.getEnchantment;
 import static cofh.core.util.Utils.getItemEnchantmentLevel;
-import static cofh.lib.util.Constants.ID_ENSORCELLATION;
 import static cofh.core.util.references.EnsorcIDs.ID_TRUESHOT;
 import static cofh.core.util.references.EnsorcIDs.ID_VOLLEY;
+import static cofh.lib.util.Constants.ID_ENSORCELLATION;
 import static net.minecraft.world.item.enchantment.Enchantments.*;
 
 public final class ArcheryHelper {

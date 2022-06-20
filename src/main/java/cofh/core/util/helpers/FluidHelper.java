@@ -1,6 +1,6 @@
 package cofh.core.util.helpers;
 
-import cofh.core.fluid.FluidStorageCoFH;
+import cofh.core.content.fluid.FluidStorageCoFH;
 import cofh.lib.tags.FluidTagsCoFH;
 import cofh.lib.util.helpers.BlockHelper;
 import com.mojang.datafixers.util.Pair;

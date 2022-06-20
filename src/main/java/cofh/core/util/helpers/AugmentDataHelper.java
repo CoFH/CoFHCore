@@ -1,6 +1,6 @@
 package cofh.core.util.helpers;
 
-import cofh.core.item.IAugmentItem;
+import cofh.core.content.item.IAugmentItem;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 

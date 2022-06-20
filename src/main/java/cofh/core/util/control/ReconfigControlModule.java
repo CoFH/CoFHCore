@@ -2,8 +2,8 @@ package cofh.core.util.control;
 
 import cofh.core.network.packet.server.SideConfigPacket;
 import cofh.core.util.Utils;
-import cofh.lib.util.helpers.BlockHelper;
 import cofh.lib.util.control.IReconfigurable;
+import cofh.lib.util.helpers.BlockHelper;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;

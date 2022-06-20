@@ -1,8 +1,8 @@
 package cofh.core.client.renderer.entity.model;
 
-import cofh.lib.client.renderer.entity.ITranslucentRenderer;
-import cofh.core.entity.ElectricArc;
+import cofh.core.content.entity.ElectricArc;
 import cofh.core.util.helpers.vfx.VFXHelper;
+import cofh.lib.client.renderer.entity.ITranslucentRenderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;

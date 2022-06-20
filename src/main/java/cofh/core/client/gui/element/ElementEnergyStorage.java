@@ -1,7 +1,7 @@
 package cofh.core.client.gui.element;
 
 import cofh.core.client.gui.IGuiAccess;
-import cofh.core.energy.EnergyStorageCoFH;
+import cofh.core.content.energy.EnergyStorageCoFH;
 import cofh.core.util.helpers.RenderHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 

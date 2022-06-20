@@ -1,7 +1,7 @@
 package cofh.core.network.packet.server;
 
 import cofh.core.CoFHCore;
-import cofh.core.block.entity.ITileXpHandler;
+import cofh.core.content.block.entity.ITileXpHandler;
 import cofh.core.network.packet.IPacketServer;
 import cofh.core.network.packet.PacketBase;
 import net.minecraft.core.BlockPos;

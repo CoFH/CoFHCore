@@ -1,6 +1,6 @@
 package cofh.core.init;
 
-import cofh.core.effect.*;
+import cofh.core.content.effect.*;
 import cofh.lib.content.effect.MobEffectCoFH;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -9,8 +9,8 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraftforge.registries.RegistryObject;
 
 import static cofh.core.CoFHCore.MOB_EFFECTS;
-import static cofh.lib.util.Constants.*;
 import static cofh.core.util.references.CoreIDs.*;
+import static cofh.lib.util.Constants.*;
 
 public class CoreMobEffects {
 

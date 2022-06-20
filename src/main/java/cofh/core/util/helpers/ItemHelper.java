@@ -1,7 +1,7 @@
 package cofh.core.util.helpers;
 
-import cofh.core.item.ILeftClickHandlerItem;
-import cofh.core.item.IMultiModeItem;
+import cofh.core.content.item.ILeftClickHandlerItem;
+import cofh.core.content.item.IMultiModeItem;
 import com.google.common.base.Strings;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;

@@ -1,6 +1,6 @@
 package cofh.core.init;
 
-import cofh.core.enchantment.HoldingEnchantment;
+import cofh.core.content.enchantment.HoldingEnchantment;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;

@@ -1,7 +1,7 @@
 package cofh.core.client.particle;
 
-import cofh.lib.util.helpers.MathHelper;
 import cofh.core.util.helpers.vfx.VFXHelper;
+import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.multiplayer.ClientLevel;

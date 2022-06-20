@@ -27,9 +27,9 @@ import net.minecraftforge.fml.common.Mod;
 import java.util.List;
 
 import static cofh.core.capability.CapabilityAreaEffect.AREA_EFFECT_ITEM_CAPABILITY;
-import static cofh.lib.util.Constants.ID_COFH_CORE;
 import static cofh.core.util.helpers.AreaEffectHelper.validAreaEffectItem;
 import static cofh.core.util.helpers.AreaEffectHelper.validAreaEffectMiningItem;
+import static cofh.lib.util.Constants.ID_COFH_CORE;
 
 @Mod.EventBusSubscriber (value = Dist.CLIENT, modid = ID_COFH_CORE)
 public class AreaEffectClientEvents {

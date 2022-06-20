@@ -1,7 +1,7 @@
 package cofh.core.util.helpers;
 
-import cofh.core.inventory.ItemStorageCoFH;
-import cofh.core.inventory.container.slot.SlotFalseCopy;
+import cofh.core.content.inventory.ItemStorageCoFH;
+import cofh.core.content.inventory.container.slot.SlotFalseCopy;
 import cofh.lib.util.helpers.BlockHelper;
 import net.minecraft.core.Direction;
 import net.minecraft.world.Container;

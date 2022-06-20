@@ -3,7 +3,7 @@ package cofh.core.client.gui.element.panel;
 import cofh.core.client.gui.CoreTextures;
 import cofh.core.client.gui.IGuiAccess;
 import cofh.core.client.gui.element.ElementAugmentSlots;
-import cofh.core.inventory.container.slot.SlotCoFH;
+import cofh.core.content.inventory.container.slot.SlotCoFH;
 import cofh.core.util.helpers.RenderHelper;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;

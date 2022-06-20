@@ -1,6 +1,6 @@
 package cofh.core.util.helpers;
 
-import cofh.core.xp.IXpContainerItem;
+import cofh.core.content.xp.IXpContainerItem;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;

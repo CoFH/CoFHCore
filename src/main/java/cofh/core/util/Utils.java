@@ -1,6 +1,6 @@
 package cofh.core.util;
 
-import cofh.core.enchantment.EnchantmentCoFH;
+import cofh.core.content.enchantment.EnchantmentCoFH;
 import cofh.lib.tags.ItemTagsCoFH;
 import cofh.lib.util.helpers.MathHelper;
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;

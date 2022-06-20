@@ -1,7 +1,7 @@
 package cofh.core.client.gui.element;
 
 import cofh.core.client.gui.IGuiAccess;
-import cofh.core.fluid.FluidStorageCoFH;
+import cofh.core.content.fluid.FluidStorageCoFH;
 import cofh.core.util.helpers.FluidHelper;
 import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.util.helpers.StringHelper;

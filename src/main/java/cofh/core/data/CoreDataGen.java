@@ -1,6 +1,6 @@
 package cofh.core.data;
 
-import cofh.core.loot.TileNBTSync;
+import cofh.core.content.loot.TileNBTSync;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

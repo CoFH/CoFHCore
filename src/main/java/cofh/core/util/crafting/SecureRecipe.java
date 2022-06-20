@@ -1,8 +1,8 @@
 package cofh.core.util.crafting;
 
+import cofh.lib.tags.ItemTagsCoFH;
 import cofh.lib.util.control.ISecurable.AccessMode;
 import cofh.lib.util.helpers.SecurityHelper;
-import cofh.lib.tags.ItemTagsCoFH;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;

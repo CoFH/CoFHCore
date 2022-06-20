@@ -2,8 +2,8 @@ package cofh.core.client.gui.element.panel;
 
 import cofh.core.client.gui.CoreTextures;
 import cofh.core.client.gui.IGuiAccess;
-import cofh.lib.util.control.IRedstoneControllable;
 import cofh.core.util.helpers.RenderHelper;
+import cofh.lib.util.control.IRedstoneControllable;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;

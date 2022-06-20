@@ -1,6 +1,6 @@
 package cofh.core.util.filter;
 
-import cofh.core.inventory.container.TileItemFilterContainer;
+import cofh.core.content.inventory.container.TileItemFilterContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;

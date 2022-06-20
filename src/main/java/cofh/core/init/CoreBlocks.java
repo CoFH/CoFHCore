@@ -1,13 +1,13 @@
 package cofh.core.init;
 
-import cofh.core.block.*;
+import cofh.core.content.block.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.registries.RegistryObject;
 
 import static cofh.core.CoFHCore.BLOCKS;
-import static cofh.lib.util.helpers.BlockHelper.lightValue;
 import static cofh.core.util.references.CoreIDs.*;
+import static cofh.lib.util.helpers.BlockHelper.lightValue;
 import static net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy;
 
 public class CoreBlocks {
