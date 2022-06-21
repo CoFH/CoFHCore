@@ -1,6 +1,5 @@
-package cofh.core.content.xp;
+package cofh.lib.api.item;
 
-import cofh.lib.api.item.IContainerItem;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -19,7 +18,7 @@ public interface IXpContainerItem extends IContainerItem {
         return stack.getOrCreateTag().getInt(TAG_XP);
     }
 
-    default int getSpaceXP(ItemStack stack) {
+    default int getSpaceXp(ItemStack stack) {
 
         return getCapacityXP(stack) - getStoredXp(stack);
     }
@@ -40,7 +39,7 @@ public interface IXpContainerItem extends IContainerItem {
     static boolean storeXpOrb(Player player, ExperienceOrb orb, ItemStack stack) {
 
         IXpContainerItem item = (IXpContainerItem) stack.getItem();
-        int toAdd = Math.min(item.getSpaceXP(stack), orb.value);
+        int toAdd = Math.min(item.getSpaceXp(stack), orb.value);
 
         if (toAdd > 0) {
             stack.setPopTime(5);

@@ -1,8 +1,8 @@
 package cofh.core.content.item;
 
 import cofh.lib.api.item.IInventoryContainerItem;
-import cofh.core.content.inventory.ItemStorageCoFH;
-import cofh.core.content.inventory.SimpleItemInv;
+import cofh.lib.content.inventory.ItemStorageCoFH;
+import cofh.lib.content.inventory.SimpleItemInv;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 

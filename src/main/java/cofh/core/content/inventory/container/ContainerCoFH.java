@@ -1,8 +1,8 @@
 package cofh.core.content.inventory.container;
 
-import cofh.core.content.inventory.container.slot.SlotCoFH;
-import cofh.core.content.inventory.container.slot.SlotFalseCopy;
 import cofh.core.util.helpers.InventoryHelper;
+import cofh.lib.content.inventory.container.slot.SlotCoFH;
+import cofh.lib.content.inventory.container.slot.SlotFalseCopy;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;

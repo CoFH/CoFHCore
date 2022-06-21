@@ -1,10 +1,10 @@
 package cofh.core.content.item;
 
-import cofh.core.content.fluid.FluidContainerItemWrapper;
-import cofh.lib.api.item.IFluidContainerItem;
-import cofh.core.content.xp.IXpContainerItem;
 import cofh.core.util.helpers.FluidHelper;
 import cofh.lib.api.ContainerType;
+import cofh.lib.api.item.IFluidContainerItem;
+import cofh.lib.api.item.IXpContainerItem;
+import cofh.lib.content.fluid.FluidContainerItemWrapper;
 import cofh.lib.util.Utils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -103,14 +103,14 @@ public class XpContainerItem extends ItemCoFH implements IXpContainerItem, IFlui
             modifyXp(stack, -xp);
         } else {
             if (getExtraPlayerXp(player) > 0) {
-                xp = Math.min(getExtraPlayerXp(player), getSpaceXP(stack));
+                xp = Math.min(getExtraPlayerXp(player), getSpaceXp(stack));
                 setPlayerXP(player, getPlayerXP(player) - xp);
                 if (player.experienceLevel < curLevel) {
                     setPlayerLevel(player, curLevel);
                 }
                 modifyXp(stack, xp);
             } else if (player.experienceLevel > 0) {
-                xp = Math.min(getTotalXpForLevel(player.experienceLevel) - getTotalXpForLevel(player.experienceLevel - 1), getSpaceXP(stack));
+                xp = Math.min(getTotalXpForLevel(player.experienceLevel) - getTotalXpForLevel(player.experienceLevel - 1), getSpaceXp(stack));
                 setPlayerXP(player, getPlayerXP(player) - xp);
                 if (player.experienceLevel < curLevel - 1) {
                     setPlayerLevel(player, curLevel - 1);

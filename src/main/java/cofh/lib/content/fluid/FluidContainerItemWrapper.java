@@ -1,4 +1,4 @@
-package cofh.core.content.fluid;
+package cofh.lib.content.fluid;
 
 import cofh.lib.api.item.IFluidContainerItem;
 import net.minecraft.core.Direction;

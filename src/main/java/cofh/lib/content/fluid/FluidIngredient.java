@@ -1,4 +1,4 @@
-package cofh.core.content.fluid;
+package cofh.lib.content.fluid;
 
 import com.google.common.collect.Lists;
 import com.google.gson.*;

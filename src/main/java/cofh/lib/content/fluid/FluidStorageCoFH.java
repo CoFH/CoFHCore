@@ -1,6 +1,7 @@
-package cofh.core.content.fluid;
+package cofh.lib.content.fluid;
 
 import cofh.lib.api.IResourceStorage;
+import cofh.lib.api.fluid.IFluidStackHolder;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.fluids.FluidStack;

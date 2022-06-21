@@ -1,9 +1,9 @@
 package cofh.core.client.gui.element;
 
 import cofh.core.client.gui.IGuiAccess;
-import cofh.core.content.fluid.FluidStorageCoFH;
 import cofh.core.util.helpers.FluidHelper;
 import cofh.core.util.helpers.RenderHelper;
+import cofh.lib.content.fluid.FluidStorageCoFH;
 import cofh.lib.util.helpers.StringHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;

@@ -1,4 +1,4 @@
-package cofh.core.content.inventory.container.slot;
+package cofh.lib.content.inventory.container.slot;
 
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;

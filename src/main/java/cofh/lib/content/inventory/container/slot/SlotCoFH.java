@@ -1,6 +1,6 @@
-package cofh.core.content.inventory.container.slot;
+package cofh.lib.content.inventory.container.slot;
 
-import cofh.core.content.inventory.wrapper.InvWrapperCoFH;
+import cofh.lib.content.inventory.wrapper.InvWrapperCoFH;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;

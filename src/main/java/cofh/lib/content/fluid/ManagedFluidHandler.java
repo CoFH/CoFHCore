@@ -1,4 +1,4 @@
-package cofh.core.content.fluid;
+package cofh.lib.content.fluid;
 
 import cofh.lib.api.IStorageCallback;
 import net.minecraftforge.fluids.FluidStack;

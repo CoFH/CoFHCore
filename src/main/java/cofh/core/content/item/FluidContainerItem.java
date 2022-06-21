@@ -1,9 +1,9 @@
 package cofh.core.content.item;
 
-import cofh.core.content.fluid.FluidContainerItemWrapper;
-import cofh.lib.api.item.IFluidContainerItem;
 import cofh.core.util.helpers.FluidHelper;
 import cofh.lib.api.item.IColorableItem;
+import cofh.lib.api.item.IFluidContainerItem;
+import cofh.lib.content.fluid.FluidContainerItemWrapper;
 import cofh.lib.util.helpers.StringHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;

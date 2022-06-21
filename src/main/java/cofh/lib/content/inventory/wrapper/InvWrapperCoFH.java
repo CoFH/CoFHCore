@@ -1,6 +1,6 @@
-package cofh.core.content.inventory.wrapper;
+package cofh.lib.content.inventory.wrapper;
 
-import cofh.core.content.inventory.SimpleItemInv;
+import cofh.lib.content.inventory.SimpleItemInv;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;

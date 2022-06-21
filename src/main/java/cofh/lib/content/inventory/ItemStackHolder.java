@@ -1,5 +1,6 @@
-package cofh.core.content.inventory;
+package cofh.lib.content.inventory;
 
+import cofh.lib.api.inventory.IItemStackHolder;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;

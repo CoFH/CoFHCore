@@ -1,4 +1,4 @@
-package cofh.core.content.fluid;
+package cofh.lib.content.fluid;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;

@@ -1,4 +1,6 @@
-package cofh.core.content.inventory;
+package cofh.lib.content.inventory;
+
+import cofh.lib.api.inventory.IItemStackHolder;
 
 import java.util.function.BooleanSupplier;
 

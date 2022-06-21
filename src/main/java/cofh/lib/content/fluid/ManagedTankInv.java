@@ -1,4 +1,4 @@
-package cofh.core.content.fluid;
+package cofh.lib.content.fluid;
 
 import cofh.lib.api.StorageGroup;
 import cofh.lib.api.block.entity.ITileCallback;

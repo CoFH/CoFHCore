@@ -1,4 +1,4 @@
-package cofh.core.content.inventory;
+package cofh.lib.content.inventory;
 
 import cofh.lib.api.IStorageCallback;
 import cofh.lib.api.StorageGroup;
