@@ -20,11 +20,6 @@ public class CoreEnchantments {
         Types.register();
     }
 
-    public static void registerHoldingEnchantment() {
-
-        HOLDING = ENCHANTMENTS.register(ID_HOLDING, HoldingEnchantment::new);
-    }
-
     public static class Types {
 
         public static void register() {
@@ -44,6 +39,6 @@ public class CoreEnchantments {
 
     }
 
-    public static RegistryObject<Enchantment> HOLDING;
+    public static final RegistryObject<Enchantment> HOLDING = ENCHANTMENTS.register(ID_HOLDING, HoldingEnchantment::new);
 
 }

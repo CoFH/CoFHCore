@@ -20,11 +20,9 @@ public class CoreContainers {
 
     public static void register() {
 
-        HELD_ITEM_FILTER = CONTAINERS.register(ID_CONTAINER_HELD_ITEM_FILTER, () -> IForgeMenuType.create((windowId, inv, data) -> new HeldItemFilterContainer(windowId, inv, getClientPlayer())));
-        TILE_ITEM_FILTER = CONTAINERS.register(ID_CONTAINER_TILE_ITEM_FILTER, () -> IForgeMenuType.create((windowId, inv, data) -> new TileItemFilterContainer(windowId, getClientWorld(), data.readBlockPos(), inv, getClientPlayer())));
     }
 
-    public static RegistryObject<MenuType<HeldItemFilterContainer>> HELD_ITEM_FILTER;
-    public static RegistryObject<MenuType<TileItemFilterContainer>> TILE_ITEM_FILTER;
+    public static final RegistryObject<MenuType<HeldItemFilterContainer>> HELD_ITEM_FILTER = CONTAINERS.register(ID_CONTAINER_HELD_ITEM_FILTER, () -> IForgeMenuType.create((windowId, inv, data) -> new HeldItemFilterContainer(windowId, inv, getClientPlayer())));
+    public static final RegistryObject<MenuType<TileItemFilterContainer>> TILE_ITEM_FILTER = CONTAINERS.register(ID_CONTAINER_TILE_ITEM_FILTER, () -> IForgeMenuType.create((windowId, inv, data) -> new TileItemFilterContainer(windowId, getClientWorld(), data.readBlockPos(), inv, getClientPlayer())));
 
 }

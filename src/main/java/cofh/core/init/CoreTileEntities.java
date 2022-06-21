@@ -19,15 +19,12 @@ public class CoreTileEntities {
 
     public static void register() {
 
-        SIGNAL_AIR_TILE = TILE_ENTITIES.register(ID_SIGNAL_AIR, () -> BlockEntityType.Builder.of(SignalAirTile::new, SIGNAL_AIR.get()).build(null));
-        GLOW_AIR_TILE = TILE_ENTITIES.register(ID_GLOW_AIR, () -> BlockEntityType.Builder.of(GlowAirTile::new, GLOW_AIR.get()).build(null));
-        ENDER_AIR_TILE = TILE_ENTITIES.register(ID_ENDER_AIR, () -> BlockEntityType.Builder.of(EnderAirTile::new, ENDER_AIR.get()).build(null));
-        LIGHTNING_AIR_TILE = TILE_ENTITIES.register(ID_LIGHTNING_AIR, () -> BlockEntityType.Builder.of(LightningAirTile::new, LIGHTNING_AIR.get()).build(null));
+
     }
 
-    public static RegistryObject<BlockEntityType<SignalAirTile>> SIGNAL_AIR_TILE;
-    public static RegistryObject<BlockEntityType<GlowAirTile>> GLOW_AIR_TILE;
-    public static RegistryObject<BlockEntityType<EnderAirTile>> ENDER_AIR_TILE;
-    public static RegistryObject<BlockEntityType<LightningAirTile>> LIGHTNING_AIR_TILE;
+    public static final RegistryObject<BlockEntityType<SignalAirTile>> SIGNAL_AIR_TILE = TILE_ENTITIES.register(ID_SIGNAL_AIR, () -> BlockEntityType.Builder.of(SignalAirTile::new, SIGNAL_AIR.get()).build(null));
+    public static final RegistryObject<BlockEntityType<GlowAirTile>> GLOW_AIR_TILE = TILE_ENTITIES.register(ID_GLOW_AIR, () -> BlockEntityType.Builder.of(GlowAirTile::new, GLOW_AIR.get()).build(null));
+    public static final RegistryObject<BlockEntityType<EnderAirTile>> ENDER_AIR_TILE = TILE_ENTITIES.register(ID_ENDER_AIR, () -> BlockEntityType.Builder.of(EnderAirTile::new, ENDER_AIR.get()).build(null));
+    public static final RegistryObject<BlockEntityType<LightningAirTile>> LIGHTNING_AIR_TILE = TILE_ENTITIES.register(ID_LIGHTNING_AIR, () -> BlockEntityType.Builder.of(LightningAirTile::new, LIGHTNING_AIR.get()).build(null));
 
 }
