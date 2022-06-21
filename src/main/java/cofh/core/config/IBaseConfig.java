@@ -6,6 +6,4 @@ public interface IBaseConfig {
 
     void apply(ForgeConfigSpec.Builder builder);
 
-    void refresh();
-
 }

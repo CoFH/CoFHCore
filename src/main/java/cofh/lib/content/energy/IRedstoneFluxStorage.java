@@ -1,4 +1,4 @@
-package cofh.core.capability;
+package cofh.lib.content.energy;
 
 import net.minecraftforge.energy.IEnergyStorage;
 

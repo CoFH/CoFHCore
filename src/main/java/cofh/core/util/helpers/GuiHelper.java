@@ -3,14 +3,14 @@ package cofh.core.util.helpers;
 import cofh.core.client.gui.IGuiAccess;
 import cofh.core.client.gui.element.*;
 import cofh.core.content.block.entity.ITileXpHandler;
-import cofh.core.content.energy.EnergyStorageCoFH;
-import cofh.core.content.xp.XpStorage;
 import cofh.core.network.packet.server.ClaimXPPacket;
 import cofh.core.network.packet.server.StorageClearPacket;
 import cofh.lib.api.block.entity.ITileCallback;
 import cofh.lib.api.control.IReconfigurable;
+import cofh.lib.content.energy.EnergyStorageCoFH;
 import cofh.lib.content.fluid.FluidStorageCoFH;
 import cofh.lib.content.inventory.ItemStorageCoFH;
+import cofh.lib.content.xp.XpStorage;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.function.BooleanSupplier;

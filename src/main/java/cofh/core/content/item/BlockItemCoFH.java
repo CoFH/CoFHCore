@@ -99,9 +99,9 @@ public class BlockItemCoFH extends BlockItem implements ICoFHItem {
         tooltipDelegate(stack, worldIn, additionalTooltips, flagIn);
 
         if (!additionalTooltips.isEmpty()) {
-            if (Screen.hasShiftDown() || CoreClientConfig.alwaysShowDetails) {
+            if (Screen.hasShiftDown() || CoreClientConfig.alwaysShowDetails.get()) {
                 tooltip.addAll(additionalTooltips);
-            } else if (CoreClientConfig.holdShiftForDetails) {
+            } else if (CoreClientConfig.holdShiftForDetails.get()) {
                 tooltip.add(getTextComponent("info.cofh.hold_shift_for_details").withStyle(GRAY));
             }
         }

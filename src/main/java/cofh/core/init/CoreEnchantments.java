@@ -1,8 +1,8 @@
 package cofh.core.init;
 
 import cofh.core.content.enchantment.HoldingEnchantment;
+import cofh.lib.content.enchantment.EnchantmentCoFH;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraftforge.registries.RegistryObject;
 
@@ -39,6 +39,6 @@ public class CoreEnchantments {
 
     }
 
-    public static final RegistryObject<Enchantment> HOLDING = ENCHANTMENTS.register(ID_HOLDING, HoldingEnchantment::new);
+    public static final RegistryObject<EnchantmentCoFH> HOLDING = ENCHANTMENTS.register(ID_HOLDING, HoldingEnchantment::new);
 
 }

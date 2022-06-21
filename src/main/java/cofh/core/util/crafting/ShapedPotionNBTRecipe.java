@@ -19,8 +19,7 @@ import net.minecraftforge.common.crafting.IShapedRecipe;
 
 import java.util.Map;
 
-import static cofh.core.CoFHCore.RECIPE_SERIALIZERS;
-import static cofh.core.util.references.CoreIDs.ID_CRAFTING_POTION;
+import static cofh.core.init.CoreRecipeSerializers.SHAPED_POTION_RECIPE_SERIALIZER;
 
 public class ShapedPotionNBTRecipe implements CraftingRecipe, IShapedRecipe<CraftingContainer> {
 
@@ -91,16 +90,16 @@ public class ShapedPotionNBTRecipe implements CraftingRecipe, IShapedRecipe<Craf
     @Override
     public RecipeSerializer<?> getSerializer() {
 
-        return RECIPE_SERIALIZERS.get(ID_CRAFTING_POTION);
+        return SHAPED_POTION_RECIPE_SERIALIZER.get();
     }
 
-    // @Override
+    @Override
     public int getRecipeWidth() {
 
         return wrappedRecipe.getWidth();
     }
 
-    // @Override
+    @Override
     public int getRecipeHeight() {
 
         return wrappedRecipe.getHeight();

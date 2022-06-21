@@ -1,7 +1,7 @@
 package cofh.core.content.item;
 
-import cofh.core.content.energy.EnergyContainerItemWrapper;
 import cofh.lib.api.item.IEnergyContainerItem;
+import cofh.lib.content.energy.EnergyContainerItemWrapper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;

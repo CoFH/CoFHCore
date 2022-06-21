@@ -6,8 +6,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-import static cofh.core.CoFHCore.TILE_ENTITIES;
-import static cofh.core.util.references.CoreIDs.ID_GLOW_AIR;
+import static cofh.core.init.CoreTileEntities.GLOW_AIR_TILE;
 
 public class GlowAirTile extends BlockEntity implements ITickableTile {
 
@@ -15,7 +14,7 @@ public class GlowAirTile extends BlockEntity implements ITickableTile {
 
     public GlowAirTile(BlockPos pos, BlockState state) {
 
-        super(TILE_ENTITIES.get(ID_GLOW_AIR), pos, state);
+        super(GLOW_AIR_TILE.get(), pos, state);
     }
 
     @Override

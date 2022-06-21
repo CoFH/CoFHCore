@@ -10,20 +10,21 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 
 import java.util.Collection;
+import java.util.function.Supplier;
 
 import static cofh.core.command.CoFHCommand.CMD_DURATION;
 import static cofh.core.command.CoFHCommand.CMD_TARGETS;
 
 public class SubCommandIgnite {
 
-    public static int permissionLevel = 2;
+    public static Supplier<Integer> permissionLevel = () -> 2;
 
     static final int DEFAULT_DURATION = 10;
 
     static ArgumentBuilder<CommandSourceStack, ?> register() {
 
         return Commands.literal("ignite")
-                .requires(source -> source.hasPermission(permissionLevel))
+                .requires(source -> source.hasPermission(permissionLevel.get()))
                 // Self - default duration
                 .executes(context -> igniteEntities(context.getSource(), ImmutableList.of(context.getSource().getEntityOrException()), DEFAULT_DURATION))
                 // Duration specified

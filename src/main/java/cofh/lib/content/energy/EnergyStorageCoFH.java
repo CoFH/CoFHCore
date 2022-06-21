@@ -1,6 +1,5 @@
-package cofh.core.content.energy;
+package cofh.lib.content.energy;
 
-import cofh.core.capability.IRedstoneFluxStorage;
 import cofh.lib.api.IResourceStorage;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.nbt.CompoundTag;

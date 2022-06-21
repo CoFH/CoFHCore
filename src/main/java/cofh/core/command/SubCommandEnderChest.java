@@ -11,18 +11,20 @@ import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ChestMenu;
 
+import java.util.function.Supplier;
+
 import static cofh.core.command.CoFHCommand.CMD_PLAYER;
 
 public class SubCommandEnderChest {
 
-    public static int permissionLevel = 2;
+    public static Supplier<Integer> permissionLevel = () -> 2;
 
     static final MutableComponent TITLE = Component.translatable("container.enderchest");
 
     static ArgumentBuilder<CommandSourceStack, ?> register() {
 
         return Commands.literal("enderchest")
-                .requires(source -> source.hasPermission(permissionLevel))
+                .requires(source -> source.hasPermission(permissionLevel.get()))
                 // Self
                 .executes(context -> openContainer(context.getSource().getPlayerOrException(), context.getSource().getPlayerOrException()))
                 // Target Specified

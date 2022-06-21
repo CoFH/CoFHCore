@@ -1,4 +1,4 @@
-package cofh.core.content.xp;
+package cofh.lib.content.xp;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;

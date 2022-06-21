@@ -62,9 +62,9 @@ public class ItemCoFH extends Item implements ICoFHItem {
             tooltip.add(getTextComponent("info.cofh.claimable").withStyle(GREEN).withStyle(ITALIC));
         }
         if (!additionalTooltips.isEmpty()) {
-            if (Screen.hasShiftDown() || CoreClientConfig.alwaysShowDetails) {
+            if (Screen.hasShiftDown() || CoreClientConfig.alwaysShowDetails.get()) {
                 tooltip.addAll(additionalTooltips);
-            } else if (CoreClientConfig.holdShiftForDetails) {
+            } else if (CoreClientConfig.holdShiftForDetails.get()) {
                 tooltip.add(getTextComponent("info.cofh.hold_shift_for_details").withStyle(GRAY));
             }
         }

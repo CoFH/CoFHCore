@@ -9,23 +9,25 @@ import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.CraftingMenu;
 
+import java.util.function.Supplier;
+
 public class SubCommandCrafting {
 
-    public static int permissionLevel = 2;
+    public static Supplier<Integer> permissionLevel = () -> 2;
 
     static final MutableComponent TITLE = Component.translatable("container.crafting");
 
     static ArgumentBuilder<CommandSourceStack, ?> register() {
 
         return Commands.literal("crafting")
-                .requires(source -> source.hasPermission(permissionLevel))
+                .requires(source -> source.hasPermission(permissionLevel.get()))
                 .executes(context -> openContainer(context.getSource().getPlayerOrException()));
     }
 
     static ArgumentBuilder<CommandSourceStack, ?> registerAlt() {
 
         return Commands.literal("workbench")
-                .requires(source -> source.hasPermission(permissionLevel))
+                .requires(source -> source.hasPermission(permissionLevel.get()))
                 .executes(context -> openContainer(context.getSource().getPlayerOrException()));
     }
 

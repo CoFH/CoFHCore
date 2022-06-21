@@ -1,6 +1,5 @@
-package cofh.core.content.energy;
+package cofh.lib.content.energy;
 
-import cofh.core.capability.IRedstoneFluxStorage;
 import cofh.lib.api.item.IEnergyContainerItem;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;

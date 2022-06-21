@@ -23,6 +23,8 @@ import static cofh.lib.util.constants.NBTTags.TAG_CAPACITY;
  */
 public class FluidStorageCoFH implements IFluidHandler, IFluidStackHolder, IResourceStorage {
 
+    protected static Predicate<FluidStack> DEFAULT_VALIDATOR = e -> true;
+
     protected final int baseCapacity;
 
     protected BooleanSupplier creative = FALSE;
@@ -36,7 +38,7 @@ public class FluidStorageCoFH implements IFluidHandler, IFluidStackHolder, IReso
 
     public FluidStorageCoFH(int capacity) {
 
-        this(capacity, e -> true);
+        this(capacity, DEFAULT_VALIDATOR);
     }
 
     public FluidStorageCoFH(int capacity, Predicate<FluidStack> validator) {
@@ -97,7 +99,7 @@ public class FluidStorageCoFH implements IFluidHandler, IFluidStackHolder, IReso
         return this;
     }
 
-    public boolean isFluidValid(@Nonnull FluidStack stack) {
+    protected boolean isFluidValid(@Nonnull FluidStack stack) {
 
         return enabled.getAsBoolean() && validator.test(stack);
     }

@@ -6,13 +6,11 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.List;
-import java.util.function.BooleanSupplier;
-
-import static cofh.lib.util.Constants.FALSE;
+import java.util.function.Supplier;
 
 public class OreConfig implements IBaseConfig {
 
-    public static final OreConfig EMPTY_CONFIG = new OreConfig("invalid", 0, 0, 0, 0, List.of(), FALSE);
+    public static final OreConfig EMPTY_CONFIG = new OreConfig("invalid", 0, 0, 0, 0, List.of(), () -> false);
 
     protected String name;
     protected int count;
@@ -20,17 +18,17 @@ public class OreConfig implements IBaseConfig {
     protected int maxY;
     protected int size;
     // protected List<ResourceKey<Level>> dimensions;
-    protected BooleanSupplier enable;
+    protected Supplier<Boolean> enable = () -> true;
 
     // private Set<ResourceKey<Level>> storedDimension = null;
 
-    private ForgeConfigSpec.IntValue configCount;
-    private ForgeConfigSpec.IntValue configMinY;
-    private ForgeConfigSpec.IntValue configMaxY;
-    private ForgeConfigSpec.IntValue configSize;
-    // private ForgeConfigSpec.ConfigValue<List<? extends String>> configDimensions;
+    private Supplier<Integer> configCount;
+    private Supplier<Integer> configMinY;
+    private Supplier<Integer> configMaxY;
+    private Supplier<Integer> configSize;
+    // private Supplier<List<? extends String>> configDimensions;
 
-    public OreConfig(String name, int count, int minY, int maxY, int size, List<ResourceKey<Level>> dimensions, BooleanSupplier enable) {
+    public OreConfig(String name, int count, int minY, int maxY, int size, List<ResourceKey<Level>> dimensions, Supplier<Boolean> enable) {
 
         this.name = name;
         this.count = count;
@@ -48,27 +46,27 @@ public class OreConfig implements IBaseConfig {
 
     public int getCount() {
 
-        return !enable.getAsBoolean() ? 0 : configCount == null ? count : configCount.get();
+        return !enable.get() ? 0 : configCount == null ? count : configCount.get();
     }
 
     public int getMinY() {
 
-        return !enable.getAsBoolean() ? 0 : configMinY == null ? minY : configMinY.get();
+        return !enable.get() ? 0 : configMinY == null ? minY : configMinY.get();
     }
 
     public int getMaxY() {
 
-        return !enable.getAsBoolean() ? 0 : configMaxY == null ? maxY : configMaxY.get();
+        return !enable.get() ? 0 : configMaxY == null ? maxY : configMaxY.get();
     }
 
     public int getSize() {
 
-        return !enable.getAsBoolean() ? 0 : configSize == null ? size : configSize.get();
+        return !enable.get() ? 0 : configSize == null ? size : configSize.get();
     }
 
     public boolean shouldGenerate() {
 
-        return enable.getAsBoolean() && getCount() > 0;
+        return enable.get() && getCount() > 0;
     }
 
     //    public Set<ResourceKey<Level>> getDimensions() {
@@ -82,7 +80,7 @@ public class OreConfig implements IBaseConfig {
     @Override
     public void apply(ForgeConfigSpec.Builder builder) {
 
-        if (enable.getAsBoolean()) {
+        if (enable.get()) {
             builder.push(name);
 
             configCount = builder.comment("Max number of veins per chunk; set to 0 to disable.").defineInRange("Vein Count", count, 0, 64);
@@ -93,12 +91,6 @@ public class OreConfig implements IBaseConfig {
 
             builder.pop();
         }
-    }
-
-    @Override
-    public void refresh() {
-
-        // storedDimension = null;
     }
 
 }

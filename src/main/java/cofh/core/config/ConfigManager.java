@@ -4,10 +4,8 @@ import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.loading.FMLPaths;
 
 import java.nio.file.Path;
@@ -63,7 +61,6 @@ public class ConfigManager {
         if (!commonInit) {
             genCommonConfig();
             commonSpec = commonConfig.build();
-            refreshCommonConfig();
             ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, commonSpec);
             commonInit = true;
 
@@ -94,7 +91,6 @@ public class ConfigManager {
         if (!clientInit) {
             genClientConfig();
             clientSpec = clientConfig.build();
-            refreshClientConfig();
             ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, clientSpec);
             clientInit = true;
         }
@@ -108,7 +104,6 @@ public class ConfigManager {
         if (!serverInit) {
             genServerConfig();
             serverSpec = serverConfig.build();
-            refreshServerConfig();
             ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, serverSpec);
             serverInit = true;
         }
@@ -155,30 +150,4 @@ public class ConfigManager {
         }
     }
 
-    protected void refreshCommonConfig() {
-
-        commonSubConfigs.forEach(IBaseConfig::refresh);
-    }
-
-    protected void refreshServerConfig() {
-
-        serverSubConfigs.forEach(IBaseConfig::refresh);
-    }
-
-    protected void refreshClientConfig() {
-
-        clientSubConfigs.forEach(IBaseConfig::refresh);
-    }
-
-    // region CONFIGURATION
-    @SubscribeEvent
-    public void configRefresh(ModConfigEvent event) {
-
-        switch (event.getConfig().getType()) {
-            case COMMON -> refreshCommonConfig();
-            case CLIENT -> refreshClientConfig();
-            case SERVER -> refreshServerConfig();
-        }
-    }
-    // endregion
 }

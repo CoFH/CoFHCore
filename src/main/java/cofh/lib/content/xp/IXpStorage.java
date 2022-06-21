@@ -1,4 +1,4 @@
-package cofh.core.content.xp;
+package cofh.lib.content.xp;
 
 import cofh.lib.util.helpers.MathHelper;
 

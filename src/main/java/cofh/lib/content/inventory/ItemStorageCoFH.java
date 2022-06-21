@@ -23,6 +23,8 @@ import static cofh.lib.util.Constants.*;
  */
 public class ItemStorageCoFH implements IItemHandler, IItemStackHolder, IResourceStorage {
 
+    protected static Predicate<ItemStack> DEFAULT_VALIDATOR = e -> true;
+
     protected final int baseCapacity;
 
     protected BooleanSupplier creative = FALSE;
@@ -36,12 +38,12 @@ public class ItemStorageCoFH implements IItemHandler, IItemStackHolder, IResourc
 
     public ItemStorageCoFH() {
 
-        this(e -> true);
+        this(DEFAULT_VALIDATOR);
     }
 
     public ItemStorageCoFH(int capacity) {
 
-        this(capacity, e -> true);
+        this(capacity, DEFAULT_VALIDATOR);
     }
 
     public ItemStorageCoFH(Predicate<ItemStack> validator) {
@@ -106,7 +108,7 @@ public class ItemStorageCoFH implements IItemHandler, IItemStackHolder, IResourc
         return this;
     }
 
-    public boolean isItemValid(@Nonnull ItemStack stack) {
+    protected boolean isItemValid(@Nonnull ItemStack stack) {
 
         return enabled.getAsBoolean() && validator.test(stack);
     }

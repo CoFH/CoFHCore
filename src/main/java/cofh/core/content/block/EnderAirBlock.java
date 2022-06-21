@@ -23,9 +23,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
 
-import static cofh.core.CoFHCore.TILE_ENTITIES;
 import static cofh.core.init.CoreMobEffects.ENDERFERENCE;
-import static cofh.core.util.references.CoreIDs.ID_ENDER_AIR;
+import static cofh.core.init.CoreTileEntities.ENDER_AIR_TILE;
 
 public class EnderAirBlock extends AirBlock implements EntityBlock {
 
@@ -47,7 +46,7 @@ public class EnderAirBlock extends AirBlock implements EntityBlock {
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> actualType) {
 
-        return ITickableTile.createTicker(level, actualType, TILE_ENTITIES.get(ID_ENDER_AIR), EnderAirTile.class);
+        return ITickableTile.createTicker(level, actualType, ENDER_AIR_TILE.get(), EnderAirTile.class);
     }
 
     @OnlyIn (Dist.CLIENT)

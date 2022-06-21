@@ -11,8 +11,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 
-import static cofh.core.CoFHCore.RECIPE_SERIALIZERS;
-import static cofh.core.util.references.CoreIDs.ID_CRAFTING_SECURABLE;
+import static cofh.core.init.CoreRecipeSerializers.SECURE_RECIPE_SERIALIZER;
 
 public class SecureRecipe extends CustomRecipe {
 
@@ -75,7 +74,7 @@ public class SecureRecipe extends CustomRecipe {
     @Override
     public RecipeSerializer<?> getSerializer() {
 
-        return RECIPE_SERIALIZERS.get(ID_CRAFTING_SECURABLE);
+        return SECURE_RECIPE_SERIALIZER.get();
     }
 
 }

@@ -10,17 +10,18 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Collection;
+import java.util.function.Supplier;
 
 import static cofh.core.command.CoFHCommand.CMD_TARGETS;
 
 public class SubCommandRepair {
 
-    public static int permissionLevel = 2;
+    public static Supplier<Integer> permissionLevel = () -> 2;
 
     static ArgumentBuilder<CommandSourceStack, ?> register() {
 
         return Commands.literal("repair")
-                .requires(source -> source.hasPermission(permissionLevel))
+                .requires(source -> source.hasPermission(permissionLevel.get()))
                 // Self
                 .executes(context -> repairEquipment(context.getSource(), ImmutableList.of(context.getSource().getPlayerOrException())))
                 // Targets Specified

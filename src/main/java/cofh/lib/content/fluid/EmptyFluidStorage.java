@@ -2,34 +2,37 @@ package cofh.lib.content.fluid;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
-import java.util.function.Predicate;
 
-public class NullFluidStorage extends FluidStorageCoFH {
+public class EmptyFluidStorage extends FluidStorageCoFH {
 
-    public NullFluidStorage(int capacity) {
+    public static final EmptyFluidStorage INSTANCE = new EmptyFluidStorage();
 
-        super(capacity);
+    public EmptyFluidStorage() {
+
+        super(0);
     }
 
-    public NullFluidStorage(int capacity, Predicate<FluidStack> validator) {
+    public FluidStorageCoFH setCapacity(int capacity) {
 
-        super(capacity, validator);
+        return this;
     }
 
     @Override
     public void setFluidStack(FluidStack stack) {
 
-        // Do Nothing
     }
 
     // region NBT
+    @Override
     public FluidStorageCoFH read(CompoundTag nbt) {
 
         return this;
     }
 
+    @Override
     public CompoundTag write(CompoundTag nbt) {
 
         return nbt;
@@ -37,6 +40,12 @@ public class NullFluidStorage extends FluidStorageCoFH {
     // endregion
 
     // region IFluidHandler
+    @Override
+    public int getTanks() {
+
+        return 0;
+    }
+
     @Nonnull
     @Override
     public FluidStack getFluidInTank(int tank) {
@@ -47,10 +56,14 @@ public class NullFluidStorage extends FluidStorageCoFH {
     @Override
     public int fill(FluidStack resource, FluidAction action) {
 
-        if (resource.isEmpty() || !isFluidValid(resource) || !enabled.getAsBoolean()) {
-            return 0;
-        }
-        return Math.min(resource.getAmount(), getCapacity());
+        return 0;
+    }
+
+    @Nonnull
+    @Override
+    public FluidStack drain(FluidStack resource, FluidAction action) {
+
+        return FluidStack.EMPTY;
     }
 
     @Nonnull
@@ -58,6 +71,18 @@ public class NullFluidStorage extends FluidStorageCoFH {
     public FluidStack drain(int maxDrain, FluidAction action) {
 
         return FluidStack.EMPTY;
+    }
+
+    @Override
+    public int getTankCapacity(int tank) {
+
+        return 0;
+    }
+
+    @Override
+    public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
+
+        return false;
     }
     // endregion
 }

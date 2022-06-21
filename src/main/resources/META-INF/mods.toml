@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[34,)"
+loaderVersion = "[41,)"
 issueTrackerURL = "https://github.com/cofh/feedback"
 license = "CoFH - Don't Be A Jerk (Learn, Don't Steal)"
 
@@ -20,13 +20,13 @@ Also contains a number of optional gameplay tweaks for convenience.
 [[dependencies.cofh_core]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.18.2,)"
+versionRange = "[1.19,)"
 ordering = "AFTER"
 side = "BOTH"
 
 [[dependencies.cofh_core]]
 modId = "forge"
 mandatory = true
-versionRange = "[40.1.0,)"
+versionRange = "[41.0.38,)"
 ordering = "AFTER"
 side = "BOTH"

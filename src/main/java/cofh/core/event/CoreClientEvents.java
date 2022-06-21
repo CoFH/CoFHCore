@@ -79,7 +79,7 @@ public class CoreClientEvents {
         }
         ItemStack stack = event.getItemStack();
 
-        if (CoreClientConfig.enableKeywords && NAMESPACES.contains(Utils.getModId(stack.getItem()))) {
+        if (CoreClientConfig.enableKeywords.get() && NAMESPACES.contains(Utils.getModId(stack.getItem()))) {
             String keywordKey = stack.getDescriptionId() + ".keyword";
             if (canLocalize(keywordKey)) {
                 if (tooltip.get(0) instanceof MutableComponent mutable) {
@@ -87,13 +87,13 @@ public class CoreClientEvents {
                 }
             }
         }
-        if (CoreClientConfig.enableItemDescriptions && NAMESPACES.contains(Utils.getModId(stack.getItem()))) {
+        if (CoreClientConfig.enableItemDescriptions.get() && NAMESPACES.contains(Utils.getModId(stack.getItem()))) {
             String infoKey = stack.getDescriptionId() + ".desc";
             if (canLocalize(infoKey)) {
                 tooltip.add(1, getInfoTextComponent(infoKey));
             }
         }
-        if (CoreClientConfig.enableEnchantmentDescriptions) {
+        if (CoreClientConfig.enableEnchantmentDescriptions.get()) {
             if (stack.getTag() != null) {
                 ListTag list = stack.getTag().getList(TAG_STORED_ENCHANTMENTS, TAG_COMPOUND);
                 if (list.size() == 1) {
@@ -112,7 +112,7 @@ public class CoreClientEvents {
         //
         //            }
         //        }
-        if (CoreClientConfig.enableItemTags && event.getFlags().isAdvanced()) {
+        if (CoreClientConfig.enableItemTags.get() && event.getFlags().isAdvanced()) {
             Item item = event.getItemStack().getItem();
             Block block = Block.byItem(item);
 

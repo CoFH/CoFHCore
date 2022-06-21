@@ -10,18 +10,19 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Collection;
+import java.util.function.Supplier;
 
 import static cofh.core.command.CoFHCommand.CMD_TARGETS;
 import static cofh.lib.util.Constants.MAX_FOOD_LEVEL;
 
 public class SubCommandHeal {
 
-    public static int permissionLevel = 2;
+    public static Supplier<Integer> permissionLevel = () -> 2;
 
     static ArgumentBuilder<CommandSourceStack, ?> register() {
 
         return Commands.literal("heal")
-                .requires(source -> source.hasPermission(permissionLevel))
+                .requires(source -> source.hasPermission(permissionLevel.get()))
                 // Self
                 .executes(context -> healEntities(context.getSource(), ImmutableList.of(context.getSource().getPlayerOrException())))
                 // Targets Specified

@@ -23,10 +23,4 @@ public class ConfigGroup implements IBaseConfig {
         }
     }
 
-    @Override
-    public void refresh() {
-
-        subConfigs.forEach(IBaseConfig::refresh);
-    }
-
 }

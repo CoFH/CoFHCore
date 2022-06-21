@@ -1,4 +1,4 @@
-package cofh.core.content.energy;
+package cofh.lib.content.energy;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
