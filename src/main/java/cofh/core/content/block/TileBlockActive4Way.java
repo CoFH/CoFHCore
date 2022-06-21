@@ -1,6 +1,7 @@
 package cofh.core.content.block;
 
 import cofh.core.content.block.entity.TileCoFH;
+import cofh.lib.api.block.IWrenchable;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;

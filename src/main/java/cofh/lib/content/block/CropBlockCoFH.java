@@ -1,4 +1,4 @@
-package cofh.core.content.block.impl.crops;
+package cofh.lib.content.block;
 
 import cofh.lib.api.block.IHarvestable;
 import cofh.lib.util.Utils;

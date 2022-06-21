@@ -1,4 +1,4 @@
-package cofh.core.util;
+package cofh.lib.util;
 
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;

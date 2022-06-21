@@ -1,6 +1,6 @@
-package cofh.core.data;
+package cofh.lib.data;
 
-import cofh.core.util.DeferredRegisterCoFH;
+import cofh.lib.util.DeferredRegisterCoFH;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;

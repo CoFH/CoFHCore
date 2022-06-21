@@ -1,6 +1,6 @@
-package cofh.core.data;
+package cofh.lib.data;
 
-import cofh.core.util.DeferredRegisterCoFH;
+import cofh.lib.util.DeferredRegisterCoFH;
 import cofh.lib.util.Utils;
 import cofh.lib.util.flags.FlagManager;
 import cofh.lib.util.flags.FlagRecipeCondition;

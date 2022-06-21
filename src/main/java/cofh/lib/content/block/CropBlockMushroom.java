@@ -1,4 +1,4 @@
-package cofh.core.content.block.impl.crops;
+package cofh.lib.content.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

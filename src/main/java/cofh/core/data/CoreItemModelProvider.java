@@ -1,5 +1,6 @@
 package cofh.core.data;
 
+import cofh.lib.data.ItemModelProviderCoFH;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
 

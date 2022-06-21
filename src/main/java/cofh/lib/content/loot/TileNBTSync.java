@@ -1,4 +1,4 @@
-package cofh.core.content.loot;
+package cofh.lib.content.loot;
 
 import cofh.lib.api.block.entity.ITileCallback;
 import com.google.gson.JsonDeserializationContext;

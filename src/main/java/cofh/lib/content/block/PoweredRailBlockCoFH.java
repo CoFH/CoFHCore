@@ -1,7 +1,7 @@
-package cofh.core.content.block.impl.rails;
+package cofh.lib.content.block;
 
-import cofh.core.content.block.IDismantleable;
-import cofh.core.content.block.IWrenchable;
+import cofh.lib.api.block.IDismantleable;
+import cofh.lib.api.block.IWrenchable;
 import cofh.lib.util.Utils;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.core.BlockPos;

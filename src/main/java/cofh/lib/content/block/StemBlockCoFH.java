@@ -1,6 +1,5 @@
 package cofh.lib.content.block;
 
-import cofh.core.content.block.impl.crops.CropBlockCoFH;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;

@@ -1,4 +1,4 @@
-package cofh.core.data;
+package cofh.lib.data;
 
 import cofh.lib.util.Utils;
 import net.minecraft.data.DataGenerator;

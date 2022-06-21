@@ -1,6 +1,7 @@
 package cofh.core.data;
 
 import cofh.core.init.CoreFlags;
+import cofh.lib.data.RecipeProviderCoFH;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
 

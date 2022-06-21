@@ -2,6 +2,7 @@ package cofh.core.content.block;
 
 import cofh.core.content.block.entity.TileCoFH;
 import cofh.core.util.helpers.ChatHelper;
+import cofh.lib.api.block.IDismantleable;
 import cofh.lib.api.block.entity.ITickableTile;
 import cofh.lib.api.block.entity.ITileCallback;
 import cofh.lib.api.item.IPlacementItem;

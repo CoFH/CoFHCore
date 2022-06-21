@@ -1,6 +1,6 @@
 package cofh.core.content.block.impl;
 
-import cofh.core.content.block.IDismantleable;
+import cofh.lib.api.block.IDismantleable;
 import cofh.lib.util.Utils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;

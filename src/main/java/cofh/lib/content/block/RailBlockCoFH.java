@@ -1,7 +1,7 @@
-package cofh.core.content.block.impl.rails;
+package cofh.lib.content.block;
 
-import cofh.core.content.block.IDismantleable;
-import cofh.core.content.block.IWrenchable;
+import cofh.lib.api.block.IDismantleable;
+import cofh.lib.api.block.IWrenchable;
 import cofh.lib.util.Utils;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.core.BlockPos;
@@ -10,21 +10,21 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.DetectorRailBlock;
+import net.minecraft.world.level.block.RailBlock;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
-public class DetectorRailBlockCoFH extends DetectorRailBlock implements IDismantleable, IWrenchable {
+public class RailBlockCoFH extends RailBlock implements IDismantleable, IWrenchable {
 
     protected float maxSpeed = 0.4F;
 
-    public DetectorRailBlockCoFH(Properties builder) {
+    public RailBlockCoFH(Properties builder) {
 
         super(builder);
     }
 
-    public DetectorRailBlockCoFH speed(float maxSpeed) {
+    public RailBlockCoFH speed(float maxSpeed) {
 
         this.maxSpeed = MathHelper.clamp(maxSpeed, 0F, 1F);
         return this;

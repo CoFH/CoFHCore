@@ -1,4 +1,4 @@
-package cofh.core.content.block;
+package cofh.lib.api.block;
 
 import cofh.lib.api.block.entity.ITileCallback;
 import net.minecraft.core.BlockPos;

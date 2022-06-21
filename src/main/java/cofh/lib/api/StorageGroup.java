@@ -1,4 +1,4 @@
-package cofh.core.util;
+package cofh.lib.api;
 
 public enum StorageGroup {
 

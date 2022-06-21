@@ -1,6 +1,6 @@
 package cofh.core.content.fluid;
 
-import cofh.core.util.StorageGroup;
+import cofh.lib.api.StorageGroup;
 import cofh.lib.api.block.entity.ITileCallback;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
