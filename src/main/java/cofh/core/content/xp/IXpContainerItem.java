@@ -1,6 +1,6 @@
 package cofh.core.content.xp;
 
-import cofh.core.content.item.IContainerItem;
+import cofh.lib.api.item.IContainerItem;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;

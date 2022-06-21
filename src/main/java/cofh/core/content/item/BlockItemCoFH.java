@@ -1,6 +1,7 @@
 package cofh.core.content.item;
 
 import cofh.core.config.CoreClientConfig;
+import cofh.lib.api.item.ICoFHItem;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;

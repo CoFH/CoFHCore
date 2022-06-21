@@ -15,10 +15,10 @@ import net.minecraftforge.network.NetworkHooks;
 
 import java.util.Map;
 
-import static cofh.core.util.Utils.getEnchantment;
 import static cofh.core.util.references.CoreIDs.ID_HOLDING;
 import static cofh.lib.util.Constants.ID_COFH_CORE;
 import static cofh.lib.util.NBTTags.TAG_ENCHANTMENTS;
+import static cofh.lib.util.Utils.getEnchantment;
 import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 
 public abstract class AbstractMinecartCoFH extends AbstractMinecart {

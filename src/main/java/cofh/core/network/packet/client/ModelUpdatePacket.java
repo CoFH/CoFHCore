@@ -4,7 +4,7 @@ import cofh.core.CoFHCore;
 import cofh.core.network.packet.IPacketClient;
 import cofh.core.network.packet.PacketBase;
 import cofh.core.util.ProxyUtils;
-import cofh.core.util.Utils;
+import cofh.lib.util.Utils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.Level;

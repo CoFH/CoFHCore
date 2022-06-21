@@ -1,6 +1,6 @@
 package cofh.core.content.fluid;
 
-import cofh.lib.content.IStorageCallback;
+import cofh.lib.api.IStorageCallback;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;

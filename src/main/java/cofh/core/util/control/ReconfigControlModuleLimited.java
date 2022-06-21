@@ -1,12 +1,12 @@
 package cofh.core.util.control;
 
 import cofh.core.network.packet.server.SideConfigPacket;
-import cofh.core.util.Utils;
+import cofh.lib.util.Utils;
 import net.minecraft.core.Direction;
 
 import java.util.function.BooleanSupplier;
 
-import static cofh.lib.util.control.IReconfigurable.SideConfig.*;
+import static cofh.lib.api.control.IReconfigurable.SideConfig.*;
 
 public class ReconfigControlModuleLimited extends ReconfigControlModule {
 

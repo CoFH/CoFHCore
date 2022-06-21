@@ -4,7 +4,7 @@ import cofh.core.client.gui.IGuiAccess;
 import cofh.core.client.gui.element.ElementButton;
 import cofh.core.client.gui.element.SimpleTooltip;
 import cofh.core.util.helpers.RenderHelper;
-import cofh.lib.util.control.ISecurable;
+import cofh.lib.api.control.ISecurable;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import static cofh.core.client.gui.CoreTextures.*;
+import static cofh.lib.api.control.ISecurable.AccessMode.*;
 import static cofh.lib.util.Constants.ID_COFH_CORE;
-import static cofh.lib.util.control.ISecurable.AccessMode.*;
 import static cofh.lib.util.helpers.SoundHelper.playClickSound;
 import static cofh.lib.util.helpers.StringHelper.localize;
 

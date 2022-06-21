@@ -1,13 +1,22 @@
 package cofh.core.content.item;
 
 import cofh.core.capability.templates.ArcheryBowItemWrapper;
+import cofh.lib.api.item.ICoFHItem;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.BowItem;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
+
+import static cofh.lib.util.Constants.TRUE;
 
 public class BowItemCoFH extends BowItem implements ICoFHItem {
 
@@ -56,4 +65,51 @@ public class BowItemCoFH extends BowItem implements ICoFHItem {
         return new ArcheryBowItemWrapper(stack, accuracyModifier, damageModifier, velocityModifier);
     }
 
+    // region DISPLAY
+    protected Supplier<CreativeModeTab> displayGroup;
+    protected BooleanSupplier showInGroups = TRUE;
+    protected String modId = "";
+
+    @Override
+    public ICoFHItem setDisplayGroup(Supplier<CreativeModeTab> displayGroup) {
+
+        this.displayGroup = displayGroup;
+        return this;
+    }
+
+    @Override
+    public ICoFHItem setModId(String modId) {
+
+        this.modId = modId;
+        return this;
+    }
+
+    @Override
+    public ICoFHItem setShowInGroups(BooleanSupplier showInGroups) {
+
+        this.showInGroups = showInGroups;
+        return this;
+    }
+
+    @Override
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
+
+        if (!showInGroups.getAsBoolean() || displayGroup != null && displayGroup.get() != null && displayGroup.get() != group) {
+            return;
+        }
+        super.fillItemCategory(group, items);
+    }
+
+    @Override
+    public Collection<CreativeModeTab> getCreativeTabs() {
+
+        return displayGroup != null && displayGroup.get() != null ? Collections.singletonList(displayGroup.get()) : super.getCreativeTabs();
+    }
+
+    @Override
+    public String getCreatorModId(ItemStack itemStack) {
+
+        return modId == null || modId.isEmpty() ? super.getCreatorModId(itemStack) : modId;
+    }
+    // endregion
 }

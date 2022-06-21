@@ -1,6 +1,6 @@
 package cofh.core.content.entity;
 
-import cofh.lib.content.IDetonatable;
+import cofh.lib.api.IDetonatable;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.protocol.Packet;

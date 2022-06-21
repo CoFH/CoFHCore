@@ -1,7 +1,7 @@
 package cofh.core.content.fluid;
 
 import cofh.core.util.StorageGroup;
-import cofh.lib.content.block.entity.ITileCallback;
+import cofh.lib.api.block.entity.ITileCallback;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.EmptyFluidHandler;
 

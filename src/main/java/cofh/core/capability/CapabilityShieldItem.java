@@ -1,5 +1,6 @@
 package cofh.core.capability;
 
+import cofh.lib.api.capability.IShieldItem;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;

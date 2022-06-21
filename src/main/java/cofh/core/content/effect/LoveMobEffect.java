@@ -1,7 +1,7 @@
 package cofh.core.content.effect;
 
-import cofh.core.util.Utils;
 import cofh.lib.content.effect.MobEffectCoFH;
+import cofh.lib.util.Utils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.Entity;

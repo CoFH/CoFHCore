@@ -23,7 +23,7 @@ import net.minecraft.world.level.material.Material;
 
 import javax.annotation.Nullable;
 
-import static cofh.core.util.Utils.getItemEnchantmentLevel;
+import static cofh.lib.util.Utils.getItemEnchantmentLevel;
 
 public class GlossedMagmaBlock extends MagmaBlock {
 

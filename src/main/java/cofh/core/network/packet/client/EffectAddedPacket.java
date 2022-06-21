@@ -10,8 +10,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import static cofh.core.util.Utils.getRegistryName;
 import static cofh.lib.util.Constants.PACKET_EFFECT_ADD;
+import static cofh.lib.util.Utils.getRegistryName;
 
 public class EffectAddedPacket extends PacketBase implements IPacketClient {
 

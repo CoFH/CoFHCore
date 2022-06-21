@@ -2,7 +2,6 @@ package cofh.core;
 
 import cofh.core.capability.CapabilityArchery;
 import cofh.core.capability.CapabilityAreaEffect;
-import cofh.core.capability.CapabilityEnchantableItem;
 import cofh.core.capability.CapabilityShieldItem;
 import cofh.core.client.gui.HeldItemFilterScreen;
 import cofh.core.client.gui.TileItemFilterScreen;
@@ -13,18 +12,18 @@ import cofh.core.command.CoFHCommand;
 import cofh.core.compat.curios.CuriosProxy;
 import cofh.core.compat.quark.QuarkFlags;
 import cofh.core.config.*;
+import cofh.core.content.loot.TileNBTSync;
 import cofh.core.event.ArmorEvents;
 import cofh.core.init.*;
-import cofh.core.content.loot.TileNBTSync;
 import cofh.core.network.PacketHandler;
 import cofh.core.network.packet.client.*;
 import cofh.core.network.packet.server.*;
 import cofh.core.util.DeferredRegisterCoFH;
 import cofh.core.util.Proxy;
 import cofh.core.util.ProxyClient;
-import cofh.core.util.Utils;
 import cofh.core.util.helpers.FluidHelper;
 import cofh.lib.client.renderer.entity.NothingRenderer;
+import cofh.lib.util.Utils;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.resources.ResourceLocation;
@@ -192,7 +191,6 @@ public class CoFHCore {
 
         CapabilityArchery.register(event);
         CapabilityAreaEffect.register(event);
-        CapabilityEnchantableItem.register(event);
         CapabilityShieldItem.register(event);
     }
 

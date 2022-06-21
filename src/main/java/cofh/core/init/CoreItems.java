@@ -1,9 +1,9 @@
 package cofh.core.init;
 
-import cofh.core.content.item.DyeableHorseArmorItemCoFH;
-import cofh.core.content.item.HorseArmorItemCoFH;
-import cofh.core.content.item.ShearsItemCoFH;
-import cofh.core.content.item.ShieldItemCoFH;
+import cofh.lib.content.item.DyeableHorseArmorItemCoFH;
+import cofh.lib.content.item.HorseArmorItemCoFH;
+import cofh.lib.content.item.ShearsItemCoFH;
+import cofh.lib.content.item.ShieldItemCoFH;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 

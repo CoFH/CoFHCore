@@ -1,13 +1,13 @@
 package cofh.core.content.energy;
 
-import cofh.core.content.item.IContainerItem;
+import cofh.lib.api.item.IContainerItem;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.IEnergyStorage;
 
-import static cofh.core.content.item.ContainerType.ENERGY;
+import static cofh.lib.api.ContainerType.ENERGY;
 import static cofh.lib.util.NBTTags.TAG_ENERGY;
 
 /**

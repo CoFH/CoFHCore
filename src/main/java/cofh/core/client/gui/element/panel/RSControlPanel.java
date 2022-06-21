@@ -3,7 +3,7 @@ package cofh.core.client.gui.element.panel;
 import cofh.core.client.gui.CoreTextures;
 import cofh.core.client.gui.IGuiAccess;
 import cofh.core.util.helpers.RenderHelper;
-import cofh.lib.util.control.IRedstoneControllable;
+import cofh.lib.api.control.IRedstoneControllable;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
@@ -12,7 +12,7 @@ import net.minecraft.network.chat.Component;
 import java.util.List;
 
 import static cofh.core.client.gui.CoreTextures.*;
-import static cofh.lib.util.control.IRedstoneControllable.ControlMode.*;
+import static cofh.lib.api.control.IRedstoneControllable.ControlMode.*;
 import static cofh.lib.util.helpers.SoundHelper.playClickSound;
 import static cofh.lib.util.helpers.StringHelper.localize;
 

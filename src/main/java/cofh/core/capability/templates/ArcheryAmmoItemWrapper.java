@@ -1,8 +1,8 @@
 package cofh.core.capability.templates;
 
 import cofh.core.capability.CapabilityArchery;
-import cofh.core.capability.IArcheryAmmoItem;
 import cofh.core.util.helpers.ArcheryHelper;
+import cofh.lib.api.capability.IArcheryAmmoItem;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -17,7 +17,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static cofh.core.util.Utils.getItemEnchantmentLevel;
+import static cofh.lib.util.Utils.getItemEnchantmentLevel;
 
 public class ArcheryAmmoItemWrapper implements IArcheryAmmoItem, ICapabilityProvider {
 

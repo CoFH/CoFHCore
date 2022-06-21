@@ -4,7 +4,7 @@ import cofh.core.CoFHCore;
 import cofh.core.network.packet.IPacketServer;
 import cofh.core.network.packet.PacketBase;
 import cofh.core.util.control.IRedstoneControllableTile;
-import cofh.lib.util.control.IRedstoneControllable.ControlMode;
+import cofh.lib.api.control.IRedstoneControllable.ControlMode;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;

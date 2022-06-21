@@ -1,9 +1,9 @@
 package cofh.core.content.block.entity;
 
-import cofh.core.util.helpers.XpHelper;
 import cofh.core.content.xp.EmptyXpStorage;
 import cofh.core.content.xp.XpStorage;
-import cofh.lib.content.block.entity.ITileLocation;
+import cofh.core.util.helpers.XpHelper;
+import cofh.lib.api.block.entity.ITileLocation;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;

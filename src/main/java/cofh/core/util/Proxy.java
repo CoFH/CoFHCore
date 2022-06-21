@@ -1,6 +1,6 @@
 package cofh.core.util;
 
-import cofh.lib.content.block.entity.IAreaEffectTile;
+import cofh.lib.api.block.entity.IAreaEffectTile;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -8,7 +8,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 
-import static cofh.core.util.Utils.getRegistryName;
+import static cofh.lib.util.Utils.getRegistryName;
 
 public class Proxy {
 

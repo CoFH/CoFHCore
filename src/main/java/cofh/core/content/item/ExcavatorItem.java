@@ -1,6 +1,7 @@
 package cofh.core.content.item;
 
 import cofh.core.capability.templates.AreaEffectMiningItemWrapper;
+import cofh.lib.content.item.ShovelItemCoFH;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;

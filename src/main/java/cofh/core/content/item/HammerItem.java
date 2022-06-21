@@ -1,6 +1,7 @@
 package cofh.core.content.item;
 
 import cofh.core.capability.templates.AreaEffectMiningItemWrapper;
+import cofh.lib.content.item.PickaxeItemCoFH;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;

@@ -18,10 +18,10 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static cofh.core.content.item.ContainerType.FLUID;
 import static cofh.core.util.helpers.FluidHelper.addPotionTooltip;
 import static cofh.core.util.helpers.FluidHelper.hasPotionTag;
 import static cofh.core.util.helpers.ItemHelper.areItemStacksEqualIgnoreTags;
+import static cofh.lib.api.ContainerType.FLUID;
 import static cofh.lib.util.NBTTags.TAG_FLUID;
 import static cofh.lib.util.helpers.StringHelper.*;
 

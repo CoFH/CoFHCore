@@ -1,6 +1,7 @@
 package cofh.core.content.item;
 
 import cofh.core.util.ProxyUtils;
+import cofh.lib.api.item.ICoFHItem;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -49,22 +50,32 @@ public class ArmorItemCoFH extends ArmorItem implements ICoFHItem {
             UUID.fromString("A8BD3E20-FA60-47AF-8A09-B1A57D26F3CC")
     };
 
-    protected BooleanSupplier showInGroups = TRUE;
-
-    protected Supplier<CreativeModeTab> displayGroup;
-
     public ArmorItemCoFH(ArmorMaterial materialIn, EquipmentSlot slot, Properties builder) {
 
         super(materialIn, slot, builder);
     }
 
-    public ArmorItemCoFH setDisplayGroup(Supplier<CreativeModeTab> displayGroup) {
+    // region DISPLAY
+    protected Supplier<CreativeModeTab> displayGroup;
+    protected BooleanSupplier showInGroups = TRUE;
+    protected String modId = "";
+
+    @Override
+    public ICoFHItem setDisplayGroup(Supplier<CreativeModeTab> displayGroup) {
 
         this.displayGroup = displayGroup;
         return this;
     }
 
-    public ArmorItemCoFH setShowInGroups(BooleanSupplier showInGroups) {
+    @Override
+    public ICoFHItem setModId(String modId) {
+
+        this.modId = modId;
+        return this;
+    }
+
+    @Override
+    public ICoFHItem setShowInGroups(BooleanSupplier showInGroups) {
 
         this.showInGroups = showInGroups;
         return this;
@@ -84,6 +95,13 @@ public class ArmorItemCoFH extends ArmorItem implements ICoFHItem {
 
         return displayGroup != null && displayGroup.get() != null ? Collections.singletonList(displayGroup.get()) : super.getCreativeTabs();
     }
+
+    @Override
+    public String getCreatorModId(ItemStack itemStack) {
+
+        return modId == null || modId.isEmpty() ? super.getCreatorModId(itemStack) : modId;
+    }
+    // endregion
 
     @OnlyIn (Dist.CLIENT)
     @Nullable

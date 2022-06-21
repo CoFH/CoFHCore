@@ -1,6 +1,6 @@
 package cofh.core.content.inventory;
 
-import cofh.lib.content.IStorageCallback;
+import cofh.lib.api.IStorageCallback;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;

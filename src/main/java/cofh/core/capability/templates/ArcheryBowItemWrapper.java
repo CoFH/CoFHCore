@@ -1,8 +1,8 @@
 package cofh.core.capability.templates;
 
 import cofh.core.capability.CapabilityArchery;
-import cofh.core.capability.IArcheryBowItem;
 import cofh.core.util.helpers.ArcheryHelper;
+import cofh.lib.api.capability.IArcheryBowItem;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;

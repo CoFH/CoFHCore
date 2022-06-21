@@ -12,7 +12,7 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import static cofh.core.content.item.ContainerType.ENERGY;
+import static cofh.lib.api.ContainerType.ENERGY;
 import static cofh.lib.util.Constants.RGB_DURABILITY_FLUX;
 import static cofh.lib.util.helpers.StringHelper.*;
 

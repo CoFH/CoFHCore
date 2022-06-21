@@ -1,6 +1,10 @@
 package cofh.core.content.item;
 
 import cofh.core.content.entity.Knife;
+import cofh.lib.api.item.ICoFHItem;
+import cofh.lib.content.item.SwordItemCoFH;
+import cofh.lib.util.helpers.MathHelper;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.Position;
 import net.minecraft.core.dispenser.AbstractProjectileDispenseBehavior;
 import net.minecraft.sounds.SoundEvents;
@@ -12,14 +16,18 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.item.BowItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Tier;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
+
+import static cofh.lib.util.Constants.TRUE;
 
 public class KnifeItem extends SwordItemCoFH {
 
@@ -79,13 +87,61 @@ public class KnifeItem extends SwordItemCoFH {
                 }
                 world.addFreshEntity(knife);
             }
-            world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.TRIDENT_THROW, SoundSource.PLAYERS, 1.0F, 1.0F / (random.nextFloat() * 0.4F + 1.2F) + power * 0.5F);
+            world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.TRIDENT_THROW, SoundSource.PLAYERS, 1.0F, 1.0F / (MathHelper.RANDOM.nextFloat() * 0.4F + 1.2F) + power * 0.5F);
             if (!player.getAbilities().instabuild) {
                 player.getInventory().removeItem(stack);
             }
             player.awardStat(Stats.ITEM_USED.get(this));
         }
     }
+
+    // region DISPLAY
+    protected Supplier<CreativeModeTab> displayGroup;
+    protected BooleanSupplier showInGroups = TRUE;
+    protected String modId = "";
+
+    @Override
+    public ICoFHItem setDisplayGroup(Supplier<CreativeModeTab> displayGroup) {
+
+        this.displayGroup = displayGroup;
+        return this;
+    }
+
+    @Override
+    public ICoFHItem setModId(String modId) {
+
+        this.modId = modId;
+        return this;
+    }
+
+    @Override
+    public ICoFHItem setShowInGroups(BooleanSupplier showInGroups) {
+
+        this.showInGroups = showInGroups;
+        return this;
+    }
+
+    @Override
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
+
+        if (!showInGroups.getAsBoolean() || displayGroup != null && displayGroup.get() != null && displayGroup.get() != group) {
+            return;
+        }
+        super.fillItemCategory(group, items);
+    }
+
+    @Override
+    public Collection<CreativeModeTab> getCreativeTabs() {
+
+        return displayGroup != null && displayGroup.get() != null ? Collections.singletonList(displayGroup.get()) : super.getCreativeTabs();
+    }
+
+    @Override
+    public String getCreatorModId(ItemStack itemStack) {
+
+        return modId == null || modId.isEmpty() ? super.getCreatorModId(itemStack) : modId;
+    }
+    // endregion
 
     // region DISPENSER BEHAVIOR
     private static final AbstractProjectileDispenseBehavior DISPENSER_BEHAVIOR = new AbstractProjectileDispenseBehavior() {
@@ -105,5 +161,4 @@ public class KnifeItem extends SwordItemCoFH {
         }
     };
     // endregion
-
 }

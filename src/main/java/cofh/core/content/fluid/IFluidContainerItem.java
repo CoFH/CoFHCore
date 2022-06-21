@@ -1,13 +1,13 @@
 package cofh.core.content.fluid;
 
-import cofh.core.content.item.IContainerItem;
+import cofh.lib.api.item.IContainerItem;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 
-import static cofh.core.content.item.ContainerType.FLUID;
+import static cofh.lib.api.ContainerType.FLUID;
 import static cofh.lib.util.NBTTags.TAG_AMOUNT;
 import static cofh.lib.util.NBTTags.TAG_FLUID;
 

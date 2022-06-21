@@ -2,7 +2,7 @@ package cofh.core.util.helpers;
 
 import cofh.core.network.packet.client.IndexedChatPacket;
 import cofh.core.util.ProxyUtils;
-import cofh.core.util.Utils;
+import cofh.lib.util.Utils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;

@@ -1,6 +1,6 @@
 package cofh.core.content.entity;
 
-import cofh.lib.content.IDetonatable;
+import cofh.lib.api.IDetonatable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -19,8 +19,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import static cofh.lib.util.NBTTags.TAG_FUSE;
 
@@ -118,7 +116,6 @@ public abstract class AbstractTNTMinecart extends AbstractMinecartCoFH implement
     }
 
     @Override
-    @OnlyIn (Dist.CLIENT)
     public void handleEntityEvent(byte id) {
 
         if (id == 10) {

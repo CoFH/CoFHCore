@@ -1,6 +1,6 @@
 package cofh.core.data;
 
-import cofh.core.util.Utils;
+import cofh.lib.util.Utils;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;

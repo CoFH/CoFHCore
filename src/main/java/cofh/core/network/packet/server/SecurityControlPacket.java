@@ -4,7 +4,7 @@ import cofh.core.CoFHCore;
 import cofh.core.network.packet.IPacketServer;
 import cofh.core.network.packet.PacketBase;
 import cofh.core.util.control.ISecurableTile;
-import cofh.lib.util.control.ISecurable.AccessMode;
+import cofh.lib.api.control.ISecurable.AccessMode;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;

@@ -18,12 +18,12 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import static cofh.core.capability.CapabilityArchery.BOW_ITEM_CAPABILITY;
-import static cofh.core.util.Utils.*;
 import static cofh.core.util.helpers.ArcheryHelper.findAmmo;
 import static cofh.core.util.helpers.ArcheryHelper.validBow;
 import static cofh.core.util.references.EnsorcIDs.ID_QUICK_DRAW;
 import static cofh.core.util.references.EnsorcIDs.ID_VOLLEY;
 import static cofh.lib.util.Constants.*;
+import static cofh.lib.util.Utils.*;
 import static net.minecraft.world.item.enchantment.Enchantments.INFINITY_ARROWS;
 
 @Mod.EventBusSubscriber (modid = ID_COFH_CORE)

@@ -1,7 +1,7 @@
 package cofh.core.content.block;
 
-import cofh.core.util.Utils;
-import cofh.lib.content.block.entity.ITileCallback;
+import cofh.lib.api.block.entity.ITileCallback;
+import cofh.lib.util.Utils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;

@@ -1,8 +1,8 @@
 package cofh.core.event;
 
 import cofh.core.config.CoreClientConfig;
-import cofh.core.util.Utils;
 import cofh.lib.client.renderer.entity.ITranslucentRenderer;
+import cofh.lib.util.Utils;
 import cofh.lib.util.raytracer.VoxelShapeBlockHitResult;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;

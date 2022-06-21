@@ -1,8 +1,8 @@
 package cofh.core.capability.templates;
 
 import cofh.core.capability.CapabilityAreaEffect;
-import cofh.core.capability.IAreaEffect;
 import cofh.core.util.helpers.AreaEffectHelper;
+import cofh.lib.api.capability.IAreaEffectItem;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -15,9 +15,9 @@ import net.minecraftforge.common.util.LazyOptional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class AreaEffectItemWrapper implements IAreaEffect, ICapabilityProvider {
+public class AreaEffectItemWrapper implements IAreaEffectItem, ICapabilityProvider {
 
-    private final LazyOptional<IAreaEffect> holder = LazyOptional.of(() -> this);
+    private final LazyOptional<IAreaEffectItem> holder = LazyOptional.of(() -> this);
 
     final ItemStack areaEffectItem;
 

@@ -1,6 +1,6 @@
 package cofh.core.util.filter;
 
-import cofh.lib.content.block.entity.ITileLocation;
+import cofh.lib.api.block.entity.ITileLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 

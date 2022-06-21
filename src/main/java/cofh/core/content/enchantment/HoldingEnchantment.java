@@ -1,6 +1,7 @@
 package cofh.core.content.enchantment;
 
-import cofh.core.content.item.IContainerItem;
+import cofh.lib.api.item.IContainerItem;
+import cofh.lib.content.enchantment.EnchantmentCoFH;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -30,7 +31,7 @@ public class HoldingEnchantment extends EnchantmentCoFH {
     public boolean canApplyAtEnchantingTable(ItemStack stack) {
 
         Item item = stack.getItem();
-        return enable && (item instanceof IContainerItem || supportsEnchantment(stack));
+        return enable && item instanceof IContainerItem;
     }
 
 }

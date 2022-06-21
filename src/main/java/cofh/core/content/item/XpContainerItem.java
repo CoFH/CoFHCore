@@ -2,9 +2,10 @@ package cofh.core.content.item;
 
 import cofh.core.content.fluid.FluidContainerItemWrapper;
 import cofh.core.content.fluid.IFluidContainerItem;
-import cofh.core.util.Utils;
-import cofh.core.util.helpers.FluidHelper;
 import cofh.core.content.xp.IXpContainerItem;
+import cofh.core.util.helpers.FluidHelper;
+import cofh.lib.api.ContainerType;
+import cofh.lib.util.Utils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -22,6 +23,7 @@ import java.util.List;
 
 import static cofh.core.util.helpers.ItemHelper.areItemStacksEqualIgnoreTags;
 import static cofh.core.util.helpers.XpHelper.*;
+import static cofh.lib.api.ContainerType.EXPERIENCE;
 import static cofh.lib.util.Constants.MB_PER_XP;
 import static cofh.lib.util.Constants.RGB_DURABILITY_XP;
 import static cofh.lib.util.NBTTags.TAG_FLUID;
@@ -63,7 +65,7 @@ public class XpContainerItem extends ItemCoFH implements IXpContainerItem, IFlui
     @Override
     public boolean isBarVisible(ItemStack stack) {
 
-        return !isCreative(stack, ContainerType.XP) && getStoredXp(stack) > 0;
+        return !isCreative(stack, EXPERIENCE) && getStoredXp(stack) > 0;
     }
 
     @Override

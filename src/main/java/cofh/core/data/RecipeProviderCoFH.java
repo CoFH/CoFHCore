@@ -1,7 +1,7 @@
 package cofh.core.data;
 
 import cofh.core.util.DeferredRegisterCoFH;
-import cofh.core.util.Utils;
+import cofh.lib.util.Utils;
 import cofh.lib.util.flags.FlagManager;
 import cofh.lib.util.flags.FlagRecipeCondition;
 import cofh.lib.util.flags.TagExistsRecipeCondition;

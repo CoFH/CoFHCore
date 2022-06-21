@@ -1,5 +1,6 @@
 package cofh.core.capability;
 
+import cofh.lib.api.capability.IAreaEffectItem;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
@@ -7,11 +8,11 @@ import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 
 public class CapabilityAreaEffect {
 
-    public static final Capability<IAreaEffect> AREA_EFFECT_ITEM_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {});
+    public static final Capability<IAreaEffectItem> AREA_EFFECT_ITEM_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {});
 
     public static void register(RegisterCapabilitiesEvent event) {
 
-        event.register(IAreaEffect.class);
+        event.register(IAreaEffectItem.class);
     }
 
 }

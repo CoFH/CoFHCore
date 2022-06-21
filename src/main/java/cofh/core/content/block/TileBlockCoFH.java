@@ -1,11 +1,11 @@
 package cofh.core.content.block;
 
 import cofh.core.content.block.entity.TileCoFH;
-import cofh.core.util.Utils;
 import cofh.core.util.helpers.ChatHelper;
+import cofh.lib.api.block.entity.ITickableTile;
+import cofh.lib.api.block.entity.ITileCallback;
 import cofh.lib.api.item.IPlacementItem;
-import cofh.lib.content.block.entity.ITickableTile;
-import cofh.lib.content.block.entity.ITileCallback;
+import cofh.lib.util.Utils;
 import cofh.lib.util.helpers.SecurityHelper;
 import cofh.lib.util.raytracer.RayTracer;
 import net.minecraft.core.BlockPos;

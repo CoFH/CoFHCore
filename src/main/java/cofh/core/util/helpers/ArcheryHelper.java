@@ -1,11 +1,11 @@
 package cofh.core.util.helpers;
 
-import cofh.core.capability.IArcheryAmmoItem;
-import cofh.core.capability.IArcheryBowItem;
 import cofh.core.capability.templates.ArcheryAmmoItemWrapper;
 import cofh.core.capability.templates.ArcheryBowItemWrapper;
 import cofh.core.compat.curios.CuriosProxy;
-import cofh.core.util.Utils;
+import cofh.lib.api.capability.IArcheryAmmoItem;
+import cofh.lib.api.capability.IArcheryBowItem;
+import cofh.lib.util.Utils;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -27,11 +27,11 @@ import java.util.stream.Stream;
 
 import static cofh.core.capability.CapabilityArchery.AMMO_ITEM_CAPABILITY;
 import static cofh.core.capability.CapabilityArchery.BOW_ITEM_CAPABILITY;
-import static cofh.core.util.Utils.getEnchantment;
-import static cofh.core.util.Utils.getItemEnchantmentLevel;
 import static cofh.core.util.references.EnsorcIDs.ID_TRUESHOT;
 import static cofh.core.util.references.EnsorcIDs.ID_VOLLEY;
 import static cofh.lib.util.Constants.ID_ENSORCELLATION;
+import static cofh.lib.util.Utils.getEnchantment;
+import static cofh.lib.util.Utils.getItemEnchantmentLevel;
 import static net.minecraft.world.item.enchantment.Enchantments.*;
 
 public final class ArcheryHelper {

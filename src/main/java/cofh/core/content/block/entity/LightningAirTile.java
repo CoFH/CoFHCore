@@ -1,8 +1,8 @@
 package cofh.core.content.block.entity;
 
 import cofh.core.content.entity.ElectricArc;
-import cofh.core.util.Utils;
-import cofh.lib.content.block.entity.ITickableTile;
+import cofh.lib.api.block.entity.ITickableTile;
+import cofh.lib.util.Utils;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;

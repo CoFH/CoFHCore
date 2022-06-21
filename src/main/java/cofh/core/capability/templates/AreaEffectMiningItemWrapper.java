@@ -6,10 +6,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
-import static cofh.core.util.Utils.getEnchantment;
-import static cofh.core.util.Utils.getItemEnchantmentLevel;
 import static cofh.core.util.references.EnsorcIDs.ID_EXCAVATING;
 import static cofh.lib.util.Constants.ID_ENSORCELLATION;
+import static cofh.lib.util.Utils.getEnchantment;
+import static cofh.lib.util.Utils.getItemEnchantmentLevel;
 
 public class AreaEffectMiningItemWrapper extends AreaEffectItemWrapper {
 

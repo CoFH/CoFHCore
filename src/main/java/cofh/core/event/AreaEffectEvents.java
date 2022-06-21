@@ -1,7 +1,7 @@
 package cofh.core.event;
 
 import cofh.core.capability.templates.AreaEffectItemWrapper;
-import cofh.core.util.Utils;
+import cofh.lib.util.Utils;
 import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.core.BlockPos;

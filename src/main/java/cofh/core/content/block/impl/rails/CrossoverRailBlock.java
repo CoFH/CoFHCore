@@ -1,7 +1,7 @@
 package cofh.core.content.block.impl.rails;
 
 import cofh.core.content.block.IDismantleable;
-import cofh.core.util.Utils;
+import cofh.lib.util.Utils;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;

@@ -1,7 +1,7 @@
 package cofh.core.content.inventory;
 
 import cofh.core.util.StorageGroup;
-import cofh.lib.content.IStorageCallback;
+import cofh.lib.api.IStorageCallback;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.item.ItemStack;

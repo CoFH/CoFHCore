@@ -1,5 +1,6 @@
 package cofh.lib.content.block;
 
+import cofh.lib.api.ITNTFactory;
 import cofh.lib.content.entity.PrimedTntCoFH;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockSource;

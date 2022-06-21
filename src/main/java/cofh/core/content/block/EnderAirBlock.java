@@ -1,8 +1,8 @@
 package cofh.core.content.block;
 
 import cofh.core.content.block.entity.EnderAirTile;
-import cofh.core.util.Utils;
-import cofh.lib.content.block.entity.ITickableTile;
+import cofh.lib.api.block.entity.ITickableTile;
+import cofh.lib.util.Utils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;

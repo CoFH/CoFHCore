@@ -1,8 +1,8 @@
 package cofh.core.util.control;
 
 import cofh.core.network.packet.server.TransferControlPacket;
-import cofh.core.util.Utils;
-import cofh.lib.util.control.ITransferControllable;
+import cofh.lib.api.control.ITransferControllable;
+import cofh.lib.util.Utils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 

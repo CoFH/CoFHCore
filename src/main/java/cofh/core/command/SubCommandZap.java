@@ -1,6 +1,6 @@
 package cofh.core.command;
 
-import cofh.core.util.Utils;
+import cofh.lib.util.Utils;
 import com.google.common.collect.ImmutableList;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import net.minecraft.commands.CommandSourceStack;

@@ -3,7 +3,7 @@ package cofh.core.network.packet.server;
 import cofh.core.CoFHCore;
 import cofh.core.network.packet.IPacketServer;
 import cofh.core.network.packet.PacketBase;
-import cofh.lib.content.block.entity.IPacketHandlerTile;
+import cofh.lib.api.block.entity.IPacketHandlerTile;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;

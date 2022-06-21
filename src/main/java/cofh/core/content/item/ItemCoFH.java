@@ -1,6 +1,7 @@
 package cofh.core.content.item;
 
 import cofh.core.config.CoreClientConfig;
+import cofh.lib.api.item.ICoFHItem;
 import cofh.lib.util.helpers.SecurityHelper;
 import com.google.common.collect.Sets;
 import net.minecraft.client.gui.screens.Screen;
@@ -15,11 +16,9 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ToolAction;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -29,13 +28,8 @@ import static net.minecraft.ChatFormatting.*;
 
 public class ItemCoFH extends Item implements ICoFHItem {
 
-    protected static final Random random = new Random();
-
-    protected BooleanSupplier showInGroups = TRUE;
-
     protected int burnTime = -1;
     protected int enchantability;
-    protected String modId = "";
 
     public ItemCoFH(Properties builder) {
 
@@ -54,35 +48,8 @@ public class ItemCoFH extends Item implements ICoFHItem {
         return this;
     }
 
-    public ItemCoFH setShowInGroups(BooleanSupplier showInGroups) {
-
-        this.showInGroups = showInGroups;
-        return this;
-    }
-
-    public ItemCoFH setModId(String modId) {
-
-        this.modId = modId;
-        return this;
-    }
-
     protected void tooltipDelegate(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 
-    }
-
-    @Override
-    public String getCreatorModId(ItemStack itemStack) {
-
-        return modId == null || modId.isEmpty() ? super.getCreatorModId(itemStack) : modId;
-    }
-
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-
-        if (!showInGroups.getAsBoolean()) {
-            return;
-        }
-        super.fillItemCategory(group, items);
     }
 
     @Override
@@ -126,26 +93,51 @@ public class ItemCoFH extends Item implements ICoFHItem {
         return Stream.of(actions).collect(Collectors.toCollection(Sets::newIdentityHashSet));
     }
 
-    //    @Override
-    //    public String getHighlightTip(ItemStack stack, String displayName) {
-    //
-    //        if (isActive(stack)) {
-    //            return "";
-    //        }
-    //        return displayName;
-    //    }
-    //
-    //    // region HELPERS
-    //    public static boolean isActive(ItemStack stack) {
-    //
-    //        return stack.hasTag() && stack.getTag().getBoolean(TAG_ACTIVE);
-    //    }
-    //
-    //    public static void clearActive(ItemStack stack) {
-    //
-    //        if (stack.hasTag()) {
-    //            stack.getTag().remove(TAG_ACTIVE);
-    //        }
-    //    }
-    //    // endregion
+    // region DISPLAY
+    protected Supplier<CreativeModeTab> displayGroup;
+    protected BooleanSupplier showInGroups = TRUE;
+    protected String modId = "";
+
+    @Override
+    public ICoFHItem setDisplayGroup(Supplier<CreativeModeTab> displayGroup) {
+
+        this.displayGroup = displayGroup;
+        return this;
+    }
+
+    @Override
+    public ICoFHItem setModId(String modId) {
+
+        this.modId = modId;
+        return this;
+    }
+
+    @Override
+    public ICoFHItem setShowInGroups(BooleanSupplier showInGroups) {
+
+        this.showInGroups = showInGroups;
+        return this;
+    }
+
+    @Override
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
+
+        if (!showInGroups.getAsBoolean() || displayGroup != null && displayGroup.get() != null && displayGroup.get() != group) {
+            return;
+        }
+        super.fillItemCategory(group, items);
+    }
+
+    @Override
+    public Collection<CreativeModeTab> getCreativeTabs() {
+
+        return displayGroup != null && displayGroup.get() != null ? Collections.singletonList(displayGroup.get()) : super.getCreativeTabs();
+    }
+
+    @Override
+    public String getCreatorModId(ItemStack itemStack) {
+
+        return modId == null || modId.isEmpty() ? super.getCreatorModId(itemStack) : modId;
+    }
+    // endregion
 }

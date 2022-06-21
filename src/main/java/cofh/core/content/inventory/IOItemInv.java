@@ -1,7 +1,7 @@
 package cofh.core.content.inventory;
 
 import cofh.core.util.StorageGroup;
-import cofh.lib.content.IStorageCallback;
+import cofh.lib.api.IStorageCallback;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.EmptyHandler;
 

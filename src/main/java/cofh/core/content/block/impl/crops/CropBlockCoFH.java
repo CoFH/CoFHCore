@@ -1,7 +1,7 @@
 package cofh.core.content.block.impl.crops;
 
-import cofh.core.util.Utils;
 import cofh.lib.api.block.IHarvestable;
+import cofh.lib.util.Utils;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;

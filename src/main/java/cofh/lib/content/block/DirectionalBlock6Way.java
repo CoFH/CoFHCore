@@ -1,6 +1,6 @@
 package cofh.lib.content.block;
 
-import cofh.core.util.Utils;
+import cofh.lib.util.Utils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;

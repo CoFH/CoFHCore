@@ -1,7 +1,7 @@
 package cofh.core.capability.templates;
 
 import cofh.core.capability.CapabilityShieldItem;
-import cofh.core.capability.IShieldItem;
+import cofh.lib.api.capability.IShieldItem;
 import net.minecraft.core.Direction;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;

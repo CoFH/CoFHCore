@@ -2,12 +2,12 @@ package cofh.core.content.block.entity;
 
 import cofh.core.network.packet.client.TileGuiPacket;
 import cofh.core.util.ProxyUtils;
-import cofh.core.util.Utils;
 import cofh.core.util.helpers.FluidHelper;
-import cofh.lib.content.IConveyableData;
-import cofh.lib.content.block.entity.IAreaEffectTile;
-import cofh.lib.content.block.entity.IPacketHandlerTile;
-import cofh.lib.content.block.entity.ITileCallback;
+import cofh.lib.api.IConveyableData;
+import cofh.lib.api.block.entity.IAreaEffectTile;
+import cofh.lib.api.block.entity.IPacketHandlerTile;
+import cofh.lib.api.block.entity.ITileCallback;
+import cofh.lib.util.Utils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
