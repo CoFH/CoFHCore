@@ -455,6 +455,11 @@ public class Utils {
         return ForgeRegistries.FLUIDS.getKey(fluid);
     }
 
+    public static ResourceLocation getRegistryName(EntityType entity) {
+
+        return ForgeRegistries.ENTITIES.getKey(entity);
+    }
+
     public static ResourceLocation getRegistryName(MobEffect effect) {
 
         return ForgeRegistries.MOB_EFFECTS.getKey(effect);

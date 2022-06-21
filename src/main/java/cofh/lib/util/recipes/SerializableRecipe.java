@@ -1,4 +1,4 @@
-package cofh.core.util.recipes;
+package cofh.lib.util.recipes;
 
 import cofh.lib.content.inventory.FalseIInventory;
 import net.minecraft.resources.ResourceLocation;

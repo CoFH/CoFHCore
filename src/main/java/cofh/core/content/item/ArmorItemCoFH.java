@@ -61,21 +61,21 @@ public class ArmorItemCoFH extends ArmorItem implements ICoFHItem {
     protected String modId = "";
 
     @Override
-    public ICoFHItem setDisplayGroup(Supplier<CreativeModeTab> displayGroup) {
+    public ArmorItemCoFH setDisplayGroup(Supplier<CreativeModeTab> displayGroup) {
 
         this.displayGroup = displayGroup;
         return this;
     }
 
     @Override
-    public ICoFHItem setModId(String modId) {
+    public ArmorItemCoFH setModId(String modId) {
 
         this.modId = modId;
         return this;
     }
 
     @Override
-    public ICoFHItem setShowInGroups(BooleanSupplier showInGroups) {
+    public ArmorItemCoFH setShowInGroups(BooleanSupplier showInGroups) {
 
         this.showInGroups = showInGroups;
         return this;

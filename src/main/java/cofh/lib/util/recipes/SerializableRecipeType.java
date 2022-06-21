@@ -1,4 +1,4 @@
-package cofh.core.util.recipes;
+package cofh.lib.util.recipes;
 
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
