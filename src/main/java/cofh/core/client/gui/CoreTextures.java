@@ -8,7 +8,7 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import static cofh.lib.util.Constants.ID_COFH_CORE;
+import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 
 @Mod.EventBusSubscriber (value = Dist.CLIENT, modid = ID_COFH_CORE, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CoreTextures {

@@ -11,8 +11,8 @@ import net.minecraft.world.entity.Entity;
 
 import java.util.Collection;
 
-import static cofh.lib.util.Constants.CMD_DURATION;
-import static cofh.lib.util.Constants.CMD_TARGETS;
+import static cofh.core.command.CoFHCommand.CMD_DURATION;
+import static cofh.core.command.CoFHCommand.CMD_TARGETS;
 
 public class SubCommandIgnite {
 

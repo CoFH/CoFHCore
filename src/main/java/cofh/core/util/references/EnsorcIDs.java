@@ -1,6 +1,6 @@
 package cofh.core.util.references;
 
-import static cofh.lib.util.Constants.ID_MINECRAFT;
+import static cofh.lib.util.constants.ModIds.ID_MINECRAFT;
 
 public class EnsorcIDs {
 

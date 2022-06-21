@@ -1,9 +1,9 @@
 package cofh.core.network.packet.server;
 
 import cofh.core.CoFHCore;
-import cofh.core.network.packet.IPacketServer;
-import cofh.core.network.packet.PacketBase;
 import cofh.lib.api.block.entity.IPacketHandlerTile;
+import cofh.lib.network.packet.IPacketServer;
+import cofh.lib.network.packet.PacketBase;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -11,7 +11,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-import static cofh.lib.util.Constants.PACKET_CONFIG;
+import static cofh.core.network.packet.PacketIDs.PACKET_CONFIG;
 
 public class TileConfigPacket extends PacketBase implements IPacketServer {
 

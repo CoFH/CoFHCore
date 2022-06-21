@@ -16,9 +16,17 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.PlantType;
 
-import static cofh.lib.util.Constants.*;
+import static cofh.lib.util.Constants.FUNGUS;
+import static cofh.lib.util.constants.BlockStatePropertiesCoFH.AGE_0_4;
 
 public class CropBlockMushroom extends CropBlockCoFH {
+
+    public static final VoxelShape[] MUSHROOMS_BY_AGE = new VoxelShape[]{
+            box(4.0D, 0.0D, 4.0D, 12.0D, 6.0D, 12.0D),
+            box(3.0D, 0.0D, 3.0D, 13.0D, 8.0D, 13.0D),
+            box(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D),
+            box(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D),
+            box(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D)};
 
     public CropBlockMushroom(Properties builder, PlantType type, int growLight, float growMod) {
 

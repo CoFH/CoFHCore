@@ -1,7 +1,7 @@
 package cofh.core.client.gui.element;
 
 import cofh.core.client.gui.IGuiAccess;
-import cofh.core.util.IResourceStorage;
+import cofh.lib.api.IResourceStorage;
 import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.vertex.PoseStack;

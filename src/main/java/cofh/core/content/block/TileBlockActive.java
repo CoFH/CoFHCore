@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 
 import java.util.function.Supplier;
 
-import static cofh.lib.util.Constants.ACTIVE;
+import static cofh.lib.util.constants.BlockStatePropertiesCoFH.ACTIVE;
 
 public class TileBlockActive extends TileBlockCoFH {
 

@@ -1,10 +1,10 @@
 package cofh.core.network.packet.client;
 
 import cofh.core.CoFHCore;
-import cofh.core.network.packet.IPacketClient;
-import cofh.core.network.packet.PacketBase;
 import cofh.core.util.ProxyUtils;
 import cofh.lib.api.block.entity.IPacketHandlerTile;
+import cofh.lib.network.packet.IPacketClient;
+import cofh.lib.network.packet.PacketBase;
 import cofh.lib.util.Utils;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;
@@ -12,8 +12,8 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
+import static cofh.core.network.packet.PacketIDs.PACKET_REDSTONE;
 import static cofh.lib.util.Constants.NETWORK_UPDATE_DISTANCE;
-import static cofh.lib.util.Constants.PACKET_REDSTONE;
 
 public class TileRedstonePacket extends PacketBase implements IPacketClient {
 
@@ -30,7 +30,7 @@ public class TileRedstonePacket extends PacketBase implements IPacketClient {
 
         Level world = ProxyUtils.getClientWorld();
         if (world == null) {
-            CoFHCore.LOG.error("Client world is null! (Is this being called on the server?)");
+            handler.log().error("Client world is null! (Is this being called on the server?)");
             return;
         }
         BlockEntity tile = world.getBlockEntity(pos);

@@ -6,8 +6,8 @@ import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
 
-import static cofh.lib.util.NBTTags.TAG_AUGMENT_DATA;
-import static cofh.lib.util.NBTTags.TAG_TYPE;
+import static cofh.lib.util.constants.NBTTags.TAG_AUGMENT_DATA;
+import static cofh.lib.util.constants.NBTTags.TAG_TYPE;
 
 public class AugmentDataHelper {
 

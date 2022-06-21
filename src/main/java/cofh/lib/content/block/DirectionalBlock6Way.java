@@ -17,7 +17,7 @@ import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
 
-import static cofh.lib.util.Constants.FACING_ALL;
+import static cofh.lib.util.constants.BlockStatePropertiesCoFH.FACING_ALL;
 
 public class DirectionalBlock6Way extends Block {
 

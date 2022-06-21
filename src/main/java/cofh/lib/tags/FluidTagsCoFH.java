@@ -5,7 +5,7 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.material.Fluid;
 
-import static cofh.lib.util.Constants.ID_FORGE;
+import static cofh.lib.util.constants.ModIds.ID_FORGE;
 
 public class FluidTagsCoFH {
 

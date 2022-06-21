@@ -22,10 +22,21 @@ import net.minecraftforge.common.PlantType;
 
 import java.util.List;
 
-import static cofh.lib.util.Constants.*;
+import static cofh.lib.util.constants.BlockStatePropertiesCoFH.AGE_0_9;
+import static cofh.lib.util.constants.BlockStatePropertiesCoFH.TOP;
 import static net.minecraft.world.item.enchantment.Enchantments.BLOCK_FORTUNE;
 
 public class CropBlockTall extends CropBlockCoFH {
+
+    public static final VoxelShape[] TALL_CROPS_BY_AGE = new VoxelShape[]{
+            box(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D),
+            box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D),
+            box(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D),
+            box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D),
+            box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D),
+            box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D),
+            box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D),
+            box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)};
 
     public CropBlockTall(Properties builder, PlantType type, int growLight, float growMod) {
 

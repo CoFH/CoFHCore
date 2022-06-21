@@ -16,7 +16,7 @@ import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.UUID;
 
-import static cofh.lib.util.NBTTags.*;
+import static cofh.lib.util.constants.NBTTags.*;
 import static cofh.lib.util.helpers.StringHelper.localize;
 
 public class SecurityHelper {

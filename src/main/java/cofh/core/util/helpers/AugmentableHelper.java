@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static cofh.lib.util.Constants.MAX_AUGMENTS;
-import static cofh.lib.util.NBTTags.*;
+import static cofh.lib.util.constants.NBTTags.*;
 import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 
 public class AugmentableHelper {

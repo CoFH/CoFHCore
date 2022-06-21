@@ -5,9 +5,9 @@ import cofh.lib.util.Utils;
 import net.minecraft.world.item.ItemStack;
 
 import static cofh.core.util.references.CoreIDs.ID_HOLDING;
-import static cofh.lib.util.Constants.ID_COFH_CORE;
 import static cofh.lib.util.Utils.getEnchantment;
 import static cofh.lib.util.Utils.getItemEnchantmentLevel;
+import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 
 /**
  * Marker interface for anything that supports the "Holding" enchantment. Can also be done via the Enchantable capability, but this is way less overhead.

@@ -1,7 +1,7 @@
 package cofh.core.content.item;
 
 import cofh.core.content.fluid.FluidContainerItemWrapper;
-import cofh.core.content.fluid.IFluidContainerItem;
+import cofh.lib.api.item.IFluidContainerItem;
 import cofh.core.content.xp.IXpContainerItem;
 import cofh.core.util.helpers.FluidHelper;
 import cofh.lib.api.ContainerType;
@@ -26,7 +26,7 @@ import static cofh.core.util.helpers.XpHelper.*;
 import static cofh.lib.api.ContainerType.EXPERIENCE;
 import static cofh.lib.util.Constants.MB_PER_XP;
 import static cofh.lib.util.Constants.RGB_DURABILITY_XP;
-import static cofh.lib.util.NBTTags.TAG_FLUID;
+import static cofh.lib.util.constants.NBTTags.TAG_FLUID;
 import static cofh.lib.util.helpers.StringHelper.*;
 
 /**

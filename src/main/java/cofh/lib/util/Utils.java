@@ -51,7 +51,7 @@ import javax.annotation.Nullable;
 import java.nio.file.Path;
 
 import static cofh.lib.util.Constants.MAX_CAPACITY;
-import static cofh.lib.util.NBTTags.TAG_ENCHANTMENTS;
+import static cofh.lib.util.constants.NBTTags.TAG_ENCHANTMENTS;
 import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 import static net.minecraft.nbt.Tag.TAG_LIST;
 import static net.minecraft.world.item.enchantment.EnchantmentHelper.getEnchantmentLevel;

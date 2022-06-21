@@ -7,7 +7,7 @@ import net.minecraft.data.recipes.FinishedRecipe;
 
 import java.util.function.Consumer;
 
-import static cofh.lib.util.Constants.ID_COFH_CORE;
+import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 
 public class CoreRecipeProvider extends RecipeProviderCoFH {
 

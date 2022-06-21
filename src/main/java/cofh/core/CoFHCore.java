@@ -3,6 +3,7 @@ package cofh.core;
 import cofh.core.capability.CapabilityArchery;
 import cofh.core.capability.CapabilityAreaEffect;
 import cofh.core.capability.CapabilityShieldItem;
+import cofh.core.client.CoreKeys;
 import cofh.core.client.gui.HeldItemFilterScreen;
 import cofh.core.client.gui.TileItemFilterScreen;
 import cofh.core.client.renderer.entity.model.ArmorFullSuitModel;
@@ -12,17 +13,18 @@ import cofh.core.command.CoFHCommand;
 import cofh.core.compat.curios.CuriosProxy;
 import cofh.core.compat.quark.QuarkFlags;
 import cofh.core.config.*;
-import cofh.lib.content.loot.TileNBTSync;
 import cofh.core.event.ArmorEvents;
 import cofh.core.init.*;
-import cofh.core.network.PacketHandler;
+import cofh.core.network.packet.PacketIDs;
 import cofh.core.network.packet.client.*;
 import cofh.core.network.packet.server.*;
-import cofh.lib.util.DeferredRegisterCoFH;
 import cofh.core.util.Proxy;
 import cofh.core.util.ProxyClient;
 import cofh.core.util.helpers.FluidHelper;
 import cofh.lib.client.renderer.entity.NothingRenderer;
+import cofh.lib.content.loot.TileNBTSync;
+import cofh.lib.network.PacketHandler;
+import cofh.lib.util.DeferredRegisterCoFH;
 import cofh.lib.util.Utils;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.core.particles.ParticleType;
@@ -56,15 +58,17 @@ import static cofh.core.client.renderer.entity.model.ArmorFullSuitModel.ARMOR_FU
 import static cofh.core.init.CoreContainers.HELD_ITEM_FILTER;
 import static cofh.core.init.CoreContainers.TILE_ITEM_FILTER;
 import static cofh.core.init.CoreEntities.*;
-import static cofh.lib.util.Constants.*;
+import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
+import static cofh.lib.util.constants.ModIds.ID_CURIOS;
 
 @Mod (ID_COFH_CORE)
 public class CoFHCore {
 
-    public static final PacketHandler PACKET_HANDLER = new PacketHandler(new ResourceLocation(ID_COFH_CORE, "general"));
     public static final Logger LOG = LogManager.getLogger(ID_COFH_CORE);
-    public static final Proxy PROXY = DistExecutor.unsafeRunForDist(() -> ProxyClient::new, () -> Proxy::new);
+
     public static final ConfigManager CONFIG_MANAGER = new ConfigManager();
+    public static final PacketHandler PACKET_HANDLER = new PacketHandler(new ResourceLocation(ID_COFH_CORE, "general"), LOG);
+    public static final Proxy PROXY = DistExecutor.unsafeRunForDist(() -> ProxyClient::new, () -> Proxy::new);
 
     public static final DeferredRegisterCoFH<Block> BLOCKS = DeferredRegisterCoFH.create(ForgeRegistries.BLOCKS, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<Fluid> FLUIDS = DeferredRegisterCoFH.create(ForgeRegistries.FLUIDS, ID_COFH_CORE);
@@ -135,35 +139,35 @@ public class CoFHCore {
 
     private void registerPackets() {
 
-        PACKET_HANDLER.registerPacket(PACKET_CONTROL, TileControlPacket::new);
-        PACKET_HANDLER.registerPacket(PACKET_GUI, TileGuiPacket::new);
-        PACKET_HANDLER.registerPacket(PACKET_REDSTONE, TileRedstonePacket::new);
-        PACKET_HANDLER.registerPacket(PACKET_STATE, TileStatePacket::new);
-        PACKET_HANDLER.registerPacket(PACKET_RENDER, TileRenderPacket::new);
+        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_CONTROL, TileControlPacket::new);
+        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_GUI, TileGuiPacket::new);
+        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_REDSTONE, TileRedstonePacket::new);
+        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_STATE, TileStatePacket::new);
+        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_RENDER, TileRenderPacket::new);
 
-        PACKET_HANDLER.registerPacket(PACKET_MODEL_UPDATE, ModelUpdatePacket::new);
+        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_MODEL_UPDATE, ModelUpdatePacket::new);
 
-        PACKET_HANDLER.registerPacket(PACKET_CHAT, IndexedChatPacket::new);
-        PACKET_HANDLER.registerPacket(PACKET_MOTION, PlayerMotionPacket::new);
+        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_CHAT, IndexedChatPacket::new);
+        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_MOTION, PlayerMotionPacket::new);
 
-        PACKET_HANDLER.registerPacket(PACKET_GUI_OPEN, FilterGuiOpenPacket::new);
+        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_GUI_OPEN, FilterGuiOpenPacket::new);
 
-        PACKET_HANDLER.registerPacket(PACKET_CONTAINER, ContainerPacket::new);
-        PACKET_HANDLER.registerPacket(PACKET_SECURITY, SecurityPacket::new);
+        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_CONTAINER, ContainerPacket::new);
+        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_SECURITY, SecurityPacket::new);
 
-        PACKET_HANDLER.registerPacket(PACKET_CONFIG, TileConfigPacket::new);
-        PACKET_HANDLER.registerPacket(PACKET_SECURITY_CONTROL, SecurityControlPacket::new);
-        PACKET_HANDLER.registerPacket(PACKET_REDSTONE_CONTROL, RedstoneControlPacket::new);
-        PACKET_HANDLER.registerPacket(PACKET_TRANSFER_CONTROL, TransferControlPacket::new);
-        PACKET_HANDLER.registerPacket(PACKET_SIDE_CONFIG, SideConfigPacket::new);
-        PACKET_HANDLER.registerPacket(PACKET_STORAGE_CLEAR, StorageClearPacket::new);
-        PACKET_HANDLER.registerPacket(PACKET_CLAIM_XP, ClaimXPPacket::new);
+        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_CONFIG, TileConfigPacket::new);
+        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_SECURITY_CONTROL, SecurityControlPacket::new);
+        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_REDSTONE_CONTROL, RedstoneControlPacket::new);
+        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_TRANSFER_CONTROL, TransferControlPacket::new);
+        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_SIDE_CONFIG, SideConfigPacket::new);
+        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_STORAGE_CLEAR, StorageClearPacket::new);
+        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_CLAIM_XP, ClaimXPPacket::new);
 
-        PACKET_HANDLER.registerPacket(PACKET_ITEM_MODE_CHANGE, ItemModeChangePacket::new);
-        PACKET_HANDLER.registerPacket(PACKET_ITEM_LEFT_CLICK, ItemLeftClickPacket::new);
+        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_ITEM_MODE_CHANGE, ItemModeChangePacket::new);
+        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_ITEM_LEFT_CLICK, ItemLeftClickPacket::new);
 
-        PACKET_HANDLER.registerPacket(PACKET_EFFECT_ADD, EffectAddedPacket::new);
-        PACKET_HANDLER.registerPacket(PACKET_EFFECT_REMOVE, EffectRemovedPacket::new);
+        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_EFFECT_ADD, EffectAddedPacket::new);
+        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_EFFECT_REMOVE, EffectRemovedPacket::new);
     }
 
     // region INITIALIZATION
@@ -213,7 +217,7 @@ public class CoFHCore {
 
     private void registerCommands(final RegisterCommandsEvent event) {
 
-        CoFHCommand.initialize(event.getDispatcher());
+        CoFHCommand.register(event.getDispatcher());
     }
     // endregion
 }

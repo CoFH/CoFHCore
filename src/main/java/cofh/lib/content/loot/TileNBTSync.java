@@ -12,7 +12,7 @@ import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunct
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
-import static cofh.lib.util.Constants.ID_COFH_CORE;
+import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 import static net.minecraft.world.level.storage.loot.parameters.LootContextParams.BLOCK_ENTITY;
 
 public class TileNBTSync extends LootItemConditionalFunction {

@@ -22,7 +22,7 @@ import java.util.Set;
 
 import static cofh.core.capability.CapabilityAreaEffect.AREA_EFFECT_ITEM_CAPABILITY;
 import static cofh.core.util.helpers.AreaEffectHelper.validAreaEffectMiningItem;
-import static cofh.lib.util.Constants.ID_COFH_CORE;
+import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 
 @Mod.EventBusSubscriber (modid = ID_COFH_CORE)
 public class AreaEffectEvents {

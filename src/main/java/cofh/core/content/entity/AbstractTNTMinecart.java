@@ -20,7 +20,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 
-import static cofh.lib.util.NBTTags.TAG_FUSE;
+import static cofh.lib.util.constants.NBTTags.TAG_FUSE;
 
 public abstract class AbstractTNTMinecart extends AbstractMinecartCoFH implements IDetonatable {
 

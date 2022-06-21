@@ -13,7 +13,7 @@ import java.util.function.BooleanSupplier;
 import static cofh.lib.api.control.IReconfigurable.SideConfig.SIDE_ACCESSIBLE;
 import static cofh.lib.api.control.IReconfigurable.SideConfig.SIDE_NONE;
 import static cofh.lib.util.Constants.TRUE;
-import static cofh.lib.util.NBTTags.TAG_SIDES;
+import static cofh.lib.util.constants.NBTTags.TAG_SIDES;
 
 public class ReconfigControlModule implements IReconfigurable {
 

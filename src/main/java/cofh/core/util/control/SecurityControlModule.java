@@ -12,7 +12,7 @@ import java.util.UUID;
 import java.util.function.BooleanSupplier;
 
 import static cofh.lib.util.Constants.TRUE;
-import static cofh.lib.util.NBTTags.*;
+import static cofh.lib.util.constants.NBTTags.*;
 
 public class SecurityControlModule implements ISecurable {
 

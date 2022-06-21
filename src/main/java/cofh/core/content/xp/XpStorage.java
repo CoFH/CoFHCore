@@ -1,6 +1,6 @@
 package cofh.core.content.xp;
 
-import cofh.core.util.IResourceStorage;
+import cofh.lib.api.IResourceStorage;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -10,8 +10,8 @@ import java.util.function.BooleanSupplier;
 
 import static cofh.lib.util.Constants.FALSE;
 import static cofh.lib.util.Constants.MAX_CAPACITY;
-import static cofh.lib.util.NBTTags.TAG_XP;
-import static cofh.lib.util.NBTTags.TAG_XP_MAX;
+import static cofh.lib.util.constants.NBTTags.TAG_XP;
+import static cofh.lib.util.constants.NBTTags.TAG_XP_MAX;
 
 /**
  * Implementation of an Experience Storage object. See {@link IXpStorage}.

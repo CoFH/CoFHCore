@@ -13,7 +13,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 
 import static cofh.core.CoFHCore.FLUIDS;
 import static cofh.core.util.references.CoreIDs.*;
-import static cofh.lib.util.Constants.ID_COFH_CORE;
+import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 
 public class CoreTagsProvider {
 

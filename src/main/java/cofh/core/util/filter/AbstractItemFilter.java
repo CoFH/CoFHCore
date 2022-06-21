@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import static cofh.lib.util.NBTTags.*;
+import static cofh.lib.util.constants.NBTTags.*;
 import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 
 public abstract class AbstractItemFilter implements IFilter, IFilterOptions {

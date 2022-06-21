@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
-import static cofh.lib.util.NBTTags.TAG_ACTIVE;
+import static cofh.lib.util.constants.NBTTags.TAG_ACTIVE;
 import static cofh.lib.util.helpers.StringHelper.*;
 
 /**

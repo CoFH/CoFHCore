@@ -2,7 +2,7 @@ package cofh.core.content.item;
 
 import cofh.core.capability.templates.AreaEffectMiningItemWrapper;
 import cofh.lib.api.item.ICoFHItem;
-import cofh.lib.util.Constants;
+import cofh.lib.util.constants.ModIds;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
@@ -36,7 +36,7 @@ import static cofh.lib.util.Constants.TRUE;
 public class SickleItem extends DiggerItem implements ICoFHItem {
 
     @Deprecated // TOOD move to Tags class somewhere and generate.
-    public static final TagKey<Block> EFFECTIVE_BLOCKS = BlockTags.create(new ResourceLocation(Constants.ID_THERMAL, "mineable/sickle"));
+    public static final TagKey<Block> EFFECTIVE_BLOCKS = BlockTags.create(new ResourceLocation(ModIds.ID_THERMAL, "mineable/sickle"));
     public static final Set<Material> EFFECTIVE_MATERIALS = ImmutableSet.of(Material.LEAVES, Material.PLANT, Material.REPLACEABLE_PLANT, Material.WEB);
 
     private static final float DEFAULT_ATTACK_DAMAGE = 2.5F;

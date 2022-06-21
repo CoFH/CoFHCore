@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.PlantType;
@@ -21,13 +22,15 @@ import net.minecraftforge.common.ToolActions;
 
 import java.util.function.Supplier;
 
-import static cofh.lib.util.Constants.CHARGED;
 import static cofh.lib.util.Constants.FUNGUS;
 import static net.minecraftforge.common.PlantType.*;
 
 public class SoilBlock extends Block {
 
+    public static final IntegerProperty CHARGED = IntegerProperty.create("charged", 0, 4);
+
     protected static final VoxelShape SHAPE_TILLED = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 15.0D, 16.0D);
+
     protected Supplier<Block> otherBlock = () -> Blocks.DIRT;
 
     public SoilBlock(Properties properties) {

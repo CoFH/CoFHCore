@@ -6,14 +6,13 @@ import net.minecraft.commands.CommandSourceStack;
 
 public class CoFHCommand {
 
-    private static CoFHCommand instance;
+    public static final String CMD_DURATION = "duration";
+    public static final String CMD_FLAG = "flag";
+    public static final String CMD_PLAYER = "player";
+    public static final String CMD_PLAYERS = "players";
+    public static final String CMD_TARGETS = "targets";
 
-    public static void initialize(CommandDispatcher<CommandSourceStack> dispatcher) {
-
-        instance = new CoFHCommand(dispatcher);
-    }
-
-    private CoFHCommand(CommandDispatcher<CommandSourceStack> dispatcher) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
 
         dispatcher.register(LiteralArgumentBuilder.<CommandSourceStack>literal("cofh")
                 // TODO: This works but there's just not a need.

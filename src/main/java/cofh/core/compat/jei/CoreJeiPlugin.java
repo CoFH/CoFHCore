@@ -9,7 +9,7 @@ import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
 import net.minecraft.resources.ResourceLocation;
 
-import static cofh.lib.util.Constants.ID_COFH_CORE;
+import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 
 @JeiPlugin
 public class CoreJeiPlugin implements IModPlugin {

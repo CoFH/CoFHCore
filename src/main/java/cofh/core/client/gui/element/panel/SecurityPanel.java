@@ -15,7 +15,7 @@ import java.util.UUID;
 
 import static cofh.core.client.gui.CoreTextures.*;
 import static cofh.lib.api.control.ISecurable.AccessMode.*;
-import static cofh.lib.util.Constants.ID_COFH_CORE;
+import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 import static cofh.lib.util.helpers.SoundHelper.playClickSound;
 import static cofh.lib.util.helpers.StringHelper.localize;
 

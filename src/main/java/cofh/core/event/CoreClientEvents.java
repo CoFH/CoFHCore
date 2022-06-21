@@ -3,6 +3,7 @@ package cofh.core.event;
 import cofh.core.config.CoreClientConfig;
 import cofh.lib.client.renderer.entity.ITranslucentRenderer;
 import cofh.lib.util.Utils;
+import cofh.lib.util.constants.ModIds;
 import cofh.lib.util.raytracer.VoxelShapeBlockHitResult;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -42,14 +43,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static cofh.lib.util.Constants.*;
-import static cofh.lib.util.NBTTags.TAG_STORED_ENCHANTMENTS;
+import static cofh.lib.util.Constants.INVIS_STYLE;
+import static cofh.lib.util.constants.NBTTags.TAG_STORED_ENCHANTMENTS;
 import static cofh.lib.util.helpers.StringHelper.*;
 import static net.minecraft.ChatFormatting.DARK_GRAY;
 import static net.minecraft.ChatFormatting.GRAY;
 import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 
-@Mod.EventBusSubscriber (value = Dist.CLIENT, modid = ID_COFH_CORE)
+@Mod.EventBusSubscriber (value = Dist.CLIENT, modid = ModIds.ID_COFH_CORE)
 public class CoreClientEvents {
 
     public static int renderTime;
@@ -58,11 +59,11 @@ public class CoreClientEvents {
     private static final Set<String> NAMESPACES = new ObjectOpenHashSet<>();
 
     static {
-        NAMESPACES.add(ID_COFH_CORE);
-        NAMESPACES.add(ID_ARCHERS_PARADOX);
-        NAMESPACES.add(ID_ENSORCELLATION);
-        NAMESPACES.add(ID_REDSTONE_ARSENAL);
-        NAMESPACES.add(ID_THERMAL);
+        NAMESPACES.add(ModIds.ID_COFH_CORE);
+        NAMESPACES.add(ModIds.ID_ARCHERS_PARADOX);
+        NAMESPACES.add(ModIds.ID_ENSORCELLATION);
+        NAMESPACES.add(ModIds.ID_REDSTONE_ARSENAL);
+        NAMESPACES.add(ModIds.ID_THERMAL);
     }
 
     private CoreClientEvents() {

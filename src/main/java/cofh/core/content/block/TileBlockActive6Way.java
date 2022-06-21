@@ -18,7 +18,7 @@ import net.minecraft.world.phys.HitResult;
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
-import static cofh.lib.util.Constants.FACING_ALL;
+import static cofh.lib.util.constants.BlockStatePropertiesCoFH.FACING_ALL;
 
 public class TileBlockActive6Way extends TileBlockActive implements IWrenchable {
 

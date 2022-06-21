@@ -26,9 +26,9 @@ import net.minecraftforge.fml.common.Mod;
 import java.util.Map;
 
 import static cofh.core.init.CoreMobEffects.SLIMED;
-import static cofh.lib.util.Constants.ID_COFH_CORE;
 import static cofh.lib.util.Utils.getItemEnchantmentLevel;
 import static cofh.lib.util.Utils.getMaxEquippedEnchantmentLevel;
+import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 import static net.minecraft.world.item.enchantment.Enchantments.FALL_PROTECTION;
 import static net.minecraft.world.item.enchantment.Enchantments.MENDING;
 

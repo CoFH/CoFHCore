@@ -26,7 +26,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import javax.annotation.Nonnull;
 import java.util.function.Supplier;
 
-import static cofh.lib.util.Constants.BITES_0_7;
+import static cofh.lib.util.constants.BlockStatePropertiesCoFH.BITES_0_7;
 
 public class FeastBlock extends DirectionalBlock4Way {
 

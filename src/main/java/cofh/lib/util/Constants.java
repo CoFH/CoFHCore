@@ -1,5 +1,6 @@
 package cofh.lib.util;
 
+import cofh.lib.util.constants.ModIds;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
@@ -7,7 +8,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.PlantType;
 import net.minecraftforge.fluids.FluidStack;
@@ -15,7 +15,6 @@ import net.minecraftforge.fluids.FluidType;
 
 import java.util.UUID;
 import java.util.function.BooleanSupplier;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import static net.minecraft.world.entity.EquipmentSlot.*;
@@ -26,33 +25,7 @@ public class Constants {
 
     }
 
-    // region AABBs
-    public static final VoxelShape[] CROPS_BY_AGE = new VoxelShape[]{
-            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D),
-            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D),
-            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D),
-            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D),
-            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 10.0D, 16.0D),
-            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D),
-            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D),
-            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)};
-
-    public static final VoxelShape[] MUSHROOMS_BY_AGE = new VoxelShape[]{
-            Block.box(4.0D, 0.0D, 4.0D, 12.0D, 6.0D, 12.0D),
-            Block.box(3.0D, 0.0D, 3.0D, 13.0D, 8.0D, 13.0D),
-            Block.box(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D),
-            Block.box(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D),
-            Block.box(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D)};
-
-    public static final VoxelShape[] TALL_CROPS_BY_AGE = new VoxelShape[]{
-            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D),
-            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D),
-            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D),
-            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D),
-            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D),
-            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D),
-            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D),
-            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)};
+    public static final PlantType FUNGUS = PlantType.get("fungus");
 
     public static final VoxelShape[] TALL_CROPS_BY_AGE_ALT = new VoxelShape[]{
             Block.box(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D),
@@ -65,63 +38,6 @@ public class Constants {
             Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)};
 
     public static final VoxelShape FULL_CUBE_COLLISION = Block.box(1.0D, 0.0D, 1.0D, 15.9375D, 15.9375D, 15.9375D);
-    // endregion
-
-    // region MOD IDS
-    public static final String ID_MINECRAFT = "minecraft";
-    public static final String ID_FORGE = "forge";
-
-    public static final String ID_COFH_CORE = "cofh_core";
-
-    public static final String ID_THERMAL = "thermal";
-
-    public static final String ID_THERMAL_ATOMICS = "thermal_atomics";
-    public static final String ID_THERMAL_CULTIVATION = "thermal_cultivation";
-    public static final String ID_THERMAL_DYNAMICS = "thermal_dynamics";
-    public static final String ID_THERMAL_ESSENTIALS = "thermal_essentials";
-    public static final String ID_THERMAL_EXPANSION = "thermal_expansion";
-    public static final String ID_THERMAL_FOUNDATION = "thermal_foundation";
-    public static final String ID_THERMAL_HORIZONS = "thermal_horizons";
-    public static final String ID_THERMAL_INNOVATION = "thermal_innovation";
-    public static final String ID_THERMAL_INTEGRATION = "thermal_integration";
-    public static final String ID_THERMAL_LOCOMOTION = "thermal_locomotion";
-
-    public static final String ID_ARCHERS_PARADOX = "archers_paradox";
-    public static final String ID_ENSORCELLATION = "ensorcellation";
-    public static final String ID_OMGOURD = "omgourd";
-    public static final String ID_REDSTONE_ARSENAL = "redstone_arsenal";
-    public static final String ID_THAUMCRAFT = "thaumcraft";
-    public static final String ID_TOOLS_COMPLEMENT = "tools_complement";
-
-    public static final String ID_CURIOS = "curios";
-    public static final String ID_QUARK = "quark";
-    // endregion
-
-    // region BLOCKSTATE PROPERTIES
-    public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
-    public static final IntegerProperty CHARGED = IntegerProperty.create("charged", 0, 4);
-    public static final BooleanProperty TOP = BooleanProperty.create("top");
-
-    public static final IntegerProperty AGE_0_4 = IntegerProperty.create("age", 0, 4);
-    public static final IntegerProperty AGE_0_6 = IntegerProperty.create("age", 0, 6);
-    public static final IntegerProperty AGE_0_7 = IntegerProperty.create("age", 0, 7);
-    public static final IntegerProperty AGE_0_9 = IntegerProperty.create("age", 0, 9);
-    public static final IntegerProperty AGE_0_10 = IntegerProperty.create("age", 0, 10);
-
-    public static final IntegerProperty BITES_0_3 = IntegerProperty.create("bites", 0, 3);
-    public static final IntegerProperty BITES_0_7 = IntegerProperty.create("bites", 0, 7);
-
-    public static final DirectionProperty FACING_ALL = DirectionProperty.create("facing", Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST, Direction.UP, Direction.DOWN);
-    public static final DirectionProperty FACING_HORIZONTAL = DirectionProperty.create("facing", Direction.Plane.HORIZONTAL);
-
-    private static final Predicate<RailShape> PRED_STRAIGHT = dir -> dir != RailShape.NORTH_EAST && dir != RailShape.NORTH_WEST && dir != RailShape.SOUTH_EAST && dir != RailShape.SOUTH_WEST;
-    private static final Predicate<RailShape> PRED_NO_SLOPE = dir -> dir != RailShape.ASCENDING_EAST && dir != RailShape.ASCENDING_WEST && dir != RailShape.ASCENDING_NORTH && dir != RailShape.ASCENDING_SOUTH;
-
-    public static final EnumProperty<RailShape> RAIL_DEFAULT = EnumProperty.create("shape", RailShape.class);
-    public static final EnumProperty<RailShape> RAIL_STRAIGHT = EnumProperty.create("shape", RailShape.class, PRED_STRAIGHT);
-    public static final EnumProperty<RailShape> RAIL_FLAT = EnumProperty.create("shape", RailShape.class, PRED_NO_SLOPE);
-    public static final EnumProperty<RailShape> RAIL_STRAIGHT_FLAT = EnumProperty.create("shape", RailShape.class, dir -> PRED_STRAIGHT.test(dir) && PRED_NO_SLOPE.test(dir));
-    // endregion
 
     // region GLOBALS
     public static final int AOE_BREAK_FACTOR = 8;
@@ -149,46 +65,6 @@ public class Constants {
 
     public static final EquipmentSlot[] ARMOR_SLOTS = new EquipmentSlot[]{HEAD, CHEST, LEGS, FEET};
     public static final Direction[] DIRECTIONS = Direction.values();
-    // endregion
-
-    // region COMMANDS
-    public static final String CMD_DURATION = "duration";
-    public static final String CMD_FLAG = "flag";
-    public static final String CMD_PLAYER = "player";
-    public static final String CMD_PLAYERS = "players";
-    public static final String CMD_TARGETS = "targets";
-    // endregion
-
-    // region PACKET
-    public static final int PACKET_CONTROL = 1;
-    public static final int PACKET_GUI = 2;
-    public static final int PACKET_REDSTONE = 3;
-    public static final int PACKET_STATE = 4;
-    public static final int PACKET_RENDER = 5;
-
-    public static final int PACKET_MODEL_UPDATE = 8;
-
-    public static final int PACKET_CHAT = 16;
-    public static final int PACKET_MOTION = 17;
-
-    public static final int PACKET_GUI_OPEN = 20;
-
-    public static final int PACKET_CONTAINER = 24;
-    public static final int PACKET_SECURITY = 25;
-
-    public static final int PACKET_CONFIG = 32;
-    public static final int PACKET_SECURITY_CONTROL = 33;
-    public static final int PACKET_REDSTONE_CONTROL = 34;
-    public static final int PACKET_TRANSFER_CONTROL = 35;
-    public static final int PACKET_SIDE_CONFIG = 36;
-    public static final int PACKET_STORAGE_CLEAR = 37;
-    public static final int PACKET_CLAIM_XP = 38;
-
-    public static final int PACKET_ITEM_MODE_CHANGE = 64;
-    public static final int PACKET_ITEM_LEFT_CLICK = 65;
-
-    public static final int PACKET_EFFECT_ADD = 96;
-    public static final int PACKET_EFFECT_REMOVE = 97;
     // endregion
 
     // region CONSTANTS
@@ -230,19 +106,16 @@ public class Constants {
     public static float AUG_SCALE_MAX = 100.0F;
     // endregion
 
-    public static final PlantType FUNGUS = PlantType.get("fungus");
-
     // region FONTS
-    public static final ResourceLocation ENDER_FONT = new ResourceLocation(ID_COFH_CORE, "ender");
-    public static final ResourceLocation INVIS_FONT = new ResourceLocation(ID_COFH_CORE, "invis");
+    public static final ResourceLocation ENDER_FONT = new ResourceLocation(ModIds.ID_COFH_CORE, "ender");
+    public static final ResourceLocation INVIS_FONT = new ResourceLocation(ModIds.ID_COFH_CORE, "invis");
 
     public static final Style ENDER_STYLE = Style.EMPTY.withFont(ENDER_FONT);
     public static final Style INVIS_STYLE = Style.EMPTY.withFont(INVIS_FONT);
     // endregion
 
     // region TEXTURES
-    public static final String PATH_GFX = ID_COFH_CORE + ":textures/";
-    public static final String PATH_GUI = PATH_GFX + "gui/";
+    public static final String PATH_GUI = ModIds.ID_COFH_CORE + ":textures/gui/";
     public static final String PATH_ELEMENTS = PATH_GUI + "elements/";
     // endregion
 }

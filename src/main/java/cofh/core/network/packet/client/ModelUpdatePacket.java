@@ -1,9 +1,9 @@
 package cofh.core.network.packet.client;
 
 import cofh.core.CoFHCore;
-import cofh.core.network.packet.IPacketClient;
-import cofh.core.network.packet.PacketBase;
 import cofh.core.util.ProxyUtils;
+import cofh.lib.network.packet.IPacketClient;
+import cofh.lib.network.packet.PacketBase;
 import cofh.lib.util.Utils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -11,8 +11,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
+import static cofh.core.network.packet.PacketIDs.PACKET_MODEL_UPDATE;
 import static cofh.lib.util.Constants.NETWORK_UPDATE_DISTANCE;
-import static cofh.lib.util.Constants.PACKET_MODEL_UPDATE;
 
 /**
  * A generic packet to force a client-side ModelData update and rerender if it didn't happen for efficiency or other reasons.
@@ -31,7 +31,7 @@ public class ModelUpdatePacket extends PacketBase implements IPacketClient {
 
         Level level = ProxyUtils.getClientWorld();
         if (level == null) {
-            CoFHCore.LOG.error("Client world is null! (Is this being called on the server?)");
+            handler.log().error("Client world is null! (Is this being called on the server?)");
             return;
         }
         BlockState state = level.getBlockState(pos);

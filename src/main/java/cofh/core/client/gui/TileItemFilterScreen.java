@@ -14,7 +14,7 @@ import net.minecraft.world.inventory.Slot;
 import java.util.Collections;
 
 import static cofh.core.util.helpers.GuiHelper.*;
-import static cofh.lib.util.Constants.ID_COFH_CORE;
+import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 import static cofh.lib.util.helpers.SoundHelper.playClickSound;
 
 public class TileItemFilterScreen extends ContainerScreenCoFH<TileItemFilterContainer> {

@@ -10,7 +10,7 @@ import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Collection;
 
-import static cofh.lib.util.Constants.CMD_PLAYERS;
+import static cofh.core.command.CoFHCommand.CMD_PLAYERS;
 
 public class SubCommandFriend {
 

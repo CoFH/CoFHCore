@@ -22,7 +22,7 @@ import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
 
-import static cofh.lib.util.Constants.RAIL_STRAIGHT_FLAT;
+import static cofh.lib.util.constants.BlockStatePropertiesCoFH.RAIL_STRAIGHT_FLAT;
 
 public class CrossoverRailBlock extends BaseRailBlock implements IDismantleable {
 

@@ -9,7 +9,7 @@ import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotTypeMessage;
 import top.theillusivec4.curios.api.SlotTypePreset;
 
-import static cofh.lib.util.Constants.ID_CURIOS;
+import static cofh.lib.util.constants.ModIds.ID_CURIOS;
 
 public class CuriosIntegration extends CuriosProxy {
 

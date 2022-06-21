@@ -6,7 +6,7 @@ import cofh.core.util.filter.IFilterableTile;
 import net.minecraft.world.item.ItemStack;
 
 import static cofh.core.util.helpers.AugmentableHelper.getPropertyWithDefault;
-import static cofh.lib.util.NBTTags.TAG_FILTER_TYPE;
+import static cofh.lib.util.constants.NBTTags.TAG_FILTER_TYPE;
 
 public class FilterHelper {
 

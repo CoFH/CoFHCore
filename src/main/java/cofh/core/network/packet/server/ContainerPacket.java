@@ -2,13 +2,13 @@ package cofh.core.network.packet.server;
 
 import cofh.core.CoFHCore;
 import cofh.core.content.inventory.container.ContainerCoFH;
-import cofh.core.network.packet.IPacketServer;
-import cofh.core.network.packet.PacketBase;
+import cofh.lib.network.packet.IPacketServer;
+import cofh.lib.network.packet.PacketBase;
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 
-import static cofh.lib.util.Constants.PACKET_CONTAINER;
+import static cofh.core.network.packet.PacketIDs.PACKET_CONTAINER;
 
 public class ContainerPacket extends PacketBase implements IPacketServer {
 

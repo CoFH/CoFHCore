@@ -14,7 +14,7 @@ import net.minecraft.world.level.Level;
 
 import java.util.Collection;
 
-import static cofh.lib.util.Constants.CMD_TARGETS;
+import static cofh.core.command.CoFHCommand.CMD_TARGETS;
 
 public class SubCommandZap {
 

@@ -52,7 +52,7 @@ import java.util.function.Predicate;
 
 import static cofh.lib.util.Constants.BOTTLE_VOLUME;
 import static cofh.lib.util.Constants.BUCKET_VOLUME;
-import static cofh.lib.util.NBTTags.TAG_POTION;
+import static cofh.lib.util.constants.NBTTags.TAG_POTION;
 import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
 import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.SIMULATE;
 
