@@ -14,7 +14,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
-import static cofh.core.init.CoreContainers.TILE_ITEM_FILTER;
+import static cofh.core.init.CoreContainers.TILE_ITEM_FILTER_CONTAINER;
 
 public class TileItemFilterContainer extends TileContainer implements IFilterOptions {
 
@@ -24,7 +24,7 @@ public class TileItemFilterContainer extends TileContainer implements IFilterOpt
 
     public TileItemFilterContainer(int windowId, Level world, BlockPos pos, Inventory inventory, Player player) {
 
-        super(TILE_ITEM_FILTER.get(), windowId, world, pos, inventory, player);
+        super(TILE_ITEM_FILTER_CONTAINER.get(), windowId, world, pos, inventory, player);
 
         allowSwap = false;
 

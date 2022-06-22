@@ -36,10 +36,10 @@ import java.util.function.Supplier;
 
 public class TileBlockCoFH extends Block implements EntityBlock, IDismantleable {
 
-    protected final Supplier<BlockEntityType<? extends TileCoFH>> blockEntityType;
-    protected final Class<? extends TileCoFH> tileClass;
+    protected final Supplier<BlockEntityType<?>> blockEntityType;
+    protected final Class<?> tileClass;
 
-    public TileBlockCoFH(Properties builder, Class<? extends TileCoFH> tileClass, Supplier<BlockEntityType<? extends TileCoFH>> blockEntityType) {
+    public TileBlockCoFH(Properties builder, Class<?> tileClass, Supplier<BlockEntityType<?>> blockEntityType) {
 
         super(builder);
         this.blockEntityType = blockEntityType;

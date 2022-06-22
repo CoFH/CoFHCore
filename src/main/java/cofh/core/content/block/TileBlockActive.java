@@ -1,6 +1,5 @@
 package cofh.core.content.block;
 
-import cofh.core.content.block.entity.TileCoFH;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -12,7 +11,7 @@ import static cofh.lib.util.constants.BlockStatePropertiesCoFH.ACTIVE;
 
 public class TileBlockActive extends TileBlockCoFH {
 
-    public TileBlockActive(Properties builder, Class<? extends TileCoFH> tileClass, Supplier<BlockEntityType<? extends TileCoFH>> blockEntityType) {
+    public TileBlockActive(Properties builder, Class<?> tileClass, Supplier<BlockEntityType<?>> blockEntityType) {
 
         super(builder, tileClass, blockEntityType);
         this.registerDefaultState(this.stateDefinition.any().setValue(ACTIVE, false));

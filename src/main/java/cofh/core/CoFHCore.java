@@ -44,6 +44,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -55,8 +56,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import static cofh.core.client.renderer.entity.model.ArmorFullSuitModel.ARMOR_FULL_SUIT_LAYER;
-import static cofh.core.init.CoreContainers.HELD_ITEM_FILTER;
-import static cofh.core.init.CoreContainers.TILE_ITEM_FILTER;
+import static cofh.core.init.CoreContainers.HELD_ITEM_FILTER_CONTAINER;
+import static cofh.core.init.CoreContainers.TILE_ITEM_FILTER_CONTAINER;
 import static cofh.core.init.CoreEntities.*;
 import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 import static cofh.lib.util.constants.ModIds.ID_CURIOS;
@@ -81,6 +82,8 @@ public class CoFHCore {
     public static final DeferredRegisterCoFH<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegisterCoFH.create(ForgeRegistries.RECIPE_SERIALIZERS, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<SoundEvent> SOUND_EVENTS = DeferredRegisterCoFH.create(ForgeRegistries.SOUND_EVENTS, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<BlockEntityType<?>> TILE_ENTITIES = DeferredRegisterCoFH.create(ForgeRegistries.BLOCK_ENTITIES, ID_COFH_CORE);
+
+    public static final DeferredRegisterCoFH<FluidType> FLUID_TYPES = DeferredRegisterCoFH.create(ForgeRegistries.Keys.FLUID_TYPES, ID_COFH_CORE);
 
     public static boolean curiosLoaded = false;
 
@@ -208,8 +211,8 @@ public class CoFHCore {
     private void clientSetup(final FMLClientSetupEvent event) {
 
         event.enqueueWork(() -> {
-            MenuScreens.register(HELD_ITEM_FILTER.get(), HeldItemFilterScreen::new);
-            MenuScreens.register(TILE_ITEM_FILTER.get(), TileItemFilterScreen::new);
+            MenuScreens.register(HELD_ITEM_FILTER_CONTAINER.get(), HeldItemFilterScreen::new);
+            MenuScreens.register(TILE_ITEM_FILTER_CONTAINER.get(), TileItemFilterScreen::new);
         });
         event.enqueueWork(CoreKeys::register);
         event.enqueueWork(ProxyClient::registerItemModelProperties);

@@ -108,7 +108,7 @@ public class ItemStorageCoFH implements IItemHandler, IItemStackHolder, IResourc
         return this;
     }
 
-    protected boolean isItemValid(@Nonnull ItemStack stack) {
+    public boolean isItemValid(@Nonnull ItemStack stack) {
 
         return enabled.getAsBoolean() && validator.test(stack);
     }

@@ -13,22 +13,22 @@ import java.util.function.Predicate;
  *
  * @author King Lemming
  */
-public class FluidStorageAdjustable extends FluidStorageCoFH {
+public class FluidStorageRestrictable extends FluidStorageCoFH {
 
     protected IntSupplier maxFill = this::getCapacity;
     protected IntSupplier maxDrain = this::getCapacity;
 
-    public FluidStorageAdjustable(int capacity) {
+    public FluidStorageRestrictable(int capacity) {
 
         this(capacity, e -> true);
     }
 
-    public FluidStorageAdjustable(int capacity, Predicate<FluidStack> validator) {
+    public FluidStorageRestrictable(int capacity, Predicate<FluidStack> validator) {
 
         super(capacity, validator);
     }
 
-    public FluidStorageAdjustable setTransferLimits(IntSupplier maxFill, IntSupplier maxDrain) {
+    public FluidStorageRestrictable setTransferLimits(IntSupplier maxFill, IntSupplier maxDrain) {
 
         this.maxFill = maxFill;
         this.maxDrain = maxDrain;

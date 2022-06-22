@@ -14,7 +14,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
-import static cofh.core.init.CoreContainers.HELD_ITEM_FILTER;
+import static cofh.core.init.CoreContainers.HELD_ITEM_FILTER_CONTAINER;
 import static cofh.core.util.helpers.FilterHelper.hasFilter;
 
 public class HeldItemFilterContainer extends ContainerCoFH implements IFilterOptions {
@@ -28,7 +28,7 @@ public class HeldItemFilterContainer extends ContainerCoFH implements IFilterOpt
 
     public HeldItemFilterContainer(int windowId, Inventory inventory, Player player) {
 
-        super(HELD_ITEM_FILTER.get(), windowId, inventory, player);
+        super(HELD_ITEM_FILTER_CONTAINER.get(), windowId, inventory, player);
 
         allowSwap = false;
 

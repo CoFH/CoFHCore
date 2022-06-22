@@ -99,7 +99,7 @@ public class FluidStorageCoFH implements IFluidHandler, IFluidStackHolder, IReso
         return this;
     }
 
-    protected boolean isFluidValid(@Nonnull FluidStack stack) {
+    public boolean isFluidValid(@Nonnull FluidStack stack) {
 
         return enabled.getAsBoolean() && validator.test(stack);
     }

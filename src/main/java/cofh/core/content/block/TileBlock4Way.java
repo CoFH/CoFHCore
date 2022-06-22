@@ -1,6 +1,5 @@
 package cofh.core.content.block;
 
-import cofh.core.content.block.entity.TileCoFH;
 import cofh.lib.api.block.IWrenchable;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -18,7 +17,7 @@ import static cofh.lib.util.constants.BlockStatePropertiesCoFH.FACING_HORIZONTAL
 
 public class TileBlock4Way extends TileBlockCoFH implements IWrenchable {
 
-    public TileBlock4Way(Properties builder, Class<? extends TileCoFH> tileClass, Supplier<BlockEntityType<? extends TileCoFH>> blockEntityType) {
+    public TileBlock4Way(Properties builder, Class<?> tileClass, Supplier<BlockEntityType<?>> blockEntityType) {
 
         super(builder, tileClass, blockEntityType);
     }

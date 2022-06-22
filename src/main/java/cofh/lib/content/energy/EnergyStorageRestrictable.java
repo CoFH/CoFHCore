@@ -10,32 +10,32 @@ import java.util.function.IntSupplier;
  *
  * @author King Lemming
  */
-public class EnergyStorageAdjustable extends EnergyStorageCoFH {
+public class EnergyStorageRestrictable extends EnergyStorageCoFH {
 
     protected IntSupplier curReceive = this::getMaxReceive;
     protected IntSupplier curExtract = this::getMaxExtract;
 
-    public EnergyStorageAdjustable(int capacity) {
+    public EnergyStorageRestrictable(int capacity) {
 
         this(capacity, capacity, capacity, 0);
     }
 
-    public EnergyStorageAdjustable(int capacity, int maxTransfer) {
+    public EnergyStorageRestrictable(int capacity, int maxTransfer) {
 
         this(capacity, maxTransfer, maxTransfer, 0);
     }
 
-    public EnergyStorageAdjustable(int capacity, int maxReceive, int maxExtract) {
+    public EnergyStorageRestrictable(int capacity, int maxReceive, int maxExtract) {
 
         this(capacity, maxReceive, maxExtract, 0);
     }
 
-    public EnergyStorageAdjustable(int capacity, int maxReceive, int maxExtract, int energy) {
+    public EnergyStorageRestrictable(int capacity, int maxReceive, int maxExtract, int energy) {
 
         super(capacity, maxReceive, maxExtract, energy);
     }
 
-    public EnergyStorageAdjustable setTransferLimits(IntSupplier curReceive, IntSupplier curExtract) {
+    public EnergyStorageRestrictable setTransferLimits(IntSupplier curReceive, IntSupplier curExtract) {
 
         this.curReceive = curReceive;
         this.curExtract = curExtract;
