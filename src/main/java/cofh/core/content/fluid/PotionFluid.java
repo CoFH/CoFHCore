@@ -28,7 +28,6 @@ import java.util.function.Supplier;
 
 import static cofh.core.CoFHCore.FLUIDS;
 import static cofh.core.CoFHCore.FLUID_TYPES;
-import static cofh.core.util.references.CoreIDs.ID_FLUID_HONEY;
 import static cofh.core.util.references.CoreIDs.ID_FLUID_POTION;
 import static cofh.lib.util.constants.NBTTags.TAG_POTION;
 
@@ -64,7 +63,7 @@ public class PotionFluid extends FluidCoFH {
         return TYPE;
     }
 
-    public static final RegistryObject<FluidType> TYPE = FLUID_TYPES.register(ID_FLUID_HONEY, () -> new FluidType(FluidType.Properties.create()
+    public static final RegistryObject<FluidType> TYPE = FLUID_TYPES.register(ID_FLUID_POTION, () -> new FluidType(FluidType.Properties.create()
             .density(1500)
             .viscosity(10000000)) {
 

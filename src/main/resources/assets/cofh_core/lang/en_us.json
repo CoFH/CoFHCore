@@ -155,13 +155,10 @@
   "enchantment.cofh_core.holding": "Holding",
   "enchantment.cofh_core.holding.desc": "Increases the storage capacity of certain items.",
 
-  "fluid.cofh_core.experience": "Essence of Knowledge",
-  "fluid.cofh_core.honey": "Honey",
-  "fluid.cofh_core.milk": "Milk",
-  "fluid.cofh_core.potion": "Potion",
-  "fluid.cofh_core.steam": "Steam",
-
-  "item.cofh_core.ectoplasm": "Ectoplasm",
+  "fluid_type.cofh_core.experience": "Essence of Knowledge",
+  "fluid_type.cofh_core.honey": "Honey",
+  "fluid_type.cofh_core.potion": "Potion",
+  "fluid_type.cofh_core.steam": "Steam",
 
   "info.cofh_core.item_filter.0": "Place items in slots to add them to the filter list.",
   "info.cofh_core.item_filter.1": "Additional options can be used to fine-tune behavior.",
@@ -219,6 +216,7 @@
   "item.minecraft.lingering_potion.effect.love": "Lingering Potion of Love",
   "item.minecraft.lingering_potion.effect.magic_resistance": "Lingering Potion of Magic Resistance",
   "item.minecraft.lingering_potion.effect.panacea": "Lingering Panacea",
+
   "item.minecraft.potion.effect.amplification": "Potion of Amplification",
   "item.minecraft.potion.effect.clarity": "Potion of Clarity",
   "item.minecraft.potion.effect.enderference": "Potion of Enderference",
@@ -227,6 +225,7 @@
   "item.minecraft.potion.effect.love": "Potion of Love",
   "item.minecraft.potion.effect.magic_resistance": "Potion of Magic Resistance",
   "item.minecraft.potion.effect.panacea": "Panacea",
+
   "item.minecraft.splash_potion.effect.amplification": "Splash Potion of Amplification",
   "item.minecraft.splash_potion.effect.clarity": "Splash Potion of Clarity",
   "item.minecraft.splash_potion.effect.enderference": "Splash Potion of Enderference",
@@ -235,6 +234,7 @@
   "item.minecraft.splash_potion.effect.love": "Splash Potion of Love",
   "item.minecraft.splash_potion.effect.magic_resistance": "Splash Potion of Magic Resistance",
   "item.minecraft.splash_potion.effect.panacea": "Splash Panacea",
+
   "item.minecraft.tipped_arrow.effect.amplification": "Arrow of Amplification",
   "item.minecraft.tipped_arrow.effect.clarity": "Arrow of Clarity",
   "item.minecraft.tipped_arrow.effect.enderference": "Arrow of Enderference",
