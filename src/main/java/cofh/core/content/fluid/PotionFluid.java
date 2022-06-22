@@ -6,6 +6,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -14,8 +15,8 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.client.IFluidTypeRenderProperties;
+import net.minecraftforge.common.SoundActions;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
@@ -28,6 +29,7 @@ import java.util.function.Supplier;
 
 import static cofh.core.CoFHCore.FLUIDS;
 import static cofh.core.CoFHCore.FLUID_TYPES;
+import static cofh.core.init.CoreFluids.POTION_FLUID;
 import static cofh.core.util.references.CoreIDs.ID_FLUID_POTION;
 import static cofh.lib.util.constants.NBTTags.TAG_POTION;
 
@@ -64,8 +66,10 @@ public class PotionFluid extends FluidCoFH {
     }
 
     public static final RegistryObject<FluidType> TYPE = FLUID_TYPES.register(ID_FLUID_POTION, () -> new FluidType(FluidType.Properties.create()
-            .density(1500)
-            .viscosity(10000000)) {
+            .density(1100)
+            .viscosity(1100)
+            .sound(SoundActions.BUCKET_FILL, SoundEvents.BOTTLE_FILL)
+            .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BOTTLE_EMPTY)) {
 
         @Override
         public Component getDescription(FluidStack stack) {
@@ -131,7 +135,7 @@ public class PotionFluid extends FluidCoFH {
             return FluidStack.EMPTY;
         }
         if (type == Potions.WATER) {
-            return new FluidStack(Fluids.WATER, amount);
+            return new FluidStack(POTION_FLUID.get(), amount);
         }
         return addPotionToFluidStack(new FluidStack(INSTANCE.stillFluid.get(), amount), type);
     }

@@ -2,8 +2,10 @@ package cofh.core.content.fluid;
 
 import cofh.lib.content.fluid.FluidCoFH;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.Rarity;
 import net.minecraftforge.client.IFluidTypeRenderProperties;
+import net.minecraftforge.common.SoundActions;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.registries.RegistryObject;
@@ -17,9 +19,14 @@ import static cofh.core.util.references.CoreIDs.ID_FLUID_EXPERIENCE;
 
 public class ExperienceFluid extends FluidCoFH {
 
+    private static ExperienceFluid INSTANCE;
+
     public static ExperienceFluid create() {
 
-        return new ExperienceFluid();
+        if (INSTANCE == null) {
+            INSTANCE = new ExperienceFluid();
+        }
+        return INSTANCE;
     }
 
     protected ExperienceFluid() {
@@ -43,7 +50,9 @@ public class ExperienceFluid extends FluidCoFH {
             .lightLevel(10)
             .density(250)
             .viscosity(500)
-            .rarity(Rarity.UNCOMMON)) {
+            .rarity(Rarity.UNCOMMON)
+            .sound(SoundActions.BUCKET_FILL, SoundEvents.BOTTLE_FILL)
+            .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BOTTLE_EMPTY)) {
 
         @Override
         public void initializeClient(Consumer<IFluidTypeRenderProperties> consumer) {

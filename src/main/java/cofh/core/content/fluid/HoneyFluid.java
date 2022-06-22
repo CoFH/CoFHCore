@@ -2,7 +2,9 @@ package cofh.core.content.fluid;
 
 import cofh.lib.content.fluid.FluidCoFH;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraftforge.client.IFluidTypeRenderProperties;
+import net.minecraftforge.common.SoundActions;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.registries.RegistryObject;
@@ -16,9 +18,14 @@ import static cofh.core.util.references.CoreIDs.ID_FLUID_HONEY;
 
 public class HoneyFluid extends FluidCoFH {
 
+    private static HoneyFluid INSTANCE;
+
     public static HoneyFluid create() {
 
-        return new HoneyFluid();
+        if (INSTANCE == null) {
+            INSTANCE = new HoneyFluid();
+        }
+        return INSTANCE;
     }
 
     protected HoneyFluid() {
@@ -40,7 +47,9 @@ public class HoneyFluid extends FluidCoFH {
 
     public static final RegistryObject<FluidType> TYPE = FLUID_TYPES.register(ID_FLUID_HONEY, () -> new FluidType(FluidType.Properties.create()
             .density(1500)
-            .viscosity(10000000)) {
+            .viscosity(1000000)
+            .sound(SoundActions.BUCKET_FILL, SoundEvents.BOTTLE_FILL)
+            .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BOTTLE_EMPTY)) {
 
         @Override
         public void initializeClient(Consumer<IFluidTypeRenderProperties> consumer) {

@@ -130,12 +130,12 @@ public class CoFHCore {
 
         CoreBlocks.register();
         CoreFluids.register();
-        CoreEntities.register();
 
-        CoreParticles.register();
         CoreContainers.register();
-        CoreMobEffects.register();
         CoreEnchantments.register();
+        CoreEntities.register();
+        CoreMobEffects.register();
+        CoreParticles.register();
         CoreRecipeSerializers.register();
         CoreSounds.register();
         CoreTileEntities.register();
@@ -208,7 +208,7 @@ public class CoFHCore {
 
         event.enqueueWork(TileNBTSync::setup);
         event.enqueueWork(ArmorEvents::setup);
-        event.enqueueWork(FluidHelper::setup);
+        event.enqueueWork(CoreFluids::setup);
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {
