@@ -4,7 +4,7 @@ import cofh.core.client.gui.CoreTextures;
 import cofh.core.client.gui.IGuiAccess;
 import cofh.core.client.gui.element.ElementAugmentSlots;
 import cofh.core.util.helpers.RenderHelper;
-import cofh.lib.content.inventory.container.slot.SlotCoFH;
+import cofh.lib.inventory.container.slot.SlotCoFH;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.network.chat.Component;

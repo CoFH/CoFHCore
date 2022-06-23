@@ -1,6 +1,6 @@
 package cofh.lib.data;
 
-import cofh.lib.content.loot.TileNBTSync;
+import cofh.lib.loot.TileNBTSync;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.minecraft.advancements.critereon.EnchantmentPredicate;

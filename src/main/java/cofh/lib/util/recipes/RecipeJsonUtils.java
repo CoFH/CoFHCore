@@ -1,6 +1,6 @@
 package cofh.lib.util.recipes;
 
-import cofh.lib.content.fluid.FluidIngredient;
+import cofh.lib.fluid.FluidIngredient;
 import cofh.lib.util.crafting.IngredientWithCount;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

@@ -2,7 +2,7 @@ package cofh.core.client.gui;
 
 import cofh.core.client.gui.element.ElementButton;
 import cofh.core.client.gui.element.SimpleTooltip;
-import cofh.core.content.inventory.container.HeldItemFilterContainer;
+import cofh.core.inventory.container.HeldItemFilterContainer;
 import cofh.core.util.helpers.RenderHelper;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.vertex.PoseStack;

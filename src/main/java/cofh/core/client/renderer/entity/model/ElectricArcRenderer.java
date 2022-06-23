@@ -1,6 +1,6 @@
 package cofh.core.client.renderer.entity.model;
 
-import cofh.core.content.entity.ElectricArc;
+import cofh.core.entity.ElectricArc;
 import cofh.core.util.helpers.vfx.VFXHelper;
 import cofh.lib.client.renderer.entity.ITranslucentRenderer;
 import com.mojang.blaze3d.vertex.PoseStack;

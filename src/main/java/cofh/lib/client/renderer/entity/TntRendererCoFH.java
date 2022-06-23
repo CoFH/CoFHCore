@@ -1,6 +1,6 @@
 package cofh.lib.client.renderer.entity;
 
-import cofh.lib.content.entity.PrimedTntCoFH;
+import cofh.lib.entity.PrimedTntCoFH;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;

@@ -2,7 +2,7 @@ package cofh.core.client.gui.element;
 
 import cofh.core.client.gui.IGuiAccess;
 import cofh.core.util.helpers.GuiHelper;
-import cofh.lib.content.inventory.container.slot.SlotCoFH;
+import cofh.lib.inventory.container.slot.SlotCoFH;
 import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 

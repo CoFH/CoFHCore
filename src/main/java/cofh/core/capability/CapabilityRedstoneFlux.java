@@ -1,6 +1,6 @@
 package cofh.core.capability;
 
-import cofh.lib.content.energy.IRedstoneFluxStorage;
+import cofh.lib.energy.IRedstoneFluxStorage;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;

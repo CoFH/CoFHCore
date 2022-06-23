@@ -2,7 +2,7 @@ package cofh.core.event;
 
 import cofh.core.network.packet.client.EffectAddedPacket;
 import cofh.core.network.packet.client.EffectRemovedPacket;
-import cofh.lib.content.effect.CustomParticleMobEffect;
+import cofh.lib.effect.CustomParticleMobEffect;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;

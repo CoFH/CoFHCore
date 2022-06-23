@@ -1,9 +1,9 @@
 package cofh.core.init;
 
-import cofh.core.content.block.entity.EnderAirTile;
-import cofh.core.content.block.entity.GlowAirTile;
-import cofh.core.content.block.entity.LightningAirTile;
-import cofh.core.content.block.entity.SignalAirTile;
+import cofh.core.block.entity.EnderAirTile;
+import cofh.core.block.entity.GlowAirTile;
+import cofh.core.block.entity.LightningAirTile;
+import cofh.core.block.entity.SignalAirTile;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.RegistryObject;
 

@@ -1,7 +1,7 @@
 package cofh.core.init;
 
-import cofh.core.content.effect.*;
-import cofh.lib.content.effect.MobEffectCoFH;
+import cofh.core.effect.*;
+import cofh.lib.effect.MobEffectCoFH;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;

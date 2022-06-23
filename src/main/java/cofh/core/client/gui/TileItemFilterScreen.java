@@ -3,7 +3,7 @@ package cofh.core.client.gui;
 import cofh.core.client.gui.element.ElementButton;
 import cofh.core.client.gui.element.ElementTexture;
 import cofh.core.client.gui.element.SimpleTooltip;
-import cofh.core.content.inventory.container.TileItemFilterContainer;
+import cofh.core.inventory.container.TileItemFilterContainer;
 import cofh.core.network.packet.server.FilterGuiOpenPacket;
 import cofh.core.util.helpers.FilterHelper;
 import net.minecraft.network.chat.Component;

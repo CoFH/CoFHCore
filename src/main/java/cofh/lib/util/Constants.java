@@ -27,16 +27,6 @@ public class Constants {
 
     public static final PlantType FUNGUS = PlantType.get("fungus");
 
-    public static final VoxelShape[] TALL_CROPS_BY_AGE_ALT = new VoxelShape[]{
-            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D),
-            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D),
-            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D),
-            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D),
-            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D),
-            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D),
-            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D),
-            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)};
-
     public static final VoxelShape FULL_CUBE_COLLISION = Block.box(1.0D, 0.0D, 1.0D, 15.9375D, 15.9375D, 15.9375D);
 
     // region GLOBALS

@@ -1,6 +1,6 @@
 package cofh.lib.api.item;
 
-import cofh.core.content.item.IMultiModeItem;
+import cofh.core.item.IMultiModeItem;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.CreativeModeTab;

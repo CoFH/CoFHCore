@@ -2,7 +2,7 @@ package cofh.core.client.gui.element;
 
 import cofh.core.client.gui.IGuiAccess;
 import cofh.core.util.helpers.RenderHelper;
-import cofh.lib.content.inventory.ItemStorageCoFH;
+import cofh.lib.inventory.ItemStorageCoFH;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 public class ElementItemStorage extends ElementResourceStorage {

@@ -1,8 +1,8 @@
 package cofh.core.init;
 
-import cofh.core.content.entity.ElectricArc;
-import cofh.core.content.entity.ElectricField;
-import cofh.core.content.entity.Knife;
+import cofh.core.entity.ElectricArc;
+import cofh.core.entity.ElectricField;
+import cofh.core.entity.Knife;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.registries.RegistryObject;

@@ -1,7 +1,7 @@
 package cofh.core.network.packet.server;
 
 import cofh.core.CoFHCore;
-import cofh.core.content.inventory.container.ContainerCoFH;
+import cofh.core.inventory.container.ContainerCoFH;
 import cofh.lib.network.packet.IPacketServer;
 import cofh.lib.network.packet.PacketBase;
 import io.netty.buffer.Unpooled;
