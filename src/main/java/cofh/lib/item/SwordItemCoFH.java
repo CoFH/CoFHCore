@@ -27,21 +27,21 @@ public class SwordItemCoFH extends SwordItem implements ICoFHItem {
     protected String modId = "";
 
     @Override
-    public ICoFHItem setDisplayGroup(Supplier<CreativeModeTab> displayGroup) {
+    public SwordItemCoFH setDisplayGroup(Supplier<CreativeModeTab> displayGroup) {
 
         this.displayGroup = displayGroup;
         return this;
     }
 
     @Override
-    public ICoFHItem setModId(String modId) {
+    public SwordItemCoFH setModId(String modId) {
 
         this.modId = modId;
         return this;
     }
 
     @Override
-    public ICoFHItem setShowInGroups(BooleanSupplier showInGroups) {
+    public SwordItemCoFH setShowInGroups(BooleanSupplier showInGroups) {
 
         this.showInGroups = showInGroups;
         return this;

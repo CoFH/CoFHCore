@@ -112,21 +112,21 @@ public class SickleItem extends DiggerItem implements ICoFHItem {
     protected String modId = "";
 
     @Override
-    public ICoFHItem setDisplayGroup(Supplier<CreativeModeTab> displayGroup) {
+    public SickleItem setDisplayGroup(Supplier<CreativeModeTab> displayGroup) {
 
         this.displayGroup = displayGroup;
         return this;
     }
 
     @Override
-    public ICoFHItem setModId(String modId) {
+    public SickleItem setModId(String modId) {
 
         this.modId = modId;
         return this;
     }
 
     @Override
-    public ICoFHItem setShowInGroups(BooleanSupplier showInGroups) {
+    public SickleItem setShowInGroups(BooleanSupplier showInGroups) {
 
         this.showInGroups = showInGroups;
         return this;

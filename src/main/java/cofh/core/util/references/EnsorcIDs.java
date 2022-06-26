@@ -1,7 +1,5 @@
 package cofh.core.util.references;
 
-import static cofh.lib.util.constants.ModIds.ID_MINECRAFT;
-
 public class EnsorcIDs {
 
     private EnsorcIDs() {
@@ -9,17 +7,17 @@ public class EnsorcIDs {
     }
 
     // VANILLA
-    public static final String ID_PROTECTION = ID_MINECRAFT + ":protection";
-    public static final String ID_PROTECTION_BLAST = ID_MINECRAFT + ":blast_protection";
-    public static final String ID_PROTECTION_FALL = ID_MINECRAFT + ":feather_falling";
-    public static final String ID_PROTECTION_FIRE = ID_MINECRAFT + ":fire_protection";
-    public static final String ID_PROTECTION_PROJECTILE = ID_MINECRAFT + ":projectile_protection";
-    public static final String ID_FIRE_ASPECT = ID_MINECRAFT + ":fire_aspect";
-    public static final String ID_FROST_WALKER = ID_MINECRAFT + ":frost_walker";
-    public static final String ID_KNOCKBACK = ID_MINECRAFT + ":knockback";
-    public static final String ID_LOOTING = ID_MINECRAFT + ":looting";
-    public static final String ID_THORNS = ID_MINECRAFT + ":thorns";
-    public static final String ID_MENDING = ID_MINECRAFT + ":mending";
+    public static final String ID_PROTECTION = "protection";
+    public static final String ID_PROTECTION_BLAST = "blast_protection";
+    public static final String ID_PROTECTION_FALL = "feather_falling";
+    public static final String ID_PROTECTION_FIRE = "fire_protection";
+    public static final String ID_PROTECTION_PROJECTILE = "projectile_protection";
+    public static final String ID_FIRE_ASPECT = "fire_aspect";
+    public static final String ID_FROST_WALKER = "frost_walker";
+    public static final String ID_KNOCKBACK = "knockback";
+    public static final String ID_LOOTING = "looting";
+    public static final String ID_THORNS = "thorns";
+    public static final String ID_MENDING = "mending";
 
     // ARMOR
     public static final String ID_PROTECTION_MAGIC = "magic_protection";
@@ -29,7 +27,7 @@ public class EnsorcIDs {
 
     // HELMET
     public static final String ID_AIR_AFFINITY = "air_affinity";
-    public static final String ID_EXP_BOOST = "exp_boost";
+    public static final String ID_XP_BOOST = "xp_boost";
     public static final String ID_GOURMAND = "gourmand";
 
     // CHESTPLATE

@@ -1,7 +1,6 @@
 package cofh.core.item;
 
 import cofh.core.entity.Knife;
-import cofh.lib.api.item.ICoFHItem;
 import cofh.lib.item.SwordItemCoFH;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.core.NonNullList;
@@ -101,21 +100,21 @@ public class KnifeItem extends SwordItemCoFH {
     protected String modId = "";
 
     @Override
-    public ICoFHItem setDisplayGroup(Supplier<CreativeModeTab> displayGroup) {
+    public KnifeItem setDisplayGroup(Supplier<CreativeModeTab> displayGroup) {
 
         this.displayGroup = displayGroup;
         return this;
     }
 
     @Override
-    public ICoFHItem setModId(String modId) {
+    public KnifeItem setModId(String modId) {
 
         this.modId = modId;
         return this;
     }
 
     @Override
-    public ICoFHItem setShowInGroups(BooleanSupplier showInGroups) {
+    public KnifeItem setShowInGroups(BooleanSupplier showInGroups) {
 
         this.showInGroups = showInGroups;
         return this;

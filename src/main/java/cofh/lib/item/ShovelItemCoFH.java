@@ -27,21 +27,21 @@ public class ShovelItemCoFH extends ShovelItem implements ICoFHItem {
     protected String modId = "";
 
     @Override
-    public ICoFHItem setDisplayGroup(Supplier<CreativeModeTab> displayGroup) {
+    public ShovelItemCoFH setDisplayGroup(Supplier<CreativeModeTab> displayGroup) {
 
         this.displayGroup = displayGroup;
         return this;
     }
 
     @Override
-    public ICoFHItem setModId(String modId) {
+    public ShovelItemCoFH setModId(String modId) {
 
         this.modId = modId;
         return this;
     }
 
     @Override
-    public ICoFHItem setShowInGroups(BooleanSupplier showInGroups) {
+    public ShovelItemCoFH setShowInGroups(BooleanSupplier showInGroups) {
 
         this.showInGroups = showInGroups;
         return this;
