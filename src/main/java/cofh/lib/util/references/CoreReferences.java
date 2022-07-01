@@ -4,6 +4,9 @@ import cofh.core.block.entity.EnderAirTile;
 import cofh.core.block.entity.GlowAirTile;
 import cofh.core.block.entity.LightningAirTile;
 import cofh.core.block.entity.SignalAirTile;
+import cofh.core.client.particle.types.CylindricalParticleType;
+import cofh.core.client.particle.types.PointToPointParticleType;
+import cofh.core.client.particle.types.RadialParticleType;
 import cofh.core.inventory.container.HeldItemFilterContainer;
 import cofh.core.inventory.container.TileItemFilterContainer;
 import cofh.lib.entity.BlackHole;
@@ -155,25 +158,25 @@ public class CoreReferences {
     public static final SimpleParticleType PLASMA_PARTICLE = null;
 
     @ObjectHolder (ID_PARTICLE_SHOCKWAVE)
-    public static final SimpleParticleType SHOCKWAVE_PARTICLE = null;
+    public static final CylindricalParticleType SHOCKWAVE_PARTICLE = null;
 
     @ObjectHolder (ID_PARTICLE_BLAST_WAVE)
-    public static final SimpleParticleType BLAST_WAVE_PARTICLE = null;
+    public static final CylindricalParticleType BLAST_WAVE_PARTICLE = null;
 
     @ObjectHolder (ID_PARTICLE_VORTEX)
-    public static final SimpleParticleType VORTEX_PARTICLE = null;
+    public static final CylindricalParticleType VORTEX_PARTICLE = null;
 
     @ObjectHolder (ID_PARTICLE_SPIRAL)
-    public static final SimpleParticleType SPIRAL_PARTICLE = null;
+    public static final CylindricalParticleType SPIRAL_PARTICLE = null;
 
     @ObjectHolder (ID_PARTICLE_STRAIGHT_ARC)
-    public static final SimpleParticleType STRAIGHT_ARC_PARTICLE = null;
+    public static final PointToPointParticleType STRAIGHT_ARC_PARTICLE = null;
 
     @ObjectHolder (ID_PARTICLE_CIRCLE_ARC)
-    public static final SimpleParticleType CIRCLE_ARC_PARTICLE = null;
+    public static final RadialParticleType CIRCLE_ARC_PARTICLE = null;
 
     @ObjectHolder (ID_PARTICLE_CURRENT)
-    public static final SimpleParticleType CURRENT_PARTICLE = null;
+    public static final PointToPointParticleType CURRENT_PARTICLE = null;
 
     @ObjectHolder (ID_PARTICLE_MIST)
     public static final SimpleParticleType MIST_PARTICLE = null;
@@ -182,13 +185,16 @@ public class CoreReferences {
     public static final SimpleParticleType FLAME_PARTICLE = null;
 
     @ObjectHolder (ID_PARTICLE_BLAST)
-    public static final SimpleParticleType BLAST_PARTICLE = null;
+    public static final RadialParticleType BLAST_PARTICLE = null;
+
+    @ObjectHolder (ID_PARTICLE_EXPLOSION)
+    public static final RadialParticleType EXPLOSION_PARTICLE = null;
 
     @ObjectHolder (ID_PARTICLE_BEAM)
-    public static final SimpleParticleType BEAM_PARTICLE = null;
+    public static final PointToPointParticleType BEAM_PARTICLE = null;
 
-    @ObjectHolder (ID_PARTICLE_BULLET)
-    public static final SimpleParticleType BULLET_PARTICLE = null;
+    @ObjectHolder (ID_PARTICLE_SHARD)
+    public static final PointToPointParticleType SHARD_PARTICLE = null;
     // endregion
 
     // region ENTITIES

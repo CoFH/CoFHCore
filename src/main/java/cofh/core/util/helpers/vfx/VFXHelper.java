@@ -4,10 +4,7 @@ import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix3f;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
-import com.mojang.math.Vector4f;
+import com.mojang.math.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -67,6 +64,11 @@ public final class VFXHelper {
     public static int packRGBA(int r, int g, int b, int a) {
 
         return (r << 24) | (g << 16) | (b << 8) | a;
+    }
+
+    public static int alphaScale(int rgba, float alphaScale) {
+
+        return (rgba & 0xFFFFFF00) | MathHelper.clamp((int) ((rgba & 0xFF) * alphaScale), 0, 255);
     }
 
     public static Vector4f mid(Vector4f a, Vector4f b) {
@@ -182,21 +184,46 @@ public final class VFXHelper {
     //}
 
     /**
-     * Transforms a matrix stack such that YP faces the given direction.
+     * Returns a quaternion that transforms a matrix stack such that YP points in the given direction.
      * XP, YP, and ZP remain orthogonal to each other.
      */
-    public static void transformVertical(PoseStack stack, Vector3f dir) {
+    public static Quaternion alignVertical(Vector3f dir) {
 
-        dir.normalize();
-        boolean neg = dir.y() < 0;
-        if (dir.x() * dir.x() + dir.z() * dir.z() > 0.001) {
-            dir.cross(Vector3f.YP);
-            float angle = -MathHelper.asin(length(dir));
+        Vector3f d = dir.copy();
+        d.normalize();
+        boolean neg = d.y() < 0;
+        if (d.x() * d.x() + d.z() * d.z() > 0.001) {
+            d.cross(Vector3f.YP);
+            float angle = -MathHelper.asin(length(d));
             if (neg) {
                 angle = -(MathHelper.F_PI + angle);
             }
-            dir.normalize();
-            stack.mulPose(dir.rotation(angle));
+            d.normalize();
+            return d.rotation(angle);
+        } else if (neg) {
+            return Vector3f.XP.rotation(MathHelper.F_PI);
+        }
+        return Quaternion.ONE;
+    }
+
+
+    /**
+     * Transforms a matrix stack such that YP points in the given direction.
+     * XP, YP, and ZP remain orthogonal to each other.
+     */
+    public static void alignVertical(PoseStack stack, Vector3f dir) {
+
+        Vector3f d = dir.copy();
+        d.normalize();
+        boolean neg = d.y() < 0;
+        if (d.x() * d.x() + d.z() * d.z() > 0.001) {
+            d.cross(Vector3f.YP);
+            float angle = -MathHelper.asin(length(d));
+            if (neg) {
+                angle = -(MathHelper.F_PI + angle);
+            }
+            d.normalize();
+            stack.mulPose(d.rotation(angle));
         } else if (neg) {
             stack.mulPose(Vector3f.XP.rotation(MathHelper.F_PI));
         }
@@ -206,13 +233,13 @@ public final class VFXHelper {
      * Transforms a matrix stack such that YP starts and ends at the given positions.
      * XP, YP, and ZP remain orthogonal to each other. XP and ZP are scaled the same amount as YP.
      */
-    public static void transformVertical(PoseStack stack, Vector3f start, Vector3f end) {
+    public static void alignVertical(PoseStack stack, Vector3f start, Vector3f end) {
 
         Vector3f diff = end.copy();
         diff.sub(start);
         float scale = length(diff);
         stack.translate(start.x(), start.y(), start.z());
-        transformVertical(stack, diff);
+        alignVertical(stack, diff);
         stack.scale(scale, scale, scale);
     }
     // endregion
@@ -298,17 +325,19 @@ public final class VFXHelper {
      * @param origin      Center of the shockwave.
      * @param time        Travels outward 1 block per unit time. Blocks take 5 units to complete their trajectory.
      *                    Scale this value based on how fast you want the animation to play.
-     * @param radius      The maximum radius of the shockwave. Hard limit of 16.
+     * @param diameter    The maximum diameter of the shockwave. Hard limit of 32.
      * @param heightScale Adjusts how high the blocks travel.
      * @param canRender   Predicate for filtering which blocks are to be rendered.
      */
-    public static void renderShockwave(PoseStack stack, MultiBufferSource buffer, BlockAndTintGetter level, BlockPos origin, float time, float radius, float heightScale, Predicate<BlockPos> canRender) {
+    public static void renderShockwave(PoseStack stack, MultiBufferSource buffer, BlockAndTintGetter level, BlockPos origin, float time, float diameter, float heightScale, Predicate<BlockPos> canRender) {
 
         BlockRenderDispatcher renderer = RenderHelper.renderBlock();
-        SortedMap<Float, List<int[]>> blocks = shockwaveOffsets.subMap(Math.min(time - 5, radius), Math.min(time, radius + 1));
+        float radius = diameter * 0.5F;
+        float invRadius = 1 / radius;
+        SortedMap<Float, List<int[]>> blocks = shockwaveOffsets.subMap(Math.min(time - 5, radius), Math.min(time, radius));
         for (Float dist : blocks.keySet()) {
             float progress = time - dist;
-            double height = heightScale * 0.16 * (radius - dist * 0.5F) * progress * (5 - progress) / radius;
+            double height = heightScale * 0.16 * (radius - dist * 0.5F) * progress * (5 - progress) * invRadius;
             for (int[] offset : blocks.get(dist)) {
                 for (int y = 1; y >= -1; --y) {
                     BlockPos pos = origin.offset(offset[0], y, offset[1]);
@@ -334,9 +363,9 @@ public final class VFXHelper {
         ForgeHooksClient.setRenderType(null);
     }
 
-    public static void renderShockwave(PoseStack stack, MultiBufferSource buffer, BlockAndTintGetter world, BlockPos origin, float time, float radius, float heightScale) {
+    public static void renderShockwave(PoseStack stack, MultiBufferSource buffer, BlockAndTintGetter world, BlockPos origin, float time, float diameter, float heightScale) {
 
-        renderShockwave(stack, buffer, world, origin, time, radius, heightScale, pos -> {
+        renderShockwave(stack, buffer, world, origin, time, diameter, heightScale, pos -> {
             BlockState state = world.getBlockState(pos);
             return !state.isAir() && state.isRedstoneConductor(world, pos) && // TODO: hardness/blast resist?
                     state.isCollisionShapeFullBlock(world, pos) && !state.hasBlockEntity() &&
@@ -444,8 +473,8 @@ public final class VFXHelper {
                     float yw = perp.y * width;
                     inner[j - first] = new VFXNode(xc + xw, xc - xw, yc + yw, yc - yw, center.z(), width);
                     width = Math.max(width, arcWidth);
-                    xw += perp.x * width;
-                    yw += perp.y * width;
+                    xw += perp.x * width * 1.5F;
+                    yw += perp.y * width * 1.5F;
                     outer[j - first] = new VFXNode(xc + xw, xc - xw, yc + yw, yc - yw, center.z(), width);
                 }
                 renderNodesCapped(normal, buffer, RenderTypes.LINEAR_GLOW, RenderTypes.ROUND_GLOW, packedLight, outer, (glowRGBA >> 24) & 0xFF, (glowRGBA >> 16) & 0xFF, (glowRGBA >> 8) & 0xFF, glowRGBA & 0xFF);
@@ -598,7 +627,7 @@ public final class VFXHelper {
     /**
      * Renders a unit wind cyclone that rotates about the Y axis.
      *
-     * @param streamCount The average number of visible streamlines. The actual number will be twice this, to account for fading in and out.
+     * @param streamCount The number of streamlines. The number of visible streamlines will be about half this due to fading in and out.
      * @param streamWidth The average width of streamlines.
      * @param time        Streamlines rotate on average once every time unit. Negate to rotate in the opposite direction. Offset for different "seeds."
      * @param alphaScale  Value between 0.0F and 1.0F for the alpha scale. 0.5F recommended.
@@ -606,17 +635,16 @@ public final class VFXHelper {
     public static void renderCyclone(PoseStack stack, VertexConsumer builder, int packedLight, int streamCount, float streamWidth, float time, float alphaScale) {
 
         SplittableRandom rand = new SplittableRandom(69420);
-        streamCount *= 2;
 
         stack.pushPose();
         stack.mulPose(Vector3f.YP.rotation(time * 6.2832F));
         for (int i = 0; i < streamCount; ++i) {
-            float relRot = ((float) rand.nextDouble() - 0.5F) * time * 0.5F + 2 * i;
-            float scale = 1.0F + ((float) rand.nextDouble() + MathHelper.sin(time * 0.1F + i)) * 0.1F;
-            float width = streamWidth * ((float) rand.nextDouble() * 0.8F + 0.6F) / scale;
+            float relRot = (rand.nextFloat() - 0.5F) * time * 0.5F + 2 * i;
+            float scale = 1.0F + (rand.nextFloat() + MathHelper.sin(time * 0.1F + i)) * 0.1F;
+            float width = streamWidth * (rand.nextFloat() * 0.8F + 0.6F) / scale;
             int alpha = (int) MathHelper.clamp((64 + rand.nextInt(64)) * alphaScale * (MathHelper.bevel((float) rand.nextDouble(4.0F) + time * 0.06F) + 1.0F), 0, 255);
             int value = rand.nextInt(32) + 224;
-            float y = ((float) rand.nextDouble() + MathHelper.cos(time * 0.2F + i)) * 0.16F;
+            float y = (rand.nextFloat() + MathHelper.cos(time * 0.2F + i)) * 0.16F;
             int length = rand.nextInt(WIND_SEGMENTS / 2) + WIND_SEGMENTS / 2;
             if (alpha > 0) {
                 Vector4f[] nodes = new Vector4f[length];
@@ -634,10 +662,9 @@ public final class VFXHelper {
         stack.popPose();
     }
 
-    public static void renderCyclone(PoseStack stack, MultiBufferSource buffer, int packedLight, float radius, float height, int streamCount, float streamWidth, float time, float alphaScale) {
+    public static void renderCyclone(PoseStack stack, MultiBufferSource buffer, int packedLight, float diameter, float height, int streamCount, float streamWidth, float time, float alphaScale) {
 
         stack.pushPose();
-        float diameter = radius * 2;
         stack.scale(diameter, height, diameter);
         renderCyclone(stack, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLight, streamCount, streamWidth, time, alphaScale);
         stack.popPose();

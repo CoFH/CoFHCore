@@ -25,7 +25,7 @@ public class ElectricArcRenderer extends EntityRenderer<ElectricArc> implements 
 
         float time = entity.tickCount + partialTicks;
 
-        VFXHelper.transformVertical(stack, new Vector3f(0, 5.9F, 0), new Vector3f(0, -0.9F, 0));
+        VFXHelper.alignVertical(stack, new Vector3f(0, 5.9F, 0), new Vector3f(0, -0.9F, 0));
         VFXHelper.renderStraightArcs(stack, buffer, 0x00F000F0, 2, 0.05F, VFXHelper.getSeedWithTime(entity.seed, time),
                 0xFFFFFFFF, 0xFFFC52A4, VFXHelper.getTaperOffsetFromTimes(time, ElectricArc.defaultDuration, 3));
 

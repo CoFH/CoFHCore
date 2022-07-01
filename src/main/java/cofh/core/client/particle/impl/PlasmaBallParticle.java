@@ -1,4 +1,4 @@
-package cofh.core.client.particle;
+package cofh.core.client.particle.impl;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;

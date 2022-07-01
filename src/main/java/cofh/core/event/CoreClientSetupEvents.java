@@ -1,6 +1,6 @@
 package cofh.core.event;
 
-import cofh.core.client.particle.*;
+import cofh.core.client.particle.impl.*;
 import cofh.lib.client.model.DynamicFluidContainerModel;
 import cofh.lib.item.IColorableItem;
 import net.minecraft.client.Minecraft;
@@ -52,14 +52,19 @@ public class CoreClientSetupEvents {
         ParticleEngine manager = Minecraft.getInstance().particleEngine;
 
         manager.register(FROST_PARTICLE, FrostParticle.Factory::new);
-        manager.register(SPARK_PARTICLE, SparkParticle.Factory::new);
+        manager.register(MIST_PARTICLE, MistParticle::ice);
         manager.register(PLASMA_PARTICLE, PlasmaBallParticle.Factory::new);
-        manager.register(SHOCKWAVE_PARTICLE, ShockwaveParticle.Factory::new);
-        manager.register(BLAST_WAVE_PARTICLE, BlastWaveParticle.Factory::new);
-        manager.register(VORTEX_PARTICLE, WindVortexParticle.Factory::new);
-        manager.register(SPIRAL_PARTICLE, WindSpiralParticle.Factory::new);
-        manager.register(STRAIGHT_ARC_PARTICLE, ArcParticle.Factory::new);
-        manager.register(MIST_PARTICLE, MistParticle::iceMist);
+        manager.register(SPARK_PARTICLE, SparkParticle.Factory::new);
+
+        manager.register(BLAST_PARTICLE, BlastParticle::factory);
+
+        manager.register(SHOCKWAVE_PARTICLE, ShockwaveParticle::factory);
+        manager.register(BLAST_WAVE_PARTICLE, BlastWaveParticle::factory);
+        manager.register(VORTEX_PARTICLE, WindVortexParticle::factory);
+        manager.register(SPIRAL_PARTICLE, WindSpiralParticle::factory);
+
+        manager.register(STRAIGHT_ARC_PARTICLE, ArcParticle::factory);
+        manager.register(SHARD_PARTICLE, ShardParticle::factory);
 
     }
 

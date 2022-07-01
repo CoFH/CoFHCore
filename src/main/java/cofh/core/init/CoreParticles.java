@@ -1,5 +1,8 @@
 package cofh.core.init;
 
+import cofh.core.client.particle.types.CylindricalParticleType;
+import cofh.core.client.particle.types.PointToPointParticleType;
+import cofh.core.client.particle.types.RadialParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 
 import static cofh.core.CoFHCore.PARTICLES;
@@ -11,23 +14,46 @@ public class CoreParticles {
 
     }
 
+    //public static List<Consumer<ParticleEngine>> factoryRegistration = new ArrayList<>();
+
     public static void register() {
 
         PARTICLES.register(ID_PARTICLE_FROST, () -> new SimpleParticleType(false));
-        PARTICLES.register(ID_PARTICLE_SPARK, () -> new SimpleParticleType(false));
-        PARTICLES.register(ID_PARTICLE_PLASMA, () -> new SimpleParticleType(false));
-        PARTICLES.register(ID_PARTICLE_SHOCKWAVE, () -> new SimpleParticleType(false));
-        PARTICLES.register(ID_PARTICLE_BLAST_WAVE, () -> new SimpleParticleType(false));
-        PARTICLES.register(ID_PARTICLE_VORTEX, () -> new SimpleParticleType(false));
-        PARTICLES.register(ID_PARTICLE_SPIRAL, () -> new SimpleParticleType(false));
-        //PARTICLES.register(ID_PARTICLE_CURRENT, () -> new SimpleParticleType(false));
-        PARTICLES.register(ID_PARTICLE_STRAIGHT_ARC, () -> new SimpleParticleType(false));
-        //PARTICLES.register(ID_PARTICLE_CIRCLE_ARC, () -> new SimpleParticleType(false));
-        //PARTICLES.register(ID_PARTICLE_FLAME, () -> new SimpleParticleType(false));
         PARTICLES.register(ID_PARTICLE_MIST, () -> new SimpleParticleType(false));
-        //PARTICLES.register(ID_PARTICLE_BLAST, () -> new SimpleParticleType(false));
-        //PARTICLES.register(ID_PARTICLE_BEAM, () -> new SimpleParticleType(false));
-        //PARTICLES.register(ID_PARTICLE_BULLET, () -> new SimpleParticleType(false));
+        PARTICLES.register(ID_PARTICLE_PLASMA, () -> new SimpleParticleType(false));
+        PARTICLES.register(ID_PARTICLE_SPARK, () -> new SimpleParticleType(false));
+
+        PARTICLES.register(ID_PARTICLE_BLAST, RadialParticleType::new);
+
+        PARTICLES.register(ID_PARTICLE_SHOCKWAVE, CylindricalParticleType::new);
+        PARTICLES.register(ID_PARTICLE_BLAST_WAVE, CylindricalParticleType::new);
+        PARTICLES.register(ID_PARTICLE_VORTEX, CylindricalParticleType::new);
+        PARTICLES.register(ID_PARTICLE_SPIRAL, CylindricalParticleType::new);
+
+        //PARTICLES.register(ID_PARTICLE_CURRENT, false, );
+        //PARTICLES.register(ID_PARTICLE_BEAM, false, );
+        PARTICLES.register(ID_PARTICLE_STRAIGHT_ARC, PointToPointParticleType::new);
+        PARTICLES.register(ID_PARTICLE_SHARD, PointToPointParticleType::new);
+
+        //PARTICLES.register(ID_PARTICLE_CIRCLE_ARC, false, );
+        //PARTICLES.register(ID_PARTICLE_FLAME, false, );
+        //PARTICLES.register(ID_PARTICLE_BLAST, false, );
     }
+
+    //private static void registerSimpleParticle(String id, ParticleEngine.SpriteParticleRegistration<SimpleParticleType> reg) {
+    //
+    //    registerSimpleParticle(id, false, reg);
+    //}
+    //
+    //private static void registerSimpleParticle(String id, boolean overrideLimit, ParticleEngine.SpriteParticleRegistration<SimpleParticleType> reg) {
+    //
+    //    registerParticle(id, () -> new SimpleParticleType(overrideLimit), reg);
+    //}
+    //
+    //private static <T extends ParticleOptions, R extends ParticleType<T>> void registerParticle(String id, Supplier<R> supp, ParticleEngine.SpriteParticleRegistration<T> reg) {
+    //
+    //    RegistryObject<R> type = PARTICLES.register(id, supp);
+    //    factoryRegistration.add(engine -> engine.register(type.get(), reg));
+    //}
 
 }

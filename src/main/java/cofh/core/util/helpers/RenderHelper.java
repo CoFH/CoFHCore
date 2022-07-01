@@ -5,10 +5,7 @@ import com.mojang.blaze3d.platform.GlStateManager.DestFactor;
 import com.mojang.blaze3d.platform.GlStateManager.SourceFactor;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import com.mojang.math.Matrix3f;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import com.mojang.math.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
@@ -27,6 +24,7 @@ import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
 import java.util.List;
+import java.util.SplittableRandom;
 
 /**
  * Contains various helper functions to assist with rendering.
@@ -44,6 +42,7 @@ public final class RenderHelper {
     public static final ResourceLocation MC_FONT_DEFAULT = new ResourceLocation("textures/font/ascii.png");
     public static final ResourceLocation MC_FONT_SGA = new ResourceLocation("textures/font/ascii_sga.png");
     public static final ResourceLocation MC_ITEM_GLINT = new ResourceLocation("textures/misc/enchanted_item_glint.png");
+    public static PoseStack particleStack = new PoseStack();
 
     // region ACCESSORS
     public static TextureManager engine() {
@@ -558,86 +557,194 @@ public final class RenderHelper {
         buffer.vertex(mat4, (float) aabb.maxX, (float) aabb.minY, (float) aabb.maxZ).color(r, g, b, a).uv(u0, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 1.0F, 0.0F, 0.0F).endVertex();
     }
 
-    public static void renderRectPrism(VertexConsumer builder, PoseStack stack, int packedLightIn, Vector3f start, Vector3f end, Vector3f perp) {
+    //public static void renderRectPrism(VertexConsumer builder, PoseStack stack, int packedLightIn, Vector3f start, Vector3f end, Vector3f perp) {
+    //
+    //    PoseStack.Pose stackEntry = stack.last();
+    //    Matrix4f pose = stackEntry.pose();
+    //    Matrix3f normal = stackEntry.normal();
+    //    float sx = start.x();
+    //    float sy = start.y();
+    //    float sz = start.z();
+    //    float ex = end.x();
+    //    float ey = end.y();
+    //    float ez = end.z();
+    //    Vector3f diff = end.copy();
+    //    diff.sub(start);
+    //    diff.normalize();
+    //    float p1x = perp.x();
+    //    float p1y = perp.y();
+    //    float p1z = perp.z();
+    //    perp.transform(diff.rotationDegrees(90.0F));
+    //    float p2x = perp.x();
+    //    float p2y = perp.y();
+    //    float p2z = perp.z();
+    //
+    //    builder.vertex(pose, sx + p1x + p2x, sy + p1y + p2y, sz + p1z + p2z).color(255, 255, 255, 255).uv(1, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
+    //    builder.vertex(pose, ex + p1x + p2x, ey + p1y + p2y, ez + p1z + p2z).color(255, 255, 255, 255).uv(1, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
+    //    builder.vertex(pose, ex - p1x + p2x, ey - p1y + p2y, ez - p1z + p2z).color(255, 255, 255, 255).uv(0, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
+    //    builder.vertex(pose, sx - p1x + p2x, sy - p1y + p2y, sz - p1z + p2z).color(255, 255, 255, 255).uv(0, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
+    //
+    //    builder.vertex(pose, sx + p1x - p2x, sy + p1y - p2y, sz + p1z - p2z).color(255, 255, 255, 255).uv(1, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
+    //    builder.vertex(pose, ex + p1x - p2x, ey + p1y - p2y, ez + p1z - p2z).color(255, 255, 255, 255).uv(1, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
+    //    builder.vertex(pose, ex - p1x - p2x, ey - p1y - p2y, ez - p1z - p2z).color(255, 255, 255, 255).uv(0, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
+    //    builder.vertex(pose, sx - p1x - p2x, sy - p1y - p2y, sz - p1z - p2z).color(255, 255, 255, 255).uv(0, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
+    //
+    //    builder.vertex(pose, sx + p1x + p2x, sy + p1y + p2y, sz + p1z + p2z).color(255, 255, 255, 255).uv(1, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
+    //    builder.vertex(pose, ex + p1x + p2x, ey + p1y + p2y, ez + p1z + p2z).color(255, 255, 255, 255).uv(1, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
+    //    builder.vertex(pose, ex + p1x - p2x, ey + p1y - p2y, ez + p1z - p2z).color(255, 255, 255, 255).uv(0, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
+    //    builder.vertex(pose, sx + p1x - p2x, sy + p1y - p2y, sz + p1z - p2z).color(255, 255, 255, 255).uv(0, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
+    //
+    //    builder.vertex(pose, sx - p1x + p2x, sy - p1y + p2y, sz - p1z + p2z).color(255, 255, 255, 255).uv(1, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
+    //    builder.vertex(pose, ex - p1x + p2x, ey - p1y + p2y, ez - p1z + p2z).color(255, 255, 255, 255).uv(1, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
+    //    builder.vertex(pose, ex - p1x - p2x, ey - p1y - p2y, ez - p1z - p2z).color(255, 255, 255, 255).uv(0, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
+    //    builder.vertex(pose, sx - p1x - p2x, sy - p1y - p2y, sz - p1z - p2z).color(255, 255, 255, 255).uv(0, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
+    //
+    //    builder.vertex(pose, sx + p1x + p2x, sy + p1y + p2y, sz + p1z + p2z).color(255, 255, 255, 255).uv(1, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
+    //    builder.vertex(pose, sx - p1x + p2x, sy - p1y + p2y, sz - p1z + p2z).color(255, 255, 255, 255).uv(1, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
+    //    builder.vertex(pose, sx - p1x - p2x, sy - p1y - p2y, sz - p1z - p2z).color(255, 255, 255, 255).uv(0, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
+    //    builder.vertex(pose, sx + p1x - p2x, sy + p1y - p2y, sz + p1z - p2z).color(255, 255, 255, 255).uv(0, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
+    //
+    //    builder.vertex(pose, ex + p1x + p2x, ey + p1y + p2y, ez + p1z + p2z).color(255, 255, 255, 255).uv(1, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
+    //    builder.vertex(pose, ex - p1x + p2x, ey - p1y + p2y, ez - p1z + p2z).color(255, 255, 255, 255).uv(1, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
+    //    builder.vertex(pose, ex - p1x - p2x, ey - p1y - p2y, ez - p1z - p2z).color(255, 255, 255, 255).uv(0, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
+    //    builder.vertex(pose, ex + p1x - p2x, ey + p1y - p2y, ez + p1z - p2z).color(255, 255, 255, 255).uv(0, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
+    //}
+    //
+    //public static void renderRectPrism(VertexConsumer builder, PoseStack stack, int packedLightIn, Vector3f start, Vector3f end, float radius) {
+    //
+    //    Vector3f diff = end.copy();
+    //    diff.sub(start);
+    //    Vector3f perp;
+    //    if (diff.z() < 0.0001 && diff.x() < 0.0001) {
+    //        perp = Vector3f.XP.copy();
+    //    } else {
+    //        perp = Vector3f.YP.copy();
+    //    }
+    //    perp.cross(diff);
+    //    perp.normalize();
+    //    perp.mul(radius);
+    //    renderRectPrism(builder, stack, packedLightIn, start, end, perp);
+    //}
+    //
+    //public static void renderRectPrism(VertexConsumer builder, PoseStack stack, int packedLightIn, Vector3f start, Vector3f end, float radius, boolean coverEnds) {
+    //
+    //    if (coverEnds) {
+    //        Vector3f ext = end.copy();
+    //        ext.sub(start);
+    //        ext.normalize();
+    //        ext.mul(radius);
+    //        end.add(ext);
+    //        start.sub(ext);
+    //    }
+    //    renderRectPrism(builder, stack, packedLightIn, start, end, radius);
+    //}
 
-        PoseStack.Pose stackEntry = stack.last();
-        Matrix4f pose = stackEntry.pose();
-        Matrix3f normal = stackEntry.normal();
-        float sx = start.x();
-        float sy = start.y();
-        float sz = start.z();
-        float ex = end.x();
-        float ey = end.y();
-        float ez = end.z();
-        Vector3f diff = end.copy();
-        diff.sub(start);
-        diff.normalize();
-        float p1x = perp.x();
-        float p1y = perp.y();
-        float p1z = perp.z();
-        perp.transform(diff.rotationDegrees(90.0F));
-        float p2x = perp.x();
-        float p2y = perp.y();
-        float p2z = perp.z();
 
-        builder.vertex(pose, sx + p1x + p2x, sy + p1y + p2y, sz + p1z + p2z).color(255, 255, 255, 255).uv(1, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
-        builder.vertex(pose, ex + p1x + p2x, ey + p1y + p2y, ez + p1z + p2z).color(255, 255, 255, 255).uv(1, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
-        builder.vertex(pose, ex - p1x + p2x, ey - p1y + p2y, ez - p1z + p2z).color(255, 255, 255, 255).uv(0, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
-        builder.vertex(pose, sx - p1x + p2x, sy - p1y + p2y, sz - p1z + p2z).color(255, 255, 255, 255).uv(0, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
+    /**
+     * Renders a trigonal trapezohedron (a cube stretched along one diagonal). Has 6 congruent rhombi as faces.
+     *
+     * @param height The total height of the polyhedron.
+     * @param radius The maximum distance of a point within the polyhedron from its axis.
+     */
+    public static void renderTrigonalTrapezohedron(PoseStack stack, VertexConsumer consumer, int packedLight, int rgba, float height, float radius) {
 
-        builder.vertex(pose, sx + p1x - p2x, sy + p1y - p2y, sz + p1z - p2z).color(255, 255, 255, 255).uv(1, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
-        builder.vertex(pose, ex + p1x - p2x, ey + p1y - p2y, ez + p1z - p2z).color(255, 255, 255, 255).uv(1, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
-        builder.vertex(pose, ex - p1x - p2x, ey - p1y - p2y, ez - p1z - p2z).color(255, 255, 255, 255).uv(0, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
-        builder.vertex(pose, sx - p1x - p2x, sy - p1y - p2y, sz - p1z - p2z).color(255, 255, 255, 255).uv(0, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
+        int a = rgba & 0xFF;
+        if (a <= 0) {
+            return;
+        }
+        int r = (rgba >> 24) & 0xFF;
+        int g = (rgba >> 16) & 0xFF;
+        int b = (rgba >> 8) & 0xFF;
+        PoseStack.Pose last = stack.last();
+        Matrix4f pose = last.pose();
+        Matrix3f norm = last.normal();
+        //float lenSqr = (diagRatio * diagRatio + 1) * 0.25F;
+        //float rad = 0.57735F * diagRatio;
+        //float h = 0.5F * (float) Math.sqrt(lenSqr - rad * rad);
+        float h = 0.1666667F * height;
 
-        builder.vertex(pose, sx + p1x + p2x, sy + p1y + p2y, sz + p1z + p2z).color(255, 255, 255, 255).uv(1, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
-        builder.vertex(pose, ex + p1x + p2x, ey + p1y + p2y, ez + p1z + p2z).color(255, 255, 255, 255).uv(1, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
-        builder.vertex(pose, ex + p1x - p2x, ey + p1y - p2y, ez + p1z - p2z).color(255, 255, 255, 255).uv(0, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
-        builder.vertex(pose, sx + p1x - p2x, sy + p1y - p2y, sz + p1z - p2z).color(255, 255, 255, 255).uv(0, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
+        Vector4f u = new Vector4f(0, 3 * h, 0, 1);
+        Vector4f l = new Vector4f(0, -3 * h, 0, 1);
+        Vector4f[] v = new Vector4f[8];
+        for (int i = 0; i < 6; ++i) {
+            v[i] = new Vector4f(radius * MathHelper.sin(i * 1.0472F), h, radius * MathHelper.cos(i * 1.0472F), 1);
+            h = -h;
+        }
+        v[6] = v[0];
+        v[7] = v[1];
+        u.transform(pose);
+        l.transform(pose);
+        for (int i = 0; i < 6; ++i) {
+            v[i].transform(pose);
+        }
 
-        builder.vertex(pose, sx - p1x + p2x, sy - p1y + p2y, sz - p1z + p2z).color(255, 255, 255, 255).uv(1, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
-        builder.vertex(pose, ex - p1x + p2x, ey - p1y + p2y, ez - p1z + p2z).color(255, 255, 255, 255).uv(1, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
-        builder.vertex(pose, ex - p1x - p2x, ey - p1y - p2y, ez - p1z - p2z).color(255, 255, 255, 255).uv(0, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
-        builder.vertex(pose, sx - p1x - p2x, sy - p1y - p2y, sz - p1z - p2z).color(255, 255, 255, 255).uv(0, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
-
-        builder.vertex(pose, sx + p1x + p2x, sy + p1y + p2y, sz + p1z + p2z).color(255, 255, 255, 255).uv(1, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
-        builder.vertex(pose, sx - p1x + p2x, sy - p1y + p2y, sz - p1z + p2z).color(255, 255, 255, 255).uv(1, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
-        builder.vertex(pose, sx - p1x - p2x, sy - p1y - p2y, sz - p1z - p2z).color(255, 255, 255, 255).uv(0, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
-        builder.vertex(pose, sx + p1x - p2x, sy + p1y - p2y, sz + p1z - p2z).color(255, 255, 255, 255).uv(0, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
-
-        builder.vertex(pose, ex + p1x + p2x, ey + p1y + p2y, ez + p1z + p2z).color(255, 255, 255, 255).uv(1, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
-        builder.vertex(pose, ex - p1x + p2x, ey - p1y + p2y, ez - p1z + p2z).color(255, 255, 255, 255).uv(1, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
-        builder.vertex(pose, ex - p1x - p2x, ey - p1y - p2y, ez - p1z - p2z).color(255, 255, 255, 255).uv(0, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
-        builder.vertex(pose, ex + p1x - p2x, ey + p1y - p2y, ez + p1z - p2z).color(255, 255, 255, 255).uv(0, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(normal, 0, 1, 0).endVertex();
+        for (int i = 0; i < 6; i += 2) {
+            Vector4f v0 = v[i];
+            Vector4f v1 = v[i + 1];
+            Vector4f v2 = v[i + 2];
+            consumer.vertex(v0.x(), v0.y(), v0.z()).color(r, g, b, a).uv(0, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(norm, 0, 1, 0).endVertex();
+            consumer.vertex(v1.x(), v1.y(), v1.z()).color(r, g, b, a).uv(0, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(norm, 0, 1, 0).endVertex();
+            consumer.vertex(v2.x(), v2.y(), v2.z()).color(r, g, b, a).uv(1, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(norm, 0, 1, 0).endVertex();
+            consumer.vertex(u.x(), u.y(), u.z()).color(r, g, b, a).uv(1, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(norm, 0, 1, 0).endVertex();
+        }
+        for (int i = 1; i < 7; i += 2) {
+            Vector4f v0 = v[i + 2];
+            Vector4f v1 = v[i + 1];
+            Vector4f v2 = v[i];
+            consumer.vertex(v0.x(), v0.y(), v0.z()).color(r, g, b, a).uv(0, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(norm, 0, 1, 0).endVertex();
+            consumer.vertex(v1.x(), v1.y(), v1.z()).color(r, g, b, a).uv(0, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(norm, 0, 1, 0).endVertex();
+            consumer.vertex(v2.x(), v2.y(), v2.z()).color(r, g, b, a).uv(1, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(norm, 0, 1, 0).endVertex();
+            consumer.vertex(l.x(), l.y(), l.z()).color(r, g, b, a).uv(1, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(norm, 0, 1, 0).endVertex();
+        }
     }
 
-    public static void renderRectPrism(VertexConsumer builder, PoseStack stack, int packedLightIn, Vector3f start, Vector3f end, float radius) {
+    /**
+     * Renders a bipyramid.
+     *
+     * @param height The total height of the polyhedron.
+     * @param radius The maximum distance of a point within the polyhedron from its axis.
+     * @param baseSides The number of sides that the base of each pyramid has.
+     */
+    public static void renderBipyramid(PoseStack stack, VertexConsumer consumer, int packedLight, int rgba, int baseSides, float height, float radius) {
 
-        Vector3f diff = end.copy();
-        diff.sub(start);
-        Vector3f perp;
-        if (diff.z() < 0.0001 && diff.x() < 0.0001) {
-            perp = Vector3f.XP.copy();
-        } else {
-            perp = Vector3f.YP.copy();
+        int a = rgba & 0xFF;
+        if (a <= 0) {
+            return;
         }
-        perp.cross(diff);
-        perp.normalize();
-        perp.mul(radius);
-        renderRectPrism(builder, stack, packedLightIn, start, end, perp);
-    }
+        int r = (rgba >> 24) & 0xFF;
+        int g = (rgba >> 16) & 0xFF;
+        int b = (rgba >> 8) & 0xFF;
+        PoseStack.Pose last = stack.last();
+        Matrix4f pose = last.pose();
+        Matrix3f norm = last.normal();
 
-    public static void renderRectPrism(VertexConsumer builder, PoseStack stack, int packedLightIn, Vector3f start, Vector3f end, float radius, boolean coverEnds) {
-
-        if (coverEnds) {
-            Vector3f ext = end.copy();
-            ext.sub(start);
-            ext.normalize();
-            ext.mul(radius);
-            end.add(ext);
-            start.sub(ext);
+        Vector4f u = new Vector4f(0, height * 0.5F, 0, 1);
+        Vector4f l = new Vector4f(0, height * -0.5F, 0, 1);
+        Vector4f[] v = new Vector4f[baseSides + 1];
+        float angle = MathHelper.F_TAU / baseSides;
+        for (int i = 0; i < baseSides; ++i) {
+            v[i] = new Vector4f(radius * MathHelper.sin(i * angle), 0, radius * MathHelper.cos(i * angle), 1);
         }
-        renderRectPrism(builder, stack, packedLightIn, start, end, radius);
+        v[baseSides] = v[0];
+        u.transform(pose);
+        l.transform(pose);
+        for (int i = 0; i < baseSides; ++i) {
+            v[i].transform(pose);
+        }
+
+        for (int i = 0; i < baseSides; ++i) {
+            Vector4f v0 = v[i];
+            Vector4f v1 = v[i + 1];
+            consumer.vertex(v0.x(), v0.y(), v0.z()).color(r, g, b, a).uv(0, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(norm, 0, 1, 0).endVertex();
+            consumer.vertex(v1.x(), v1.y(), v1.z()).color(r, g, b, a).uv(0, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(norm, 0, 1, 0).endVertex();
+            consumer.vertex(u.x(), u.y(), u.z()).color(r, g, b, a).uv(1, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(norm, 0, 1, 0).endVertex();
+            consumer.vertex(u.x(), u.y(), u.z()).color(r, g, b, a).uv(1, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(norm, 0, 1, 0).endVertex();
+
+            consumer.vertex(v1.x(), v1.y(), v1.z()).color(r, g, b, a).uv(0, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(norm, 0, 1, 0).endVertex();
+            consumer.vertex(v0.x(), v0.y(), v0.z()).color(r, g, b, a).uv(0, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(norm, 0, 1, 0).endVertex();
+            consumer.vertex(l.x(), l.y(), l.z()).color(r, g, b, a).uv(1, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(norm, 0, 1, 0).endVertex();
+            consumer.vertex(l.x(), l.y(), l.z()).color(r, g, b, a).uv(1, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(norm, 0, 1, 0).endVertex();
+        }
     }
 
 }

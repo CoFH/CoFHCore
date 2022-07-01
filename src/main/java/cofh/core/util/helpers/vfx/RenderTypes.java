@@ -1,11 +1,18 @@
 package cofh.core.util.helpers.vfx;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
 
 import static cofh.core.client.CoreRenderType.THICK_LINES;
+import static cofh.core.init.CoreShaders.*;
 import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
 import static net.minecraft.client.renderer.RenderStateShard.*;
 
@@ -58,5 +65,54 @@ public class RenderTypes {
                     .setWriteMaskState(COLOR_WRITE)
                     .setShaderState(NEW_ENTITY_SHADER)
                     .createCompositeState(false));
+
+    public static ParticleRenderType CUSTOM = ParticleRenderTypeCoFH.copy(ParticleRenderType.CUSTOM);
+    public static ParticleRenderType PARTICLE_SHEET_TRANSLUCENT_BLEND = new ParticleRenderTypeCoFH() {
+
+        @Override
+        public void begin(BufferBuilder builder, TextureManager manager) { //TODO translucent blocks
+
+            RenderSystem.depthMask(false);
+            RenderSystem.enableBlend();
+            RenderSystem.setShader(() -> PARTICLE_TRANSLUCENT);
+            RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_PARTICLES);
+            builder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
+        }
+
+        @Override
+        public void end(Tesselator tess) {
+
+            tess.end();
+            RenderSystem.depthMask(true);
+            RenderSystem.disableBlend();
+        }
+    };
+
+    public interface ParticleRenderTypeCoFH extends ParticleRenderType {
+
+        static ParticleRenderTypeCoFH copy(ParticleRenderType type) {
+
+            return new ParticleRenderTypeCoFH() {
+
+                @Override
+                public void begin(BufferBuilder builder, TextureManager manager) {
+
+                    type.begin(builder, manager);
+                }
+
+                @Override
+                public void end(Tesselator tess) {
+
+                    type.end(tess);
+                }
+
+                @Override
+                public String toString() {
+
+                    return type.toString();
+                }
+            };
+        }
+    }
 
 }
