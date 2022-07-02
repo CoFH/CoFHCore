@@ -703,9 +703,9 @@ public final class RenderHelper {
      *
      * @param height The total height of the polyhedron.
      * @param radius The maximum distance of a point within the polyhedron from its axis.
-     * @param baseSides The number of sides that the base of each pyramid has.
+     * @param baseEdges The number of edges that the base of each pyramid has.
      */
-    public static void renderBipyramid(PoseStack stack, VertexConsumer consumer, int packedLight, int rgba, int baseSides, float height, float radius) {
+    public static void renderBipyramid(PoseStack stack, VertexConsumer consumer, int packedLight, int rgba, int baseEdges, float height, float radius) {
 
         int a = rgba & 0xFF;
         if (a <= 0) {
@@ -720,19 +720,19 @@ public final class RenderHelper {
 
         Vector4f u = new Vector4f(0, height * 0.5F, 0, 1);
         Vector4f l = new Vector4f(0, height * -0.5F, 0, 1);
-        Vector4f[] v = new Vector4f[baseSides + 1];
-        float angle = MathHelper.F_TAU / baseSides;
-        for (int i = 0; i < baseSides; ++i) {
+        Vector4f[] v = new Vector4f[baseEdges + 1];
+        float angle = MathHelper.F_TAU / baseEdges;
+        for (int i = 0; i < baseEdges; ++i) {
             v[i] = new Vector4f(radius * MathHelper.sin(i * angle), 0, radius * MathHelper.cos(i * angle), 1);
         }
-        v[baseSides] = v[0];
+        v[baseEdges] = v[0];
         u.transform(pose);
         l.transform(pose);
-        for (int i = 0; i < baseSides; ++i) {
+        for (int i = 0; i < baseEdges; ++i) {
             v[i].transform(pose);
         }
 
-        for (int i = 0; i < baseSides; ++i) {
+        for (int i = 0; i < baseEdges; ++i) {
             Vector4f v0 = v[i];
             Vector4f v1 = v[i + 1];
             consumer.vertex(v0.x(), v0.y(), v0.z()).color(r, g, b, a).uv(0, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(norm, 0, 1, 0).endVertex();

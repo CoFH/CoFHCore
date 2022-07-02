@@ -84,7 +84,7 @@ public abstract class CustomRenderParticle extends Particle {
 
     protected void setSize(float size) {
 
-        this.size = size; //TODO bounding box
+        this.size = size;
     }
 
 }

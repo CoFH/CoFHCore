@@ -19,10 +19,10 @@ public class CoreParticles {
     public static void register() {
 
         PARTICLES.register(ID_PARTICLE_FROST, () -> new SimpleParticleType(false));
-        PARTICLES.register(ID_PARTICLE_MIST, () -> new SimpleParticleType(false));
         PARTICLES.register(ID_PARTICLE_PLASMA, () -> new SimpleParticleType(false));
         PARTICLES.register(ID_PARTICLE_SPARK, () -> new SimpleParticleType(false));
 
+        PARTICLES.register(ID_PARTICLE_MIST, RadialParticleType::new);
         PARTICLES.register(ID_PARTICLE_BLAST, RadialParticleType::new);
 
         PARTICLES.register(ID_PARTICLE_SHOCKWAVE, CylindricalParticleType::new);
@@ -30,14 +30,14 @@ public class CoreParticles {
         PARTICLES.register(ID_PARTICLE_VORTEX, CylindricalParticleType::new);
         PARTICLES.register(ID_PARTICLE_SPIRAL, CylindricalParticleType::new);
 
-        //PARTICLES.register(ID_PARTICLE_CURRENT, false, );
-        //PARTICLES.register(ID_PARTICLE_BEAM, false, );
+        //PARTICLES.register(ID_PARTICLE_CURRENT, );
+        //PARTICLES.register(ID_PARTICLE_BEAM, );
         PARTICLES.register(ID_PARTICLE_STRAIGHT_ARC, PointToPointParticleType::new);
         PARTICLES.register(ID_PARTICLE_SHARD, PointToPointParticleType::new);
 
-        //PARTICLES.register(ID_PARTICLE_CIRCLE_ARC, false, );
-        //PARTICLES.register(ID_PARTICLE_FLAME, false, );
-        //PARTICLES.register(ID_PARTICLE_BLAST, false, );
+        //PARTICLES.register(ID_PARTICLE_CIRCLE_ARC, );
+        //PARTICLES.register(ID_PARTICLE_FLAME, );
+        //PARTICLES.register(ID_PARTICLE_EXPLOSION, );
     }
 
     //private static void registerSimpleParticle(String id, ParticleEngine.SpriteParticleRegistration<SimpleParticleType> reg) {

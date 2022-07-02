@@ -7,12 +7,13 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
 public abstract class TextureParticleCoFH extends TextureSheetParticle {
 
     protected final SpriteSet sprites;
     protected float fLifetime;
-    protected int rgba;
 
     protected TextureParticleCoFH(ColorParticleOptions data, ClientLevel level, SpriteSet sprites, double x, double y, double z) {
 
@@ -40,8 +41,10 @@ public abstract class TextureParticleCoFH extends TextureSheetParticle {
 
     public void setSize(float size) {
 
-        setBoundingBox(getBoundingBox().inflate(size - quadSize));
-        this.quadSize = size;
+        Vec3 pos = new Vec3(x, y, z);
+        setBoundingBox(new AABB(pos, pos).inflate(size * 0.5F));
+        bbWidth = bbHeight = size;
+        quadSize = size;
     }
 
     public void setColor(int rgba) {

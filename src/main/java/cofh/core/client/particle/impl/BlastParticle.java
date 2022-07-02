@@ -19,15 +19,15 @@ public class BlastParticle extends TextureParticleCoFH {
     private BlastParticle(ColorParticleOptions data, ClientLevel level, SpriteSet sprites, double x, double y, double z, double dx, double dy, double dz) {
 
         super(data, level, sprites, x, y, z);
-        this.gravity = -0.1F;
-        this.friction = 0.9F;
+        gravity = -0.1F;
+        friction = 0.9F;
         float var = 0.05F;
-        this.xd = dx + random.nextFloat(-var, var);
-        this.yd = dy + random.nextFloat(-var, var);
-        this.zd = dz + random.nextFloat(-var, var);
+        xd = dx + random.nextFloat(-var, var);
+        yd = dy + random.nextFloat(-var, var);
+        zd = dz + random.nextFloat(-var, var);
         //this.fLifetime = this.lifetime = 6 + this.random.nextInt(4);
-        this.setSpriteFromAge(sprites);
-        this.oRoll = this.roll = 0.5F * (float) random.nextGaussian();
+        setSpriteFromAge(sprites);
+        oRoll = roll = 0.5F * (float) random.nextGaussian();
     }
 
     @Override

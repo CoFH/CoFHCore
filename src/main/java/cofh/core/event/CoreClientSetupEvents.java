@@ -52,11 +52,11 @@ public class CoreClientSetupEvents {
         ParticleEngine manager = Minecraft.getInstance().particleEngine;
 
         manager.register(FROST_PARTICLE, FrostParticle.Factory::new);
-        manager.register(MIST_PARTICLE, MistParticle::ice);
         manager.register(PLASMA_PARTICLE, PlasmaBallParticle.Factory::new);
         manager.register(SPARK_PARTICLE, SparkParticle.Factory::new);
 
         manager.register(BLAST_PARTICLE, BlastParticle::factory);
+        manager.register(MIST_PARTICLE, MistParticle::factory);
 
         manager.register(SHOCKWAVE_PARTICLE, ShockwaveParticle::factory);
         manager.register(BLAST_WAVE_PARTICLE, BlastWaveParticle::factory);

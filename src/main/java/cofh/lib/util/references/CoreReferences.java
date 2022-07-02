@@ -150,51 +150,41 @@ public class CoreReferences {
 
     @ObjectHolder (ID_PARTICLE_FROST)
     public static final SimpleParticleType FROST_PARTICLE = null;
-
+    @ObjectHolder (ID_PARTICLE_PLASMA)
+    public static final SimpleParticleType PLASMA_PARTICLE = null;
     @ObjectHolder (ID_PARTICLE_SPARK)
     public static final SimpleParticleType SPARK_PARTICLE = null;
 
-    @ObjectHolder (ID_PARTICLE_PLASMA)
-    public static final SimpleParticleType PLASMA_PARTICLE = null;
-
-    @ObjectHolder (ID_PARTICLE_SHOCKWAVE)
-    public static final CylindricalParticleType SHOCKWAVE_PARTICLE = null;
+    @ObjectHolder (ID_PARTICLE_BLAST)
+    public static final RadialParticleType BLAST_PARTICLE = null;
+    @ObjectHolder (ID_PARTICLE_MIST)
+    public static final RadialParticleType MIST_PARTICLE = null;
 
     @ObjectHolder (ID_PARTICLE_BLAST_WAVE)
     public static final CylindricalParticleType BLAST_WAVE_PARTICLE = null;
-
+    @ObjectHolder (ID_PARTICLE_SHOCKWAVE)
+    public static final CylindricalParticleType SHOCKWAVE_PARTICLE = null;
+    @ObjectHolder (ID_PARTICLE_SPIRAL)
+    public static final CylindricalParticleType SPIRAL_PARTICLE = null;
     @ObjectHolder (ID_PARTICLE_VORTEX)
     public static final CylindricalParticleType VORTEX_PARTICLE = null;
 
-    @ObjectHolder (ID_PARTICLE_SPIRAL)
-    public static final CylindricalParticleType SPIRAL_PARTICLE = null;
-
+    @ObjectHolder (ID_PARTICLE_BEAM)
+    public static final PointToPointParticleType BEAM_PARTICLE = null;
+    @ObjectHolder (ID_PARTICLE_CURRENT)
+    public static final PointToPointParticleType CURRENT_PARTICLE = null;
+    @ObjectHolder (ID_PARTICLE_SHARD)
+    public static final PointToPointParticleType SHARD_PARTICLE = null;
     @ObjectHolder (ID_PARTICLE_STRAIGHT_ARC)
     public static final PointToPointParticleType STRAIGHT_ARC_PARTICLE = null;
 
+    // TBI
     @ObjectHolder (ID_PARTICLE_CIRCLE_ARC)
     public static final RadialParticleType CIRCLE_ARC_PARTICLE = null;
-
-    @ObjectHolder (ID_PARTICLE_CURRENT)
-    public static final PointToPointParticleType CURRENT_PARTICLE = null;
-
-    @ObjectHolder (ID_PARTICLE_MIST)
-    public static final SimpleParticleType MIST_PARTICLE = null;
-
-    @ObjectHolder (ID_PARTICLE_FLAME)
-    public static final SimpleParticleType FLAME_PARTICLE = null;
-
-    @ObjectHolder (ID_PARTICLE_BLAST)
-    public static final RadialParticleType BLAST_PARTICLE = null;
-
     @ObjectHolder (ID_PARTICLE_EXPLOSION)
     public static final RadialParticleType EXPLOSION_PARTICLE = null;
-
-    @ObjectHolder (ID_PARTICLE_BEAM)
-    public static final PointToPointParticleType BEAM_PARTICLE = null;
-
-    @ObjectHolder (ID_PARTICLE_SHARD)
-    public static final PointToPointParticleType SHARD_PARTICLE = null;
+    @ObjectHolder (ID_PARTICLE_FLAME)
+    public static final SimpleParticleType FLAME_PARTICLE = null;
     // endregion
 
     // region ENTITIES
