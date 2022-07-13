@@ -12,8 +12,8 @@ import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraftforge.event.entity.EntityStruckByLightningEvent;
 import net.minecraftforge.event.entity.EntityTeleportEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.event.entity.living.PotionColorCalculationEvent;
-import net.minecraftforge.event.entity.living.PotionEvent;
 import net.minecraftforge.event.entity.player.PlayerXpEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -92,7 +92,7 @@ public class EffectEvents {
         if (event.isCanceled()) {
             return;
         }
-        LivingEntity entity = event.getEntityLiving();
+        LivingEntity entity = event.getEntity();
         DamageSource source = event.getSource();
         if (source.isBypassMagic()) {
             return;
@@ -127,19 +127,19 @@ public class EffectEvents {
     }
 
     @SubscribeEvent (priority = EventPriority.HIGH)
-    public static void handlePotionAddEvent(PotionEvent.PotionAddedEvent event) {
+    public static void handlePotionAddEvent(MobEffectEvent.Added event) {
 
-        if (event.getPotionEffect().getEffect() instanceof CustomParticleMobEffect) {
-            EffectAddedPacket.sendToClient(event.getEntityLiving(), event.getPotionEffect());
+        if (event.getEffectInstance().getEffect() instanceof CustomParticleMobEffect) {
+            EffectAddedPacket.sendToClient(event.getEntity(), event.getEffectInstance());
         }
     }
 
     @SubscribeEvent (priority = EventPriority.HIGH)
-    public static void handlePotionRemoveEvent(PotionEvent.PotionRemoveEvent event) {
+    public static void handlePotionRemoveEvent(MobEffectEvent.Remove event) {
 
-        MobEffectInstance effect = event.getPotionEffect();
+        MobEffectInstance effect = event.getEffectInstance();
         if (effect != null && effect.getEffect() instanceof CustomParticleMobEffect) {
-            EffectRemovedPacket.sendToClient(event.getEntityLiving(), event.getPotionEffect());
+            EffectRemovedPacket.sendToClient(event.getEntity(), event.getEffectInstance());
         }
     }
 
@@ -149,7 +149,7 @@ public class EffectEvents {
         if (event.isCanceled() || event.getAmount() <= 0) {
             return;
         }
-        Player player = event.getPlayer();
+        Player player = event.getEntity();
 
         MobEffectInstance clarityEffect = player.getEffect(CLARITY.get());
         if (clarityEffect == null) {

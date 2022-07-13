@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -64,7 +64,7 @@ public class AreaEffectEvents {
         if (event.isCanceled()) {
             return;
         }
-        Player player = event.getPlayer();
+        Player player = event.getEntity();
         ItemStack stack = player.getMainHandItem();
         if (!validAreaEffectMiningItem(stack)) {
             return;

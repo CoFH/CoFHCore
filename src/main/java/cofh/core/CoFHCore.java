@@ -3,7 +3,6 @@ package cofh.core;
 import cofh.core.capability.CapabilityArchery;
 import cofh.core.capability.CapabilityAreaEffect;
 import cofh.core.capability.CapabilityShieldItem;
-import cofh.core.client.CoreKeys;
 import cofh.core.client.gui.HeldItemFilterScreen;
 import cofh.core.client.gui.TileItemFilterScreen;
 import cofh.core.client.renderer.entity.model.ArmorFullSuitModel;
@@ -74,14 +73,14 @@ public class CoFHCore {
     public static final DeferredRegisterCoFH<Item> ITEMS = DeferredRegisterCoFH.create(ForgeRegistries.ITEMS, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<Fluid> FLUIDS = DeferredRegisterCoFH.create(ForgeRegistries.FLUIDS, ID_COFH_CORE);
 
-    public static final DeferredRegisterCoFH<MenuType<?>> CONTAINERS = DeferredRegisterCoFH.create(ForgeRegistries.CONTAINERS, ID_COFH_CORE);
+    public static final DeferredRegisterCoFH<MenuType<?>> CONTAINERS = DeferredRegisterCoFH.create(ForgeRegistries.MENU_TYPES, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<Enchantment> ENCHANTMENTS = DeferredRegisterCoFH.create(ForgeRegistries.ENCHANTMENTS, ID_COFH_CORE);
-    public static final DeferredRegisterCoFH<EntityType<?>> ENTITIES = DeferredRegisterCoFH.create(ForgeRegistries.ENTITIES, ID_COFH_CORE);
+    public static final DeferredRegisterCoFH<EntityType<?>> ENTITIES = DeferredRegisterCoFH.create(ForgeRegistries.ENTITY_TYPES, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<MobEffect> MOB_EFFECTS = DeferredRegisterCoFH.create(ForgeRegistries.MOB_EFFECTS, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<ParticleType<?>> PARTICLES = DeferredRegisterCoFH.create(ForgeRegistries.PARTICLE_TYPES, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegisterCoFH.create(ForgeRegistries.RECIPE_SERIALIZERS, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<SoundEvent> SOUND_EVENTS = DeferredRegisterCoFH.create(ForgeRegistries.SOUND_EVENTS, ID_COFH_CORE);
-    public static final DeferredRegisterCoFH<BlockEntityType<?>> TILE_ENTITIES = DeferredRegisterCoFH.create(ForgeRegistries.BLOCK_ENTITIES, ID_COFH_CORE);
+    public static final DeferredRegisterCoFH<BlockEntityType<?>> TILE_ENTITIES = DeferredRegisterCoFH.create(ForgeRegistries.BLOCK_ENTITY_TYPES, ID_COFH_CORE);
 
     public static final DeferredRegisterCoFH<FluidType> FLUID_TYPES = DeferredRegisterCoFH.create(ForgeRegistries.Keys.FLUID_TYPES, ID_COFH_CORE);
 
@@ -178,7 +177,7 @@ public class CoFHCore {
     // region INITIALIZATION
     private void registerLootData(final RegisterEvent event) {
 
-        if (event.getRegistryKey() == ForgeRegistries.Keys.LOOT_MODIFIER_SERIALIZERS) {
+        if (event.getRegistryKey() == ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS) {
             CoreFlags.manager().setup();
             QuarkFlags.setup();
         }
@@ -216,7 +215,6 @@ public class CoFHCore {
             MenuScreens.register(HELD_ITEM_FILTER_CONTAINER.get(), HeldItemFilterScreen::new);
             MenuScreens.register(TILE_ITEM_FILTER_CONTAINER.get(), TileItemFilterScreen::new);
         });
-        event.enqueueWork(CoreKeys::register);
         event.enqueueWork(ProxyClient::registerItemModelProperties);
     }
 

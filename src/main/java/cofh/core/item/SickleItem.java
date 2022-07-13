@@ -32,7 +32,6 @@ import java.util.function.Supplier;
 
 import static cofh.lib.util.Constants.TRUE;
 
-// TODO Sickle Tool Type.
 public class SickleItem extends DiggerItem implements ICoFHItem {
 
     @Deprecated // TOOD move to Tags class somewhere and generate.

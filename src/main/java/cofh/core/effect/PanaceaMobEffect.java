@@ -7,7 +7,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.PotionEvent;
+import net.minecraftforge.event.entity.living.MobEffectEvent;
 
 import javax.annotation.Nullable;
 import java.util.Iterator;
@@ -41,7 +41,7 @@ public class PanaceaMobEffect extends MobEffectCoFH {
 
         while (iterator.hasNext()) {
             MobEffectInstance effect = iterator.next();
-            if (!effect.isAmbient() && effect.getEffect().getCategory() == MobEffectCategory.HARMFUL && !MinecraftForge.EVENT_BUS.post(new PotionEvent.PotionRemoveEvent(entity, effect))) {
+            if (!effect.isAmbient() && effect.getEffect().getCategory() == MobEffectCategory.HARMFUL && !MinecraftForge.EVENT_BUS.post(new MobEffectEvent.Remove(entity, effect))) {
                 entity.onEffectRemoved(effect);
                 iterator.remove();
             }

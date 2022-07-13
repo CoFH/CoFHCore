@@ -30,7 +30,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.client.RenderProperties;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
@@ -477,7 +477,7 @@ public class FluidHelper {
     // region PROPERTY HELPERS
     public static int color(FluidStack stack) {
 
-        return !stack.isEmpty() && stack.getFluid() != null ? RenderProperties.get(stack.getFluid()).getColorTint(stack) : 0;
+        return !stack.isEmpty() && stack.getFluid() != null ? IClientFluidTypeExtensions.of(stack.getFluid()).getTintColor(stack) : 0;
     }
 
     public static int luminosity(FluidStack stack) {

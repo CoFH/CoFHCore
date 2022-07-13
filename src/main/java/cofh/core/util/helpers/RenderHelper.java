@@ -22,8 +22,7 @@ import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.client.RenderProperties;
-import net.minecraftforge.client.model.pipeline.LightUtil;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
@@ -102,8 +101,8 @@ public final class RenderHelper {
         int color = FluidHelper.color(fluid);
         setPosTexShader();
         setBlockTextureSheet();
-        setSahderColorFromInt(color);
-        drawTiledTexture(x, y, getTexture(RenderProperties.get(fluid.getFluid()).getStillTexture(fluid)), width, height);
+        setShaderColorFromInt(color);
+        drawTiledTexture(x, y, getTexture(IClientFluidTypeExtensions.of(fluid.getFluid()).getStillTexture(fluid)), width, height);
     }
 
     public static void drawIcon(TextureAtlasSprite icon, double z) {
@@ -207,9 +206,9 @@ public final class RenderHelper {
         int color = FluidHelper.color(fluid);
         setPosTexShader();
         setBlockTextureSheet();
-        setSahderColorFromInt(color);
+        setShaderColorFromInt(color);
 
-        drawTiledTexture(matrixStack, x, y, getTexture(RenderProperties.get(fluid.getFluid()).getStillTexture(fluid)), width, height);
+        drawTiledTexture(matrixStack, x, y, getTexture(IClientFluidTypeExtensions.of(fluid.getFluid()).getStillTexture(fluid)), width, height);
     }
 
     public static void drawIcon(PoseStack matrixStack, TextureAtlasSprite icon, float z) {
@@ -344,12 +343,12 @@ public final class RenderHelper {
 
     public static TextureAtlasSprite getFluidTexture(Fluid fluid) {
 
-        return getTexture(RenderProperties.get(fluid).getStillTexture());
+        return getTexture(IClientFluidTypeExtensions.of(fluid).getStillTexture());
     }
 
     public static TextureAtlasSprite getFluidTexture(FluidStack fluid) {
 
-        return getTexture(RenderProperties.get(fluid.getFluid()).getStillTexture(fluid));
+        return getTexture(IClientFluidTypeExtensions.of(fluid.getFluid()).getStillTexture(fluid));
     }
 
     public static boolean textureExists(String location) {
@@ -366,7 +365,7 @@ public final class RenderHelper {
     private static int vertexColorIndex;
 
     static {
-        VertexFormat from = DefaultVertexFormat.BLOCK; //Always BLOCK as of 1.15
+        VertexFormat from = DefaultVertexFormat.BLOCK; // Always BLOCK as of 1.15
 
         vertexColorIndex = -1;
         List<VertexFormatElement> elements = from.getElements();
@@ -381,38 +380,100 @@ public final class RenderHelper {
 
     public static BakedQuad mulColor(BakedQuad quad, int color) {
 
-        VertexFormat from = DefaultVertexFormat.BLOCK; //Always BLOCK as of 1.15
+        VertexFormat from = DefaultVertexFormat.BLOCK; // Always BLOCK as of 1.15
 
         float r = ((color >> 16) & 0xFF) / 255f; // red
         float g = ((color >> 8) & 0xFF) / 255f; // green
         float b = ((color) & 0xFF) / 255f; // blue
 
-        // Cache this somewhere static, it will never change, and you will never use a different format.
-        // See above.
-
-        //        int colorIdx = -1;
-        //        List<VertexFormatElement> elements = from.getElements();
-        //        for (int i = 0; i < from.getElements().size(); ++i) {
-        //            VertexFormatElement element = elements.get(i);
-        //            if (element.getUsage() == VertexFormatElement.Usage.COLOR) {
-        //                colorIdx = i;
-        //                break;
-        //            }
-        //        }
-
         int[] packedData = quad.getVertices().clone();
         float[] data = new float[4];
         for (int v = 0; v < 4; v++) {
-            LightUtil.unpack(packedData, data, from, v, vertexColorIndex);
+            unpackLight(packedData, data, from, v, vertexColorIndex);
             data[0] = MathHelper.clamp(data[0] * r, 0, 1);
             data[1] = MathHelper.clamp(data[1] * g, 0, 1);
             data[2] = MathHelper.clamp(data[2] * b, 0, 1);
-            LightUtil.pack(data, packedData, from, v, vertexColorIndex);
+            packLight(data, packedData, from, v, vertexColorIndex);
         }
         return new BakedQuad(packedData, quad.getTintIndex(), quad.getDirection(), quad.getSprite(), quad.isShade());
     }
 
-    public static void setSahderColorFromInt(int color) {
+    // region LIGHT UTIL
+    public static void unpackLight(int[] from, float[] to, VertexFormat formatFrom, int v, int e) {
+
+        int length = Math.min(4, to.length);
+        VertexFormatElement element = formatFrom.getElements().get(e);
+        int vertexStart = v * formatFrom.getVertexSize() + formatFrom.getOffset(e);
+        int count = element.getElementCount();
+        VertexFormatElement.Type type = element.getType();
+        VertexFormatElement.Usage usage = element.getUsage();
+        int size = type.getSize();
+        int mask = (256 << (8 * (size - 1))) - 1;
+        for (int i = 0; i < length; i++) {
+            if (i < count) {
+                int pos = vertexStart + size * i;
+                int index = pos >> 2;
+                int offset = pos & 3;
+                int bits = from[index];
+                bits = bits >>> (offset * 8);
+                if ((pos + size - 1) / 4 != index) {
+                    bits |= from[index + 1] << ((4 - offset) * 8);
+                }
+                bits &= mask;
+                if (type == VertexFormatElement.Type.FLOAT) {
+                    to[i] = Float.intBitsToFloat(bits);
+                } else if (type == VertexFormatElement.Type.UBYTE || type == VertexFormatElement.Type.USHORT) {
+                    to[i] = (float) bits / mask;
+                } else if (type == VertexFormatElement.Type.UINT) {
+                    to[i] = (float) ((double) (bits & 0xFFFFFFFFL) / 0xFFFFFFFFL);
+                } else if (type == VertexFormatElement.Type.BYTE) {
+                    to[i] = ((float) (byte) bits) / (mask >> 1);
+                } else if (type == VertexFormatElement.Type.SHORT) {
+                    to[i] = ((float) (short) bits) / (mask >> 1);
+                } else if (type == VertexFormatElement.Type.INT) {
+                    to[i] = (float) ((double) (bits & 0xFFFFFFFFL) / (0xFFFFFFFFL >> 1));
+                }
+            } else {
+                to[i] = (i == 3 && usage == VertexFormatElement.Usage.POSITION) ? 1 : 0;
+            }
+        }
+    }
+
+    public static void packLight(float[] from, int[] to, VertexFormat formatTo, int v, int e) {
+
+        VertexFormatElement element = formatTo.getElements().get(e);
+        int vertexStart = v * formatTo.getVertexSize() + formatTo.getOffset(e);
+        int count = element.getElementCount();
+        VertexFormatElement.Type type = element.getType();
+        int size = type.getSize();
+        int mask = (256 << (8 * (size - 1))) - 1;
+        for (int i = 0; i < 4; i++) {
+            if (i < count) {
+                int pos = vertexStart + size * i;
+                int index = pos >> 2;
+                int offset = pos & 3;
+                int bits = 0;
+                float f = i < from.length ? from[i] : 0;
+                if (type == VertexFormatElement.Type.FLOAT) {
+                    bits = Float.floatToRawIntBits(f);
+                } else if (
+                        type == VertexFormatElement.Type.UBYTE ||
+                                type == VertexFormatElement.Type.USHORT ||
+                                type == VertexFormatElement.Type.UINT
+                ) {
+                    bits = Math.round(f * mask);
+                } else {
+                    bits = Math.round(f * (mask >> 1));
+                }
+                to[index] &= ~(mask << (offset * 8));
+                to[index] |= (((bits & mask) << (offset * 8)));
+                // TODO handle overflow into to[index + 1]
+            }
+        }
+    }
+    // endregion
+
+    public static void setShaderColorFromInt(int color) {
 
         float red = (float) (color >> 16 & 255) / 255.0F;
         float green = (float) (color >> 8 & 255) / 255.0F;
@@ -447,22 +508,21 @@ public final class RenderHelper {
         int z = pos.getZ();
 
         switch (side) {
-            case NORTH:
-                poseStackIn.translate(x + 0.75, y + 0.84375, z + RenderHelper.RENDER_OFFSET * 145);
-                break;
-            case SOUTH:
+            case NORTH -> poseStackIn.translate(x + 0.75, y + 0.84375, z + RenderHelper.RENDER_OFFSET * 145);
+            case SOUTH -> {
                 poseStackIn.translate(x + 0.25, y + 0.84375, z + 1 - RenderHelper.RENDER_OFFSET * 145);
                 poseStackIn.mulPose(new Quaternion(0, 180, 0, true));
-                break;
-            case WEST:
+            }
+            case WEST -> {
                 poseStackIn.translate(x + RenderHelper.RENDER_OFFSET * 145, y + 0.84375, z + 0.25);
                 poseStackIn.mulPose(new Quaternion(0, 90, 0, true));
-                break;
-            case EAST:
+            }
+            case EAST -> {
                 poseStackIn.translate(x + 1 - RenderHelper.RENDER_OFFSET * 145, y + 0.84375, z + 0.75);
                 poseStackIn.mulPose(new Quaternion(0, 270, 0, true));
-                break;
-            default:
+            }
+            default -> {
+            }
         }
         poseStackIn.scale(0.03125F, 0.03125F, -RenderHelper.RENDER_OFFSET);
         poseStackIn.mulPose(new Quaternion(0, 0, 180, true));

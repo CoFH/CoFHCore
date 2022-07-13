@@ -1,24 +1,24 @@
 package cofh.core.event;
 
-import cofh.core.client.model.DynamicFluidContainerModel;
 import cofh.core.client.particle.*;
 import cofh.lib.api.item.IColorableItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.client.particle.ParticleEngine;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ColorHandlerEvent;
-import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.client.event.ModelEvent.RegisterGeometryLoaders;
+import net.minecraftforge.client.event.RegisterColorHandlersEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static cofh.core.client.CoreKeys.MULTIMODE_DECREMENT;
+import static cofh.core.client.CoreKeys.MULTIMODE_INCREMENT;
 import static cofh.core.init.CoreParticles.*;
 import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 
@@ -32,7 +32,14 @@ public class CoreClientSetupEvents {
     }
 
     @SubscribeEvent
-    public static void colorSetupItem(final ColorHandlerEvent.Item event) {
+    public static void registerKeyMappings(final RegisterKeyMappingsEvent event) {
+
+        event.register(MULTIMODE_INCREMENT);
+        event.register(MULTIMODE_DECREMENT);
+    }
+
+    @SubscribeEvent
+    public static void colorSetupItem(final RegisterColorHandlersEvent.Item event) {
 
         ItemColors colors = event.getItemColors();
         for (Item colorable : COLORABLE_ITEMS) {
@@ -41,13 +48,12 @@ public class CoreClientSetupEvents {
     }
 
     @SubscribeEvent
-    public static void registerModels(final ModelRegistryEvent event) {
+    public static void registerModels(final RegisterGeometryLoaders event) {
 
-        ModelLoaderRegistry.registerLoader(new ResourceLocation(ID_COFH_CORE, "dynamic_fluid"), new DynamicFluidContainerModel.Loader());
     }
 
     @SubscribeEvent
-    public static void registerParticleFactories(final ParticleFactoryRegisterEvent event) {
+    public static void registerParticleFactories(final RegisterParticleProvidersEvent event) {
 
         ParticleEngine manager = Minecraft.getInstance().particleEngine;
 

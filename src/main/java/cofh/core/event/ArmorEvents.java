@@ -13,7 +13,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
-import net.minecraftforge.event.entity.living.PotionEvent;
+import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -40,7 +40,7 @@ public class ArmorEvents {
         if (event.isCanceled()) {
             return;
         }
-        LivingEntity entity = event.getEntityLiving();
+        LivingEntity entity = event.getEntity();
         DamageSource source = event.getSource();
         float amount = event.getAmount();
 
@@ -71,7 +71,7 @@ public class ArmorEvents {
         if (event.isCanceled()) {
             return;
         }
-        LivingEntity entity = event.getEntityLiving();
+        LivingEntity entity = event.getEntity();
 
         double fallRes = getFallResistance(entity);
         if (fallRes != 0.0D) {
@@ -80,13 +80,13 @@ public class ArmorEvents {
     }
 
     @SubscribeEvent (priority = EventPriority.HIGH)
-    public static void handlePotionApplicableEvent(PotionEvent.PotionApplicableEvent event) {
+    public static void handlePotionApplicableEvent(MobEffectEvent.Applicable event) {
 
         if (event.isCanceled()) {
             return;
         }
-        LivingEntity entity = event.getEntityLiving();
-        MobEffectInstance effect = event.getPotionEffect();
+        LivingEntity entity = event.getEntity();
+        MobEffectInstance effect = event.getEffectInstance();
 
         double hazRes = getHazardResistance(entity);
         if (hazRes > 0.0D) {

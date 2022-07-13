@@ -28,7 +28,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.DrawSelectionEvent;
+import net.minecraftforge.client.event.RenderHighlightEvent;
 import net.minecraftforge.client.event.RenderLevelLastEvent;
 import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.event.TickEvent;
@@ -181,7 +181,7 @@ public class CoreClientEvents {
     }
 
     @SubscribeEvent (priority = EventPriority.LOW)
-    public static void renderSubHitboxes(DrawSelectionEvent.HighlightBlock event) {
+    public static void renderSubHitboxes(RenderHighlightEvent.Block event) {
 
         BlockHitResult hit = event.getTarget();
         if (hit instanceof VoxelShapeBlockHitResult voxelHit) {

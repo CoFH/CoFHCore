@@ -35,7 +35,7 @@ public interface IGuiAccess {
 
         RenderHelper.setPosTexShader();
         RenderHelper.setBlockTextureSheet();
-        RenderHelper.setSahderColorFromInt(color);
+        RenderHelper.setShaderColorFromInt(color);
         GuiComponent.blit(matrixStack, x, y, getBlitOffset(), 16, 16, icon);
         RenderHelper.resetShaderColor();
     }

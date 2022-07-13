@@ -91,7 +91,7 @@ public class TileBlockCoFH extends Block implements EntityBlock, IDismantleable 
             return InteractionResult.SUCCESS;
         }
         if (((TileCoFH) tile).canOpenGui()) {
-            NetworkHooks.openGui((ServerPlayer) player, (MenuProvider) tile, tile.getBlockPos());
+            NetworkHooks.openScreen((ServerPlayer) player, (MenuProvider) tile, tile.getBlockPos());
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.PASS;

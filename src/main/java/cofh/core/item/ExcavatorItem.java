@@ -9,7 +9,6 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
 
-// TODO Excavator Tool Type.
 public class ExcavatorItem extends ShovelItemCoFH {
 
     private static final float DEFAULT_ATTACK_DAMAGE = 2.0F;

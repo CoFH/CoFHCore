@@ -15,7 +15,7 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
-import net.minecraftforge.client.IFluidTypeRenderProperties;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.common.SoundActions;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
@@ -88,16 +88,16 @@ public class PotionFluid extends FluidCoFH {
         }
 
         @Override
-        public void initializeClient(Consumer<IFluidTypeRenderProperties> consumer) {
+        public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer) {
 
-            consumer.accept(new IFluidTypeRenderProperties() {
+            consumer.accept(new IClientFluidTypeExtensions() {
 
                 private static final ResourceLocation
                         STILL = new ResourceLocation("cofh_core:block/fluids/potion_still"),
                         FLOW = new ResourceLocation("cofh_core:block/fluids/potion_flow");
 
                 @Override
-                public int getColorTint(FluidStack stack) {
+                public int getTintColor(FluidStack stack) {
 
                     return 0xFF000000 | getPotionColor(stack);
                 }

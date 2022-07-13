@@ -19,7 +19,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.DrawSelectionEvent;
+import net.minecraftforge.client.event.RenderHighlightEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -39,7 +39,7 @@ public class AreaEffectClientEvents {
     }
 
     @SubscribeEvent (priority = EventPriority.LOW)
-    public static void renderBlockHighlights(DrawSelectionEvent.HighlightBlock event) {
+    public static void renderBlockHighlights(RenderHighlightEvent.Block event) {
 
         if (event.isCanceled()) {
             return;

@@ -9,7 +9,6 @@ import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
 import com.mojang.math.Vector4f;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
@@ -20,8 +19,7 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec2;
-import net.minecraftforge.client.ForgeHooksClient;
-import net.minecraftforge.client.model.data.EmptyModelData;
+import net.minecraftforge.client.model.data.ModelData;
 
 import java.util.*;
 import java.util.function.Function;
@@ -319,10 +317,7 @@ public final class VFXHelper {
                             stack.translate(offset[0], height + y, offset[1]);
                             stack.scale(1.01F, 1.01F, 1.01F);
                             for (RenderType type : chunkRenderTypes) {
-                                if (ItemBlockRenderTypes.canRenderInLayer(state, type)) {
-                                    ForgeHooksClient.setRenderType(type);
-                                    renderer.renderBatched(state, pos.relative(Direction.UP), level, stack, buffer.getBuffer(type), false, MathHelper.RANDOM, EmptyModelData.INSTANCE);
-                                }
+                                renderer.renderBatched(state, pos.relative(Direction.UP), level, stack, buffer.getBuffer(type), false, MathHelper.RANDOM, ModelData.EMPTY, type);
                             }
                             stack.popPose();
                         }
@@ -331,7 +326,6 @@ public final class VFXHelper {
                 }
             }
         }
-        ForgeHooksClient.setRenderType(null);
     }
 
     public static void renderShockwave(PoseStack stack, MultiBufferSource buffer, BlockAndTintGetter world, BlockPos origin, float time, float radius, float heightScale) {

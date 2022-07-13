@@ -24,7 +24,7 @@ public class ItemHelper {
             return ItemStack.EMPTY;
         }
         Item item = stack.getItem();
-        boolean largerStack = stack.getItem().getItemStackLimit(stack) > 1;
+        boolean largerStack = stack.getItem().getMaxStackSize(stack) > 1;
         // vanilla only alters the stack passed to hasContainerItem/etc. when the size is > 1
 
         if (largerStack) {
@@ -32,8 +32,8 @@ public class ItemHelper {
             if (stack.isEmpty()) {
                 stack = ItemStack.EMPTY;
             }
-        } else if (item.hasContainerItem(stack)) {
-            ItemStack ret = item.getContainerItem(stack);
+        } else if (item.hasCraftingRemainingItem(stack)) {
+            ItemStack ret = item.getCraftingRemainingItem(stack);
             if (ret.isEmpty()) {
                 return ItemStack.EMPTY;
             }

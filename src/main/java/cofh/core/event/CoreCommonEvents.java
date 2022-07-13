@@ -16,8 +16,8 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.event.entity.player.PlayerXpEvent;
-import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.event.world.SaplingGrowTreeEvent;
+import net.minecraftforge.event.level.BlockEvent;
+import net.minecraftforge.event.level.SaplingGrowTreeEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -64,7 +64,7 @@ public class CoreCommonEvents {
             return;
         }
         if (event.getDistance() >= 3.0) {
-            LivingEntity living = event.getEntityLiving();
+            LivingEntity living = event.getEntity();
             if (living.hasEffect(SLIMED.get())) {
                 Vec3 motion = living.getDeltaMovement();
                 living.setDeltaMovement(motion.x, 0.08 * Math.sqrt(event.getDistance() / 0.08), motion.z);
@@ -96,7 +96,7 @@ public class CoreCommonEvents {
         if (event.isCanceled()) {
             return;
         }
-        Player player = event.getPlayer();
+        Player player = event.getEntity();
         ExperienceOrb orb = event.getOrb();
 
         player.takeXpDelay = 2;
@@ -131,7 +131,7 @@ public class CoreCommonEvents {
         if (!CoreServerConfig.enableSaplingGrowthMod.get()) {
             return;
         }
-        if (event.getRand().nextInt(CoreServerConfig.amountSaplingGrowthMod.get()) != 0) {
+        if (event.getRandomSource().nextInt(CoreServerConfig.amountSaplingGrowthMod.get()) != 0) {
             event.setResult(Event.Result.DENY);
         }
     }

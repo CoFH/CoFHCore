@@ -28,7 +28,7 @@ public class ShieldEvents {
         if (event.isCanceled()) {
             return;
         }
-        LivingEntity entity = event.getEntityLiving();
+        LivingEntity entity = event.getEntity();
         DamageSource source = event.getSource();
 
         if (!canBlockDamageSource(entity, source)) {

@@ -457,7 +457,7 @@ public class Utils {
 
     public static ResourceLocation getRegistryName(EntityType entity) {
 
-        return ForgeRegistries.ENTITIES.getKey(entity);
+        return ForgeRegistries.ENTITY_TYPES.getKey(entity);
     }
 
     public static ResourceLocation getRegistryName(MobEffect effect) {
