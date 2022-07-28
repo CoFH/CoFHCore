@@ -3,19 +3,24 @@ package cofh.lib.util.helpers;
 import cofh.lib.util.RayTracer;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.core.BlockPos;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BucketPickup;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.tags.ITagManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static cofh.lib.capability.CapabilityAreaEffect.AREA_EFFECT_ITEM_CAPABILITY;
@@ -243,6 +248,46 @@ public class AreaEffectHelper {
                 break;
         }
         return ImmutableList.copyOf(area);
+    }
+
+    public static ImmutableList<BlockPos> getBreakableWoodenBlocksVertical(ItemStack stack, BlockPos pos, Player player, int length) {
+
+        Level world = player.getCommandSenderWorld();
+        Item tool = stack.getItem();
+        if (length <= 0 || !canToolAffect(tool, stack, world, pos) || player.isSecondaryUseActive()) {
+            return ImmutableList.of();
+        }
+        BlockHitResult traceResult = RayTracer.retrace(player, ClipContext.Fluid.NONE);
+        if (traceResult.getType() == HitResult.Type.MISS) {
+            return ImmutableList.of();
+        }
+
+        BlockState state = world.getBlockState(pos);
+        Block block = state.getBlock();
+        ITagManager<Block> tags = ForgeRegistries.BLOCKS.tags();
+        if (tags == null) {
+            return ImmutableList.of();
+        }
+
+        Predicate<BlockPos> exact = p -> world.getBlockState(p).is(block) && canToolAffect(tool, stack, world, p);
+        // Match logs based on tag
+        Predicate<BlockPos> match = tags.getReverseTag(state.getBlock()).map(rev -> {
+            if (rev.containsTag(BlockTags.LOGS)) {
+                return rev.getTagKeys().filter(key -> key.location().getPath().contains("_logs")).findAny().map(key -> exact.or(p -> world.getBlockState(p).is(key))).orElse(exact);
+            }
+            return exact;
+        }).orElse(exact);
+
+        BlockPos.MutableBlockPos mutable = pos.mutable();
+        ImmutableList.Builder<BlockPos> builder = ImmutableList.builder();
+        for (int i = 0; i < length; ++i) {
+            mutable.move(0, 1, 0);
+            if (!match.test(mutable)) {
+                break;
+            }
+            builder.add(mutable.immutable());
+        }
+        return builder.build();
     }
     // endregion
 
