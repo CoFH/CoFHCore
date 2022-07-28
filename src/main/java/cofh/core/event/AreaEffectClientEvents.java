@@ -52,7 +52,7 @@ public class AreaEffectClientEvents {
         if (!validAreaEffectItem(stack)) {
             return;
         }
-        Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
+        Camera camera = event.getCamera();
         ImmutableList<BlockPos> areaBlocks = stack.getCapability(AREA_EFFECT_ITEM_CAPABILITY).orElse(new AreaEffectItemWrapper(stack)).getAreaEffectBlocks(event.getTarget().getBlockPos(), player);
 
         LevelRenderer levelRenderer = event.getLevelRenderer();

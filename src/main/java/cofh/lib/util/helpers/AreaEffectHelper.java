@@ -4,10 +4,12 @@ import cofh.lib.util.RayTracer;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -17,6 +19,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.tags.ITagManager;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.ToolActions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +30,6 @@ import java.util.stream.Collectors;
 import static cofh.lib.capability.CapabilityAreaEffect.AREA_EFFECT_ITEM_CAPABILITY;
 import static cofh.lib.util.Utils.getItemEnchantmentLevel;
 import static cofh.lib.util.references.EnsorcReferences.*;
-import static net.minecraft.core.Direction.DOWN;
 
 public class AreaEffectHelper {
 
@@ -336,14 +339,14 @@ public class AreaEffectHelper {
 
         List<BlockPos> area;
         Level world = player.getCommandSenderWorld();
-        boolean weeding = getItemEnchantmentLevel(WEEDING, stack) > 0;
 
         BlockHitResult traceResult = RayTracer.retrace(player, ClipContext.Fluid.NONE);
-        if (traceResult.getType() == HitResult.Type.MISS || traceResult.getDirection() == DOWN || player.isSecondaryUseActive() || !canHoeAffect(world, pos, weeding) || radius <= 0) {
+        UseOnContext context = new UseOnContext(world, player, InteractionHand.MAIN_HAND, player.getMainHandItem(), traceResult);
+        if (traceResult.getType() == HitResult.Type.MISS || player.isSecondaryUseActive() || !canHoeAffect(world, player, context) || radius <= 0) {
             return ImmutableList.of();
         }
         area = BlockPos.betweenClosedStream(pos.offset(-radius, 0, -radius), pos.offset(radius, 0, radius))
-                .filter(blockPos -> canHoeAffect(world, blockPos, weeding))
+                .filter(blockPos -> canHoeAffect(world, player, getContextAt(context, blockPos)))
                 .map(BlockPos::immutable)
                 .collect(Collectors.toList());
         area.remove(pos);
@@ -354,39 +357,31 @@ public class AreaEffectHelper {
 
         List<BlockPos> area;
         Level world = player.getCommandSenderWorld();
-        boolean weeding = getItemEnchantmentLevel(WEEDING, stack) > 0;
 
-        if (player.isSecondaryUseActive() || !canHoeAffect(world, pos, weeding) || length <= 0) {
+        BlockHitResult traceResult = RayTracer.retrace(player, ClipContext.Fluid.NONE);
+        UseOnContext context = new UseOnContext(world, player, InteractionHand.MAIN_HAND, player.getMainHandItem(), traceResult);
+        if (traceResult.getType() == HitResult.Type.MISS || player.isSecondaryUseActive() || !canHoeAffect(world, player, context) || length <= 0) {
             return ImmutableList.of();
         }
-        switch (player.getDirection()) {
-            case SOUTH:
-                area = BlockPos.betweenClosedStream(pos.offset(0, 0, 1), pos.offset(0, 0, length + 1))
-                        .filter(blockPos -> canHoeAffect(world, blockPos, weeding))
-                        .map(BlockPos::immutable)
-                        .collect(Collectors.toList());
-                break;
-            case WEST:
-                area = BlockPos.betweenClosedStream(pos.offset(-1, 0, 0), pos.offset(-(length + 1), 0, 0))
-                        .filter(blockPos -> canHoeAffect(world, blockPos, weeding))
-                        .map(BlockPos::immutable)
-                        .collect(Collectors.toList());
-                break;
-            case NORTH:
-                area = BlockPos.betweenClosedStream(pos.offset(0, 0, -1), pos.offset(0, 0, -(length + 1)))
-                        .filter(blockPos -> canHoeAffect(world, blockPos, weeding))
-                        .map(BlockPos::immutable)
-                        .collect(Collectors.toList());
-                break;
-            case EAST:
-                area = BlockPos.betweenClosedStream(pos.offset(1, 0, 0), pos.offset(length + 1, 0, 0))
-                        .filter(blockPos -> canHoeAffect(world, blockPos, weeding))
-                        .map(BlockPos::immutable)
-                        .collect(Collectors.toList());
-                break;
-            default:
-                area = ImmutableList.of();
-        }
+        area = switch (player.getDirection()) {
+            case SOUTH -> BlockPos.betweenClosedStream(pos.offset(0, 0, 1), pos.offset(0, 0, length + 1))
+                    .filter(blockPos -> canHoeAffect(world, player, getContextAt(context, blockPos)))
+                    .map(BlockPos::immutable)
+                    .collect(Collectors.toList());
+            case WEST -> BlockPos.betweenClosedStream(pos.offset(-1, 0, 0), pos.offset(-(length + 1), 0, 0))
+                    .filter(blockPos -> canHoeAffect(world, player, getContextAt(context, blockPos)))
+                    .map(BlockPos::immutable)
+                    .collect(Collectors.toList());
+            case NORTH -> BlockPos.betweenClosedStream(pos.offset(0, 0, -1), pos.offset(0, 0, -(length + 1)))
+                    .filter(blockPos -> canHoeAffect(world, player, getContextAt(context, blockPos)))
+                    .map(BlockPos::immutable)
+                    .collect(Collectors.toList());
+            case EAST -> BlockPos.betweenClosedStream(pos.offset(1, 0, 0), pos.offset(length + 1, 0, 0))
+                    .filter(blockPos -> canHoeAffect(world, player, getContextAt(context, blockPos)))
+                    .map(BlockPos::immutable)
+                    .collect(Collectors.toList());
+            default -> ImmutableList.of();
+        };
         area.remove(pos);
         return ImmutableList.copyOf(area);
     }
@@ -421,16 +416,19 @@ public class AreaEffectHelper {
         return toolItem.isCorrectToolForDrops(toolStack, state) || !state.requiresCorrectToolForDrops() && toolItem.getDestroySpeed(toolStack, state) > 1.0F;
     }
 
-    private static boolean canHoeAffect(Level world, BlockPos pos, boolean weeding) {
+    private static boolean canHoeAffect(Level level, Player player, UseOnContext context) {
 
-        // TODO King Lemming FIXME
-        //        BlockState state = world.getBlockState(pos);
-        //        if (HoeItem.TILLABLES.containsKey(state.getBlock())) {
-        //            BlockPos up = pos.above();
-        //            BlockState stateUp = world.getBlockState(up);
-        //            return world.isEmptyBlock(up) || (weeding && (stateUp.getMaterial() == Material.PLANT || stateUp.getMaterial() == Material.REPLACEABLE_PLANT) && stateUp.getDestroySpeed(world, up) <= 0.0F);
-        //        }
-        return false;
+        // TODO: revisit if performance issues show.
+        BlockState state = level.getBlockState(context.getClickedPos()).getToolModifiedState(context, ToolActions.HOE_TILL, true);
+        return state != null;
+    }
+
+    private static UseOnContext getContextAt(UseOnContext context, BlockPos pos) {
+
+        BlockPos og = context.getClickedPos();
+        Vec3 loc = context.getClickLocation().add(pos.getX() - og.getX(), pos.getY() - og.getY(), pos.getZ() - og.getZ());
+        return new UseOnContext(context.getLevel(), context.getPlayer(), context.getHand(), context.getItemInHand(),
+                new BlockHitResult(loc, context.getClickedFace(), pos, context.isInside()));
     }
 
     private static boolean isBucketable(Item toolItem, ItemStack toolStack, Level world, BlockPos pos) {

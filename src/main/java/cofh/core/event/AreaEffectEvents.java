@@ -6,23 +6,37 @@ import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.ToolAction;
+import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Set;
+import java.util.function.BiPredicate;
 
 import static cofh.lib.capability.CapabilityAreaEffect.AREA_EFFECT_ITEM_CAPABILITY;
+import static cofh.lib.util.Utils.getItemEnchantmentLevel;
 import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
 import static cofh.lib.util.helpers.AreaEffectHelper.validAreaEffectMiningItem;
+import static cofh.lib.util.references.EnsorcReferences.WEEDING;
 
 @Mod.EventBusSubscriber (modid = ID_COFH_CORE)
 public class AreaEffectEvents {
@@ -84,61 +98,74 @@ public class AreaEffectEvents {
         }
     }
 
-/*  TODO Lemming, HoeItem.TILLABLES has changed quite a lot, this Event is also deprecated for removal.. Last version..
     @SubscribeEvent (priority = EventPriority.LOW)
-    public static void handleUseHoeEvent(UseHoeEvent event) {
+    public static void handleBlockToolModificationEvent(BlockEvent.BlockToolModificationEvent event) {
 
-        if (event.isCanceled() || event.getResult() == Event.Result.ALLOW) {
+        ToolAction action = event.getToolAction();
+        if (event.isCanceled() || action != ToolActions.HOE_TILL) {
+            return;
+        }
+        UseOnContext context = event.getContext();
+        if (context == null || context instanceof CoFHIgnoreUseOnContext) {
             return;
         }
         Player player = event.getPlayer();
-        ItemStack stack = event.getContext().getItemInHand();
-        BlockPos target = event.getContext().getClickedPos();
-        Level world = player.level;
-        BlockState targetTilled = TILLABLES.get(world.getBlockState(target).getBlock());
-        BlockPos up = target.above();
+        if (player == null) {
+            return;
+        }
+        Level level = context.getLevel();
+        BlockPos target = context.getClickedPos();
+        ItemStack stack = context.getItemInHand();
+        BlockState original = event.getState();
+        BlockState tilled = event.getFinalState();
+        boolean simulate = event.isSimulated();
         boolean weeding = getItemEnchantmentLevel(WEEDING, stack) > 0;
-
-        if (targetTilled == null || !world.isEmptyBlock(up) && !weeding) {
+        // WEEDING
+        // If has weeding and replaceable block above preventing tilling, simulate event at location without block above.
+        BiPredicate<BlockState, BlockPlaceContext> replace = (state, ctx) -> !state.isAir() && (state.canBeReplaced(ctx) || state.is(BlockTags.FLOWERS));
+        BlockPlaceContext blockContext = new BlockPlaceContext(context);
+        if (original.equals(tilled) && weeding) {
+            BlockPos up = target.above();
+            if (replace.test(level.getBlockState(up), blockContext)) {
+                tilled = original.getToolModifiedState(getContextAt(context, target, weeding), action, true);
+                if (tilled != null && !simulate) {
+                    level.destroyBlock(up, !player.abilities.instabuild);
+                }
+            }
+        }
+        if (tilled == null) {
             return;
         }
-        if (Utils.isClientWorld(world)) {
-            player.swing(event.getContext().getHand());
+        event.setFinalState(tilled);
+        //if (TILLING_PLAYERS.contains(player)) { //TODO: revisit whether necessary. Currently messes with this code so it has been commented out.
+        //    return;
+        //}
+        //TILLING_PLAYERS.add(player);
+        if (simulate) {
             return;
         }
-        if (TILLING_PLAYERS.contains(player)) {
-            return;
-        }
-        TILLING_PLAYERS.add(player);
+        // FURROWING and TILLING
         ImmutableList<BlockPos> areaBlocks = stack.getCapability(AREA_EFFECT_ITEM_CAPABILITY).orElse(new AreaEffectItemWrapper(stack)).getAreaEffectBlocks(target, player);
         for (BlockPos pos : areaBlocks) {
             if (stack.isEmpty()) {
                 break;
             }
-            BlockState tilled = TILLABLES.get(world.getBlockState(pos).getBlock());
+            original = level.getBlockState(pos);
+            tilled = original.getToolModifiedState(getContextAt(context, pos, weeding), action, false);
             if (tilled != null) {
-                world.setBlockAndUpdate(pos, tilled);
                 if (weeding) {
-                    up = pos.above();
-                    if (!world.isEmptyBlock(up)) {
-                        world.destroyBlock(up, !player.getAbilities().instabuild);
+                    BlockPos up = pos.above();
+                    if (replace.test(level.getBlockState(up), blockContext)) {
+                        level.destroyBlock(up, !player.abilities.instabuild);
                     }
                 }
+                level.setBlockAndUpdate(pos, tilled);
                 stack.hurtAndBreak(1, player, (entity) -> {
                     entity.broadcastBreakEvent(event.getContext().getHand());
                 });
             }
         }
-        world.setBlockAndUpdate(target, targetTilled);
-        if (weeding) {
-            up = target.above();
-            if (!world.isEmptyBlock(up)) {
-                world.destroyBlock(up, !player.getAbilities().instabuild);
-            }
-        }
-        world.playSound(player, target, SoundEvents.HOE_TILL, SoundSource.BLOCKS, 1.0F, 1.0F);
-        event.setResult(Event.Result.ALLOW);
-    }*/
+    }
 
     @SubscribeEvent (priority = EventPriority.LOWEST)
     public static void handleTickEndEvent(TickEvent.ServerTickEvent event) {
@@ -162,6 +189,31 @@ public class AreaEffectEvents {
             }
         }
         return maxHardness;
+    }
+
+    private static UseOnContext getContextAt(UseOnContext context, BlockPos pos, boolean isolate) {
+
+        if (isolate) {
+            pos = pos.atY(-65536);
+        }
+        BlockPos og = context.getClickedPos();
+        Vec3 loc = context.getClickLocation().add(pos.getX() - og.getX(), pos.getY() - og.getY(), pos.getZ() - og.getZ());
+        return new CoFHIgnoreUseOnContext(context.getLevel(), context.getPlayer(), context.getHand(), context.getItemInHand(),
+                new BlockHitResult(loc, context.getClickedFace(), pos, context.isInside()));
+    }
+
+    public static class CoFHIgnoreUseOnContext extends UseOnContext {
+
+        public CoFHIgnoreUseOnContext(Player player, InteractionHand hand, BlockHitResult result) {
+
+            super(player, hand, result);
+        }
+
+        public CoFHIgnoreUseOnContext(Level level, @Nullable Player player, InteractionHand hand, ItemStack stack, BlockHitResult result) {
+
+            super(level, player, hand, stack, result);
+        }
+
     }
 
     //    private static boolean tryHarvestBlock(PlayerInteractionManager manager, BlockPos pos) {
