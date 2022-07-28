@@ -106,7 +106,7 @@ public class AreaEffectEvents {
             return;
         }
         UseOnContext context = event.getContext();
-        if (context == null || context instanceof CoFHIgnoreUseOnContext) {
+        if (context == null || context instanceof CoFHIgnoreUseOnContext) { //yes, i know this is a gamer way to stop recursion, but it prevents some weird client/server issues
             return;
         }
         Player player = event.getPlayer();
@@ -191,6 +191,8 @@ public class AreaEffectEvents {
         return maxHardness;
     }
 
+    // Used to reproduce the use context, but with the proper position as some BlockToolModifications are context-dependent.
+    // If isolate, sets the position to one guaranteed to have no adjacent blocks. Used to solve hoe till indeterminancy without the need to break/replace blocks.
     private static UseOnContext getContextAt(UseOnContext context, BlockPos pos, boolean isolate) {
 
         if (isolate) {
