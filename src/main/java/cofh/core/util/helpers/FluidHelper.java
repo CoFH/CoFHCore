@@ -217,7 +217,7 @@ public class FluidHelper {
         BOTTLE_DRAIN_MAP.put(Items.HONEY_BOTTLE, (stack -> new FluidStack(FLUID_HONEY, BOTTLE_VOLUME)));
         BOTTLE_DRAIN_MAP.put(Items.EXPERIENCE_BOTTLE, (stack -> new FluidStack(FLUID_XP, BOTTLE_VOLUME)));
 
-        BOTTLE_FILL_MAP.put(fluid -> fluid.getFluid() == net.minecraft.world.level.material.Fluids.WATER || hasPotionTag(fluid), fluid -> PotionUtils.setPotion(new ItemStack(Items.POTION), getPotionFromFluid(fluid)));
+        BOTTLE_FILL_MAP.put(fluid -> fluid.getFluid() == net.minecraft.world.level.material.Fluids.WATER || hasPotionTag(fluid), PotionFluid::getItemFromPotionFluid);
         BOTTLE_FILL_MAP.put(fluid -> fluid.getFluid().is(CoFHTags.Fluids.HONEY), fluid -> new ItemStack(Items.HONEY_BOTTLE));
         BOTTLE_FILL_MAP.put(fluid -> fluid.getFluid().is(CoFHTags.Fluids.EXPERIENCE), fluid -> new ItemStack(Items.EXPERIENCE_BOTTLE));
     }
