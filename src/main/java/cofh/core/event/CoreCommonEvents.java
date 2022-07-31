@@ -99,11 +99,11 @@ public class CoreCommonEvents {
         Player player = event.getPlayer();
         ExperienceOrb orb = event.getOrb();
 
-        player.takeXpDelay = 2;
-        player.take(orb, 1);
-
         // Improved Mending
         if (CoreEnchantConfig.improvedMending) {
+            player.takeXpDelay = 2;
+            player.take(orb, 1);
+
             Map.Entry<EquipmentSlot, ItemStack> entry = getMostDamagedItem(player);
             if (entry != null) {
                 ItemStack itemstack = entry.getValue();
@@ -113,13 +113,15 @@ public class CoreCommonEvents {
                     itemstack.setDamageValue(itemstack.getDamageValue() - i);
                 }
             }
+            XpHelper.attemptStoreXP(player, orb);
+            if (orb.value > 0) {
+                player.giveExperiencePoints(orb.value);
+            }
+            orb.discard();
+            event.setCanceled(true);
+            return;
         }
         XpHelper.attemptStoreXP(player, orb);
-        if (orb.value > 0) {
-            player.giveExperiencePoints(orb.value);
-        }
-        orb.discard();
-        event.setCanceled(true);
     }
 
     @SubscribeEvent (priority = EventPriority.LOWEST)

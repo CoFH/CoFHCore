@@ -31,6 +31,8 @@ import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 import static cofh.lib.util.constants.Constants.TRUE;
+import static net.minecraft.world.level.material.Material.*;
+
 
 // TODO Sickle Tool Type.
 public class SickleItem extends DiggerItem implements ICoFHItem {
@@ -39,9 +41,10 @@ public class SickleItem extends DiggerItem implements ICoFHItem {
 
     protected Supplier<CreativeModeTab> displayGroup;
 
-    @Deprecated // TOOD move to Tags class somewhere and generate.
+    @Deprecated // TODO move to Tags class somewhere and generate.
     public static final TagKey<Block> EFFECTIVE_BLOCKS = BlockTags.create(new ResourceLocation(Constants.ID_THERMAL, "mineable/sickle"));
-    public static final Set<Material> EFFECTIVE_MATERIALS = ImmutableSet.of(Material.LEAVES, Material.PLANT, Material.REPLACEABLE_PLANT, Material.WEB);
+    public static final Set<Material> EFFECTIVE_MATERIALS = ImmutableSet.of(LEAVES, BAMBOO, BAMBOO_SAPLING, PLANT, REPLACEABLE_PLANT,
+            WATER_PLANT, REPLACEABLE_WATER_PLANT, REPLACEABLE_FIREPROOF_PLANT, WEB, CACTUS, VEGETABLE, MOSS);
 
     private static final float DEFAULT_ATTACK_DAMAGE = 2.5F;
     private static final float DEFAULT_ATTACK_SPEED = -2.6F;
