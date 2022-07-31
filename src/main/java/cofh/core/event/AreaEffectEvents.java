@@ -15,6 +15,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -122,12 +123,15 @@ public class AreaEffectEvents {
         boolean weeding = getItemEnchantmentLevel(WEEDING, stack) > 0;
         // WEEDING
         // If has weeding and replaceable block above preventing tilling, simulate event at location without block above.
-        BiPredicate<BlockState, BlockPlaceContext> replace = (state, ctx) -> !state.isAir() && (state.canBeReplaced(ctx) || state.is(BlockTags.FLOWERS));
+        BiPredicate<BlockState, BlockPlaceContext> replace = (state, ctx) -> !state.isAir() && (state.canBeReplaced(ctx) || state.is(BlockTags.FLOWERS)) && !state.hasBlockEntity();
         BlockPlaceContext blockContext = new BlockPlaceContext(context);
         if (original.equals(tilled) && weeding) {
             BlockPos up = target.above();
-            if (replace.test(level.getBlockState(up), blockContext)) {
-                tilled = original.getToolModifiedState(getContextAt(context, target, weeding), action, true);
+            BlockState upState = level.getBlockState(up);
+            if (replace.test(upState, blockContext)) {
+                level.setBlock(up, Blocks.AIR.defaultBlockState(), 180);
+                tilled = original.getToolModifiedState(CoFHIgnoreUseOnContext.copy(context), action, true);
+                level.setBlock(up, upState, 180);
                 if (tilled != null && !simulate) {
                     level.destroyBlock(up, !player.abilities.instabuild);
                 }
@@ -137,10 +141,6 @@ public class AreaEffectEvents {
             return;
         }
         event.setFinalState(tilled);
-        //if (TILLING_PLAYERS.contains(player)) { //TODO: revisit whether necessary. Currently messes with this code so it has been commented out.
-        //    return;
-        //}
-        //TILLING_PLAYERS.add(player);
         if (simulate) {
             return;
         }
@@ -150,15 +150,19 @@ public class AreaEffectEvents {
             if (stack.isEmpty()) {
                 break;
             }
-            original = level.getBlockState(pos);
-            tilled = original.getToolModifiedState(getContextAt(context, pos, weeding), action, false);
-            if (tilled != null) {
-                if (weeding) {
-                    BlockPos up = pos.above();
-                    if (replace.test(level.getBlockState(up), blockContext)) {
-                        level.destroyBlock(up, !player.abilities.instabuild);
-                    }
+            BlockPos up = pos.above();
+            BlockState upState = level.getBlockState(up);
+            if (weeding && replace.test(upState, blockContext)) {
+                level.setBlock(up, Blocks.AIR.defaultBlockState(), 180);
+                tilled = level.getBlockState(pos).getToolModifiedState(getContextAt(context, pos), action, false);
+                level.setBlock(up, upState, 180);
+                if (tilled != null) {
+                    level.destroyBlock(up, !player.abilities.instabuild);
                 }
+            } else {
+                tilled = level.getBlockState(pos).getToolModifiedState(getContextAt(context, pos), action, false);
+            }
+            if (tilled != null) {
                 level.setBlockAndUpdate(pos, tilled);
                 stack.hurtAndBreak(1, player, (entity) -> {
                     entity.broadcastBreakEvent(event.getContext().getHand());
@@ -192,19 +196,15 @@ public class AreaEffectEvents {
     }
 
     // Used to reproduce the use context, but with the proper position as some BlockToolModifications are context-dependent.
-    // If isolate, sets the position to one guaranteed to have no adjacent blocks. Used to solve hoe till indeterminancy without the need to break/replace blocks.
-    private static UseOnContext getContextAt(UseOnContext context, BlockPos pos, boolean isolate) {
+    private static UseOnContext getContextAt(UseOnContext context, BlockPos pos) {
 
-        if (isolate) {
-            pos = pos.atY(-65536);
-        }
         BlockPos og = context.getClickedPos();
         Vec3 loc = context.getClickLocation().add(pos.getX() - og.getX(), pos.getY() - og.getY(), pos.getZ() - og.getZ());
         return new CoFHIgnoreUseOnContext(context.getLevel(), context.getPlayer(), context.getHand(), context.getItemInHand(),
                 new BlockHitResult(loc, context.getClickedFace(), pos, context.isInside()));
     }
 
-    public static class CoFHIgnoreUseOnContext extends UseOnContext {
+    private static class CoFHIgnoreUseOnContext extends UseOnContext {
 
         public CoFHIgnoreUseOnContext(Player player, InteractionHand hand, BlockHitResult result) {
 
@@ -214,6 +214,12 @@ public class AreaEffectEvents {
         public CoFHIgnoreUseOnContext(Level level, @Nullable Player player, InteractionHand hand, ItemStack stack, BlockHitResult result) {
 
             super(level, player, hand, stack, result);
+        }
+
+        public static UseOnContext copy(UseOnContext context) {
+
+            return new CoFHIgnoreUseOnContext(context.getLevel(), context.getPlayer(), context.getHand(), context.getItemInHand(),
+                    new BlockHitResult(context.getClickLocation(), context.getClickedFace(), context.getClickedPos(), context.isInside()));
         }
 
     }
