@@ -62,15 +62,20 @@ public class PotionFluid extends FluidCoFH {
         }
     }
 
-    public static FluidStack getPotionAsFluid(int amount, Potion type) {
+    public static FluidStack getPotionAsFluid(int amount, Potion type, boolean hasCustom) {
 
         if (type == null) {
             return FluidStack.EMPTY;
         }
-        if (type == Potions.WATER) {
+        if (type == Potions.WATER && !hasCustom) {
             return new FluidStack(Fluids.WATER, amount);
         }
         return addPotionToFluidStack(new FluidStack(FLUID_POTION, amount), type);
+    }
+
+    public static FluidStack getPotionAsFluid(int amount, Potion type) {
+
+        return getPotionAsFluid(amount, type, false);
     }
 
     public static FluidStack addPotionToFluidStack(FluidStack stack, Potion type) {
@@ -123,7 +128,8 @@ public class PotionFluid extends FluidCoFH {
         Item item = stack.getItem();
 
         if (item.equals(Items.POTION)) {
-            FluidStack fluid = setCustomEffects(getPotionAsFluid(amount, PotionUtils.getPotion(stack)), PotionUtils.getCustomEffects(stack));
+            Collection<MobEffectInstance> custom = PotionUtils.getCustomEffects(stack);
+            FluidStack fluid = setCustomEffects(getPotionAsFluid(amount, PotionUtils.getPotion(stack), !custom.isEmpty()), custom);
             int color = PotionUtils.getColor(stack);
             if (color != PotionUtils.getColor(PotionUtils.getMobEffects(stack))) {
                 setCustomColor(fluid, color);
