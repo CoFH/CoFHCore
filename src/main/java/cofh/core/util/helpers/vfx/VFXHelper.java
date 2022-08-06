@@ -316,7 +316,10 @@ public final class VFXHelper {
                             stack.pushPose();
                             stack.translate(offset[0], height + y, offset[1]);
                             stack.scale(1.01F, 1.01F, 1.01F);
-                            for (RenderType type : chunkRenderTypes) {
+
+                            // ModelData modelData = renderer.getBlockModel(state).getModelData(level, pos, state, ModelData.EMPTY);
+
+                            for (RenderType type : renderer.getBlockModel(state).getRenderTypes(state, MathHelper.RANDOM, ModelData.EMPTY)) {
                                 renderer.renderBatched(state, pos.relative(Direction.UP), level, stack, buffer.getBuffer(type), false, MathHelper.RANDOM, ModelData.EMPTY, type);
                             }
                             stack.popPose();

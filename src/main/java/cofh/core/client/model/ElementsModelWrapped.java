@@ -33,11 +33,11 @@ import java.util.function.Function;
 /**
  * Why does this class exist? Because Forge made some dumb decisions.
  */
-public class ElementsModelCoFH extends SimpleUnbakedGeometry<ElementsModelCoFH> {
+public class ElementsModelWrapped extends SimpleUnbakedGeometry<ElementsModelWrapped> {
 
     private final List<BlockElement> elements;
 
-    private ElementsModelCoFH(List<BlockElement> elements) {
+    private ElementsModelWrapped(List<BlockElement> elements) {
 
         this.elements = elements;
     }
@@ -81,7 +81,7 @@ public class ElementsModelCoFH extends SimpleUnbakedGeometry<ElementsModelCoFH> 
         return textures;
     }
 
-    public static final class Loader implements IGeometryLoader<ElementsModelCoFH> {
+    public static final class Loader implements IGeometryLoader<ElementsModelWrapped> {
 
         public static final Loader INSTANCE = new Loader();
 
@@ -90,7 +90,7 @@ public class ElementsModelCoFH extends SimpleUnbakedGeometry<ElementsModelCoFH> 
         }
 
         @Override
-        public ElementsModelCoFH read(JsonObject jsonObject, JsonDeserializationContext deserializationContext) throws JsonParseException {
+        public ElementsModelWrapped read(JsonObject jsonObject, JsonDeserializationContext deserializationContext) throws JsonParseException {
 
             if (!jsonObject.has("elements")) {
                 throw new JsonParseException("An element model must have an \"elements\" member.");
@@ -99,7 +99,7 @@ public class ElementsModelCoFH extends SimpleUnbakedGeometry<ElementsModelCoFH> 
             for (JsonElement element : GsonHelper.getAsJsonArray(jsonObject, "elements")) {
                 elements.add(deserializationContext.deserialize(element, BlockElement.class));
             }
-            return new ElementsModelCoFH(elements);
+            return new ElementsModelWrapped(elements);
         }
 
     }

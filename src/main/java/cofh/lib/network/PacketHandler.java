@@ -82,10 +82,8 @@ public class PacketHandler {
                 log.error("Received packet ID that isn't an IPacketClient? ID: {}", id);
                 return;
             }
-            ctx.enqueueWork(() -> {
-                packet.read(buf);
-                ((IPacketClient) packet).handleClient();
-            });
+            packet.read(buf);
+            ctx.enqueueWork(() -> ((IPacketClient) packet).handleClient());
         }
 
     }
@@ -110,12 +108,10 @@ public class PacketHandler {
                 log.error("Received packet ID that isn't an IPacketServer? ID: {}", id);
                 return;
             }
+            packet.read(buf);
             PacketListener netHandler = ctx.getNetworkManager().getPacketListener();
-            if (netHandler instanceof ServerGamePacketListenerImpl) {
-                ctx.enqueueWork(() -> {
-                    packet.read(buf);
-                    ((IPacketServer) packet).handleServer(((ServerGamePacketListenerImpl) netHandler).player);
-                });
+            if (netHandler instanceof ServerGamePacketListenerImpl gamePacketListener) {
+                ctx.enqueueWork(() -> ((IPacketServer) packet).handleServer(gamePacketListener.player));
             }
         }
 

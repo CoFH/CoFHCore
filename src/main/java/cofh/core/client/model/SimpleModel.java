@@ -18,10 +18,10 @@ import java.util.function.Function;
 
 public class SimpleModel extends SimpleUnbakedGeometry<SimpleModel> {
 
-    private final ElementsModelCoFH model;
+    private final ElementsModelWrapped model;
     private final SimpleModel.IFactory<BakedModel> factory;
 
-    public SimpleModel(ElementsModelCoFH model, SimpleModel.IFactory<BakedModel> factory) {
+    public SimpleModel(ElementsModelWrapped model, SimpleModel.IFactory<BakedModel> factory) {
 
         this.model = model;
         this.factory = factory;
@@ -64,7 +64,7 @@ public class SimpleModel extends SimpleUnbakedGeometry<SimpleModel> {
         @Override
         public SimpleModel read(JsonObject jsonObject, JsonDeserializationContext deserializationContext) {
 
-            return new SimpleModel(ElementsModelCoFH.Loader.INSTANCE.read(jsonObject, deserializationContext), factory);
+            return new SimpleModel(ElementsModelWrapped.Loader.INSTANCE.read(jsonObject, deserializationContext), factory);
         }
 
     }
