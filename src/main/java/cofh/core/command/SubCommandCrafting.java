@@ -15,7 +15,7 @@ public class SubCommandCrafting {
 
     public static Supplier<Integer> permissionLevel = () -> 2;
 
-    static final MutableComponent TITLE = Component.translatable("container.crafting");
+    static final MutableComponent TITLE = Component.literal("container.crafting");
 
     static ArgumentBuilder<CommandSourceStack, ?> register() {
 
