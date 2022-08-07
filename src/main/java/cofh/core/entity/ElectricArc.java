@@ -1,8 +1,6 @@
 package cofh.core.entity;
 
 import net.minecraft.core.particles.SimpleParticleType;
-import cofh.core.client.particle.options.ColorParticleOptions;
-import cofh.lib.util.references.CoreReferences;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -29,7 +27,7 @@ public class ElectricArc extends AbstractAoESpell {
 
         super(type, level);
         radius = 1.5F;
-        duration = 100;
+        duration = defaultDuration;
         noCulling = true;
     }
 
@@ -109,9 +107,8 @@ public class ElectricArc extends AbstractAoESpell {
     @OnlyIn (Dist.CLIENT)
     public boolean shouldRenderAtSqrDistance(double distSqr) {
 
-        //double d0 = 64.0D * getViewScale();
-        //return distSqr < d0 * d0;
-        return false;
+        double d0 = 64.0D * getViewScale();
+        return distSqr < d0 * d0;
     }
 
 }

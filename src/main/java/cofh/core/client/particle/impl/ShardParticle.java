@@ -3,10 +3,10 @@ package cofh.core.client.particle.impl;
 import cofh.core.client.particle.PointToPointParticle;
 import cofh.core.client.particle.options.BiColorParticleOptions;
 import cofh.core.client.particle.options.ColorParticleOptions;
+import cofh.core.init.CoreParticles;
 import cofh.core.util.helpers.RenderHelper;
 import cofh.core.util.helpers.vfx.RenderTypes;
 import cofh.core.util.helpers.vfx.VFXHelper;
-import cofh.lib.util.references.CoreReferences;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix3f;
@@ -76,7 +76,7 @@ public class ShardParticle extends PointToPointParticle {
                 this.fLifetime = this.age + (float) Math.sqrt(distSqr) / speed;
             }
             if (this.age + 1 >= this.fLifetime) {
-                this.level.addParticle(new ColorParticleOptions(CoreReferences.BLAST_PARTICLE, this.size * 0.25F, 6 + random.nextInt(4), this.rgba0), collide.x, collide.y, collide.z, 0, 0, 0);
+                this.level.addParticle(new ColorParticleOptions(CoreParticles.BLAST.get(), this.size * 0.25F, 6 + random.nextInt(4), this.rgba0), collide.x, collide.y, collide.z, 0, 0, 0);
             }
 
             dx = delta.x;

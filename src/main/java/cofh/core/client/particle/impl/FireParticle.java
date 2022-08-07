@@ -3,7 +3,6 @@ package cofh.core.client.particle.impl;
 import cofh.core.client.particle.TextureParticleCoFH;
 import cofh.core.client.particle.options.ColorParticleOptions;
 import cofh.core.util.helpers.vfx.RenderTypes;
-import cofh.core.util.helpers.vfx.VFXHelper;
 import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Camera;

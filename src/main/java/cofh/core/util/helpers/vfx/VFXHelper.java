@@ -7,7 +7,6 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -22,6 +21,7 @@ import net.minecraftforge.client.model.data.ModelData;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
+
 import static cofh.core.util.helpers.vfx.RenderTypes.*;
 
 /**

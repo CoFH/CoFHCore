@@ -15,9 +15,8 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.function.Supplier;
 
 import static cofh.core.client.CoreRenderType.THICK_LINES;
-import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 import static cofh.core.init.CoreShaders.*;
-import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
+import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 import static net.minecraft.client.renderer.RenderStateShard.*;
 
 public class RenderTypes {
