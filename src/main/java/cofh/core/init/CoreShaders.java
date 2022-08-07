@@ -17,13 +17,17 @@ import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
 @Mod.EventBusSubscriber (value = Dist.CLIENT, modid = ID_COFH_CORE, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CoreShaders {
 
-    public static ShaderInstance PARTICLE_TRANSLUCENT;
+    public static ShaderInstance PARTICLE_OVER;
+    public static ShaderInstance PARTICLE_ADDITIVE_MULTIPLY;
+    public static ShaderInstance PARTICLE_ADDITIVE_SCREEN;
     public static ShaderInstance ENTITY_PIXELATE;
 
     @SubscribeEvent
     public static void registerShaders(final RegisterShadersEvent event) throws IOException {
 
-        registerShader(event, "particle", DefaultVertexFormat.PARTICLE, s -> PARTICLE_TRANSLUCENT = s);
+        registerShader(event, "particle_over", DefaultVertexFormat.PARTICLE, s -> PARTICLE_OVER = s);
+        registerShader(event, "particle_add", DefaultVertexFormat.PARTICLE, s -> PARTICLE_ADDITIVE_MULTIPLY = s);
+        registerShader(event, "particle_screen", DefaultVertexFormat.PARTICLE, s -> PARTICLE_ADDITIVE_SCREEN = s);
         registerShader(event, "pixelation", DefaultVertexFormat.NEW_ENTITY, s -> ENTITY_PIXELATE = s);
     }
 

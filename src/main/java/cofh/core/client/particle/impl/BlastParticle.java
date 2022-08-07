@@ -2,8 +2,6 @@ package cofh.core.client.particle.impl;
 
 import cofh.core.client.particle.TextureParticleCoFH;
 import cofh.core.client.particle.options.ColorParticleOptions;
-import cofh.core.util.helpers.vfx.RenderTypes;
-import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.ParticleRenderType;
@@ -58,7 +56,7 @@ public class BlastParticle extends TextureParticleCoFH {
     @Nonnull
     public static ParticleProvider<ColorParticleOptions> factory(SpriteSet spriteSet) {
 
-        return (data, level, sx, sy, sz, size, rgba, speed) -> new BlastParticle(data, level, spriteSet, sx, sy, sz, size, rgba, speed);
+        return (data, level, x, y, z, dx, dy, dz) -> new BlastParticle(data, level, spriteSet, x, y, z, dx, dy, dz);
     }
 
 }

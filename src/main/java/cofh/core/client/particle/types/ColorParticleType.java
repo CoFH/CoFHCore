@@ -4,14 +4,14 @@ import cofh.core.client.particle.options.ColorParticleOptions;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.particles.ParticleType;
 
-public class RadialParticleType extends ParticleType<ColorParticleOptions> {
+public class ColorParticleType extends ParticleType<ColorParticleOptions> {
 
-    public RadialParticleType(boolean overrideLimit) {
+    public ColorParticleType(boolean overrideLimit) {
 
         super(overrideLimit, ColorParticleOptions.DESERIALIZER);
     }
 
-    public RadialParticleType() {
+    public ColorParticleType() {
 
         this(false);
     }

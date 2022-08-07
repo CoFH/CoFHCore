@@ -8,6 +8,7 @@ import com.mojang.math.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -23,6 +24,7 @@ import net.minecraftforge.client.model.data.EmptyModelData;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import static cofh.core.util.helpers.vfx.RenderTypes.*;
 
 /**
  * The cooler version of RenderHelper.
@@ -69,6 +71,25 @@ public final class VFXHelper {
     public static int alphaScale(int rgba, float alphaScale) {
 
         return (rgba & 0xFFFFFF00) | MathHelper.clamp((int) ((rgba & 0xFF) * alphaScale), 0, 255);
+    }
+
+    public static int mix(float d, int rgba0, int ...colors) {
+
+        if (colors.length <= 0 || d <= 0) {
+            return rgba0;
+        }
+        if (d >= 1) {
+            return colors[colors.length - 1];
+        }
+        int i = MathHelper.floor(d * colors.length);
+        int x = i <= 0 ? rgba0 : colors[i - 1];
+        int y = colors[i];
+        d = d * colors.length - i;
+        int r = MathHelper.interpolate((x >> 24) & 0xFF, (y >> 24) & 0xFF, d);
+        int g = MathHelper.interpolate((x >> 16) & 0xFF, (y >> 16) & 0xFF, d);
+        int b = MathHelper.interpolate((x >> 8) & 0xFF, (y >> 8) & 0xFF, d);
+        int a = MathHelper.interpolate(x & 0xFF, y & 0xFF, d);
+        return packRGBA(r, g, b, a);
     }
 
     public static Vector4f mid(Vector4f a, Vector4f b) {
@@ -251,7 +272,7 @@ public final class VFXHelper {
      */
     public static void renderTest(PoseStack stack, MultiBufferSource buffer) {
 
-        RenderType type = RenderTypes.FLAT_TRANSLUCENT;
+        RenderType type = FLAT_TRANSLUCENT;
         VertexConsumer builder = buffer.getBuffer(type);
         Vector4f center = new Vector4f(0, 0, 0, 1);
         center.transform(stack.last().pose());
@@ -426,17 +447,17 @@ public final class VFXHelper {
      * @param taperOffset Value between -1.25F and 1.25F that determines the threshold for tapering.
      *                    Generally, negative at the start of an animation, 0 in the middle (no taper), and positive at the end.
      */
-    public static void renderStraightArcs(PoseStack poseStackIn, MultiBufferSource buffer, int packedLight, int arcCount, float arcWidth, float widthVar, long seed, int coreRGBA, int glowRGBA, float taperOffset) {
+    public static void renderStraightArcs(PoseStack stack, MultiBufferSource buffer, int packedLight, int arcCount, float arcWidth, float widthVar, long seed, int coreRGBA, int glowRGBA, float taperOffset) {
 
         SplittableRandom rand = new SplittableRandom(seed);
-        poseStackIn.pushPose();
+        stack.pushPose();
 
         int nodeCount = arcs[0].length;
         int first = MathHelper.clamp((int) (nodeCount * (taperOffset - 0.25F) + 1), 0, nodeCount);
         int last = MathHelper.clamp((int) (nodeCount * (1.25F + taperOffset) + 1), 0, nodeCount);
 
         if (last - first > 1) {
-            PoseStack.Pose stackEntry = poseStackIn.last();
+            PoseStack.Pose stackEntry = stack.last();
             Matrix4f pose = stackEntry.pose();
             Matrix3f normal = stackEntry.normal();
 
@@ -456,7 +477,7 @@ public final class VFXHelper {
 
             float incr = 1.0F / nodeCount;
             for (int i = 0; i < arcCount; ++i) {
-                poseStackIn.mulPose(Vector3f.YP.rotationDegrees(rotations[i]));
+                stack.mulPose(Vector3f.YP.rotationDegrees(rotations[i]));
                 Vector3f[] arc = randomArcs[i];
                 VFXNode[] outer = new VFXNode[last - first];
                 VFXNode[] inner = new VFXNode[last - first];
@@ -477,24 +498,24 @@ public final class VFXHelper {
                     yw += perp.y * width * 1.5F;
                     outer[j - first] = new VFXNode(xc + xw, xc - xw, yc + yw, yc - yw, center.z(), width);
                 }
-                renderNodesCapped(normal, buffer, RenderTypes.LINEAR_GLOW, RenderTypes.ROUND_GLOW, packedLight, outer, (glowRGBA >> 24) & 0xFF, (glowRGBA >> 16) & 0xFF, (glowRGBA >> 8) & 0xFF, glowRGBA & 0xFF);
-                renderNodesCapped(normal, buffer, RenderTypes.LINEAR_GLOW, RenderTypes.ROUND_GLOW, packedLight, inner, (coreRGBA >> 24) & 0xFF, (coreRGBA >> 16) & 0xFF, (coreRGBA >> 8) & 0xFF, coreRGBA & 0xFF);
+                renderNodesCapped(normal, buffer, LINEAR_GLOW, ROUND_GLOW, packedLight, outer, (glowRGBA >> 24) & 0xFF, (glowRGBA >> 16) & 0xFF, (glowRGBA >> 8) & 0xFF, glowRGBA & 0xFF);
+                renderNodesCapped(normal, buffer, LINEAR_GLOW, ROUND_GLOW, packedLight, inner, (coreRGBA >> 24) & 0xFF, (coreRGBA >> 16) & 0xFF, (coreRGBA >> 8) & 0xFF, coreRGBA & 0xFF);
             }
         }
-        poseStackIn.popPose();
+        stack.popPose();
     }
 
-    public static void renderStraightArcs(PoseStack poseStackIn, MultiBufferSource buffer, int packedLightIn, int arcCount, float arcWidth, long seed, int coreRGBA, int glowRGBA, float taperOffset) {
+    public static void renderStraightArcs(PoseStack stack, MultiBufferSource buffer, int packedLightIn, int arcCount, float arcWidth, long seed, int coreRGBA, int glowRGBA, float taperOffset) {
 
-        renderStraightArcs(poseStackIn, buffer, packedLightIn, arcCount, arcWidth, 0.3F * arcWidth, seed, coreRGBA, glowRGBA, taperOffset);
+        renderStraightArcs(stack, buffer, packedLightIn, arcCount, arcWidth, 0.3F * arcWidth, seed, coreRGBA, glowRGBA, taperOffset);
     }
 
-    public static void renderStraightArcs(PoseStack poseStackIn, MultiBufferSource buffer, int packedLightIn, float length, int arcCount, float arcWidth, long seed, int coreRGBA, int glowRGBA, float taperOffset) {
+    public static void renderStraightArcs(PoseStack stack, MultiBufferSource buffer, int packedLightIn, float length, int arcCount, float arcWidth, long seed, int coreRGBA, int glowRGBA, float taperOffset) {
 
-        poseStackIn.pushPose();
-        poseStackIn.scale(length, length, length);
-        renderStraightArcs(poseStackIn, buffer, packedLightIn, arcCount, arcWidth / Math.abs(length), seed, coreRGBA, glowRGBA, taperOffset);
-        poseStackIn.popPose();
+        stack.pushPose();
+        stack.scale(length, length, length);
+        renderStraightArcs(stack, buffer, packedLightIn, arcCount, arcWidth / Math.abs(length), seed, coreRGBA, glowRGBA, taperOffset);
+        stack.popPose();
     }
 
     public static long getSeedWithTime(long seed, float time, float flickerRate) {
@@ -570,6 +591,45 @@ public final class VFXHelper {
     }
     // endregion
 
+    // region BEAM
+
+    /**
+     * Renders a laser beam in a unit column towards positive y.
+     *
+     * @param width       Width of the beam.
+     * @param coreRGBA    Color/alpha for the center part of the beam.
+     * @param glowRGBA    Color/alpha for the glow surrounding the beam.
+     */
+    public static void renderBeam(PoseStack stack, MultiBufferSource buffer, int packedLight, float width, int coreRGBA, int glowRGBA) {
+
+        PoseStack.Pose last = stack.last();
+        Matrix4f pose = last.pose();
+        Matrix3f normal = last.normal();
+        Vector4f start = new Vector4f(0, 0, 0, 1);
+        start.transform(pose);
+        Vector4f end = new Vector4f(0, 1, 0, 1);
+        end.transform(pose);
+        Vec2 perp = axialPerp(start, end, width);
+
+        float sx = start.x();
+        float sy = start.y();
+        float sz = start.z();
+        float ex = end.x();
+        float ey = end.y();
+        float ez = end.z();
+
+        VFXNode[] outer = {new VFXNode(sx + perp.x, sx - perp.x, sy + perp.y, sy - perp.y, sz, width),
+                new VFXNode(ex + perp.x, ex - perp.x, ey + perp.y, ey - perp.y, ez, width)};
+        perp = perp.scale(0.5F);
+        width *= 0.5F;
+        VFXNode[] inner = {new VFXNode(sx + perp.x, sx - perp.x, sy + perp.y, sy - perp.y, sz, width),
+                new VFXNode(ex + perp.x, ex - perp.x, ey + perp.y, ey - perp.y, ez, width)};
+
+        renderNodesCapped(normal, buffer, LINEAR_GLOW, ROUND_GLOW, packedLight, outer, (glowRGBA >> 24) & 0xFF, (glowRGBA >> 16) & 0xFF, (glowRGBA >> 8) & 0xFF, glowRGBA & 0xFF);
+        renderNodesCapped(normal, buffer, LINEAR_GLOW, ROUND_GLOW, packedLight, inner, (coreRGBA >> 24) & 0xFF, (coreRGBA >> 16) & 0xFF, (coreRGBA >> 8) & 0xFF, coreRGBA & 0xFF);
+    }
+    // endregion
+
     // region WIND
     private static final int WIND_SEGMENTS = 48;
     public static final float WIND_INCR = MathHelper.F_TAU / WIND_SEGMENTS;
@@ -621,7 +681,7 @@ public final class VFXHelper {
 
     public static void renderStreamLine(PoseStack stack, MultiBufferSource buffer, int packedLight, Vector4f[] poss, int rgba, Function<Float, Float> widthFunc) {
 
-        renderStreamLine(stack, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLight, poss, rgba, widthFunc);
+        renderStreamLine(stack, buffer.getBuffer(FLAT_TRANSLUCENT), packedLight, poss, rgba, widthFunc);
     }
 
     /**
@@ -666,9 +726,10 @@ public final class VFXHelper {
 
         stack.pushPose();
         stack.scale(diameter, height, diameter);
-        renderCyclone(stack, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLight, streamCount, streamWidth, time, alphaScale);
+        renderCyclone(stack, buffer.getBuffer(FLAT_TRANSLUCENT), packedLight, streamCount, streamWidth, time, alphaScale);
         stack.popPose();
     }
+    // endregion
 
     public static class VFXNode {
 

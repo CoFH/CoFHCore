@@ -1,10 +1,8 @@
 package cofh.core.client.particle.impl;
 
 import cofh.core.client.particle.CylindricalParticle;
-import cofh.core.client.particle.options.ColorParticleOptions;
 import cofh.core.client.particle.options.CylindricalParticleOptions;
 import cofh.core.util.helpers.vfx.VFXHelper;
-import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleProvider;

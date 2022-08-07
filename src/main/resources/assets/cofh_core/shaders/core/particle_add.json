@@ -2,12 +2,10 @@
   "blend": {
     "func": "add",
     "srcrgb": "srcalpha",
-    "dstrgb": "1-srcalpha",
-    "srcalpha": "1",
-    "dstalpha": "1-srcalpha"
+    "dstrgb": "1-srcalpha"
   },
   "vertex": "cofh_core:particle",
-  "fragment": "cofh_core:particle",
+  "fragment": "cofh_core:particle_add",
   "attributes": [
     "Position",
     "UV0",

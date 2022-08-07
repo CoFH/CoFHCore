@@ -62,7 +62,7 @@ public class CoreIDs {
     public static final String ID_PARTICLE_VORTEX = "wind_vortex";
     public static final String ID_PARTICLE_SPIRAL = "wind_spiral";
     public static final String ID_PARTICLE_MIST = "mist";
-    public static final String ID_PARTICLE_FLAME = "flame";
+    public static final String ID_PARTICLE_FIRE = "fire";
     public static final String ID_PARTICLE_BLAST = "blast";
     public static final String ID_PARTICLE_EXPLOSION = "explosion";
     public static final String ID_PARTICLE_BEAM = "beam";

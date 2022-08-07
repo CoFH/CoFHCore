@@ -16,29 +16,18 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nonnull;
 
 @OnlyIn (Dist.CLIENT)
-public class ArcParticle extends PointToPointParticle {
+public class BeamParticle extends PointToPointParticle {
 
     protected final Vector3f dest;
-    protected final float taper;
 
-    private ArcParticle(BiColorParticleOptions data, ClientLevel level, double sx, double sy, double sz, double ex, double ey, double ez) {
+    private BeamParticle(BiColorParticleOptions data, ClientLevel level, double sx, double sy, double sz, double ex, double ey, double ez) {
 
         super(data, level, sx, sy, sz, ex, ey, ez);
         float dx = (float) (ex - sx);
         float dy = (float) (ey - sy);
         float dz = (float) (ez - sz);
         //setDuration(5 + random.nextInt(2));
-        float dist = MathHelper.dist(dx, dy, dz);
-        // Partial arc if the distance is short
-        if (dist < 4) {
-            float frac = dist * 0.25F;
-            taper = frac - 1.25F;
-            frac = 1 / frac;
-            dest = new Vector3f(dx * frac, dy * frac, dz * frac);
-        } else {
-            taper = 0;
-            dest = new Vector3f(dx, dy, dz);
-        }
+        dest = new Vector3f(dx, dy, dz);
     }
 
     @Override
@@ -49,12 +38,11 @@ public class ArcParticle extends PointToPointParticle {
             return;
         }
         float progress = time / lifetime;
-        float easeCos = MathHelper.cos(progress * MathHelper.F_PI * 0.5F);
+        float easeCos = 0.5F * MathHelper.cos(progress * MathHelper.F_PI * 0.5F) + 0.5F;
         float easeCub = 1.0F - MathHelper.easeInCubic(progress);
         VFXHelper.alignVertical(stack, Vector3f.ZERO, dest);
-        VFXHelper.renderStraightArcs(stack, buffer, packedLight, 2, this.size * (easeCos * 1.5F - 0.5F), 0.015F,
-                VFXHelper.getSeedWithTime(seed, age), VFXHelper.alphaScale(rgba0, easeCub),
-                VFXHelper.alphaScale(rgba1, easeCub), Math.min(age * 0.3333F * 1.25F - 1.25F, taper));
+        VFXHelper.renderBeam(stack, buffer, packedLight, this.size * easeCos,
+                VFXHelper.alphaScale(rgba0, easeCub), VFXHelper.alphaScale(rgba1, easeCub));
     }
 
     @Override
@@ -72,7 +60,7 @@ public class ArcParticle extends PointToPointParticle {
     @Nonnull
     public static ParticleProvider<BiColorParticleOptions> factory(SpriteSet spriteSet) {
 
-        return ArcParticle::new;
+        return BeamParticle::new;
     }
 
 }

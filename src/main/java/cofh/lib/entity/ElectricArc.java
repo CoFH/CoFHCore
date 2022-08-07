@@ -1,5 +1,6 @@
 package cofh.lib.entity;
 
+import cofh.core.client.particle.options.ColorParticleOptions;
 import cofh.lib.util.references.CoreReferences;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -25,7 +26,7 @@ public class ElectricArc extends AbstractAoESpell {
 
         super(type, level);
         radius = 1.5F;
-        duration = defaultDuration;
+        duration = 100;
         noCulling = true;
     }
 
@@ -44,7 +45,13 @@ public class ElectricArc extends AbstractAoESpell {
     public void activeTick() {
 
         if (level.isClientSide) {
-            level.addParticle(CoreReferences.SPARK_PARTICLE, this.getX() + random.nextGaussian() * radius, this.getY() + random.nextFloat() * 0.25F, this.getZ() + random.nextGaussian() * radius, 0.0D, 0.0D, 0.0D);
+            //level.addParticle(CoreReferences.SPARK_PARTICLE, this.getX() + random.nextGaussian() * radius, this.getY() + random.nextFloat() * 0.25F, this.getZ() + random.nextGaussian() * radius, 0.0D, 0.0D, 0.0D);
+            Vec3 pos = this.position();
+            Vec3 look = new Vec3(0, .75, 0);
+            for (int i = 0; i < 6; ++i) {
+                float var = 0.08F;
+                level.addParticle(new ColorParticleOptions(CoreReferences.FIRE_PARTICLE, random.nextFloat(0.2F, 0.5F), 13.0F, 0xfffecc60), pos.x, pos.y + 0.1 * i, pos.z, look.x + random.nextFloat(-var, var), look.y + random.nextFloat(-var, var), look.z + random.nextFloat(-var, var));
+            }
         }
     }
 
@@ -105,8 +112,9 @@ public class ElectricArc extends AbstractAoESpell {
     @OnlyIn (Dist.CLIENT)
     public boolean shouldRenderAtSqrDistance(double distSqr) {
 
-        double d0 = 64.0D * getViewScale();
-        return distSqr < d0 * d0;
+        //double d0 = 64.0D * getViewScale();
+        //return distSqr < d0 * d0;
+        return false;
     }
 
 }

@@ -6,7 +6,7 @@ import cofh.core.block.entity.LightningAirTile;
 import cofh.core.block.entity.SignalAirTile;
 import cofh.core.client.particle.types.CylindricalParticleType;
 import cofh.core.client.particle.types.PointToPointParticleType;
-import cofh.core.client.particle.types.RadialParticleType;
+import cofh.core.client.particle.types.ColorParticleType;
 import cofh.core.inventory.container.HeldItemFilterContainer;
 import cofh.core.inventory.container.TileItemFilterContainer;
 import cofh.lib.entity.BlackHole;
@@ -156,9 +156,11 @@ public class CoreReferences {
     public static final SimpleParticleType SPARK_PARTICLE = null;
 
     @ObjectHolder (ID_PARTICLE_BLAST)
-    public static final RadialParticleType BLAST_PARTICLE = null;
+    public static final ColorParticleType BLAST_PARTICLE = null;
+    @ObjectHolder (ID_PARTICLE_FIRE)
+    public static final ColorParticleType FIRE_PARTICLE = null;
     @ObjectHolder (ID_PARTICLE_MIST)
-    public static final RadialParticleType MIST_PARTICLE = null;
+    public static final ColorParticleType MIST_PARTICLE = null;
 
     @ObjectHolder (ID_PARTICLE_BLAST_WAVE)
     public static final CylindricalParticleType BLAST_WAVE_PARTICLE = null;
@@ -180,11 +182,9 @@ public class CoreReferences {
 
     // TBI
     @ObjectHolder (ID_PARTICLE_CIRCLE_ARC)
-    public static final RadialParticleType CIRCLE_ARC_PARTICLE = null;
+    public static final ColorParticleType CIRCLE_ARC_PARTICLE = null;
     @ObjectHolder (ID_PARTICLE_EXPLOSION)
-    public static final RadialParticleType EXPLOSION_PARTICLE = null;
-    @ObjectHolder (ID_PARTICLE_FLAME)
-    public static final SimpleParticleType FLAME_PARTICLE = null;
+    public static final ColorParticleType EXPLOSION_PARTICLE = null;
     // endregion
 
     // region ENTITIES

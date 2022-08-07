@@ -41,8 +41,9 @@ public abstract class TextureParticleCoFH extends TextureSheetParticle {
 
     public void setSize(float size) {
 
-        Vec3 pos = new Vec3(x, y, z);
-        setBoundingBox(new AABB(pos, pos).inflate(size * 0.5F));
+        float half = size * 0.5F;
+        Vec3 pos = new Vec3(x, y + half, z);
+        setBoundingBox(new AABB(pos, pos).inflate(half));
         bbWidth = bbHeight = size;
         quadSize = size;
     }

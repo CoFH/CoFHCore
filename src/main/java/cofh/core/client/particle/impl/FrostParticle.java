@@ -36,7 +36,7 @@ public class FrostParticle extends TextureSheetParticle {
     @Override
     public ParticleRenderType getRenderType() {
 
-        return RenderTypes.PARTICLE_SHEET_TRANSLUCENT_BLEND;
+        return RenderTypes.PARTICLE_SHEET_OVER;
     }
 
     @OnlyIn (Dist.CLIENT)

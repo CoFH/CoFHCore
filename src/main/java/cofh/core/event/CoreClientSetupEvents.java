@@ -55,6 +55,7 @@ public class CoreClientSetupEvents {
         manager.register(PLASMA_PARTICLE, PlasmaBallParticle.Factory::new);
         manager.register(SPARK_PARTICLE, SparkParticle.Factory::new);
 
+        manager.register(FIRE_PARTICLE, FireParticle::factory);
         manager.register(BLAST_PARTICLE, BlastParticle::factory);
         manager.register(MIST_PARTICLE, MistParticle::factory);
 
@@ -63,9 +64,9 @@ public class CoreClientSetupEvents {
         manager.register(VORTEX_PARTICLE, WindVortexParticle::factory);
         manager.register(SPIRAL_PARTICLE, WindSpiralParticle::factory);
 
+        manager.register(BEAM_PARTICLE, BeamParticle::factory);
         manager.register(STRAIGHT_ARC_PARTICLE, ArcParticle::factory);
         manager.register(SHARD_PARTICLE, ShardParticle::factory);
-
     }
 
     // region HELPERS

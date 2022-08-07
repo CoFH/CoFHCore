@@ -2,7 +2,7 @@ package cofh.core.init;
 
 import cofh.core.client.particle.types.CylindricalParticleType;
 import cofh.core.client.particle.types.PointToPointParticleType;
-import cofh.core.client.particle.types.RadialParticleType;
+import cofh.core.client.particle.types.ColorParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 
 import static cofh.core.CoFHCore.PARTICLES;
@@ -22,21 +22,21 @@ public class CoreParticles {
         PARTICLES.register(ID_PARTICLE_PLASMA, () -> new SimpleParticleType(false));
         PARTICLES.register(ID_PARTICLE_SPARK, () -> new SimpleParticleType(false));
 
-        PARTICLES.register(ID_PARTICLE_MIST, RadialParticleType::new);
-        PARTICLES.register(ID_PARTICLE_BLAST, RadialParticleType::new);
+        PARTICLES.register(ID_PARTICLE_FIRE, ColorParticleType::new);
+        PARTICLES.register(ID_PARTICLE_BLAST, ColorParticleType::new);
+        PARTICLES.register(ID_PARTICLE_MIST, ColorParticleType::new);
 
-        PARTICLES.register(ID_PARTICLE_SHOCKWAVE, CylindricalParticleType::new);
         PARTICLES.register(ID_PARTICLE_BLAST_WAVE, CylindricalParticleType::new);
-        PARTICLES.register(ID_PARTICLE_VORTEX, CylindricalParticleType::new);
+        PARTICLES.register(ID_PARTICLE_SHOCKWAVE, CylindricalParticleType::new);
         PARTICLES.register(ID_PARTICLE_SPIRAL, CylindricalParticleType::new);
+        PARTICLES.register(ID_PARTICLE_VORTEX, CylindricalParticleType::new);
 
         //PARTICLES.register(ID_PARTICLE_CURRENT, );
-        //PARTICLES.register(ID_PARTICLE_BEAM, );
+        PARTICLES.register(ID_PARTICLE_BEAM, PointToPointParticleType::new);
         PARTICLES.register(ID_PARTICLE_STRAIGHT_ARC, PointToPointParticleType::new);
         PARTICLES.register(ID_PARTICLE_SHARD, PointToPointParticleType::new);
 
         //PARTICLES.register(ID_PARTICLE_CIRCLE_ARC, );
-        //PARTICLES.register(ID_PARTICLE_FLAME, );
         //PARTICLES.register(ID_PARTICLE_EXPLOSION, );
     }
 
