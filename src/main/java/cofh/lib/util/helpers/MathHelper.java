@@ -159,6 +159,11 @@ public final class MathHelper {
         return a > b ? a - b < max ? b : a - max : b - a < max ? b : a + max;
     }
 
+    public static int interpolate(int a, int b, float d) {
+
+        return (int) (a + (b - a) * d);
+    }
+
     public static float interpolate(float a, float b, float d) {
 
         return a + (b - a) * d;
