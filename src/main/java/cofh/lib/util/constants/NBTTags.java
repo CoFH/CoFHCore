@@ -49,6 +49,7 @@ public class NBTTags {
     public static final String TAG_FUEL = "Fuel";
     public static final String TAG_FUEL_MAX = "FuelMax";
     public static final String TAG_FUSE = "Fuse";
+    public static final String TAG_HOOK = "Hook";
     public static final String TAG_INDEX = "Index";
     public static final String TAG_INSTANT = "Instant";
     public static final String TAG_ITEM_INV = "ItemInv";

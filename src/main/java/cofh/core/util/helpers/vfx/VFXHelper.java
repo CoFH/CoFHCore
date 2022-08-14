@@ -118,7 +118,6 @@ public final class VFXHelper {
         interpolateCap(nodes[1], nodes[0]).renderStart(normal, consumer, packedLight, r, g, b, a, 0, 0, 1.0F, 0.5F);
         nodes[0].renderEnd(normal, consumer, packedLight, r, g, b, a, 0, 0, 1.0F, 0.5F);
         nodes[nodes.length - 1].renderStart(normal, consumer, packedLight, r, g, b, a, 0, 0.5F, 1.0F, 1.0F);
-        //System.out.println(interpolateCap(new VFXNode(1, 0, 1, 0, 0), new VFXNode(0, -1, 2, 1, -1)));
         interpolateCap(nodes[nodes.length - 2], nodes[nodes.length - 1]).renderEnd(normal, consumer, packedLight, r, g, b, a, 0, 0.5F, 1.0F, 1.0F);
     }
 
@@ -589,7 +588,6 @@ public final class VFXHelper {
     // endregion
 
     // region BEAM
-
     /**
      * Renders a laser beam in a unit column towards positive y.
      *
