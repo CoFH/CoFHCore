@@ -208,8 +208,16 @@ public class CoreClientEvents {
     private static void bufferShapeOutline(VertexConsumer builder, Matrix4f mat, VoxelShape shape, float r, float g, float b, float a) {
 
         shape.forAllEdges((x1, y1, z1, x2, y2, z2) -> {
-            builder.vertex(mat, (float) x1, (float) y1, (float) z1).color(r, g, b, a).endVertex();
-            builder.vertex(mat, (float) x2, (float) y2, (float) z2).color(r, g, b, a).endVertex();
+            double xn = x1 - x2;
+            double yn = y1 - y2;
+            double zn = z1 - z2;
+            double d = Math.sqrt(xn * xn + yn * yn + zn * zn);
+            xn /= d;
+            yn /= d;
+            zn /= d;
+
+            builder.vertex(mat, (float) x1, (float) y1, (float) z1).color(r, g, b, a).normal((float) xn, (float) yn, (float) zn).endVertex();
+            builder.vertex(mat, (float) x2, (float) y2, (float) z2).color(r, g, b, a).normal((float) xn, (float) yn, (float) zn).endVertex();
         });
     }
     // endregion

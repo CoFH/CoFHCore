@@ -22,7 +22,7 @@
 //    protected AbstractFluidFilter filter;
 //    protected InvWrapperGeneric filterInventory;
 //
-//    public TileFluidFilterContainer(int windowId, Level level, BlockPos pos, PlayerInventory inventory, PlayerEntity player) {
+//    public TileFluidFilterContainer(int windowId, Level level, BlockPos pos, Inventory inventory, PlayerEntity player) {
 //
 //        super(TILE_FLUID_FILTER_CONTAINER, windowId, world, pos, inventory, player);
 //

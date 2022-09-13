@@ -2,7 +2,6 @@ package cofh.core.fluid;
 
 import cofh.core.util.helpers.FluidHelper;
 import cofh.lib.fluid.FluidCoFH;
-import cofh.lib.util.constants.NBTTags;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;

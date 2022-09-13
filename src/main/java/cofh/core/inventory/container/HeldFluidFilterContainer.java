@@ -24,7 +24,7 @@
 //    protected InvWrapperGeneric filterInventory;
 //    protected ItemStack filterStack;
 //
-//    public HeldFluidFilterContainer(int windowId, PlayerInventory inventory, PlayerEntity player) {
+//    public HeldFluidFilterContainer(int windowId, Inventory inventory, PlayerEntity player) {
 //
 //        super(HELD_FLUID_FILTER_CONTAINER, windowId, inventory, player);
 //
@@ -50,7 +50,7 @@
 //    }
 //
 //    @Override
-//    protected void bindPlayerInventory(PlayerInventory inventory) {
+//    protected void bindPlayerInventory(Inventory inventory) {
 //
 //        int xOffset = getPlayerInventoryHorizontalOffset();
 //        int yOffset = getPlayerInventoryVerticalOffset();

@@ -33,7 +33,6 @@ import java.util.function.Supplier;
 import static cofh.lib.util.constants.Constants.TRUE;
 import static net.minecraft.world.level.material.Material.*;
 
-
 // TODO Sickle Tool Type.
 public class SickleItem extends DiggerItem implements ICoFHItem {
 
