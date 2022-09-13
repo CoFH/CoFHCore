@@ -18,7 +18,7 @@ public interface IRedstoneControllable {
     }
 
     /**
-     * This returns whether or not redstone control functionality is enabled at all.
+     * This returns whether redstone control functionality is enabled at all.
      */
     boolean isControllable();
 
