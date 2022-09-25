@@ -1,6 +1,6 @@
 package cofh.core.block.entity;
 
-import cofh.lib.block.entity.ICoFHTickableTile;
+import cofh.lib.api.block.entity.ITickableTile;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Blocks;
@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import static cofh.lib.util.references.CoreReferences.SIGNAL_AIR_TILE;
 
-public class SignalAirTile extends BlockEntity implements ICoFHTickableTile {
+public class SignalAirTile extends BlockEntity implements ITickableTile {
 
     protected int duration = 200;
     protected int power = 15;

@@ -1,7 +1,7 @@
 package cofh.core.block;
 
 import cofh.core.block.entity.EnderAirTile;
-import cofh.lib.block.entity.ICoFHTickableTile;
+import cofh.lib.api.block.entity.ITickableTile;
 import cofh.lib.util.Utils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -47,7 +47,7 @@ public class EnderAirBlock extends AirBlock implements EntityBlock {
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> actualType) {
 
-        return ICoFHTickableTile.createTicker(level, actualType, ENDER_AIR_TILE, EnderAirTile.class);
+        return ITickableTile.createTicker(level, actualType, ENDER_AIR_TILE, EnderAirTile.class);
     }
 
     @OnlyIn (Dist.CLIENT)

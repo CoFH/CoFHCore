@@ -48,13 +48,14 @@ import net.minecraftforge.event.entity.EntityTeleportEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nullable;
 import java.nio.file.Path;
 import java.util.Optional;
 import java.util.Random;
 
-import static cofh.lib.util.constants.Constants.MAX_CAPACITY;
+import static cofh.lib.util.Constants.MAX_CAPACITY;
 import static cofh.lib.util.constants.NBTTags.TAG_ENCHANTMENTS;
 import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 import static net.minecraft.nbt.Tag.TAG_LIST;
@@ -180,6 +181,18 @@ public class Utils {
 
         return tag == null || tag.getValues().isEmpty();
     }*/
+
+    @Nullable
+    public static String getKeynameFromKeycode(int code) {
+
+        return GLFW.glfwGetKeyName(code, -1);
+    }
+
+    @Nullable
+    public static String getKeyNameFromScanCode(int code) {
+
+        return GLFW.glfwGetKeyName(-1, code);
+    }
 
     // region TIME CHECKS
     public static final int TIME_CONSTANT = 40;

@@ -1,6 +1,6 @@
 package cofh.lib.inventory;
 
-import cofh.lib.util.IInventoryCallback;
+import cofh.lib.api.IStorageCallback;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -14,7 +14,7 @@ public class ManagedItemHandler extends SimpleItemHandler {
 
     protected boolean preventInputExtract = false;
 
-    public ManagedItemHandler(@Nullable IInventoryCallback callback, @Nonnull List<ItemStorageCoFH> inputSlots, @Nonnull List<ItemStorageCoFH> outputSlots) {
+    public ManagedItemHandler(@Nullable IStorageCallback callback, @Nonnull List<ItemStorageCoFH> inputSlots, @Nonnull List<ItemStorageCoFH> outputSlots) {
 
         super(callback);
 

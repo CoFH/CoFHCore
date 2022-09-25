@@ -3,11 +3,10 @@ package cofh.core.block.entity;
 import cofh.core.network.packet.client.TileGuiPacket;
 import cofh.core.util.ProxyUtils;
 import cofh.core.util.helpers.FluidHelper;
-import cofh.lib.block.entity.IAreaEffectTile;
-import cofh.lib.block.entity.ITileCallback;
-import cofh.lib.block.entity.ITilePacketHandler;
-import cofh.lib.block.entity.ITileXpHandler;
-import cofh.lib.util.IConveyableData;
+import cofh.lib.api.IConveyableData;
+import cofh.lib.api.block.entity.IAreaEffectTile;
+import cofh.lib.api.block.entity.IPacketHandlerTile;
+import cofh.lib.api.block.entity.ITileCallback;
 import cofh.lib.util.Utils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -27,7 +26,7 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import javax.annotation.Nullable;
 
-public class TileCoFH extends BlockEntity implements ITileCallback, ITilePacketHandler, ITileXpHandler, IConveyableData {
+public class TileCoFH extends BlockEntity implements ITileCallback, IPacketHandlerTile, ITileXpHandler, IConveyableData {
 
     protected int numPlayersUsing;
 

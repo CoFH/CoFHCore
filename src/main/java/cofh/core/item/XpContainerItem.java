@@ -1,11 +1,11 @@
 package cofh.core.item;
 
 import cofh.core.util.helpers.FluidHelper;
+import cofh.lib.api.ContainerType;
+import cofh.lib.api.item.IFluidContainerItem;
+import cofh.lib.api.item.IXpContainerItem;
 import cofh.lib.fluid.FluidContainerItemWrapper;
-import cofh.lib.fluid.IFluidContainerItem;
-import cofh.lib.item.ContainerType;
 import cofh.lib.util.Utils;
-import cofh.lib.xp.IXpContainerItem;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -21,13 +21,13 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import static cofh.lib.item.ContainerType.XP;
-import static cofh.lib.util.constants.Constants.MB_PER_XP;
-import static cofh.lib.util.constants.Constants.RGB_DURABILITY_XP;
+import static cofh.core.util.helpers.ItemHelper.areItemStacksEqualIgnoreTags;
+import static cofh.core.util.helpers.XpHelper.*;
+import static cofh.lib.api.ContainerType.XP;
+import static cofh.lib.util.Constants.MB_PER_XP;
+import static cofh.lib.util.Constants.RGB_DURABILITY_XP;
 import static cofh.lib.util.constants.NBTTags.TAG_FLUID;
-import static cofh.lib.util.helpers.ItemHelper.areItemStacksEqualIgnoreTags;
 import static cofh.lib.util.helpers.StringHelper.*;
-import static cofh.lib.util.helpers.XpHelper.*;
 import static cofh.lib.util.references.CoreReferences.FLUID_XP;
 
 /**

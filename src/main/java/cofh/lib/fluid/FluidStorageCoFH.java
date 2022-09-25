@@ -1,6 +1,7 @@
 package cofh.lib.fluid;
 
-import cofh.lib.util.IResourceStorage;
+import cofh.lib.api.IResourceStorage;
+import cofh.lib.api.fluid.IFluidStackHolder;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.fluids.FluidStack;
@@ -12,7 +13,7 @@ import java.util.function.BooleanSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-import static cofh.lib.util.constants.Constants.*;
+import static cofh.lib.util.Constants.*;
 import static cofh.lib.util.constants.NBTTags.TAG_CAPACITY;
 
 /**
@@ -20,7 +21,7 @@ import static cofh.lib.util.constants.NBTTags.TAG_CAPACITY;
  *
  * @author King Lemming
  */
-public class FluidStorageCoFH implements IFluidHandler, IFluidStackAccess, IResourceStorage {
+public class FluidStorageCoFH implements IFluidHandler, IFluidStackHolder, IResourceStorage {
 
     protected final int baseCapacity;
 

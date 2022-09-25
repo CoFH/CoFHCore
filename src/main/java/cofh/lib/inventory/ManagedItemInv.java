@@ -1,7 +1,7 @@
 package cofh.lib.inventory;
 
-import cofh.lib.util.IInventoryCallback;
-import cofh.lib.util.StorageGroup;
+import cofh.lib.api.IStorageCallback;
+import cofh.lib.api.StorageGroup;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.EmptyHandler;
@@ -24,12 +24,12 @@ public class ManagedItemInv extends SimpleItemInv {
     protected IItemHandler accessibleHandler;
     protected IItemHandler internalHandler;
 
-    public ManagedItemInv(IInventoryCallback callback) {
+    public ManagedItemInv(IStorageCallback callback) {
 
         super(callback);
     }
 
-    public ManagedItemInv(IInventoryCallback callback, String tag) {
+    public ManagedItemInv(IStorageCallback callback, String tag) {
 
         super(callback, tag);
     }

@@ -1,7 +1,7 @@
 package cofh.core.block;
 
 import cofh.core.block.entity.LightningAirTile;
-import cofh.lib.block.entity.ICoFHTickableTile;
+import cofh.lib.api.block.entity.ITickableTile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AirBlock;
@@ -31,7 +31,7 @@ public class LightningAirBlock extends AirBlock implements EntityBlock {
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> actualType) {
 
-        return ICoFHTickableTile.createTicker(level, actualType, LIGHTNING_AIR_TILE, LightningAirTile.class);
+        return ITickableTile.createTicker(level, actualType, LIGHTNING_AIR_TILE, LightningAirTile.class);
     }
 
     //    @OnlyIn (Dist.CLIENT)

@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import static cofh.core.CoFHCore.FLUIDS;
-import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
+import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 import static cofh.lib.util.references.CoreIDs.*;
 
 public class CoreTagsProvider {

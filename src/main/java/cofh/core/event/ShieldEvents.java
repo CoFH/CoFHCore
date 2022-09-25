@@ -12,8 +12,8 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import static cofh.lib.capability.CapabilityShieldItem.SHIELD_ITEM_CAPABILITY;
-import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
+import static cofh.core.capability.CapabilityShieldItem.SHIELD_ITEM_CAPABILITY;
+import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 
 @Mod.EventBusSubscriber (modid = ID_COFH_CORE)
 public class ShieldEvents {

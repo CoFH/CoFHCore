@@ -1,7 +1,7 @@
 package cofh.core.client.gui.element.listbox;
 
+import cofh.core.client.gui.IGuiAccess;
 import cofh.core.client.gui.element.ElementSlider;
-import cofh.lib.client.gui.IGuiAccess;
 
 public class SliderVertical extends ElementSlider {
 

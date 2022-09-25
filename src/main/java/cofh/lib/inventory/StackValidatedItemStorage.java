@@ -1,17 +1,19 @@
 package cofh.lib.inventory;
 
+import cofh.lib.api.inventory.IItemStackHolder;
+
 import java.util.function.BooleanSupplier;
 
-import static cofh.lib.util.constants.Constants.TRUE;
-import static cofh.lib.util.helpers.ItemHelper.itemsEqual;
-import static cofh.lib.util.helpers.ItemHelper.itemsEqualWithTags;
+import static cofh.core.util.helpers.ItemHelper.itemsEqual;
+import static cofh.core.util.helpers.ItemHelper.itemsEqualWithTags;
+import static cofh.lib.util.Constants.TRUE;
 
 public class StackValidatedItemStorage extends ItemStorageCoFH {
 
-    protected final IItemStackAccess linkedStack;
+    protected final IItemStackHolder linkedStack;
     protected BooleanSupplier checkNBT = TRUE;
 
-    public StackValidatedItemStorage(IItemStackAccess linkedStack) {
+    public StackValidatedItemStorage(IItemStackHolder linkedStack) {
 
         this.linkedStack = linkedStack;
 

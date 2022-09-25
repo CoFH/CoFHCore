@@ -1,6 +1,6 @@
 package cofh.core.block.entity;
 
-import cofh.lib.block.entity.ICoFHTickableTile;
+import cofh.lib.api.block.entity.ITickableTile;
 import cofh.lib.entity.ElectricArc;
 import cofh.lib.util.Utils;
 import cofh.lib.util.helpers.MathHelper;
@@ -13,7 +13,7 @@ import net.minecraft.world.phys.Vec3;
 
 import static cofh.lib.util.references.CoreReferences.LIGHTNING_AIR_TILE;
 
-public class LightningAirTile extends BlockEntity implements ICoFHTickableTile {
+public class LightningAirTile extends BlockEntity implements ITickableTile {
 
     protected int duration = 100;
 

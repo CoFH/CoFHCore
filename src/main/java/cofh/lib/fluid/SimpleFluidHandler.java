@@ -1,6 +1,6 @@
 package cofh.lib.fluid;
 
-import cofh.lib.util.IInventoryCallback;
+import cofh.lib.api.IStorageCallback;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
@@ -15,7 +15,7 @@ import java.util.List;
 public class SimpleFluidHandler implements IFluidHandler {
 
     @Nullable
-    protected IInventoryCallback callback;
+    protected IStorageCallback callback;
     protected List<FluidStorageCoFH> tanks;
 
     public SimpleFluidHandler() {
@@ -23,13 +23,13 @@ public class SimpleFluidHandler implements IFluidHandler {
         this(null);
     }
 
-    public SimpleFluidHandler(@Nullable IInventoryCallback callback) {
+    public SimpleFluidHandler(@Nullable IStorageCallback callback) {
 
         this.callback = callback;
         this.tanks = new ArrayList<>();
     }
 
-    public SimpleFluidHandler(@Nullable IInventoryCallback callback, @Nonnull List<FluidStorageCoFH> tanks) {
+    public SimpleFluidHandler(@Nullable IStorageCallback callback, @Nonnull List<FluidStorageCoFH> tanks) {
 
         this.callback = callback;
         this.tanks = new ArrayList<>(tanks);

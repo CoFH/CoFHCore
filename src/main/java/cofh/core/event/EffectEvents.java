@@ -2,7 +2,7 @@ package cofh.core.event;
 
 import cofh.core.network.packet.client.EffectAddedPacket;
 import cofh.core.network.packet.client.EffectRemovedPacket;
-import cofh.lib.effect.CustomParticleEffect;
+import cofh.lib.effect.CustomParticleMobEffect;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
+import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 import static cofh.lib.util.references.CoreReferences.*;
 
 @Mod.EventBusSubscriber (modid = ID_COFH_CORE)
@@ -115,7 +115,7 @@ public class EffectEvents {
         if (effects.isEmpty()) {
             return;
         }
-        Predicate<MobEffectInstance> hasCustomParticle = effect -> effect.getEffect() instanceof CustomParticleEffect;
+        Predicate<MobEffectInstance> hasCustomParticle = effect -> effect.getEffect() instanceof CustomParticleMobEffect;
         if (effects.stream().anyMatch(hasCustomParticle)) {
             List<MobEffectInstance> nonCustom = effects.stream().filter(hasCustomParticle.negate()).collect(Collectors.toList());
             if (nonCustom.isEmpty()) {
@@ -129,7 +129,7 @@ public class EffectEvents {
     @SubscribeEvent (priority = EventPriority.HIGH)
     public static void handlePotionAddEvent(PotionEvent.PotionAddedEvent event) {
 
-        if (event.getPotionEffect().getEffect() instanceof CustomParticleEffect) {
+        if (event.getPotionEffect().getEffect() instanceof CustomParticleMobEffect) {
             EffectAddedPacket.sendToClient(event.getEntityLiving(), event.getPotionEffect());
         }
     }
@@ -138,7 +138,7 @@ public class EffectEvents {
     public static void handlePotionRemoveEvent(PotionEvent.PotionRemoveEvent event) {
 
         MobEffectInstance effect = event.getPotionEffect();
-        if (effect != null && effect.getEffect() instanceof CustomParticleEffect) {
+        if (effect != null && effect.getEffect() instanceof CustomParticleMobEffect) {
             EffectRemovedPacket.sendToClient(event.getEntityLiving(), event.getPotionEffect());
         }
     }

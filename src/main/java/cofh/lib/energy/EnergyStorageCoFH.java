@@ -1,7 +1,7 @@
 package cofh.lib.energy;
 
-import cofh.lib.capability.IRedstoneFluxStorage;
-import cofh.lib.util.IResourceStorage;
+import cofh.core.capability.IRedstoneFluxStorage;
+import cofh.lib.api.IResourceStorage;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -10,7 +10,7 @@ import net.minecraftforge.energy.IEnergyStorage;
 
 import java.util.function.BooleanSupplier;
 
-import static cofh.lib.util.constants.Constants.*;
+import static cofh.lib.util.Constants.*;
 import static cofh.lib.util.constants.NBTTags.*;
 
 /**

@@ -6,7 +6,7 @@ import net.minecraft.core.Direction;
 
 import java.util.function.BooleanSupplier;
 
-import static cofh.lib.util.control.IReconfigurable.SideConfig.*;
+import static cofh.lib.api.control.IReconfigurable.SideConfig.*;
 
 public class ReconfigControlModuleLimited extends ReconfigControlModule {
 

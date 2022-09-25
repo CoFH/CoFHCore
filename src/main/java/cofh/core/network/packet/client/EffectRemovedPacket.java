@@ -11,7 +11,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import static cofh.lib.util.constants.Constants.PACKET_EFFECT_REMOVE;
+import static cofh.core.network.packet.PacketIDs.PACKET_EFFECT_REMOVE;
 
 public class EffectRemovedPacket extends PacketBase implements IPacketClient {
 

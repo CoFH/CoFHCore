@@ -3,7 +3,6 @@ package cofh.core.util.helpers;
 import cofh.core.fluid.PotionFluid;
 import cofh.lib.fluid.FluidStorageCoFH;
 import cofh.lib.util.helpers.BlockHelper;
-import cofh.lib.util.helpers.ItemHelper;
 import cofh.lib.util.references.CoFHTags;
 import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -53,8 +52,8 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static cofh.lib.util.constants.Constants.BOTTLE_VOLUME;
-import static cofh.lib.util.constants.Constants.BUCKET_VOLUME;
+import static cofh.lib.util.Constants.BOTTLE_VOLUME;
+import static cofh.lib.util.Constants.BUCKET_VOLUME;
 import static cofh.lib.util.constants.NBTTags.TAG_POTION;
 import static cofh.lib.util.references.CoreReferences.FLUID_HONEY;
 import static cofh.lib.util.references.CoreReferences.FLUID_XP;

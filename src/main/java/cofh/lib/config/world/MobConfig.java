@@ -10,7 +10,7 @@ import java.util.function.BooleanSupplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static cofh.lib.util.constants.Constants.FALSE;
+import static cofh.lib.util.Constants.FALSE;
 
 public class MobConfig implements IBaseConfig {
 

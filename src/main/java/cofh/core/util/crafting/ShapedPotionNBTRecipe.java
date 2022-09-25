@@ -1,5 +1,6 @@
 package cofh.core.util.crafting;
 
+import cofh.lib.util.crafting.ShapedRecipeInternal;
 import com.google.gson.JsonObject;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;

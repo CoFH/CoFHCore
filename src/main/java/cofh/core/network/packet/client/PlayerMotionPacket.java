@@ -7,7 +7,7 @@ import cofh.lib.network.packet.PacketBase;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 
-import static cofh.lib.util.constants.Constants.PACKET_MOTION;
+import static cofh.core.network.packet.PacketIDs.PACKET_MOTION;
 
 public class PlayerMotionPacket extends PacketBase implements IPacketClient {
 

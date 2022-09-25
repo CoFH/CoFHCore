@@ -9,7 +9,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
-import static cofh.lib.util.constants.Constants.PACKET_CHAT;
+import static cofh.core.network.packet.PacketIDs.PACKET_CHAT;
 
 public class IndexedChatPacket extends PacketBase implements IPacketClient {
 

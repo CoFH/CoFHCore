@@ -1,7 +1,7 @@
 package cofh.lib.inventory;
 
-import cofh.lib.util.IInventoryCallback;
-import cofh.lib.util.StorageGroup;
+import cofh.lib.api.IStorageCallback;
+import cofh.lib.api.StorageGroup;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.EmptyHandler;
 
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BooleanSupplier;
 
-import static cofh.lib.util.constants.Constants.FALSE;
+import static cofh.lib.util.Constants.FALSE;
 
 public class IOItemInv extends SimpleItemInv {
 
@@ -21,12 +21,12 @@ public class IOItemInv extends SimpleItemInv {
     protected IOItemHandler inputHandler;
     protected IItemHandler internalHandler;
 
-    public IOItemInv(@Nullable IInventoryCallback callback) {
+    public IOItemInv(@Nullable IStorageCallback callback) {
 
         super(callback);
     }
 
-    public IOItemInv(IInventoryCallback callback, String tag) {
+    public IOItemInv(IStorageCallback callback, String tag) {
 
         super(callback, tag);
     }

@@ -4,7 +4,7 @@ import cofh.lib.data.ItemModelProviderCoFH;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
-import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
+import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 
 public class CoreItemModelProvider extends ItemModelProviderCoFH {
 

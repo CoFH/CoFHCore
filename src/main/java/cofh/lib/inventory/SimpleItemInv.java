@@ -1,7 +1,7 @@
 package cofh.lib.inventory;
 
-import cofh.lib.util.IInventoryCallback;
-import cofh.lib.util.StorageGroup;
+import cofh.lib.api.IStorageCallback;
+import cofh.lib.api.StorageGroup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.item.ItemStack;
@@ -31,22 +31,22 @@ public class SimpleItemInv extends SimpleItemHandler {
         this(null, slots, TAG_ITEM_INV);
     }
 
-    public SimpleItemInv(@Nullable IInventoryCallback callback) {
+    public SimpleItemInv(@Nullable IStorageCallback callback) {
 
         this(callback, TAG_ITEM_INV);
     }
 
-    public SimpleItemInv(@Nullable IInventoryCallback callback, @Nonnull List<ItemStorageCoFH> slots) {
+    public SimpleItemInv(@Nullable IStorageCallback callback, @Nonnull List<ItemStorageCoFH> slots) {
 
         this(callback, slots, TAG_ITEM_INV);
     }
 
-    public SimpleItemInv(@Nullable IInventoryCallback callback, @Nonnull String tag) {
+    public SimpleItemInv(@Nullable IStorageCallback callback, @Nonnull String tag) {
 
         this(callback, Collections.emptyList(), tag);
     }
 
-    public SimpleItemInv(@Nullable IInventoryCallback callback, @Nonnull List<ItemStorageCoFH> slots, @Nonnull String tag) {
+    public SimpleItemInv(@Nullable IStorageCallback callback, @Nonnull List<ItemStorageCoFH> slots, @Nonnull String tag) {
 
         super(callback, slots);
         this.tag = tag;

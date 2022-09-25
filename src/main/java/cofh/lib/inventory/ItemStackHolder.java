@@ -1,10 +1,11 @@
 package cofh.lib.inventory;
 
+import cofh.lib.api.inventory.IItemStackHolder;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;
 
-public class ItemStackHolder implements IItemStackAccess {
+public class ItemStackHolder implements IItemStackHolder {
 
     protected ItemStack stack;
 

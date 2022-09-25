@@ -1,7 +1,7 @@
 package cofh.core.network.packet.server;
 
 import cofh.core.CoFHCore;
-import cofh.lib.block.entity.ITileXpHandler;
+import cofh.core.block.entity.ITileXpHandler;
 import cofh.lib.network.packet.IPacketServer;
 import cofh.lib.network.packet.PacketBase;
 import net.minecraft.core.BlockPos;
@@ -11,7 +11,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
 
-import static cofh.lib.util.constants.Constants.PACKET_CLAIM_XP;
+import static cofh.core.network.packet.PacketIDs.PACKET_CLAIM_XP;
 
 public class ClaimXPPacket extends PacketBase implements IPacketServer {
 

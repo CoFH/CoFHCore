@@ -1,7 +1,7 @@
 package cofh.core.util.control;
 
-import cofh.lib.block.entity.ITileCallback;
-import cofh.lib.util.control.IReconfigurable;
+import cofh.lib.api.block.entity.ITileCallback;
+import cofh.lib.api.control.IReconfigurable;
 import net.minecraft.core.Direction;
 
 public interface IReconfigurableTile extends IReconfigurable, ITileCallback {

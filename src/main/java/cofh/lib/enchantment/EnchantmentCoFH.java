@@ -5,7 +5,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
-import static cofh.lib.capability.CapabilityEnchantableItem.ENCHANTABLE_ITEM_CAPABILITY;
+import static cofh.core.capability.CapabilityEnchantableItem.ENCHANTABLE_ITEM_CAPABILITY;
 
 public abstract class EnchantmentCoFH extends Enchantment {
 

@@ -24,7 +24,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import static cofh.lib.util.constants.Constants.BUCKET_VOLUME;
+import static cofh.lib.util.Constants.BUCKET_VOLUME;
 
 public class FluidIngredient implements Predicate<FluidStack> {
 

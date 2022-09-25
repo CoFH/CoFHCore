@@ -1,10 +1,11 @@
 package cofh.lib.fluid;
 
+import cofh.lib.api.fluid.IFluidStackHolder;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
 
-public class FluidStackHolder implements IFluidStackAccess {
+public class FluidStackHolder implements IFluidStackHolder {
 
     protected final FluidStack stack;
 

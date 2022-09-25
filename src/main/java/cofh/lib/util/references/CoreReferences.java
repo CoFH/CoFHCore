@@ -20,7 +20,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraftforge.registries.ObjectHolder;
 
-import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
+import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 import static cofh.lib.util.references.CoreIDs.*;
 
 @ObjectHolder (ID_COFH_CORE)

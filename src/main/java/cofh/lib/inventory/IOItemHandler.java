@@ -1,6 +1,6 @@
 package cofh.lib.inventory;
 
-import cofh.lib.util.IInventoryCallback;
+import cofh.lib.api.IStorageCallback;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -8,14 +8,14 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.BooleanSupplier;
 
-import static cofh.lib.util.constants.Constants.TRUE;
+import static cofh.lib.util.Constants.TRUE;
 
 public class IOItemHandler extends SimpleItemHandler {
 
     protected BooleanSupplier allowInsert = TRUE;
     protected BooleanSupplier allowExtract = TRUE;
 
-    public IOItemHandler(@Nullable IInventoryCallback callback, @Nonnull List<ItemStorageCoFH> slots) {
+    public IOItemHandler(@Nullable IStorageCallback callback, @Nonnull List<ItemStorageCoFH> slots) {
 
         super(callback, slots);
     }

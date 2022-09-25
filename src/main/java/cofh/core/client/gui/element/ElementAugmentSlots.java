@@ -1,7 +1,7 @@
 package cofh.core.client.gui.element;
 
+import cofh.core.client.gui.IGuiAccess;
 import cofh.core.util.helpers.GuiHelper;
-import cofh.lib.client.gui.IGuiAccess;
 import cofh.lib.inventory.container.slot.SlotCoFH;
 import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -13,8 +13,8 @@ import java.util.function.BooleanSupplier;
 import java.util.function.IntSupplier;
 
 import static cofh.core.util.helpers.GuiHelper.SLOT_SIZE;
-import static cofh.lib.util.constants.Constants.MAX_AUGMENTS;
-import static cofh.lib.util.constants.Constants.TRUE;
+import static cofh.lib.util.Constants.MAX_AUGMENTS;
+import static cofh.lib.util.Constants.TRUE;
 
 public class ElementAugmentSlots extends ElementBase {
 

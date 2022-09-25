@@ -2,7 +2,7 @@ package cofh.core.network.packet.client;
 
 import cofh.core.CoFHCore;
 import cofh.core.util.ProxyUtils;
-import cofh.lib.block.entity.ITilePacketHandler;
+import cofh.lib.api.block.entity.IPacketHandlerTile;
 import cofh.lib.network.packet.IPacketClient;
 import cofh.lib.network.packet.PacketBase;
 import cofh.lib.util.Utils;
@@ -12,8 +12,8 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-import static cofh.lib.util.constants.Constants.NETWORK_UPDATE_DISTANCE;
-import static cofh.lib.util.constants.Constants.PACKET_RENDER;
+import static cofh.core.network.packet.PacketIDs.PACKET_RENDER;
+import static cofh.lib.util.Constants.NETWORK_UPDATE_DISTANCE;
 
 /**
  * Intended to sync tile entity render data *without* forcing a block update. Useful in TESRs, etc.
@@ -37,8 +37,8 @@ public class TileRenderPacket extends PacketBase implements IPacketClient {
             return;
         }
         BlockEntity tile = world.getBlockEntity(pos);
-        if (tile instanceof ITilePacketHandler) {
-            ((ITilePacketHandler) tile).handleRenderPacket(buffer);
+        if (tile instanceof IPacketHandlerTile) {
+            ((IPacketHandlerTile) tile).handleRenderPacket(buffer);
         }
     }
 
@@ -56,7 +56,7 @@ public class TileRenderPacket extends PacketBase implements IPacketClient {
         pos = buffer.readBlockPos();
     }
 
-    public static void sendToClient(ITilePacketHandler tile) {
+    public static void sendToClient(IPacketHandlerTile tile) {
 
         if (tile.world() == null || Utils.isClientWorld(tile.world())) {
             return;

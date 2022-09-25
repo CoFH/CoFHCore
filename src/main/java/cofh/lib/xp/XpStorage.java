@@ -1,6 +1,6 @@
 package cofh.lib.xp;
 
-import cofh.lib.util.IResourceStorage;
+import cofh.lib.api.IResourceStorage;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -8,8 +8,8 @@ import net.minecraftforge.common.util.INBTSerializable;
 
 import java.util.function.BooleanSupplier;
 
-import static cofh.lib.util.constants.Constants.FALSE;
-import static cofh.lib.util.constants.Constants.MAX_CAPACITY;
+import static cofh.lib.util.Constants.FALSE;
+import static cofh.lib.util.Constants.MAX_CAPACITY;
 import static cofh.lib.util.constants.NBTTags.TAG_XP;
 import static cofh.lib.util.constants.NBTTags.TAG_XP_MAX;
 

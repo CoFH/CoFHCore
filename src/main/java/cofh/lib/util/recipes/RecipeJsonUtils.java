@@ -1,7 +1,7 @@
 package cofh.lib.util.recipes;
 
-import cofh.core.util.crafting.IngredientWithCount;
 import cofh.lib.fluid.FluidIngredient;
+import cofh.lib.util.crafting.IngredientWithCount;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -21,8 +21,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 
-import static cofh.lib.util.constants.Constants.BASE_CHANCE_LOCKED;
-import static cofh.lib.util.constants.Constants.BUCKET_VOLUME;
+import static cofh.lib.util.Constants.BASE_CHANCE_LOCKED;
+import static cofh.lib.util.Constants.BUCKET_VOLUME;
 
 public abstract class RecipeJsonUtils {
 

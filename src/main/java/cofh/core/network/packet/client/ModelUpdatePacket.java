@@ -11,8 +11,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-import static cofh.lib.util.constants.Constants.NETWORK_UPDATE_DISTANCE;
-import static cofh.lib.util.constants.Constants.PACKET_MODEL_UPDATE;
+import static cofh.core.network.packet.PacketIDs.PACKET_MODEL_UPDATE;
+import static cofh.lib.util.Constants.NETWORK_UPDATE_DISTANCE;
 
 /**
  * A generic packet to force a client-side ModelData update and rerender if it didn't happen for efficiency or other reasons.

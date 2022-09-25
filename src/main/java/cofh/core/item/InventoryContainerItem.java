@@ -1,6 +1,6 @@
 package cofh.core.item;
 
-import cofh.lib.inventory.IInventoryContainerItem;
+import cofh.lib.api.item.IInventoryContainerItem;
 import cofh.lib.inventory.ItemStorageCoFH;
 import cofh.lib.inventory.SimpleItemInv;
 import net.minecraft.nbt.CompoundTag;
@@ -9,8 +9,8 @@ import net.minecraft.world.item.ItemStack;
 import java.util.ArrayList;
 import java.util.WeakHashMap;
 
+import static cofh.core.util.helpers.ItemHelper.areItemStacksEqualIgnoreTags;
 import static cofh.lib.util.constants.NBTTags.TAG_ITEM_INV;
-import static cofh.lib.util.helpers.ItemHelper.areItemStacksEqualIgnoreTags;
 
 public class InventoryContainerItem extends ItemCoFH implements IInventoryContainerItem {
 

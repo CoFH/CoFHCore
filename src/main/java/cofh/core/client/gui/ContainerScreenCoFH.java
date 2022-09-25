@@ -5,7 +5,6 @@ import cofh.core.client.gui.element.panel.InfoPanel;
 import cofh.core.client.gui.element.panel.PanelBase;
 import cofh.core.client.gui.element.panel.PanelTracker;
 import cofh.core.util.helpers.RenderHelper;
-import cofh.lib.client.gui.IGuiAccess;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;

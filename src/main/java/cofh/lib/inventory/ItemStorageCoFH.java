@@ -1,7 +1,8 @@
 package cofh.lib.inventory;
 
-import cofh.lib.util.IResourceStorage;
-import cofh.lib.util.helpers.ItemHelper;
+import cofh.core.util.helpers.ItemHelper;
+import cofh.lib.api.IResourceStorage;
+import cofh.lib.api.inventory.IItemStackHolder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
@@ -11,16 +12,16 @@ import java.util.function.BooleanSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-import static cofh.lib.util.constants.Constants.*;
-import static cofh.lib.util.helpers.ItemHelper.cloneStack;
-import static cofh.lib.util.helpers.ItemHelper.itemsEqualWithTags;
+import static cofh.core.util.helpers.ItemHelper.cloneStack;
+import static cofh.core.util.helpers.ItemHelper.itemsEqualWithTags;
+import static cofh.lib.util.Constants.*;
 
 /**
  * Implementation of an Item Storage object.
  *
  * @author King Lemming
  */
-public class ItemStorageCoFH implements IItemHandler, IItemStackAccess, IResourceStorage {
+public class ItemStorageCoFH implements IItemHandler, IItemStackHolder, IResourceStorage {
 
     protected final int baseCapacity;
 

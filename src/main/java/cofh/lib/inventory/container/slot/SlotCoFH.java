@@ -10,7 +10,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.function.BooleanSupplier;
 import java.util.function.IntSupplier;
 
-import static cofh.lib.util.constants.Constants.TRUE;
+import static cofh.lib.util.Constants.TRUE;
 
 public class SlotCoFH extends Slot {
 

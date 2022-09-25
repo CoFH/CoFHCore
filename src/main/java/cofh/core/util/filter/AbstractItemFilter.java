@@ -1,8 +1,6 @@
 package cofh.core.util.filter;
 
-import cofh.lib.util.filter.IFilter;
-import cofh.lib.util.filter.IFilterOptions;
-import cofh.lib.util.helpers.ItemHelper;
+import cofh.core.util.helpers.ItemHelper;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;

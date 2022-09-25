@@ -8,7 +8,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import java.util.List;
 import java.util.function.BooleanSupplier;
 
-import static cofh.lib.util.constants.Constants.FALSE;
+import static cofh.lib.util.Constants.FALSE;
 
 public class OreConfig implements IBaseConfig {
 

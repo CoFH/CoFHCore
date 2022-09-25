@@ -6,7 +6,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
-import static cofh.lib.util.constants.Constants.MAX_CAPACITY;
+import static cofh.lib.util.Constants.MAX_CAPACITY;
 
 public class InvWrapperCoFH implements Container {
 

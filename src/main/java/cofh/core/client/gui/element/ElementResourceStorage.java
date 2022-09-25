@@ -1,8 +1,8 @@
 package cofh.core.client.gui.element;
 
+import cofh.core.client.gui.IGuiAccess;
 import cofh.core.util.helpers.RenderHelper;
-import cofh.lib.client.gui.IGuiAccess;
-import cofh.lib.util.IResourceStorage;
+import cofh.lib.api.IResourceStorage;
 import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
@@ -15,8 +15,8 @@ import java.util.List;
 import java.util.function.BooleanSupplier;
 
 import static cofh.core.CoFHCore.LOG;
-import static cofh.lib.util.constants.Constants.FALSE;
-import static cofh.lib.util.constants.Constants.TRUE;
+import static cofh.lib.util.Constants.FALSE;
+import static cofh.lib.util.Constants.TRUE;
 import static cofh.lib.util.helpers.StringHelper.format;
 import static net.minecraft.client.gui.screens.Screen.hasAltDown;
 import static net.minecraft.client.gui.screens.Screen.hasShiftDown;

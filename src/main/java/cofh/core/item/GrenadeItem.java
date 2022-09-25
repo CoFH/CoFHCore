@@ -17,7 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
 
-import static cofh.lib.util.helpers.ItemHelper.cloneStack;
+import static cofh.core.util.helpers.ItemHelper.cloneStack;
 
 public class GrenadeItem extends ItemCoFH {
 

@@ -1,6 +1,6 @@
 package cofh.lib.client.renderer.entity;
 
-import cofh.lib.item.impl.FishingRodItemCoFH;
+import cofh.lib.item.FishingRodItemCoFH;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix3f;

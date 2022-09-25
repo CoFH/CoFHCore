@@ -1,8 +1,8 @@
 package cofh.core.util.control;
 
 import cofh.core.network.packet.server.SecurityControlPacket;
+import cofh.lib.api.control.ISecurable;
 import cofh.lib.util.Utils;
-import cofh.lib.util.control.ISecurable;
 import cofh.lib.util.helpers.SecurityHelper;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.nbt.CompoundTag;
@@ -11,7 +11,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import java.util.UUID;
 import java.util.function.BooleanSupplier;
 
-import static cofh.lib.util.constants.Constants.TRUE;
+import static cofh.lib.util.Constants.TRUE;
 import static cofh.lib.util.constants.NBTTags.*;
 
 public class SecurityControlModule implements ISecurable {

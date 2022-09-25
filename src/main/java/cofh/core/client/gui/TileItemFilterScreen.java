@@ -5,7 +5,7 @@ import cofh.core.client.gui.element.ElementTexture;
 import cofh.core.client.gui.element.SimpleTooltip;
 import cofh.core.inventory.container.TileItemFilterContainer;
 import cofh.core.network.packet.server.FilterGuiOpenPacket;
-import cofh.lib.util.helpers.FilterHelper;
+import cofh.core.util.helpers.FilterHelper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -15,7 +15,7 @@ import net.minecraft.world.inventory.Slot;
 import java.util.Collections;
 
 import static cofh.core.util.helpers.GuiHelper.*;
-import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
+import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 import static cofh.lib.util.helpers.SoundHelper.playClickSound;
 
 public class TileItemFilterScreen extends ContainerScreenCoFH<TileItemFilterContainer> {

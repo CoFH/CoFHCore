@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
-import static cofh.lib.util.constants.Constants.ID_FORGE;
+import static cofh.lib.util.constants.ModIds.ID_FORGE;
 
 public class RecipeProviderCoFH extends RecipeProvider implements IConditionBuilder {
 

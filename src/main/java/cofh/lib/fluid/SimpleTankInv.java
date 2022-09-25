@@ -1,7 +1,7 @@
 package cofh.lib.fluid;
 
-import cofh.lib.block.entity.ITileCallback;
-import cofh.lib.util.StorageGroup;
+import cofh.lib.api.StorageGroup;
+import cofh.lib.api.block.entity.ITileCallback;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraftforge.fluids.FluidStack;

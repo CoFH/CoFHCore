@@ -21,7 +21,7 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.util.Set;
 
-import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
+import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 import static cofh.lib.util.references.CoreReferences.CHILLED;
 import static cofh.lib.util.references.CoreReferences.SHOCKED;
 import static net.minecraft.world.effect.MobEffects.POISON;

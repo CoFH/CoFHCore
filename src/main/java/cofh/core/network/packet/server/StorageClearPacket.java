@@ -1,7 +1,7 @@
 package cofh.core.network.packet.server;
 
 import cofh.core.CoFHCore;
-import cofh.lib.block.entity.ITileCallback;
+import cofh.lib.api.block.entity.ITileCallback;
 import cofh.lib.network.packet.IPacketServer;
 import cofh.lib.network.packet.PacketBase;
 import net.minecraft.core.BlockPos;
@@ -10,7 +10,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-import static cofh.lib.util.constants.Constants.PACKET_STORAGE_CLEAR;
+import static cofh.core.network.packet.PacketIDs.PACKET_STORAGE_CLEAR;
 
 public class StorageClearPacket extends PacketBase implements IPacketServer {
 

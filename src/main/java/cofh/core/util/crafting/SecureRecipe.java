@@ -1,6 +1,6 @@
 package cofh.core.util.crafting;
 
-import cofh.lib.util.control.ISecurable.AccessMode;
+import cofh.lib.api.control.ISecurable.AccessMode;
 import cofh.lib.util.helpers.SecurityHelper;
 import cofh.lib.util.references.CoFHTags;
 import net.minecraft.resources.ResourceLocation;

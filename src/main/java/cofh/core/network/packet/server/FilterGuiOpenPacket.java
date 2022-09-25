@@ -1,16 +1,16 @@
 package cofh.core.network.packet.server;
 
 import cofh.core.CoFHCore;
+import cofh.core.util.filter.IFilterableTile;
 import cofh.lib.network.packet.IPacketServer;
 import cofh.lib.network.packet.PacketBase;
-import cofh.lib.util.filter.IFilterableTile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-import static cofh.lib.util.constants.Constants.PACKET_GUI_OPEN;
+import static cofh.core.network.packet.PacketIDs.PACKET_GUI_OPEN;
 
 public class FilterGuiOpenPacket extends PacketBase implements IPacketServer {
 

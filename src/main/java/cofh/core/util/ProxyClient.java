@@ -1,8 +1,8 @@
 package cofh.core.util;
 
 import cofh.core.event.CoreClientSetupEvents;
-import cofh.lib.block.entity.IAreaEffectTile;
-import cofh.lib.util.IProxyItemPropertyGetter;
+import cofh.lib.api.IProxyItemPropertyGetter;
+import cofh.lib.api.block.entity.IAreaEffectTile;
 import cofh.lib.util.helpers.SoundHelper;
 import cofh.lib.util.helpers.StringHelper;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;

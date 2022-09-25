@@ -1,6 +1,6 @@
 package cofh.lib.entity;
 
-import cofh.lib.item.impl.KnifeItem;
+import cofh.core.item.KnifeItem;
 import cofh.lib.util.Utils;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.nbt.CompoundTag;

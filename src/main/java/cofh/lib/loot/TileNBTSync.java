@@ -1,6 +1,6 @@
 package cofh.lib.loot;
 
-import cofh.lib.block.entity.ITileCallback;
+import cofh.lib.api.block.entity.ITileCallback;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import net.minecraft.core.Registry;
@@ -12,7 +12,7 @@ import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunct
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
-import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
+import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 import static net.minecraft.world.level.storage.loot.parameters.LootContextParams.BLOCK_ENTITY;
 
 public class TileNBTSync extends LootItemConditionalFunction {

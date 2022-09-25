@@ -2,16 +2,16 @@ package cofh.core.network.packet.server;
 
 import cofh.core.CoFHCore;
 import cofh.core.util.control.IRedstoneControllableTile;
+import cofh.lib.api.control.IRedstoneControllable.ControlMode;
 import cofh.lib.network.packet.IPacketServer;
 import cofh.lib.network.packet.PacketBase;
-import cofh.lib.util.control.IRedstoneControllable.ControlMode;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-import static cofh.lib.util.constants.Constants.PACKET_REDSTONE_CONTROL;
+import static cofh.core.network.packet.PacketIDs.PACKET_REDSTONE_CONTROL;
 
 public class RedstoneControlPacket extends PacketBase implements IPacketServer {
 

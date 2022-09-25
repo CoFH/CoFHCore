@@ -1,14 +1,14 @@
 package cofh.core.util.control;
 
 import cofh.core.network.packet.server.RedstoneControlPacket;
+import cofh.lib.api.control.IRedstoneControllable;
 import cofh.lib.util.Utils;
-import cofh.lib.util.control.IRedstoneControllable;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.function.BooleanSupplier;
 
-import static cofh.lib.util.constants.Constants.TRUE;
+import static cofh.lib.util.Constants.TRUE;
 import static cofh.lib.util.constants.NBTTags.*;
 
 public class RedstoneControlModule implements IRedstoneControllable {

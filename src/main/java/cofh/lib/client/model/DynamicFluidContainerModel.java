@@ -35,8 +35,8 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.function.Function;
 
-import static cofh.lib.util.constants.Constants.BUCKET_VOLUME;
-import static cofh.lib.util.constants.Constants.ID_COFH_CORE;
+import static cofh.lib.util.Constants.BUCKET_VOLUME;
+import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 
 public final class DynamicFluidContainerModel implements IModelGeometry<DynamicFluidContainerModel> {
 

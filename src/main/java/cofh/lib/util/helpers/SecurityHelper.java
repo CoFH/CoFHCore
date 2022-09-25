@@ -1,7 +1,7 @@
 package cofh.lib.util.helpers;
 
-import cofh.lib.util.control.ISecurable;
-import cofh.lib.util.control.ISecurable.AccessMode;
+import cofh.lib.api.control.ISecurable;
+import cofh.lib.api.control.ISecurable.AccessMode;
 import com.google.common.base.Strings;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.Minecraft;

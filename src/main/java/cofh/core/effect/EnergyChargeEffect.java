@@ -1,6 +1,6 @@
 package cofh.core.effect;
 
-import cofh.lib.capability.CapabilityRedstoneFlux;
+import cofh.core.capability.CapabilityRedstoneFlux;
 import cofh.lib.effect.EffectCoFH;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectCategory;

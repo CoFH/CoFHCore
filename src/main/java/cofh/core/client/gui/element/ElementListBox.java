@@ -1,9 +1,9 @@
 package cofh.core.client.gui.element;
 
+import cofh.core.client.gui.GuiColor;
+import cofh.core.client.gui.IGuiAccess;
 import cofh.core.client.gui.element.listbox.IListBoxElement;
 import cofh.core.util.helpers.RenderHelper;
-import cofh.lib.client.gui.GuiColor;
-import cofh.lib.client.gui.IGuiAccess;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.screens.Screen;
 import org.lwjgl.opengl.GL11;

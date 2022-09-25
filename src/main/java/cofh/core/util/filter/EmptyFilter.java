@@ -1,6 +1,5 @@
 package cofh.core.util.filter;
 
-import cofh.lib.util.filter.IFilter;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;

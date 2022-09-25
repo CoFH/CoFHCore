@@ -10,7 +10,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-import static cofh.lib.util.constants.Constants.PACKET_TRANSFER_CONTROL;
+import static cofh.core.network.packet.PacketIDs.PACKET_TRANSFER_CONTROL;
 
 public class TransferControlPacket extends PacketBase implements IPacketServer {
 

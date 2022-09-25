@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 
 import java.util.function.BooleanSupplier;
 
-import static cofh.lib.util.constants.Constants.FALSE;
+import static cofh.lib.util.Constants.FALSE;
 
 public class ConditionalSound extends AbstractTickableSoundInstance {
 

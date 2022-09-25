@@ -1,6 +1,6 @@
 package cofh.lib.inventory;
 
-import cofh.lib.util.IInventoryCallback;
+import cofh.lib.api.IStorageCallback;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 
@@ -15,7 +15,7 @@ import java.util.List;
 public class SimpleItemHandler implements IItemHandler {
 
     @Nullable
-    protected IInventoryCallback callback;
+    protected IStorageCallback callback;
     protected List<ItemStorageCoFH> slots;
 
     public SimpleItemHandler(@Nonnull List<ItemStorageCoFH> slots) {
@@ -23,13 +23,13 @@ public class SimpleItemHandler implements IItemHandler {
         this(null, slots);
     }
 
-    public SimpleItemHandler(@Nullable IInventoryCallback callback) {
+    public SimpleItemHandler(@Nullable IStorageCallback callback) {
 
         this.callback = callback;
         this.slots = new ArrayList<>();
     }
 
-    public SimpleItemHandler(@Nullable IInventoryCallback callback, @Nonnull List<ItemStorageCoFH> slots) {
+    public SimpleItemHandler(@Nullable IStorageCallback callback, @Nonnull List<ItemStorageCoFH> slots) {
 
         this.callback = callback;
         this.slots = new ArrayList<>(slots);
