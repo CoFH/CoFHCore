@@ -30,7 +30,7 @@ import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
-import static cofh.lib.util.references.CoreReferences.KNIFE_ENTITY;
+import static cofh.core.util.references.CoreReferences.KNIFE_ENTITY;
 
 public class Knife extends AbstractArrow {
 

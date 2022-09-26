@@ -7,7 +7,7 @@ import net.minecraft.world.item.Rarity;
 import net.minecraftforge.fluids.FluidAttributes;
 
 import static cofh.core.CoFHCore.FLUIDS;
-import static cofh.lib.util.references.CoreIDs.ID_FLUID_XP;
+import static cofh.core.util.references.CoreIDs.ID_FLUID_XP;
 
 public class XPFluid extends FluidCoFH {
 

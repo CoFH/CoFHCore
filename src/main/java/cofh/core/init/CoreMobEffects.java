@@ -7,12 +7,12 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 
 import static cofh.core.CoFHCore.EFFECTS;
+import static cofh.core.util.references.CoreIDs.*;
 import static cofh.lib.util.Constants.*;
-import static cofh.lib.util.references.CoreIDs.*;
 
-public class CoreEffects {
+public class CoreMobEffects {
 
-    private CoreEffects() {
+    private CoreMobEffects() {
 
     }
 

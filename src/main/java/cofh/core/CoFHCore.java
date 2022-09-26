@@ -60,8 +60,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import static cofh.core.util.references.CoreReferences.*;
 import static cofh.lib.client.renderer.entity.model.ArmorFullSuitModel.ARMOR_FULL_SUIT_LAYER;
-import static cofh.lib.util.references.CoreReferences.*;
 
 @Mod (ModIds.ID_COFH_CORE)
 public class CoFHCore {
@@ -131,7 +131,7 @@ public class CoFHCore {
 
         CoreParticles.register();
         CoreContainers.register();
-        CoreEffects.register();
+        CoreMobEffects.register();
         CoreEnchantments.register();
         CoreRecipeSerializers.register();
         CoreSounds.register();

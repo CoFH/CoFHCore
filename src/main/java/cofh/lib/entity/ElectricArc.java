@@ -1,6 +1,6 @@
 package cofh.lib.entity;
 
-import cofh.lib.util.references.CoreReferences;
+import cofh.core.util.references.CoreReferences;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -11,8 +11,8 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import static cofh.lib.util.references.CoreReferences.ELECTRIC_ARC_ENTITY;
-import static cofh.lib.util.references.CoreReferences.SHOCKED;
+import static cofh.core.util.references.CoreReferences.ELECTRIC_ARC_ENTITY;
+import static cofh.core.util.references.CoreReferences.SHOCKED;
 
 public class ElectricArc extends AbstractAoESpell {
 

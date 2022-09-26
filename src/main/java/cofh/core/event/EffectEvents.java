@@ -24,8 +24,8 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static cofh.core.util.references.CoreReferences.*;
 import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
-import static cofh.lib.util.references.CoreReferences.*;
 
 @Mod.EventBusSubscriber (modid = ID_COFH_CORE)
 public class EffectEvents {

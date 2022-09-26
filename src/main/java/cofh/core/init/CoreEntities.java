@@ -8,7 +8,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 
 import static cofh.core.CoFHCore.ENTITIES;
-import static cofh.lib.util.references.CoreIDs.*;
+import static cofh.core.util.references.CoreIDs.*;
 
 public class CoreEntities {
 

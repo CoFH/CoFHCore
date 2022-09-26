@@ -30,8 +30,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static cofh.core.capability.CapabilityAreaEffect.AREA_EFFECT_ITEM_CAPABILITY;
+import static cofh.core.util.references.EnsorcReferences.*;
 import static cofh.lib.util.Utils.getItemEnchantmentLevel;
-import static cofh.lib.util.references.EnsorcReferences.*;
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.*;
 
 public class AreaEffectHelper {

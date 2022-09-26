@@ -19,8 +19,8 @@ import net.minecraftforge.fml.common.Mod;
 import java.util.ArrayList;
 import java.util.List;
 
+import static cofh.core.util.references.CoreReferences.*;
 import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
-import static cofh.lib.util.references.CoreReferences.*;
 
 @Mod.EventBusSubscriber (value = Dist.CLIENT, modid = ID_COFH_CORE, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CoreClientSetupEvents {

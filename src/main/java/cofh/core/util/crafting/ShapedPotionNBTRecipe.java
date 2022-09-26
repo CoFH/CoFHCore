@@ -21,7 +21,7 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 import java.util.Map;
 
 import static cofh.core.CoFHCore.RECIPE_SERIALIZERS;
-import static cofh.lib.util.references.CoreIDs.ID_CRAFTING_POTION;
+import static cofh.core.util.references.CoreIDs.ID_CRAFTING_POTION;
 
 public class ShapedPotionNBTRecipe implements CraftingRecipe, IShapedRecipe<CraftingContainer> {
 

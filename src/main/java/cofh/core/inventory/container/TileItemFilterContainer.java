@@ -14,7 +14,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
-import static cofh.lib.util.references.CoreReferences.TILE_ITEM_FILTER_CONTAINER;
+import static cofh.core.util.references.CoreReferences.TILE_ITEM_FILTER_CONTAINER;
 
 public class TileItemFilterContainer extends TileContainer implements IFilterOptions {
 

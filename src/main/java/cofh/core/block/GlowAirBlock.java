@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
-import static cofh.lib.util.references.CoreReferences.GLOW_AIR_TILE;
+import static cofh.core.util.references.CoreReferences.GLOW_AIR_TILE;
 
 public class GlowAirBlock extends AirBlock implements EntityBlock {
 

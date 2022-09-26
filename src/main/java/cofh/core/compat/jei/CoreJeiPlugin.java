@@ -1,7 +1,7 @@
 package cofh.core.compat.jei;
 
 import cofh.core.client.gui.ContainerScreenCoFH;
-import cofh.lib.util.references.CoreReferences;
+import cofh.core.util.references.CoreReferences;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.forge.ForgeTypes;

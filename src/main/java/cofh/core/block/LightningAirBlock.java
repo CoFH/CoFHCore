@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-import static cofh.lib.util.references.CoreReferences.LIGHTNING_AIR_TILE;
+import static cofh.core.util.references.CoreReferences.LIGHTNING_AIR_TILE;
 
 public class LightningAirBlock extends AirBlock implements EntityBlock {
 

@@ -15,8 +15,8 @@ import net.minecraftforge.network.NetworkHooks;
 
 import java.util.Map;
 
+import static cofh.core.util.references.CoreReferences.HOLDING;
 import static cofh.lib.util.constants.NBTTags.TAG_ENCHANTMENTS;
-import static cofh.lib.util.references.CoreReferences.HOLDING;
 import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 
 public abstract class AbstractMinecartCoFH extends AbstractMinecart {

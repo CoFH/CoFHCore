@@ -1,7 +1,7 @@
 package cofh.lib.entity;
 
+import cofh.core.util.references.CoreReferences;
 import cofh.lib.api.IDetonatable;
-import cofh.lib.util.references.CoreReferences;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.sounds.SoundEvents;

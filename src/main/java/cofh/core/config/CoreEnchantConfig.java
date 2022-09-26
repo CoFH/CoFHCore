@@ -4,8 +4,8 @@ import cofh.lib.config.IBaseConfig;
 import cofh.lib.enchantment.EnchantmentCoFH;
 import net.minecraftforge.common.ForgeConfigSpec;
 
+import static cofh.core.util.references.CoreReferences.HOLDING;
 import static cofh.lib.util.Constants.MAX_ENCHANT_LEVEL;
-import static cofh.lib.util.references.CoreReferences.HOLDING;
 
 public class CoreEnchantConfig implements IBaseConfig {
 

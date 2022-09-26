@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import static cofh.lib.util.references.CoreReferences.*;
+import static cofh.core.util.references.CoreReferences.*;
 import static net.minecraft.world.level.block.Blocks.*;
 
 public class AreaUtils {

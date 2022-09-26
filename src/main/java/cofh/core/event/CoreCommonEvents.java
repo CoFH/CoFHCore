@@ -25,10 +25,10 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.util.Map;
 
+import static cofh.core.util.references.CoreReferences.SLIMED;
 import static cofh.lib.util.Utils.getItemEnchantmentLevel;
 import static cofh.lib.util.Utils.getMaxEquippedEnchantmentLevel;
 import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
-import static cofh.lib.util.references.CoreReferences.SLIMED;
 import static net.minecraft.world.item.enchantment.Enchantments.FALL_PROTECTION;
 import static net.minecraft.world.item.enchantment.Enchantments.MENDING;
 

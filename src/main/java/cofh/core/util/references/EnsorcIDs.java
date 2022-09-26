@@ -1,4 +1,4 @@
-package cofh.lib.util.references;
+package cofh.core.util.references;
 
 import static cofh.lib.util.constants.ModIds.ID_MINECRAFT;
 

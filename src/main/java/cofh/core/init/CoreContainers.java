@@ -7,8 +7,8 @@ import net.minecraftforge.common.extensions.IForgeMenuType;
 import static cofh.core.CoFHCore.CONTAINERS;
 import static cofh.core.util.ProxyUtils.getClientPlayer;
 import static cofh.core.util.ProxyUtils.getClientWorld;
-import static cofh.lib.util.references.CoreIDs.ID_CONTAINER_HELD_ITEM_FILTER;
-import static cofh.lib.util.references.CoreIDs.ID_CONTAINER_TILE_ITEM_FILTER;
+import static cofh.core.util.references.CoreIDs.ID_CONTAINER_HELD_ITEM_FILTER;
+import static cofh.core.util.references.CoreIDs.ID_CONTAINER_TILE_ITEM_FILTER;
 
 public class CoreContainers {
 

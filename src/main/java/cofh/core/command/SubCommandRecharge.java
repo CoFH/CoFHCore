@@ -11,8 +11,8 @@ import net.minecraft.world.effect.MobEffectInstance;
 
 import java.util.Collection;
 
+import static cofh.core.util.references.CoreReferences.SUPERCHARGE;
 import static cofh.lib.util.Constants.CMD_TARGETS;
-import static cofh.lib.util.references.CoreReferences.SUPERCHARGE;
 
 public class SubCommandRecharge {
 

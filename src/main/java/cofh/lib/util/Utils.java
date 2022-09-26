@@ -1,8 +1,8 @@
 package cofh.lib.util;
 
 import cofh.lib.enchantment.EnchantmentCoFH;
+import cofh.lib.tags.ItemTagsCoFH;
 import cofh.lib.util.helpers.MathHelper;
-import cofh.lib.util.references.CoFHTags;
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
 import com.google.gson.Gson;
@@ -155,7 +155,7 @@ public class Utils {
 
     public static boolean isWrench(ItemStack item) {
 
-        return item.is(CoFHTags.Items.TOOLS_WRENCH);
+        return item.is(ItemTagsCoFH.TOOLS_WRENCH);
     }
 
     public static boolean hasBiomeType(Level world, BlockPos pos, BiomeDictionary.Type type) {

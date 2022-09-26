@@ -5,7 +5,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fluids.FluidAttributes;
 
 import static cofh.core.CoFHCore.FLUIDS;
-import static cofh.lib.util.references.CoreIDs.ID_FLUID_MILK;
+import static cofh.core.util.references.CoreIDs.ID_FLUID_MILK;
 
 public class MilkFluid extends FluidCoFH {
 

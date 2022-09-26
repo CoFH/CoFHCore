@@ -3,7 +3,7 @@ package cofh.core.init;
 import net.minecraft.core.particles.SimpleParticleType;
 
 import static cofh.core.CoFHCore.PARTICLES;
-import static cofh.lib.util.references.CoreIDs.*;
+import static cofh.core.util.references.CoreIDs.*;
 
 public class CoreParticles {
 

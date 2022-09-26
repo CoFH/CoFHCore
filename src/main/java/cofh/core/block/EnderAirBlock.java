@@ -24,8 +24,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
-import static cofh.lib.util.references.CoreReferences.ENDERFERENCE;
-import static cofh.lib.util.references.CoreReferences.ENDER_AIR_TILE;
+import static cofh.core.util.references.CoreReferences.ENDERFERENCE;
+import static cofh.core.util.references.CoreReferences.ENDER_AIR_TILE;
 
 public class EnderAirBlock extends AirBlock implements EntityBlock {
 

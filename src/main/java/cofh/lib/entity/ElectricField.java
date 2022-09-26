@@ -11,7 +11,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 
-import static cofh.lib.util.references.CoreReferences.ELECTRIC_FIELD_ENTITY;
+import static cofh.core.util.references.CoreReferences.ELECTRIC_FIELD_ENTITY;
 
 public class ElectricField extends AbstractAoESpell {
 

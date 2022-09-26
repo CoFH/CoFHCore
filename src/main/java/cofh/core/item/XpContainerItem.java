@@ -23,12 +23,12 @@ import java.util.List;
 
 import static cofh.core.util.helpers.ItemHelper.areItemStacksEqualIgnoreTags;
 import static cofh.core.util.helpers.XpHelper.*;
+import static cofh.core.util.references.CoreReferences.FLUID_XP;
 import static cofh.lib.api.ContainerType.XP;
 import static cofh.lib.util.Constants.MB_PER_XP;
 import static cofh.lib.util.Constants.RGB_DURABILITY_XP;
 import static cofh.lib.util.constants.NBTTags.TAG_FLUID;
 import static cofh.lib.util.helpers.StringHelper.*;
-import static cofh.lib.util.references.CoreReferences.FLUID_XP;
 
 /**
  * This class does not set an XP Timer on the player entity.

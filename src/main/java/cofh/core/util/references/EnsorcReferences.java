@@ -1,10 +1,10 @@
-package cofh.lib.util.references;
+package cofh.core.util.references;
 
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraftforge.registries.ObjectHolder;
 
+import static cofh.core.util.references.EnsorcIDs.*;
 import static cofh.lib.util.constants.ModIds.ID_ENSORCELLATION;
-import static cofh.lib.util.references.EnsorcIDs.*;
 
 @ObjectHolder (ID_ENSORCELLATION)
 public class EnsorcReferences {

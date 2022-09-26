@@ -27,9 +27,9 @@ import java.util.stream.Stream;
 
 import static cofh.core.capability.CapabilityArchery.AMMO_ITEM_CAPABILITY;
 import static cofh.core.capability.CapabilityArchery.BOW_ITEM_CAPABILITY;
+import static cofh.core.util.references.EnsorcReferences.TRUESHOT;
+import static cofh.core.util.references.EnsorcReferences.VOLLEY;
 import static cofh.lib.util.Utils.getItemEnchantmentLevel;
-import static cofh.lib.util.references.EnsorcReferences.TRUESHOT;
-import static cofh.lib.util.references.EnsorcReferences.VOLLEY;
 import static net.minecraft.world.item.enchantment.Enchantments.*;
 
 public final class ArcheryHelper {

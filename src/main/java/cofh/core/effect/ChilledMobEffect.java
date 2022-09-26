@@ -1,7 +1,7 @@
 package cofh.core.effect;
 
+import cofh.core.util.references.CoreReferences;
 import cofh.lib.effect.CustomParticleMobEffect;
-import cofh.lib.util.references.CoreReferences;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;

@@ -2,8 +2,8 @@ package cofh.core.util.helpers;
 
 import cofh.core.fluid.PotionFluid;
 import cofh.lib.fluid.FluidStorageCoFH;
+import cofh.lib.tags.FluidTagsCoFH;
 import cofh.lib.util.helpers.BlockHelper;
-import cofh.lib.util.references.CoFHTags;
 import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.ChatFormatting;
@@ -52,11 +52,11 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import static cofh.core.util.references.CoreReferences.FLUID_HONEY;
+import static cofh.core.util.references.CoreReferences.FLUID_XP;
 import static cofh.lib.util.Constants.BOTTLE_VOLUME;
 import static cofh.lib.util.Constants.BUCKET_VOLUME;
 import static cofh.lib.util.constants.NBTTags.TAG_POTION;
-import static cofh.lib.util.references.CoreReferences.FLUID_HONEY;
-import static cofh.lib.util.references.CoreReferences.FLUID_XP;
 import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
 import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.SIMULATE;
 
@@ -68,7 +68,7 @@ public class FluidHelper {
 
     public static final Predicate<FluidStack> IS_WATER = e -> e.getFluid().equals(net.minecraft.world.level.material.Fluids.WATER);
     public static final Predicate<FluidStack> IS_LAVA = e -> e.getFluid().equals(net.minecraft.world.level.material.Fluids.LAVA);
-    public static final Predicate<FluidStack> IS_XP = e -> e.getFluid().is(CoFHTags.Fluids.EXPERIENCE);
+    public static final Predicate<FluidStack> IS_XP = e -> e.getFluid().is(FluidTagsCoFH.EXPERIENCE);
 
     public static final Map<Item, Function<ItemStack, FluidStack>> BOTTLE_DRAIN_MAP = new Object2ObjectOpenHashMap<>();
     public static final Map<Predicate<FluidStack>, Function<FluidStack, ItemStack>> BOTTLE_FILL_MAP = new Object2ObjectOpenHashMap<>();
@@ -217,8 +217,8 @@ public class FluidHelper {
         BOTTLE_DRAIN_MAP.put(Items.EXPERIENCE_BOTTLE, (stack -> new FluidStack(FLUID_XP, BOTTLE_VOLUME)));
 
         BOTTLE_FILL_MAP.put(fluid -> fluid.getFluid() == net.minecraft.world.level.material.Fluids.WATER || hasPotionTag(fluid), PotionFluid::getItemFromPotionFluid);
-        BOTTLE_FILL_MAP.put(fluid -> fluid.getFluid().is(CoFHTags.Fluids.HONEY), fluid -> new ItemStack(Items.HONEY_BOTTLE));
-        BOTTLE_FILL_MAP.put(fluid -> fluid.getFluid().is(CoFHTags.Fluids.EXPERIENCE), fluid -> new ItemStack(Items.EXPERIENCE_BOTTLE));
+        BOTTLE_FILL_MAP.put(fluid -> fluid.getFluid().is(FluidTagsCoFH.HONEY), fluid -> new ItemStack(Items.HONEY_BOTTLE));
+        BOTTLE_FILL_MAP.put(fluid -> fluid.getFluid().is(FluidTagsCoFH.EXPERIENCE), fluid -> new ItemStack(Items.EXPERIENCE_BOTTLE));
     }
 
     public static boolean hasFluidHandlerCap(ItemStack item) {

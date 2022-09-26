@@ -1,4 +1,4 @@
-package cofh.lib.util.references;
+package cofh.core.util.references;
 
 import cofh.core.block.entity.EnderAirTile;
 import cofh.core.block.entity.GlowAirTile;
@@ -20,8 +20,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraftforge.registries.ObjectHolder;
 
+import static cofh.core.util.references.CoreIDs.*;
 import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
-import static cofh.lib.util.references.CoreIDs.*;
 
 @ObjectHolder (ID_COFH_CORE)
 public class CoreReferences {

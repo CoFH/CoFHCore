@@ -3,7 +3,7 @@ package cofh.core.data;
 import cofh.lib.data.LootTableProviderCoFH;
 import net.minecraft.data.DataGenerator;
 
-import static cofh.lib.util.references.CoreReferences.GLOSSED_MAGMA;
+import static cofh.core.util.references.CoreReferences.GLOSSED_MAGMA;
 
 public class CoreLootTableProvider extends LootTableProviderCoFH {
 

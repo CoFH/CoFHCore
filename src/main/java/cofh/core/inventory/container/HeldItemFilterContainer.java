@@ -15,7 +15,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
 import static cofh.core.util.helpers.FilterHelper.hasFilter;
-import static cofh.lib.util.references.CoreReferences.HELD_ITEM_FILTER_CONTAINER;
+import static cofh.core.util.references.CoreReferences.HELD_ITEM_FILTER_CONTAINER;
 
 public class HeldItemFilterContainer extends ContainerCoFH implements IFilterOptions {
 
