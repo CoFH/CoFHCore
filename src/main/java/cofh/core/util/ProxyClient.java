@@ -6,6 +6,7 @@ import cofh.lib.api.block.entity.IAreaEffectTile;
 import cofh.lib.util.helpers.SoundHelper;
 import cofh.lib.util.helpers.StringHelper;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.minecraft.client.GuiMessageTag;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
@@ -29,9 +30,10 @@ public class ProxyClient extends Proxy {
     public void addIndexedChatMessage(Component chat, int index) {
 
         if (chat == null) {
-            Minecraft.getInstance().gui.getChat().removeById(index);
+            // TODO: Determine if this needs "fixing" or not.
+            // Minecraft.getInstance().gui.getChat().removeById(index);
         } else {
-            Minecraft.getInstance().gui.getChat().addMessage(chat, index);
+            Minecraft.getInstance().gui.getChat().addMessage(chat, null, index, GuiMessageTag.system(), false);
         }
     }
 
