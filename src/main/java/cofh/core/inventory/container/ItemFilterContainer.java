@@ -19,8 +19,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
+import static cofh.core.init.CoreContainers.ITEM_FILTER_CONTAINER;
 import static cofh.core.util.helpers.FilterHelper.hasFilter;
-import static cofh.core.util.references.CoreReferences.ITEM_FILTER_CONTAINER;
 
 public class ItemFilterContainer extends ContainerCoFH implements IFilterOptions {
 
@@ -39,7 +39,7 @@ public class ItemFilterContainer extends ContainerCoFH implements IFilterOptions
 
     public ItemFilterContainer(int windowId, Level world, Inventory inventory, Player player, boolean held, BlockPos pos, int filterId) {
 
-        super(ITEM_FILTER_CONTAINER, windowId, inventory, player);
+        super(ITEM_FILTER_CONTAINER.get(), windowId, inventory, player);
 
         this.held = held;
         this.filterId = filterId;

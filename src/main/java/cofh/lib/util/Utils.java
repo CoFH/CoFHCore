@@ -16,6 +16,7 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -407,6 +408,11 @@ public class Utils {
     // endregion
 
     // region ENCHANT UTILS
+    public static Enchantment getEnchantment(String modId, String enchantId) {
+
+        return ForgeRegistries.ENCHANTMENTS.getValue(new ResourceLocation(modId, enchantId));
+    }
+
     public static int getEnchantedCapacity(int amount, int holding) {
 
         return MathHelper.clamp(amount + amount * holding / 2, 0, MAX_CAPACITY);

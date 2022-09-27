@@ -29,7 +29,7 @@ public class EnsorcIDs {
 
     // HELMET
     public static final String ID_AIR_AFFINITY = "air_affinity";
-    public static final String ID_EXP_BOOST = "exp_boost";
+    public static final String ID_XP_BOOST = "exp_boost";
     public static final String ID_GOURMAND = "gourmand";
 
     // CHESTPLATE

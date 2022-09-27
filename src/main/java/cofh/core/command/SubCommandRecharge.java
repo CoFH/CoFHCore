@@ -11,7 +11,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 
 import java.util.Collection;
 
-import static cofh.core.util.references.CoreReferences.SUPERCHARGE;
+import static cofh.core.init.CoreMobEffects.SUPERCHARGE;
 import static cofh.lib.util.Constants.CMD_TARGETS;
 
 public class SubCommandRecharge {
@@ -32,7 +32,7 @@ public class SubCommandRecharge {
     private static int chargeEntities(CommandSourceStack source, Collection<? extends ServerPlayer> targets) {
 
         for (ServerPlayer entity : targets) {
-            entity.addEffect(new MobEffectInstance(SUPERCHARGE, 1200, 0, false, false));
+            entity.addEffect(new MobEffectInstance(SUPERCHARGE.get(), 1200, 0, false, false));
         }
         if (targets.size() == 1) {
             source.sendSuccess(new TranslatableComponent("commands.cofh.recharge.success.single", targets.iterator().next().getDisplayName()), true);

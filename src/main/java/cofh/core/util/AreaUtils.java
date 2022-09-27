@@ -30,7 +30,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import static cofh.core.util.references.CoreReferences.*;
+import static cofh.core.init.CoreBlocks.*;
+import static cofh.core.init.CoreMobEffects.*;
 import static net.minecraft.world.level.block.Blocks.*;
 
 public class AreaUtils {
@@ -50,7 +51,7 @@ public class AreaUtils {
         }
         if (target instanceof LivingEntity) {
             LivingEntity living = (LivingEntity) target;
-            living.removeEffect(CHILLED);
+            living.removeEffect(CHILLED.get());
         }
     };
 
@@ -61,7 +62,7 @@ public class AreaUtils {
         }
         if (target instanceof LivingEntity) {
             LivingEntity living = (LivingEntity) target;
-            living.addEffect(new MobEffectInstance(CHILLED, duration, power));
+            living.addEffect(new MobEffectInstance(CHILLED.get(), duration, power));
         }
     };
 
@@ -69,7 +70,7 @@ public class AreaUtils {
 
         if (target instanceof LivingEntity) {
             LivingEntity living = (LivingEntity) target;
-            living.addEffect(new MobEffectInstance(SUNDERED, duration, power));
+            living.addEffect(new MobEffectInstance(SUNDERED.get(), duration, power));
         }
     };
 
@@ -77,8 +78,8 @@ public class AreaUtils {
 
         if (target instanceof LivingEntity) {
             LivingEntity living = (LivingEntity) target;
-            if (!living.hasEffect(LIGHTNING_RESISTANCE)) {
-                living.addEffect(new MobEffectInstance(SHOCKED, duration, power));
+            if (!living.hasEffect(LIGHTNING_RESISTANCE.get())) {
+                living.addEffect(new MobEffectInstance(SHOCKED.get(), duration, power));
             }
         }
     };
@@ -144,9 +145,9 @@ public class AreaUtils {
         // LAVA
         isFull = state.getBlock() == LAVA && state.getValue(LiquidBlock.LEVEL) == 0;
         if (state.getMaterial() == Material.LAVA && isFull && state.canSurvive(world, pos) && world.isUnobstructed(state, pos, CollisionContext.empty())) {
-            succeeded |= world.setBlockAndUpdate(pos, permanentLava ? OBSIDIAN.defaultBlockState() : GLOSSED_MAGMA.defaultBlockState());
+            succeeded |= world.setBlockAndUpdate(pos, permanentLava ? OBSIDIAN.defaultBlockState() : GLOSSED_MAGMA.get().defaultBlockState());
             if (!permanentLava) {
-                world.scheduleTick(pos, GLOSSED_MAGMA, MathHelper.nextInt(world.random, 60, 120));
+                world.scheduleTick(pos, GLOSSED_MAGMA.get(), MathHelper.nextInt(world.random, 60, 120));
             }
         }
         return succeeded;
@@ -161,7 +162,7 @@ public class AreaUtils {
         boolean permanentLava = true;
 
         BlockState frozenWater = permanentWater ? ICE.defaultBlockState() : FROSTED_ICE.defaultBlockState();
-        BlockState frozenLava = permanentLava ? OBSIDIAN.defaultBlockState() : GLOSSED_MAGMA.defaultBlockState();
+        BlockState frozenLava = permanentLava ? OBSIDIAN.defaultBlockState() : GLOSSED_MAGMA.get().defaultBlockState();
 
         // SNOW
         if (world.isEmptyBlock(pos) && AreaUtils.isValidSnowPosition(world, pos)) {
@@ -181,7 +182,7 @@ public class AreaUtils {
             if (state.getMaterial() == Material.LAVA && isFull && state.canSurvive(world, pos) && world.isUnobstructed(state, pos, CollisionContext.empty())) {
                 succeeded |= world.setBlockAndUpdate(pos, frozenLava);
                 if (!permanentLava) {
-                    world.scheduleTick(pos, GLOSSED_MAGMA, MathHelper.nextInt(world.random, 60, 120));
+                    world.scheduleTick(pos, GLOSSED_MAGMA.get(), MathHelper.nextInt(world.random, 60, 120));
                 }
             }
         }
@@ -203,7 +204,7 @@ public class AreaUtils {
         BlockState state = world.getBlockState(pos);
         if (state.isAir()) {
             if (isValidLightningBoltPosition(world, pos, 1.0F)) {
-                succeeded |= world.setBlockAndUpdate(pos, LIGHTNING_AIR.defaultBlockState());
+                succeeded |= world.setBlockAndUpdate(pos, LIGHTNING_AIR.get().defaultBlockState());
             }
         }
         return succeeded;
@@ -211,8 +212,8 @@ public class AreaUtils {
     // endregion ELEMENTAL
 
     // region CONVERSION
-    public static final IBlockTransformer signalAirTransform = getConversionTransform(REPLACEABLE_AIR, SIGNAL_AIR.defaultBlockState(), false);
-    public static final IBlockTransformer glowAirTransform = getConversionTransform(REPLACEABLE_AIR, GLOW_AIR.defaultBlockState(), false);
+    public static final IBlockTransformer signalAirTransform = getConversionTransform(REPLACEABLE_AIR, SIGNAL_AIR.get().defaultBlockState(), false);
+    public static final IBlockTransformer glowAirTransform = getConversionTransform(REPLACEABLE_AIR, GLOW_AIR.get().defaultBlockState(), false);
     public static final IEffectApplier glowEntities = (target, duration, power, source) -> {
 
         if (target instanceof LivingEntity) {
@@ -224,12 +225,12 @@ public class AreaUtils {
             }
         }
     };
-    public static final IBlockTransformer enderAirTransform = getConversionTransform(REPLACEABLE_AIR, ENDER_AIR.defaultBlockState(), false);
+    public static final IBlockTransformer enderAirTransform = getConversionTransform(REPLACEABLE_AIR, ENDER_AIR.get().defaultBlockState(), false);
     public static final IEffectApplier enderfereEntities = (target, duration, power, source) -> {
 
         if (target instanceof EnderMan || target instanceof Endermite) {
             LivingEntity living = (LivingEntity) target;
-            living.addEffect(new MobEffectInstance(ENDERFERENCE, duration, power));
+            living.addEffect(new MobEffectInstance(ENDERFERENCE.get(), duration, power));
             living.hurt(DamageSource.explosion(source instanceof LivingEntity ? (LivingEntity) source : null), 4.0F);
         }
     };
@@ -596,7 +597,7 @@ public class AreaUtils {
         if (GLOSSED_MAGMA == null && !permanent) {
             return;
         }
-        BlockState state = permanent ? OBSIDIAN.defaultBlockState() : GLOSSED_MAGMA.defaultBlockState();
+        BlockState state = permanent ? OBSIDIAN.defaultBlockState() : GLOSSED_MAGMA.get().defaultBlockState();
         float f = (float) Math.min(HORZ_MAX, radius);
         float v = (float) Math.min(VERT_MAX, radius);
         float f2 = f * f;
@@ -613,7 +614,7 @@ public class AreaUtils {
                     if (blockstate2.getMaterial() == Material.LAVA && isFull && state.canSurvive(levelIn, blockpos) && levelIn.isUnobstructed(state, blockpos, CollisionContext.empty())) {
                         levelIn.setBlockAndUpdate(blockpos, state);
                         if (!permanent) {
-                            levelIn.scheduleTick(blockpos, GLOSSED_MAGMA, MathHelper.nextInt(levelIn.random, 60, 120));
+                            levelIn.scheduleTick(blockpos, GLOSSED_MAGMA.get(), MathHelper.nextInt(levelIn.random, 60, 120));
                         }
                     }
                 }
@@ -626,7 +627,7 @@ public class AreaUtils {
         if (GLOSSED_MAGMA == null && !permanent) {
             return;
         }
-        BlockState state = permanent ? OBSIDIAN.defaultBlockState() : GLOSSED_MAGMA.defaultBlockState();
+        BlockState state = permanent ? OBSIDIAN.defaultBlockState() : GLOSSED_MAGMA.get().defaultBlockState();
         float f = (float) Math.min(HORZ_MAX, radius);
         float v = (float) Math.min(VERT_MAX, radius);
         float f2 = f * f;
@@ -639,7 +640,7 @@ public class AreaUtils {
                 if (blockstate2.getMaterial() == Material.LAVA && isFull && state.canSurvive(levelIn, blockpos) && levelIn.isUnobstructed(state, blockpos, CollisionContext.empty())) {
                     levelIn.setBlockAndUpdate(blockpos, state);
                     if (!permanent) {
-                        levelIn.scheduleTick(blockpos, GLOSSED_MAGMA, MathHelper.nextInt(levelIn.random, 60, 120));
+                        levelIn.scheduleTick(blockpos, GLOSSED_MAGMA.get(), MathHelper.nextInt(levelIn.random, 60, 120));
                     }
                 }
             }
@@ -650,7 +651,7 @@ public class AreaUtils {
 
         BlockState state = levelIn.getBlockState(pos.below());
         Block block = state.getBlock();
-        if (block == ICE || block == PACKED_ICE || block == BARRIER || block == FROSTED_ICE || block == GLOSSED_MAGMA) {
+        if (block == ICE || block == PACKED_ICE || block == BARRIER || block == FROSTED_ICE || block == GLOSSED_MAGMA.get()) {
             return false;
         }
         return Block.isFaceFull(state.getCollisionShape(levelIn, pos.below()), Direction.UP) || block == SNOW && state.getValue(SnowLayerBlock.LAYERS) == 8;
@@ -747,21 +748,21 @@ public class AreaUtils {
 
         Set<BlockState> replaceable = new ObjectOpenHashSet<>();
         Collections.addAll(replaceable, AIR.defaultBlockState(), CAVE_AIR.defaultBlockState());
-        transformArea(entity, levelIn, pos, replaceable, SIGNAL_AIR.defaultBlockState(), radius, false);
+        transformArea(entity, levelIn, pos, replaceable, SIGNAL_AIR.get().defaultBlockState(), radius, false);
     }
 
     public static void transformGlowAir(Entity entity, Level levelIn, BlockPos pos, int radius) {
 
         Set<BlockState> replaceable = new ObjectOpenHashSet<>();
         Collections.addAll(replaceable, AIR.defaultBlockState(), CAVE_AIR.defaultBlockState());
-        transformArea(entity, levelIn, pos, replaceable, GLOW_AIR.defaultBlockState(), radius, false);
+        transformArea(entity, levelIn, pos, replaceable, GLOW_AIR.get().defaultBlockState(), radius, false);
     }
 
     public static void transformEnderAir(Entity entity, Level levelIn, BlockPos pos, int radius) {
 
         Set<BlockState> replaceable = new ObjectOpenHashSet<>();
         Collections.addAll(replaceable, AIR.defaultBlockState(), CAVE_AIR.defaultBlockState());
-        transformArea(entity, levelIn, pos, replaceable, ENDER_AIR.defaultBlockState(), radius, false);
+        transformArea(entity, levelIn, pos, replaceable, ENDER_AIR.get().defaultBlockState(), radius, false);
     }
 
     public static void zapNearbyGround(Entity entity, Level levelIn, BlockPos pos, int radius, double chance, int max) {
@@ -782,7 +783,7 @@ public class AreaUtils {
                 BlockState blockstate1 = levelIn.getBlockState(mutable);
                 if (blockstate1.isAir()) {
                     if (isValidLightningBoltPosition(levelIn, mutable, chance)) {
-                        levelIn.setBlockAndUpdate(mutable, LIGHTNING_AIR.defaultBlockState());
+                        levelIn.setBlockAndUpdate(mutable, LIGHTNING_AIR.get().defaultBlockState());
                         ++count;
                     }
                 }

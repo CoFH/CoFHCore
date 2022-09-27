@@ -24,8 +24,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
-import static cofh.core.util.references.CoreReferences.ENDERFERENCE;
-import static cofh.core.util.references.CoreReferences.ENDER_AIR_TILE;
+import static cofh.core.init.CoreMobEffects.ENDERFERENCE;
+import static cofh.core.init.CoreTileEntities.ENDER_AIR_TILE;
 
 public class EnderAirBlock extends AirBlock implements EntityBlock {
 
@@ -47,7 +47,7 @@ public class EnderAirBlock extends AirBlock implements EntityBlock {
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> actualType) {
 
-        return ITickableTile.createTicker(level, actualType, ENDER_AIR_TILE, EnderAirTile.class);
+        return ITickableTile.createTicker(level, actualType, ENDER_AIR_TILE.get(), EnderAirTile.class);
     }
 
     @OnlyIn (Dist.CLIENT)
@@ -73,7 +73,7 @@ public class EnderAirBlock extends AirBlock implements EntityBlock {
         if (!worldIn.getBlockState(randPos).getMaterial().isSolid()) {
             if (entityIn instanceof LivingEntity) {
                 if (Utils.teleportEntityTo(entityIn, randPos)) {
-                    ((LivingEntity) entityIn).addEffect(new MobEffectInstance(ENDERFERENCE, duration, 0, false, false));
+                    ((LivingEntity) entityIn).addEffect(new MobEffectInstance(ENDERFERENCE.get(), duration, 0, false, false));
                 }
             } else if (worldIn.getGameTime() % duration == 0) {
                 entityIn.setPos(randPos.getX(), randPos.getY(), randPos.getZ());

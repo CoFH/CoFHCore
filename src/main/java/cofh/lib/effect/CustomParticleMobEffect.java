@@ -4,7 +4,7 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 
-public abstract class CustomParticleMobEffect extends EffectCoFH {
+public abstract class CustomParticleMobEffect extends MobEffectCoFH {
 
     public CustomParticleMobEffect(MobEffectCategory typeIn, int liquidColorIn) {
 

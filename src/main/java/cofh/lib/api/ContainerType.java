@@ -5,5 +5,5 @@ public enum ContainerType {
     ITEM,
     FLUID,
     ENERGY,
-    XP
+    EXPERIENCE
 }

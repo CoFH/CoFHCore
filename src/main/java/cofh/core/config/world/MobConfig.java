@@ -1,6 +1,6 @@
-package cofh.lib.config.world;
+package cofh.core.config.world;
 
-import cofh.lib.config.IBaseConfig;
+import cofh.core.config.IBaseConfig;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.ForgeConfigSpec;

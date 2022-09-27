@@ -1,6 +1,6 @@
 package cofh.core.command;
 
-import cofh.core.effect.PanaceaEffect;
+import cofh.core.effect.PanaceaMobEffect;
 import com.google.common.collect.ImmutableList;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import net.minecraft.commands.CommandSourceStack;
@@ -35,7 +35,7 @@ public class SubCommandHeal {
             // Extinguish Fire
             entity.clearFire();
             // Clear all negative effects
-            PanaceaEffect.clearHarmfulEffects(entity);
+            PanaceaMobEffect.clearHarmfulEffects(entity);
             // Set to Max Air
             entity.setAirSupply(entity.getMaxAirSupply());
             // Set to Max Food

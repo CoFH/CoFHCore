@@ -25,7 +25,7 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.util.Map;
 
-import static cofh.core.util.references.CoreReferences.SLIMED;
+import static cofh.core.init.CoreMobEffects.SLIMED;
 import static cofh.lib.util.Utils.getItemEnchantmentLevel;
 import static cofh.lib.util.Utils.getMaxEquippedEnchantmentLevel;
 import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
@@ -45,7 +45,7 @@ public class CoreCommonEvents {
         if (event.isCanceled()) {
             return;
         }
-        if (!CoreEnchantConfig.improvedFeatherFalling) {
+        if (!CoreEnchantConfig.improvedFeatherFalling.get()) {
             return;
         }
         Entity entity = event.getEntity();
@@ -65,7 +65,7 @@ public class CoreCommonEvents {
         }
         if (event.getDistance() >= 3.0) {
             LivingEntity living = event.getEntityLiving();
-            if (living.hasEffect(SLIMED)) {
+            if (living.hasEffect(SLIMED.get())) {
                 Vec3 motion = living.getDeltaMovement();
                 living.setDeltaMovement(motion.x, 0.08 * Math.sqrt(event.getDistance() / 0.08), motion.z);
                 living.hurtMarked = true;
@@ -100,7 +100,7 @@ public class CoreCommonEvents {
         ExperienceOrb orb = event.getOrb();
 
         // Improved Mending
-        if (CoreEnchantConfig.improvedMending) {
+        if (CoreEnchantConfig.improvedMending.get()) {
             player.takeXpDelay = 2;
             player.take(orb, 1);
 

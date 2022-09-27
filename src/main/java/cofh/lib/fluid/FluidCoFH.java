@@ -3,16 +3,17 @@ package cofh.lib.fluid;
 import cofh.lib.util.DeferredRegisterCoFH;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.LiquidBlock;
-import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.function.Supplier;
+
 public abstract class FluidCoFH {
 
-    protected RegistryObject<FlowingFluid> stillFluid;
-    protected RegistryObject<FlowingFluid> flowingFluid;
+    protected RegistryObject<ForgeFlowingFluid> stillFluid;
+    protected RegistryObject<ForgeFlowingFluid> flowingFluid;
 
     protected RegistryObject<LiquidBlock> block;
     protected RegistryObject<Item> bucket;
@@ -29,6 +30,26 @@ public abstract class FluidCoFH {
         flowingFluid = reg.register(flowing(key), () -> new ForgeFlowingFluid.Flowing(properties));
 
         properties = new ForgeFlowingFluid.Properties(stillFluid, flowingFluid, attributes);
+    }
+
+    public Supplier<ForgeFlowingFluid> still() {
+
+        return stillFluid;
+    }
+
+    public Supplier<ForgeFlowingFluid> flowing() {
+
+        return flowingFluid;
+    }
+
+    public Supplier<LiquidBlock> block() {
+
+        return block;
+    }
+
+    public Supplier<Item> bucket() {
+
+        return bucket;
     }
 
     // region HELPERS

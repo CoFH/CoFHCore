@@ -1,12 +1,12 @@
 package cofh.core.effect;
 
-import cofh.lib.effect.EffectCoFH;
+import cofh.lib.effect.MobEffectCoFH;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 
-public class WrenchedEffect extends EffectCoFH {
+public class WrenchedMobEffect extends MobEffectCoFH {
 
-    public WrenchedEffect(MobEffectCategory typeIn, int liquidColorIn) {
+    public WrenchedMobEffect(MobEffectCategory typeIn, int liquidColorIn) {
 
         super(typeIn, liquidColorIn);
     }

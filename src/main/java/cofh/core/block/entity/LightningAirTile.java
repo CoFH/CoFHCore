@@ -1,7 +1,7 @@
 package cofh.core.block.entity;
 
+import cofh.core.entity.ElectricArc;
 import cofh.lib.api.block.entity.ITickableTile;
-import cofh.lib.entity.ElectricArc;
 import cofh.lib.util.Utils;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.core.BlockPos;
@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
-import static cofh.core.util.references.CoreReferences.LIGHTNING_AIR_TILE;
+import static cofh.core.init.CoreTileEntities.LIGHTNING_AIR_TILE;
 
 public class LightningAirTile extends BlockEntity implements ITickableTile {
 
@@ -19,7 +19,7 @@ public class LightningAirTile extends BlockEntity implements ITickableTile {
 
     public LightningAirTile(BlockPos pos, BlockState state) {
 
-        super(LIGHTNING_AIR_TILE, pos, state);
+        super(LIGHTNING_AIR_TILE.get(), pos, state);
         duration = MathHelper.nextInt(MathHelper.RANDOM, 20, duration);
     }
 

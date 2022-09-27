@@ -4,7 +4,7 @@ import cofh.core.client.gui.element.ElementButton;
 import cofh.core.client.gui.element.ElementTexture;
 import cofh.core.client.gui.element.SimpleTooltip;
 import cofh.core.inventory.container.ItemFilterContainer;
-import cofh.core.network.packet.server.FilterGuiOpenPacket;
+import cofh.core.network.packet.server.TileFilterGuiOpenPacket;
 import cofh.core.util.helpers.FilterHelper;
 import cofh.core.util.helpers.RenderHelper;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -57,20 +57,20 @@ public class ItemFilterScreen extends ContainerScreenCoFH<ItemFilterContainer> {
                     .setUV(24, 0)
                     .setSize(24, 21)
                     .setTexture(TAB_TOP, 48, 32)
-                    .setVisible(() -> FilterHelper.hasFilter(menu.getFilterableTile(), 0)));
+                    .setVisible(() -> FilterHelper.hasFilter(menu.getFilterableTile(), menu.filterId)));
             addElement(new ElementTexture(this, 8, -17) {
 
                 @Override
                 public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
 
-                    FilterGuiOpenPacket.openTileGui(menu.getFilterableTile(), (byte) 0);
+                    TileFilterGuiOpenPacket.openTileGui(menu.getFilterableTile(), (byte) menu.filterId);
                     return true;
                 }
             }
                     .setSize(16, 16)
                     .setTexture(NAV_BACK, 16, 16)
                     .setTooltipFactory((element, mouseX, mouseY) -> Collections.singletonList(menu.getFilterableTile().getDisplayName()))
-                    .setVisible(() -> FilterHelper.hasFilter(menu.getFilterableTile(), 0)));
+                    .setVisible(() -> FilterHelper.hasFilter(menu.getFilterableTile(), menu.filterId)));
         }
     }
 

@@ -1,5 +1,6 @@
-package cofh.lib.entity;
+package cofh.core.entity;
 
+import cofh.lib.entity.AbstractAoESpell;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.EntityType;
@@ -11,7 +12,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 
-import static cofh.core.util.references.CoreReferences.ELECTRIC_FIELD_ENTITY;
+import static cofh.core.init.CoreEntities.ELECTRIC_FIELD;
 
 public class ElectricField extends AbstractAoESpell {
 
@@ -22,7 +23,7 @@ public class ElectricField extends AbstractAoESpell {
 
     public ElectricField(Level level, Vec3 pos, float radius, int duration) {
 
-        this(ELECTRIC_FIELD_ENTITY, level);
+        this(ELECTRIC_FIELD.get(), level);
         this.moveTo(pos);
         this.radius = radius;
         this.duration = duration;

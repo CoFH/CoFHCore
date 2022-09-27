@@ -26,8 +26,8 @@ import java.util.Collection;
 import java.util.Collections;
 
 import static cofh.core.CoFHCore.FLUIDS;
+import static cofh.core.init.CoreFluids.POTION_FLUID;
 import static cofh.core.util.references.CoreIDs.ID_FLUID_POTION;
-import static cofh.core.util.references.CoreReferences.FLUID_POTION;
 import static cofh.lib.util.constants.NBTTags.TAG_POTION;
 
 public class PotionFluid extends FluidCoFH {
@@ -69,7 +69,7 @@ public class PotionFluid extends FluidCoFH {
         if (type == Potions.WATER && !hasCustom) {
             return new FluidStack(Fluids.WATER, amount);
         }
-        return addPotionToFluidStack(new FluidStack(FLUID_POTION, amount), type);
+        return addPotionToFluidStack(new FluidStack(POTION_FLUID.get(), amount), type);
     }
 
     public static FluidStack getPotionAsFluid(int amount, Potion type) {

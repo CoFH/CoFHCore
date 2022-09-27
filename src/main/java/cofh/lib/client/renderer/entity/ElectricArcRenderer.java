@@ -1,7 +1,7 @@
 package cofh.lib.client.renderer.entity;
 
+import cofh.core.entity.ElectricArc;
 import cofh.core.util.helpers.vfx.VFXHelper;
-import cofh.lib.entity.ElectricArc;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;

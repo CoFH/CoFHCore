@@ -1,6 +1,6 @@
 package cofh.core.effect;
 
-import cofh.lib.effect.EffectCoFH;
+import cofh.lib.effect.MobEffectCoFH;
 import cofh.lib.util.Utils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -11,9 +11,9 @@ import net.minecraft.world.entity.player.Player;
 
 import javax.annotation.Nullable;
 
-public class LoveEffect extends EffectCoFH {
+public class LoveMobEffect extends MobEffectCoFH {
 
-    public LoveEffect(MobEffectCategory typeIn, int liquidColorIn) {
+    public LoveMobEffect(MobEffectCategory typeIn, int liquidColorIn) {
 
         super(typeIn, liquidColorIn);
     }

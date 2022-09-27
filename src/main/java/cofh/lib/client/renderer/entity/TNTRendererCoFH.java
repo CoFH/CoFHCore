@@ -1,6 +1,6 @@
 package cofh.lib.client.renderer.entity;
 
-import cofh.lib.entity.AbstractTNTEntity;
+import cofh.lib.entity.PrimedTntCoFH;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
@@ -16,7 +16,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn (Dist.CLIENT)
-public class TNTRendererCoFH extends EntityRenderer<AbstractTNTEntity> {
+public class TNTRendererCoFH extends EntityRenderer<PrimedTntCoFH> {
 
     public TNTRendererCoFH(EntityRendererProvider.Context ctx) {
 
@@ -25,7 +25,7 @@ public class TNTRendererCoFH extends EntityRenderer<AbstractTNTEntity> {
     }
 
     @Override
-    public void render(AbstractTNTEntity entityIn, float entityYaw, float partialTicks, PoseStack poseStackIn, MultiBufferSource bufferIn, int packedLightIn) {
+    public void render(PrimedTntCoFH entityIn, float entityYaw, float partialTicks, PoseStack poseStackIn, MultiBufferSource bufferIn, int packedLightIn) {
 
         poseStackIn.pushPose();
         poseStackIn.translate(0.0D, 0.5D, 0.0D);
@@ -46,7 +46,7 @@ public class TNTRendererCoFH extends EntityRenderer<AbstractTNTEntity> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(AbstractTNTEntity entity) {
+    public ResourceLocation getTextureLocation(PrimedTntCoFH entity) {
 
         return InventoryMenu.BLOCK_ATLAS;
     }

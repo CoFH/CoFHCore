@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
-import static cofh.core.util.references.CoreReferences.SIGNAL_AIR_TILE;
+import static cofh.core.init.CoreTileEntities.SIGNAL_AIR_TILE;
 
 public class SignalAirBlock extends AirBlock implements EntityBlock {
 
@@ -39,7 +39,7 @@ public class SignalAirBlock extends AirBlock implements EntityBlock {
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> actualType) {
 
-        return ITickableTile.createTicker(level, actualType, SIGNAL_AIR_TILE, SignalAirTile.class);
+        return ITickableTile.createTicker(level, actualType, SIGNAL_AIR_TILE.get(), SignalAirTile.class);
     }
 
     @Override

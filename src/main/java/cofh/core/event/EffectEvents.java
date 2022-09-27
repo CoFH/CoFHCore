@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static cofh.core.util.references.CoreReferences.*;
+import static cofh.core.init.CoreMobEffects.*;
 import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 
 @Mod.EventBusSubscriber (modid = ID_COFH_CORE)
@@ -41,7 +41,7 @@ public class EffectEvents {
             return;
         }
         LivingEntity entity = event.getEntityLiving();
-        if (entity.hasEffect(ENDERFERENCE)) {
+        if (entity.hasEffect(ENDERFERENCE.get())) {
             event.setCanceled(true);
         }
     }
@@ -53,7 +53,7 @@ public class EffectEvents {
             return;
         }
         LivingEntity entity = event.getEntityLiving();
-        if (entity.hasEffect(ENDERFERENCE)) {
+        if (entity.hasEffect(ENDERFERENCE.get())) {
             event.setCanceled(true);
         }
     }
@@ -65,7 +65,7 @@ public class EffectEvents {
             return;
         }
         LivingEntity entity = event.getPlayer();
-        if (entity.hasEffect(ENDERFERENCE)) {
+        if (entity.hasEffect(ENDERFERENCE.get())) {
             event.setCanceled(true);
         }
     }
@@ -78,10 +78,10 @@ public class EffectEvents {
         }
         Entity entity = event.getEntity();
         if (entity instanceof LivingEntity living) {
-            if (living.hasEffect(LIGHTNING_RESISTANCE)) {
+            if (living.hasEffect(LIGHTNING_RESISTANCE.get())) {
                 event.setCanceled(true);
             } else {
-                living.addEffect(new MobEffectInstance(SHOCKED, 100, 0));
+                living.addEffect(new MobEffectInstance(SHOCKED.get(), 100, 0));
             }
         }
     }
@@ -97,14 +97,14 @@ public class EffectEvents {
         if (source.isBypassMagic()) {
             return;
         }
-        if (source.isExplosion() && entity.hasEffect(EXPLOSION_RESISTANCE)) {
+        if (source.isExplosion() && entity.hasEffect(EXPLOSION_RESISTANCE.get())) {
             event.setCanceled(true);
-        } else if (source.isMagic() && entity.hasEffect(MAGIC_RESISTANCE)) {
+        } else if (source.isMagic() && entity.hasEffect(MAGIC_RESISTANCE.get())) {
             event.setCanceled(true);
-        } else if (source == DamageSource.LIGHTNING_BOLT && entity.hasEffect(LIGHTNING_RESISTANCE)) {
+        } else if (source == DamageSource.LIGHTNING_BOLT && entity.hasEffect(LIGHTNING_RESISTANCE.get())) {
             event.setCanceled(true);
         } else if (source.isFire()) {
-            entity.removeEffect(CHILLED);
+            entity.removeEffect(CHILLED.get());
         }
     }
 
@@ -151,7 +151,7 @@ public class EffectEvents {
         }
         Player player = event.getPlayer();
 
-        MobEffectInstance clarityEffect = player.getEffect(CLARITY);
+        MobEffectInstance clarityEffect = player.getEffect(CLARITY.get());
         if (clarityEffect == null) {
             return;
         }

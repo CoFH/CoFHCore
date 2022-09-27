@@ -19,7 +19,7 @@ import net.minecraftforge.fml.common.Mod;
 import java.util.ArrayList;
 import java.util.List;
 
-import static cofh.core.util.references.CoreReferences.*;
+import static cofh.core.init.CoreParticles.*;
 import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 
 @Mod.EventBusSubscriber (value = Dist.CLIENT, modid = ID_COFH_CORE, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -51,15 +51,15 @@ public class CoreClientSetupEvents {
 
         ParticleEngine manager = Minecraft.getInstance().particleEngine;
 
-        manager.register(FROST_PARTICLE, FrostParticle.Factory::new);
-        manager.register(SPARK_PARTICLE, SparkParticle.Factory::new);
-        manager.register(PLASMA_PARTICLE, PlasmaBallParticle.Factory::new);
-        manager.register(SHOCKWAVE_PARTICLE, ShockwaveParticle.Factory::new);
-        manager.register(BLAST_WAVE_PARTICLE, BlastWaveParticle.Factory::new);
-        manager.register(VORTEX_PARTICLE, WindVortexParticle.Factory::new);
-        manager.register(SPIRAL_PARTICLE, WindSpiralParticle.Factory::new);
-        manager.register(STRAIGHT_ARC_PARTICLE, ArcParticle.Factory::new);
-        manager.register(MIST_PARTICLE, MistParticle::iceMist);
+        manager.register(FROST.get(), FrostParticle.Factory::new);
+        manager.register(SPARK.get(), SparkParticle.Factory::new);
+        manager.register(PLASMA.get(), PlasmaBallParticle.Factory::new);
+        manager.register(SHOCKWAVE.get(), ShockwaveParticle.Factory::new);
+        manager.register(BLAST_WAVE.get(), BlastWaveParticle.Factory::new);
+        manager.register(VORTEX.get(), WindVortexParticle.Factory::new);
+        manager.register(SPIRAL.get(), WindSpiralParticle.Factory::new);
+        manager.register(STRAIGHT_ARC.get(), ArcParticle.Factory::new);
+        manager.register(MIST.get(), MistParticle::iceMist);
 
     }
 

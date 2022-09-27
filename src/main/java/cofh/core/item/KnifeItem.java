@@ -1,6 +1,6 @@
 package cofh.core.item;
 
-import cofh.lib.entity.Knife;
+import cofh.core.entity.Knife;
 import cofh.lib.item.SwordItemCoFH;
 import net.minecraft.core.Position;
 import net.minecraft.core.dispenser.AbstractProjectileDispenseBehavior;

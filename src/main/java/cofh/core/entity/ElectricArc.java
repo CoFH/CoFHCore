@@ -1,6 +1,7 @@
-package cofh.lib.entity;
+package cofh.core.entity;
 
-import cofh.core.util.references.CoreReferences;
+import cofh.lib.entity.AbstractAoESpell;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -11,8 +12,10 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import static cofh.core.util.references.CoreReferences.ELECTRIC_ARC_ENTITY;
-import static cofh.core.util.references.CoreReferences.SHOCKED;
+import static cofh.core.init.CoreEntities.ELECTRIC_ARC;
+import static cofh.core.init.CoreMobEffects.SHOCKED;
+import static cofh.core.init.CoreParticles.PLASMA;
+import static cofh.core.init.CoreParticles.SPARK;
 
 public class ElectricArc extends AbstractAoESpell {
 
@@ -31,7 +34,7 @@ public class ElectricArc extends AbstractAoESpell {
 
     public ElectricArc(Level level, Vec3 pos) {
 
-        this(ELECTRIC_ARC_ENTITY, level);
+        this(ELECTRIC_ARC.get(), level);
         this.moveTo(pos);
     }
 
@@ -44,7 +47,7 @@ public class ElectricArc extends AbstractAoESpell {
     public void activeTick() {
 
         if (level.isClientSide) {
-            level.addParticle(CoreReferences.SPARK_PARTICLE, this.getX() + random.nextGaussian() * radius, this.getY() + random.nextFloat() * 0.25F, this.getZ() + random.nextGaussian() * radius, 0.0D, 0.0D, 0.0D);
+            level.addParticle((SimpleParticleType) SPARK.get(), this.getX() + random.nextGaussian() * radius, this.getY() + random.nextFloat() * 0.25F, this.getZ() + random.nextGaussian() * radius, 0.0D, 0.0D, 0.0D);
         }
     }
 
@@ -52,7 +55,7 @@ public class ElectricArc extends AbstractAoESpell {
     public void onCast() {
 
         if (level.isClientSide) {
-            level.addParticle(CoreReferences.PLASMA_PARTICLE, this.getX(), this.getY() + 6, this.getZ(), 0.0D, 0.0D, 0.0D);
+            level.addParticle((SimpleParticleType) PLASMA.get(), this.getX(), this.getY() + 6, this.getZ(), 0.0D, 0.0D, 0.0D);
         } else {
             strike();
         }
@@ -77,7 +80,7 @@ public class ElectricArc extends AbstractAoESpell {
 
         if (entity.hurt(DamageSource.LIGHTNING_BOLT, this.damage)) {
             if (entity instanceof LivingEntity) {
-                ((LivingEntity) entity).addEffect(new MobEffectInstance(SHOCKED, 100, 0));
+                ((LivingEntity) entity).addEffect(new MobEffectInstance(SHOCKED.get(), 100, 0));
             }
             return true;
         }

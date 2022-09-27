@@ -555,10 +555,10 @@ public class ContainerScreenCoFH<T extends AbstractContainerMenu> extends Abstra
         Matrix4f mat = poseStack.last().pose();
         BufferBuilder bufferbuilder = tessellator.getBuilder();
         bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        bufferbuilder.vertex(mat, x + 0, (y + height), this.getBlitOffset()).uv(((float) (textureX + 0) * 0.00390625F), ((float) (textureY + height) * 0.00390625F)).endVertex();
+        bufferbuilder.vertex(mat, x, (y + height), this.getBlitOffset()).uv(((float) (textureX) * 0.00390625F), ((float) (textureY + height) * 0.00390625F)).endVertex();
         bufferbuilder.vertex(mat, (x + width), (y + height), this.getBlitOffset()).uv(((float) (textureX + width) * 0.00390625F), ((float) (textureY + height) * 0.00390625F)).endVertex();
-        bufferbuilder.vertex(mat, (x + width), (y + 0), this.getBlitOffset()).uv(((float) (textureX + width) * 0.00390625F), ((float) (textureY + 0) * 0.00390625F)).endVertex();
-        bufferbuilder.vertex(mat, (x + 0), (y + 0), this.getBlitOffset()).uv(((float) (textureX + 0) * 0.00390625F), ((float) (textureY + 0) * 0.00390625F)).endVertex();
+        bufferbuilder.vertex(mat, (x + width), (y), this.getBlitOffset()).uv(((float) (textureX + width) * 0.00390625F), ((float) (textureY) * 0.00390625F)).endVertex();
+        bufferbuilder.vertex(mat, (x), (y), this.getBlitOffset()).uv(((float) (textureX) * 0.00390625F), ((float) (textureY) * 0.00390625F)).endVertex();
         tessellator.end();
     }
 

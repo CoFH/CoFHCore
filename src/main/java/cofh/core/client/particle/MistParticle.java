@@ -25,7 +25,7 @@ public class MistParticle extends TextureSheetParticle {
         rCol = gCol = 0.95F - (random.nextFloat() * 0.05F);
         oRoll = roll = random.nextFloat() * MathHelper.F_TAU;
         scale(20);
-        setAlpha(level.random.nextFloat() * 1.0F);
+        setAlpha(level.random.nextFloat());
     }
 
     @Override

@@ -1,18 +1,18 @@
 package cofh.core.effect;
 
 import cofh.core.capability.CapabilityRedstoneFlux;
-import cofh.lib.effect.EffectCoFH;
+import cofh.lib.effect.MobEffectCoFH;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.energy.CapabilityEnergy;
 
-public class EnergyChargeEffect extends EffectCoFH {
+public class EnergyChargeMobEffect extends MobEffectCoFH {
 
     private final int amount;
 
-    public EnergyChargeEffect(MobEffectCategory typeIn, int liquidColorIn, int amount) {
+    public EnergyChargeMobEffect(MobEffectCategory typeIn, int liquidColorIn, int amount) {
 
         super(typeIn, liquidColorIn);
         this.amount = amount;

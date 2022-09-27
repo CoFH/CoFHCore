@@ -54,8 +54,8 @@ public class FishingHookCoFHRenderer extends FishingHookRenderer {
         float f = player.getAttackAnim(partialTicks);
         float f1 = Mth.sin(Mth.sqrt(f) * (float) Math.PI);
         float f2 = Mth.lerp(partialTicks, player.yBodyRotO, player.yBodyRot) * ((float) Math.PI / 180F);
-        double d0 = (double) Mth.sin(f2);
-        double d1 = (double) Mth.cos(f2);
+        double d0 = Mth.sin(f2);
+        double d1 = Mth.cos(f2);
         double d2 = (double) i * 0.35D;
         double d3 = 0.8D;
         double d4;
@@ -68,20 +68,20 @@ public class FishingHookCoFHRenderer extends FishingHookRenderer {
             vec3 = vec3.scale(d7);
             vec3 = vec3.yRot(f1 * 0.5F);
             vec3 = vec3.xRot(-f1 * 0.7F);
-            d4 = Mth.lerp((double) partialTicks, player.xo, player.getX()) + vec3.x;
-            d5 = Mth.lerp((double) partialTicks, player.yo, player.getY()) + vec3.y;
-            d6 = Mth.lerp((double) partialTicks, player.zo, player.getZ()) + vec3.z;
+            d4 = Mth.lerp(partialTicks, player.xo, player.getX()) + vec3.x;
+            d5 = Mth.lerp(partialTicks, player.yo, player.getY()) + vec3.y;
+            d6 = Mth.lerp(partialTicks, player.zo, player.getZ()) + vec3.z;
             f3 = player.getEyeHeight();
         } else {
-            d4 = Mth.lerp((double) partialTicks, player.xo, player.getX()) - d1 * d2 - d0 * 0.8D;
+            d4 = Mth.lerp(partialTicks, player.xo, player.getX()) - d1 * d2 - d0 * 0.8D;
             d5 = player.yo + (double) player.getEyeHeight() + (player.getY() - player.yo) * (double) partialTicks - 0.45D;
-            d6 = Mth.lerp((double) partialTicks, player.zo, player.getZ()) - d0 * d2 + d1 * 0.8D;
+            d6 = Mth.lerp(partialTicks, player.zo, player.getZ()) - d0 * d2 + d1 * 0.8D;
             f3 = player.isCrouching() ? -0.1875F : 0.0F;
         }
 
-        double d9 = Mth.lerp((double) partialTicks, hook.xo, hook.getX());
-        double d10 = Mth.lerp((double) partialTicks, hook.yo, hook.getY()) + 0.25D;
-        double d8 = Mth.lerp((double) partialTicks, hook.zo, hook.getZ());
+        double d9 = Mth.lerp(partialTicks, hook.xo, hook.getX());
+        double d10 = Mth.lerp(partialTicks, hook.yo, hook.getY()) + 0.25D;
+        double d8 = Mth.lerp(partialTicks, hook.zo, hook.getZ());
         float f4 = (float) (d4 - d9);
         float f5 = (float) (d5 - d10) + f3;
         float f6 = (float) (d6 - d8);

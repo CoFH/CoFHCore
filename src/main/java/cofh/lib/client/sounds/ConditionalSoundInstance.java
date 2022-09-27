@@ -1,4 +1,4 @@
-package cofh.lib.client.audio;
+package cofh.lib.client.sounds;
 
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.sounds.SoundEvent;
@@ -10,7 +10,7 @@ import java.util.function.BooleanSupplier;
 
 import static cofh.lib.util.Constants.FALSE;
 
-public class ConditionalSound extends AbstractTickableSoundInstance {
+public class ConditionalSoundInstance extends AbstractTickableSoundInstance {
 
     boolean beginFadeOut;
     boolean donePlaying;
@@ -21,7 +21,7 @@ public class ConditionalSound extends AbstractTickableSoundInstance {
 
     BooleanSupplier condition = FALSE;
 
-    public ConditionalSound(SoundEvent soundIn, SoundSource categoryIn, BlockEntity tile, BooleanSupplier condition) {
+    public ConditionalSoundInstance(SoundEvent soundIn, SoundSource categoryIn, BlockEntity tile, BooleanSupplier condition) {
 
         super(soundIn, categoryIn);
 
@@ -33,7 +33,7 @@ public class ConditionalSound extends AbstractTickableSoundInstance {
         this.condition = condition;
     }
 
-    public ConditionalSound(SoundEvent soundIn, SoundSource categoryIn, Entity entity, BooleanSupplier condition) {
+    public ConditionalSoundInstance(SoundEvent soundIn, SoundSource categoryIn, Entity entity, BooleanSupplier condition) {
 
         super(soundIn, categoryIn);
 
@@ -45,13 +45,13 @@ public class ConditionalSound extends AbstractTickableSoundInstance {
         this.condition = condition;
     }
 
-    public ConditionalSound setFadeIn(int fadeIn) {
+    public ConditionalSoundInstance setFadeIn(int fadeIn) {
 
         this.fadeIn = Math.min(0, fadeIn);
         return this;
     }
 
-    public ConditionalSound setFadeOut(int fadeOut) {
+    public ConditionalSoundInstance setFadeOut(int fadeOut) {
 
         this.fadeOut = Math.min(0, fadeOut);
         return this;

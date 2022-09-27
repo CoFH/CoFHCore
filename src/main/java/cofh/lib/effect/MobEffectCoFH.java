@@ -10,9 +10,9 @@ import net.minecraft.world.effect.MobEffectCategory;
  *
  * @author King Lemming
  */
-public class EffectCoFH extends MobEffect {
+public class MobEffectCoFH extends MobEffect {
 
-    public EffectCoFH(MobEffectCategory typeIn, int liquidColorIn) {
+    public MobEffectCoFH(MobEffectCategory typeIn, int liquidColorIn) {
 
         super(typeIn, liquidColorIn);
     }

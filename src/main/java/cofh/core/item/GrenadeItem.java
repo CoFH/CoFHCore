@@ -1,7 +1,7 @@
 package cofh.core.item;
 
+import cofh.core.entity.AbstractGrenade;
 import cofh.core.util.ProxyUtils;
-import cofh.lib.entity.AbstractGrenade;
 import net.minecraft.core.Position;
 import net.minecraft.core.dispenser.AbstractProjectileDispenseBehavior;
 import net.minecraft.resources.ResourceLocation;

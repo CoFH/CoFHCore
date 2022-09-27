@@ -9,14 +9,14 @@ import net.minecraftforge.fluids.FluidAttributes;
 import static cofh.core.CoFHCore.FLUIDS;
 import static cofh.core.util.references.CoreIDs.ID_FLUID_XP;
 
-public class XPFluid extends FluidCoFH {
+public class ExperienceFluid extends FluidCoFH {
 
-    public static XPFluid create() {
+    public static ExperienceFluid create() {
 
-        return new XPFluid(ID_FLUID_XP, "cofh_core:block/fluids/experience_still", "cofh_core:block/fluids/experience_flow");
+        return new ExperienceFluid(ID_FLUID_XP, "cofh_core:block/fluids/experience_still", "cofh_core:block/fluids/experience_flow");
     }
 
-    protected XPFluid(String key, String stillTexture, String flowTexture) {
+    protected ExperienceFluid(String key, String stillTexture, String flowTexture) {
 
         super(FLUIDS, key, FluidAttributes.builder(new ResourceLocation(stillTexture), new ResourceLocation(flowTexture))
                 .luminosity(10)

@@ -1,6 +1,6 @@
 package cofh.core.effect;
 
-import cofh.lib.effect.EffectCoFH;
+import cofh.lib.effect.MobEffectCoFH;
 import cofh.lib.util.Utils;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -12,9 +12,9 @@ import net.minecraftforge.event.entity.living.PotionEvent;
 import javax.annotation.Nullable;
 import java.util.Iterator;
 
-public class PanaceaEffect extends EffectCoFH {
+public class PanaceaMobEffect extends MobEffectCoFH {
 
-    public PanaceaEffect(MobEffectCategory typeIn, int liquidColorIn) {
+    public PanaceaMobEffect(MobEffectCategory typeIn, int liquidColorIn) {
 
         super(typeIn, liquidColorIn);
     }

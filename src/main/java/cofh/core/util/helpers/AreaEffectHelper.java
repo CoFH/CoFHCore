@@ -30,8 +30,10 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static cofh.core.capability.CapabilityAreaEffect.AREA_EFFECT_ITEM_CAPABILITY;
-import static cofh.core.util.references.EnsorcReferences.*;
+import static cofh.core.util.references.EnsorcIDs.ID_EXCAVATING;
+import static cofh.lib.util.Utils.getEnchantment;
 import static cofh.lib.util.Utils.getItemEnchantmentLevel;
+import static cofh.lib.util.constants.ModIds.ID_ENSORCELLATION;
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.*;
 
 public class AreaEffectHelper {
@@ -55,18 +57,18 @@ public class AreaEffectHelper {
      */
     public static ImmutableList<BlockPos> getAreaEffectBlocks(ItemStack stack, BlockPos pos, Player player) {
 
-        int encExcavating = getItemEnchantmentLevel(EXCAVATING, stack);
+        int encExcavating = getItemEnchantmentLevel(getEnchantment(ID_ENSORCELLATION, ID_EXCAVATING), stack);
         if (encExcavating > 0) {
             return getBreakableBlocksRadius(stack, pos, player, encExcavating);
         }
-        int encTilling = getItemEnchantmentLevel(TILLING, stack);
-        if (encTilling > 0) {
-            return getTillableBlocksRadius(stack, pos, player, encTilling);
-        }
-        int encFurrowing = getItemEnchantmentLevel(FURROWING, stack);
-        if (encFurrowing > 0) {
-            return getTillableBlocksLine(stack, pos, player, encFurrowing * 2);
-        }
+        //        int encTilling = getItemEnchantmentLevel(TILLING, stack);
+        //        if (encTilling > 0) {
+        //            return getTillableBlocksRadius(stack, pos, player, encTilling);
+        //        }
+        //        int encFurrowing = getItemEnchantmentLevel(FURROWING, stack);
+        //        if (encFurrowing > 0) {
+        //            return getTillableBlocksLine(stack, pos, player, encFurrowing * 2);
+        //        }
         return ImmutableList.of();
     }
 

@@ -1,4 +1,4 @@
-package cofh.lib.entity;
+package cofh.core.entity;
 
 import cofh.lib.api.IDetonatable;
 import net.minecraft.core.BlockPos;

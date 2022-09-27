@@ -3,7 +3,7 @@ package cofh.core.data;
 import cofh.lib.data.LootTableProviderCoFH;
 import net.minecraft.data.DataGenerator;
 
-import static cofh.core.util.references.CoreReferences.GLOSSED_MAGMA;
+import static cofh.core.init.CoreBlocks.GLOSSED_MAGMA;
 
 public class CoreLootTableProvider extends LootTableProviderCoFH {
 
@@ -21,7 +21,7 @@ public class CoreLootTableProvider extends LootTableProviderCoFH {
     @Override
     protected void addTables() {
 
-        blockLootTables.put(GLOSSED_MAGMA, getEmptyTable());
+        blockLootTables.put(GLOSSED_MAGMA.get(), getEmptyTable());
     }
 
 }

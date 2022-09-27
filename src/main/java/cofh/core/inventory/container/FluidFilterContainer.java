@@ -24,8 +24,8 @@ import net.minecraftforge.fluids.FluidStack;
 import java.util.ArrayList;
 import java.util.List;
 
+import static cofh.core.init.CoreContainers.FLUID_FILTER_CONTAINER;
 import static cofh.core.util.helpers.FilterHelper.hasFilter;
-import static cofh.core.util.references.CoreReferences.FLUID_FILTER_CONTAINER;
 
 public class FluidFilterContainer extends ContainerCoFH implements IFilterOptions {
 
@@ -44,7 +44,7 @@ public class FluidFilterContainer extends ContainerCoFH implements IFilterOption
 
     public FluidFilterContainer(int windowId, Level world, Inventory inventory, Player player, boolean held, BlockPos pos, int filterId) {
 
-        super(FLUID_FILTER_CONTAINER, windowId, inventory, player);
+        super(FLUID_FILTER_CONTAINER.get(), windowId, inventory, player);
 
         this.held = held;
         this.filterId = filterId;

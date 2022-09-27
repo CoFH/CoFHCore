@@ -1,7 +1,6 @@
 package cofh.core.config;
 
 import cofh.core.command.*;
-import cofh.lib.config.IBaseConfig;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 public class CoreCommandConfig implements IBaseConfig {

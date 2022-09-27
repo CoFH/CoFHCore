@@ -1,10 +1,12 @@
 package cofh.core.config;
 
-import cofh.lib.config.IBaseConfig;
 import cofh.lib.enchantment.EnchantmentCoFH;
 import net.minecraftforge.common.ForgeConfigSpec;
 
-import static cofh.core.util.references.CoreReferences.HOLDING;
+import java.util.function.Supplier;
+
+import static cofh.core.CoFHCore.ENCHANTMENTS;
+import static cofh.core.util.references.CoreIDs.ID_HOLDING;
 import static cofh.lib.util.Constants.MAX_ENCHANT_LEVEL;
 
 public class CoreEnchantConfig implements IBaseConfig {
@@ -17,11 +19,11 @@ public class CoreEnchantConfig implements IBaseConfig {
 
         builder.push("Enchantments");
 
-        serverImprovedFeatherFalling = builder
+        improvedFeatherFalling = builder
                 .comment("If TRUE, Feather Falling will prevent Farmland from being trampled. This option will work with alternative versions (overrides) of Feather Falling.")
                 .define("Improved Feather Falling", improvedFeatherFalling);
 
-        serverImprovedMending = builder
+        improvedMending = builder
                 .comment("If TRUE, Mending behavior is altered so that Experience Orbs always repair items if possible, and the most damaged item is prioritized. This option may not work with alternative versions (overrides) of Mending.")
                 .define("Improved Mending", improvedMending);
 
@@ -43,25 +45,18 @@ public class CoreEnchantConfig implements IBaseConfig {
     @Override
     public void refresh() {
 
-        improvedFeatherFalling = serverImprovedFeatherFalling.get();
-        improvedMending = serverImprovedMending.get();
-
-        if (HOLDING instanceof EnchantmentCoFH) {
-            ((EnchantmentCoFH) HOLDING).setEnable(enableHolding.get());
-            ((EnchantmentCoFH) HOLDING).setTreasureEnchantment(treasureHolding.get());
-            ((EnchantmentCoFH) HOLDING).setMaxLevel(levelHolding.get());
+        if (ENCHANTMENTS.get(ID_HOLDING) instanceof EnchantmentCoFH enc) {
+            enc.setEnable(enableHolding.get());
+            enc.setTreasureEnchantment(treasureHolding.get());
+            enc.setMaxLevel(levelHolding.get());
         }
     }
 
-    // region VARIABLES
-    public static boolean improvedFeatherFalling = true;
-    public static boolean improvedMending = true;
+    public static Supplier<Boolean> improvedFeatherFalling = () -> true;
+    public static Supplier<Boolean> improvedMending = () -> true;
 
-    private ForgeConfigSpec.BooleanValue serverImprovedFeatherFalling;
-    private ForgeConfigSpec.BooleanValue serverImprovedMending;
+    private Supplier<Boolean> enableHolding;
+    private Supplier<Boolean> treasureHolding;
+    private Supplier<Integer> levelHolding;
 
-    private ForgeConfigSpec.BooleanValue enableHolding;
-    private ForgeConfigSpec.BooleanValue treasureHolding;
-    private ForgeConfigSpec.IntValue levelHolding;
-    // endregion
 }

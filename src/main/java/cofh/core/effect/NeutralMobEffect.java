@@ -1,15 +1,15 @@
 package cofh.core.effect;
 
-import cofh.lib.effect.EffectCoFH;
+import cofh.lib.effect.MobEffectCoFH;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Collections;
 import java.util.List;
 
-public class NeutralEffect extends EffectCoFH {
+public class NeutralMobEffect extends MobEffectCoFH {
 
-    public NeutralEffect(MobEffectCategory typeIn, int liquidColorIn) {
+    public NeutralMobEffect(MobEffectCategory typeIn, int liquidColorIn) {
 
         super(typeIn, liquidColorIn);
     }

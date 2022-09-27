@@ -11,24 +11,24 @@ import static cofh.lib.util.constants.NBTTags.TAG_XP;
 
 public interface IXpContainerItem extends IContainerItem {
 
-    int getCapacityXP(ItemStack stack);
+    int getCapacityXp(ItemStack stack);
 
     default int getStoredXp(ItemStack stack) {
 
         return stack.getOrCreateTag().getInt(TAG_XP);
     }
 
-    default int getSpaceXP(ItemStack stack) {
+    default int getSpaceXp(ItemStack stack) {
 
-        return getCapacityXP(stack) - getStoredXp(stack);
+        return getCapacityXp(stack) - getStoredXp(stack);
     }
 
     default int modifyXp(ItemStack stack, int xp) {
 
         int totalXP = getStoredXp(stack) + xp;
 
-        if (totalXP > getCapacityXP(stack)) {
-            totalXP = getCapacityXP(stack);
+        if (totalXP > getCapacityXp(stack)) {
+            totalXP = getCapacityXp(stack);
         } else if (totalXP < 0) {
             totalXP = 0;
         }
@@ -39,7 +39,7 @@ public interface IXpContainerItem extends IContainerItem {
     static boolean storeXpOrb(Player player, ExperienceOrb orb, ItemStack stack) {
 
         IXpContainerItem item = (IXpContainerItem) stack.getItem();
-        int toAdd = Math.min(item.getSpaceXP(stack), orb.value);
+        int toAdd = Math.min(item.getSpaceXp(stack), orb.value);
 
         if (toAdd > 0) {
             stack.setPopTime(5);

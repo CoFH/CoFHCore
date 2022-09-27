@@ -14,19 +14,19 @@ import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
-public abstract class AbstractTNTEntity extends PrimedTnt implements IDetonatable {
+public abstract class PrimedTntCoFH extends PrimedTnt implements IDetonatable {
 
     protected static final int CLOUD_DURATION = 20;
     protected int radius = 9;
     public int effectAmplifier = 1;
     public int effectDuration = 300;
 
-    public AbstractTNTEntity(EntityType<? extends PrimedTnt> type, Level worldIn) {
+    public PrimedTntCoFH(EntityType<? extends PrimedTnt> type, Level worldIn) {
 
         super(type, worldIn);
     }
 
-    public AbstractTNTEntity(EntityType<? extends PrimedTnt> type, Level worldIn, double x, double y, double z, @Nullable LivingEntity igniter) {
+    public PrimedTntCoFH(EntityType<? extends PrimedTnt> type, Level worldIn, double x, double y, double z, @Nullable LivingEntity igniter) {
 
         this(type, worldIn);
         this.setPos(x, y, z);

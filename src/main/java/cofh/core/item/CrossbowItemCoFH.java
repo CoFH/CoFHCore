@@ -171,8 +171,7 @@ public class CrossbowItemCoFH extends CrossbowItem implements ICoFHItem {
     // region HELPER
     public boolean loadAmmo(LivingEntity living, ItemStack crossbow) {
 
-        if (living instanceof Player) {
-            Player player = (Player) living;
+        if (living instanceof Player player) {
             ItemStack ammo = ArcheryHelper.findAmmo(player, crossbow);
             if (!ammo.isEmpty() && ammo.getItem() instanceof FireworkRocketItem) {
                 if (!player.abilities.instabuild) {
@@ -236,8 +235,7 @@ public class CrossbowItemCoFH extends CrossbowItem implements ICoFHItem {
     public boolean shootLoadedAmmo(Level level, LivingEntity living, InteractionHand hand, ItemStack crossbow) {
 
         // TODO: dmg/acc/vel modifiers
-        if (living instanceof Player) {
-            Player shooter = (Player) living;
+        if (living instanceof Player shooter) {
             ItemStack ammo = getLoadedAmmo(crossbow);
             if (!ammo.isEmpty()) {
                 int multishot = Utils.getItemEnchantmentLevel(Enchantments.MULTISHOT, crossbow);

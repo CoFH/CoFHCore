@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 
 import static cofh.core.network.packet.PacketIDs.PACKET_FILTERABLE_GUI_OPEN;
 
-public class FilterGuiOpenPacket extends PacketBase implements IPacketServer {
+public class TileFilterGuiOpenPacket extends PacketBase implements IPacketServer {
 
     public static byte TILE = 0;
     public static byte FILTER = 1;
@@ -21,7 +21,7 @@ public class FilterGuiOpenPacket extends PacketBase implements IPacketServer {
     protected byte mode;
     protected byte guiId;
 
-    public FilterGuiOpenPacket() {
+    public TileFilterGuiOpenPacket() {
 
         super(PACKET_FILTERABLE_GUI_OPEN, CoFHCore.PACKET_HANDLER);
     }
@@ -70,7 +70,7 @@ public class FilterGuiOpenPacket extends PacketBase implements IPacketServer {
 
     protected static void sendToServer(IFilterableTile tile, byte mode, byte guiId) {
 
-        FilterGuiOpenPacket packet = new FilterGuiOpenPacket();
+        TileFilterGuiOpenPacket packet = new TileFilterGuiOpenPacket();
         packet.pos = tile.pos();
         packet.mode = mode;
         packet.guiId = guiId;

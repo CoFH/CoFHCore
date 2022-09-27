@@ -1,4 +1,4 @@
-package cofh.lib.config;
+package cofh.core.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 

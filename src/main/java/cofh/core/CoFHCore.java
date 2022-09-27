@@ -9,10 +9,7 @@ import cofh.core.client.gui.ItemFilterScreen;
 import cofh.core.command.CoFHCommand;
 import cofh.core.compat.curios.CuriosProxy;
 import cofh.core.compat.quark.QuarkFlags;
-import cofh.core.config.CoreClientConfig;
-import cofh.core.config.CoreCommandConfig;
-import cofh.core.config.CoreEnchantConfig;
-import cofh.core.config.CoreServerConfig;
+import cofh.core.config.*;
 import cofh.core.event.ArmorEvents;
 import cofh.core.init.*;
 import cofh.core.network.packet.PacketIDs;
@@ -20,12 +17,10 @@ import cofh.core.network.packet.client.*;
 import cofh.core.network.packet.server.*;
 import cofh.core.util.Proxy;
 import cofh.core.util.ProxyClient;
-import cofh.core.util.helpers.FluidHelper;
 import cofh.lib.client.renderer.entity.ElectricArcRenderer;
 import cofh.lib.client.renderer.entity.KnifeRenderer;
 import cofh.lib.client.renderer.entity.NothingRenderer;
 import cofh.lib.client.renderer.entity.model.ArmorFullSuitModel;
-import cofh.lib.config.ConfigManager;
 import cofh.lib.loot.TileNBTSync;
 import cofh.lib.network.PacketHandler;
 import cofh.lib.util.DeferredRegisterCoFH;
@@ -60,7 +55,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import static cofh.core.util.references.CoreReferences.*;
+import static cofh.core.init.CoreContainers.FLUID_FILTER_CONTAINER;
+import static cofh.core.init.CoreContainers.ITEM_FILTER_CONTAINER;
+import static cofh.core.init.CoreEntities.*;
 import static cofh.lib.client.renderer.entity.model.ArmorFullSuitModel.ARMOR_FULL_SUIT_LAYER;
 
 @Mod (ModIds.ID_COFH_CORE)
@@ -77,8 +74,8 @@ public class CoFHCore {
     public static final DeferredRegisterCoFH<EntityType<?>> ENTITIES = DeferredRegisterCoFH.create(ForgeRegistries.ENTITIES, ModIds.ID_COFH_CORE);
 
     public static final DeferredRegisterCoFH<MenuType<?>> CONTAINERS = DeferredRegisterCoFH.create(ForgeRegistries.CONTAINERS, ModIds.ID_COFH_CORE);
-    public static final DeferredRegisterCoFH<MobEffect> EFFECTS = DeferredRegisterCoFH.create(ForgeRegistries.MOB_EFFECTS, ModIds.ID_COFH_CORE);
     public static final DeferredRegisterCoFH<Enchantment> ENCHANTMENTS = DeferredRegisterCoFH.create(ForgeRegistries.ENCHANTMENTS, ModIds.ID_COFH_CORE);
+    public static final DeferredRegisterCoFH<MobEffect> MOB_EFFECTS = DeferredRegisterCoFH.create(ForgeRegistries.MOB_EFFECTS, ModIds.ID_COFH_CORE);
     public static final DeferredRegisterCoFH<ParticleType<?>> PARTICLES = DeferredRegisterCoFH.create(ForgeRegistries.PARTICLE_TYPES, ModIds.ID_COFH_CORE);
     public static final DeferredRegisterCoFH<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegisterCoFH.create(ForgeRegistries.RECIPE_SERIALIZERS, ModIds.ID_COFH_CORE);
     public static final DeferredRegisterCoFH<SoundEvent> SOUND_EVENTS = DeferredRegisterCoFH.create(ForgeRegistries.SOUND_EVENTS, ModIds.ID_COFH_CORE);
@@ -109,7 +106,7 @@ public class CoFHCore {
         ENTITIES.register(modEventBus);
 
         CONTAINERS.register(modEventBus);
-        EFFECTS.register(modEventBus);
+        MOB_EFFECTS.register(modEventBus);
         ENCHANTMENTS.register(modEventBus);
         PARTICLES.register(modEventBus);
         RECIPE_SERIALIZERS.register(modEventBus);
@@ -135,6 +132,7 @@ public class CoFHCore {
         CoreEnchantments.register();
         CoreRecipeSerializers.register();
         CoreSounds.register();
+        CoreTileEntities.register();
 
         CuriosProxy.register();
     }
@@ -152,7 +150,7 @@ public class CoFHCore {
         PACKET_HANDLER.registerPacket(PacketIDs.PACKET_CHAT, IndexedChatPacket::new);
         PACKET_HANDLER.registerPacket(PacketIDs.PACKET_MOTION, PlayerMotionPacket::new);
 
-        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_FILTERABLE_GUI_OPEN, FilterGuiOpenPacket::new);
+        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_FILTERABLE_GUI_OPEN, TileFilterGuiOpenPacket::new);
 
         PACKET_HANDLER.registerPacket(PacketIDs.PACKET_CONTAINER_CONFIG, ContainerConfigPacket::new);
         PACKET_HANDLER.registerPacket(PacketIDs.PACKET_CONTAINER_GUI, ContainerGuiPacket::new);
@@ -188,10 +186,9 @@ public class CoFHCore {
 
     private void entityRendererSetup(final EntityRenderersEvent.RegisterRenderers event) {
 
-        event.registerEntityRenderer(ELECTRIC_ARC_ENTITY, ElectricArcRenderer::new);
-        event.registerEntityRenderer(ELECTRIC_FIELD_ENTITY, NothingRenderer::new);
-
-        event.registerEntityRenderer(KNIFE_ENTITY, KnifeRenderer::new);
+        event.registerEntityRenderer(KNIFE.get(), KnifeRenderer::new);
+        event.registerEntityRenderer(ELECTRIC_ARC.get(), ElectricArcRenderer::new);
+        event.registerEntityRenderer(ELECTRIC_FIELD.get(), NothingRenderer::new);
     }
 
     private void capSetup(RegisterCapabilitiesEvent event) {
@@ -206,14 +203,14 @@ public class CoFHCore {
 
         event.enqueueWork(TileNBTSync::setup);
         event.enqueueWork(ArmorEvents::setup);
-        event.enqueueWork(FluidHelper::setup);
+        event.enqueueWork(CoreFluids::setup);
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {
 
         event.enqueueWork(() -> {
-            MenuScreens.register(FLUID_FILTER_CONTAINER, FluidFilterScreen::new);
-            MenuScreens.register(ITEM_FILTER_CONTAINER, ItemFilterScreen::new);
+            MenuScreens.register(FLUID_FILTER_CONTAINER.get(), FluidFilterScreen::new);
+            MenuScreens.register(ITEM_FILTER_CONTAINER.get(), ItemFilterScreen::new);
         });
         event.enqueueWork(CoreKeys::register);
         event.enqueueWork(ProxyClient::registerItemModelProperties);

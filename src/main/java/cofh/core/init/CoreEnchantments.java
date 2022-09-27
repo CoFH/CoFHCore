@@ -1,8 +1,10 @@
 package cofh.core.init;
 
 import cofh.core.enchantment.HoldingEnchantment;
+import cofh.lib.enchantment.EnchantmentCoFH;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
+import net.minecraftforge.registries.RegistryObject;
 
 import static cofh.core.CoFHCore.ENCHANTMENTS;
 import static cofh.core.util.references.CoreIDs.ID_HOLDING;
@@ -16,11 +18,6 @@ public class CoreEnchantments {
     public static void register() {
 
         Types.register();
-    }
-
-    public static void registerHoldingEnchantment() {
-
-        ENCHANTMENTS.register(ID_HOLDING, HoldingEnchantment::new);
     }
 
     public static class Types {
@@ -41,5 +38,7 @@ public class CoreEnchantments {
         public static EnchantmentCategory SWORD_OR_AXE_OR_CROSSBOW;
 
     }
+
+    public static final RegistryObject<EnchantmentCoFH> HOLDING = ENCHANTMENTS.register(ID_HOLDING, HoldingEnchantment::new);
 
 }

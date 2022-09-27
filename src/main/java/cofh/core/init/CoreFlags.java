@@ -34,7 +34,4 @@ public class CoreFlags {
         return FLAG_MANAGER.getFlag(flag);
     }
 
-    // region SPECIFIC FEATURES
-    public static String FLAG_ECTOPLASM = "ectoplasm";
-    // endregion
 }

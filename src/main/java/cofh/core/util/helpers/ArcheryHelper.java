@@ -27,9 +27,11 @@ import java.util.stream.Stream;
 
 import static cofh.core.capability.CapabilityArchery.AMMO_ITEM_CAPABILITY;
 import static cofh.core.capability.CapabilityArchery.BOW_ITEM_CAPABILITY;
-import static cofh.core.util.references.EnsorcReferences.TRUESHOT;
-import static cofh.core.util.references.EnsorcReferences.VOLLEY;
+import static cofh.core.util.references.EnsorcIDs.ID_TRUESHOT;
+import static cofh.core.util.references.EnsorcIDs.ID_VOLLEY;
+import static cofh.lib.util.Utils.getEnchantment;
 import static cofh.lib.util.Utils.getItemEnchantmentLevel;
+import static cofh.lib.util.constants.ModIds.ID_ENSORCELLATION;
 import static net.minecraft.world.item.enchantment.Enchantments.*;
 
 public final class ArcheryHelper {
@@ -72,14 +74,15 @@ public final class ArcheryHelper {
             }
             float arrowVelocity = BowItem.getPowerForTime(charge);
 
-            float accuracyMod = bowCap.getAccuracyModifier(shooter);
-            float damageMod = bowCap.getDamageModifier(shooter);
-            float velocityMod = bowCap.getVelocityModifier(shooter);
 
             if (arrowVelocity >= 0.1F) {
                 if (Utils.isServerWorld(world)) {
-                    int encVolley = getItemEnchantmentLevel(VOLLEY, bow);
-                    int encTrueshot = getItemEnchantmentLevel(TRUESHOT, bow);
+                    float accuracyMod = bowCap.getAccuracyModifier(shooter);
+                    float damageMod = bowCap.getDamageModifier(shooter);
+                    float velocityMod = bowCap.getVelocityModifier(shooter);
+
+                    int encVolley = getItemEnchantmentLevel(getEnchantment(ID_ENSORCELLATION, ID_VOLLEY), bow);
+                    int encTrueshot = getItemEnchantmentLevel(getEnchantment(ID_ENSORCELLATION, ID_TRUESHOT), bow);
                     int encPunch = getItemEnchantmentLevel(PUNCH_ARROWS, bow);
                     int encPower = getItemEnchantmentLevel(POWER_ARROWS, bow);
                     int encFlame = getItemEnchantmentLevel(FLAMING_ARROWS, bow);
