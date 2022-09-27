@@ -4,10 +4,8 @@ import cofh.core.capability.CapabilityArchery;
 import cofh.core.capability.CapabilityAreaEffect;
 import cofh.core.capability.CapabilityEnchantableItem;
 import cofh.core.capability.CapabilityShieldItem;
-import cofh.core.client.gui.HeldFluidFilterScreen;
-import cofh.core.client.gui.HeldItemFilterScreen;
-import cofh.core.client.gui.TileFluidFilterScreen;
-import cofh.core.client.gui.TileItemFilterScreen;
+import cofh.core.client.gui.FluidFilterScreen;
+import cofh.core.client.gui.ItemFilterScreen;
 import cofh.core.command.CoFHCommand;
 import cofh.core.compat.curios.CuriosProxy;
 import cofh.core.compat.quark.QuarkFlags;
@@ -214,11 +212,8 @@ public class CoFHCore {
     private void clientSetup(final FMLClientSetupEvent event) {
 
         event.enqueueWork(() -> {
-            MenuScreens.register(HELD_FLUID_FILTER_CONTAINER, HeldFluidFilterScreen::new);
-            MenuScreens.register(TILE_FLUID_FILTER_CONTAINER, TileFluidFilterScreen::new);
-
-            MenuScreens.register(HELD_ITEM_FILTER_CONTAINER, HeldItemFilterScreen::new);
-            MenuScreens.register(TILE_ITEM_FILTER_CONTAINER, TileItemFilterScreen::new);
+            MenuScreens.register(FLUID_FILTER_CONTAINER, FluidFilterScreen::new);
+            MenuScreens.register(ITEM_FILTER_CONTAINER, ItemFilterScreen::new);
         });
         event.enqueueWork(CoreKeys::register);
         event.enqueueWork(ProxyClient::registerItemModelProperties);

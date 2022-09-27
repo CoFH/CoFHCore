@@ -26,6 +26,9 @@ public class CoreIDs {
     public static final String ID_CONTAINER_HELD_ITEM_FILTER = "held_item_filter";
     public static final String ID_CONTAINER_TILE_ITEM_FILTER = "tile_item_filter";
 
+    public static final String ID_CONTAINER_FLUID_FILTER = "fluid_filter";
+    public static final String ID_CONTAINER_ITEM_FILTER = "item_filter";
+
     public static final String ID_EFFECT_EXPLOSION_RESISTANCE = "explosion_resistance";
     public static final String ID_EFFECT_LIGHTNING_RESISTANCE = "lightning_resistance";
     public static final String ID_EFFECT_MAGIC_RESISTANCE = "magic_resistance";
