@@ -51,7 +51,6 @@ public class TileContainer extends ContainerCoFH {
     public void setData(int i, int j) {
 
         super.setData(i, j);
-
         if (baseTile == null) {
             return;
         }

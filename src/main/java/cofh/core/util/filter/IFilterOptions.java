@@ -1,6 +1,6 @@
 package cofh.core.util.filter;
 
-public interface IFilterOptions {
+public interface IFilterOptions extends IFilterContainer {
 
     boolean getAllowList();
 

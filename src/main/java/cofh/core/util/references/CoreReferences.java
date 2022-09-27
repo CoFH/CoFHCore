@@ -4,7 +4,9 @@ import cofh.core.block.entity.EnderAirTile;
 import cofh.core.block.entity.GlowAirTile;
 import cofh.core.block.entity.LightningAirTile;
 import cofh.core.block.entity.SignalAirTile;
+import cofh.core.inventory.container.HeldFluidFilterContainer;
 import cofh.core.inventory.container.HeldItemFilterContainer;
+import cofh.core.inventory.container.TileFluidFilterContainer;
 import cofh.core.inventory.container.TileItemFilterContainer;
 import cofh.lib.entity.BlackHole;
 import cofh.lib.entity.ElectricArc;
@@ -48,11 +50,11 @@ public class CoreReferences {
     // endregion
 
     // region CONTAINERS
-    //    @ObjectHolder(ID_CONTAINER_HELD_FLUID_FILTER)
-    //    public static final ContainerType<HeldFluidFilterContainer> HELD_FLUID_FILTER_CONTAINER = null;
-    //
-    //    @ObjectHolder(ID_CONTAINER_TILE_FLUID_FILTER)
-    //    public static final ContainerType<TileFluidFilterContainer> TILE_FLUID_FILTER_CONTAINER = null;
+    @ObjectHolder (ID_CONTAINER_HELD_FLUID_FILTER)
+    public static final MenuType<HeldFluidFilterContainer> HELD_FLUID_FILTER_CONTAINER = null;
+
+    @ObjectHolder (ID_CONTAINER_TILE_FLUID_FILTER)
+    public static final MenuType<TileFluidFilterContainer> TILE_FLUID_FILTER_CONTAINER = null;
 
     @ObjectHolder (ID_CONTAINER_HELD_ITEM_FILTER)
     public static final MenuType<HeldItemFilterContainer> HELD_ITEM_FILTER_CONTAINER = null;

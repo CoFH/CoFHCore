@@ -78,8 +78,8 @@ public class TileCoFH extends BlockEntity implements ITileCallback, IPacketHandl
 
     public void sendGuiNetworkData(AbstractContainerMenu container, Player player) {
 
-        if (hasGuiPacket() && player instanceof ServerPlayer && (!(player instanceof FakePlayer))) {
-            TileGuiPacket.sendToClient(this, (ServerPlayer) player);
+        if (hasGuiPacket() && player instanceof ServerPlayer serverPlayer && (!(player instanceof FakePlayer))) {
+            TileGuiPacket.sendToClient(this, serverPlayer);
         }
     }
 

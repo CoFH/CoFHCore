@@ -104,12 +104,21 @@ public abstract class ContainerCoFH extends AbstractContainerMenu {
     // endregion
 
     // region NETWORK
-    public FriendlyByteBuf getContainerPacket(FriendlyByteBuf buffer) {
+    public FriendlyByteBuf getConfigPacket(FriendlyByteBuf buffer) {
 
         return buffer;
     }
 
-    public void handleContainerPacket(FriendlyByteBuf buffer) {
+    public void handleConfigPacket(FriendlyByteBuf buffer) {
+
+    }
+
+    public FriendlyByteBuf getGuiPacket(FriendlyByteBuf buffer) {
+
+        return buffer;
+    }
+
+    public void handleGuiPacket(FriendlyByteBuf buffer) {
 
     }
     // endregion

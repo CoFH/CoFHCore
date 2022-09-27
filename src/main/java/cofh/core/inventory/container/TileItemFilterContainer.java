@@ -1,6 +1,6 @@
 package cofh.core.inventory.container;
 
-import cofh.core.network.packet.server.ContainerPacket;
+import cofh.core.network.packet.server.ContainerConfigPacket;
 import cofh.core.util.filter.AbstractItemFilter;
 import cofh.core.util.filter.IFilterOptions;
 import cofh.core.util.filter.IFilterableTile;
@@ -81,7 +81,7 @@ public class TileItemFilterContainer extends TileContainer implements IFilterOpt
 
     // region NETWORK
     @Override
-    public FriendlyByteBuf getContainerPacket(FriendlyByteBuf buffer) {
+    public FriendlyByteBuf getConfigPacket(FriendlyByteBuf buffer) {
 
         buffer.writeBoolean(getAllowList());
         buffer.writeBoolean(getCheckNBT());
@@ -90,7 +90,7 @@ public class TileItemFilterContainer extends TileContainer implements IFilterOpt
     }
 
     @Override
-    public void handleContainerPacket(FriendlyByteBuf buffer) {
+    public void handleConfigPacket(FriendlyByteBuf buffer) {
 
         filter.setAllowList(buffer.readBoolean());
         filter.setCheckNBT(buffer.readBoolean());
@@ -108,7 +108,7 @@ public class TileItemFilterContainer extends TileContainer implements IFilterOpt
     public boolean setAllowList(boolean allowList) {
 
         boolean ret = filter.setAllowList(allowList);
-        ContainerPacket.sendToServer(this);
+        ContainerConfigPacket.sendToServer(this);
         return ret;
     }
 
@@ -122,7 +122,7 @@ public class TileItemFilterContainer extends TileContainer implements IFilterOpt
     public boolean setCheckNBT(boolean checkNBT) {
 
         boolean ret = filter.setCheckNBT(checkNBT);
-        ContainerPacket.sendToServer(this);
+        ContainerConfigPacket.sendToServer(this);
         return ret;
     }
     // endregion

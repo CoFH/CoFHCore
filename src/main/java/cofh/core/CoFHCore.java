@@ -4,7 +4,9 @@ import cofh.core.capability.CapabilityArchery;
 import cofh.core.capability.CapabilityAreaEffect;
 import cofh.core.capability.CapabilityEnchantableItem;
 import cofh.core.capability.CapabilityShieldItem;
+import cofh.core.client.gui.HeldFluidFilterScreen;
 import cofh.core.client.gui.HeldItemFilterScreen;
+import cofh.core.client.gui.TileFluidFilterScreen;
 import cofh.core.client.gui.TileItemFilterScreen;
 import cofh.core.command.CoFHCommand;
 import cofh.core.compat.curios.CuriosProxy;
@@ -152,9 +154,11 @@ public class CoFHCore {
         PACKET_HANDLER.registerPacket(PacketIDs.PACKET_CHAT, IndexedChatPacket::new);
         PACKET_HANDLER.registerPacket(PacketIDs.PACKET_MOTION, PlayerMotionPacket::new);
 
-        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_GUI_OPEN, FilterGuiOpenPacket::new);
+        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_FILTERABLE_GUI_OPEN, FilterGuiOpenPacket::new);
 
-        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_CONTAINER, ContainerPacket::new);
+        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_CONTAINER_CONFIG, ContainerConfigPacket::new);
+        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_CONTAINER_GUI, ContainerGuiPacket::new);
+
         PACKET_HANDLER.registerPacket(PacketIDs.PACKET_SECURITY, SecurityPacket::new);
 
         PACKET_HANDLER.registerPacket(PacketIDs.PACKET_CONFIG, TileConfigPacket::new);
@@ -210,6 +214,9 @@ public class CoFHCore {
     private void clientSetup(final FMLClientSetupEvent event) {
 
         event.enqueueWork(() -> {
+            MenuScreens.register(HELD_FLUID_FILTER_CONTAINER, HeldFluidFilterScreen::new);
+            MenuScreens.register(TILE_FLUID_FILTER_CONTAINER, TileFluidFilterScreen::new);
+
             MenuScreens.register(HELD_ITEM_FILTER_CONTAINER, HeldItemFilterScreen::new);
             MenuScreens.register(TILE_ITEM_FILTER_CONTAINER, TileItemFilterScreen::new);
         });

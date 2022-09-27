@@ -16,6 +16,9 @@ public class FilterRegistry {
     protected static final Map<String, ITileFilterFactory<? extends IFilter>> TILE_FILTER_MAP = new Object2ObjectOpenHashMap<>();
 
     static {
+        registerHeldFilter(FLUID_FILTER_TYPE, HeldFluidFilter.FACTORY);
+        registerTileFilter(FLUID_FILTER_TYPE, TileFluidFilter.FACTORY);
+
         registerHeldFilter(ITEM_FILTER_TYPE, HeldItemFilter.FACTORY);
         registerTileFilter(ITEM_FILTER_TYPE, TileItemFilter.FACTORY);
     }

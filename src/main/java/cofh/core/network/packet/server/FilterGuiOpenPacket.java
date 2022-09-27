@@ -10,7 +10,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-import static cofh.core.network.packet.PacketIDs.PACKET_GUI_OPEN;
+import static cofh.core.network.packet.PacketIDs.PACKET_FILTERABLE_GUI_OPEN;
 
 public class FilterGuiOpenPacket extends PacketBase implements IPacketServer {
 
@@ -23,7 +23,7 @@ public class FilterGuiOpenPacket extends PacketBase implements IPacketServer {
 
     public FilterGuiOpenPacket() {
 
-        super(PACKET_GUI_OPEN, CoFHCore.PACKET_HANDLER);
+        super(PACKET_FILTERABLE_GUI_OPEN, CoFHCore.PACKET_HANDLER);
     }
 
     @Override
@@ -34,11 +34,11 @@ public class FilterGuiOpenPacket extends PacketBase implements IPacketServer {
             return;
         }
         BlockEntity tile = world.getBlockEntity(pos);
-        if (tile instanceof IFilterableTile) {
+        if (tile instanceof IFilterableTile filterable) {
             if (mode == TILE) {
-                ((IFilterableTile) tile).openGui(player, guiId);
+                filterable.openGui(player, guiId);
             } else if (mode == FILTER) {
-                ((IFilterableTile) tile).openFilterGui(player, guiId);
+                filterable.openFilterGui(player, guiId);
             }
         }
     }
