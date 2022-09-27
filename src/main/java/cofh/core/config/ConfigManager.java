@@ -63,7 +63,6 @@ public class ConfigManager {
         if (!commonInit) {
             genCommonConfig();
             commonSpec = commonConfig.build();
-            refreshCommonConfig();
             ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, commonSpec);
             commonInit = true;
 
@@ -94,7 +93,6 @@ public class ConfigManager {
         if (!clientInit) {
             genClientConfig();
             clientSpec = clientConfig.build();
-            refreshClientConfig();
             ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, clientSpec);
             clientInit = true;
         }
@@ -108,7 +106,6 @@ public class ConfigManager {
         if (!serverInit) {
             genServerConfig();
             serverSpec = serverConfig.build();
-            refreshServerConfig();
             ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, serverSpec);
             serverInit = true;
         }
