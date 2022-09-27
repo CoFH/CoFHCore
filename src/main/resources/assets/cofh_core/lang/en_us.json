@@ -160,6 +160,9 @@
   "fluid_type.cofh_core.potion": "Potion",
   "fluid_type.cofh_core.steam": "Steam",
 
+  "info.cofh_core.fluid_filter.0": "Place items containing fluid in slots to add the fluid to the filter list.",
+  "info.cofh_core.fluid_filter.1": "Additional options can be used to fine-tune behavior.",
+
   "info.cofh_core.item_filter.0": "Place items in slots to add them to the filter list.",
   "info.cofh_core.item_filter.1": "Additional options can be used to fine-tune behavior.",
 
