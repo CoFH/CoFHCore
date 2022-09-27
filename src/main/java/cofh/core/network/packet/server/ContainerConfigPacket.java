@@ -8,22 +8,22 @@ import io.netty.buffer.Unpooled;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 
-import static cofh.core.network.packet.PacketIDs.PACKET_CONTAINER;
+import static cofh.core.network.packet.PacketIDs.PACKET_CONTAINER_CONFIG;
 
-public class ContainerPacket extends PacketBase implements IPacketServer {
+public class ContainerConfigPacket extends PacketBase implements IPacketServer {
 
     protected FriendlyByteBuf buffer;
 
-    public ContainerPacket() {
+    public ContainerConfigPacket() {
 
-        super(PACKET_CONTAINER, CoFHCore.PACKET_HANDLER);
+        super(PACKET_CONTAINER_CONFIG, CoFHCore.PACKET_HANDLER);
     }
 
     @Override
     public void handleServer(ServerPlayer player) {
 
-        if (player.containerMenu instanceof ContainerCoFH) {
-            ((ContainerCoFH) player.containerMenu).handleContainerPacket(buffer);
+        if (player.containerMenu instanceof ContainerCoFH container) {
+            container.handleConfigPacket(buffer);
         }
     }
 
@@ -41,8 +41,11 @@ public class ContainerPacket extends PacketBase implements IPacketServer {
 
     public static void sendToServer(ContainerCoFH container) {
 
-        ContainerPacket packet = new ContainerPacket();
-        packet.buffer = container.getContainerPacket(new FriendlyByteBuf(Unpooled.buffer()));
+        if (container == null) {
+            return;
+        }
+        ContainerConfigPacket packet = new ContainerConfigPacket();
+        packet.buffer = container.getConfigPacket(new FriendlyByteBuf(Unpooled.buffer()));
         packet.sendToServer();
     }
 

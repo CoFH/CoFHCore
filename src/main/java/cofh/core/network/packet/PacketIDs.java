@@ -17,10 +17,12 @@ public class PacketIDs {
     public static final int PACKET_CHAT = 16;
     public static final int PACKET_MOTION = 17;
 
-    public static final int PACKET_GUI_OPEN = 20;
+    public static final int PACKET_FILTERABLE_GUI_OPEN = 20;
 
-    public static final int PACKET_CONTAINER = 24;
-    public static final int PACKET_SECURITY = 25;
+    public static final int PACKET_CONTAINER_CONFIG = 24;
+    public static final int PACKET_CONTAINER_GUI = 25;
+
+    public static final int PACKET_SECURITY = 28;
 
     public static final int PACKET_CONFIG = 32;
     public static final int PACKET_SECURITY_CONTROL = 33;

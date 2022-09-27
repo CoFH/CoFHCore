@@ -3,8 +3,8 @@ package cofh.core;
 import cofh.core.capability.CapabilityArchery;
 import cofh.core.capability.CapabilityAreaEffect;
 import cofh.core.capability.CapabilityShieldItem;
-import cofh.core.client.gui.HeldItemFilterScreen;
-import cofh.core.client.gui.TileItemFilterScreen;
+import cofh.core.client.gui.FluidFilterScreen;
+import cofh.core.client.gui.ItemFilterScreen;
 import cofh.core.client.renderer.entity.model.ArmorFullSuitModel;
 import cofh.core.client.renderer.entity.model.ElectricArcRenderer;
 import cofh.core.client.renderer.entity.model.KnifeRenderer;
@@ -54,8 +54,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import static cofh.core.client.renderer.entity.model.ArmorFullSuitModel.ARMOR_FULL_SUIT_LAYER;
-import static cofh.core.init.CoreContainers.HELD_ITEM_FILTER_CONTAINER;
-import static cofh.core.init.CoreContainers.TILE_ITEM_FILTER_CONTAINER;
+import static cofh.core.init.CoreContainers.FLUID_FILTER_CONTAINER;
+import static cofh.core.init.CoreContainers.ITEM_FILTER_CONTAINER;
 import static cofh.core.init.CoreEntities.*;
 import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 import static cofh.lib.util.constants.ModIds.ID_CURIOS;
@@ -154,9 +154,11 @@ public class CoFHCore {
         PACKET_HANDLER.registerPacket(PacketIDs.PACKET_CHAT, IndexedChatPacket::new);
         PACKET_HANDLER.registerPacket(PacketIDs.PACKET_MOTION, PlayerMotionPacket::new);
 
-        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_GUI_OPEN, FilterGuiOpenPacket::new);
+        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_FILTERABLE_GUI_OPEN, TileFilterGuiOpenPacket::new);
 
-        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_CONTAINER, ContainerPacket::new);
+        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_CONTAINER_CONFIG, ContainerConfigPacket::new);
+        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_CONTAINER_GUI, ContainerGuiPacket::new);
+
         PACKET_HANDLER.registerPacket(PacketIDs.PACKET_SECURITY, SecurityPacket::new);
 
         PACKET_HANDLER.registerPacket(PacketIDs.PACKET_CONFIG, TileConfigPacket::new);
@@ -212,8 +214,8 @@ public class CoFHCore {
     private void clientSetup(final FMLClientSetupEvent event) {
 
         event.enqueueWork(() -> {
-            MenuScreens.register(HELD_ITEM_FILTER_CONTAINER.get(), HeldItemFilterScreen::new);
-            MenuScreens.register(TILE_ITEM_FILTER_CONTAINER.get(), TileItemFilterScreen::new);
+            MenuScreens.register(FLUID_FILTER_CONTAINER.get(), FluidFilterScreen::new);
+            MenuScreens.register(ITEM_FILTER_CONTAINER.get(), ItemFilterScreen::new);
         });
         event.enqueueWork(ProxyClient::registerItemModelProperties);
     }

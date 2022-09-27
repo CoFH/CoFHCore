@@ -81,6 +81,11 @@ public class FluidHelper {
     }
 
     // region COMPARISON
+    public static boolean fluidsEqualWithTags(FluidStack resourceA, FluidStack resourceB) {
+
+        return fluidsEqual(resourceA, resourceB) && FluidStack.areFluidStackTagsEqual(resourceA, resourceB);
+    }
+
     public static boolean fluidsEqual(FluidStack resourceA, FluidStack resourceB) {
 
         return resourceA != null && resourceA.isFluidEqual(resourceB) || resourceA == null && resourceB == null;

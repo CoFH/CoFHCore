@@ -1,8 +1,11 @@
 package cofh.core.client.gui;
 
 import cofh.core.client.gui.element.ElementButton;
+import cofh.core.client.gui.element.ElementTexture;
 import cofh.core.client.gui.element.SimpleTooltip;
-import cofh.core.inventory.container.HeldItemFilterContainer;
+import cofh.core.inventory.container.ItemFilterContainer;
+import cofh.core.network.packet.server.TileFilterGuiOpenPacket;
+import cofh.core.util.helpers.FilterHelper;
 import cofh.core.util.helpers.RenderHelper;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -11,13 +14,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 
-import static cofh.core.util.helpers.GuiHelper.createSlot;
-import static cofh.core.util.helpers.GuiHelper.generatePanelInfo;
+import java.util.Collections;
+
+import static cofh.core.util.helpers.GuiHelper.*;
 import static cofh.lib.util.Constants.PATH_ELEMENTS;
 import static cofh.lib.util.Constants.PATH_GUI;
 import static cofh.lib.util.helpers.SoundHelper.playClickSound;
 
-public class HeldItemFilterScreen extends ContainerScreenCoFH<HeldItemFilterContainer> {
+public class ItemFilterScreen extends ContainerScreenCoFH<ItemFilterContainer> {
 
     public static final ResourceLocation TEXTURE = new ResourceLocation(PATH_GUI + "generic.png");
     public static final ResourceLocation SLOT_OVERLAY = new ResourceLocation(PATH_ELEMENTS + "locked_overlay_slot.png");
@@ -27,7 +31,7 @@ public class HeldItemFilterScreen extends ContainerScreenCoFH<HeldItemFilterCont
     public static final String TEX_IGNORE_NBT = PATH_GUI + "filters/filter_ignore_nbt.png";
     public static final String TEX_USE_NBT = PATH_GUI + "filters/filter_use_nbt.png";
 
-    public HeldItemFilterScreen(HeldItemFilterContainer container, Inventory inv, Component titleIn) {
+    public ItemFilterScreen(ItemFilterContainer container, Inventory inv, Component titleIn) {
 
         super(container, inv, titleIn);
 
@@ -45,6 +49,28 @@ public class HeldItemFilterScreen extends ContainerScreenCoFH<HeldItemFilterCont
             addElement(createSlot(this, slot.x, slot.y));
         }
         addButtons();
+
+        if (menu.getFilterableTile() != null) {
+            // Filter Tab
+            addElement(new ElementTexture(this, 4, -21)
+                    .setUV(24, 0)
+                    .setSize(24, 21)
+                    .setTexture(TAB_TOP, 48, 32)
+                    .setVisible(() -> FilterHelper.hasFilter(menu.getFilterableTile(), menu.filterId)));
+            addElement(new ElementTexture(this, 8, -17) {
+
+                @Override
+                public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+
+                    TileFilterGuiOpenPacket.openTileGui(menu.getFilterableTile(), (byte) menu.filterId);
+                    return true;
+                }
+            }
+                    .setSize(16, 16)
+                    .setTexture(NAV_BACK, 16, 16)
+                    .setTooltipFactory((element, mouseX, mouseY) -> Collections.singletonList(menu.getFilterableTile().getDisplayName()))
+                    .setVisible(() -> FilterHelper.hasFilter(menu.getFilterableTile(), menu.filterId)));
+        }
     }
 
     @Override
@@ -52,10 +78,12 @@ public class HeldItemFilterScreen extends ContainerScreenCoFH<HeldItemFilterCont
 
         super.renderLabels(poseStack, mouseX, mouseY);
 
-        GlStateManager._enableBlend();
-        RenderHelper.setShaderTexture0(SLOT_OVERLAY);
-        drawTexturedModalRect(poseStack, menu.lockedSlot.x, menu.lockedSlot.y, 0, 0, 16, 16, 16, 16);
-        GlStateManager._disableBlend();
+        if (menu.lockedSlot != null) {
+            GlStateManager._enableBlend();
+            RenderHelper.setShaderTexture0(SLOT_OVERLAY);
+            drawTexturedModalRect(poseStack, menu.lockedSlot.x, menu.lockedSlot.y, 0, 0, 16, 16, 16, 16);
+            GlStateManager._disableBlend();
+        }
     }
 
     // region ELEMENTS

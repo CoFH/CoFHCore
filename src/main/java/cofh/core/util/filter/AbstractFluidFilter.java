@@ -18,7 +18,7 @@ import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 
 public abstract class AbstractFluidFilter implements IFilter, IFilterOptions {
 
-    public static final int SIZE = 12;
+    public static final int SIZE = 15;
 
     protected List<FluidStack> fluids;
     protected Predicate<FluidStack> rules;
@@ -47,6 +47,12 @@ public abstract class AbstractFluidFilter implements IFilter, IFilterOptions {
     public void setFluids(List<FluidStack> fluids) {
 
         this.fluids = fluids;
+        reset();
+    }
+
+    public void reset() {
+
+        this.rules = null;
     }
 
     @Override
@@ -61,17 +67,15 @@ public abstract class AbstractFluidFilter implements IFilter, IFilterOptions {
                 if (stack.isEmpty()) {
                     return false;
                 }
-                if (allowList != fluidSet.contains(stack.getFluid())) {
-                    return false;
-                }
                 if (checkNBT) {
                     for (FluidStack fluid : fluids) {
-                        if (FluidHelper.fluidsEqual(stack, fluid)) {
+                        if (FluidHelper.fluidsEqualWithTags(stack, fluid)) {
                             return allowList;
                         }
                     }
+                    return !allowList;
                 }
-                return true;
+                return allowList == fluidSet.contains(stack.getFluid());
             };
         }
         return rules;
