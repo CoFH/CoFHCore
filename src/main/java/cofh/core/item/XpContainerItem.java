@@ -21,6 +21,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import static cofh.core.init.CoreFluids.EXPERIENCE_FLUID;
 import static cofh.core.util.helpers.ItemHelper.areItemStacksEqualIgnoreTags;
 import static cofh.core.util.helpers.XpHelper.*;
 import static cofh.lib.api.ContainerType.EXPERIENCE;
@@ -47,7 +48,7 @@ public class XpContainerItem extends ItemCoFH implements IXpContainerItem, IFlui
     @Override
     protected void tooltipDelegate(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 
-        tooltip.add(getTextComponent(localize("info.cofh.amount") + ": " + getScaledNumber(getStoredXp(stack)) + " / " + getScaledNumber(getCapacityXP(stack))));
+        tooltip.add(getTextComponent(localize("info.cofh.amount") + ": " + getScaledNumber(getStoredXp(stack)) + " / " + getScaledNumber(getCapacityXp(stack))));
     }
 
     @Override
@@ -71,7 +72,7 @@ public class XpContainerItem extends ItemCoFH implements IXpContainerItem, IFlui
     @Override
     public int getBarWidth(ItemStack stack) {
 
-        return (int) Math.round(13.0D * getStoredXp(stack) / (double) getCapacityXP(stack));
+        return (int) Math.round(13.0D * getStoredXp(stack) / (double) getCapacityXp(stack));
     }
 
     @Override
@@ -128,7 +129,7 @@ public class XpContainerItem extends ItemCoFH implements IXpContainerItem, IFlui
     }
 
     // region IXpContainerItem
-    public int getCapacityXP(ItemStack stack) {
+    public int getCapacityXp(ItemStack stack) {
 
         return getMaxStored(stack, xpCapacity);
     }
@@ -138,10 +139,8 @@ public class XpContainerItem extends ItemCoFH implements IXpContainerItem, IFlui
     @Override
     public FluidStack getFluid(ItemStack container) {
 
-
-        // TODO: FIXME
         int xp = getStoredXp(container);
-        return /*xp > 0 ? new FluidStack(EXPERIENCE.get(), xp * MB_PER_XP) :*/ FluidStack.EMPTY;
+        return xp > 0 ? new FluidStack(EXPERIENCE_FLUID.get(), xp * MB_PER_XP) : FluidStack.EMPTY;
     }
 
     @Override
@@ -153,7 +152,7 @@ public class XpContainerItem extends ItemCoFH implements IXpContainerItem, IFlui
     @Override
     public int getCapacity(ItemStack container) {
 
-        return getCapacityXP(container) * MB_PER_XP;
+        return getCapacityXp(container) * MB_PER_XP;
     }
 
     @Override
@@ -163,7 +162,7 @@ public class XpContainerItem extends ItemCoFH implements IXpContainerItem, IFlui
             return 0;
         }
         int xp = getStoredXp(container);
-        int filled = Math.min(getCapacityXP(container) - xp, resource.getAmount() / MB_PER_XP);
+        int filled = Math.min(getCapacityXp(container) - xp, resource.getAmount() / MB_PER_XP);
 
         if (action.execute()) {
             modifyXp(container, filled);
@@ -183,9 +182,7 @@ public class XpContainerItem extends ItemCoFH implements IXpContainerItem, IFlui
         if (action.execute() && !isCreative(container, ContainerType.FLUID)) {
             modifyXp(container, -drained);
         }
-        return FluidStack.EMPTY;
-        // TODO: FIXME
-        // return new FluidStack(EXPERIENCE.get(), drained * MB_PER_XP);
+        return new FluidStack(EXPERIENCE_FLUID.get(), drained * MB_PER_XP);
     }
     // endregion
 }

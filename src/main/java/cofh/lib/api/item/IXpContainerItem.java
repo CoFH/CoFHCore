@@ -11,7 +11,7 @@ import static cofh.lib.util.constants.NBTTags.TAG_XP;
 
 public interface IXpContainerItem extends IContainerItem {
 
-    int getCapacityXP(ItemStack stack);
+    int getCapacityXp(ItemStack stack);
 
     default int getStoredXp(ItemStack stack) {
 
@@ -20,15 +20,15 @@ public interface IXpContainerItem extends IContainerItem {
 
     default int getSpaceXp(ItemStack stack) {
 
-        return getCapacityXP(stack) - getStoredXp(stack);
+        return getCapacityXp(stack) - getStoredXp(stack);
     }
 
     default int modifyXp(ItemStack stack, int xp) {
 
         int totalXP = getStoredXp(stack) + xp;
 
-        if (totalXP > getCapacityXP(stack)) {
-            totalXP = getCapacityXP(stack);
+        if (totalXP > getCapacityXp(stack)) {
+            totalXP = getCapacityXp(stack);
         } else if (totalXP < 0) {
             totalXP = 0;
         }

@@ -1,4 +1,4 @@
-package cofh.core.entity;
+package cofh.lib.entity;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;

@@ -1,6 +1,5 @@
 package cofh.lib.util;
 
-import cofh.lib.util.constants.ModIds;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
@@ -17,6 +16,7 @@ import java.util.UUID;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
+import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 import static net.minecraft.world.entity.EquipmentSlot.*;
 
 public class Constants {
@@ -61,9 +61,6 @@ public class Constants {
     public static final BooleanSupplier TRUE = () -> true;
     public static final BooleanSupplier FALSE = () -> false;
 
-    public static final Supplier<Boolean> TRUE_SUP = () -> true;
-    public static final Supplier<Boolean> FALSE_SUP = () -> false;
-
     public static final Supplier<Block> EMPTY_BLOCK = () -> Blocks.AIR;
     public static final Supplier<ItemStack> EMPTY_ITEM = () -> ItemStack.EMPTY;
     public static final Supplier<FluidStack> EMPTY_FLUID = () -> FluidStack.EMPTY;
@@ -100,15 +97,15 @@ public class Constants {
     // endregion
 
     // region FONTS
-    public static final ResourceLocation ENDER_FONT = new ResourceLocation(ModIds.ID_COFH_CORE, "ender");
-    public static final ResourceLocation INVIS_FONT = new ResourceLocation(ModIds.ID_COFH_CORE, "invis");
+    public static final ResourceLocation ENDER_FONT = new ResourceLocation(ID_COFH_CORE, "ender");
+    public static final ResourceLocation INVIS_FONT = new ResourceLocation(ID_COFH_CORE, "invis");
 
     public static final Style ENDER_STYLE = Style.EMPTY.withFont(ENDER_FONT);
     public static final Style INVIS_STYLE = Style.EMPTY.withFont(INVIS_FONT);
     // endregion
 
     // region TEXTURES
-    public static final String PATH_GUI = ModIds.ID_COFH_CORE + ":textures/gui/";
+    public static final String PATH_GUI = ID_COFH_CORE + ":textures/gui/";
     public static final String PATH_ELEMENTS = PATH_GUI + "elements/";
     // endregion
 }

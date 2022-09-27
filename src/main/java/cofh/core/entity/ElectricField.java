@@ -1,5 +1,6 @@
 package cofh.core.entity;
 
+import cofh.lib.entity.AbstractAoESpell;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.EntityType;
