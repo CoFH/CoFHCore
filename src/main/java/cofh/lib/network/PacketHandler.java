@@ -3,6 +3,7 @@ package cofh.lib.network;
 import cofh.lib.network.packet.IPacket;
 import cofh.lib.network.packet.IPacketClient;
 import cofh.lib.network.packet.IPacketServer;
+import io.netty.buffer.ByteBuf;
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectArrayMap;
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
 import net.minecraft.network.FriendlyByteBuf;
@@ -68,7 +69,9 @@ public class PacketHandler {
         @SubscribeEvent
         public void onPayload(NetworkEvent.ServerCustomPayloadEvent event) {
 
-            FriendlyByteBuf buf = new FriendlyByteBuf(event.getPayload());
+            ByteBuf payload = event.getPayload().copy();
+            FriendlyByteBuf buf = new FriendlyByteBuf(payload);
+
             NetworkEvent.Context ctx = event.getSource().get();
             ctx.setPacketHandled(true);
             byte id = (byte) buf.readUnsignedByte();
@@ -82,8 +85,17 @@ public class PacketHandler {
                 log.error("Received packet ID that isn't an IPacketClient? ID: {}", id);
                 return;
             }
+
             packet.read(buf);
-            ctx.enqueueWork(() -> ((IPacketClient) packet).handleClient());
+            ctx.enqueueWork(() -> {
+                try {
+                    ((IPacketClient) packet).handleClient();
+                } catch (Throwable ex) {
+                    log.error("Error handling packet on channel {}.", channelName, ex);
+                } finally {
+                    buf.release();
+                }
+            });
         }
 
     }
@@ -94,7 +106,9 @@ public class PacketHandler {
         @SubscribeEvent
         public void onPayload(NetworkEvent.ClientCustomPayloadEvent event) {
 
-            FriendlyByteBuf buf = new FriendlyByteBuf(event.getPayload());
+            ByteBuf payload = event.getPayload().copy();
+            FriendlyByteBuf buf = new FriendlyByteBuf(payload);
+
             NetworkEvent.Context ctx = event.getSource().get();
             ctx.setPacketHandled(true);
             byte id = (byte) buf.readUnsignedByte();
@@ -108,10 +122,19 @@ public class PacketHandler {
                 log.error("Received packet ID that isn't an IPacketServer? ID: {}", id);
                 return;
             }
+
             packet.read(buf);
             PacketListener netHandler = ctx.getNetworkManager().getPacketListener();
             if (netHandler instanceof ServerGamePacketListenerImpl gamePacketListener) {
-                ctx.enqueueWork(() -> ((IPacketServer) packet).handleServer(gamePacketListener.player));
+                ctx.enqueueWork(() -> {
+                    try {
+                        ((IPacketServer) packet).handleServer(gamePacketListener.player);
+                    } catch (Throwable ex) {
+                        log.error("Error handling packet on channel {}.", channelName, ex);
+                    } finally {
+                        buf.release();
+                    }
+                });
             }
         }
 

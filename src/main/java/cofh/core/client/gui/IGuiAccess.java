@@ -109,17 +109,16 @@ public interface IGuiAccess {
 
     default void drawTexturedModalRect(PoseStack poseStack, int x, int y, int textureX, int textureY, int width, int height) {
 
-        float f = 0.00390625F;
-        float f1 = 0.00390625F;
+        final float f = 0.00390625F;
         Tesselator tessellator = Tesselator.getInstance();
 
         Matrix4f mat = poseStack.last().pose();
         BufferBuilder bufferbuilder = tessellator.getBuilder();
         bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        bufferbuilder.vertex(mat, x, (y + height), getBlitOffset()).uv(((float) textureX * 0.00390625F), ((float) (textureY + height) * 0.00390625F)).endVertex();
-        bufferbuilder.vertex(mat, (x + width), (y + height), getBlitOffset()).uv(((float) (textureX + width) * 0.00390625F), ((float) (textureY + height) * 0.00390625F)).endVertex();
-        bufferbuilder.vertex(mat, (x + width), y, getBlitOffset()).uv(((float) (textureX + width) * 0.00390625F), ((float) textureY * 0.00390625F)).endVertex();
-        bufferbuilder.vertex(mat, x, y, getBlitOffset()).uv(((float) textureX * 0.00390625F), ((float) textureY * 0.00390625F)).endVertex();
+        bufferbuilder.vertex(mat, x, (y + height), getBlitOffset()).uv(((float) textureX * f), ((float) (textureY + height) * f)).endVertex();
+        bufferbuilder.vertex(mat, (x + width), (y + height), getBlitOffset()).uv(((float) (textureX + width) * f), ((float) (textureY + height) * f)).endVertex();
+        bufferbuilder.vertex(mat, (x + width), y, getBlitOffset()).uv(((float) (textureX + width) * f), ((float) textureY * f)).endVertex();
+        bufferbuilder.vertex(mat, x, y, getBlitOffset()).uv(((float) textureX * f), ((float) textureY * f)).endVertex();
         tessellator.end();
     }
 
