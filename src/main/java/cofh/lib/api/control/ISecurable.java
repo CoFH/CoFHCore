@@ -33,7 +33,7 @@ public interface ISecurable {
     }
 
     /**
-     * This returns whether or not security functionality is enabled at all.
+     * This returns whether security functionality is enabled at all.
      */
     default boolean isSecurable() {
 

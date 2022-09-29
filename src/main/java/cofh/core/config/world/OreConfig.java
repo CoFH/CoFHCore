@@ -6,7 +6,6 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.List;
-import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 import static cofh.lib.util.Constants.TRUE;

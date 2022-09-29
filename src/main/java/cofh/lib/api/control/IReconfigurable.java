@@ -22,7 +22,7 @@ public interface IReconfigurable {
     boolean hasOutputSide();
 
     /**
-     * This returns whether or not reconfiguration functionality is enabled at all.
+     * This returns whether reconfiguration functionality is enabled at all.
      */
     boolean isReconfigurable();
 

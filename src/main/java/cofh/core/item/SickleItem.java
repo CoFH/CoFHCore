@@ -42,8 +42,8 @@ public class SickleItem extends DiggerItem implements ICoFHItem {
     private static final int DEFAULT_BASE_RADIUS = 2;
     private static final int DEFAULT_BASE_HEIGHT = 0;
 
-    private final int radius;
-    private final int height;
+    protected final int radius;
+    protected final int height;
 
     public SickleItem(Tier tier, float attackDamageIn, float attackSpeedIn, int radius, int height, Properties builder) {
 
