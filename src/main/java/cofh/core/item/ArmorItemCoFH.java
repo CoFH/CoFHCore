@@ -12,6 +12,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -48,21 +49,31 @@ public class ArmorItemCoFH extends ArmorItem implements ICoFHItem {
             UUID.fromString("A8BD3E20-FA60-47AF-8A09-B1A57D26F3CC")
     };
 
-    protected Supplier<Boolean> showInGroups = TRUE;
-
-    protected Supplier<CreativeModeTab> displayGroup;
-
     public ArmorItemCoFH(ArmorMaterial materialIn, EquipmentSlot slot, Properties builder) {
 
         super(materialIn, slot, builder);
     }
 
+    // region DISPLAY
+    protected Supplier<CreativeModeTab> displayGroup;
+    protected Supplier<Boolean> showInGroups = TRUE;
+    protected String modId = "";
+
+    @Override
     public ArmorItemCoFH setDisplayGroup(Supplier<CreativeModeTab> displayGroup) {
 
         this.displayGroup = displayGroup;
         return this;
     }
 
+    @Override
+    public ArmorItemCoFH setModId(String modId) {
+
+        this.modId = modId;
+        return this;
+    }
+
+    @Override
     public ArmorItemCoFH setShowInGroups(Supplier<Boolean> showInGroups) {
 
         this.showInGroups = showInGroups;
@@ -84,11 +95,18 @@ public class ArmorItemCoFH extends ArmorItem implements ICoFHItem {
         return displayGroup != null && displayGroup.get() != null ? Collections.singletonList(displayGroup.get()) : super.getCreativeTabs();
     }
 
+    @Override
+    public String getCreatorModId(ItemStack itemStack) {
+
+        return modId == null || modId.isEmpty() ? super.getCreatorModId(itemStack) : modId;
+    }
+    // endregion
+
     @OnlyIn (Dist.CLIENT)
     @Nullable
     public <A extends HumanoidModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot armorSlot, A _default) {
 
-        return (A) ProxyUtils.getModel(this.getRegistryName());
+        return (A) ProxyUtils.getModel(ForgeRegistries.ITEMS.getKey(this));
     }
 
 }

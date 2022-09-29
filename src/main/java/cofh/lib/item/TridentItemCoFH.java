@@ -15,11 +15,7 @@ import static cofh.lib.util.Constants.TRUE;
 
 public class TridentItemCoFH extends TridentItem implements ICoFHItem {
 
-    protected Supplier<Boolean> showInGroups = TRUE;
-
     protected int enchantability = 1;
-
-    protected Supplier<CreativeModeTab> displayGroup;
 
     public TridentItemCoFH(Properties builder) {
 
@@ -32,13 +28,39 @@ public class TridentItemCoFH extends TridentItem implements ICoFHItem {
         enchantability = tier.getEnchantmentValue();
     }
 
-    public TridentItemCoFH setDisplayGroup(Supplier<CreativeModeTab> displayGroup) {
+    @Override
+    public boolean isEnchantable(ItemStack stack) {
+
+        return enchantability > 0;
+    }
+
+    @Override
+    public int getEnchantmentValue() {
+
+        return enchantability;
+    }
+
+    // region DISPLAY
+    protected Supplier<CreativeModeTab> displayGroup;
+    protected Supplier<Boolean> showInGroups = TRUE;
+    protected String modId = "";
+
+    @Override
+    public ICoFHItem setDisplayGroup(Supplier<CreativeModeTab> displayGroup) {
 
         this.displayGroup = displayGroup;
         return this;
     }
 
-    public TridentItemCoFH setShowInGroups(Supplier<Boolean> showInGroups) {
+    @Override
+    public ICoFHItem setModId(String modId) {
+
+        this.modId = modId;
+        return this;
+    }
+
+    @Override
+    public ICoFHItem setShowInGroups(Supplier<Boolean> showInGroups) {
 
         this.showInGroups = showInGroups;
         return this;
@@ -60,15 +82,9 @@ public class TridentItemCoFH extends TridentItem implements ICoFHItem {
     }
 
     @Override
-    public boolean isEnchantable(ItemStack stack) {
+    public String getCreatorModId(ItemStack itemStack) {
 
-        return enchantability > 0;
+        return modId == null || modId.isEmpty() ? super.getCreatorModId(itemStack) : modId;
     }
-
-    @Override
-    public int getEnchantmentValue() {
-
-        return enchantability;
-    }
-
+    // endregion
 }

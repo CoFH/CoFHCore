@@ -10,7 +10,6 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
 
-// TODO Hammer Tool Type.
 public class HammerItem extends PickaxeItemCoFH {
 
     private static final float DEFAULT_ATTACK_DAMAGE = 4.0F;

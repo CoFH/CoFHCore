@@ -2,6 +2,7 @@ package cofh.core.item;
 
 import cofh.core.entity.AbstractGrenade;
 import cofh.core.util.ProxyUtils;
+import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.core.Position;
 import net.minecraft.core.dispenser.AbstractProjectileDispenseBehavior;
 import net.minecraft.resources.ResourceLocation;
@@ -39,7 +40,7 @@ public class GrenadeItem extends ItemCoFH {
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
 
         ItemStack stack = playerIn.getItemInHand(handIn);
-        worldIn.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.SNOWBALL_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (random.nextFloat() * 0.4F + 0.8F));
+        worldIn.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.SNOWBALL_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (MathHelper.RANDOM.nextFloat() * 0.4F + 0.8F));
         playerIn.getCooldowns().addCooldown(this, cooldown);
         if (!worldIn.isClientSide) {
             createGrenade(stack, worldIn, playerIn);

@@ -9,29 +9,37 @@ import net.minecraft.world.item.Tier;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Random;
 import java.util.function.Supplier;
 
 import static cofh.lib.util.Constants.TRUE;
 
 public class SwordItemCoFH extends SwordItem implements ICoFHItem {
 
-    protected static Random random = new Random();
-    protected Supplier<Boolean> showInGroups = TRUE;
-
-    protected Supplier<CreativeModeTab> displayGroup;
-
     public SwordItemCoFH(Tier tier, int attackDamageIn, float attackSpeedIn, Properties builder) {
 
         super(tier, attackDamageIn, attackSpeedIn, builder);
     }
 
+    // region DISPLAY
+    protected Supplier<CreativeModeTab> displayGroup;
+    protected Supplier<Boolean> showInGroups = TRUE;
+    protected String modId = "";
+
+    @Override
     public SwordItemCoFH setDisplayGroup(Supplier<CreativeModeTab> displayGroup) {
 
         this.displayGroup = displayGroup;
         return this;
     }
 
+    @Override
+    public SwordItemCoFH setModId(String modId) {
+
+        this.modId = modId;
+        return this;
+    }
+
+    @Override
     public SwordItemCoFH setShowInGroups(Supplier<Boolean> showInGroups) {
 
         this.showInGroups = showInGroups;
@@ -53,4 +61,10 @@ public class SwordItemCoFH extends SwordItem implements ICoFHItem {
         return displayGroup != null && displayGroup.get() != null ? Collections.singletonList(displayGroup.get()) : super.getCreativeTabs();
     }
 
+    @Override
+    public String getCreatorModId(ItemStack itemStack) {
+
+        return modId == null || modId.isEmpty() ? super.getCreatorModId(itemStack) : modId;
+    }
+    // endregion
 }

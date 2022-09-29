@@ -1,6 +1,5 @@
 package cofh.core.item;
 
-import cofh.core.util.ProxyUtils;
 import cofh.lib.api.item.IColorableItem;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.entity.EntityType;
@@ -22,8 +21,6 @@ public class SpawnEggItemCoFH extends ForgeSpawnEggItem implements IColorableIte
     public SpawnEggItemCoFH(Supplier<EntityType<? extends Mob>> typeSupIn, int primaryColorIn, int secondaryColorIn, Properties builder) {
 
         super(typeSupIn, primaryColorIn, secondaryColorIn, builder);
-
-        ProxyUtils.registerColorable(this);
     }
 
     public SpawnEggItemCoFH setShowInGroups(Supplier<Boolean> showInGroups) {

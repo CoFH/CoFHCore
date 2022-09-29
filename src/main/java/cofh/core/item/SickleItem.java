@@ -30,19 +30,12 @@ import java.util.Set;
 import java.util.function.Supplier;
 
 import static cofh.lib.util.Constants.TRUE;
-import static net.minecraft.world.level.material.Material.*;
 
-// TODO Sickle Tool Type.
 public class SickleItem extends DiggerItem implements ICoFHItem {
 
-    protected Supplier<Boolean> showInGroups = TRUE;
-
-    protected Supplier<CreativeModeTab> displayGroup;
-
-    @Deprecated // TODO move to Tags class somewhere and generate.
+    @Deprecated // TOOD move to Tags class somewhere and generate.
     public static final TagKey<Block> EFFECTIVE_BLOCKS = BlockTags.create(new ResourceLocation(ModIds.ID_THERMAL, "mineable/sickle"));
-    public static final Set<Material> EFFECTIVE_MATERIALS = ImmutableSet.of(LEAVES, BAMBOO, BAMBOO_SAPLING, PLANT, REPLACEABLE_PLANT,
-            WATER_PLANT, REPLACEABLE_WATER_PLANT, REPLACEABLE_FIREPROOF_PLANT, WEB, CACTUS, VEGETABLE, MOSS);
+    public static final Set<Material> EFFECTIVE_MATERIALS = ImmutableSet.of(Material.LEAVES, Material.PLANT, Material.REPLACEABLE_PLANT, Material.WEB);
 
     private static final float DEFAULT_ATTACK_DAMAGE = 2.5F;
     private static final float DEFAULT_ATTACK_SPEED = -2.6F;
@@ -74,35 +67,8 @@ public class SickleItem extends DiggerItem implements ICoFHItem {
         this(tier, DEFAULT_ATTACK_DAMAGE, DEFAULT_ATTACK_SPEED, DEFAULT_BASE_RADIUS, DEFAULT_BASE_HEIGHT, builder);
     }
 
-    public SickleItem setDisplayGroup(Supplier<CreativeModeTab> displayGroup) {
-
-        this.displayGroup = displayGroup;
-        return this;
-    }
-
-    public SickleItem setShowInGroups(Supplier<Boolean> showInGroups) {
-
-        this.showInGroups = showInGroups;
-        return this;
-    }
-
     @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-
-        if (!showInGroups.get() || displayGroup != null && displayGroup.get() != null && displayGroup.get() != group) {
-            return;
-        }
-        super.fillItemCategory(group, items);
-    }
-
-    @Override
-    public Collection<CreativeModeTab> getCreativeTabs() {
-
-        return displayGroup != null && displayGroup.get() != null ? Collections.singletonList(displayGroup.get()) : super.getCreativeTabs();
-    }
-
-    @Override
-    public boolean isCorrectToolForDrops(ItemStack stack, BlockState state) {
+    public boolean isCorrectToolForDrops(BlockState state) {
 
         // TODO Tags are used for this now
         //        if (state.getHarvestTool() == SICKLE) {
@@ -138,4 +104,51 @@ public class SickleItem extends DiggerItem implements ICoFHItem {
         return new AreaEffectMiningItemWrapper(stack, radius, height, AreaEffectMiningItemWrapper.Type.SICKLE);
     }
 
+    // region DISPLAY
+    protected Supplier<CreativeModeTab> displayGroup;
+    protected Supplier<Boolean> showInGroups = TRUE;
+    protected String modId = "";
+
+    @Override
+    public SickleItem setDisplayGroup(Supplier<CreativeModeTab> displayGroup) {
+
+        this.displayGroup = displayGroup;
+        return this;
+    }
+
+    @Override
+    public SickleItem setModId(String modId) {
+
+        this.modId = modId;
+        return this;
+    }
+
+    @Override
+    public SickleItem setShowInGroups(Supplier<Boolean> showInGroups) {
+
+        this.showInGroups = showInGroups;
+        return this;
+    }
+
+    @Override
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
+
+        if (!showInGroups.get() || displayGroup != null && displayGroup.get() != null && displayGroup.get() != group) {
+            return;
+        }
+        super.fillItemCategory(group, items);
+    }
+
+    @Override
+    public Collection<CreativeModeTab> getCreativeTabs() {
+
+        return displayGroup != null && displayGroup.get() != null ? Collections.singletonList(displayGroup.get()) : super.getCreativeTabs();
+    }
+
+    @Override
+    public String getCreatorModId(ItemStack itemStack) {
+
+        return modId == null || modId.isEmpty() ? super.getCreatorModId(itemStack) : modId;
+    }
+    // endregion
 }

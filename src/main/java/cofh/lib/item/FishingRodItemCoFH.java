@@ -1,6 +1,7 @@
 package cofh.lib.item;
 
 import cofh.lib.api.item.ICoFHItem;
+import net.minecraft.core.NonNullList;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
@@ -8,13 +9,19 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FishingHook;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.FishingRodItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Random;
+import java.util.function.Supplier;
+
+import static cofh.lib.util.Constants.TRUE;
 
 public class FishingRodItemCoFH extends FishingRodItem implements ICoFHItem {
 
@@ -84,4 +91,51 @@ public class FishingRodItemCoFH extends FishingRodItem implements ICoFHItem {
         return enchantability;
     }
 
+    // region DISPLAY
+    protected Supplier<CreativeModeTab> displayGroup;
+    protected Supplier<Boolean> showInGroups = TRUE;
+    protected String modId = "";
+
+    @Override
+    public FishingRodItemCoFH setDisplayGroup(Supplier<CreativeModeTab> displayGroup) {
+
+        this.displayGroup = displayGroup;
+        return this;
+    }
+
+    @Override
+    public FishingRodItemCoFH setModId(String modId) {
+
+        this.modId = modId;
+        return this;
+    }
+
+    @Override
+    public FishingRodItemCoFH setShowInGroups(Supplier<Boolean> showInGroups) {
+
+        this.showInGroups = showInGroups;
+        return this;
+    }
+
+    @Override
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
+
+        if (!showInGroups.get() || displayGroup != null && displayGroup.get() != null && displayGroup.get() != group) {
+            return;
+        }
+        super.fillItemCategory(group, items);
+    }
+
+    @Override
+    public Collection<CreativeModeTab> getCreativeTabs() {
+
+        return displayGroup != null && displayGroup.get() != null ? Collections.singletonList(displayGroup.get()) : super.getCreativeTabs();
+    }
+
+    @Override
+    public String getCreatorModId(ItemStack itemStack) {
+
+        return modId == null || modId.isEmpty() ? super.getCreatorModId(itemStack) : modId;
+    }
+    // endregion
 }

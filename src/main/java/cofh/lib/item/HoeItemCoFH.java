@@ -15,21 +15,31 @@ import static cofh.lib.util.Constants.TRUE;
 
 public class HoeItemCoFH extends HoeItem implements ICoFHItem {
 
-    protected Supplier<Boolean> showInGroups = TRUE;
-
-    protected Supplier<CreativeModeTab> displayGroup;
-
     public HoeItemCoFH(Tier tier, int attackDamageIn, float attackSpeedIn, Properties builder) {
 
         super(tier, attackDamageIn, attackSpeedIn, builder);
     }
 
+    // region DISPLAY
+    protected Supplier<CreativeModeTab> displayGroup;
+    protected Supplier<Boolean> showInGroups = TRUE;
+    protected String modId = "";
+
+    @Override
     public HoeItemCoFH setDisplayGroup(Supplier<CreativeModeTab> displayGroup) {
 
         this.displayGroup = displayGroup;
         return this;
     }
 
+    @Override
+    public HoeItemCoFH setModId(String modId) {
+
+        this.modId = modId;
+        return this;
+    }
+
+    @Override
     public HoeItemCoFH setShowInGroups(Supplier<Boolean> showInGroups) {
 
         this.showInGroups = showInGroups;
@@ -51,4 +61,10 @@ public class HoeItemCoFH extends HoeItem implements ICoFHItem {
         return displayGroup != null && displayGroup.get() != null ? Collections.singletonList(displayGroup.get()) : super.getCreativeTabs();
     }
 
+    @Override
+    public String getCreatorModId(ItemStack itemStack) {
+
+        return modId == null || modId.isEmpty() ? super.getCreatorModId(itemStack) : modId;
+    }
+    // endregion
 }

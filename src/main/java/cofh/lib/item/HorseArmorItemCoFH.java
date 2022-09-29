@@ -15,11 +15,7 @@ import static cofh.lib.util.Constants.TRUE;
 
 public class HorseArmorItemCoFH extends HorseArmorItem implements ICoFHItem {
 
-    protected Supplier<Boolean> showInGroups = TRUE;
-
-    protected Supplier<CreativeModeTab> displayGroup;
-
-    protected int enchantability;
+    protected int enchantability = 1;
 
     public HorseArmorItemCoFH(int protection, String texture, Properties builder) {
 
@@ -31,21 +27,47 @@ public class HorseArmorItemCoFH extends HorseArmorItem implements ICoFHItem {
         super(protection, texture, builder);
     }
 
+    public HorseArmorItemCoFH setEnchantability(int enchantability) {
+
+        this.enchantability = enchantability;
+        return this;
+    }
+
+    @Override
+    public boolean isEnchantable(ItemStack stack) {
+
+        return enchantability > 0;
+    }
+
+    @Override
+    public int getEnchantmentValue() {
+
+        return enchantability;
+    }
+
+    // region DISPLAY
+    protected Supplier<CreativeModeTab> displayGroup;
+    protected Supplier<Boolean> showInGroups = TRUE;
+    protected String modId = "";
+
+    @Override
     public HorseArmorItemCoFH setDisplayGroup(Supplier<CreativeModeTab> displayGroup) {
 
         this.displayGroup = displayGroup;
         return this;
     }
 
-    public HorseArmorItemCoFH setShowInGroups(Supplier<Boolean> showInGroups) {
+    @Override
+    public HorseArmorItemCoFH setModId(String modId) {
 
-        this.showInGroups = showInGroups;
+        this.modId = modId;
         return this;
     }
 
-    public HorseArmorItemCoFH setEnchantability(int enchantability) {
+    @Override
+    public HorseArmorItemCoFH setShowInGroups(Supplier<Boolean> showInGroups) {
 
-        this.enchantability = enchantability;
+        this.showInGroups = showInGroups;
         return this;
     }
 
@@ -65,15 +87,9 @@ public class HorseArmorItemCoFH extends HorseArmorItem implements ICoFHItem {
     }
 
     @Override
-    public boolean isEnchantable(ItemStack stack) {
+    public String getCreatorModId(ItemStack itemStack) {
 
-        return enchantability > 0;
+        return modId == null || modId.isEmpty() ? super.getCreatorModId(itemStack) : modId;
     }
-
-    @Override
-    public int getEnchantmentValue() {
-
-        return enchantability;
-    }
-
+    // endregion
 }

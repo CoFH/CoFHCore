@@ -24,10 +24,6 @@ import static cofh.lib.util.Utils.getItemEnchantmentLevel;
 
 public class ArrowItemCoFH extends ArrowItem implements ICoFHItem {
 
-    protected Supplier<Boolean> showInGroups = TRUE;
-
-    protected Supplier<CreativeModeTab> displayGroup;
-
     protected final IArrowFactory<? extends AbstractArrow> factory;
     protected boolean infinitySupport = false;
 
@@ -39,21 +35,47 @@ public class ArrowItemCoFH extends ArrowItem implements ICoFHItem {
         DispenserBlock.registerBehavior(this, DISPENSER_BEHAVIOR);
     }
 
+    public ArrowItemCoFH setInfinitySupport(boolean infinitySupport) {
+
+        this.infinitySupport = infinitySupport;
+        return this;
+    }
+
+    @Override
+    public AbstractArrow createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
+
+        return factory.createArrow(worldIn, shooter);
+    }
+
+    @Override
+    public boolean isInfinite(ItemStack stack, ItemStack bow, Player player) {
+
+        return infinitySupport && getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, bow) > 0 || super.isInfinite(stack, bow, player);
+    }
+
+    // region DISPLAY
+    protected Supplier<CreativeModeTab> displayGroup;
+    protected Supplier<Boolean> showInGroups = TRUE;
+    protected String modId = "";
+
+    @Override
     public ArrowItemCoFH setDisplayGroup(Supplier<CreativeModeTab> displayGroup) {
 
         this.displayGroup = displayGroup;
         return this;
     }
 
-    public ArrowItemCoFH setShowInGroups(Supplier<Boolean> showInGroups) {
+    @Override
+    public ArrowItemCoFH setModId(String modId) {
 
-        this.showInGroups = showInGroups;
+        this.modId = modId;
         return this;
     }
 
-    public ArrowItemCoFH setInfinitySupport(boolean infinitySupport) {
+    @Override
+    public ArrowItemCoFH setShowInGroups(Supplier<Boolean> showInGroups) {
 
-        this.infinitySupport = infinitySupport;
+        this.showInGroups = showInGroups;
         return this;
     }
 
@@ -73,16 +95,11 @@ public class ArrowItemCoFH extends ArrowItem implements ICoFHItem {
     }
 
     @Override
-    public AbstractArrow createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
+    public String getCreatorModId(ItemStack itemStack) {
 
-        return factory.createArrow(worldIn, shooter);
+        return modId == null || modId.isEmpty() ? super.getCreatorModId(itemStack) : modId;
     }
-
-    @Override
-    public boolean isInfinite(ItemStack stack, ItemStack bow, Player player) {
-
-        return infinitySupport && getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, bow) > 0 || super.isInfinite(stack, bow, player);
-    }
+    // endregion
 
     // region FACTORY
     public interface IArrowFactory<T extends AbstractArrow> {

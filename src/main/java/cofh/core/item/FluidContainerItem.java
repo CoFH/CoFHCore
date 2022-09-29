@@ -1,5 +1,6 @@
 package cofh.core.item;
 
+import cofh.core.util.helpers.FluidHelper;
 import cofh.lib.api.item.IColorableItem;
 import cofh.lib.api.item.IFluidContainerItem;
 import cofh.lib.fluid.FluidContainerItemWrapper;
@@ -144,7 +145,7 @@ public class FluidContainerItem extends ItemCoFH implements IFluidContainerItem,
         //            return 0xD78D5B;
         //        }
         if (colorIndex == 1) {
-            return getFluidAmount(item) > 0 ? getFluid(item).getFluid().getAttributes().getColor(getFluid(item)) : 0xFFFFFF;
+            return getFluidAmount(item) > 0 ? FluidHelper.color(getFluid(item)) : 0xFFFFFF;
         }
         return 0xFFFFFF;
     }

@@ -1,4 +1,4 @@
-package cofh.core.init;
+package cofh.core.client;
 
 import cofh.core.client.settings.KeyBindingModeChange;
 import net.minecraft.client.KeyMapping;

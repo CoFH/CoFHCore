@@ -1,14 +1,10 @@
 package cofh.lib.api.item;
 
 import cofh.core.item.IMultiModeItem;
-import cofh.lib.api.ContainerType;
-import cofh.lib.util.helpers.SecurityHelper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
@@ -16,12 +12,12 @@ import net.minecraftforge.common.extensions.IForgeItem;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Supplier;
 
-import static cofh.core.init.CoreKeys.MULTIMODE_DECREMENT;
-import static cofh.core.init.CoreKeys.MULTIMODE_INCREMENT;
-import static cofh.core.util.helpers.AugmentableHelper.getPropertyWithDefault;
+import static cofh.core.client.CoreKeys.MULTIMODE_DECREMENT;
+import static cofh.core.client.CoreKeys.MULTIMODE_INCREMENT;
 import static cofh.lib.util.Utils.getKeynameFromKeycode;
-import static cofh.lib.util.constants.NBTTags.*;
+import static cofh.lib.util.constants.NBTTags.TAG_ACTIVE;
 import static cofh.lib.util.helpers.StringHelper.*;
 import static net.minecraft.ChatFormatting.RED;
 import static net.minecraft.ChatFormatting.YELLOW;
@@ -31,40 +27,11 @@ import static net.minecraft.ChatFormatting.YELLOW;
  */
 public interface ICoFHItem extends IForgeItem {
 
-    default boolean isCreative(ItemStack stack, ContainerType type) {
+    ICoFHItem setDisplayGroup(Supplier<CreativeModeTab> displayGroup);
 
-        switch (type) {
-            case ITEM:
-                return getPropertyWithDefault(stack, TAG_AUGMENT_ITEM_CREATIVE, 0.0F) > 0;
-            case FLUID:
-                return getPropertyWithDefault(stack, TAG_AUGMENT_FLUID_CREATIVE, 0.0F) > 0;
-            case ENERGY:
-                return getPropertyWithDefault(stack, TAG_AUGMENT_RF_CREATIVE, 0.0F) > 0;
-        }
-        return false;
-    }
+    ICoFHItem setModId(String modId);
 
-    default boolean canPlayerAccess(ItemStack stack, Player player) {
-
-        return SecurityHelper.getAccess(stack).matches(SecurityHelper.getOwner(stack), player);
-    }
-
-    @Override
-    default boolean hasCustomEntity(ItemStack stack) {
-
-        return SecurityHelper.hasSecurity(stack);
-    }
-
-    @Override
-    @Nullable
-    default Entity createEntity(Level world, Entity location, ItemStack stack) {
-
-        if (SecurityHelper.hasSecurity(stack)) {
-            location.setInvulnerable(true);
-            ((ItemEntity) location).lifespan = Integer.MAX_VALUE;
-        }
-        return null;
-    }
+    ICoFHItem setShowInGroups(Supplier<Boolean> showInGroups);
 
     default void addEnergyTooltip(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn, int extract, int receive, boolean creative) {
 

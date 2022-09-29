@@ -4,6 +4,7 @@ import cofh.core.capability.CapabilityArchery;
 import cofh.core.capability.CapabilityAreaEffect;
 import cofh.core.capability.CapabilityEnchantableItem;
 import cofh.core.capability.CapabilityShieldItem;
+import cofh.core.client.CoreKeys;
 import cofh.core.client.gui.FluidFilterScreen;
 import cofh.core.client.gui.ItemFilterScreen;
 import cofh.core.command.CoFHCommand;
