@@ -4,6 +4,8 @@ import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.function.Supplier;
 
+import static cofh.lib.util.Constants.TRUE;
+
 public class CoreClientConfig implements IBaseConfig {
 
     @Override
@@ -42,12 +44,12 @@ public class CoreClientConfig implements IBaseConfig {
         builder.pop();
     }
 
-    public static Supplier<Boolean> enableEnchantmentDescriptions = () -> true;
-    public static Supplier<Boolean> enableFoodDescriptions = () -> true;
-    public static Supplier<Boolean> enableItemDescriptions = () -> true;
-    public static Supplier<Boolean> enableItemTags = () -> true;
-    public static Supplier<Boolean> enableKeywords = () -> true;
-    public static Supplier<Boolean> alwaysShowDetails = () -> true;
-    public static Supplier<Boolean> holdShiftForDetails = () -> true;
+    public static Supplier<Boolean> enableEnchantmentDescriptions = TRUE;
+    public static Supplier<Boolean> enableFoodDescriptions = TRUE;
+    public static Supplier<Boolean> enableItemDescriptions = TRUE;
+    public static Supplier<Boolean> enableItemTags = TRUE;
+    public static Supplier<Boolean> enableKeywords = TRUE;
+    public static Supplier<Boolean> alwaysShowDetails = TRUE;
+    public static Supplier<Boolean> holdShiftForDetails = TRUE;
 
 }

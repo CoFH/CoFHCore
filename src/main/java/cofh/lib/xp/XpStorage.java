@@ -6,7 +6,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.common.util.INBTSerializable;
 
-import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 import static cofh.lib.util.Constants.FALSE;
 import static cofh.lib.util.Constants.MAX_CAPACITY;
@@ -22,7 +22,7 @@ public class XpStorage implements IXpStorage, IResourceStorage, INBTSerializable
 
     protected final int baseCapacity;
 
-    protected BooleanSupplier creative = FALSE;
+    protected Supplier<Boolean> creative = FALSE;
 
     protected int xp;
     protected int capacity;
@@ -53,7 +53,7 @@ public class XpStorage implements IXpStorage, IResourceStorage, INBTSerializable
         return this;
     }
 
-    public XpStorage setCreative(BooleanSupplier creative) {
+    public XpStorage setCreative(Supplier<Boolean> creative) {
 
         this.creative = creative;
         if (isCreative()) {

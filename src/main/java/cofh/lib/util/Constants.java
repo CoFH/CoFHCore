@@ -13,7 +13,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
 
 import java.util.UUID;
-import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
@@ -58,8 +57,8 @@ public class Constants {
     // endregion
 
     // region CONSTANTS
-    public static final BooleanSupplier TRUE = () -> true;
-    public static final BooleanSupplier FALSE = () -> false;
+    public static final Supplier<Boolean> TRUE = () -> true;
+    public static final Supplier<Boolean> FALSE = () -> false;
 
     public static final Supplier<Block> EMPTY_BLOCK = () -> Blocks.AIR;
     public static final Supplier<ItemStack> EMPTY_ITEM = () -> ItemStack.EMPTY;

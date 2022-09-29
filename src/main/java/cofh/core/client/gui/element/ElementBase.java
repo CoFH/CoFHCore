@@ -7,8 +7,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
-import java.util.function.BooleanSupplier;
 import java.util.function.IntSupplier;
+import java.util.function.Supplier;
 
 import static cofh.lib.util.Constants.TRUE;
 
@@ -16,8 +16,8 @@ public abstract class ElementBase {
 
     protected ITooltipFactory tooltip = ITooltipFactory.EMPTY;
 
-    protected BooleanSupplier enabled = TRUE;
-    protected BooleanSupplier visible = TRUE;
+    protected Supplier<Boolean> enabled = TRUE;
+    protected Supplier<Boolean> visible = TRUE;
 
     protected final IGuiAccess gui;
     protected ResourceLocation texture;
@@ -79,13 +79,13 @@ public abstract class ElementBase {
     }
 
     // region SETTERS / GETTERS
-    public final ElementBase setEnabled(BooleanSupplier enabled) {
+    public final ElementBase setEnabled(Supplier<Boolean> enabled) {
 
         this.enabled = enabled;
         return this;
     }
 
-    public final ElementBase setVisible(BooleanSupplier visible) {
+    public final ElementBase setVisible(Supplier<Boolean> visible) {
 
         this.visible = visible;
         return this;
@@ -134,12 +134,12 @@ public abstract class ElementBase {
 
     public final boolean enabled() {
 
-        return enabled.getAsBoolean();
+        return enabled.get();
     }
 
     public final boolean visible() {
 
-        return visible.getAsBoolean();
+        return visible.get();
     }
 
     public final String name() {

@@ -7,7 +7,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.energy.IEnergyStorage;
 
-import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 import static cofh.lib.util.Constants.*;
 import static cofh.lib.util.constants.NBTTags.*;
@@ -23,8 +23,8 @@ public class EnergyStorageCoFH implements IRedstoneFluxStorage, IResourceStorage
     protected final int baseReceive;
     protected final int baseExtract;
 
-    protected BooleanSupplier creative = FALSE;
-    protected BooleanSupplier enabled = TRUE;
+    protected Supplier<Boolean> creative = FALSE;
+    protected Supplier<Boolean> enabled = TRUE;
 
     protected int energy;
     protected int capacity;
@@ -85,7 +85,7 @@ public class EnergyStorageCoFH implements IRedstoneFluxStorage, IResourceStorage
         return this;
     }
 
-    public EnergyStorageCoFH setCreative(BooleanSupplier creative) {
+    public EnergyStorageCoFH setCreative(Supplier<Boolean> creative) {
 
         this.creative = creative;
         if (isCreative()) {
@@ -94,7 +94,7 @@ public class EnergyStorageCoFH implements IRedstoneFluxStorage, IResourceStorage
         return this;
     }
 
-    public EnergyStorageCoFH setEnabled(BooleanSupplier enabled) {
+    public EnergyStorageCoFH setEnabled(Supplier<Boolean> enabled) {
 
         if (enabled != null) {
             this.enabled = enabled;
@@ -199,7 +199,7 @@ public class EnergyStorageCoFH implements IRedstoneFluxStorage, IResourceStorage
     @Override
     public int receiveEnergy(int maxReceive, boolean simulate) {
 
-        if (!enabled.getAsBoolean()) {
+        if (!enabled.get()) {
             return 0;
         }
         int energyReceived = Math.min(capacity - energy, Math.min(this.maxReceive, maxReceive));
@@ -212,7 +212,7 @@ public class EnergyStorageCoFH implements IRedstoneFluxStorage, IResourceStorage
     @Override
     public int extractEnergy(int maxExtract, boolean simulate) {
 
-        if (!enabled.getAsBoolean()) {
+        if (!enabled.get()) {
             return 0;
         }
         int energyExtracted = Math.min(energy, Math.min(this.maxExtract, maxExtract));
@@ -275,7 +275,7 @@ public class EnergyStorageCoFH implements IRedstoneFluxStorage, IResourceStorage
     @Override
     public boolean isCreative() {
 
-        return creative.getAsBoolean();
+        return creative.get();
     }
 
     @Override

@@ -10,7 +10,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
-import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 import static cofh.core.CoFHCore.LOG;
 import static cofh.lib.util.Constants.FALSE;
@@ -28,14 +28,14 @@ public abstract class ElementResourceStorage extends ElementBase {
     protected IResourceStorage storage;
     protected int minDisplay = 1;
 
-    protected BooleanSupplier drawStorage = TRUE;
-    protected BooleanSupplier drawUnderlay = TRUE;
-    protected BooleanSupplier drawOverlay = TRUE;
+    protected Supplier<Boolean> drawStorage = TRUE;
+    protected Supplier<Boolean> drawUnderlay = TRUE;
+    protected Supplier<Boolean> drawOverlay = TRUE;
 
-    protected BooleanSupplier claimStorage = FALSE;
-    protected BooleanSupplier clearStorage = FALSE;
-    protected BooleanSupplier claimable = FALSE;
-    protected BooleanSupplier clearable;
+    protected Supplier<Boolean> claimStorage = FALSE;
+    protected Supplier<Boolean> clearStorage = FALSE;
+    protected Supplier<Boolean> claimable = FALSE;
+    protected Supplier<Boolean> clearable;
 
     public ElementResourceStorage(IGuiAccess gui, int posX, int posY, IResourceStorage storage) {
 
@@ -60,7 +60,7 @@ public abstract class ElementResourceStorage extends ElementBase {
         return setUnderlayTexture(texture, TRUE);
     }
 
-    public final ElementResourceStorage setUnderlayTexture(String texture, BooleanSupplier draw) {
+    public final ElementResourceStorage setUnderlayTexture(String texture, Supplier<Boolean> draw) {
 
         if (texture == null || draw == null) {
             LOG.warn("Attempted to assign a NULL underlay texture.");
@@ -76,7 +76,7 @@ public abstract class ElementResourceStorage extends ElementBase {
         return setOverlayTexture(texture, TRUE);
     }
 
-    public final ElementResourceStorage setOverlayTexture(String texture, BooleanSupplier draw) {
+    public final ElementResourceStorage setOverlayTexture(String texture, Supplier<Boolean> draw) {
 
         if (texture == null || draw == null) {
             LOG.warn("Attempted to assign a NULL overlay texture.");
@@ -87,13 +87,13 @@ public abstract class ElementResourceStorage extends ElementBase {
         return this;
     }
 
-    public final ElementResourceStorage setClaimStorage(BooleanSupplier claimStorage) {
+    public final ElementResourceStorage setClaimStorage(Supplier<Boolean> claimStorage) {
 
         this.claimStorage = claimStorage;
         return this;
     }
 
-    public final ElementResourceStorage setClearStorage(BooleanSupplier clearStorage) {
+    public final ElementResourceStorage setClearStorage(Supplier<Boolean> clearStorage) {
 
         this.clearStorage = clearStorage;
         return this;
@@ -122,9 +122,9 @@ public abstract class ElementResourceStorage extends ElementBase {
         } else {
             tooltipList.add(Component.literal(format(storage.getStored()) + " / " + format(storage.getCapacity()) + " " + storage.getUnit()));
         }
-        if (clearable.getAsBoolean() && clearStorage != FALSE && (hasAltDown() || hasShiftDown())) {
+        if (clearable.get() && clearStorage != FALSE && (hasAltDown() || hasShiftDown())) {
             tooltipList.add(Component.translatable("info.cofh.click_to_clear").withStyle(ChatFormatting.GRAY));
-        } else if (claimable.getAsBoolean()) {
+        } else if (claimable.get()) {
             tooltipList.add(Component.translatable("info.cofh.click_to_claim").withStyle(ChatFormatting.GRAY));
         }
     }
@@ -132,11 +132,11 @@ public abstract class ElementResourceStorage extends ElementBase {
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
 
-        if (clearable.getAsBoolean() && hasShiftDown() && hasAltDown()) {
-            return clearStorage.getAsBoolean();
+        if (clearable.get() && hasShiftDown() && hasAltDown()) {
+            return clearStorage.get();
         }
-        if (claimable.getAsBoolean()) {
-            return claimStorage.getAsBoolean();
+        if (claimable.get()) {
+            return claimStorage.get();
         }
         return false;
     }
@@ -150,7 +150,7 @@ public abstract class ElementResourceStorage extends ElementBase {
 
     protected void drawStorage(PoseStack poseStack) {
 
-        if (drawStorage.getAsBoolean() && texture != null) {
+        if (drawStorage.get() && texture != null) {
             RenderHelper.setPosTexShader();
             RenderHelper.setShaderTexture0(texture);
             drawTexturedModalRect(poseStack, posX(), posY(), 0, 0, width, height);
@@ -159,7 +159,7 @@ public abstract class ElementResourceStorage extends ElementBase {
 
     protected void drawUnderlayTexture(PoseStack poseStack) {
 
-        if (drawUnderlay.getAsBoolean() && underlayTexture != null) {
+        if (drawUnderlay.get() && underlayTexture != null) {
             RenderHelper.setPosTexShader();
             RenderHelper.setShaderTexture0(underlayTexture);
             drawTexturedModalRect(poseStack, posX(), posY(), 0, 0, width, height);
@@ -170,7 +170,7 @@ public abstract class ElementResourceStorage extends ElementBase {
 
     protected void drawOverlayTexture(PoseStack poseStack) {
 
-        if (drawOverlay.getAsBoolean() && overlayTexture != null) {
+        if (drawOverlay.get() && overlayTexture != null) {
             RenderHelper.setPosTexShader();
             RenderHelper.setShaderTexture0(overlayTexture);
             drawTexturedModalRect(poseStack, posX(), posY(), 0, 0, width, height);

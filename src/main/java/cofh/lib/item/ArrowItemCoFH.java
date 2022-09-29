@@ -17,7 +17,6 @@ import net.minecraft.world.level.block.DispenserBlock;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 import static cofh.lib.util.Constants.TRUE;
@@ -56,7 +55,7 @@ public class ArrowItemCoFH extends ArrowItem implements ICoFHItem {
 
     // region DISPLAY
     protected Supplier<CreativeModeTab> displayGroup;
-    protected BooleanSupplier showInGroups = TRUE;
+    protected Supplier<Boolean> showInGroups = TRUE;
     protected String modId = "";
 
     @Override
@@ -74,7 +73,7 @@ public class ArrowItemCoFH extends ArrowItem implements ICoFHItem {
     }
 
     @Override
-    public ArrowItemCoFH setShowInGroups(BooleanSupplier showInGroups) {
+    public ArrowItemCoFH setShowInGroups(Supplier<Boolean> showInGroups) {
 
         this.showInGroups = showInGroups;
         return this;
@@ -83,7 +82,7 @@ public class ArrowItemCoFH extends ArrowItem implements ICoFHItem {
     @Override
     public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
 
-        if (!showInGroups.getAsBoolean() || displayGroup != null && displayGroup.get() != null && displayGroup.get() != group) {
+        if (!showInGroups.get() || displayGroup != null && displayGroup.get() != null && displayGroup.get() != group) {
             return;
         }
         super.fillItemCategory(group, items);

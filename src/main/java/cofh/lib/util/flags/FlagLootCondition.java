@@ -26,7 +26,7 @@ public class FlagLootCondition implements LootItemCondition {
     @Override
     public boolean test(LootContext lootContext) {
 
-        return manager.getFlag(flag).getAsBoolean();
+        return manager.getFlag(flag).get();
     }
 
     @Nonnull

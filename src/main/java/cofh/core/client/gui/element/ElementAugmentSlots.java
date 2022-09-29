@@ -9,8 +9,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BooleanSupplier;
 import java.util.function.IntSupplier;
+import java.util.function.Supplier;
 
 import static cofh.core.util.helpers.GuiHelper.SLOT_SIZE;
 import static cofh.lib.util.Constants.MAX_AUGMENTS;
@@ -27,7 +27,7 @@ public class ElementAugmentSlots extends ElementBase {
         this(gui, posX, posY, numSlots, augmentSlots, null, TRUE);
     }
 
-    public ElementAugmentSlots(IGuiAccess gui, int posX, int posY, @Nonnull IntSupplier numSlots, @Nonnull List<SlotCoFH> augmentSlots, String texture, BooleanSupplier drawUnderlay) {
+    public ElementAugmentSlots(IGuiAccess gui, int posX, int posY, @Nonnull IntSupplier numSlots, @Nonnull List<SlotCoFH> augmentSlots, String texture, Supplier<Boolean> drawUnderlay) {
 
         super(gui, posX, posY);
 

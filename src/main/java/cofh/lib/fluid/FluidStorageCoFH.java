@@ -9,7 +9,6 @@ import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
-import java.util.function.BooleanSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -27,8 +26,8 @@ public class FluidStorageCoFH implements IFluidHandler, IFluidStackHolder, IReso
 
     protected final int baseCapacity;
 
-    protected BooleanSupplier creative = FALSE;
-    protected BooleanSupplier enabled = TRUE;
+    protected Supplier<Boolean> creative = FALSE;
+    protected Supplier<Boolean> enabled = TRUE;
     protected Supplier<FluidStack> emptyFluid = EMPTY_FLUID;
     protected Predicate<FluidStack> validator;
 
@@ -74,7 +73,7 @@ public class FluidStorageCoFH implements IFluidHandler, IFluidStackHolder, IReso
         return this;
     }
 
-    public FluidStorageCoFH setCreative(BooleanSupplier creative) {
+    public FluidStorageCoFH setCreative(Supplier<Boolean> creative) {
 
         this.creative = creative;
         if (!fluid.isEmpty() && isCreative()) {
@@ -83,7 +82,7 @@ public class FluidStorageCoFH implements IFluidHandler, IFluidStackHolder, IReso
         return this;
     }
 
-    public FluidStorageCoFH setEnabled(BooleanSupplier enabled) {
+    public FluidStorageCoFH setEnabled(Supplier<Boolean> enabled) {
 
         if (enabled != null) {
             this.enabled = enabled;
@@ -101,7 +100,7 @@ public class FluidStorageCoFH implements IFluidHandler, IFluidStackHolder, IReso
 
     public boolean isFluidValid(@Nonnull FluidStack stack) {
 
-        return enabled.getAsBoolean() && validator.test(stack);
+        return enabled.get() && validator.test(stack);
     }
 
     public void setFluidStack(FluidStack stack) {
@@ -165,7 +164,7 @@ public class FluidStorageCoFH implements IFluidHandler, IFluidStackHolder, IReso
     @Override
     public int fill(FluidStack resource, FluidAction action) {
 
-        if (resource.isEmpty() || !isFluidValid(resource) || !enabled.getAsBoolean()) {
+        if (resource.isEmpty() || !isFluidValid(resource) || !enabled.get()) {
             return 0;
         }
         if (action.simulate()) {
@@ -209,7 +208,7 @@ public class FluidStorageCoFH implements IFluidHandler, IFluidStackHolder, IReso
     @Override
     public FluidStack drain(int maxDrain, FluidAction action) {
 
-        if (maxDrain <= 0 || fluid.isEmpty() || !enabled.getAsBoolean()) {
+        if (maxDrain <= 0 || fluid.isEmpty() || !enabled.get()) {
             return FluidStack.EMPTY;
         }
         int drained = maxDrain;
@@ -265,7 +264,7 @@ public class FluidStorageCoFH implements IFluidHandler, IFluidStackHolder, IReso
     @Override
     public boolean isCreative() {
 
-        return creative.getAsBoolean();
+        return creative.get();
     }
 
     @Override

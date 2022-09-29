@@ -41,7 +41,7 @@ public class NullItemStorage extends ItemStorageCoFH {
     @Override
     public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
 
-        if (!isItemValid(stack) || !enabled.getAsBoolean()) {
+        if (!isItemValid(stack) || !enabled.get()) {
             return stack;
         }
         return ItemStack.EMPTY;

@@ -8,7 +8,7 @@ import net.minecraftforge.items.wrapper.EmptyHandler;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 import static cofh.lib.util.Constants.FALSE;
 
@@ -48,7 +48,7 @@ public class IOItemInv extends SimpleItemInv {
         }
     }
 
-    public void setConditions(BooleanSupplier allowInsert, BooleanSupplier allowExtract) {
+    public void setConditions(Supplier<Boolean> allowInsert, Supplier<Boolean> allowExtract) {
 
         outputHandler.setConditions(FALSE, allowExtract);
         inputHandler.setConditions(allowInsert, FALSE);

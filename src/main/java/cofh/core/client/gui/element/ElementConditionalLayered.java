@@ -29,7 +29,7 @@ public class ElementConditionalLayered extends ElementBase {
         super(gui, posX, posY);
     }
 
-    public ElementConditionalLayered addSprite(String location, BooleanSupplier condition) {
+    public ElementConditionalLayered addSprite(String location, Supplier<Boolean> condition) {
 
         if (location == null) {
             return this;
@@ -37,7 +37,7 @@ public class ElementConditionalLayered extends ElementBase {
         return addSprite(new ResourceLocation(location), condition);
     }
 
-    public ElementConditionalLayered addSprite(ResourceLocation location, BooleanSupplier condition) {
+    public ElementConditionalLayered addSprite(ResourceLocation location, Supplier<Boolean> condition) {
 
         if (!textureExists(location)) {
             return this;
@@ -45,17 +45,17 @@ public class ElementConditionalLayered extends ElementBase {
         return addSprite(RenderHelper.getTexture(location), condition);
     }
 
-    public ElementConditionalLayered addSprite(TextureAtlasSprite sprite, BooleanSupplier condition) {
+    public ElementConditionalLayered addSprite(TextureAtlasSprite sprite, Supplier<Boolean> condition) {
 
         return addSprite(() -> sprite, condition);
     }
 
-    public ElementConditionalLayered addSprite(Supplier<TextureAtlasSprite> sprite, BooleanSupplier condition) {
+    public ElementConditionalLayered addSprite(Supplier<TextureAtlasSprite> sprite, Supplier<Boolean> condition) {
 
         return addSprite(sprite, WHITE, condition);
     }
 
-    public ElementConditionalLayered addSprite(Supplier<TextureAtlasSprite> sprite, IntSupplier color, BooleanSupplier condition) {
+    public ElementConditionalLayered addSprite(Supplier<TextureAtlasSprite> sprite, IntSupplier color, Supplier<Boolean> condition) {
 
         conditionalTextures.add(new IconWrapper(sprite, color, condition));
         return this;
@@ -65,7 +65,7 @@ public class ElementConditionalLayered extends ElementBase {
     public void drawBackground(PoseStack matrixStack, int mouseX, int mouseY) {
 
         for (IconWrapper icon : conditionalTextures) {
-            if (icon.display.getAsBoolean()) {
+            if (icon.display.get()) {
                 if (icon.color != WHITE) {
                     gui.drawIcon(matrixStack, icon.texture.get(), icon.color.getAsInt(), posX(), posY());
                 } else {
@@ -80,9 +80,9 @@ public class ElementConditionalLayered extends ElementBase {
 
         protected Supplier<TextureAtlasSprite> texture;
         protected IntSupplier color;
-        protected BooleanSupplier display;
+        protected Supplier<Boolean> display;
 
-        IconWrapper(Supplier<TextureAtlasSprite> texture, IntSupplier color, BooleanSupplier display) {
+        IconWrapper(Supplier<TextureAtlasSprite> texture, IntSupplier color, Supplier<Boolean> display) {
 
             this.texture = texture;
             this.color = color;

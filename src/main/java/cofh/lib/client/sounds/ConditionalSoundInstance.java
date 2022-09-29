@@ -7,7 +7,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 import static cofh.lib.util.Constants.FALSE;
 
@@ -20,9 +20,9 @@ public class ConditionalSoundInstance extends AbstractTickableSoundInstance {
     int fadeOut = 50;
     float baseVolume = 1.0F;
 
-    BooleanSupplier condition = FALSE;
+    Supplier<Boolean> condition = FALSE;
 
-    public ConditionalSoundInstance(SoundEvent soundIn, SoundSource categoryIn, BlockEntity tile, BooleanSupplier condition) {
+    public ConditionalSoundInstance(SoundEvent soundIn, SoundSource categoryIn, BlockEntity tile, Supplier<Boolean> condition) {
 
         super(soundIn, categoryIn, MathHelper.RANDOM);
 
@@ -34,7 +34,7 @@ public class ConditionalSoundInstance extends AbstractTickableSoundInstance {
         this.condition = condition;
     }
 
-    public ConditionalSoundInstance(SoundEvent soundIn, SoundSource categoryIn, Entity entity, BooleanSupplier condition) {
+    public ConditionalSoundInstance(SoundEvent soundIn, SoundSource categoryIn, Entity entity, Supplier<Boolean> condition) {
 
         super(soundIn, categoryIn, MathHelper.RANDOM);
 
@@ -76,7 +76,7 @@ public class ConditionalSoundInstance extends AbstractTickableSoundInstance {
             if (ticks < fadeIn) {
                 ++ticks;
             }
-            if (!condition.getAsBoolean()) {
+            if (!condition.get()) {
                 beginFadeOut = true;
                 ticks = 0;
             }

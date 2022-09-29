@@ -11,7 +11,6 @@ import net.minecraftforge.common.extensions.IForgeItem;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 import static cofh.core.client.CoreKeys.MULTIMODE_DECREMENT;
@@ -31,7 +30,7 @@ public interface ICoFHItem extends IForgeItem {
 
     ICoFHItem setModId(String modId);
 
-    ICoFHItem setShowInGroups(BooleanSupplier showInGroups);
+    ICoFHItem setShowInGroups(Supplier<Boolean> showInGroups);
 
     default void addEnergyTooltip(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn, int extract, int receive, boolean creative) {
 

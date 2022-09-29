@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 import static cofh.core.CoFHCore.ENCHANTMENTS;
 import static cofh.core.util.references.CoreIDs.ID_HOLDING;
 import static cofh.lib.util.Constants.MAX_ENCHANT_LEVEL;
+import static cofh.lib.util.Constants.TRUE;
 
 public class CoreEnchantConfig implements IBaseConfig {
 
@@ -52,8 +53,8 @@ public class CoreEnchantConfig implements IBaseConfig {
         }
     }
 
-    public static Supplier<Boolean> improvedFeatherFalling = () -> true;
-    public static Supplier<Boolean> improvedMending = () -> true;
+    public static Supplier<Boolean> improvedFeatherFalling = TRUE;
+    public static Supplier<Boolean> improvedMending = TRUE;
 
     private Supplier<Boolean> enableHolding;
     private Supplier<Boolean> treasureHolding;

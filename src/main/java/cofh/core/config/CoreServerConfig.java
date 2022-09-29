@@ -4,6 +4,8 @@ import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.function.Supplier;
 
+import static cofh.lib.util.Constants.FALSE;
+
 public class CoreServerConfig implements IBaseConfig {
 
     @Override
@@ -36,10 +38,10 @@ public class CoreServerConfig implements IBaseConfig {
         builder.pop();
     }
 
-    public static Supplier<Boolean> enableFishingExhaustion = () -> false;
+    public static Supplier<Boolean> enableFishingExhaustion = FALSE;
     public static Supplier<Double> amountFishingExhaustion = () -> 0.125;
 
-    public static Supplier<Boolean> enableSaplingGrowthMod = () -> false;
+    public static Supplier<Boolean> enableSaplingGrowthMod = FALSE;
     public static Supplier<Integer> amountSaplingGrowthMod = () -> 4;
 
 }

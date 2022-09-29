@@ -5,7 +5,7 @@ import cofh.core.util.helpers.RenderHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.resources.ResourceLocation;
 
-import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 import static cofh.core.CoFHCore.LOG;
 import static cofh.lib.util.Constants.TRUE;
@@ -15,8 +15,8 @@ public class ElementSlot extends ElementBase {
     protected ResourceLocation underlayTexture;
     protected ResourceLocation overlayTexture;
 
-    protected BooleanSupplier drawUnderlay = TRUE;
-    protected BooleanSupplier drawOverlay = TRUE;
+    protected Supplier<Boolean> drawUnderlay = TRUE;
+    protected Supplier<Boolean> drawOverlay = TRUE;
 
     public ElementSlot(IGuiAccess gui, int posX, int posY) {
 
@@ -28,7 +28,7 @@ public class ElementSlot extends ElementBase {
         return setUnderlayTexture(texture, TRUE);
     }
 
-    public final ElementSlot setUnderlayTexture(String texture, BooleanSupplier draw) {
+    public final ElementSlot setUnderlayTexture(String texture, Supplier<Boolean> draw) {
 
         if (texture == null || draw == null) {
             LOG.warn("Attempted to assign a NULL underlay texture.");
@@ -44,7 +44,7 @@ public class ElementSlot extends ElementBase {
         return setOverlayTexture(texture, TRUE);
     }
 
-    public final ElementSlot setOverlayTexture(String texture, BooleanSupplier draw) {
+    public final ElementSlot setOverlayTexture(String texture, Supplier<Boolean> draw) {
 
         if (texture == null || draw == null) {
             LOG.warn("Attempted to assign a NULL overlay texture.");
@@ -78,7 +78,7 @@ public class ElementSlot extends ElementBase {
 
     protected void drawUnderlayTexture(PoseStack poseStack) {
 
-        if (drawUnderlay.getAsBoolean() && underlayTexture != null) {
+        if (drawUnderlay.get() && underlayTexture != null) {
             RenderHelper.setPosTexShader();
             RenderHelper.setShaderTexture0(underlayTexture);
             drawTexturedModalRect(poseStack, posX(), posY(), 0, 0, width, height);
@@ -87,7 +87,7 @@ public class ElementSlot extends ElementBase {
 
     protected void drawOverlayTexture(PoseStack poseStack) {
 
-        if (drawOverlay.getAsBoolean() && overlayTexture != null) {
+        if (drawOverlay.get() && overlayTexture != null) {
             RenderHelper.setPosTexShader();
             RenderHelper.setShaderTexture0(overlayTexture);
             drawTexturedModalRect(poseStack, posX(), posY(), 0, 0, width, height);
