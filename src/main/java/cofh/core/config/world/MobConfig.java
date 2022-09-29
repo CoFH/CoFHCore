@@ -6,7 +6,7 @@ import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.List;
-import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -22,14 +22,14 @@ public class MobConfig implements IBaseConfig {
     protected int max;
     protected List<String> biomes;
     protected BiomeDictionary.Type restriction;
-    protected BooleanSupplier enable;
+    protected Supplier<Boolean> enable;
 
-    protected ForgeConfigSpec.IntValue configChance;
-    protected ForgeConfigSpec.IntValue configMin;
-    protected ForgeConfigSpec.IntValue configMax;
+    protected Supplier<Integer> configChance;
+    protected Supplier<Integer> configMin;
+    protected Supplier<Integer> configMax;
     protected ForgeConfigSpec.ConfigValue<String> configBiomes;
 
-    public MobConfig(String name, int chance, int min, int max, List<String> biomes, BooleanSupplier enable) {
+    public MobConfig(String name, int chance, int min, int max, List<String> biomes, Supplier<Boolean> enable) {
 
         this(name, chance, min, max, biomes, BiomeDictionary.Type.OVERWORLD);
     }

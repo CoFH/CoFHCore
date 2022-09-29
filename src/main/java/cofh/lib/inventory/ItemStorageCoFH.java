@@ -8,7 +8,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
-import java.util.function.BooleanSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -25,8 +24,8 @@ public class ItemStorageCoFH implements IItemHandler, IItemStackHolder, IResourc
 
     protected final int baseCapacity;
 
-    protected BooleanSupplier creative = FALSE;
-    protected BooleanSupplier enabled = TRUE;
+    protected Supplier<Boolean> creative = FALSE;
+    protected Supplier<Boolean> enabled = TRUE;
     protected Supplier<ItemStack> emptyItem = EMPTY_ITEM;
     protected Predicate<ItemStack> validator;
 
@@ -81,7 +80,7 @@ public class ItemStorageCoFH implements IItemHandler, IItemStackHolder, IResourc
         return this;
     }
 
-    public ItemStorageCoFH setCreative(BooleanSupplier creative) {
+    public ItemStorageCoFH setCreative(Supplier<Boolean> creative) {
 
         this.creative = creative;
         if (!item.isEmpty() && isCreative()) {
@@ -90,7 +89,7 @@ public class ItemStorageCoFH implements IItemHandler, IItemStackHolder, IResourc
         return this;
     }
 
-    public ItemStorageCoFH setEnabled(BooleanSupplier enabled) {
+    public ItemStorageCoFH setEnabled(Supplier<Boolean> enabled) {
 
         if (enabled != null) {
             this.enabled = enabled;
@@ -108,7 +107,7 @@ public class ItemStorageCoFH implements IItemHandler, IItemStackHolder, IResourc
 
     public boolean isItemValid(@Nonnull ItemStack stack) {
 
-        return enabled.getAsBoolean() && validator.test(stack);
+        return enabled.get() && validator.test(stack);
     }
 
     public void consume(int amount) {
@@ -202,7 +201,7 @@ public class ItemStorageCoFH implements IItemHandler, IItemStackHolder, IResourc
         if (stack.isEmpty()) {
             return ItemStack.EMPTY;
         }
-        if (!isItemValid(stack) || !enabled.getAsBoolean()) {
+        if (!isItemValid(stack) || !enabled.get()) {
             return stack;
         }
         if (item.isEmpty()) {
@@ -231,7 +230,7 @@ public class ItemStorageCoFH implements IItemHandler, IItemStackHolder, IResourc
     @Override
     public ItemStack extractItem(int slot, int amount, boolean simulate) {
 
-        if (amount <= 0 || item.isEmpty() || !enabled.getAsBoolean()) {
+        if (amount <= 0 || item.isEmpty() || !enabled.get()) {
             return ItemStack.EMPTY;
         }
         int retCount = Math.min(item.getCount(), amount);
@@ -284,7 +283,7 @@ public class ItemStorageCoFH implements IItemHandler, IItemStackHolder, IResourc
     @Override
     public boolean isCreative() {
 
-        return creative.getAsBoolean();
+        return creative.get();
     }
 
     @Override

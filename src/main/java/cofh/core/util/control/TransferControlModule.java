@@ -6,7 +6,7 @@ import cofh.lib.util.Utils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 
-import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 import static cofh.lib.util.Constants.TRUE;
 import static cofh.lib.util.constants.NBTTags.*;
@@ -14,7 +14,7 @@ import static cofh.lib.util.constants.NBTTags.*;
 public class TransferControlModule implements ITransferControllable {
 
     protected ITransferControllableTile tile;
-    protected BooleanSupplier enabled;
+    protected Supplier<Boolean> enabled;
 
     protected boolean enableAutoInput;
     protected boolean enableAutoOutput;
@@ -24,13 +24,13 @@ public class TransferControlModule implements ITransferControllable {
         this(tile, TRUE);
     }
 
-    public TransferControlModule(ITransferControllableTile tile, BooleanSupplier enabled) {
+    public TransferControlModule(ITransferControllableTile tile, Supplier<Boolean> enabled) {
 
         this.tile = tile;
         this.enabled = enabled;
     }
 
-    public TransferControlModule setEnabled(BooleanSupplier enabled) {
+    public TransferControlModule setEnabled(Supplier<Boolean> enabled) {
 
         this.enabled = enabled;
         return this;
@@ -83,7 +83,7 @@ public class TransferControlModule implements ITransferControllable {
 
         CompoundTag subTag = new CompoundTag();
 
-        if (enabled.getAsBoolean()) {
+        if (enabled.get()) {
             subTag.putBoolean(TAG_XFER_IN, enableAutoInput);
             subTag.putBoolean(TAG_XFER_OUT, enableAutoOutput);
 
@@ -94,7 +94,7 @@ public class TransferControlModule implements ITransferControllable {
 
     public TransferControlModule readSettings(CompoundTag nbt) {
 
-        if (enabled.getAsBoolean()) {
+        if (enabled.get()) {
             return read(nbt);
         }
         return this;
@@ -110,13 +110,13 @@ public class TransferControlModule implements ITransferControllable {
     @Override
     public boolean hasTransferIn() {
 
-        return enabled.getAsBoolean();
+        return enabled.get();
     }
 
     @Override
     public boolean hasTransferOut() {
 
-        return enabled.getAsBoolean();
+        return enabled.get();
     }
 
     @Override

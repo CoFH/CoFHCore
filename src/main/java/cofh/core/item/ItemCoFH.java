@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -32,7 +32,7 @@ public class ItemCoFH extends Item implements ICoFHItem {
 
     protected static final Random random = new Random();
 
-    protected BooleanSupplier showInGroups = TRUE;
+    protected Supplier<Boolean> showInGroups = TRUE;
 
     protected int burnTime = -1;
     protected int enchantability;
@@ -55,7 +55,7 @@ public class ItemCoFH extends Item implements ICoFHItem {
         return this;
     }
 
-    public ItemCoFH setShowInGroups(BooleanSupplier showInGroups) {
+    public ItemCoFH setShowInGroups(Supplier<Boolean> showInGroups) {
 
         this.showInGroups = showInGroups;
         return this;
@@ -80,7 +80,7 @@ public class ItemCoFH extends Item implements ICoFHItem {
     @Override
     public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
 
-        if (!showInGroups.getAsBoolean()) {
+        if (!showInGroups.get()) {
             return;
         }
         super.fillItemCategory(group, items);
@@ -96,9 +96,9 @@ public class ItemCoFH extends Item implements ICoFHItem {
             tooltip.add(getTextComponent("info.cofh.claimable").withStyle(GREEN).withStyle(ITALIC));
         }
         if (!additionalTooltips.isEmpty()) {
-            if (Screen.hasShiftDown() || CoreClientConfig.alwaysShowDetails) {
+            if (Screen.hasShiftDown() || CoreClientConfig.alwaysShowDetails.get()) {
                 tooltip.addAll(additionalTooltips);
-            } else if (CoreClientConfig.holdShiftForDetails) {
+            } else if (CoreClientConfig.holdShiftForDetails.get()) {
                 tooltip.add(getTextComponent("info.cofh.hold_shift_for_details").withStyle(GRAY));
             }
         }

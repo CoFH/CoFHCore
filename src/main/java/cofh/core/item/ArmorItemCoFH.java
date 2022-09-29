@@ -17,7 +17,6 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.UUID;
-import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 import static cofh.lib.util.Constants.TRUE;
@@ -49,7 +48,7 @@ public class ArmorItemCoFH extends ArmorItem implements ICoFHItem {
             UUID.fromString("A8BD3E20-FA60-47AF-8A09-B1A57D26F3CC")
     };
 
-    protected BooleanSupplier showInGroups = TRUE;
+    protected Supplier<Boolean> showInGroups = TRUE;
 
     protected Supplier<CreativeModeTab> displayGroup;
 
@@ -64,7 +63,7 @@ public class ArmorItemCoFH extends ArmorItem implements ICoFHItem {
         return this;
     }
 
-    public ArmorItemCoFH setShowInGroups(BooleanSupplier showInGroups) {
+    public ArmorItemCoFH setShowInGroups(Supplier<Boolean> showInGroups) {
 
         this.showInGroups = showInGroups;
         return this;
@@ -73,7 +72,7 @@ public class ArmorItemCoFH extends ArmorItem implements ICoFHItem {
     @Override
     public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
 
-        if (!showInGroups.getAsBoolean() || displayGroup != null && displayGroup.get() != null && displayGroup.get() != group) {
+        if (!showInGroups.get() || displayGroup != null && displayGroup.get() != null && displayGroup.get() != group) {
             return;
         }
         super.fillItemCategory(group, items);

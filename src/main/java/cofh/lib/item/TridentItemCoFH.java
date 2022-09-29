@@ -9,14 +9,13 @@ import net.minecraft.world.item.TridentItem;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 import static cofh.lib.util.Constants.TRUE;
 
 public class TridentItemCoFH extends TridentItem implements ICoFHItem {
 
-    protected BooleanSupplier showInGroups = TRUE;
+    protected Supplier<Boolean> showInGroups = TRUE;
 
     protected int enchantability = 1;
 
@@ -39,7 +38,7 @@ public class TridentItemCoFH extends TridentItem implements ICoFHItem {
         return this;
     }
 
-    public TridentItemCoFH setShowInGroups(BooleanSupplier showInGroups) {
+    public TridentItemCoFH setShowInGroups(Supplier<Boolean> showInGroups) {
 
         this.showInGroups = showInGroups;
         return this;
@@ -48,7 +47,7 @@ public class TridentItemCoFH extends TridentItem implements ICoFHItem {
     @Override
     public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
 
-        if (!showInGroups.getAsBoolean() || displayGroup != null && displayGroup.get() != null && displayGroup.get() != group) {
+        if (!showInGroups.get() || displayGroup != null && displayGroup.get() != null && displayGroup.get() != group) {
             return;
         }
         super.fillItemCategory(group, items);

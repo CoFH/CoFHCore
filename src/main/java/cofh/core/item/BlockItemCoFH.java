@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 import static cofh.lib.util.Constants.TRUE;
@@ -29,7 +28,7 @@ import static net.minecraft.ChatFormatting.GRAY;
 
 public class BlockItemCoFH extends BlockItem implements ICoFHItem {
 
-    protected BooleanSupplier showInGroups = TRUE;
+    protected Supplier<Boolean> showInGroups = TRUE;
 
     protected int burnTime = -1;
     protected int enchantability;
@@ -60,7 +59,7 @@ public class BlockItemCoFH extends BlockItem implements ICoFHItem {
         return this;
     }
 
-    public BlockItemCoFH setShowInGroups(BooleanSupplier showInGroups) {
+    public BlockItemCoFH setShowInGroups(Supplier<Boolean> showInGroups) {
 
         this.showInGroups = showInGroups;
         return this;
@@ -85,7 +84,7 @@ public class BlockItemCoFH extends BlockItem implements ICoFHItem {
     @Override
     public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
 
-        if (!showInGroups.getAsBoolean() || getBlock() == null || displayGroup != null && displayGroup.get() != null && displayGroup.get() != group) {
+        if (!showInGroups.get() || getBlock() == null || displayGroup != null && displayGroup.get() != null && displayGroup.get() != group) {
             return;
         }
         super.fillItemCategory(group, items);
@@ -99,9 +98,9 @@ public class BlockItemCoFH extends BlockItem implements ICoFHItem {
         tooltipDelegate(stack, worldIn, additionalTooltips, flagIn);
 
         if (!additionalTooltips.isEmpty()) {
-            if (Screen.hasShiftDown() || CoreClientConfig.alwaysShowDetails) {
+            if (Screen.hasShiftDown() || CoreClientConfig.alwaysShowDetails.get()) {
                 tooltip.addAll(additionalTooltips);
-            } else if (CoreClientConfig.holdShiftForDetails) {
+            } else if (CoreClientConfig.holdShiftForDetails.get()) {
                 tooltip.add(getTextComponent("info.cofh.hold_shift_for_details").withStyle(GRAY));
             }
         }

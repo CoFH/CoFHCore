@@ -11,14 +11,13 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 
-import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 import static cofh.lib.util.Constants.TRUE;
 
 public class SpawnEggItemCoFH extends ForgeSpawnEggItem implements IColorableItem {
 
-    protected BooleanSupplier showInGroups = TRUE;
+    protected Supplier<Boolean> showInGroups = TRUE;
 
     public SpawnEggItemCoFH(Supplier<EntityType<? extends Mob>> typeSupIn, int primaryColorIn, int secondaryColorIn, Properties builder) {
 
@@ -27,7 +26,7 @@ public class SpawnEggItemCoFH extends ForgeSpawnEggItem implements IColorableIte
         ProxyUtils.registerColorable(this);
     }
 
-    public SpawnEggItemCoFH setShowInGroups(BooleanSupplier showInGroups) {
+    public SpawnEggItemCoFH setShowInGroups(Supplier<Boolean> showInGroups) {
 
         this.showInGroups = showInGroups;
         return this;
@@ -36,7 +35,7 @@ public class SpawnEggItemCoFH extends ForgeSpawnEggItem implements IColorableIte
     @Override
     public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
 
-        if (!showInGroups.getAsBoolean()) {
+        if (!showInGroups.get()) {
             return;
         }
         super.fillItemCategory(group, items);

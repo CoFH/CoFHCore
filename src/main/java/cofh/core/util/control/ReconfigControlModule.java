@@ -8,7 +8,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 
-import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 import static cofh.lib.api.control.IReconfigurable.SideConfig.SIDE_ACCESSIBLE;
 import static cofh.lib.api.control.IReconfigurable.SideConfig.SIDE_NONE;
@@ -18,7 +18,7 @@ import static cofh.lib.util.constants.NBTTags.TAG_SIDES;
 public class ReconfigControlModule implements IReconfigurable {
 
     protected IReconfigurableTile tile;
-    protected BooleanSupplier enabled;
+    protected Supplier<Boolean> enabled;
 
     protected Direction facing = Direction.NORTH;
     protected SideConfig[] sides = {SIDE_NONE, SIDE_NONE, SIDE_NONE, SIDE_NONE, SIDE_NONE, SIDE_NONE};
@@ -28,13 +28,13 @@ public class ReconfigControlModule implements IReconfigurable {
         this(tile, TRUE);
     }
 
-    public ReconfigControlModule(IReconfigurableTile tile, BooleanSupplier enabled) {
+    public ReconfigControlModule(IReconfigurableTile tile, Supplier<Boolean> enabled) {
 
         this.tile = tile;
         this.enabled = enabled;
     }
 
-    public ReconfigControlModule setEnabled(BooleanSupplier enabled) {
+    public ReconfigControlModule setEnabled(Supplier<Boolean> enabled) {
 
         this.enabled = enabled;
         return this;
@@ -177,7 +177,7 @@ public class ReconfigControlModule implements IReconfigurable {
     @Override
     public boolean isReconfigurable() {
 
-        return enabled.getAsBoolean();
+        return enabled.get();
     }
 
     @Override

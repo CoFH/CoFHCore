@@ -34,7 +34,7 @@ public class NullFluidStorage extends FluidStorageCoFH {
     @Override
     public int fill(FluidStack resource, FluidAction action) {
 
-        if (resource.isEmpty() || !isFluidValid(resource) || !enabled.getAsBoolean()) {
+        if (resource.isEmpty() || !isFluidValid(resource) || !enabled.get()) {
             return 0;
         }
         return Math.min(resource.getAmount(), getCapacity());

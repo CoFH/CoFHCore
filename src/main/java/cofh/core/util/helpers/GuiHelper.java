@@ -13,7 +13,6 @@ import cofh.lib.inventory.ItemStorageCoFH;
 import cofh.lib.xp.XpStorage;
 import net.minecraftforge.fluids.FluidStack;
 
-import java.util.function.BooleanSupplier;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
@@ -100,7 +99,7 @@ public class GuiHelper {
         return (ElementFluidStorage) new ElementFluidStorage(gui, posX, posY, storage).setOverlayTexture(overlayTexture).setSize(width, height).setTexture(texture, texW, texH);
     }
 
-    public static ElementFluidStorage createDefaultFluidStorage(IGuiAccess gui, int posX, int posY, FluidStorageCoFH storage, int width, int height, String texture, String underlayTexture, BooleanSupplier drawUnderlay, String overlayTexture, int texW, int texH) {
+    public static ElementFluidStorage createDefaultFluidStorage(IGuiAccess gui, int posX, int posY, FluidStorageCoFH storage, int width, int height, String texture, String underlayTexture, Supplier<Boolean> drawUnderlay, String overlayTexture, int texW, int texH) {
 
         return (ElementFluidStorage) new ElementFluidStorage(gui, posX, posY, storage).setUnderlayTexture(underlayTexture, drawUnderlay).setOverlayTexture(overlayTexture).setSize(width, height).setTexture(texture, texW, texH);
     }
@@ -162,7 +161,7 @@ public class GuiHelper {
                 .setTexture(texture, texW, texH);
     }
 
-    public static ElementSlot createDefaultSlot(IGuiAccess gui, int posX, int posY, int width, int height, String texture, String underlayTexture, BooleanSupplier drawUnderlay, int texW, int texH) {
+    public static ElementSlot createDefaultSlot(IGuiAccess gui, int posX, int posY, int width, int height, String texture, String underlayTexture, Supplier<Boolean> drawUnderlay, int texW, int texH) {
 
         return (ElementSlot) new ElementSlot(gui, posX, posY)
                 .setUnderlayTexture(underlayTexture, drawUnderlay)
@@ -170,7 +169,7 @@ public class GuiHelper {
                 .setTexture(texture, texW, texH);
     }
 
-    public static ElementSlot createDefaultSlot(IGuiAccess gui, int posX, int posY, int width, int height, String texture, String underlayTexture, BooleanSupplier drawUnderlay, String overlayTexture, int texW, int texH) {
+    public static ElementSlot createDefaultSlot(IGuiAccess gui, int posX, int posY, int width, int height, String texture, String underlayTexture, Supplier<Boolean> drawUnderlay, String overlayTexture, int texW, int texH) {
 
         return (ElementSlot) new ElementSlot(gui, posX, posY)
                 .setUnderlayTexture(underlayTexture, drawUnderlay)
@@ -223,7 +222,7 @@ public class GuiHelper {
         return createDefaultProgress(gui, posX, posY, texture, quantitySup, TRUE);
     }
 
-    public static ElementScaled createDefaultProgress(IGuiAccess gui, int posX, int posY, String texture, IntSupplier quantitySup, BooleanSupplier visible) {
+    public static ElementScaled createDefaultProgress(IGuiAccess gui, int posX, int posY, String texture, IntSupplier quantitySup, Supplier<Boolean> visible) {
 
         return (ElementScaled) new ElementScaled(gui, posX, posY)
                 .setQuantity(quantitySup)
@@ -238,7 +237,7 @@ public class GuiHelper {
         return createDefaultFluidProgress(gui, posX, posY, texture, quantitySup, fluidSup, TRUE);
     }
 
-    public static ElementScaledFluid createDefaultFluidProgress(IGuiAccess gui, int posX, int posY, String texture, IntSupplier quantitySup, Supplier<FluidStack> fluidSup, BooleanSupplier visible) {
+    public static ElementScaledFluid createDefaultFluidProgress(IGuiAccess gui, int posX, int posY, String texture, IntSupplier quantitySup, Supplier<FluidStack> fluidSup, Supplier<Boolean> visible) {
 
         return (ElementScaledFluid) new ElementScaledFluid(gui, posX, posY)
                 .setFluid(fluidSup)

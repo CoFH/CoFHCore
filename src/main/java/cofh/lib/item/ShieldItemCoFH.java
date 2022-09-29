@@ -8,14 +8,13 @@ import net.minecraft.world.item.ShieldItem;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 import static cofh.lib.util.Constants.TRUE;
 
 public class ShieldItemCoFH extends ShieldItem implements ICoFHItem {
 
-    protected BooleanSupplier showInGroups = TRUE;
+    protected Supplier<Boolean> showInGroups = TRUE;
 
     protected int enchantability = 1;
 
@@ -38,7 +37,7 @@ public class ShieldItemCoFH extends ShieldItem implements ICoFHItem {
         return this;
     }
 
-    public ShieldItemCoFH setShowInGroups(BooleanSupplier showInGroups) {
+    public ShieldItemCoFH setShowInGroups(Supplier<Boolean> showInGroups) {
 
         this.showInGroups = showInGroups;
         return this;
@@ -47,7 +46,7 @@ public class ShieldItemCoFH extends ShieldItem implements ICoFHItem {
     @Override
     public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
 
-        if (!showInGroups.getAsBoolean() || displayGroup != null && displayGroup.get() != null && displayGroup.get() != group) {
+        if (!showInGroups.get() || displayGroup != null && displayGroup.get() != null && displayGroup.get() != group) {
             return;
         }
         super.fillItemCategory(group, items);

@@ -48,7 +48,7 @@ public class ElementFluidStorage extends ElementResourceStorage {
     @Override
     protected void drawOverlayTexture(PoseStack poseStack) {
 
-        if (!drawOverlay.getAsBoolean()) {
+        if (!drawOverlay.get()) {
             return;
         }
         if (storage.isCreative() && creativeTexture != null) {

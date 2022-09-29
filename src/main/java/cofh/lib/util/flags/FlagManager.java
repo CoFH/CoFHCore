@@ -6,14 +6,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.minecraftforge.common.crafting.CraftingHelper;
 
-import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 import static cofh.lib.util.Constants.FALSE;
 import static cofh.lib.util.Constants.TRUE;
 
 public class FlagManager {
 
-    private static final Object2ObjectOpenHashMap<String, BooleanSupplier> FLAGS = new Object2ObjectOpenHashMap<>(64);
+    private static final Object2ObjectOpenHashMap<String, Supplier<Boolean>> FLAGS = new Object2ObjectOpenHashMap<>(64);
 
     public final ResourceLocation id;
     public LootItemConditionType flagConditionType;
@@ -35,7 +35,7 @@ public class FlagManager {
         Registry.register(Registry.LOOT_CONDITION_TYPE, id, flagConditionType);
     }
 
-    private BooleanSupplier getOrCreateFlag(String flag) {
+    private Supplier<Boolean> getOrCreateFlag(String flag) {
 
         FLAGS.putIfAbsent(flag, FALSE);
         return FLAGS.get(flag);
@@ -48,16 +48,16 @@ public class FlagManager {
         }
     }
 
-    public void setFlag(String flag, BooleanSupplier condition) {
+    public void setFlag(String flag, Supplier<Boolean> condition) {
 
         synchronized (FLAGS) {
             FLAGS.put(flag, condition == null ? FALSE : condition);
         }
     }
 
-    public BooleanSupplier getFlag(String flag) {
+    public Supplier<Boolean> getFlag(String flag) {
 
-        return () -> getOrCreateFlag(flag).getAsBoolean();
+        return () -> getOrCreateFlag(flag).get();
     }
 
 }

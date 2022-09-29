@@ -2,6 +2,10 @@ package cofh.core.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 
+import java.util.function.Supplier;
+
+import static cofh.lib.util.Constants.FALSE;
+
 public class CoreServerConfig implements IBaseConfig {
 
     @Override
@@ -11,10 +15,10 @@ public class CoreServerConfig implements IBaseConfig {
 
         builder.push("Fishing");
 
-        cfgEnableFishingExhaustion = builder
+        enableFishingExhaustion = builder
                 .comment("If TRUE, Fishing will cause exhaustion.")
                 .define("Fishing Exhaustion", enableFishingExhaustion);
-        cfgAmountFishingExhaustion = builder
+        amountFishingExhaustion = builder
                 .comment("This option sets the amount of exhaustion caused by fishing, if enabled.")
                 .defineInRange("Fishing Exhaustion Amount", amountFishingExhaustion, 0.0D, 10.0D);
 
@@ -22,10 +26,10 @@ public class CoreServerConfig implements IBaseConfig {
 
         builder.push("World");
 
-        cfgEnableSaplingGrowthMod = builder
+        enableSaplingGrowthMod = builder
                 .comment("If TRUE, Sapling growth will be slowed by a configurable factor.")
                 .define("Sapling Growth Reduction", enableSaplingGrowthMod);
-        cfgAmountSaplingGrowthMod = builder
+        amountSaplingGrowthMod = builder
                 .comment("This option sets the growth factor for saplings - they will only grow 1 in N times.")
                 .defineInRange("Sapling Growth Reduction Factor", amountSaplingGrowthMod, 1, Integer.MAX_VALUE);
 
@@ -34,27 +38,10 @@ public class CoreServerConfig implements IBaseConfig {
         builder.pop();
     }
 
-    @Override
-    public void refresh() {
+    public static Supplier<Boolean> enableFishingExhaustion = FALSE;
+    public static Supplier<Double> amountFishingExhaustion = () -> 0.125;
 
-        enableFishingExhaustion = cfgEnableFishingExhaustion.get();
-        amountFishingExhaustion = cfgAmountFishingExhaustion.get().floatValue();
+    public static Supplier<Boolean> enableSaplingGrowthMod = FALSE;
+    public static Supplier<Integer> amountSaplingGrowthMod = () -> 4;
 
-        enableSaplingGrowthMod = cfgEnableSaplingGrowthMod.get();
-        amountSaplingGrowthMod = cfgAmountSaplingGrowthMod.get();
-    }
-
-    // region VARIABLES
-    public static boolean enableFishingExhaustion = false;
-    public static float amountFishingExhaustion = 0.125F;
-
-    public static boolean enableSaplingGrowthMod = false;
-    public static int amountSaplingGrowthMod = 4;
-
-    private ForgeConfigSpec.BooleanValue cfgEnableFishingExhaustion;
-    private ForgeConfigSpec.DoubleValue cfgAmountFishingExhaustion;
-
-    private ForgeConfigSpec.BooleanValue cfgEnableSaplingGrowthMod;
-    private ForgeConfigSpec.IntValue cfgAmountSaplingGrowthMod;
-    // endregion
 }

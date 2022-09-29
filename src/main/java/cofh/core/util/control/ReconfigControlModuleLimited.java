@@ -4,7 +4,7 @@ import cofh.core.network.packet.server.SideConfigPacket;
 import cofh.lib.util.Utils;
 import net.minecraft.core.Direction;
 
-import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 import static cofh.lib.api.control.IReconfigurable.SideConfig.*;
 
@@ -15,7 +15,7 @@ public class ReconfigControlModuleLimited extends ReconfigControlModule {
         super(tile);
     }
 
-    public ReconfigControlModuleLimited(IReconfigurableTile tile, BooleanSupplier enabled) {
+    public ReconfigControlModuleLimited(IReconfigurableTile tile, Supplier<Boolean> enabled) {
 
         super(tile, enabled);
     }

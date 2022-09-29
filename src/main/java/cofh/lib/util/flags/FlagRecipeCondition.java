@@ -28,7 +28,7 @@ public class FlagRecipeCondition implements ICondition {
     @Override
     public boolean test() {
 
-        return manager.getFlag(flag).getAsBoolean();
+        return manager.getFlag(flag).get();
     }
 
     @Override
