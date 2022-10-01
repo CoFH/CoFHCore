@@ -30,12 +30,15 @@ import java.util.Set;
 import java.util.function.Supplier;
 
 import static cofh.lib.util.Constants.TRUE;
+import static net.minecraft.world.level.material.Material.*;
+import static net.minecraft.world.level.material.Material.MOSS;
 
 public class SickleItem extends DiggerItem implements ICoFHItem {
 
     @Deprecated // TOOD move to Tags class somewhere and generate.
     public static final TagKey<Block> EFFECTIVE_BLOCKS = BlockTags.create(new ResourceLocation(ModIds.ID_THERMAL, "mineable/sickle"));
-    public static final Set<Material> EFFECTIVE_MATERIALS = ImmutableSet.of(Material.LEAVES, Material.PLANT, Material.REPLACEABLE_PLANT, Material.WEB);
+    public static final Set<Material> EFFECTIVE_MATERIALS = ImmutableSet.of(LEAVES, BAMBOO, BAMBOO_SAPLING, PLANT, REPLACEABLE_PLANT,
+            WATER_PLANT, REPLACEABLE_WATER_PLANT, REPLACEABLE_FIREPROOF_PLANT, WEB, CACTUS, VEGETABLE, MOSS);
 
     private static final float DEFAULT_ATTACK_DAMAGE = 2.5F;
     private static final float DEFAULT_ATTACK_SPEED = -2.6F;
@@ -68,7 +71,7 @@ public class SickleItem extends DiggerItem implements ICoFHItem {
     }
 
     @Override
-    public boolean isCorrectToolForDrops(BlockState state) {
+    public boolean isCorrectToolForDrops(ItemStack stack, BlockState state) {
 
         // TODO Tags are used for this now
         //        if (state.getHarvestTool() == SICKLE) {
