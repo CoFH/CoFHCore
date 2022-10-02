@@ -1,5 +1,6 @@
-package cofh.core.client.particle;
+package cofh.core.client.particle.impl;
 
+import cofh.core.util.helpers.vfx.RenderTypes;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.core.particles.SimpleParticleType;
@@ -11,14 +12,14 @@ import javax.annotation.Nullable;
 @OnlyIn (Dist.CLIENT)
 public class FrostParticle extends TextureSheetParticle {
 
-    private FrostParticle(ClientLevel levelIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn) {
+    private FrostParticle( ClientLevel level, double x, double y, double z, double dx, double dy, double dz) {
 
-        super(levelIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
+        super(level, x, y, z, dx, dy, dz);
         lifetime = 40 + random.nextInt(20);
 
-        xd = xSpeedIn;
-        yd = ySpeedIn;
-        zd = zSpeedIn;
+        xd = dx;
+        yd = dy;
+        zd = dz;
         this.gravity = random.nextFloat() * 0.02F + 0.01F;
 
         bCol = 1.0F - (random.nextFloat() * 0.15F);
@@ -35,7 +36,7 @@ public class FrostParticle extends TextureSheetParticle {
     @Override
     public ParticleRenderType getRenderType() {
 
-        return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        return RenderTypes.PARTICLE_SHEET_OVER;
     }
 
     @OnlyIn (Dist.CLIENT)

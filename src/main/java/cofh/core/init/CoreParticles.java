@@ -1,5 +1,8 @@
 package cofh.core.init;
 
+import cofh.core.client.particle.types.ColorParticleType;
+import cofh.core.client.particle.types.CylindricalParticleType;
+import cofh.core.client.particle.types.PointToPointParticleType;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraftforge.registries.RegistryObject;
@@ -13,24 +16,27 @@ public class CoreParticles {
 
     }
 
+    //public static List<Consumer<ParticleEngine>> factoryRegistration = new ArrayList<>();
+
     public static void register() {
 
-        //PARTICLES.register(ID_PARTICLE_CURRENT, () -> new SimpleParticleType(false));
-        //PARTICLES.register(ID_PARTICLE_CIRCLE_ARC, () -> new SimpleParticleType(false));
-        //PARTICLES.register(ID_PARTICLE_FLAME, () -> new SimpleParticleType(false));
-        //PARTICLES.register(ID_PARTICLE_BLAST, () -> new SimpleParticleType(false));
-        //PARTICLES.register(ID_PARTICLE_BEAM, () -> new SimpleParticleType(false));
-        //PARTICLES.register(ID_PARTICLE_BULLET, () -> new SimpleParticleType(false));
     }
 
     public static final RegistryObject<ParticleType<SimpleParticleType>> FROST = PARTICLES.register(ID_PARTICLE_FROST, () -> new SimpleParticleType(false));
-    public static final RegistryObject<ParticleType<SimpleParticleType>> SPARK = PARTICLES.register(ID_PARTICLE_SPARK, () -> new SimpleParticleType(false));
-    public static final RegistryObject<ParticleType<SimpleParticleType>> PLASMA = PARTICLES.register(ID_PARTICLE_PLASMA, () -> new SimpleParticleType(false));
-    public static final RegistryObject<ParticleType<SimpleParticleType>> SHOCKWAVE = PARTICLES.register(ID_PARTICLE_SHOCKWAVE, () -> new SimpleParticleType(false));
-    public static final RegistryObject<ParticleType<SimpleParticleType>> BLAST_WAVE = PARTICLES.register(ID_PARTICLE_BLAST_WAVE, () -> new SimpleParticleType(false));
-    public static final RegistryObject<ParticleType<SimpleParticleType>> VORTEX = PARTICLES.register(ID_PARTICLE_VORTEX, () -> new SimpleParticleType(false));
-    public static final RegistryObject<ParticleType<SimpleParticleType>> SPIRAL = PARTICLES.register(ID_PARTICLE_SPIRAL, () -> new SimpleParticleType(false));
-    public static final RegistryObject<ParticleType<SimpleParticleType>> STRAIGHT_ARC = PARTICLES.register(ID_PARTICLE_STRAIGHT_ARC, () -> new SimpleParticleType(false));
-    public static final RegistryObject<ParticleType<SimpleParticleType>> MIST = PARTICLES.register(ID_PARTICLE_MIST, () -> new SimpleParticleType(false));
+    public static final RegistryObject<ParticleType<SimpleParticleType>> SPARK = PARTICLES.register(ID_PARTICLE_PLASMA, () -> new SimpleParticleType(false));
+    public static final RegistryObject<ParticleType<SimpleParticleType>> PLASMA = PARTICLES.register(ID_PARTICLE_SPARK, () -> new SimpleParticleType(false));
+
+    public static final RegistryObject<ColorParticleType> FIRE = PARTICLES.register(ID_PARTICLE_FIRE, ColorParticleType::new);
+    public static final RegistryObject<ColorParticleType> BLAST = PARTICLES.register(ID_PARTICLE_BLAST, ColorParticleType::new);
+    public static final RegistryObject<ColorParticleType> MIST = PARTICLES.register(ID_PARTICLE_MIST, ColorParticleType::new);
+
+    public static final RegistryObject<CylindricalParticleType> BLAST_WAVE = PARTICLES.register(ID_PARTICLE_BLAST_WAVE, CylindricalParticleType::new);
+    public static final RegistryObject<CylindricalParticleType> SHOCKWAVE = PARTICLES.register(ID_PARTICLE_SHOCKWAVE, CylindricalParticleType::new);
+    public static final RegistryObject<CylindricalParticleType> WIND_SPIRAL = PARTICLES.register(ID_PARTICLE_WIND_SPIRAL, CylindricalParticleType::new);
+    public static final RegistryObject<CylindricalParticleType> WIND_VORTEX = PARTICLES.register(ID_PARTICLE_WIND_VORTEX, CylindricalParticleType::new);
+
+    public static final RegistryObject<PointToPointParticleType> BEAM = PARTICLES.register(ID_PARTICLE_BEAM, PointToPointParticleType::new);
+    public static final RegistryObject<PointToPointParticleType> SHARD = PARTICLES.register(ID_PARTICLE_SHARD, PointToPointParticleType::new);
+    public static final RegistryObject<PointToPointParticleType> STRAIGHT_ARC = PARTICLES.register(ID_PARTICLE_STRAIGHT_ARC, PointToPointParticleType::new);
 
 }

@@ -1,6 +1,6 @@
 package cofh.core.event;
 
-import cofh.core.client.particle.*;
+import cofh.core.client.particle.impl.*;
 import cofh.lib.api.item.IColorableItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.item.ItemColors;
@@ -58,15 +58,21 @@ public class CoreClientSetupEvents {
         ParticleEngine manager = Minecraft.getInstance().particleEngine;
 
         manager.register(FROST.get(), FrostParticle.Factory::new);
-        manager.register(SPARK.get(), SparkParticle.Factory::new);
         manager.register(PLASMA.get(), PlasmaBallParticle.Factory::new);
-        manager.register(SHOCKWAVE.get(), ShockwaveParticle.Factory::new);
-        manager.register(BLAST_WAVE.get(), BlastWaveParticle.Factory::new);
-        manager.register(VORTEX.get(), WindVortexParticle.Factory::new);
-        manager.register(SPIRAL.get(), WindSpiralParticle.Factory::new);
-        manager.register(STRAIGHT_ARC.get(), ArcParticle.Factory::new);
-        manager.register(MIST.get(), MistParticle::iceMist);
+        manager.register(SPARK.get(), SparkParticle.Factory::new);
 
+        manager.register(FIRE.get(), FireParticle::factory);
+        manager.register(BLAST.get(), BlastParticle::factory);
+        manager.register(MIST.get(), MistParticle::factory);
+
+        manager.register(SHOCKWAVE.get(), ShockwaveParticle::factory);
+        manager.register(BLAST_WAVE.get(), BlastWaveParticle::factory);
+        manager.register(WIND_VORTEX.get(), WindVortexParticle::factory);
+        manager.register(WIND_SPIRAL.get(), WindSpiralParticle::factory);
+
+        manager.register(BEAM.get(), BeamParticle::factory);
+        manager.register(STRAIGHT_ARC.get(), ArcParticle::factory);
+        manager.register(SHARD.get(), ShardParticle::factory);
     }
 
     // region HELPERS
