@@ -15,6 +15,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.TntBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -54,6 +55,12 @@ public class TntBlockCoFH extends TntBlock {
             entity.setFuse((short) (worldIn.random.nextInt(entity.getFuse() / 4) + entity.getFuse() / 8));
             worldIn.addFreshEntity(entity);
         }
+    }
+
+    @Override
+    public boolean getWeakChanges(BlockState state, LevelReader level, BlockPos pos) {
+
+        return true;
     }
 
     // region DISPENSER BEHAVIOR

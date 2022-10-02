@@ -34,7 +34,7 @@ public class CoreFluids {
         BOTTLE_DRAIN_MAP.put(Items.HONEY_BOTTLE, (stack -> new FluidStack(HONEY_FLUID.get(), BOTTLE_VOLUME)));
         BOTTLE_DRAIN_MAP.put(Items.EXPERIENCE_BOTTLE, (stack -> new FluidStack(EXPERIENCE_FLUID.get(), BOTTLE_VOLUME)));
 
-        BOTTLE_FILL_MAP.put(fluid -> fluid.getFluid() == net.minecraft.world.level.material.Fluids.WATER || hasPotionTag(fluid), fluid -> PotionUtils.setPotion(new ItemStack(Items.POTION), getPotionFromFluid(fluid)));
+        BOTTLE_FILL_MAP.put(fluid -> fluid.getFluid() == net.minecraft.world.level.material.Fluids.WATER || hasPotionTag(fluid), PotionFluid::getItemFromPotionFluid);
         BOTTLE_FILL_MAP.put(fluid -> fluid.getFluid().is(FluidTagsCoFH.HONEY), fluid -> new ItemStack(Items.HONEY_BOTTLE));
         BOTTLE_FILL_MAP.put(fluid -> fluid.getFluid().is(FluidTagsCoFH.EXPERIENCE), fluid -> new ItemStack(Items.EXPERIENCE_BOTTLE));
     }

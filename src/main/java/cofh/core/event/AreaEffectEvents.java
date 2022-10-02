@@ -7,9 +7,14 @@ import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.level.BlockEvent;
@@ -17,6 +22,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Set;
 
@@ -84,61 +90,77 @@ public class AreaEffectEvents {
         }
     }
 
-/*  TODO Lemming, HoeItem.TILLABLES has changed quite a lot, this Event is also deprecated for removal.. Last version..
-    @SubscribeEvent (priority = EventPriority.LOW)
-    public static void handleUseHoeEvent(UseHoeEvent event) {
-
-        if (event.isCanceled() || event.getResult() == Event.Result.ALLOW) {
-            return;
-        }
-        Player player = event.getPlayer();
-        ItemStack stack = event.getContext().getItemInHand();
-        BlockPos target = event.getContext().getClickedPos();
-        Level world = player.level;
-        BlockState targetTilled = TILLABLES.get(world.getBlockState(target).getBlock());
-        BlockPos up = target.above();
-        boolean weeding = getItemEnchantmentLevel(WEEDING, stack) > 0;
-
-        if (targetTilled == null || !world.isEmptyBlock(up) && !weeding) {
-            return;
-        }
-        if (Utils.isClientWorld(world)) {
-            player.swing(event.getContext().getHand());
-            return;
-        }
-        if (TILLING_PLAYERS.contains(player)) {
-            return;
-        }
-        TILLING_PLAYERS.add(player);
-        ImmutableList<BlockPos> areaBlocks = stack.getCapability(AREA_EFFECT_ITEM_CAPABILITY).orElse(new AreaEffectItemWrapper(stack)).getAreaEffectBlocks(target, player);
-        for (BlockPos pos : areaBlocks) {
-            if (stack.isEmpty()) {
-                break;
-            }
-            BlockState tilled = TILLABLES.get(world.getBlockState(pos).getBlock());
-            if (tilled != null) {
-                world.setBlockAndUpdate(pos, tilled);
-                if (weeding) {
-                    up = pos.above();
-                    if (!world.isEmptyBlock(up)) {
-                        world.destroyBlock(up, !player.getAbilities().instabuild);
-                    }
-                }
-                stack.hurtAndBreak(1, player, (entity) -> {
-                    entity.broadcastBreakEvent(event.getContext().getHand());
-                });
-            }
-        }
-        world.setBlockAndUpdate(target, targetTilled);
-        if (weeding) {
-            up = target.above();
-            if (!world.isEmptyBlock(up)) {
-                world.destroyBlock(up, !player.getAbilities().instabuild);
-            }
-        }
-        world.playSound(player, target, SoundEvents.HOE_TILL, SoundSource.BLOCKS, 1.0F, 1.0F);
-        event.setResult(Event.Result.ALLOW);
-    }*/
+    //@SubscribeEvent (priority = EventPriority.LOW)
+    //public static void handleBlockToolModificationEvent(BlockEvent.BlockToolModificationEvent event) {
+    //
+    //    ToolAction action = event.getToolAction();
+    //    if (event.isCanceled() || action != ToolActions.HOE_TILL) {
+    //        return;
+    //    }
+    //    UseOnContext context = event.getContext();
+    //    if (context instanceof CoFHIgnoreUseOnContext) { //yes, i know this is a gamer way to stop recursion, but it prevents some weird client/server issues
+    //        return;
+    //    }
+    //    Player player = event.getPlayer();
+    //    if (player == null) {
+    //        return;
+    //    }
+    //    Level level = context.getLevel();
+    //    BlockPos target = context.getClickedPos();
+    //    ItemStack stack = context.getItemInHand();
+    //    BlockState original = event.getState();
+    //    BlockState tilled = event.getFinalState();
+    //    boolean simulate = event.isSimulated();
+    //    boolean weeding = getItemEnchantmentLevel(WEEDING, stack) > 0;
+    //    // WEEDING
+    //    // If has weeding and replaceable block above preventing tilling, simulate event at location without block above.
+    //    BiPredicate<BlockState, BlockPlaceContext> replace = (state, ctx) -> !state.isAir() && (state.canBeReplaced(ctx) || state.is(BlockTags.FLOWERS)) && !state.hasBlockEntity();
+    //    BlockPlaceContext blockContext = new BlockPlaceContext(context);
+    //    if (original.equals(tilled) && weeding) {
+    //        BlockPos up = target.above();
+    //        BlockState upState = level.getBlockState(up);
+    //        if (replace.test(upState, blockContext)) {
+    //            level.setBlock(up, Blocks.AIR.defaultBlockState(), 180);
+    //            tilled = original.getToolModifiedState(CoFHIgnoreUseOnContext.copy(context), action, true);
+    //            level.setBlock(up, upState, 180);
+    //            if (tilled != null && !simulate) {
+    //                level.destroyBlock(up, !player.abilities.instabuild);
+    //            }
+    //        }
+    //    }
+    //    if (tilled == null) {
+    //        return;
+    //    }
+    //    event.setFinalState(tilled);
+    //    if (simulate) {
+    //        return;
+    //    }
+    //    // FURROWING and TILLING
+    //    ImmutableList<BlockPos> areaBlocks = stack.getCapability(AREA_EFFECT_ITEM_CAPABILITY).orElse(new AreaEffectItemWrapper(stack)).getAreaEffectBlocks(target, player);
+    //    for (BlockPos pos : areaBlocks) {
+    //        if (stack.isEmpty()) {
+    //            break;
+    //        }
+    //        BlockPos up = pos.above();
+    //        BlockState upState = level.getBlockState(up);
+    //        if (weeding && replace.test(upState, blockContext)) {
+    //            level.setBlock(up, Blocks.AIR.defaultBlockState(), 180);
+    //            tilled = level.getBlockState(pos).getToolModifiedState(getContextAt(context, pos), action, false);
+    //            level.setBlock(up, upState, 180);
+    //            if (tilled != null) {
+    //                level.destroyBlock(up, !player.abilities.instabuild);
+    //            }
+    //        } else {
+    //            tilled = level.getBlockState(pos).getToolModifiedState(getContextAt(context, pos), action, false);
+    //        }
+    //        if (tilled != null) {
+    //            level.setBlockAndUpdate(pos, tilled);
+    //            stack.hurtAndBreak(1, player, (entity) -> {
+    //                entity.broadcastBreakEvent(event.getContext().getHand());
+    //            });
+    //        }
+    //    }
+    //}
 
     @SubscribeEvent (priority = EventPriority.LOWEST)
     public static void handleTickEndEvent(TickEvent.ServerTickEvent event) {
@@ -162,6 +184,35 @@ public class AreaEffectEvents {
             }
         }
         return maxHardness;
+    }
+
+    // Used to reproduce the use context, but with the proper position as some BlockToolModifications are context-dependent.
+    private static UseOnContext getContextAt(UseOnContext context, BlockPos pos) {
+
+        BlockPos og = context.getClickedPos();
+        Vec3 loc = context.getClickLocation().add(pos.getX() - og.getX(), pos.getY() - og.getY(), pos.getZ() - og.getZ());
+        return new CoFHIgnoreUseOnContext(context.getLevel(), context.getPlayer(), context.getHand(), context.getItemInHand(),
+                new BlockHitResult(loc, context.getClickedFace(), pos, context.isInside()));
+    }
+
+    private static class CoFHIgnoreUseOnContext extends UseOnContext {
+
+        public CoFHIgnoreUseOnContext(Player player, InteractionHand hand, BlockHitResult result) {
+
+            super(player, hand, result);
+        }
+
+        public CoFHIgnoreUseOnContext(Level level, @Nullable Player player, InteractionHand hand, ItemStack stack, BlockHitResult result) {
+
+            super(level, player, hand, stack, result);
+        }
+
+        public static UseOnContext copy(UseOnContext context) {
+
+            return new CoFHIgnoreUseOnContext(context.getLevel(), context.getPlayer(), context.getHand(), context.getItemInHand(),
+                    new BlockHitResult(context.getClickLocation(), context.getClickedFace(), context.getClickedPos(), context.isInside()));
+        }
+
     }
 
     //    private static boolean tryHarvestBlock(PlayerInteractionManager manager, BlockPos pos) {

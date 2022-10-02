@@ -72,6 +72,7 @@ public class NBTTags {
     public static final String TAG_TANK = "Tank";
     public static final String TAG_TANKS = "Tanks";
     public static final String TAG_TANK_INV = "TankInv";
+    public static final String TAG_TIME = "Time";
     public static final String TAG_TIMER = "Timer";
     public static final String TAG_TRACK_IN = "TrackIn";
     public static final String TAG_TRACK_OUT = "TrackOut";

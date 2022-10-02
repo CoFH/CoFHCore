@@ -1,21 +1,28 @@
 package cofh.core.util.helpers;
 
+import cofh.lib.api.block.IHarvestable;
 import cofh.lib.util.raytracer.RayTracer;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BucketPickup;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.tags.ITagManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static cofh.core.capability.CapabilityAreaEffect.AREA_EFFECT_ITEM_CAPABILITY;
@@ -23,6 +30,7 @@ import static cofh.core.util.references.EnsorcIDs.ID_EXCAVATING;
 import static cofh.lib.util.Utils.getEnchantment;
 import static cofh.lib.util.Utils.getItemEnchantmentLevel;
 import static cofh.lib.util.constants.ModIds.ID_ENSORCELLATION;
+import static net.minecraft.world.level.block.state.properties.BlockStateProperties.*;
 
 public class AreaEffectHelper {
 
@@ -237,6 +245,46 @@ public class AreaEffectHelper {
         }
         return ImmutableList.copyOf(area);
     }
+
+    public static ImmutableList<BlockPos> getBreakableWoodenBlocksVertical(ItemStack stack, BlockPos pos, Player player, int length) {
+
+        Level world = player.getCommandSenderWorld();
+        Item tool = stack.getItem();
+        if (length <= 0 || !canToolAffect(tool, stack, world, pos) || player.isSecondaryUseActive()) {
+            return ImmutableList.of();
+        }
+        BlockHitResult traceResult = RayTracer.retrace(player, ClipContext.Fluid.NONE);
+        if (traceResult.getType() == HitResult.Type.MISS) {
+            return ImmutableList.of();
+        }
+
+        BlockState state = world.getBlockState(pos);
+        Block block = state.getBlock();
+        ITagManager<Block> tags = ForgeRegistries.BLOCKS.tags();
+        if (tags == null) {
+            return ImmutableList.of();
+        }
+
+        Predicate<BlockPos> exact = p -> world.getBlockState(p).is(block) && canToolAffect(tool, stack, world, p);
+        // Match logs based on tag
+        Predicate<BlockPos> match = tags.getReverseTag(state.getBlock()).map(rev -> {
+            if (rev.containsTag(BlockTags.LOGS)) {
+                return rev.getTagKeys().filter(key -> key.location().getPath().contains("_logs")).findAny().map(key -> exact.or(p -> world.getBlockState(p).is(key))).orElse(exact);
+            }
+            return exact;
+        }).orElse(exact);
+
+        BlockPos.MutableBlockPos mutable = pos.mutable();
+        ImmutableList.Builder<BlockPos> builder = ImmutableList.builder();
+        for (int i = 0; i < length; ++i) {
+            mutable.move(0, 1, 0);
+            if (!match.test(mutable)) {
+                break;
+            }
+            builder.add(mutable.immutable());
+        }
+        return builder.build();
+    }
     // endregion
 
     // region PLACING
@@ -296,6 +344,23 @@ public class AreaEffectHelper {
         area.remove(pos);
         return ImmutableList.copyOf(area);
     }
+
+    public static ImmutableList<BlockPos> getMatureBlocksCentered(ItemStack stack, BlockPos pos, Player player, int radius, int height) {
+
+        List<BlockPos> area;
+        Level world = player.getCommandSenderWorld();
+        Item tool = stack.getItem();
+
+        if (player.isSecondaryUseActive() || !canToolAffect(tool, stack, world, pos) || !isMature(world, pos) || (radius <= 0 && height <= 0)) {
+            return ImmutableList.of();
+        }
+        area = BlockPos.betweenClosedStream(pos.offset(-radius, -height, -radius), pos.offset(radius, height, radius))
+                .filter(blockPos -> canToolAffect(tool, stack, world, blockPos) && isMature(world, blockPos))
+                .map(BlockPos::immutable)
+                .collect(Collectors.toList());
+        area.remove(pos);
+        return ImmutableList.copyOf(area);
+    }
     // endregion
 
     // region HELPERS
@@ -324,6 +389,51 @@ public class AreaEffectHelper {
 
         BlockState state = world.getBlockState(pos);
         return state.getBlock() instanceof BucketPickup;
+    }
+
+    public static boolean isMature(Level level, BlockPos pos) {
+
+        return isMature(level, pos, level.getBlockState(pos));
+    }
+
+    public static boolean isMature(Level level, BlockPos pos, BlockState state) {
+
+        Block block = state.getBlock();
+        System.out.println(block);
+        if (block instanceof IHarvestable harvestable) {
+            return harvestable.canHarvest(state);
+        }
+        if (block instanceof CropBlock crop) {
+            return crop.isMaxAge(state);
+        }
+        if (block instanceof StemBlock) {
+            return false;
+        }
+        if (block instanceof GrowingPlantBlock plant) {
+            BlockState root = level.getBlockState(pos.relative(plant.growthDirection.getOpposite()));
+            return root.is(plant.getBodyBlock());
+        }
+        if (block instanceof BambooBlock || block instanceof CactusBlock || block instanceof SugarCaneBlock) {
+            BlockState below = level.getBlockState(pos.relative(Direction.DOWN));
+            return below.is(block);
+        }
+        if (block instanceof DoublePlantBlock) {
+            return !state.is(Blocks.SMALL_DRIPLEAF);
+        }
+        if (block instanceof LeavesBlock) {
+            return !state.getOptionalValue(LeavesBlock.PERSISTENT).orElse(false);
+        }
+        Material material = state.getMaterial();
+        return state.getOptionalValue(AGE_1).map(v -> v >= 1)
+                .or(() -> state.getOptionalValue(AGE_2).map(v -> v >= 2))
+                .or(() -> state.getOptionalValue(AGE_3).map(v -> v >= 3))
+                .or(() -> state.getOptionalValue(AGE_5).map(v -> v >= 5))
+                .or(() -> state.getOptionalValue(AGE_7).map(v -> v >= 7))
+                .or(() -> state.getOptionalValue(AGE_15).map(v -> v >= 15))
+                .or(() -> state.getOptionalValue(AGE_25).map(v -> v >= 25))
+                .orElse(block instanceof BigDripleafBlock || block instanceof BigDripleafStemBlock ||
+                        block instanceof HugeMushroomBlock || state.is(BlockTags.TALL_FLOWERS) ||
+                        material.equals(Material.VEGETABLE) || material.equals(Material.MOSS));
     }
     // endregion
 }
