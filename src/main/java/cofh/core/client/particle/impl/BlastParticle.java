@@ -20,12 +20,12 @@ public class BlastParticle extends TextureParticleCoFH {
         gravity = -0.1F;
         friction = 0.9F;
         float var = 0.05F;
-        xd = dx + random.nextFloat(-var, var);
-        yd = dy + random.nextFloat(-var, var);
-        zd = dz + random.nextFloat(-var, var);
+        xd = dx + rand.nextFloat(-var, var);
+        yd = dy + rand.nextFloat(-var, var);
+        zd = dz + rand.nextFloat(-var, var);
         //this.fLifetime = this.lifetime = 6 + this.random.nextInt(4);
         setSpriteFromAge(sprites);
-        oRoll = roll = 0.5F * (float) random.nextGaussian();
+        oRoll = roll = 0.5F * (float) rand.nextGaussian();
     }
 
     @Override

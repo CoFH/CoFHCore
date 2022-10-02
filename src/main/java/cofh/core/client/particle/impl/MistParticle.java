@@ -25,9 +25,9 @@ public class MistParticle extends TextureParticleCoFH {
         super(data, level, sprites, x, y, z);
 
         float var = 0.05F;
-        xd = dx + random.nextFloat(-var, var);
-        yd = dy + random.nextFloat(-var, var);
-        zd = dz + random.nextFloat(-var, var);
+        xd = dx + rand.nextFloat(-var, var);
+        yd = dy + rand.nextFloat(-var, var);
+        zd = dz + rand.nextFloat(-var, var);
 
         oRoll = roll = random.nextFloat() * MathHelper.F_TAU;
         setSpriteFromAge(sprites);

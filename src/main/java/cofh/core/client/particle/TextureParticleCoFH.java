@@ -10,10 +10,14 @@ import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.SplittableRandom;
+import java.util.random.RandomGenerator;
+
 public abstract class TextureParticleCoFH extends TextureSheetParticle {
 
     protected final SpriteSet sprites;
     protected float fLifetime;
+    protected RandomGenerator rand = new SplittableRandom();
 
     protected TextureParticleCoFH(ColorParticleOptions data, ClientLevel level, SpriteSet sprites, double x, double y, double z) {
 
