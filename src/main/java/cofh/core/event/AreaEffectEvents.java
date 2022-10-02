@@ -33,8 +33,7 @@ import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 @Mod.EventBusSubscriber (modid = ID_COFH_CORE)
 public class AreaEffectEvents {
 
-    private static final Set<Player> HARVESTING_PLAYERS = new ObjectOpenHashSet<>();
-    private static final Set<Player> TILLING_PLAYERS = new ObjectOpenHashSet<>();
+    private static final Set<BlockPos> HARVESTED_BLOCKS = new ObjectOpenHashSet<>();
 
     private AreaEffectEvents() {
 
@@ -46,21 +45,24 @@ public class AreaEffectEvents {
         if (!(event.getPlayer() instanceof ServerPlayer player) || Utils.isClientWorld(player.level)) {
             return;
         }
-        if (HARVESTING_PLAYERS.contains(player)) {
+        BlockPos origin = event.getPos();
+        if (HARVESTED_BLOCKS.contains(origin)) {
             return;
         }
-        HARVESTING_PLAYERS.add(player);
+        HARVESTED_BLOCKS.add(origin);
         ItemStack stack = player.getMainHandItem();
         if (!validAreaEffectMiningItem(stack)) {
             return;
         }
-        ImmutableList<BlockPos> areaBlocks = stack.getCapability(AREA_EFFECT_ITEM_CAPABILITY).orElse(new AreaEffectItemWrapper(stack)).getAreaEffectBlocks(event.getPos(), player);
+        ImmutableList<BlockPos> areaBlocks = stack.getCapability(AREA_EFFECT_ITEM_CAPABILITY).orElse(new AreaEffectItemWrapper(stack)).getAreaEffectBlocks(origin, player);
         // TODO: Revisit if performance issues show. This is the most *proper* way to handle this, but is not particularly friendly.
         for (BlockPos pos : areaBlocks) {
             if (stack.isEmpty()) {
                 break;
             }
+            HARVESTED_BLOCKS.add(pos);
             player.gameMode.destroyBlock(pos);
+            HARVESTED_BLOCKS.remove(pos);
         }
     }
 
@@ -75,18 +77,29 @@ public class AreaEffectEvents {
         if (!validAreaEffectMiningItem(stack)) {
             return;
         }
-        ImmutableList<BlockPos> areaBlocks = stack.getCapability(AREA_EFFECT_ITEM_CAPABILITY).orElse(new AreaEffectItemWrapper(stack)).getAreaEffectBlocks(event.getPos(), player);
 
-        float curHardness = event.getState().getDestroySpeed(player.level, event.getPos());
-        if (curHardness <= 0 || areaBlocks.size() <= 1) {
-            return;
-        }
-        float areaMod = Mth.clamp(1.0F - 0.01F * areaBlocks.size(), 0.1F, 1.0F);
-        event.setNewSpeed(event.getNewSpeed() * areaMod);
+        event.getPosition().ifPresent(pos -> {
+            ImmutableList<BlockPos> areaBlocks = stack.getCapability(AREA_EFFECT_ITEM_CAPABILITY).orElse(new AreaEffectItemWrapper(stack)).getAreaEffectBlocks(pos, player);
 
-        float maxHardness = getMaxHardness(player.level, areaBlocks, curHardness);
-        if (maxHardness > curHardness) {
-            event.setNewSpeed(event.getNewSpeed() * curHardness / maxHardness);
+            float curHardness = event.getState().getDestroySpeed(player.level, pos);
+            if (curHardness <= 0 || areaBlocks.size() <= 1) {
+                return;
+            }
+            float areaMod = Mth.clamp(1.0F - 0.01F * areaBlocks.size(), 0.1F, 1.0F);
+            event.setNewSpeed(event.getNewSpeed() * areaMod);
+
+            float maxHardness = getMaxHardness(player.level, areaBlocks, curHardness);
+            if (maxHardness > curHardness) {
+                event.setNewSpeed(event.getNewSpeed() * curHardness / maxHardness);
+            }
+        });
+    }
+
+    @SubscribeEvent (priority = EventPriority.LOWEST)
+    public static void handleTickEndEvent(TickEvent.ServerTickEvent event) {
+
+        if (event.phase == TickEvent.Phase.END) {
+            HARVESTED_BLOCKS.clear();
         }
     }
 
@@ -161,15 +174,6 @@ public class AreaEffectEvents {
     //        }
     //    }
     //}
-
-    @SubscribeEvent (priority = EventPriority.LOWEST)
-    public static void handleTickEndEvent(TickEvent.ServerTickEvent event) {
-
-        if (event.phase == TickEvent.Phase.END) {
-            HARVESTING_PLAYERS.clear();
-            TILLING_PLAYERS.clear();
-        }
-    }
 
     // region HELPERS
     private static float getMaxHardness(BlockGetter world, List<BlockPos> areaBlocks, float curHardness) {
