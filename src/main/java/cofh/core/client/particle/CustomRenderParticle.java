@@ -4,8 +4,10 @@ import cofh.core.client.particle.options.CoFHParticleOptions;
 import cofh.core.util.helpers.RenderHelper;
 import cofh.core.util.helpers.vfx.RenderTypes;
 import cofh.lib.util.helpers.MathHelper;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Matrix4f;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -38,7 +40,14 @@ public abstract class CustomRenderParticle extends Particle {
 
         Vec3 camPos = info.getPosition();
         MultiBufferSource.BufferSource buffer = Minecraft.getInstance().renderBuffers().bufferSource();
-        PoseStack stack = RenderHelper.particleStack;
+
+        PoseStack sysStack = RenderSystem.getModelViewStack();
+        Matrix4f pose = sysStack.last().pose();
+        sysStack.popPose();
+        RenderSystem.applyModelViewMatrix();
+
+        PoseStack stack = new PoseStack();
+        stack.mulPoseMatrix(pose);
         stack.pushPose();
 
         double x = MathHelper.interpolate(this.xo, this.x, partialTicks);
@@ -51,6 +60,10 @@ public abstract class CustomRenderParticle extends Particle {
         stack.popPose();
 
         stack.popPose();
+
+        sysStack.pushPose();
+        sysStack.mulPoseMatrix(pose);
+        RenderSystem.applyModelViewMatrix();
     }
 
     public abstract void render(PoseStack stack, MultiBufferSource buffer, int packedLight, float pTicks);

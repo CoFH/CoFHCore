@@ -44,7 +44,6 @@ public final class RenderHelper {
     public static final ResourceLocation MC_FONT_DEFAULT = new ResourceLocation("textures/font/ascii.png");
     public static final ResourceLocation MC_FONT_SGA = new ResourceLocation("textures/font/ascii_sga.png");
     public static final ResourceLocation MC_ITEM_GLINT = new ResourceLocation("textures/misc/enchanted_item_glint.png");
-    public static PoseStack particleStack = new PoseStack();
 
     // region ACCESSORS
     public static TextureManager engine() {
