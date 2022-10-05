@@ -31,7 +31,6 @@ import java.util.function.Supplier;
 
 import static cofh.lib.util.Constants.TRUE;
 import static net.minecraft.world.level.material.Material.*;
-import static net.minecraft.world.level.material.Material.MOSS;
 
 public class SickleItem extends DiggerItem implements ICoFHItem {
 
