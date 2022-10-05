@@ -71,7 +71,7 @@ public final class VFXHelper {
         return (rgba & 0xFFFFFF00) | MathHelper.clamp((int) ((rgba & 0xFF) * alphaScale), 0, 255);
     }
 
-    public static int mix(float d, int rgba0, int ...colors) {
+    public static int mix(float d, int rgba0, int... colors) {
 
         if (colors.length <= 0 || d <= 0) {
             return rgba0;
@@ -223,7 +223,6 @@ public final class VFXHelper {
         }
         return Quaternion.ONE;
     }
-
 
     /**
      * Transforms a matrix stack such that YP points in the given direction.
@@ -588,12 +587,13 @@ public final class VFXHelper {
     // endregion
 
     // region BEAM
+
     /**
      * Renders a laser beam in a unit column towards positive y.
      *
-     * @param width       Width of the beam.
-     * @param coreRGBA    Color/alpha for the center part of the beam.
-     * @param glowRGBA    Color/alpha for the glow surrounding the beam.
+     * @param width    Width of the beam.
+     * @param coreRGBA Color/alpha for the center part of the beam.
+     * @param glowRGBA Color/alpha for the glow surrounding the beam.
      */
     public static void renderBeam(PoseStack stack, MultiBufferSource buffer, int packedLight, float width, int coreRGBA, int glowRGBA) {
 

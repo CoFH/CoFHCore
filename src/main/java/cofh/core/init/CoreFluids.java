@@ -6,7 +6,6 @@ import cofh.core.fluid.PotionFluid;
 import cofh.lib.tags.FluidTagsCoFH;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 

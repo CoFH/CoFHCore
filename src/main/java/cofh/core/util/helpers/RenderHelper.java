@@ -697,7 +697,6 @@ public final class RenderHelper {
     //    renderRectPrism(builder, stack, packedLightIn, start, end, radius);
     //}
 
-
     /**
      * Renders a trigonal trapezohedron (a cube stretched along one diagonal). Has 6 congruent rhombi as faces.
      *
@@ -759,8 +758,8 @@ public final class RenderHelper {
     /**
      * Renders a bipyramid.
      *
-     * @param height The total height of the polyhedron.
-     * @param radius The maximum distance of a point within the polyhedron from its axis.
+     * @param height    The total height of the polyhedron.
+     * @param radius    The maximum distance of a point within the polyhedron from its axis.
      * @param baseEdges The number of edges that the base of each pyramid has.
      */
     public static void renderBipyramid(PoseStack stack, VertexConsumer consumer, int packedLight, int rgba, int baseEdges, float height, float radius) {

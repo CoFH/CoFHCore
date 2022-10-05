@@ -12,7 +12,7 @@ import javax.annotation.Nullable;
 @OnlyIn (Dist.CLIENT)
 public class FrostParticle extends TextureSheetParticle {
 
-    private FrostParticle( ClientLevel level, double x, double y, double z, double dx, double dy, double dz) {
+    private FrostParticle(ClientLevel level, double x, double y, double z, double dx, double dy, double dz) {
 
         super(level, x, y, z, dx, dy, dz);
         lifetime = 40 + random.nextInt(20);

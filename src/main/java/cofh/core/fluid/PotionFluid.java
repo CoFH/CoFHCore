@@ -31,7 +31,6 @@ import java.util.function.Supplier;
 
 import static cofh.core.CoFHCore.FLUIDS;
 import static cofh.core.CoFHCore.FLUID_TYPES;
-import static cofh.core.init.CoreFluids.POTION_FLUID;
 import static cofh.core.util.references.CoreIDs.ID_FLUID_POTION;
 import static cofh.lib.util.constants.NBTTags.TAG_POTION;
 

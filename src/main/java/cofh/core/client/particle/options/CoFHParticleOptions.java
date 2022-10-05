@@ -6,7 +6,6 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.FriendlyByteBuf;
 
-
 public class CoFHParticleOptions implements ParticleOptions {
 
     public final ParticleType<? extends CoFHParticleOptions> type;

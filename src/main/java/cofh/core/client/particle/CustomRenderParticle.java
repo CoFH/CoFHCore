@@ -1,7 +1,6 @@
 package cofh.core.client.particle;
 
 import cofh.core.client.particle.options.CoFHParticleOptions;
-import cofh.core.util.helpers.RenderHelper;
 import cofh.core.util.helpers.vfx.RenderTypes;
 import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.systems.RenderSystem;
