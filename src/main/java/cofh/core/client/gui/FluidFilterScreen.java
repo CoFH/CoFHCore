@@ -85,6 +85,7 @@ public class FluidFilterScreen extends ContainerScreenCoFH<FluidFilterContainer>
 
         if (menu.lockedSlot != null) {
             GlStateManager._enableBlend();
+            RenderHelper.setPosTexShader();
             RenderHelper.setShaderTexture0(SLOT_OVERLAY);
             drawTexturedModalRect(poseStack, menu.lockedSlot.x, menu.lockedSlot.y, 0, 0, 16, 16, 16, 16);
             GlStateManager._disableBlend();
