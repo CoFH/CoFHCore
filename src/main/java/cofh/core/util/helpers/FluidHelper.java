@@ -57,7 +57,7 @@ import static cofh.lib.util.constants.NBTTags.TAG_POTION;
 import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
 import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.SIMULATE;
 
-public class FluidHelper {
+public final class FluidHelper {
 
     private FluidHelper() {
 

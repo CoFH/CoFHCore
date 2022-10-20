@@ -22,7 +22,7 @@ import static cofh.lib.util.Constants.TRUE;
 import static cofh.lib.util.helpers.StringHelper.canLocalize;
 import static cofh.lib.util.helpers.StringHelper.localize;
 
-public class GuiHelper {
+public final class GuiHelper {
 
     private GuiHelper() {
 

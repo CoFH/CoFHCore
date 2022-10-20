@@ -8,7 +8,7 @@ import net.minecraft.world.inventory.InventoryMenu;
 
 import java.awt.*;
 
-public class ColorHelper {
+public final class ColorHelper {
 
     private ColorHelper() {
 

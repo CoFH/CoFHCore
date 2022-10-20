@@ -32,7 +32,7 @@ import static cofh.lib.util.Utils.getItemEnchantmentLevel;
 import static cofh.lib.util.constants.ModIds.ID_ENSORCELLATION;
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.*;
 
-public class AreaEffectHelper {
+public final class AreaEffectHelper {
 
     private AreaEffectHelper() {
 

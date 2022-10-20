@@ -25,7 +25,7 @@ import static cofh.core.util.helpers.ItemHelper.itemsEqualWithTags;
  *
  * @author King Lemming
  */
-public class InventoryHelper {
+public final class InventoryHelper {
 
     private InventoryHelper() {
 

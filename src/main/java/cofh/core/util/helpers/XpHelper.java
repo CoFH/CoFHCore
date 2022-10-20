@@ -8,7 +8,7 @@ import net.minecraft.world.item.ItemStack;
 
 import static cofh.lib.util.constants.NBTTags.TAG_XP_TIMER;
 
-public class XpHelper {
+public final class XpHelper {
 
     private XpHelper() {
 

@@ -6,15 +6,20 @@ import cofh.lib.util.Utils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.client.event.CustomizeGuiOverlayEvent;
 
 import java.util.List;
 
-public class ChatHelper {
+public final class ChatHelper {
 
     public static final int TEMP_INDEX_SERVER = -661464083; // Random Integer
     public static final int TEMP_INDEX_CLIENT = -1245781222; // Random Integer
 
     private static final boolean indexChatMessages = true;
+
+    private ChatHelper() {
+
+    }
 
     public static void sendIndexedChatMessageToPlayer(Player player, Component message) {
 

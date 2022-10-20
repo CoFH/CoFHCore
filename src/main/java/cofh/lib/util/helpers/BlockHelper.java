@@ -24,7 +24,7 @@ import static net.minecraft.world.level.block.state.properties.BlockStatePropert
  *
  * @author King Lemming
  */
-public class BlockHelper {
+public final class BlockHelper {
 
     private BlockHelper() {
 

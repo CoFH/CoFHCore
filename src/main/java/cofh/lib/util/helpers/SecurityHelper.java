@@ -19,7 +19,7 @@ import java.util.UUID;
 import static cofh.lib.util.constants.NBTTags.*;
 import static cofh.lib.util.helpers.StringHelper.localize;
 
-public class SecurityHelper {
+public final class SecurityHelper {
 
     private SecurityHelper() {
 

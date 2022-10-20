@@ -12,7 +12,7 @@ import net.minecraftforge.network.NetworkHooks;
 import static cofh.core.util.helpers.AugmentableHelper.getPropertyWithDefault;
 import static cofh.lib.util.constants.NBTTags.TAG_FILTER_TYPE;
 
-public class FilterHelper {
+public final class FilterHelper {
 
     private FilterHelper() {
 

@@ -12,7 +12,7 @@ import net.minecraft.sounds.SoundEvents;
  *
  * @author King Lemming
  */
-public class SoundHelper {
+public final class SoundHelper {
 
     private SoundHelper() {
 

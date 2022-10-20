@@ -15,7 +15,7 @@ import static cofh.lib.util.Constants.MAX_AUGMENTS;
 import static cofh.lib.util.constants.NBTTags.*;
 import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 
-public class AugmentableHelper {
+public final class AugmentableHelper {
 
     private AugmentableHelper() {
 

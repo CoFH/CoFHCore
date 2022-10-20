@@ -9,7 +9,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 
-public class ItemHelper {
+public final class ItemHelper {
 
     private ItemHelper() {
 
