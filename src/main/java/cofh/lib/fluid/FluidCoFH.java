@@ -1,6 +1,8 @@
 package cofh.lib.fluid;
 
 import cofh.lib.util.DeferredRegisterCoFH;
+import com.mojang.math.Vector3f;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.material.Fluid;
@@ -11,9 +13,12 @@ import net.minecraftforge.registries.RegistryObject;
 import java.util.function.Supplier;
 
 /**
- * Not actually a Fluid but more of a fluid cunstruction assistant.
+ * Not actually a Fluid but more of a fluid construction assistant.
  */
 public abstract class FluidCoFH {
+
+    public static final ResourceLocation WATER_OVERLAY = new ResourceLocation("block/water_overlay");
+    public static final ResourceLocation UNDERWATER_LOCATION = new ResourceLocation("textures/misc/underwater.png");
 
     protected RegistryObject<ForgeFlowingFluid> stillFluid;
     protected RegistryObject<ForgeFlowingFluid> flowingFluid;
@@ -22,6 +27,8 @@ public abstract class FluidCoFH {
     protected RegistryObject<Item> bucket;
 
     protected ForgeFlowingFluid.Properties properties;
+
+    protected Vector3f particleColor = new Vector3f(1.0F, 1.0F, 1.0F);
 
     protected FluidCoFH() {
 
@@ -61,6 +68,11 @@ public abstract class FluidCoFH {
     }
 
     // region HELPERS
+    public static String fluid(String fluid) {
+
+        return fluid + "_fluid";
+    }
+
     public static String flowing(String fluid) {
 
         return fluid + "_flowing";
