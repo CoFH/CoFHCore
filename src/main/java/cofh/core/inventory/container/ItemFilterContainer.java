@@ -1,7 +1,7 @@
 package cofh.core.inventory.container;
 
 import cofh.core.network.packet.server.ContainerConfigPacket;
-import cofh.core.util.filter.AbstractItemFilter;
+import cofh.core.util.filter.BaseItemFilter;
 import cofh.core.util.filter.IFilterOptions;
 import cofh.core.util.filter.IFilterableItem;
 import cofh.core.util.filter.IFilterableTile;
@@ -31,27 +31,25 @@ public class ItemFilterContainer extends ContainerCoFH implements IFilterOptions
     protected IFilterableItem filterableItem;
     public SlotLocked lockedSlot;
 
-    protected AbstractItemFilter filter;
+    protected BaseItemFilter filter;
     protected InvWrapperGeneric filterInventory;
 
     public final boolean held;
-    public final int filterId;
 
-    public ItemFilterContainer(int windowId, Level world, Inventory inventory, Player player, boolean held, BlockPos pos, int filterId) {
+    public ItemFilterContainer(int windowId, Level world, Inventory inventory, Player player, boolean held, BlockPos pos) {
 
         super(ITEM_FILTER_CONTAINER.get(), windowId, inventory, player);
 
         this.held = held;
-        this.filterId = filterId;
 
         if (held) {
             filterStack = hasFilter(player.getMainHandItem()) ? player.getMainHandItem() : player.getOffhandItem();
             filterableItem = (IFilterableItem) filterStack.getItem();
-            filter = (AbstractItemFilter) filterableItem.getFilter(filterStack);
+            filter = (BaseItemFilter) filterableItem.getFilter(filterStack);
         } else {
             tile = world.getBlockEntity(pos);
             filterableTile = (IFilterableTile) tile;
-            filter = (AbstractItemFilter) filterableTile.getFilter(filterId);
+            filter = (BaseItemFilter) filterableTile.getFilter();
         }
         allowSwap = false;
 
@@ -117,7 +115,7 @@ public class ItemFilterContainer extends ContainerCoFH implements IFilterOptions
         if (held) {
             return lockedSlot.getItem() == filterStack;
         }
-        if (!FilterHelper.hasFilter(filterableTile, 0)) {
+        if (!FilterHelper.hasFilter(filterableTile)) {
             return false;
         }
         return tile != null && !tile.isRemoved() && tile.getBlockPos().distToCenterSqr(player.position()) <= 64D;
@@ -132,7 +130,7 @@ public class ItemFilterContainer extends ContainerCoFH implements IFilterOptions
             filter.write(filterStack.getOrCreateTag());
             filterableItem.onFilterChanged(filterStack);
         } else {
-            filterableTile.onFilterChanged(filterId);
+            filterableTile.onFilterChanged();
         }
         super.removed(playerIn);
     }

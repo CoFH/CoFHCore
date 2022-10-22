@@ -30,15 +30,15 @@ public class FilterRegistry {
     public static IFilter getHeldFilter(String type, CompoundTag nbt) {
 
         if (FILTER_FACTORY_MAP.containsKey(type)) {
-            return FILTER_FACTORY_MAP.get(type).createFilter(nbt, true, BlockPos.ZERO, (byte) 0);
+            return FILTER_FACTORY_MAP.get(type).createFilter(nbt, true, BlockPos.ZERO);
         }
         return EmptyFilter.INSTANCE;
     }
 
-    public static IFilter getTileFilter(String type, CompoundTag nbt, IFilterableTile tile, byte filterId) {
+    public static IFilter getTileFilter(String type, CompoundTag nbt, IFilterableTile tile) {
 
         if (FILTER_FACTORY_MAP.containsKey(type)) {
-            return FILTER_FACTORY_MAP.get(type).createFilter(nbt, false, tile.pos(), filterId);
+            return FILTER_FACTORY_MAP.get(type).createFilter(nbt, false, tile.pos());
         }
         return EmptyFilter.INSTANCE;
     }

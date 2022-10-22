@@ -1,13 +1,11 @@
 package cofh.core.util.filter;
 
-import cofh.core.util.helpers.ItemHelper;
+import cofh.core.util.helpers.FluidHelper;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,37 +15,37 @@ import java.util.function.Predicate;
 import static cofh.lib.util.constants.NBTTags.*;
 import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 
-public abstract class AbstractItemFilter implements IFilter, IFilterOptions {
+public class BaseFluidFilter implements IFilter, IFilterOptions {
 
     public static final int SIZE = 15;
 
-    protected List<ItemStack> items;
-    protected Predicate<ItemStack> rules;
+    protected List<FluidStack> fluids;
+    protected Predicate<FluidStack> rules;
 
     protected boolean allowList = false;
     protected boolean checkNBT = false;
 
-    public AbstractItemFilter(int size) {
+    public BaseFluidFilter(int size) {
 
-        items = new ArrayList<>(size);
+        fluids = new ArrayList<>(size);
         for (int i = 0; i < size; ++i) {
-            items.add(ItemStack.EMPTY);
+            fluids.add(FluidStack.EMPTY);
         }
     }
 
     public int size() {
 
-        return items.size();
+        return fluids.size();
     }
 
-    public List<ItemStack> getItems() {
+    public List<FluidStack> getFluids() {
 
-        return items;
+        return fluids;
     }
 
-    public void setItems(List<ItemStack> items) {
+    public void setFluids(List<FluidStack> fluids) {
 
-        this.items = items;
+        this.fluids = fluids;
         reset();
     }
 
@@ -57,26 +55,26 @@ public abstract class AbstractItemFilter implements IFilter, IFilterOptions {
     }
 
     @Override
-    public Predicate<ItemStack> getItemRules() {
+    public Predicate<FluidStack> getFluidRules() {
 
         if (rules == null) {
-            Set<Item> itemSet = new ObjectOpenHashSet<>();
-            for (ItemStack item : items) {
-                itemSet.add(item.getItem());
+            Set<Fluid> fluidSet = new ObjectOpenHashSet<>();
+            for (FluidStack fluid : fluids) {
+                fluidSet.add(fluid.getFluid());
             }
             rules = stack -> {
                 if (stack.isEmpty()) {
                     return false;
                 }
                 if (checkNBT) {
-                    for (ItemStack item : items) {
-                        if (ItemHelper.itemsEqualWithTags(stack, item)) {
+                    for (FluidStack fluid : fluids) {
+                        if (FluidHelper.fluidsEqualWithTags(stack, fluid)) {
                             return allowList;
                         }
                     }
                     return !allowList;
                 }
-                return allowList == itemSet.contains(stack.getItem());
+                return allowList == fluidSet.contains(stack.getFluid());
             };
         }
         return rules;
@@ -86,19 +84,19 @@ public abstract class AbstractItemFilter implements IFilter, IFilterOptions {
     public IFilter read(CompoundTag nbt) {
 
         CompoundTag subTag = nbt.getCompound(TAG_FILTER);
-        //        int size = subTag.getInt(TAG_SLOTS);
+        //        int size = subTag.getInt(TAG_TANKS);
         //        if (size > 0) {
-        //            items = new ArrayList<>(size);
+        //            fluids = new ArrayList<>(size);
         //            for (int i = 0; i < size; ++i) {
-        //                items.add(ItemStack.EMPTY);
+        //                fluids.add(FluidStack.EMPTY);
         //            }
         //        }
-        ListTag list = subTag.getList(TAG_ITEM_INV, TAG_COMPOUND);
+        ListTag list = subTag.getList(TAG_TANK_INV, TAG_COMPOUND);
         for (int i = 0; i < list.size(); ++i) {
-            CompoundTag slotTag = list.getCompound(i);
-            int slot = slotTag.getByte(TAG_SLOT);
-            if (slot >= 0 && slot < items.size()) {
-                items.set(slot, ItemStack.of(slotTag));
+            CompoundTag tankTag = list.getCompound(i);
+            int tank = tankTag.getByte(TAG_TANK);
+            if (tank >= 0 && tank < fluids.size()) {
+                fluids.set(tank, FluidStack.loadFluidStackFromNBT(tankTag));
             }
         }
         allowList = subTag.getBoolean(TAG_FILTER_OPT_LIST);
@@ -111,18 +109,15 @@ public abstract class AbstractItemFilter implements IFilter, IFilterOptions {
 
         CompoundTag subTag = new CompoundTag();
         ListTag list = new ListTag();
-        //        if (items.size() != SIZE) {
-        //            subTag.putInt(TAG_SLOTS, items.size());
-        //        }
-        for (int i = 0; i < items.size(); ++i) {
-            if (!items.get(i).isEmpty()) {
-                CompoundTag slotTag = new CompoundTag();
-                slotTag.putByte(TAG_SLOT, (byte) i);
-                items.get(i).save(slotTag);
-                list.add(slotTag);
+        for (int i = 0; i < fluids.size(); ++i) {
+            if (!fluids.get(i).isEmpty()) {
+                CompoundTag tankTag = new CompoundTag();
+                tankTag.putByte(TAG_TANK, (byte) i);
+                fluids.get(i).writeToNBT(tankTag);
+                list.add(tankTag);
             }
         }
-        subTag.put(TAG_ITEM_INV, list);
+        subTag.put(TAG_TANK_INV, list);
 
         subTag.putBoolean(TAG_FILTER_OPT_LIST, allowList);
         subTag.putBoolean(TAG_FILTER_OPT_NBT, checkNBT);
@@ -156,14 +151,6 @@ public abstract class AbstractItemFilter implements IFilter, IFilterOptions {
 
         this.checkNBT = checkNBT;
         return true;
-    }
-    // endregion
-
-    // region MenuProvider
-    @Override
-    public Component getDisplayName() {
-
-        return new TranslatableComponent("info.cofh.item_filter");
     }
     // endregion
 }

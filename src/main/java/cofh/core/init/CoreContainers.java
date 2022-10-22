@@ -22,7 +22,7 @@ public class CoreContainers {
 
     }
 
-    public static final RegistryObject<MenuType<FluidFilterContainer>> FLUID_FILTER_CONTAINER = CONTAINERS.register(ID_CONTAINER_FLUID_FILTER, () -> IForgeMenuType.create((windowId, inv, data) -> new FluidFilterContainer(windowId, getClientWorld(), inv, getClientPlayer(), data.readBoolean(), data.readBlockPos(), data.readByte())));
-    public static final RegistryObject<MenuType<ItemFilterContainer>> ITEM_FILTER_CONTAINER = CONTAINERS.register(ID_CONTAINER_ITEM_FILTER, () -> IForgeMenuType.create((windowId, inv, data) -> new ItemFilterContainer(windowId, getClientWorld(), inv, getClientPlayer(), data.readBoolean(), data.readBlockPos(), data.readByte())));
+    public static final RegistryObject<MenuType<FluidFilterContainer>> FLUID_FILTER_CONTAINER = CONTAINERS.register(ID_CONTAINER_FLUID_FILTER, () -> IForgeMenuType.create((windowId, inv, data) -> new FluidFilterContainer(windowId, getClientWorld(), inv, getClientPlayer(), data.readBoolean(), data.readBlockPos())));
+    public static final RegistryObject<MenuType<ItemFilterContainer>> ITEM_FILTER_CONTAINER = CONTAINERS.register(ID_CONTAINER_ITEM_FILTER, () -> IForgeMenuType.create((windowId, inv, data) -> new ItemFilterContainer(windowId, getClientWorld(), inv, getClientPlayer(), data.readBoolean(), data.readBlockPos())));
 
 }
