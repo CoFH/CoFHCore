@@ -34,7 +34,7 @@ public class FilterHelper {
         return filter != null && filter != EmptyFilter.INSTANCE;
     }
 
-    public static void openHeldGui(ServerPlayer player, MenuProvider containerSupplier) {
+    public static void openHeldScreen(ServerPlayer player, MenuProvider containerSupplier) {
 
         NetworkHooks.openGui(player, containerSupplier, buf -> {
             buf.writeBoolean(true);
@@ -42,7 +42,7 @@ public class FilterHelper {
         });
     }
 
-    public static void openTileGui(ServerPlayer player, MenuProvider containerSupplier, BlockPos pos) {
+    public static void openTileScreen(ServerPlayer player, MenuProvider containerSupplier, BlockPos pos) {
 
         NetworkHooks.openGui(player, containerSupplier, buf -> {
             buf.writeBoolean(false);

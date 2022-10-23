@@ -24,6 +24,7 @@ public class TileBlock6Way extends TileBlockCoFH implements IWrenchable {
     public TileBlock6Way(Properties builder, Class<?> tileClass, Supplier<BlockEntityType<?>> blockEntityType) {
 
         super(builder, tileClass, blockEntityType);
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING_ALL, Direction.UP));
     }
 
     @Override
