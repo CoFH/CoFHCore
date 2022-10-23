@@ -1,17 +1,16 @@
 package cofh.core.util.filter;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.function.Predicate;
 
-public interface IFilter extends INBTSerializable<CompoundTag>, MenuProvider {
+public interface IFilter extends INBTSerializable<CompoundTag> {
 
-    Predicate<ItemStack> ALWAYS_ALLOW_ITEM = (stack) -> true;
-    Predicate<FluidStack> ALWAYS_ALLOW_FLUID = (stack) -> true;
+    Predicate<ItemStack> ALWAYS_ALLOW_ITEM = (item) -> true;
+    Predicate<FluidStack> ALWAYS_ALLOW_FLUID = (fluid) -> true;
 
     default Predicate<ItemStack> getItemRules() {
 

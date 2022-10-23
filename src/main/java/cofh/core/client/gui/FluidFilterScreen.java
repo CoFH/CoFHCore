@@ -12,6 +12,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 
@@ -54,27 +55,25 @@ public class FluidFilterScreen extends ContainerScreenCoFH<FluidFilterContainer>
         }
         addButtons();
 
-        if (menu.getFilterableTile() != null) {
-            // Filter Tab
-            addElement(new ElementTexture(this, 4, -21)
-                    .setUV(24, 0)
-                    .setSize(24, 21)
-                    .setTexture(TAB_TOP, 48, 32)
-                    .setVisible(() -> FilterHelper.hasFilter(menu.getFilterableTile(), menu.filterId)));
-            addElement(new ElementTexture(this, 8, -17) {
+        // Filter Tab
+        addElement(new ElementTexture(this, 4, -21)
+                .setUV(24, 0)
+                .setSize(24, 21)
+                .setTexture(TAB_TOP, 48, 32)
+                .setVisible(() -> FilterHelper.hasFilter(menu.getFilterableTile())));
+        addElement(new ElementTexture(this, 8, -17) {
 
-                @Override
-                public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+            @Override
+            public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
 
-                    TileFilterGuiOpenPacket.openTileGui(menu.getFilterableTile(), (byte) menu.filterId);
-                    return true;
-                }
+                TileFilterGuiOpenPacket.openTileGui(menu.getFilterableTile());
+                return true;
             }
-                    .setSize(16, 16)
-                    .setTexture(NAV_BACK, 16, 16)
-                    .setTooltipFactory((element, mouseX, mouseY) -> Collections.singletonList(menu.getFilterableTile().getDisplayName()))
-                    .setVisible(() -> FilterHelper.hasFilter(menu.getFilterableTile(), menu.filterId)));
         }
+                .setSize(16, 16)
+                .setTexture(NAV_BACK, 16, 16)
+                .setTooltipFactory((element, mouseX, mouseY) -> menu.getFilterableTile() instanceof MenuProvider menuProvider ? Collections.singletonList(menuProvider.getDisplayName()) : Collections.emptyList())
+                .setVisible(() -> FilterHelper.hasFilter(menu.getFilterableTile())));
     }
 
     @Override

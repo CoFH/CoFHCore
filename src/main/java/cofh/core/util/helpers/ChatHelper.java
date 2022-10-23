@@ -6,7 +6,6 @@ import cofh.lib.util.Utils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.client.event.CustomizeGuiOverlayEvent;
 
 import java.util.List;
 

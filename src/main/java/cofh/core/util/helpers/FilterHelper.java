@@ -28,9 +28,9 @@ public final class FilterHelper {
         return getPropertyWithDefault(stack, TAG_FILTER_TYPE, "");
     }
 
-    public static boolean hasFilter(IFilterableTile filterable, int id) {
+    public static boolean hasFilter(IFilterableTile filterable) {
 
-        IFilter filter = filterable.getFilter(id);
+        IFilter filter = filterable.getFilter();
         return filter != null && filter != EmptyFilter.INSTANCE;
     }
 
@@ -39,16 +39,14 @@ public final class FilterHelper {
         NetworkHooks.openScreen(player, containerSupplier, buf -> {
             buf.writeBoolean(true);
             buf.writeBlockPos(BlockPos.ZERO);
-            buf.writeByte(0);
         });
     }
 
-    public static void openTileScreen(ServerPlayer player, MenuProvider containerSupplier, BlockPos pos, int filterId) {
+    public static void openTileScreen(ServerPlayer player, MenuProvider containerSupplier, BlockPos pos) {
 
         NetworkHooks.openScreen(player, containerSupplier, buf -> {
             buf.writeBoolean(false);
             buf.writeBlockPos(pos);
-            buf.writeByte(filterId);
         });
     }
 

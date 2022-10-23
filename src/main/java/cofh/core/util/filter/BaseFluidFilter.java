@@ -4,7 +4,6 @@ import cofh.core.util.helpers.FluidHelper;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -16,7 +15,7 @@ import java.util.function.Predicate;
 import static cofh.lib.util.constants.NBTTags.*;
 import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 
-public abstract class AbstractFluidFilter implements IFilter, IFilterOptions {
+public class BaseFluidFilter implements IFilter, IFilterOptions {
 
     public static final int SIZE = 15;
 
@@ -26,7 +25,7 @@ public abstract class AbstractFluidFilter implements IFilter, IFilterOptions {
     protected boolean allowList = false;
     protected boolean checkNBT = false;
 
-    public AbstractFluidFilter(int size) {
+    public BaseFluidFilter(int size) {
 
         fluids = new ArrayList<>(size);
         for (int i = 0; i < size; ++i) {
@@ -152,14 +151,6 @@ public abstract class AbstractFluidFilter implements IFilter, IFilterOptions {
 
         this.checkNBT = checkNBT;
         return true;
-    }
-    // endregion
-
-    // region MenuProvider
-    @Override
-    public Component getDisplayName() {
-
-        return Component.translatable("info.cofh.fluid_filter");
     }
     // endregion
 }

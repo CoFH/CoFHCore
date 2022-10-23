@@ -2,32 +2,39 @@ package cofh.core.util.filter;
 
 import cofh.core.inventory.container.ItemFilterContainer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import org.jetbrains.annotations.Nullable;
 
-public class ItemFilter extends AbstractItemFilter {
+public class ItemFilter extends BaseItemFilter implements MenuProvider {
 
-    public static final IFilterFactory<IFilter> FACTORY = (nbt, held, pos, filterId) -> new ItemFilter(SIZE, held, pos, filterId).read(nbt);
+    public static final Component DISPLAY_NAME = Component.translatable("info.cofh.item_filter");
+    public static final IFilterFactory<IFilter> FACTORY = (nbt, held, pos) -> new ItemFilter(SIZE, held, pos).read(nbt);
 
     protected final boolean held;
     protected final BlockPos pos;
-    protected final int filterId;
 
-    public ItemFilter(int size, boolean held, BlockPos pos, int filterId) {
+    public ItemFilter(int size, boolean held, BlockPos pos) {
 
         super(size);
         this.held = held;
         this.pos = pos;
-        this.filterId = filterId;
+    }
+
+    @Override
+    public Component getDisplayName() {
+
+        return DISPLAY_NAME;
     }
 
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int i, Inventory inventory, Player player) {
 
-        return new ItemFilterContainer(i, player.level, inventory, player, held, pos, filterId);
+        return new ItemFilterContainer(i, player.level, inventory, player, held, pos);
     }
 
 }

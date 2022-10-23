@@ -8,6 +8,6 @@ import net.minecraft.nbt.CompoundTag;
  */
 public interface IFilterFactory<T extends IFilter> {
 
-    T createFilter(CompoundTag nbt, boolean held, BlockPos pos, byte filterId);
+    T createFilter(CompoundTag nbt, boolean held, BlockPos pos);
 
 }
