@@ -50,7 +50,7 @@ public class ComparableItemStack {
         return false;
     }
 
-    public boolean isItemEqual(ComparableItemStack other) {
+    protected boolean isItemEqual(ComparableItemStack other) {
 
         return other != null && isEqual(other);
     }
