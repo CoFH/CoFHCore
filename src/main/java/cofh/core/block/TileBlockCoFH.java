@@ -66,33 +66,32 @@ public class TileBlockCoFH extends Block implements EntityBlock, IDismantleable 
             return InteractionResult.SUCCESS;
         }
         BlockEntity tile = worldIn.getBlockEntity(pos);
-        if (!(tile instanceof TileCoFH) || tile.isRemoved()) {
-            return InteractionResult.PASS;
-        }
-        if (!((TileCoFH) tile).canPlayerChange(player) && SecurityHelper.hasSecurity(tile)) {
-            ChatHelper.sendIndexedChatMessageToPlayer(player, Component.translatable("info.cofh.secure_warning", SecurityHelper.getOwnerName(tile)));
-            return InteractionResult.PASS;
-        }
-        if (Utils.isWrench(player.getItemInHand(handIn))) {
-            if (player.isSecondaryUseActive()) {
-                if (canDismantle(worldIn, pos, state, player)) {
-                    dismantleBlock(worldIn, pos, state, hit, player, false);
-                    return InteractionResult.SUCCESS;
-                }
-            } else {
-                BlockState rotState = rotate(state, worldIn, pos, Rotation.CLOCKWISE_90);
-                if (rotState != state) {
-                    worldIn.setBlockAndUpdate(pos, rotState);
-                    return InteractionResult.SUCCESS;
+        if (tile instanceof TileCoFH cofhTile && !tile.isRemoved()) {
+            if (!cofhTile.canPlayerChange(player) && SecurityHelper.hasSecurity(tile)) {
+                ChatHelper.sendIndexedChatMessageToPlayer(player, Component.translatable("info.cofh.secure_warning", SecurityHelper.getOwnerName(tile)));
+                return InteractionResult.PASS;
+            }
+            if (Utils.isWrench(player.getItemInHand(handIn))) {
+                if (player.isSecondaryUseActive()) {
+                    if (canDismantle(worldIn, pos, state, player)) {
+                        dismantleBlock(worldIn, pos, state, hit, player, false);
+                        return InteractionResult.SUCCESS;
+                    }
+                } else {
+                    BlockState rotState = rotate(state, worldIn, pos, Rotation.CLOCKWISE_90);
+                    if (rotState != state) {
+                        worldIn.setBlockAndUpdate(pos, rotState);
+                        return InteractionResult.SUCCESS;
+                    }
                 }
             }
-        }
-        if (onBlockActivatedDelegate(worldIn, pos, state, player, handIn, hit)) {
-            return InteractionResult.SUCCESS;
-        }
-        if (((TileCoFH) tile).canOpenGui()) {
-            NetworkHooks.openScreen((ServerPlayer) player, (MenuProvider) tile, tile.getBlockPos());
-            return InteractionResult.SUCCESS;
+            if (onBlockActivatedDelegate(worldIn, pos, state, player, handIn, hit)) {
+                return InteractionResult.SUCCESS;
+            }
+            if (cofhTile.canOpenGui()) {
+                NetworkHooks.openScreen((ServerPlayer) player, (MenuProvider) tile, tile.getBlockPos());
+                return InteractionResult.SUCCESS;
+            }
         }
         return InteractionResult.PASS;
     }
@@ -123,8 +122,8 @@ public class TileBlockCoFH extends Block implements EntityBlock, IDismantleable 
             return;
         }
         ItemStack offhand = placer.getOffhandItem();
-        if (!offhand.isEmpty() && offhand.getItem() instanceof IPlacementItem) {
-            ((IPlacementItem) offhand.getItem()).onBlockPlacement(offhand, new UseOnContext(player, InteractionHand.OFF_HAND, RayTracer.retrace(player)));
+        if (!offhand.isEmpty() && offhand.getItem() instanceof IPlacementItem placementItem) {
+            placementItem.onBlockPlacement(offhand, new UseOnContext(player, InteractionHand.OFF_HAND, RayTracer.retrace(player)));
         }
         TileCoFH tile = (TileCoFH) worldIn.getBlockEntity(pos);
         if (tile != null) {
@@ -155,8 +154,8 @@ public class TileBlockCoFH extends Block implements EntityBlock, IDismantleable 
     public float getDestroyProgress(BlockState state, Player player, BlockGetter worldIn, BlockPos pos) {
 
         BlockEntity tile = worldIn.getBlockEntity(pos);
-        if (tile instanceof TileCoFH && !tile.isRemoved()) {
-            if (!((TileCoFH) tile).canPlayerChange(player)) {
+        if (tile instanceof TileCoFH tileCoFH && !tile.isRemoved()) {
+            if (!tileCoFH.canPlayerChange(player)) {
                 return -1;
             }
         }
@@ -168,8 +167,8 @@ public class TileBlockCoFH extends Block implements EntityBlock, IDismantleable 
 
         ItemStack stack = super.getCloneItemStack(worldIn, pos, state);
         BlockEntity tile = worldIn.getBlockEntity(pos);
-        if (tile instanceof ITileCallback) {
-            ((ITileCallback) tile).createItemStackTag(stack);
+        if (tile instanceof ITileCallback callback) {
+            callback.createItemStackTag(stack);
         }
         return stack;
     }
