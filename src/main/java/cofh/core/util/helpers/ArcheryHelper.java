@@ -19,6 +19,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.LazyOptional;
 
 import java.util.Objects;
@@ -187,6 +188,12 @@ public final class ArcheryHelper {
                 return slot;
             }
         }
+        // LIVINGPROJECTILESEVENT
+        ItemStack lpeStack = ForgeHooks.getProjectile(shooter,weapon, ItemStack.EMPTY);
+        if(isAmmo.test(lpeStack)){
+            return lpeStack;
+        }
+
         return ItemStack.EMPTY;
     }
 
