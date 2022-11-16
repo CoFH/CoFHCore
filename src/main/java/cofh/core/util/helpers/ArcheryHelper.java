@@ -19,9 +19,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.LazyOptional;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -36,13 +39,20 @@ import static net.minecraft.world.item.enchantment.Enchantments.*;
 
 public final class ArcheryHelper {
 
+    private static final Set<Item> VALID_BOWS = new HashSet<>();
+
+    public static boolean addValidBow(Item bow) {
+
+        return VALID_BOWS.add(bow);
+    }
+
     private ArcheryHelper() {
 
     }
 
     public static boolean validBow(ItemStack stack) {
 
-        return stack.getItem() == Items.BOW || stack.getCapability(BOW_ITEM_CAPABILITY).isPresent();
+        return VALID_BOWS.contains(stack.getItem()) || stack.getCapability(BOW_ITEM_CAPABILITY).isPresent();
     }
 
     public static boolean isArrow(ItemStack stack) {
@@ -73,7 +83,6 @@ public final class ArcheryHelper {
                 ammo = new ItemStack(Items.ARROW);
             }
             float arrowVelocity = BowItem.getPowerForTime(charge);
-
 
             if (arrowVelocity >= 0.1F) {
                 if (Utils.isServerWorld(world)) {
@@ -186,6 +195,11 @@ public final class ArcheryHelper {
             if (slot.getCapability(AMMO_ITEM_CAPABILITY).map(cap -> !cap.isEmpty(shooter)).orElse(false) || isAmmo.test(slot)) {
                 return slot;
             }
+        }
+        // LIVING PROJECTILE EVENT
+        ItemStack lpeStack = ForgeHooks.getProjectile(shooter, weapon, ItemStack.EMPTY);
+        if (isAmmo.test(lpeStack)) {
+            return lpeStack;
         }
         return ItemStack.EMPTY;
     }

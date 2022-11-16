@@ -31,7 +31,7 @@ public class HoldingEnchantment extends EnchantmentCoFH {
     public boolean canApplyAtEnchantingTable(ItemStack stack) {
 
         Item item = stack.getItem();
-        return enable && (item instanceof IContainerItem || supportsEnchantment(stack));
+        return enable && item instanceof IContainerItem;
     }
 
 }

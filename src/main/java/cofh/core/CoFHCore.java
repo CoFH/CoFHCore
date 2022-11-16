@@ -2,7 +2,6 @@ package cofh.core;
 
 import cofh.core.capability.CapabilityArchery;
 import cofh.core.capability.CapabilityAreaEffect;
-import cofh.core.capability.CapabilityEnchantableItem;
 import cofh.core.capability.CapabilityShieldItem;
 import cofh.core.client.CoreKeys;
 import cofh.core.client.gui.FluidFilterScreen;
@@ -18,6 +17,8 @@ import cofh.core.network.packet.client.*;
 import cofh.core.network.packet.server.*;
 import cofh.core.util.Proxy;
 import cofh.core.util.ProxyClient;
+import cofh.core.util.helpers.ArcheryHelper;
+import cofh.core.util.references.IMCMethods;
 import cofh.lib.client.renderer.entity.ElectricArcRenderer;
 import cofh.lib.client.renderer.entity.KnifeRenderer;
 import cofh.lib.client.renderer.entity.NothingRenderer;
@@ -35,6 +36,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
@@ -51,6 +53,7 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
@@ -60,27 +63,28 @@ import static cofh.core.init.CoreContainers.FLUID_FILTER_CONTAINER;
 import static cofh.core.init.CoreContainers.ITEM_FILTER_CONTAINER;
 import static cofh.core.init.CoreEntities.*;
 import static cofh.lib.client.renderer.entity.model.ArmorFullSuitModel.ARMOR_FULL_SUIT_LAYER;
+import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 
-@Mod (ModIds.ID_COFH_CORE)
+@Mod (ID_COFH_CORE)
 public class CoFHCore {
 
-    public static final PacketHandler PACKET_HANDLER = new PacketHandler(new ResourceLocation(ModIds.ID_COFH_CORE, "general"));
-    public static final Logger LOG = LogManager.getLogger(ModIds.ID_COFH_CORE);
+    public static final PacketHandler PACKET_HANDLER = new PacketHandler(new ResourceLocation(ID_COFH_CORE, "general"));
+    public static final Logger LOG = LogManager.getLogger(ID_COFH_CORE);
     public static final Proxy PROXY = DistExecutor.unsafeRunForDist(() -> ProxyClient::new, () -> Proxy::new);
     public static final ConfigManager CONFIG_MANAGER = new ConfigManager();
 
-    public static final DeferredRegisterCoFH<Block> BLOCKS = DeferredRegisterCoFH.create(ForgeRegistries.BLOCKS, ModIds.ID_COFH_CORE);
-    public static final DeferredRegisterCoFH<Fluid> FLUIDS = DeferredRegisterCoFH.create(ForgeRegistries.FLUIDS, ModIds.ID_COFH_CORE);
-    public static final DeferredRegisterCoFH<Item> ITEMS = DeferredRegisterCoFH.create(ForgeRegistries.ITEMS, ModIds.ID_COFH_CORE);
-    public static final DeferredRegisterCoFH<EntityType<?>> ENTITIES = DeferredRegisterCoFH.create(ForgeRegistries.ENTITIES, ModIds.ID_COFH_CORE);
+    public static final DeferredRegisterCoFH<Block> BLOCKS = DeferredRegisterCoFH.create(ForgeRegistries.BLOCKS, ID_COFH_CORE);
+    public static final DeferredRegisterCoFH<Fluid> FLUIDS = DeferredRegisterCoFH.create(ForgeRegistries.FLUIDS, ID_COFH_CORE);
+    public static final DeferredRegisterCoFH<Item> ITEMS = DeferredRegisterCoFH.create(ForgeRegistries.ITEMS, ID_COFH_CORE);
+    public static final DeferredRegisterCoFH<EntityType<?>> ENTITIES = DeferredRegisterCoFH.create(ForgeRegistries.ENTITIES, ID_COFH_CORE);
 
-    public static final DeferredRegisterCoFH<MenuType<?>> CONTAINERS = DeferredRegisterCoFH.create(ForgeRegistries.CONTAINERS, ModIds.ID_COFH_CORE);
-    public static final DeferredRegisterCoFH<Enchantment> ENCHANTMENTS = DeferredRegisterCoFH.create(ForgeRegistries.ENCHANTMENTS, ModIds.ID_COFH_CORE);
-    public static final DeferredRegisterCoFH<MobEffect> MOB_EFFECTS = DeferredRegisterCoFH.create(ForgeRegistries.MOB_EFFECTS, ModIds.ID_COFH_CORE);
-    public static final DeferredRegisterCoFH<ParticleType<?>> PARTICLES = DeferredRegisterCoFH.create(ForgeRegistries.PARTICLE_TYPES, ModIds.ID_COFH_CORE);
-    public static final DeferredRegisterCoFH<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegisterCoFH.create(ForgeRegistries.RECIPE_SERIALIZERS, ModIds.ID_COFH_CORE);
-    public static final DeferredRegisterCoFH<SoundEvent> SOUND_EVENTS = DeferredRegisterCoFH.create(ForgeRegistries.SOUND_EVENTS, ModIds.ID_COFH_CORE);
-    public static final DeferredRegisterCoFH<BlockEntityType<?>> TILE_ENTITIES = DeferredRegisterCoFH.create(ForgeRegistries.BLOCK_ENTITIES, ModIds.ID_COFH_CORE);
+    public static final DeferredRegisterCoFH<MenuType<?>> CONTAINERS = DeferredRegisterCoFH.create(ForgeRegistries.CONTAINERS, ID_COFH_CORE);
+    public static final DeferredRegisterCoFH<Enchantment> ENCHANTMENTS = DeferredRegisterCoFH.create(ForgeRegistries.ENCHANTMENTS, ID_COFH_CORE);
+    public static final DeferredRegisterCoFH<MobEffect> MOB_EFFECTS = DeferredRegisterCoFH.create(ForgeRegistries.MOB_EFFECTS, ID_COFH_CORE);
+    public static final DeferredRegisterCoFH<ParticleType<?>> PARTICLES = DeferredRegisterCoFH.create(ForgeRegistries.PARTICLE_TYPES, ID_COFH_CORE);
+    public static final DeferredRegisterCoFH<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegisterCoFH.create(ForgeRegistries.RECIPE_SERIALIZERS, ID_COFH_CORE);
+    public static final DeferredRegisterCoFH<SoundEvent> SOUND_EVENTS = DeferredRegisterCoFH.create(ForgeRegistries.SOUND_EVENTS, ID_COFH_CORE);
+    public static final DeferredRegisterCoFH<BlockEntityType<?>> TILE_ENTITIES = DeferredRegisterCoFH.create(ForgeRegistries.BLOCK_ENTITIES, ID_COFH_CORE);
 
     public static boolean curiosLoaded = false;
 
@@ -97,6 +101,8 @@ public class CoFHCore {
         modEventBus.addListener(this::capSetup);
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::clientSetup);
+        modEventBus.addListener(this::handleIMC);
+
         modEventBus.addGenericListener(GlobalLootModifierSerializer.class, this::registerLootData);
 
         MinecraftForge.EVENT_BUS.addListener(this::registerCommands);
@@ -136,6 +142,8 @@ public class CoFHCore {
         CoreTileEntities.register();
 
         CuriosProxy.register();
+
+        ArcheryHelper.addValidBow(Items.BOW);
     }
 
     private void registerPackets() {
@@ -196,7 +204,6 @@ public class CoFHCore {
 
         CapabilityArchery.register(event);
         CapabilityAreaEffect.register(event);
-        CapabilityEnchantableItem.register(event);
         CapabilityShieldItem.register(event);
     }
 
@@ -215,6 +222,17 @@ public class CoFHCore {
         });
         event.enqueueWork(CoreKeys::register);
         event.enqueueWork(ProxyClient::registerItemModelProperties);
+    }
+
+    private void handleIMC(final InterModProcessEvent event) {
+
+        event.getIMCStream().forEach(
+                (msg) -> {
+                    if (msg.method().equalsIgnoreCase(IMCMethods.ADD_BOW_COMPATIBILITY) && msg.messageSupplier().get() instanceof Item bow) {
+                        ArcheryHelper.addValidBow(bow);
+                    }
+                }
+        );
     }
 
     private void registerCommands(final RegisterCommandsEvent event) {

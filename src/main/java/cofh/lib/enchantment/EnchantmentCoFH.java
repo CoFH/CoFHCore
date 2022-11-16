@@ -5,8 +5,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
-import static cofh.core.capability.CapabilityEnchantableItem.ENCHANTABLE_ITEM_CAPABILITY;
-
 public abstract class EnchantmentCoFH extends Enchantment {
 
     protected boolean enable = true;
@@ -53,11 +51,6 @@ public abstract class EnchantmentCoFH extends Enchantment {
         return enable;
     }
 
-    protected boolean supportsEnchantment(ItemStack stack) {
-
-        return stack.getCapability(ENCHANTABLE_ITEM_CAPABILITY).filter(cap -> cap.supportsEnchantment(this)).isPresent();
-    }
-
     @Override
     public int getMaxCost(int level) {
 
@@ -78,7 +71,7 @@ public abstract class EnchantmentCoFH extends Enchantment {
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack) {
 
-        return enable && (super.canApplyAtEnchantingTable(stack) || supportsEnchantment(stack));
+        return enable && super.canApplyAtEnchantingTable(stack);
     }
 
     @Override

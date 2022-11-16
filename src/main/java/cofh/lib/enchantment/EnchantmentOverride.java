@@ -26,7 +26,7 @@ public abstract class EnchantmentOverride extends EnchantmentCoFH {
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack) {
 
-        return stack.canApplyAtEnchantingTable(this) || supportsEnchantment(stack);
+        return stack.canApplyAtEnchantingTable(this);
     }
 
     @Override
