@@ -19,6 +19,8 @@ import cofh.core.network.packet.client.*;
 import cofh.core.network.packet.server.*;
 import cofh.core.util.Proxy;
 import cofh.core.util.ProxyClient;
+import cofh.core.util.helpers.ArcheryHelper;
+import cofh.core.util.references.IMCMethods;
 import cofh.lib.client.renderer.entity.NothingRenderer;
 import cofh.lib.loot.TileNBTSync;
 import cofh.lib.network.PacketHandler;
@@ -32,6 +34,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
@@ -47,6 +50,7 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegisterEvent;
@@ -99,6 +103,7 @@ public class CoFHCore {
         modEventBus.addListener(this::capSetup);
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::clientSetup);
+        modEventBus.addListener(this::handleIMC);
         modEventBus.addListener(this::registerLootData);
 
         MinecraftForge.EVENT_BUS.addListener(this::registerCommands);
@@ -139,6 +144,8 @@ public class CoFHCore {
         CoreTileEntities.register();
 
         CuriosProxy.register();
+
+        ArcheryHelper.addValidBow(Items.BOW);
     }
 
     private void registerPackets() {
@@ -218,6 +225,17 @@ public class CoFHCore {
             MenuScreens.register(ITEM_FILTER_CONTAINER.get(), ItemFilterScreen::new);
         });
         event.enqueueWork(ProxyClient::registerItemModelProperties);
+    }
+
+    private void handleIMC(final InterModProcessEvent event) {
+
+        event.getIMCStream().forEach(
+                (msg) -> {
+                    if (msg.method().equalsIgnoreCase(IMCMethods.ADD_BOW_COMPATIBILITY) && msg.messageSupplier().get() instanceof Item bow) {
+                        ArcheryHelper.addValidBow(bow);
+                    }
+                }
+        );
     }
 
     private void registerCommands(final RegisterCommandsEvent event) {
