@@ -30,6 +30,9 @@ public final class FilterHelper {
 
     public static boolean hasFilter(IFilterableTile filterable) {
 
+        if (filterable == null) {
+            return false;
+        }
         IFilter filter = filterable.getFilter();
         return filter != null && filter != EmptyFilter.INSTANCE;
     }
