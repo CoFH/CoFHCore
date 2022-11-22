@@ -14,8 +14,7 @@ public class PacketIDs {
 
     public static final int PACKET_MODEL_UPDATE = 8;
 
-    public static final int PACKET_CHAT = 16;
-    public static final int PACKET_MOTION = 17;
+    public static final int PACKET_MOTION = 16;
 
     public static final int PACKET_FILTERABLE_GUI_OPEN = 20;
 

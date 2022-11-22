@@ -1,7 +1,7 @@
 package cofh.core.block;
 
 import cofh.core.block.entity.TileCoFH;
-import cofh.core.util.helpers.ChatHelper;
+import cofh.core.util.ProxyUtils;
 import cofh.lib.api.block.IDismantleable;
 import cofh.lib.api.block.entity.ITickableTile;
 import cofh.lib.api.block.entity.ITileCallback;
@@ -68,7 +68,7 @@ public class TileBlockCoFH extends Block implements EntityBlock, IDismantleable 
         BlockEntity tile = worldIn.getBlockEntity(pos);
         if (tile instanceof TileCoFH cofhTile && !tile.isRemoved()) {
             if (!cofhTile.canPlayerChange(player) && SecurityHelper.hasSecurity(tile)) {
-                ChatHelper.sendIndexedChatMessageToPlayer(player, Component.translatable("info.cofh.secure_warning", SecurityHelper.getOwnerName(tile)));
+                ProxyUtils.setOverlayMessage(player, Component.translatable("info.cofh.secure_warning", SecurityHelper.getOwnerName(tile)));
                 return InteractionResult.PASS;
             }
             if (Utils.isWrench(player.getItemInHand(handIn))) {

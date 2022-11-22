@@ -1,6 +1,6 @@
 package cofh.core.item;
 
-import cofh.core.util.helpers.ChatHelper;
+import cofh.core.util.ProxyUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -27,15 +27,15 @@ public class CoinItem extends CountedItem {
         if (worldIn.isClientSide) {
             if (count == 1) {
                 if (worldIn.getRandom().nextBoolean()) {
-                    ChatHelper.sendIndexedChatMessageToPlayer(playerIn, Component.translatable("info.cofh.heads"));
+                    ProxyUtils.setOverlayMessage(playerIn, Component.translatable("info.cofh.heads"));
                 } else {
-                    ChatHelper.sendIndexedChatMessageToPlayer(playerIn, Component.translatable("info.cofh.tails"));
+                    ProxyUtils.setOverlayMessage(playerIn, Component.translatable("info.cofh.tails"));
                 }
             } else {
                 for (int i = 0; i < count; ++i) {
                     heads += worldIn.getRandom().nextInt(2);
                 }
-                ChatHelper.sendIndexedChatMessageToPlayer(playerIn, Component.translatable(localize("info.cofh.heads") + ": " + heads + " " + localize("info.cofh.tails") + ": " + (count - heads)));
+                ProxyUtils.setOverlayMessage(playerIn, Component.translatable(localize("info.cofh.heads") + ": " + heads + " " + localize("info.cofh.tails") + ": " + (count - heads)));
             }
         }
         playerIn.getCooldowns().addCooldown(this, 40);

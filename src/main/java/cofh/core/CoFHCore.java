@@ -158,7 +158,6 @@ public class CoFHCore {
 
         PACKET_HANDLER.registerPacket(PacketIDs.PACKET_MODEL_UPDATE, ModelUpdatePacket::new);
 
-        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_CHAT, IndexedChatPacket::new);
         PACKET_HANDLER.registerPacket(PacketIDs.PACKET_MOTION, PlayerMotionPacket::new);
 
         PACKET_HANDLER.registerPacket(PacketIDs.PACKET_FILTERABLE_GUI_OPEN, TileFilterGuiOpenPacket::new);

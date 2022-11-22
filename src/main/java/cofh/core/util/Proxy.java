@@ -14,7 +14,7 @@ import static cofh.lib.util.Utils.getRegistryName;
 public class Proxy {
 
     // region HELPERS
-    public void addIndexedChatMessage(Component chat, int index) {
+    public void setOverlayMessage(Player player, Component message) {
 
     }
 

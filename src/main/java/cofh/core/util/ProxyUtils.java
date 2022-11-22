@@ -16,9 +16,9 @@ public class ProxyUtils {
 
     }
 
-    public static void addIndexedChatMessage(Component chat, int index) {
+    public static void setOverlayMessage(Player player, Component message) {
 
-        CoFHCore.PROXY.addIndexedChatMessage(chat, index);
+        CoFHCore.PROXY.setOverlayMessage(player, message);
     }
 
     public static void playSimpleSound(SoundEvent sound, float volume, float pitch) {

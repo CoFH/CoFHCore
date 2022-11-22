@@ -3,10 +3,10 @@ package cofh.core.util;
 import cofh.core.event.CoreClientSetupEvents;
 import cofh.lib.api.IProxyItemPropertyGetter;
 import cofh.lib.api.block.entity.IAreaEffectTile;
+import cofh.lib.util.Utils;
 import cofh.lib.util.helpers.SoundHelper;
 import cofh.lib.util.helpers.StringHelper;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.minecraft.client.GuiMessageTag;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
@@ -27,14 +27,12 @@ public class ProxyClient extends Proxy {
 
     // region HELPERS
     @Override
-    public void addIndexedChatMessage(Component chat, int index) {
+    public void setOverlayMessage(Player player, Component message) {
 
-        if (chat == null) {
-            // TODO: Determine if this needs "fixing" or not.
-            // Minecraft.getInstance().gui.getChat().removeById(index);
-        } else {
-            Minecraft.getInstance().gui.getChat().addMessage(chat, null, index, GuiMessageTag.system(), false);
+        if (Utils.isFakePlayer(player)) {
+            return;
         }
+        Minecraft.getInstance().gui.setOverlayMessage(message, false);
     }
 
     @Override
