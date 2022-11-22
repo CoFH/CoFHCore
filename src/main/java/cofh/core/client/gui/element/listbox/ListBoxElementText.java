@@ -34,7 +34,7 @@ public class ListBoxElementText implements IListBoxElement {
     @Override
     public void draw(PoseStack matrixStack, ElementListBox listBox, int x, int y, int backColor, int textColor) {
 
-        listBox.getFontRenderer().drawShadow(matrixStack, text, x, y, textColor);
+        listBox.fontRenderer().drawShadow(matrixStack, text, x, y, textColor);
     }
 
 }

@@ -96,7 +96,7 @@ public class ConfigPanel extends PanelBase {
         if (!fullyOpen) {
             return;
         }
-        getFontRenderer().drawShadow(matrixStack, localize("info.cofh.configuration"), sideOffset() + 18, 6, headerColor);
+        fontRenderer().drawShadow(matrixStack, localize("info.cofh.configuration"), sideOffset() + 18, 6, headerColor);
 
         if (myTransfer != null) {
             if (myTransfer.hasTransferIn()) {

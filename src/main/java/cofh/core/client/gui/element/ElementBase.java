@@ -185,12 +185,12 @@ public abstract class ElementBase {
 
     public final int guiTop() {
 
-        return gui.getGuiTop();
+        return gui.guiTop();
     }
 
     public final int guiLeft() {
 
-        return gui.getGuiLeft();
+        return gui.guiLeft();
     }
     // endregion
 
@@ -210,9 +210,9 @@ public abstract class ElementBase {
         gui.drawTexturedModalRect(poseStack, x, y, u, v, width, height, texW, texH);
     }
 
-    public Font getFontRenderer() {
+    public Font fontRenderer() {
 
-        return gui.getFontRenderer();
+        return gui.fontRenderer();
     }
     // endregion
 

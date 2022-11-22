@@ -13,22 +13,22 @@ import net.minecraft.world.entity.player.Player;
 
 public interface IGuiAccess {
 
-    int getGuiTop();
+    int guiTop();
 
-    int getGuiLeft();
+    int guiLeft();
 
-    Font getFontRenderer();
+    Font fontRenderer();
 
-    Player getPlayer();
+    Player player();
 
-    int getBlitOffset();
+    int blitOffset();
 
     default void drawIcon(PoseStack matrixStack, TextureAtlasSprite icon, int x, int y) {
 
         RenderHelper.setPosTexShader();
         RenderHelper.setBlockTextureSheet();
         RenderHelper.resetShaderColor();
-        GuiComponent.blit(matrixStack, x, y, getBlitOffset(), 16, 16, icon);
+        GuiComponent.blit(matrixStack, x, y, blitOffset(), 16, 16, icon);
     }
 
     default void drawIcon(PoseStack matrixStack, TextureAtlasSprite icon, int color, int x, int y) {
@@ -36,7 +36,7 @@ public interface IGuiAccess {
         RenderHelper.setPosTexShader();
         RenderHelper.setBlockTextureSheet();
         RenderHelper.setShaderColorFromInt(color);
-        GuiComponent.blit(matrixStack, x, y, getBlitOffset(), 16, 16, icon);
+        GuiComponent.blit(matrixStack, x, y, blitOffset(), 16, 16, icon);
         RenderHelper.resetShaderColor();
     }
 
@@ -64,10 +64,10 @@ public interface IGuiAccess {
         Matrix4f mat = poseStack.last().pose();
         BufferBuilder buffer = Tesselator.getInstance().getBuilder();
         buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
-        buffer.vertex(mat, x1, y2, getBlitOffset()).endVertex();
-        buffer.vertex(mat, x2, y2, getBlitOffset()).endVertex();
-        buffer.vertex(mat, x2, y1, getBlitOffset()).endVertex();
-        buffer.vertex(mat, x1, y1, getBlitOffset()).endVertex();
+        buffer.vertex(mat, x1, y2, blitOffset()).endVertex();
+        buffer.vertex(mat, x2, y2, blitOffset()).endVertex();
+        buffer.vertex(mat, x2, y1, blitOffset()).endVertex();
+        buffer.vertex(mat, x1, y1, blitOffset()).endVertex();
         Tesselator.getInstance().end();
         RenderSystem.enableTexture();
     }
@@ -98,10 +98,10 @@ public interface IGuiAccess {
         Matrix4f mat = poseStack.last().pose();
         BufferBuilder buffer = Tesselator.getInstance().getBuilder();
         buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
-        buffer.vertex(mat, x1, y2, getBlitOffset()).endVertex();
-        buffer.vertex(mat, x2, y2, getBlitOffset()).endVertex();
-        buffer.vertex(mat, x2, y1, getBlitOffset()).endVertex();
-        buffer.vertex(mat, x1, y1, getBlitOffset()).endVertex();
+        buffer.vertex(mat, x1, y2, blitOffset()).endVertex();
+        buffer.vertex(mat, x2, y2, blitOffset()).endVertex();
+        buffer.vertex(mat, x2, y1, blitOffset()).endVertex();
+        buffer.vertex(mat, x1, y1, blitOffset()).endVertex();
         Tesselator.getInstance().end();
         RenderSystem.enableTexture();
         RenderSystem.disableBlend();
@@ -115,10 +115,10 @@ public interface IGuiAccess {
         Matrix4f mat = poseStack.last().pose();
         BufferBuilder bufferbuilder = tessellator.getBuilder();
         bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        bufferbuilder.vertex(mat, x, (y + height), getBlitOffset()).uv(((float) textureX * f), ((float) (textureY + height) * f)).endVertex();
-        bufferbuilder.vertex(mat, (x + width), (y + height), getBlitOffset()).uv(((float) (textureX + width) * f), ((float) (textureY + height) * f)).endVertex();
-        bufferbuilder.vertex(mat, (x + width), y, getBlitOffset()).uv(((float) (textureX + width) * f), ((float) textureY * f)).endVertex();
-        bufferbuilder.vertex(mat, x, y, getBlitOffset()).uv(((float) textureX * f), ((float) textureY * f)).endVertex();
+        bufferbuilder.vertex(mat, x, (y + height), blitOffset()).uv(((float) textureX * f), ((float) (textureY + height) * f)).endVertex();
+        bufferbuilder.vertex(mat, (x + width), (y + height), blitOffset()).uv(((float) (textureX + width) * f), ((float) (textureY + height) * f)).endVertex();
+        bufferbuilder.vertex(mat, (x + width), y, blitOffset()).uv(((float) (textureX + width) * f), ((float) textureY * f)).endVertex();
+        bufferbuilder.vertex(mat, x, y, blitOffset()).uv(((float) textureX * f), ((float) textureY * f)).endVertex();
         tessellator.end();
     }
 
@@ -130,10 +130,10 @@ public interface IGuiAccess {
 
         Matrix4f mat = poseStack.last().pose();
         buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        buffer.vertex(mat, x, y + height, getBlitOffset()).uv((u) * texU, (v + height) * texV).endVertex();
-        buffer.vertex(mat, x + width, y + height, getBlitOffset()).uv((u + width) * texU, (v + height) * texV).endVertex();
-        buffer.vertex(mat, x + width, y, getBlitOffset()).uv((u + width) * texU, (v) * texV).endVertex();
-        buffer.vertex(mat, x, y, getBlitOffset()).uv((u) * texU, (v) * texV).endVertex();
+        buffer.vertex(mat, x, y + height, blitOffset()).uv((u) * texU, (v + height) * texV).endVertex();
+        buffer.vertex(mat, x + width, y + height, blitOffset()).uv((u + width) * texU, (v + height) * texV).endVertex();
+        buffer.vertex(mat, x + width, y, blitOffset()).uv((u + width) * texU, (v) * texV).endVertex();
+        buffer.vertex(mat, x, y, blitOffset()).uv((u) * texU, (v) * texV).endVertex();
         Tesselator.getInstance().end();
     }
 

@@ -26,7 +26,9 @@ public interface IPacketServer extends IPacket {
     @OnlyIn (Dist.CLIENT)
     default void sendToServer() {
 
-        Minecraft.getInstance().getConnection().send(toVanillaPacket(NetworkDirection.PLAY_TO_SERVER));
+        if (Minecraft.getInstance().getConnection() != null) {
+            Minecraft.getInstance().getConnection().send(toVanillaPacket(NetworkDirection.PLAY_TO_SERVER));
+        }
     }
 
 }

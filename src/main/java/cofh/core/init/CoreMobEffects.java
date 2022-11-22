@@ -33,7 +33,7 @@ public class CoreMobEffects {
     public static final RegistryObject<MobEffect> LOVE = MOB_EFFECTS.register(ID_EFFECT_LOVE, () -> new LoveMobEffect(MobEffectCategory.BENEFICIAL, 0xFF7099));
     public static final RegistryObject<MobEffect> PANACEA = MOB_EFFECTS.register(ID_EFFECT_PANACEA, () -> new PanaceaMobEffect(MobEffectCategory.BENEFICIAL, 0x769CD7));
 
-    public static final RegistryObject<MobEffect> ENDERFERENCE = MOB_EFFECTS.register(ID_EFFECT_ENDERFERENCE, () -> new MobEffectCoFH(MobEffectCategory.NEUTRAL, 0x1B574D));
+    public static final RegistryObject<MobEffect> ENDERFERENCE = MOB_EFFECTS.register(ID_EFFECT_ENDERFERENCE, () -> new MobEffectCoFH(MobEffectCategory.NEUTRAL, 0x093755)); // 0x1B574D));
     public static final RegistryObject<MobEffect> SLIMED = MOB_EFFECTS.register(ID_EFFECT_SLIMED, () -> new MobEffectCoFH(MobEffectCategory.NEUTRAL, 0x8CD782));
 
     public static final RegistryObject<MobEffect> CHILLED = MOB_EFFECTS.register(ID_EFFECT_CHILLED, () -> new ChilledMobEffect(MobEffectCategory.HARMFUL, 0x86AEFD).addAttributeModifier(Attributes.MOVEMENT_SPEED, UUID_EFFECT_CHILLED_MOVEMENT_SPEED.toString(), -0.30D, AttributeModifier.Operation.MULTIPLY_TOTAL).addAttributeModifier(Attributes.ATTACK_SPEED, UUID_EFFECT_CHILLED_ATTACK_SPEED.toString(), -0.40D, AttributeModifier.Operation.ADDITION));

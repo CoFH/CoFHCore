@@ -55,9 +55,9 @@ public class RSControlPanel extends PanelBase {
         if (!fullyOpen) {
             return;
         }
-        getFontRenderer().drawShadow(matrixStack, localize("info.cofh.redstone_control"), sideOffset() + 18, 6, headerColor);
-        getFontRenderer().drawShadow(matrixStack, localize("info.cofh.control_status") + ":", sideOffset() + 6, 42, subheaderColor);
-        getFontRenderer().drawShadow(matrixStack, localize("info.cofh.signal_required") + ":", sideOffset() + 6, 66, subheaderColor);
+        fontRenderer().drawShadow(matrixStack, localize("info.cofh.redstone_control"), sideOffset() + 18, 6, headerColor);
+        fontRenderer().drawShadow(matrixStack, localize("info.cofh.control_status") + ":", sideOffset() + 6, 42, subheaderColor);
+        fontRenderer().drawShadow(matrixStack, localize("info.cofh.signal_required") + ":", sideOffset() + 6, 66, subheaderColor);
 
         gui.drawIcon(matrixStack, ICON_BUTTON, 28, 20);
         gui.drawIcon(matrixStack, ICON_BUTTON, 48, 20);
@@ -66,18 +66,18 @@ public class RSControlPanel extends PanelBase {
         switch (myRSControllable.getMode()) {
             case DISABLED:
                 gui.drawIcon(matrixStack, ICON_BUTTON_HIGHLIGHT, 28, 20);
-                getFontRenderer().draw(matrixStack, localize("info.cofh.disabled"), sideOffset() + 14, 54, textColor);
-                getFontRenderer().draw(matrixStack, localize("info.cofh.ignored"), sideOffset() + 14, 78, textColor);
+                fontRenderer().draw(matrixStack, localize("info.cofh.disabled"), sideOffset() + 14, 54, textColor);
+                fontRenderer().draw(matrixStack, localize("info.cofh.ignored"), sideOffset() + 14, 78, textColor);
                 break;
             case LOW:
                 gui.drawIcon(matrixStack, ICON_BUTTON_HIGHLIGHT, 48, 20);
-                getFontRenderer().draw(matrixStack, localize("info.cofh.enabled"), sideOffset() + 14, 54, textColor);
-                getFontRenderer().draw(matrixStack, localize("info.cofh.low"), sideOffset() + 14, 78, textColor);
+                fontRenderer().draw(matrixStack, localize("info.cofh.enabled"), sideOffset() + 14, 54, textColor);
+                fontRenderer().draw(matrixStack, localize("info.cofh.low"), sideOffset() + 14, 78, textColor);
                 break;
             case HIGH:
                 gui.drawIcon(matrixStack, ICON_BUTTON_HIGHLIGHT, 68, 20);
-                getFontRenderer().draw(matrixStack, localize("info.cofh.enabled"), sideOffset() + 14, 54, textColor);
-                getFontRenderer().draw(matrixStack, localize("info.cofh.high"), sideOffset() + 14, 78, textColor);
+                fontRenderer().draw(matrixStack, localize("info.cofh.enabled"), sideOffset() + 14, 54, textColor);
+                fontRenderer().draw(matrixStack, localize("info.cofh.high"), sideOffset() + 14, 78, textColor);
                 break;
             default:
         }

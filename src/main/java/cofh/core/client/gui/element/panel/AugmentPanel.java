@@ -55,7 +55,7 @@ public class AugmentPanel extends PanelBase {
         if (!fullyOpen) {
             return;
         }
-        getFontRenderer().drawShadow(matrixStack, localize("info.cofh.augmentation"), sideOffset() + 18, 6, headerColor);
+        fontRenderer().drawShadow(matrixStack, localize("info.cofh.augmentation"), sideOffset() + 18, 6, headerColor);
 
         RenderHelper.resetShaderColor();
     }

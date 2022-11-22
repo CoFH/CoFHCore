@@ -95,10 +95,10 @@ public class ContainerScreenCoFH<T extends AbstractContainerMenu> extends Abstra
     protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY) {
 
         if (drawTitle & title != null) {
-            getFontRenderer().draw(matrixStack, localize(title.getString()), getCenteredOffset(localize(title.getString())), 6, 0x404040);
+            fontRenderer().draw(matrixStack, localize(title.getString()), getCenteredOffset(localize(title.getString())), 6, 0x404040);
         }
         if (drawInventory) {
-            getFontRenderer().draw(matrixStack, localize("container.inventory"), 8, imageHeight - 96 + 3, 0x404040);
+            fontRenderer().draw(matrixStack, localize("container.inventory"), 8, imageHeight - 96 + 3, 0x404040);
         }
         drawPanels(matrixStack, true);
         drawElements(matrixStack, true);
@@ -433,15 +433,33 @@ public class ContainerScreenCoFH<T extends AbstractContainerMenu> extends Abstra
 
     // region IGuiAccess
     @Override
-    public Font getFontRenderer() {
+    public int guiTop() {
+
+        return topPos;
+    }
+
+    @Override
+    public int guiLeft() {
+
+        return leftPos;
+    }
+
+    @Override
+    public Font fontRenderer() {
 
         return font;
     }
 
     @Override
-    public Player getPlayer() {
+    public Player player() {
 
         return player;
+    }
+
+    @Override
+    public int blitOffset() {
+
+        return getBlitOffset();
     }
     // endregion
 }
