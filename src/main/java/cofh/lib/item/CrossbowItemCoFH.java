@@ -178,10 +178,11 @@ public class CrossbowItemCoFH extends CrossbowItem implements ICoFHItem {
         if (living instanceof Player player) {
             ItemStack ammo = ArcheryHelper.findAmmo(player, crossbow);
             if (!ammo.isEmpty() && ammo.getItem() instanceof FireworkRocketItem) {
-                if (!player.abilities.instabuild) {
+                boolean success = loadAmmo(player, crossbow, ammo);
+                if (success && !player.abilities.instabuild) {
                     ammo.shrink(1);
                 }
-                return loadAmmo(player, crossbow, ammo);
+                return success;
             }
             IArcheryAmmoItem ammoCap = ammo.getCapability(AMMO_ITEM_CAPABILITY).orElse(new ArcheryAmmoItemWrapper(ammo));
             boolean infinite = player.abilities.instabuild
@@ -191,13 +192,14 @@ public class CrossbowItemCoFH extends CrossbowItem implements ICoFHItem {
                 if (ammo.isEmpty()) {
                     ammo = new ItemStack(Items.ARROW);
                 }
-                if (!infinite) {
+                boolean success = loadAmmo(player, crossbow, ammo);
+                if (success && !infinite) {
                     ammoCap.onArrowLoosed(player);
                     if (ammo.isEmpty()) {
                         player.inventory.removeItem(ammo);
                     }
                 }
-                return loadAmmo(player, crossbow, ammo);
+                return success;
             }
         }
         return false;
