@@ -86,9 +86,6 @@ public class ArcheryEvents {
         DamageSource source = event.getSource();
         Entity attacker = event.getSource().getEntity();
 
-        if (entity instanceof Projectile) {
-            return;
-        }
         if (!(attacker instanceof LivingEntity)) {
             return;
         }

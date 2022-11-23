@@ -60,7 +60,6 @@ public class ElementSlot extends ElementBase {
 
         drawSlot(poseStack);
         drawUnderlayTexture(poseStack);
-
     }
 
     @Override
