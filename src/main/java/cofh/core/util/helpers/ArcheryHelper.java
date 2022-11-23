@@ -19,7 +19,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.LazyOptional;
 
 import java.util.HashSet;
@@ -182,7 +181,7 @@ public final class ArcheryHelper {
         CuriosProxy.getAllWorn(shooter).ifPresent(c -> {
             for (int i = 0; i < c.getSlots(); ++i) {
                 ItemStack slot = c.getStackInSlot(i);
-                if (slot.getCapability(AMMO_ITEM_CAPABILITY).map(cap -> !cap.isEmpty(shooter)).orElse(false) || isAmmo.test(slot)) {
+                if (slot.getCapability(AMMO_ITEM_CAPABILITY).map(cap -> !cap.isEmpty(shooter)).orElse(false)) {
                     retStack[0] = slot;
                 }
             }
@@ -192,12 +191,12 @@ public final class ArcheryHelper {
         }
         // INVENTORY
         for (ItemStack slot : shooter.getInventory().items) {
-            if (slot.getCapability(AMMO_ITEM_CAPABILITY).map(cap -> !cap.isEmpty(shooter)).orElse(false) || isAmmo.test(slot)) {
+            if (slot.getCapability(AMMO_ITEM_CAPABILITY).map(cap -> !cap.isEmpty(shooter)).orElse(false)) {
                 return slot;
             }
         }
         // LIVING PROJECTILE EVENT
-        ItemStack lpeStack = ForgeHooks.getProjectile(shooter, weapon, ItemStack.EMPTY);
+        ItemStack lpeStack = shooter.getProjectile(weapon);
         if (isAmmo.test(lpeStack)) {
             return lpeStack;
         }
