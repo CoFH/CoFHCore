@@ -266,13 +266,20 @@ public final class GuiHelper {
     // endregion
 
     // region CONSTANTS
+    public static final int SLOT_SIZE_INNER = 16;
     public static final int SLOT_SIZE = 18;
+    public static final int LARGE_SLOT_SIZE_INNER = 24;
     public static final int LARGE_SLOT_SIZE = 26;
 
     public static final int DURATION = 16;
     public static final int PROGRESS = 24;
     public static final int SPEED = 16;
     public static final int HEIGHT = 16;
+
+    public static final int PLAYER_INV_SIZE = 36;
+    public static final int PRIMARY_HIGHLIGHT_COLOR = 0x700A76D0;   // INPUT BLUE
+    public static final int SECONDARY_HIGHLIGHT_COLOR = 0x7076D00A; // HUE - 120
+    public static final int TERTIARY_HIGHLIGHT_COLOR = 0x700AD064;  // HUE - 60
     // endregion
 
     // region ELEMENTS

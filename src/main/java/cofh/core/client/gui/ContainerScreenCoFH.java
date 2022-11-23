@@ -14,9 +14,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
 
 import java.util.*;
 
+import static cofh.core.util.helpers.GuiHelper.SLOT_SIZE_INNER;
 import static cofh.lib.util.helpers.StringHelper.localize;
 
 public class ContainerScreenCoFH<T extends AbstractContainerMenu> extends AbstractContainerScreen<T> implements IGuiAccess {
@@ -102,6 +104,13 @@ public class ContainerScreenCoFH<T extends AbstractContainerMenu> extends Abstra
         }
         drawPanels(matrixStack, true);
         drawElements(matrixStack, true);
+    }
+
+    protected void renderSlotGradient(PoseStack matrixStack, Slot slot, int color1, int color2) {
+
+        int x = guiLeft() + slot.x;
+        int y = guiTop() + slot.y;
+        fillGradient(matrixStack, x, y, x + SLOT_SIZE_INNER, y + SLOT_SIZE_INNER, color1, color2);
     }
 
     // region ELEMENTS
