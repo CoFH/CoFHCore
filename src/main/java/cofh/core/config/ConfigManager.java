@@ -1,5 +1,6 @@
 package cofh.core.config;
 
+import cofh.core.util.ProxyUtils;
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -90,7 +91,7 @@ public class ConfigManager {
      */
     public void setupClient() {
 
-        if (!clientInit) {
+        if (ProxyUtils.isClient() && !clientInit) {
             genClientConfig();
             clientSpec = clientConfig.build();
             ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, clientSpec);
