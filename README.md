@@ -8,7 +8,7 @@ You'll notice that this repository does not have a license! By default, that mea
 That is indeed the case. If you'd like to reuse some of our GUI art assets for use in a mod, swing by
 our [Discord](https://discord.gg/uRKrnbH) and ask.
 
-©2012-2021 Cult of the Full Hub / Team CoFH / CoFH
+©2012-2022 Cult of the Full Hub / Team CoFH / CoFH
 
 #### Homepage
 
