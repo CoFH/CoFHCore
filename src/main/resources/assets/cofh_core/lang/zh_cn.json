@@ -164,7 +164,7 @@
 
   "info.cofh_core.fluid_filter.0": "将存有流体的物品放入槽位中以将对应流体添加至过滤列表。",
   "info.cofh_core.fluid_filter.1": "可使用额外选项来精确调整行为。",
-  
+
   "info.cofh_core.item_filter.0": "将物品放入槽位中以将其添加至过滤列表。",
   "info.cofh_core.item_filter.1": "可使用额外选项来精确调整行为。",
 
