@@ -7,8 +7,8 @@
   "attribute.name.cofh.hazard_resistance": "毒害抗性",
   "attribute.name.cofh.sting_resistance": "叮咬抗性",
 
-  "death.attack.knife": "%1$s被%2$s砍了！",
-  "death.attack.knife.item": "%1$s被%2$s用%3$s捅死了！",
+  "death.attack.knife": "%1$s 被 %2$s 砍了！",
+  "death.attack.knife.item": "%1$s 被 %2$s 用%3$s捅死了！",
 
   "forge.swimSpeed": "游泳速度",
 
@@ -199,7 +199,7 @@
   "enchantment.minecraft.multishot.desc": "三支箭矢會呈平面扇形射出，但每次射擊僅消耗一支箭。",
   "enchantment.minecraft.piercing.desc": "箭矢會射穿多個實體。",
   "enchantment.minecraft.power.desc": "提升箭矢傷害。",
-  "enchantment.minecraft.projectile_protection.desc": "削減被彈射物擊中時收到的傷害。",
+  "enchantment.minecraft.projectile_protection.desc": "削減被彈射物擊中時受到的傷害。",
   "enchantment.minecraft.protection.desc": "削減絕大部分類型的傷害。",
   "enchantment.minecraft.punch.desc": "強化箭矢的擊退效果。",
   "enchantment.minecraft.quick_charge.desc": "縮短弩的裝填時間。",
