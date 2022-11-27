@@ -83,8 +83,8 @@
   "info.cofh.energy_stored": "能量儲存",
   "info.cofh.energy_use": "能量消耗",
 
-  "info.cofh.fluid_filter": "流體過濾",
-  "info.cofh.item_filter": "物品過濾",
+  "info.cofh.fluid_filter": "流體篩選",
+  "info.cofh.item_filter": "物品篩選",
   "info.cofh.filter.allowlist.0": "黑名單",
   "info.cofh.filter.allowlist.1": "白名單",
   "info.cofh.filter.checkNBT.0": "忽略NBT",
@@ -162,10 +162,10 @@
 
   "item.cofh_core.ectoplasm": "翠綠靈質",
 
-  "info.cofh_core.fluid_filter.0": "將含有流體的容器放入槽位中以將其添加至過濾列表。",
+  "info.cofh_core.fluid_filter.0": "將含有流體的容器放入槽位中以將其新增至篩選列表。",
   "info.cofh_core.fluid_filter.1": "可使用額外選項來精確調整行為。",
 
-  "info.cofh_core.item_filter.0": "將物品放入槽位中以將其添加至過濾列表。",
+  "info.cofh_core.item_filter.0": "將物品放入槽位中以將其新增至篩選列表。",
   "info.cofh_core.item_filter.1": "可使用額外選項來精確調整行為。",
 
   "key.cofh.mode_change_increment": "循環至下一個模式",
