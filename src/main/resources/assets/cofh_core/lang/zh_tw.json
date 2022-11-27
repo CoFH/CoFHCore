@@ -7,8 +7,8 @@
   "attribute.name.cofh.hazard_resistance": "毒害抗性",
   "attribute.name.cofh.sting_resistance": "叮咬抗性",
 
-  "death.attack.knife": "%1$s 被 %2$s 砍了！",
-  "death.attack.knife.item": "%1$s 被 %2$s 用%3$s捅死了！",
+  "death.attack.knife": "%1$s被%2$s砍了！",
+  "death.attack.knife.item": "%1$s被%2$s用%3$s捅死了！",
 
   "forge.swimSpeed": "游泳速度",
 
@@ -206,7 +206,7 @@
   "enchantment.minecraft.respiration.desc": "延長水下呼吸時間。",
   "enchantment.minecraft.riptide.desc": "擲出的三叉戟會在特定條件下搭載持握者一同移動。",
   "enchantment.minecraft.sharpness.desc": "提升攻擊傷害。",
-  "enchantment.minecraft.silk_touch.desc": "被挖掘的方塊會精確地掉落其自身。",
+  "enchantment.minecraft.silk_touch.desc": "被挖掘的方塊會掉落其自身。",
   "enchantment.minecraft.smite.desc": "提升對不死生物的傷害。",
   "enchantment.minecraft.sweeping.desc": "提升橫掃攻擊造成的傷害。",
   "enchantment.minecraft.thorns.desc": "對攻擊者造成傷害。",
