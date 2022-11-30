@@ -46,19 +46,13 @@ public class EnergyStorageRestrictable extends EnergyStorageCoFH {
     @Override
     public int receiveEnergy(int maxReceive, boolean simulate) {
 
-        if (maxReceive > this.curReceive.getAsInt()) {
-            return super.receiveEnergy(this.curReceive.getAsInt(), simulate);
-        }
-        return super.receiveEnergy(maxReceive, simulate);
+        return super.receiveEnergy(Math.min(maxReceive, curReceive.getAsInt()), simulate);
     }
 
     @Override
     public int extractEnergy(int maxExtract, boolean simulate) {
 
-        if (maxExtract > this.curExtract.getAsInt()) {
-            return super.extractEnergy(this.curExtract.getAsInt(), simulate);
-        }
-        return super.extractEnergy(maxExtract, simulate);
+        return super.extractEnergy(Math.min(maxExtract, curExtract.getAsInt()), simulate);
     }
 
     @Override
