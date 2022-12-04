@@ -64,22 +64,23 @@ public class RSControlPanel extends PanelBase {
         gui.drawIcon(matrixStack, ICON_BUTTON, 68, 20);
 
         switch (myRSControllable.getMode()) {
-            case DISABLED:
+            case DISABLED -> {
                 gui.drawIcon(matrixStack, ICON_BUTTON_HIGHLIGHT, 28, 20);
                 fontRenderer().draw(matrixStack, localize("info.cofh.disabled"), sideOffset() + 14, 54, textColor);
                 fontRenderer().draw(matrixStack, localize("info.cofh.ignored"), sideOffset() + 14, 78, textColor);
-                break;
-            case LOW:
+            }
+            case LOW -> {
                 gui.drawIcon(matrixStack, ICON_BUTTON_HIGHLIGHT, 48, 20);
                 fontRenderer().draw(matrixStack, localize("info.cofh.enabled"), sideOffset() + 14, 54, textColor);
                 fontRenderer().draw(matrixStack, localize("info.cofh.low"), sideOffset() + 14, 78, textColor);
-                break;
-            case HIGH:
+            }
+            case HIGH -> {
                 gui.drawIcon(matrixStack, ICON_BUTTON_HIGHLIGHT, 68, 20);
                 fontRenderer().draw(matrixStack, localize("info.cofh.enabled"), sideOffset() + 14, 54, textColor);
                 fontRenderer().draw(matrixStack, localize("info.cofh.high"), sideOffset() + 14, 78, textColor);
-                break;
-            default:
+            }
+            default -> {
+            }
         }
         gui.drawIcon(matrixStack, ICON_REDSTONE_OFF, 28, 20);
         gui.drawIcon(matrixStack, ICON_RS_TORCH_OFF, 48, 20);
@@ -112,16 +113,12 @@ public class RSControlPanel extends PanelBase {
             tooltipList.add(Component.translatable("info.cofh.redstone_control"));
 
             switch (myRSControllable.getMode()) {
-                case DISABLED:
-                    tooltipList.add(Component.translatable("info.cofh.disabled").withStyle(ChatFormatting.YELLOW));
-                    break;
-                case LOW:
-                    tooltipList.add(Component.translatable("info.cofh.low").withStyle(ChatFormatting.YELLOW));
-                    break;
-                case HIGH:
-                    tooltipList.add(Component.translatable("info.cofh.high").withStyle(ChatFormatting.YELLOW));
-                    break;
-                default:
+                case DISABLED ->
+                        tooltipList.add(Component.translatable("info.cofh.disabled").withStyle(ChatFormatting.YELLOW));
+                case LOW -> tooltipList.add(Component.translatable("info.cofh.low").withStyle(ChatFormatting.YELLOW));
+                case HIGH -> tooltipList.add(Component.translatable("info.cofh.high").withStyle(ChatFormatting.YELLOW));
+                default -> {
+                }
             }
             tooltipList.add(Component.translatable("info.cofh.current_signal", myRSControllable.getPower())
                     .withStyle(myRSControllable.getMode() == DISABLED

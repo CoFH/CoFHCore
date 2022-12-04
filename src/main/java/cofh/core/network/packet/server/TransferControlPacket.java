@@ -31,8 +31,8 @@ public class TransferControlPacket extends PacketBase implements IPacketServer {
             return;
         }
         BlockEntity tile = world.getBlockEntity(pos);
-        if (tile instanceof ITransferControllableTile) {
-            ((ITransferControllableTile) tile).setControl(transferIn, transferOut);
+        if (tile instanceof ITransferControllableTile transferControllableTile) {
+            transferControllableTile.setControl(transferIn, transferOut);
         }
     }
 

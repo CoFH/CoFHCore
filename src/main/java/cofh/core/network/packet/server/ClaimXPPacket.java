@@ -31,8 +31,8 @@ public class ClaimXPPacket extends PacketBase implements IPacketServer {
             return;
         }
         BlockEntity tile = world.getBlockEntity(pos);
-        if (tile instanceof ITileXpHandler) {
-            ((ITileXpHandler) tile).claimXP(player);
+        if (tile instanceof ITileXpHandler tileXpHandler) {
+            tileXpHandler.claimXP(player);
         }
         // TODO: Debug logging?
     }

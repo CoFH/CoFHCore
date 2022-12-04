@@ -31,8 +31,8 @@ public class TileConfigPacket extends PacketBase implements IPacketServer {
             return;
         }
         BlockEntity tile = world.getBlockEntity(pos);
-        if (tile instanceof IPacketHandlerTile) {
-            ((IPacketHandlerTile) tile).handleConfigPacket(buffer);
+        if (tile instanceof IPacketHandlerTile handlerTile) {
+            handlerTile.handleConfigPacket(buffer);
         }
     }
 

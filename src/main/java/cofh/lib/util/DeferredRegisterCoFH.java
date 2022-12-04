@@ -48,7 +48,7 @@ public class DeferredRegisterCoFH<T> {
     }
 
     @SuppressWarnings ({"rawtypes", "unchecked"})
-    public <I extends T> RegistryObject<I> register(final String name, final Supplier<? extends I> sup) {
+    public synchronized <I extends T> RegistryObject<I> register(final String name, final Supplier<? extends I> sup) {
 
         RegistryObject<I> ret = wrappedRegister.register(name, sup);
         registryObjects.put(ret.getId(), (RegistryObject<T>) ret);
