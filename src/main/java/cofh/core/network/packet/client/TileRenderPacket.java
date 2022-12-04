@@ -37,8 +37,8 @@ public class TileRenderPacket extends PacketBase implements IPacketClient {
             return;
         }
         BlockEntity tile = world.getBlockEntity(pos);
-        if (tile instanceof IPacketHandlerTile phTile) {
-            phTile.handleRenderPacket(buffer);
+        if (tile instanceof IPacketHandlerTile handlerTile) {
+            handlerTile.handleRenderPacket(buffer);
         }
     }
 

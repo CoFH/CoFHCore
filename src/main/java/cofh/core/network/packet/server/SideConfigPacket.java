@@ -32,8 +32,8 @@ public class SideConfigPacket extends PacketBase implements IPacketServer {
             return;
         }
         BlockEntity tile = world.getBlockEntity(pos);
-        if (tile instanceof IReconfigurableTile) {
-            ((IReconfigurableTile) tile).reconfigControl().setSideConfig(sides);
+        if (tile instanceof IReconfigurableTile reconfigurableTile) {
+            reconfigurableTile.reconfigControl().setSideConfig(sides);
         }
     }
 

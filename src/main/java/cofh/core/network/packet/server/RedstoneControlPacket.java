@@ -32,8 +32,8 @@ public class RedstoneControlPacket extends PacketBase implements IPacketServer {
             return;
         }
         BlockEntity tile = world.getBlockEntity(pos);
-        if (tile instanceof IRedstoneControllableTile) {
-            ((IRedstoneControllableTile) tile).setControl(threshold, ControlMode.VALUES[mode]);
+        if (tile instanceof IRedstoneControllableTile redstoneControllableTile) {
+            redstoneControllableTile.setControl(threshold, ControlMode.VALUES[mode]);
         }
     }
 
