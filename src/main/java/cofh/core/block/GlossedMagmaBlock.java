@@ -23,6 +23,7 @@ import net.minecraft.world.level.material.Material;
 
 import javax.annotation.Nullable;
 
+import static cofh.lib.util.Constants.DIRECTIONS;
 import static cofh.lib.util.Utils.getItemEnchantmentLevel;
 
 public class GlossedMagmaBlock extends MagmaBlock {
@@ -102,7 +103,7 @@ public class GlossedMagmaBlock extends MagmaBlock {
 
         int i = 0;
         BlockPos.MutableBlockPos blockpos$mutable = new BlockPos.MutableBlockPos();
-        for (Direction direction : Direction.values()) {
+        for (Direction direction : DIRECTIONS) {
             blockpos$mutable.setWithOffset(pos, direction);
             if (worldIn.getBlockState(blockpos$mutable).is(this)) {
                 ++i;

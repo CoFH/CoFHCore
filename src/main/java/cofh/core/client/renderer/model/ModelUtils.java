@@ -19,6 +19,7 @@ import net.minecraftforge.fluids.FluidStack;
 import java.util.*;
 
 import static cofh.lib.util.Constants.BUCKET_VOLUME;
+import static cofh.lib.util.Constants.DIRECTIONS;
 
 public class ModelUtils {
 
@@ -47,9 +48,9 @@ public class ModelUtils {
 
         public WrappedBakedModelBuilder(BakedModel model) {
 
-            for (Direction direction : Direction.values()) {
-                this.builderUnderlayQuads.put(direction, new ArrayList<>());
-                this.builderFaceQuads.put(direction, new LinkedList<>(model.getQuads(null, direction, MathHelper.RANDOM)));
+            for (Direction dir : DIRECTIONS) {
+                this.builderUnderlayQuads.put(dir, new ArrayList<>());
+                this.builderFaceQuads.put(dir, new LinkedList<>(model.getQuads(null, dir, MathHelper.RANDOM)));
             }
             this.builderGeneralQuads.addAll(model.getQuads(null, null, MathHelper.RANDOM));
 
@@ -95,7 +96,7 @@ public class ModelUtils {
             if (this.builderTexture == null) {
                 throw new RuntimeException("Missing particle!");
             } else {
-                for (Direction dir : Direction.values()) {
+                for (Direction dir : DIRECTIONS) {
                     builderUnderlayQuads.get(dir).addAll(builderFaceQuads.get(dir));
                 }
                 return new SimpleBakedModel(this.builderGeneralQuads, this.builderUnderlayQuads, this.builderAmbientOcclusion, this.builderSideLit, this.builderGui3d, this.builderTexture, this.builderCameraTransforms, this.builderItemOverrideList);
