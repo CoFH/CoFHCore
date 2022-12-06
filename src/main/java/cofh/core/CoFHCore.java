@@ -10,6 +10,7 @@ import cofh.core.command.CoFHCommand;
 import cofh.core.compat.curios.CuriosProxy;
 import cofh.core.compat.quark.QuarkFlags;
 import cofh.core.config.*;
+import cofh.core.enchantment.HoldingEnchantment;
 import cofh.core.event.ArmorEvents;
 import cofh.core.init.*;
 import cofh.core.network.packet.PacketIDs;
@@ -230,6 +231,8 @@ public class CoFHCore {
                 (msg) -> {
                     if (msg.method().equalsIgnoreCase(IMCMethods.ADD_BOW_COMPATIBILITY) && msg.messageSupplier().get() instanceof Item bow) {
                         ArcheryHelper.addValidBow(bow);
+                    } else if (msg.method().equalsIgnoreCase(IMCMethods.ADD_BOW_COMPATIBILITY) && msg.messageSupplier().get() instanceof Item container) {
+                        HoldingEnchantment.addValidItem(container);
                     }
                 }
         );
