@@ -30,24 +30,16 @@ public interface IRedstoneControllable {
 
         boolean matches(int power, int threshold) {
 
-            switch (this) {
-                case LOW:
-                    return power <= 0;
-                case HIGH:
-                    return power > 0;
-                case EQUAL:
-                    return power == threshold;
-                case UNDER:
-                    return power < threshold;
-                case OVER:
-                    return power > threshold;
-                case UNDER_INC:
-                    return power <= threshold;
-                case OVER_INC:
-                    return power >= threshold;
-                default:
-                    return true;
-            }
+            return switch (this) {
+                case LOW -> power <= 0;
+                case HIGH -> power > 0;
+                case EQUAL -> power == threshold;
+                case UNDER -> power < threshold;
+                case OVER -> power > threshold;
+                case UNDER_INC -> power <= threshold;
+                case OVER_INC -> power >= threshold;
+                default -> true;
+            };
         }
     }
     // endregion
