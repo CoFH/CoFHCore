@@ -7,7 +7,17 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class HoldingEnchantment extends EnchantmentCoFH {
+
+    private static final Set<Item> VALID_ITEMS = new HashSet<>();
+
+    public static boolean addValidItem(Item container) {
+
+        return VALID_ITEMS.add(container);
+    }
 
     public HoldingEnchantment() {
 
@@ -31,7 +41,7 @@ public class HoldingEnchantment extends EnchantmentCoFH {
     public boolean canApplyAtEnchantingTable(ItemStack stack) {
 
         Item item = stack.getItem();
-        return enable && item instanceof IContainerItem;
+        return enable && item instanceof IContainerItem || VALID_ITEMS.contains(item);
     }
 
 }

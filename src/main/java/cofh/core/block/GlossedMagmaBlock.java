@@ -1,6 +1,5 @@
 package cofh.core.block;
 
-import cofh.lib.util.helpers.BlockHelper;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -74,7 +73,7 @@ public class GlossedMagmaBlock extends MagmaBlock {
 
         if ((rand.nextInt(9) == 0 || this.shouldMelt(worldIn, pos, 4)) && this.slightlyMelt(state, worldIn, pos)) {
             BlockPos.MutableBlockPos blockpos$mutable = new BlockPos.MutableBlockPos();
-            for (Direction direction : BlockHelper.DIR_VALUES) {
+            for (Direction direction : DIRECTIONS) {
                 blockpos$mutable.setWithOffset(pos, direction);
                 BlockState blockstate = worldIn.getBlockState(blockpos$mutable);
                 if (blockstate.is(this) && !this.slightlyMelt(blockstate, worldIn, blockpos$mutable)) {
