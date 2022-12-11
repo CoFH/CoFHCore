@@ -233,7 +233,7 @@ public class CoFHCore {
                 (msg) -> {
                     if (msg.method().equalsIgnoreCase(IMCMethods.ADD_BOW_COMPATIBILITY) && msg.messageSupplier().get() instanceof Item bow) {
                         ArcheryHelper.addValidBow(bow);
-                    } else if (msg.method().equalsIgnoreCase(IMCMethods.ADD_BOW_COMPATIBILITY) && msg.messageSupplier().get() instanceof Item container) {
+                    } else if (msg.method().equalsIgnoreCase(IMCMethods.ADD_HOLDING_COMPATIBILITY) && msg.messageSupplier().get() instanceof Item container) {
                         HoldingEnchantment.addValidItem(container);
                     }
                 }
