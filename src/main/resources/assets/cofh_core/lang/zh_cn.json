@@ -155,10 +155,10 @@
   "enchantment.cofh_core.holding": "扩容",
   "enchantment.cofh_core.holding.desc": "提升特定物品的存储容量。",
 
-  "fluid.cofh_core.experience": "知识精华",
-  "fluid.cofh_core.honey": "蜂蜜",
-  "fluid.cofh_core.potion": "药水",
-  "fluid.cofh_core.steam": "蒸汽",
+  "fluid_type.cofh_core.experience": "知识精华",
+  "fluid_type.cofh_core.honey": "蜂蜜",
+  "fluid_type.cofh_core.potion": "药水",
+  "fluid_type.cofh_core.steam": "蒸汽",
 
   "item.cofh_core.ectoplasm": "翠绿灵质",
 

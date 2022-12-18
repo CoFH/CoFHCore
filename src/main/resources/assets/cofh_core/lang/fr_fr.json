@@ -149,11 +149,11 @@
   "enchantment.cofh_core.holding": "Portant",
   "enchantment.cofh_core.holding.desc": "Augmente la capacité de stockage de certains objets.",
 
-  "fluid.cofh_core.experience": "Essence de la connaissance",
-  "fluid.cofh_core.honey": "Miel",
-  "fluid.cofh_core.milk": "Lait",
-  "fluid.cofh_core.potion": "Potion",
-  "fluid.cofh_core.steam": "Vapeur",
+  "fluid_type.cofh_core.experience": "Essence de la connaissance",
+  "fluid_type.cofh_core.honey": "Miel",
+  "fluid_type.cofh_core.milk": "Lait",
+  "fluid_type.cofh_core.potion": "Potion",
+  "fluid_type.cofh_core.steam": "Vapeur",
 
   "item.cofh_core.ectoplasm": "Ectoplasme",
 

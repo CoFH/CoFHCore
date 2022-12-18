@@ -149,11 +149,11 @@
   "enchantment.cofh_core.holding": "容量拡張",
   "enchantment.cofh_core.holding.desc": "特定のアイテムの容量を増やします。",
 
-  "fluid.cofh_core.experience": "知識の雫",
-  "fluid.cofh_core.honey": "ハチミツ",
-  "fluid.cofh_core.milk": "牛乳",
-  "fluid.cofh_core.potion": "ポーション",
-  "fluid.cofh_core.steam": "蒸気",
+  "fluid_type.cofh_core.experience": "知識の雫",
+  "fluid_type.cofh_core.honey": "ハチミツ",
+  "fluid_type.cofh_core.milk": "牛乳",
+  "fluid_type.cofh_core.potion": "ポーション",
+  "fluid_type.cofh_core.steam": "蒸気",
 
   "item.cofh_core.ectoplasm": "エクトプラズム",
 

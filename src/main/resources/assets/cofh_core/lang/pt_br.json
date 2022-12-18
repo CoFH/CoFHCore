@@ -128,11 +128,11 @@
   "enchantment.cofh_core.holding": "Segurando",
   "enchantment.cofh_core.holding.desc": "Aumenta a capacidade de armazenamento de certos items.",
 
-  "fluid.cofh_core.experience": "Essência do Conhecimento",
-  "fluid.cofh_core.honey": "Mel",
-  "fluid.cofh_core.milk": "Leite",
-  "fluid.cofh_core.potion": "Poção",
-  "fluid.cofh_core.steam": "Fumaça",
+  "fluid_type.cofh_core.experience": "Essência do Conhecimento",
+  "fluid_type.cofh_core.honey": "Mel",
+  "fluid_type.cofh_core.milk": "Leite",
+  "fluid_type.cofh_core.potion": "Poção",
+  "fluid_type.cofh_core.steam": "Fumaça",
 
   "item.cofh_core.ectoplasm": "Ectoplasma",
 

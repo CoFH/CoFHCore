@@ -153,11 +153,11 @@
   "enchantment.cofh_core.holding": "보유",
   "enchantment.cofh_core.holding.desc": "특정 아이템의 저장 용량을 증가시킵니다.",
 
-  "fluid.cofh_core.experience": "지식의 진액",
-  "fluid.cofh_core.honey": "꿀",
-  "fluid.cofh_core.milk": "우유",
-  "fluid.cofh_core.potion": "물약",
-  "fluid.cofh_core.steam": "증기",
+  "fluid_type.cofh_core.experience": "지식의 진액",
+  "fluid_type.cofh_core.honey": "꿀",
+  "fluid_type.cofh_core.milk": "우유",
+  "fluid_type.cofh_core.potion": "물약",
+  "fluid_type.cofh_core.steam": "증기",
 
   "item.cofh_core.ectoplasm": "심령체",
 

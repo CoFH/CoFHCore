@@ -129,11 +129,11 @@
   "enchantment.cofh_core.holding": "Halten",
   "enchantment.cofh_core.holding.desc": "Erhöht die Speicherkapazität von bestimmten Gegenständen.",
 
-  "fluid.cofh_core.experience": "Essenz der Erfahrung",
-  "fluid.cofh_core.honey": "Hinig",
-  "fluid.cofh_core.milk": "Milch",
-  "fluid.cofh_core.potion": "Trank",
-  "fluid.cofh_core.steam": "Dampf",
+  "fluid_type.cofh_core.experience": "Essenz der Erfahrung",
+  "fluid_type.cofh_core.honey": "Hinig",
+  "fluid_type.cofh_core.milk": "Milch",
+  "fluid_type.cofh_core.potion": "Trank",
+  "fluid_type.cofh_core.steam": "Dampf",
 
   "item.cofh_core.ectoplasm": "Ektoplasma",
 
