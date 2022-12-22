@@ -157,13 +157,11 @@
 
   "fluid.cofh_core.experience": "知識精華",
   "fluid.cofh_core.honey": "蜂蜜",
+  "fluid.cofh_core.milk": "鮮奶",
   "fluid.cofh_core.potion": "藥水",
   "fluid.cofh_core.steam": "蒸汽",
 
   "item.cofh_core.ectoplasm": "翠綠靈質",
-
-  "info.cofh_core.fluid_filter.0": "將含有流體的容器放入欄位中以將其新增至篩選列表。",
-  "info.cofh_core.fluid_filter.1": "可使用額外選項來精確調整行為。",
 
   "info.cofh_core.item_filter.0": "將物品放入欄位中以將其新增至篩選列表。",
   "info.cofh_core.item_filter.1": "可使用額外選項來精確調整行為。",
