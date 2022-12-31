@@ -14,20 +14,25 @@ public class CylindricalParticleOptions extends ColorParticleOptions {
 
     public final float height;
 
-    public CylindricalParticleOptions(ParticleType<? extends CylindricalParticleOptions> type, float size, float duration, int rgba0, float height) {
+    public CylindricalParticleOptions(ParticleType<? extends CylindricalParticleOptions> type, float size, float duration, float delay, int rgba0, float height) {
 
-        super(type, size, duration, rgba0);
+        super(type, size, duration, delay, rgba0);
         this.height = height;
+    }
+
+    public CylindricalParticleOptions(ParticleType<? extends CylindricalParticleOptions> type, float size, float duration, float delay, float height) {
+
+        this(type, size, duration, delay, 0xFFFFFFFF, height);
     }
 
     public CylindricalParticleOptions(ParticleType<? extends CylindricalParticleOptions> type, float size, float duration, float height) {
 
-        this(type, size, duration, 0xFFFFFFFF, height);
+        this(type, size, duration, 0.0F, height);
     }
 
     public CylindricalParticleOptions(ParticleType<? extends CylindricalParticleOptions> type) {
 
-        this(type, 1.0F, 1.0F, 0xFFFFFFFF, 1.0F);
+        this(type, 1.0F, 1.0F, 1.0F);
     }
 
     protected CylindricalParticleOptions(ParticleType<? extends CylindricalParticleOptions> type, StringReader reader) throws CommandSyntaxException {
@@ -54,9 +59,10 @@ public class CylindricalParticleOptions extends ColorParticleOptions {
             (builder) -> builder.group(
                     Codec.FLOAT.fieldOf("size").forGetter((options) -> options.size),
                     Codec.FLOAT.fieldOf("duration").forGetter((options) -> options.duration),
+                    Codec.FLOAT.fieldOf("delay").forGetter((options) -> options.delay),
                     Codec.INT.fieldOf("rgba0").forGetter((options) -> options.rgba0),
                     Codec.FLOAT.fieldOf("height").forGetter((options) -> options.height)
-            ).apply(builder, (size, duration, rgba, height) -> new CylindricalParticleOptions(type, size, duration, rgba, height))
+            ).apply(builder, (size, duration, delay, rgba, height) -> new CylindricalParticleOptions(type, size, duration, delay, rgba, height))
     );
     public static final Deserializer<CylindricalParticleOptions> DESERIALIZER = new Deserializer<>() {
 
@@ -71,7 +77,7 @@ public class CylindricalParticleOptions extends ColorParticleOptions {
         @Nonnull
         public CylindricalParticleOptions fromNetwork(ParticleType<CylindricalParticleOptions> type, FriendlyByteBuf buf) {
 
-            return new CylindricalParticleOptions(type, buf.readFloat(), buf.readFloat(), buf.readInt(), buf.readFloat());
+            return new CylindricalParticleOptions(type, buf.readFloat(), buf.readFloat(), buf.readFloat(), buf.readInt(), buf.readFloat());
         }
     };
 

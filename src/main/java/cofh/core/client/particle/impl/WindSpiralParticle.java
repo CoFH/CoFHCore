@@ -6,6 +6,7 @@ import cofh.core.util.helpers.vfx.RenderTypes;
 import cofh.core.util.helpers.vfx.VFXHelper;
 import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector4f;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -38,17 +39,13 @@ public class WindSpiralParticle extends CylindricalParticle {
     }
 
     @Override
-    public void render(PoseStack stack, MultiBufferSource buffer, int packedLightIn, float partialTicks) {
+    public void render(PoseStack stack, MultiBufferSource buffer, VertexConsumer consumer, int packedLightIn, float time, float pTicks) {
 
         SplittableRandom rand = new SplittableRandom(this.seed);
-        float time = age + partialTicks - (float) rand.nextDouble(0, this.fLifetime * 0.25F + 0.001F);
-        if (time < 0 || time > fLifetime) {
-            return;
-        }
         if (!rotation.equals(Quaternion.ONE)) {
             stack.mulPose(rotation);
         }
-        float progress = time / fLifetime;
+        float progress = time / duration;
         float easeCub = 1.0F - MathHelper.easeInCubic(progress);
         float easeSin = MathHelper.sin(progress * MathHelper.F_PI);
         float easePlat = MathHelper.easePlateau(progress);
@@ -67,13 +64,6 @@ public class WindSpiralParticle extends CylindricalParticle {
             poss[i] = new Vector4f(r * MathHelper.cos(angle), i * yScale + height * y, r * MathHelper.sin(angle), 1.0F);
         }
         VFXHelper.renderStreamLine(stack, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLightIn, poss, rgba, VFXHelper.getWidthFunc((easeSin * 0.08F + 0.01F) * (float) rand.nextDouble(0.3F, 1.0F)));
-    }
-
-    @Override
-    protected void setDuration(float duration) {
-
-        fLifetime = duration;
-        lifetime = MathHelper.ceil(fLifetime * 1.25F);
     }
 
     @Nonnull

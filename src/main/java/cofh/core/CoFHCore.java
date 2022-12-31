@@ -132,6 +132,7 @@ public class CoFHCore {
         CONFIG_MANAGER.setupClient();
         CONFIG_MANAGER.setupServer();
 
+        CoreItems.register();
         CoreBlocks.register();
         CoreFluids.register();
 

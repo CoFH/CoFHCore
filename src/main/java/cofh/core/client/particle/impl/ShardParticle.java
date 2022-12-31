@@ -34,7 +34,7 @@ public class ShardParticle extends PointToPointParticle {
 
         super(data, level, sx, sy, sz, ex, ey, ez);
         Vec3 disp = new Vec3(ex - sx, ey - sy, ez - sz);
-        Vec3 vel = disp.scale(1.0F / fLifetime);
+        Vec3 vel = disp.scale(1.0F / duration);
         xd = vel.x;
         yd = vel.y;
         zd = vel.z;
@@ -54,7 +54,7 @@ public class ShardParticle extends PointToPointParticle {
         this.zo = this.z;
         if (this.age >= this.lifetime) {
             this.remove();
-        } else if (this.age < this.fLifetime) {
+        } else if (this.age < this.duration) {
             this.move(this.xd, this.yd, this.zd);
         }
         ++this.age;
@@ -64,7 +64,7 @@ public class ShardParticle extends PointToPointParticle {
     public void move(double dx, double dy, double dz) {
 
         if (this.hasPhysics && dx * dx + dy * dy + dz * dz < 10000) {
-            float time = Math.min(this.fLifetime - this.age, 1.0F);
+            float time = Math.min(this.duration - this.age, 1.0F);
             Vec3 pos = new Vec3(this.x, this.y, this.z);
             Vec3 step = new Vec3(dx * time, dy * time, dz * time);
             Vec3 next = pos.add(step);
@@ -73,9 +73,9 @@ public class ShardParticle extends PointToPointParticle {
             Vec3 delta = collide.subtract(pos);
             double distSqr = delta.lengthSqr();
             if (speed * speed - distSqr > 0.001F) {
-                this.fLifetime = this.age + (float) Math.sqrt(distSqr) / speed;
+                this.duration = this.age + (float) Math.sqrt(distSqr) / speed;
             }
-            if (this.age + 1 >= this.fLifetime) {
+            if (this.age + 1 >= this.duration) {
                 this.level.addParticle(new ColorParticleOptions(CoreParticles.BLAST.get(), this.size * 0.25F, 6 + random.nextInt(4), this.rgba0), collide.x, collide.y, collide.z, 0, 0, 0);
             }
 
@@ -93,12 +93,12 @@ public class ShardParticle extends PointToPointParticle {
     }
 
     @Override
-    public void render(PoseStack stack, MultiBufferSource buffer, int packedLight, float partialTicks) {
+    public void render(PoseStack stack, MultiBufferSource buffer, VertexConsumer consumer, int packedLight, float partialTicks, float pTicks) {
 
         float time = this.age + partialTicks - 1;
-        float progress = time / fLifetime;
+        float progress = time / duration;
         //System.out.println(this.age); //this.x + " " + this.y + " " + this.z
-        if (fLifetime < time) {
+        if (duration < time) {
             return;
         }
         //if (progress > 1.0F) {
@@ -119,7 +119,7 @@ public class ShardParticle extends PointToPointParticle {
         float w = 0.12F;
         float xs = perp.x * w;
         float ys = perp.y * w;
-        VertexConsumer consumer = buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT);
+        consumer = buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT);
         int r = (rgba1 >> 24) & 0xFF;
         int g = (rgba1 >> 16) & 0xFF;
         int b = (rgba1 >> 8) & 0xFF;
@@ -137,14 +137,14 @@ public class ShardParticle extends PointToPointParticle {
     }
 
     @Override
-    public void setDuration(float duration) {
+    public void setLifetime(float duration, float delay) {
 
-        float speed = this.fLifetime / duration;
+        float speed = this.duration / duration;
         this.xd *= speed;
         this.yd *= speed;
         this.zd *= speed;
         this.speed *= speed;
-        super.setDuration(duration);
+        super.setLifetime(duration, delay);
     }
 
     @Nonnull

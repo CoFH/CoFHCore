@@ -1,6 +1,6 @@
 package cofh.core.client.particle.impl;
 
-import cofh.core.client.particle.TextureParticleCoFH;
+import cofh.core.client.particle.SpriteParticle;
 import cofh.core.client.particle.options.ColorParticleOptions;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleProvider;
@@ -12,20 +12,14 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nonnull;
 
 @OnlyIn (Dist.CLIENT)
-public class BlastParticle extends TextureParticleCoFH {
+public class BlastParticle extends SpriteParticle {
 
     private BlastParticle(ColorParticleOptions data, ClientLevel level, SpriteSet sprites, double x, double y, double z, double dx, double dy, double dz) {
 
-        super(data, level, sprites, x, y, z);
+        super(data, level, sprites, x, y, z, dx, dy, dz);
         gravity = -0.1F;
         friction = 0.9F;
-        float var = 0.05F;
-        xd = dx + rand.nextFloat(-var, var);
-        yd = dy + rand.nextFloat(-var, var);
-        zd = dz + rand.nextFloat(-var, var);
-        //this.fLifetime = this.lifetime = 6 + this.random.nextInt(4);
-        setSpriteFromAge(sprites);
-        oRoll = roll = 0.5F * (float) rand.nextGaussian();
+        oRoll = roll = 0.5F * (float) random.nextGaussian();
     }
 
     @Override
@@ -37,7 +31,7 @@ public class BlastParticle extends TextureParticleCoFH {
     @Override
     public int getLightColor(float partialTicks) {
 
-        return 0x00F000F0; //TODO
+        return 0x00F000F0;
     }
 
     @Override
@@ -49,7 +43,7 @@ public class BlastParticle extends TextureParticleCoFH {
         if (this.age++ >= this.lifetime) {
             this.remove();
         } else {
-            this.setSpriteFromAge(this.sprites);
+            this.sprite = sprites.get(this.age, this.lifetime);
         }
     }
 

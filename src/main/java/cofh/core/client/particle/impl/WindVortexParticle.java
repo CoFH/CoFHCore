@@ -6,6 +6,7 @@ import cofh.core.util.helpers.vfx.RenderTypes;
 import cofh.core.util.helpers.vfx.VFXHelper;
 import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector4f;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -41,17 +42,13 @@ public class WindVortexParticle extends CylindricalParticle { //TODO
     }
 
     @Override
-    public void render(PoseStack stack, MultiBufferSource buffer, int packedLight, float partialTicks) {
+    public void render(PoseStack stack, MultiBufferSource buffer, VertexConsumer consumer, int packedLight, float time, float pTicks) {
 
         SplittableRandom rand = new SplittableRandom(this.seed);
-        float time = age + partialTicks - (float) rand.nextDouble(this.fLifetime * 0.25F);
-        if (time < 0 || time > fLifetime) {
-            return;
-        }
         if (!rotation.equals(Quaternion.ONE)) {
             stack.mulPose(rotation);
         }
-        float progress = time / fLifetime;
+        float progress = time / duration;
         float easePlat = MathHelper.easePlateau(progress);
 
         int a = MathHelper.clamp((int) ((rgba0 & 0xFF) * easePlat), 0, 255);
@@ -76,13 +73,6 @@ public class WindVortexParticle extends CylindricalParticle { //TODO
         }
         VFXHelper.renderStreamLine(stack, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLight, poss, (rgba0 & 0xFFFFFF00) | a, VFXHelper.getWidthFunc((float) rand.nextDouble(0.04F, 0.05F)));
         VFXHelper.renderCyclone(stack, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLight, 1, (float) rand.nextDouble(0.04F, 0.05F), progress * 0.5F + (float) rand.nextDouble(420F), a * 0.00392157F);
-    }
-
-    @Override
-    protected void setDuration(float duration) {
-
-        fLifetime = duration;
-        lifetime = MathHelper.ceil(fLifetime * 1.25F);
     }
 
     @Nonnull

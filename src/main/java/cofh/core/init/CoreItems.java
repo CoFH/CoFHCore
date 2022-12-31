@@ -1,5 +1,6 @@
 package cofh.core.init;
 
+import cofh.core.item.DevStickItem;
 import cofh.lib.item.DyeableHorseArmorItemCoFH;
 import cofh.lib.item.HorseArmorItemCoFH;
 import cofh.lib.item.ShearsItemCoFH;
@@ -8,6 +9,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 
 import static cofh.core.CoFHCore.ITEMS;
+import static cofh.lib.util.Constants.FALSE;
 
 public class CoreItems {
 
@@ -17,6 +19,7 @@ public class CoreItems {
 
     public static void register() {
 
+        ITEMS.register("dev_stick", () -> new DevStickItem(new Item.Properties().stacksTo(1).tab(CreativeModeTab.TAB_MISC).fireResistant()).setShowInGroups(FALSE));
     }
 
     public static void registerHorseArmorOverrides() {

@@ -45,7 +45,7 @@ public class SparkParticle extends TextureSheetParticle {
     @Override
     public int getLightColor(float pTicks) {
 
-        return 15728880;
+        return 0x00F000F0;
     }
 
     @OnlyIn (Dist.CLIENT)

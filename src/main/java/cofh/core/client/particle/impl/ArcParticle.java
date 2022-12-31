@@ -5,6 +5,7 @@ import cofh.core.client.particle.options.BiColorParticleOptions;
 import cofh.core.util.helpers.vfx.VFXHelper;
 import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleProvider;
@@ -42,13 +43,9 @@ public class ArcParticle extends PointToPointParticle {
     }
 
     @Override
-    public void render(PoseStack stack, MultiBufferSource buffer, int packedLight, float partialTicks) {
+    public void render(PoseStack stack, MultiBufferSource buffer, VertexConsumer consumer, int packedLight, float time, float pTicks) {
 
-        float time = age + partialTicks;
-        if (fLifetime < time) {
-            return;
-        }
-        float progress = time / lifetime;
+        float progress = time / duration;
         float easeCos = MathHelper.cos(progress * MathHelper.F_PI * 0.5F);
         float easeCub = 1.0F - MathHelper.easeInCubic(progress);
         VFXHelper.alignVertical(stack, Vector3f.ZERO, dest);

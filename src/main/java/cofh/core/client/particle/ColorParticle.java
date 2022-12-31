@@ -3,7 +3,7 @@ package cofh.core.client.particle;
 import cofh.core.client.particle.options.ColorParticleOptions;
 import net.minecraft.client.multiplayer.ClientLevel;
 
-public abstract class ColorParticle extends CustomRenderParticle {
+public abstract class ColorParticle extends CoFHParticle {
 
     public int rgba0;
 

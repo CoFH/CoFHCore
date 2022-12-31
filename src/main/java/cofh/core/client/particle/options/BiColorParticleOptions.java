@@ -14,20 +14,20 @@ public class BiColorParticleOptions extends ColorParticleOptions {
 
     public final int rgba1;
 
-    public BiColorParticleOptions(ParticleType<? extends BiColorParticleOptions> type, float size, float duration, int rgba0, int rgba1) {
+    public BiColorParticleOptions(ParticleType<? extends BiColorParticleOptions> type, float size, float duration, float delay, int rgba0, int rgba1) {
 
-        super(type, size, duration, rgba0);
+        super(type, size, duration, delay, rgba0);
         this.rgba1 = rgba1;
     }
 
-    public BiColorParticleOptions(ParticleType<? extends BiColorParticleOptions> type, float size, float duration) {
+    public BiColorParticleOptions(ParticleType<? extends BiColorParticleOptions> type, float size, float duration, float delay) {
 
-        this(type, size, duration, 0xFFFFFFFF, 0xFFFFFFFF);
+        this(type, size, duration, delay, 0xFFFFFFFF, 0xFFFFFFFF);
     }
 
     public BiColorParticleOptions(ParticleType<? extends BiColorParticleOptions> type) {
 
-        this(type, 1.0F, 1.0F, 0xFFFFFFFF, 0xFFFFFFFF);
+        this(type, 1.0F, 1.0F, 0.0F);
     }
 
     protected BiColorParticleOptions(ParticleType<? extends BiColorParticleOptions> type, StringReader reader) throws CommandSyntaxException {
@@ -54,9 +54,10 @@ public class BiColorParticleOptions extends ColorParticleOptions {
             (builder) -> builder.group(
                     Codec.FLOAT.fieldOf("size").forGetter((options) -> options.size),
                     Codec.FLOAT.fieldOf("duration").forGetter((options) -> options.duration),
+                    Codec.FLOAT.fieldOf("delay").forGetter((options) -> options.delay),
                     Codec.INT.fieldOf("rgba0").forGetter((options) -> options.rgba0),
                     Codec.INT.fieldOf("rgba1").forGetter((options) -> options.rgba1)
-            ).apply(builder, (size, duration, rgba0, rgba1) -> new BiColorParticleOptions(type, size, duration, rgba0, rgba1))
+            ).apply(builder, (size, duration, delay, rgba0, rgba1) -> new BiColorParticleOptions(type, size, duration, delay, rgba0, rgba1))
     );
     public static final Deserializer<BiColorParticleOptions> DESERIALIZER = new Deserializer<>() {
 
@@ -71,7 +72,7 @@ public class BiColorParticleOptions extends ColorParticleOptions {
         @Nonnull
         public BiColorParticleOptions fromNetwork(ParticleType<BiColorParticleOptions> type, FriendlyByteBuf buf) {
 
-            return new BiColorParticleOptions(type, buf.readFloat(), buf.readFloat(), buf.readInt(), buf.readInt());
+            return new BiColorParticleOptions(type, buf.readFloat(), buf.readFloat(), buf.readFloat(), buf.readInt(), buf.readInt());
         }
     };
 

@@ -15,20 +15,26 @@ public class ColorParticleOptions extends CoFHParticleOptions {
 
     public final int rgba0;
 
-    public ColorParticleOptions(ParticleType<? extends ColorParticleOptions> type, float size, float duration, int rgba) {
+    public ColorParticleOptions(ParticleType<? extends ColorParticleOptions> type, float size, float duration, float delay, int rgba) {
 
-        super(type, size, duration);
+        super(type, size, duration, delay);
         this.rgba0 = rgba;
     }
 
+    public ColorParticleOptions(ParticleType<? extends ColorParticleOptions> type, float size, float duration, float delay) {
+
+        this(type, size, duration, delay,0xFFFFFFFF);
+    }
+
+
     public ColorParticleOptions(ParticleType<? extends ColorParticleOptions> type, float size, float duration) {
 
-        this(type, size, duration, 0xFFFFFFFF);
+        this(type, size, duration, 0.0F);
     }
 
     public ColorParticleOptions(ParticleType<? extends ColorParticleOptions> type) {
 
-        this(type, 1.0F, 1.0F, 0xFFFFFFFF);
+        this(type, 1.0F, 1.0F);
     }
 
     protected ColorParticleOptions(ParticleType<? extends ColorParticleOptions> type, StringReader reader) throws CommandSyntaxException {
@@ -55,8 +61,9 @@ public class ColorParticleOptions extends CoFHParticleOptions {
             (builder) -> builder.group(
                     Codec.FLOAT.fieldOf("size").forGetter((options) -> options.size),
                     Codec.FLOAT.fieldOf("duration").forGetter((options) -> options.duration),
+                    Codec.FLOAT.fieldOf("delay").forGetter((options) -> options.delay),
                     Codec.INT.fieldOf("rgba0").forGetter((options) -> options.rgba0)
-            ).apply(builder, (size, duration, rgba) -> new ColorParticleOptions(type, size, duration, rgba))
+            ).apply(builder, (size, duration, delay, rgba) -> new ColorParticleOptions(type, size, duration, delay, rgba))
     );
     public static final ParticleOptions.Deserializer<ColorParticleOptions> DESERIALIZER = new ParticleOptions.Deserializer<>() {
 
@@ -71,7 +78,7 @@ public class ColorParticleOptions extends CoFHParticleOptions {
         @Nonnull
         public ColorParticleOptions fromNetwork(ParticleType<ColorParticleOptions> type, FriendlyByteBuf buf) {
 
-            return new ColorParticleOptions(type, buf.readFloat(), buf.readFloat(), buf.readInt());
+            return new ColorParticleOptions(type, buf.readFloat(), buf.readFloat(), buf.readFloat(), buf.readInt());
         }
     };
 

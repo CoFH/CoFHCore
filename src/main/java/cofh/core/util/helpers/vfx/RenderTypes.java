@@ -53,6 +53,8 @@ public class RenderTypes {
     }
 
     public static ParticleRenderType CUSTOM = ParticleRenderTypeCoFH.copy(ParticleRenderType.CUSTOM);
+    public static ParticleRenderType PARTICLE_SHEET_OPAQUE = ParticleRenderTypeCoFH.copy(ParticleRenderType.PARTICLE_SHEET_OPAQUE);
+    public static ParticleRenderType PARTICLE_SHEET_TRANSLUCENT = ParticleRenderTypeCoFH.copy(ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT);
     public static ParticleRenderType PARTICLE_SHEET_OVER = ParticleRenderTypeCoFH.translucentSheet(() -> PARTICLE_OVER);
     public static ParticleRenderType PARTICLE_SHEET_ADDITIVE_MUTLIPLY = ParticleRenderTypeCoFH.translucentSheet(() -> PARTICLE_ADDITIVE_MULTIPLY);
     public static ParticleRenderType PARTICLE_SHEET_ADDITIVE_SCREEN = ParticleRenderTypeCoFH.translucentSheet(() -> PARTICLE_ADDITIVE_SCREEN);

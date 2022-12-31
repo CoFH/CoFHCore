@@ -4,6 +4,7 @@ import cofh.core.client.particle.CylindricalParticle;
 import cofh.core.client.particle.options.CylindricalParticleOptions;
 import cofh.core.util.helpers.vfx.VFXHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
@@ -31,13 +32,9 @@ public class ShockwaveParticle extends CylindricalParticle {
     }
 
     @Override
-    public void render(PoseStack stack, MultiBufferSource buffer, int packedLightIn, float partialTicks) {
+    public void render(PoseStack stack, MultiBufferSource buffer, VertexConsumer consumer, int packedLightIn, float time, float pTicks) {
 
-        float time = age + partialTicks;
-        if (fLifetime < time) {
-            return;
-        }
-        VFXHelper.renderShockwave(stack, buffer, level, new BlockPos(x, y, z), time * (size * 0.5F + 5) / fLifetime, size, height);
+        VFXHelper.renderShockwave(stack, buffer, level, new BlockPos(x, y, z), time * (size * 0.5F + 5) / duration, size, height);
     }
 
     @Nonnull
