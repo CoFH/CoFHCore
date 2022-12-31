@@ -239,7 +239,7 @@ public final class ArcheryHelper {
     public static Stream<EntityHitResult> findHitEntities(Level world, Entity exclude, Vec3 startPos, Vec3 endPos, AABB searchArea, Vec3 padding, Predicate<Entity> filter) {
 
         return world.getEntities(exclude, searchArea, filter).stream()
-                .map(entity -> entity.getBoundingBox().inflate(padding.x(), padding.y(), padding.z()).clip(startPos, endPos).map(Vec3 -> new EntityHitResult(entity, Vec3)).orElse(null))
+                .map(entity -> entity.getBoundingBox().inflate(padding.x(), padding.y(), padding.z()).clip(startPos, endPos).map(hitPos -> new EntityHitResult(entity, hitPos)).orElse(null))
                 .filter(Objects::nonNull);
     }
 
