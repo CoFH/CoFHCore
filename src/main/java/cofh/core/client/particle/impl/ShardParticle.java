@@ -76,7 +76,7 @@ public class ShardParticle extends PointToPointParticle {
                 this.duration = this.age + (float) Math.sqrt(distSqr) / speed;
             }
             if (this.age + 1 >= this.duration) {
-                this.level.addParticle(new ColorParticleOptions(CoreParticles.BLAST.get(), this.size * 0.25F, 6 + random.nextInt(4), this.rgba0), collide.x, collide.y, collide.z, 0, 0, 0);
+                this.level.addParticle(new ColorParticleOptions(CoreParticles.BLAST.get(), this.size * 0.25F, 6 + random.nextInt(4), c0.pack()), collide.x, collide.y, collide.z, 0, 0, 0);
             }
 
             dx = delta.x;
@@ -120,20 +120,16 @@ public class ShardParticle extends PointToPointParticle {
         float xs = perp.x * w;
         float ys = perp.y * w;
         consumer = buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT);
-        int r = (rgba1 >> 24) & 0xFF;
-        int g = (rgba1 >> 16) & 0xFF;
-        int b = (rgba1 >> 8) & 0xFF;
-        int a = rgba1 & 0xFF;
-        new VFXHelper.VFXNode(start.x() + xs, start.x() - xs, start.y() + ys, start.y() - ys, start.z(), w).renderStart(norm, consumer, packedLight, r, g, b, a);
-        new VFXHelper.VFXNode(end.x(), end.x(), end.y(), end.y(), end.z(), w * 0.1F).renderEnd(norm, consumer, packedLight, r, g, b, a);
+        new VFXHelper.VFXNode(start.x() + xs, start.x() - xs, start.y() + ys, start.y() - ys, start.z(), w).renderStart(norm, consumer, packedLight, c1);
+        new VFXHelper.VFXNode(end.x(), end.x(), end.y(), end.y(), end.z(), w * 0.1F).renderEnd(norm, consumer, packedLight, c1);
 
         // If different colors, end batch so the body always renders on top of the trail.
-        if ((rgba0 | 0xFF) != (rgba1 | 0xFF)) {
+        if (!c0.sameRGB(c1)) {
             buffer.getBuffer(RenderTypes.LINEAR_GLOW);
             buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT);
         }
         // Body
-        RenderHelper.renderBipyramid(stack, consumer, packedLight, rgba0, 4, 0.6F, 0.1F);
+        RenderHelper.renderBipyramid(stack, consumer, packedLight, c0, 4, 0.6F, 0.1F);
     }
 
     @Override

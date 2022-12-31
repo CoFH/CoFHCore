@@ -54,7 +54,6 @@ public class WindSpiralParticle extends CylindricalParticle {
         float yScale = offset * (float) rand.nextDouble(0.015F, 0.03F);
         float y = (expand * (float) rand.nextDouble(1.0F, 1.5F) - 0.6F);
         float rot = roll + progress * (float) rand.nextDouble(6.0F, 9.0F);
-        int rgba = VFXHelper.alphaScale(rgba0, easeCub);
         int length = (int) (3 + easePlat * rand.nextInt(16, 24));
         Vector4f[] poss = new Vector4f[length];
         int half = length / 2;
@@ -63,7 +62,7 @@ public class WindSpiralParticle extends CylindricalParticle {
             float r = size * (1.0F + i * 0.02F) * expand;
             poss[i] = new Vector4f(r * MathHelper.cos(angle), i * yScale + height * y, r * MathHelper.sin(angle), 1.0F);
         }
-        VFXHelper.renderStreamLine(stack, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLightIn, poss, rgba, VFXHelper.getWidthFunc((easeSin * 0.08F + 0.01F) * (float) rand.nextDouble(0.3F, 1.0F)));
+        VFXHelper.renderStreamLine(stack, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLightIn, poss, c0, VFXHelper.getWidthFunc((easeSin * 0.08F + 0.01F) * (float) rand.nextDouble(0.3F, 1.0F)));
     }
 
     @Nonnull

@@ -2,6 +2,7 @@ package cofh.core.client.particle.impl;
 
 import cofh.core.client.particle.CylindricalParticle;
 import cofh.core.client.particle.options.CylindricalParticleOptions;
+import cofh.core.util.helpers.vfx.Color;
 import cofh.core.util.helpers.vfx.RenderTypes;
 import cofh.core.util.helpers.vfx.VFXHelper;
 import cofh.lib.util.helpers.MathHelper;
@@ -51,7 +52,6 @@ public class WindVortexParticle extends CylindricalParticle { //TODO
         float progress = time / duration;
         float easePlat = MathHelper.easePlateau(progress);
 
-        int a = MathHelper.clamp((int) ((rgba0 & 0xFF) * easePlat), 0, 255);
         stack.scale(size * 0.2F, height * rand.nextFloat(-0.5F, 0.5F), size * 0.2F);
 
         float incr = VFXHelper.WIND_INCR;
@@ -71,8 +71,9 @@ public class WindVortexParticle extends CylindricalParticle { //TODO
             rot += roll;
             poss[i] = new Vector4f(r * MathHelper.cos(rot), 0.25F, r * MathHelper.sin(rot), 1.0F);
         }
-        VFXHelper.renderStreamLine(stack, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLight, poss, (rgba0 & 0xFFFFFF00) | a, VFXHelper.getWidthFunc((float) rand.nextDouble(0.04F, 0.05F)));
-        VFXHelper.renderCyclone(stack, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLight, 1, (float) rand.nextDouble(0.04F, 0.05F), progress * 0.5F + (float) rand.nextDouble(420F), a * 0.00392157F);
+        Color color = c0.scaleAlpha(easePlat);
+        VFXHelper.renderStreamLine(stack, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLight, poss, color, VFXHelper.getWidthFunc((float) rand.nextDouble(0.04F, 0.05F)));
+        VFXHelper.renderCyclone(stack, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLight, 1, (float) rand.nextDouble(0.04F, 0.05F), progress * 0.5F + (float) rand.nextDouble(420F), color.a * 0.00392157F);
     }
 
     @Nonnull

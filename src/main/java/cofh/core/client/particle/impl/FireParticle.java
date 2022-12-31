@@ -2,6 +2,7 @@ package cofh.core.client.particle.impl;
 
 import cofh.core.client.particle.SpriteParticle;
 import cofh.core.client.particle.options.ColorParticleOptions;
+import cofh.core.util.helpers.vfx.Color;
 import cofh.core.util.helpers.vfx.RenderTypes;
 import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -41,7 +42,7 @@ public class FireParticle extends SpriteParticle {
         //this.rCol = ((rgba >> 24) & 0xFF) * 0.0039215686F;
         //this.gCol = ((rgba >> 16) & 0xFF) * 0.0039215686F;
         //this.bCol = ((rgba >> 8) & 0xFF) * 0.0039215686F;
-        setPrimColor((this.rgba0 & 0xFFFFFF00) | (int) (baseAlpha * easeCub));
+        setColor0(new Color(c0.r, c0.g, c0.b, (int) (baseAlpha * easeCub)));
 
         //Only set render size based off BB size
         this.size = this.bbWidth * MathHelper.sin(0.25F * MathHelper.F_PI * (progress + 1));

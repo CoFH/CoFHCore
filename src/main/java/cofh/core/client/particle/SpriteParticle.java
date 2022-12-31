@@ -71,10 +71,10 @@ public abstract class SpriteParticle extends ColorParticle {
         float xn = x - 0.5F;
         float yp = y + 0.5F;
         float yn = y - 0.5F;
-        consumer.vertex(xp, yp, z).uv(u0, v0).color(r, g, b, a).uv2(packedLight).endVertex();
-        consumer.vertex(xn, yp, z).uv(u1, v0).color(r, g, b, a).uv2(packedLight).endVertex();
-        consumer.vertex(xn, yn, z).uv(u1, v1).color(r, g, b, a).uv2(packedLight).endVertex();
-        consumer.vertex(xp, yn, z).uv(u0, v1).color(r, g, b, a).uv2(packedLight).endVertex();
+        consumer.vertex(xp, yp, z).uv(u0, v0).color(c0.r, c0.g, c0.b, c0.a).uv2(packedLight).endVertex();
+        consumer.vertex(xn, yp, z).uv(u1, v0).color(c0.r, c0.g, c0.b, c0.a).uv2(packedLight).endVertex();
+        consumer.vertex(xn, yn, z).uv(u1, v1).color(c0.r, c0.g, c0.b, c0.a).uv2(packedLight).endVertex();
+        consumer.vertex(xp, yn, z).uv(u0, v1).color(c0.r, c0.g, c0.b, c0.a).uv2(packedLight).endVertex();
     }
 
 }

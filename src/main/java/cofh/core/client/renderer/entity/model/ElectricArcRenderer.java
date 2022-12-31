@@ -1,6 +1,7 @@
 package cofh.core.client.renderer.entity.model;
 
 import cofh.core.entity.ElectricArc;
+import cofh.core.util.helpers.vfx.Color;
 import cofh.core.util.helpers.vfx.VFXHelper;
 import cofh.lib.client.renderer.entity.ITranslucentRenderer;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -28,7 +29,7 @@ public class ElectricArcRenderer extends EntityRenderer<ElectricArc> implements 
 
         VFXHelper.alignVertical(stack, new Vector3f(0, 5.9F, 0), new Vector3f(0, -0.9F, 0));
         VFXHelper.renderStraightArcs(stack, buffer, 0x00F000F0, 2, 0.05F, VFXHelper.getSeedWithTime(entity.seed, time),
-                0xFFFFFFFF, 0xFFFC52A4, VFXHelper.getTaperOffsetFromTimes(time, ElectricArc.defaultDuration, 3));
+                new Color(0xFFFFFFFF), new Color(0xFFFC52A4), VFXHelper.getTaperOffsetFromTimes(time, ElectricArc.defaultDuration, 3));
 
         stack.popPose();
 

@@ -1,12 +1,13 @@
 package cofh.core.client.particle;
 
 import cofh.core.client.particle.options.BiColorParticleOptions;
+import cofh.core.util.helpers.vfx.Color;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.phys.AABB;
 
 public abstract class PointToPointParticle extends ColorParticle {
 
-    protected int rgba1 = 0xFFFFFFFF;
+    protected Color c1 = Color.WHITE;
 
     public PointToPointParticle(BiColorParticleOptions data, ClientLevel level, double sx, double sy, double sz, double ex, double ey, double ez) {
 
@@ -16,18 +17,17 @@ public abstract class PointToPointParticle extends ColorParticle {
         this.setBoundingBox(bound);
         this.bbWidth = (float) Math.max(bound.getXsize(), bound.getZsize());
         this.bbHeight = (float) bound.getYsize();
-        setSecColor(data.rgba1);
+        setColor1(data.rgba1);
     }
 
-    protected void setSecColor(int rgba) {
+    protected void setColor1(int rgba) {
 
-        this.rgba1 = rgba;
+        this.c1 = new Color(rgba);
     }
 
-    protected void setColors(int rgba0, int rgba1) {
+    protected void setColor1(Color color) {
 
-        setPrimColor(rgba0);
-        setSecColor(rgba1);
+        this.c1 = color;
     }
 
 }
