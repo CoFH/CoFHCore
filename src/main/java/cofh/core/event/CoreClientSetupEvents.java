@@ -2,9 +2,7 @@ package cofh.core.event;
 
 import cofh.core.client.particle.impl.*;
 import cofh.lib.api.item.IColorableItem;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.item.ItemColors;
-import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelEvent.RegisterGeometryLoaders;
@@ -55,24 +53,22 @@ public class CoreClientSetupEvents {
     @SubscribeEvent
     public static void registerParticleFactories(final RegisterParticleProvidersEvent event) {
 
-        ParticleEngine manager = Minecraft.getInstance().particleEngine;
+        event.register(FROST.get(), FrostParticle.Factory::new);
+        event.register(PLASMA.get(), PlasmaBallParticle.Factory::new);
+        event.register(SPARK.get(), SparkParticle.Factory::new);
 
-        manager.register(FROST.get(), FrostParticle.Factory::new);
-        manager.register(PLASMA.get(), PlasmaBallParticle.Factory::new);
-        manager.register(SPARK.get(), SparkParticle.Factory::new);
+        event.register(FIRE.get(), FireParticle::factory);
+        event.register(BLAST.get(), BlastParticle::factory);
+        event.register(MIST.get(), MistParticle::factory);
 
-        manager.register(FIRE.get(), FireParticle::factory);
-        manager.register(BLAST.get(), BlastParticle::factory);
-        manager.register(MIST.get(), MistParticle::factory);
+        event.register(SHOCKWAVE.get(), ShockwaveParticle::factory);
+        event.register(BLAST_WAVE.get(), BlastWaveParticle::factory);
+        event.register(WIND_VORTEX.get(), WindVortexParticle::factory);
+        event.register(WIND_SPIRAL.get(), WindSpiralParticle::factory);
 
-        manager.register(SHOCKWAVE.get(), ShockwaveParticle::factory);
-        manager.register(BLAST_WAVE.get(), BlastWaveParticle::factory);
-        manager.register(WIND_VORTEX.get(), WindVortexParticle::factory);
-        manager.register(WIND_SPIRAL.get(), WindSpiralParticle::factory);
-
-        manager.register(BEAM.get(), BeamParticle::factory);
-        manager.register(STRAIGHT_ARC.get(), ArcParticle::factory);
-        manager.register(SHARD.get(), ShardParticle::factory);
+        event.register(BEAM.get(), BeamParticle::factory);
+        event.register(STRAIGHT_ARC.get(), ArcParticle::factory);
+        event.register(SHARD.get(), ShardParticle::factory);
     }
 
     // region HELPERS

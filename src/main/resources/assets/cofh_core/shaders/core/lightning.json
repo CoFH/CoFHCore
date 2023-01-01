@@ -4,13 +4,14 @@
     "srcrgb": "srcalpha",
     "dstrgb": "1-srcalpha"
   },
-  "vertex": "cofh_core:fire",
-  "fragment": "cofh_core:fire",
+  "vertex": "cofh_core:lightning",
+  "fragment": "cofh_core:lightning",
   "attributes": [
     "Position",
     "UV0",
     "Color",
-    "UV2"
+    "UV2",
+    "Lifetime"
   ],
   "samplers": [
     {"name": "Sampler0"},

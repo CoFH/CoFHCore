@@ -7,41 +7,30 @@ import cofh.core.init.CoreParticles;
 import cofh.core.util.helpers.RenderHelper;
 import cofh.core.util.helpers.vfx.RenderTypes;
 import cofh.core.util.helpers.vfx.VFXHelper;
+import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
 import com.mojang.math.Vector4f;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.Vec2;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
+import java.util.SplittableRandom;
 
 @OnlyIn (Dist.CLIENT)
 public class ShardParticle extends PointToPointParticle {
 
-    protected float speed;
-
     private ShardParticle(BiColorParticleOptions data, ClientLevel level, double sx, double sy, double sz, double ex, double ey, double ez) {
 
         super(data, level, sx, sy, sz, ex, ey, ez);
-        Vec3 disp = new Vec3(ex - sx, ey - sy, ez - sz);
-        Vec3 vel = disp.scale(1.0F / duration);
-        xd = vel.x;
-        yd = vel.y;
-        zd = vel.z;
-        speed = (float) vel.length();
         this.friction = 1.0F;
-        this.hasPhysics = true;
-        tick();
         //rgba0 = 0xff45ff00;
         //rgba1 = 0xa525f700;
     }
@@ -49,63 +38,30 @@ public class ShardParticle extends PointToPointParticle {
     @Override
     public void tick() {
 
-        this.xo = this.x;
-        this.yo = this.y;
-        this.zo = this.z;
-        if (this.age >= this.lifetime) {
+        if (this.age++ >= this.lifetime) {
+            SplittableRandom rand = new SplittableRandom();
+            this.level.addParticle(new ColorParticleOptions(CoreParticles.BLAST.get(), this.size * 0.5F, 6 + random.nextInt(4), 0,
+                            c0.scaleRGB(rand.nextFloat(0.85F, 1.15F)).pack()),
+                    x + disp.x(), y + disp.y(), z + disp.z(), 0, 0, 0);
             this.remove();
-        } else if (this.age < this.duration) {
-            this.move(this.xd, this.yd, this.zd);
         }
-        ++this.age;
     }
 
     @Override
-    public void move(double dx, double dy, double dz) {
+    public void render(PoseStack stack, MultiBufferSource buffer, VertexConsumer consumer, int packedLight, float time, float pTicks) {
 
-        if (this.hasPhysics && dx * dx + dy * dy + dz * dz < 10000) {
-            float time = Math.min(this.duration - this.age, 1.0F);
-            Vec3 pos = new Vec3(this.x, this.y, this.z);
-            Vec3 step = new Vec3(dx * time, dy * time, dz * time);
-            Vec3 next = pos.add(step);
-            Vec3 collide = this.level.clip(new ClipContext(pos, next,
-                    ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, null)).getLocation();
-            Vec3 delta = collide.subtract(pos);
-            double distSqr = delta.lengthSqr();
-            if (speed * speed - distSqr > 0.001F) {
-                this.duration = this.age + (float) Math.sqrt(distSqr) / speed;
-            }
-            if (this.age + 1 >= this.duration) {
-                this.level.addParticle(new ColorParticleOptions(CoreParticles.BLAST.get(), this.size * 0.25F, 6 + random.nextInt(4), c0.pack()), collide.x, collide.y, collide.z, 0, 0, 0);
-            }
-
-            dx = delta.x;
-            dy = delta.y;
-            dz = delta.z;
-            //if (dist < 0.005F * speed) {
-        }
-        this.x += dx;
-        this.y += dy;
-        this.z += dz;
-
-        //this.setBoundingBox(this.getBoundingBox().move(dx, dy, dz));
-        //this.setLocationFromBoundingbox();
-    }
-
-    @Override
-    public void render(PoseStack stack, MultiBufferSource buffer, VertexConsumer consumer, int packedLight, float partialTicks, float pTicks) {
-
-        float time = this.age + partialTicks - 1;
         float progress = time / duration;
-        //System.out.println(this.age); //this.x + " " + this.y + " " + this.z
-        if (duration < time) {
-            return;
-        }
+        float dx = disp.x() * progress;
+        float dy = disp.y() * progress;
+        float dz = disp.z() * progress;
+        stack.translate(dx, dy, dz);
+        float dist = MathHelper.dist(dx, dy, dz);
+        stack.scale(size, size, size);
         //if (progress > 1.0F) {
         //    this.alpha = Math.max(1 - MathHelper.easeOutCubic(progress - 1.0F) * 5, 0);
         //}
 
-        stack.mulPose(VFXHelper.alignVertical(new Vector3f((float) xd, (float) yd, (float) zd)));
+        VFXHelper.alignVertical(stack, disp);
         PoseStack.Pose last = stack.last();
         Matrix4f pose = last.pose();
         Matrix3f norm = last.normal();
@@ -113,10 +69,10 @@ public class ShardParticle extends PointToPointParticle {
         // Trail
         Vector4f start = new Vector4f(0, 0, 0, 1);
         start.transform(pose);
-        Vector4f end = new Vector4f(0, -speed * Math.min(time, 1.0F), 0, 1);
+        Vector4f end = new Vector4f(0, -Math.min(dist / size, 2.5F), 0, 1);
         end.transform(pose);
         Vec2 perp = VFXHelper.axialPerp(start, end, 1.0F);
-        float w = 0.12F;
+        float w = 0.12F * size;
         float xs = perp.x * w;
         float ys = perp.y * w;
         consumer = buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT);
@@ -130,17 +86,6 @@ public class ShardParticle extends PointToPointParticle {
         }
         // Body
         RenderHelper.renderBipyramid(stack, consumer, packedLight, c0, 4, 0.6F, 0.1F);
-    }
-
-    @Override
-    public void setLifetime(float duration, float delay) {
-
-        float speed = this.duration / duration;
-        this.xd *= speed;
-        this.yd *= speed;
-        this.zd *= speed;
-        this.speed *= speed;
-        super.setLifetime(duration, delay);
     }
 
     @Nonnull

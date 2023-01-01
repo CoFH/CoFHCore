@@ -84,7 +84,7 @@ public class Utils {
 
     public static boolean isCreativePlayer(Entity entity) {
 
-        return entity instanceof Player player && player.getAbilities().instabuild;
+        return entity instanceof Player player && player.isCreative();
     }
 
     public static EquipmentSlot handToEquipSlot(InteractionHand hand) {

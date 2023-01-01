@@ -55,7 +55,7 @@ public abstract class SpriteParticle extends ColorParticle {
 
         float x = center.x();
         float y = center.y();
-        float z = center.z();
+        float z = center.z() + 0.1F;
 
         float rot = MathHelper.interpolate(oRoll, roll, pTicks);
         float sin = MathHelper.sin(rot);
@@ -69,10 +69,10 @@ public abstract class SpriteParticle extends ColorParticle {
         float v0 = sprite.getV0();
         float v1 = sprite.getV1();
 
-        consumer.vertex(x + a, y + b, z).uv(u0, v0).color(c0.r, c0.g, c0.b, c0.a).uv2(packedLight).endVertex();
-        consumer.vertex(x - b, y + a, z).uv(u1, v0).color(c0.r, c0.g, c0.b, c0.a).uv2(packedLight).endVertex();
-        consumer.vertex(x - a, y - b, z).uv(u1, v1).color(c0.r, c0.g, c0.b, c0.a).uv2(packedLight).endVertex();
-        consumer.vertex(x + b, y - a, z).uv(u0, v1).color(c0.r, c0.g, c0.b, c0.a).uv2(packedLight).endVertex();
+        consumer.vertex(x + a, y + b, z).uv(u1, v0).color(c0.r, c0.g, c0.b, c0.a).uv2(packedLight).endVertex();
+        consumer.vertex(x - b, y + a, z).uv(u0, v0).color(c0.r, c0.g, c0.b, c0.a).uv2(packedLight).endVertex();
+        consumer.vertex(x - a, y - b, z).uv(u0, v1).color(c0.r, c0.g, c0.b, c0.a).uv2(packedLight).endVertex();
+        consumer.vertex(x + b, y - a, z).uv(u1, v1).color(c0.r, c0.g, c0.b, c0.a).uv2(packedLight).endVertex();
     }
 
 }

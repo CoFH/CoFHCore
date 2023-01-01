@@ -19,15 +19,17 @@ import javax.annotation.Nonnull;
 @OnlyIn (Dist.CLIENT)
 public class BeamParticle extends PointToPointParticle {
 
-    protected final Vector3f dest;
-
     private BeamParticle(BiColorParticleOptions data, ClientLevel level, double sx, double sy, double sz, double ex, double ey, double ez) {
 
         super(data, level, sx, sy, sz, ex, ey, ez);
-        float dx = (float) (ex - sx);
-        float dy = (float) (ey - sy);
-        float dz = (float) (ez - sz);
-        dest = new Vector3f(dx, dy, dz);
+    }
+
+    @Override
+    public void tick() {
+
+        if (this.age++ >= this.lifetime) {
+            this.remove();
+        }
     }
 
     @Override
@@ -36,7 +38,7 @@ public class BeamParticle extends PointToPointParticle {
         float progress = time / duration;
         float easeCos = 0.5F * MathHelper.cos(progress * MathHelper.F_PI * 0.5F) + 0.5F;
         float easeCub = 1.0F - MathHelper.easeInCubic(progress);
-        VFXHelper.alignVertical(stack, Vector3f.ZERO, dest);
+        VFXHelper.alignVertical(stack, Vector3f.ZERO, disp);
         VFXHelper.renderBeam(stack, buffer, packedLight, this.size * easeCos,
                 c0.scaleAlpha(easeCub), c1.scaleAlpha(easeCub));
     }

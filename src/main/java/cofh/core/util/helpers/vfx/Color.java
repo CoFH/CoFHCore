@@ -1,7 +1,6 @@
 package cofh.core.util.helpers.vfx;
 
 import cofh.lib.util.helpers.MathHelper;
-import org.checkerframework.checker.units.qual.C;
 
 public class Color {
 

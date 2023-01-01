@@ -21,16 +21,11 @@ import javax.annotation.Nonnull;
 import java.util.SplittableRandom;
 
 @OnlyIn (Dist.CLIENT)
-public class WindVortexParticle extends CylindricalParticle { //TODO
-
-    //protected static final float defaultLifetime = 8.0F;
+public class WindVortexParticle extends CylindricalParticle {
 
     private WindVortexParticle(CylindricalParticleOptions data, ClientLevel level, double x, double y, double z, double xDir, double yDir, double zDir) {
 
         super(data, level, x, y, z, xDir, yDir, zDir);
-        //this.setSize((float) (width * (1.0F + random.nextGaussian() * 0.1F)), (float) height * random.nextFloat());
-        //alpha = 0.20F * (1.0F + random.nextFloat());
-        //rCol = gCol = bCol = 1.0F - 0.1F * random.nextFloat();
         oRoll = roll = random.nextFloat() * MathHelper.F_TAU;
     }
 

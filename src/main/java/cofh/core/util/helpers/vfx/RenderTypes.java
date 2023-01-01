@@ -52,62 +52,62 @@ public class RenderTypes {
                         .createCompositeState(false));
     }
 
-    public static ParticleRenderType CUSTOM = ParticleRenderTypeCoFH.copy(ParticleRenderType.CUSTOM);
-    public static ParticleRenderType PARTICLE_SHEET_OPAQUE = ParticleRenderTypeCoFH.copy(ParticleRenderType.PARTICLE_SHEET_OPAQUE);
-    public static ParticleRenderType PARTICLE_SHEET_TRANSLUCENT = ParticleRenderTypeCoFH.copy(ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT);
-    public static ParticleRenderType PARTICLE_SHEET_OVER = ParticleRenderTypeCoFH.translucentSheet(() -> PARTICLE_OVER);
-    public static ParticleRenderType PARTICLE_SHEET_ADDITIVE_MUTLIPLY = ParticleRenderTypeCoFH.translucentSheet(() -> PARTICLE_ADDITIVE_MULTIPLY);
-    public static ParticleRenderType PARTICLE_SHEET_ADDITIVE_SCREEN = ParticleRenderTypeCoFH.translucentSheet(() -> PARTICLE_ADDITIVE_SCREEN);
+    public static ParticleRenderType CUSTOM = copy(ParticleRenderType.CUSTOM);
+    public static ParticleRenderType PARTICLE_SHEET_OPAQUE = copy(ParticleRenderType.PARTICLE_SHEET_OPAQUE);
+    public static ParticleRenderType PARTICLE_SHEET_TRANSLUCENT = copy(ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT);
+    public static ParticleRenderType PARTICLE_SHEET_OVER = translucentSheet(() -> PARTICLE_OVER);
+    public static ParticleRenderType PARTICLE_SHEET_ADDITIVE_MUTLIPLY = translucentSheet(() -> PARTICLE_ADDITIVE_MULTIPLY);
+    public static ParticleRenderType PARTICLE_SHEET_ADDITIVE_SCREEN = translucentSheet(() -> PARTICLE_ADDITIVE_SCREEN);
+
+    static ParticleRenderTypeCoFH translucentSheet(Supplier<ShaderInstance> shader) {
+
+        return new ParticleRenderTypeCoFH() {
+
+            @Override
+            public void begin(BufferBuilder builder, TextureManager manager) { //TODO post shader
+
+                RenderSystem.depthMask(false);
+                RenderSystem.enableBlend();
+                RenderSystem.setShader(shader);
+                RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_PARTICLES);
+                builder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
+            }
+
+            @Override
+            public void end(Tesselator tess) {
+
+                tess.end();
+                RenderSystem.depthMask(true);
+                RenderSystem.disableBlend();
+            }
+        };
+    }
+
+    static ParticleRenderTypeCoFH copy(ParticleRenderType type) {
+
+        return new ParticleRenderTypeCoFH() {
+
+            @Override
+            public void begin(BufferBuilder builder, TextureManager manager) {
+
+                type.begin(builder, manager);
+            }
+
+            @Override
+            public void end(Tesselator tess) {
+
+                type.end(tess);
+            }
+
+            @Override
+            public String toString() {
+
+                return type.toString();
+            }
+        };
+    }
 
     public interface ParticleRenderTypeCoFH extends ParticleRenderType {
-
-        static ParticleRenderTypeCoFH copy(ParticleRenderType type) {
-
-            return new ParticleRenderTypeCoFH() {
-
-                @Override
-                public void begin(BufferBuilder builder, TextureManager manager) {
-
-                    type.begin(builder, manager);
-                }
-
-                @Override
-                public void end(Tesselator tess) {
-
-                    type.end(tess);
-                }
-
-                @Override
-                public String toString() {
-
-                    return type.toString();
-                }
-            };
-        }
-
-        static ParticleRenderTypeCoFH translucentSheet(Supplier<ShaderInstance> shader) {
-
-            return new ParticleRenderTypeCoFH() {
-
-                @Override
-                public void begin(BufferBuilder builder, TextureManager manager) { //TODO post shader
-
-                    RenderSystem.depthMask(false);
-                    RenderSystem.enableBlend();
-                    RenderSystem.setShader(shader);
-                    RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_PARTICLES);
-                    builder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
-                }
-
-                @Override
-                public void end(Tesselator tess) {
-
-                    tess.end();
-                    RenderSystem.depthMask(true);
-                    RenderSystem.disableBlend();
-                }
-            };
-        }
 
     }
 
