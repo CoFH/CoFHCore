@@ -85,4 +85,13 @@ public class Color {
         return sameRGB(new Color(other));
     }
 
+    //Linearly interpolate between colors
+    public Color mix(Color other, float amount) {
+
+        return new Color(MathHelper.interpolate(r, other.r, amount),
+                MathHelper.interpolate(g, other.g, amount),
+                MathHelper.interpolate(b, other.b, amount),
+                MathHelper.interpolate(a, other.a, amount));
+    }
+
 }

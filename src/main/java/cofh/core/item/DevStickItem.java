@@ -39,7 +39,7 @@ public class DevStickItem extends ItemCoFH {
             //for (int i = 0; i < 10; ++i) {
             //    level.addParticle(new CylindricalParticleOptions(CoreParticles.WIND_SPIRAL.get(), 1.0F, 10.0F, rand.nextFloat(2.5F), 2.0F), pos.x, pos.y, pos.z, 0, 0, 0);
             //}
-            level.addParticle(new ColorParticleOptions(CoreParticles.MIST.get(), 1.0F, 60.0F, 20, 0xFF0000FF), pos.x, pos.y, pos.z, 0, 0, 0);
+            level.addParticle(new ColorParticleOptions(CoreParticles.MIST.get(), 1.0F, 60.0F, 0, 0xFF0000FF), pos.x, pos.y, pos.z, 0, 0, 0);
 
         }
         return InteractionResult.sidedSuccess(level.isClientSide);

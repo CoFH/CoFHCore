@@ -17,6 +17,7 @@ import net.minecraft.world.phys.Vec3;
 
 /**
  * Reimplementation of {@link TextureSheetParticle} in a CoFH flavor.
+ * Should theoretically be much more configurable and performant compared to vanilla.
  */
 public abstract class SpriteParticle extends ColorParticle {
 
@@ -57,24 +58,21 @@ public abstract class SpriteParticle extends ColorParticle {
         float z = center.z();
 
         float rot = MathHelper.interpolate(oRoll, roll, pTicks);
-        float sqrt2 = 0.5F * (float) MathHelper.SQRT_2;
-        float rs = 0;
-        float rc = 0;
-        //float rs = MathHelper.sin(rot) - sqrt2;
-        //float rc = MathHelper.cos(rot) - sqrt2;
+        float sin = MathHelper.sin(rot);
+        float cos = MathHelper.cos(rot);
+        float w = size * 0.5F;
+        float a = w * (cos - sin);
+        float b = w * (sin + cos);
 
         float u0 = sprite.getU0();
         float u1 = sprite.getU1();
         float v0 = sprite.getV0();
         float v1 = sprite.getV1();
-        float xp = x + 0.5F;
-        float xn = x - 0.5F;
-        float yp = y + 0.5F;
-        float yn = y - 0.5F;
-        consumer.vertex(xp, yp, z).uv(u0, v0).color(c0.r, c0.g, c0.b, c0.a).uv2(packedLight).endVertex();
-        consumer.vertex(xn, yp, z).uv(u1, v0).color(c0.r, c0.g, c0.b, c0.a).uv2(packedLight).endVertex();
-        consumer.vertex(xn, yn, z).uv(u1, v1).color(c0.r, c0.g, c0.b, c0.a).uv2(packedLight).endVertex();
-        consumer.vertex(xp, yn, z).uv(u0, v1).color(c0.r, c0.g, c0.b, c0.a).uv2(packedLight).endVertex();
+
+        consumer.vertex(x + a, y + b, z).uv(u0, v0).color(c0.r, c0.g, c0.b, c0.a).uv2(packedLight).endVertex();
+        consumer.vertex(x - b, y + a, z).uv(u1, v0).color(c0.r, c0.g, c0.b, c0.a).uv2(packedLight).endVertex();
+        consumer.vertex(x - a, y - b, z).uv(u1, v1).color(c0.r, c0.g, c0.b, c0.a).uv2(packedLight).endVertex();
+        consumer.vertex(x + b, y - a, z).uv(u0, v1).color(c0.r, c0.g, c0.b, c0.a).uv2(packedLight).endVertex();
     }
 
 }

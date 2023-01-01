@@ -2,6 +2,7 @@ package cofh.core.client.particle.impl;
 
 import cofh.core.client.particle.SpriteParticle;
 import cofh.core.client.particle.options.ColorParticleOptions;
+import cofh.core.util.helpers.vfx.Color;
 import cofh.core.util.helpers.vfx.RenderTypes;
 import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -13,19 +14,20 @@ import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.checkerframework.checker.units.qual.C;
 
 import javax.annotation.Nonnull;
 
 @OnlyIn (Dist.CLIENT)
 public class MistParticle extends SpriteParticle {
 
-    protected int baseAlpha;
+    protected Color baseColor;
 
     protected MistParticle(ColorParticleOptions data, ClientLevel level, SpriteSet sprites, double x, double y, double z, double dx, double dy, double dz) {
 
         super(data, level, sprites, x, y, z, dx, dy, dz);
         oRoll = roll = random.nextFloat() * MathHelper.F_TAU;
-        baseAlpha = data.rgba0 & 0xFF;
+        baseColor = new Color(data.rgba0);
     }
 
     @Override
@@ -34,8 +36,7 @@ public class MistParticle extends SpriteParticle {
         float progress = time / duration;
         float q = 2 * progress - 1;
         q *= q;
-        //int a = (int) (baseAlpha * Math.max((1 - q * q) * MathHelper.cos(0.25F * MathHelper.F_PI * progress), 0));
-        //setPrimColor((this.rgba0 & 0xFFFFFF00) | a);
+        setColor0(baseColor.scaleAlpha(Math.max((1 - q * q) * MathHelper.cos(0.25F * MathHelper.F_PI * progress), 0)));
 
         //Only set render size based off BB size
         this.size = this.bbWidth * MathHelper.sin(0.25F * MathHelper.F_PI * (progress + 1));
