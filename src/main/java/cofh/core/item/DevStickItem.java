@@ -5,6 +5,7 @@ import cofh.core.init.CoreParticles;
 import cofh.core.util.helpers.ArcheryHelper;
 import cofh.lib.util.Constants;
 import cofh.lib.util.helpers.MathHelper;
+import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -13,10 +14,12 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ClipContext;
@@ -30,7 +33,7 @@ import java.util.Comparator;
 import java.util.Optional;
 import java.util.Random;
 
-public class DevStickItem extends ItemCoFH implements IEntityRayTraceItem {
+public class DevStickItem extends ItemCoFH implements IEntityRayTraceItem, ITrackedItem {
 
     public DevStickItem(Properties builder) {
 
@@ -94,7 +97,7 @@ public class DevStickItem extends ItemCoFH implements IEntityRayTraceItem {
                 if (blockHit.getType() != HitResult.Type.MISS) {
                     end = blockHit.getLocation();
                 }
-                Optional<EntityHitResult> closest = ArcheryHelper.findHitEntities(level, null, start, end, 0.1F, e -> true)
+                Optional<EntityHitResult> closest = ArcheryHelper.findHitEntities(level, null, start, end, 0.1F, EntitySelector.LIVING_ENTITY_STILL_ALIVE.and(EntitySelector.NO_CREATIVE_OR_SPECTATOR))
                         .min(Comparator.comparingDouble(result -> result.getLocation().distanceToSqr(start)));
                 if (closest.isPresent()) {
                     end = closest.get().getLocation();
@@ -115,7 +118,7 @@ public class DevStickItem extends ItemCoFH implements IEntityRayTraceItem {
     public void releaseUsing(ItemStack stack, Level level, LivingEntity living, int durationRemaining) {
 
         if (living instanceof Player player) {
-            player.getCooldowns().addCooldown(stack.getItem(), 20);
+            player.getCooldowns().addCooldown(stack.getItem(), 40);
         }
         if (level.isClientSide) {
 
@@ -135,6 +138,15 @@ public class DevStickItem extends ItemCoFH implements IEntityRayTraceItem {
 //            float time = (float) hit.subtract(origin).length() * 0.25F;
 //            ((ServerLevel) level).sendParticles(new BiColorParticleOptions(CoreParticles.SHARD.get(), 1.0F, time, 0, 0xac3ad0ff, 0x7426a9ff), origin.x, origin.y, origin.z, 0, hit.x, hit.y, hit.z, 1.0F);
 
+        }
+    }
+
+    @Override
+    public void onSwapFrom(Player player, InteractionHand hand, ItemStack stack, int duration) {
+
+        Item item = stack.getItem();
+        if (!player.getCooldowns().isOnCooldown(item) && duration > 0) {
+            player.getCooldowns().addCooldown(item, 80);
         }
     }
 
