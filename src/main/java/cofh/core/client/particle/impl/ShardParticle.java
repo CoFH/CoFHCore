@@ -2,8 +2,6 @@ package cofh.core.client.particle.impl;
 
 import cofh.core.client.particle.PointToPointParticle;
 import cofh.core.client.particle.options.BiColorParticleOptions;
-import cofh.core.client.particle.options.ColorParticleOptions;
-import cofh.core.init.CoreParticles;
 import cofh.core.util.helpers.RenderHelper;
 import cofh.core.util.helpers.vfx.RenderTypes;
 import cofh.core.util.helpers.vfx.VFXHelper;
@@ -22,7 +20,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
-import java.util.SplittableRandom;
 
 @OnlyIn (Dist.CLIENT)
 public class ShardParticle extends PointToPointParticle {
@@ -31,18 +28,12 @@ public class ShardParticle extends PointToPointParticle {
 
         super(data, level, sx, sy, sz, ex, ey, ez);
         this.friction = 1.0F;
-        //rgba0 = 0xff45ff00;
-        //rgba1 = 0xa525f700;
     }
 
     @Override
     public void tick() {
 
         if (this.age++ >= this.lifetime) {
-            SplittableRandom rand = new SplittableRandom();
-            this.level.addParticle(new ColorParticleOptions(CoreParticles.BLAST.get(), this.size * 0.5F, 4 + random.nextInt(2), 0,
-                            c0.scaleRGB(rand.nextFloat(0.85F, 1.15F)).pack()),
-                    x + disp.x(), y + disp.y(), z + disp.z(), 0, 0, 0);
             this.remove();
         }
     }

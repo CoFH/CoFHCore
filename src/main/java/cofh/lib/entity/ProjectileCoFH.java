@@ -2,19 +2,16 @@ package cofh.lib.entity;
 
 import cofh.core.util.helpers.ArcheryHelper;
 import cofh.lib.util.helpers.MathHelper;
-import cofh.lib.util.raytracer.MissResult;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.TheEndGatewayBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -32,12 +29,12 @@ import java.util.stream.Stream;
 
 public class ProjectileCoFH extends Projectile {
 
-    public ProjectileCoFH(EntityType<? extends Projectile> type, Level level) {
+    public ProjectileCoFH(EntityType<? extends ProjectileCoFH> type, Level level) {
 
         super(type, level);
     }
 
-    public ProjectileCoFH(EntityType<? extends Projectile> type, Level level, Entity owner, Vec3 position, Vec3 velocity) {
+    public ProjectileCoFH(EntityType<? extends ProjectileCoFH> type, Level level, Entity owner, Vec3 position, Vec3 velocity) {
 
         this(type, level);
         setOwner(owner);
@@ -73,11 +70,6 @@ public class ProjectileCoFH extends Projectile {
         return false;
     }
 
-    public Player getPlayerOwner() {
-        Entity owner = getOwner();
-        return owner instanceof Player ? (Player) owner : null;
-    }
-
     @Override
     public void tick() {
 
@@ -94,6 +86,7 @@ public class ProjectileCoFH extends Projectile {
         projectileTick(level);
         checkInsideBlocks();
         updateVelocity();
+        updateRotation();
 
         this.firstTick = false;
     }
@@ -103,28 +96,32 @@ public class ProjectileCoFH extends Projectile {
      */
     public void projectileTick(Level level) {
 
-        Vec3 start = this.position();
-        Vec3 end = start.add(this.getDeltaMovement());
+        Vec3 start = position();
+        Vec3 end = start.add(getDeltaMovement());
+        Vec3 disp = end;
         BlockHitResult blockResult = blockRayTrace(level, start, end);
         if (blockResult.getType() != HitResult.Type.MISS) {
             end = blockResult.getLocation();
         }
-        HitResult entityCollision = hitEntities(level, start, end);
-        if (entityCollision.getType() == HitResult.Type.MISS) {
-            BlockPos blockpos = blockResult.getBlockPos();
-            BlockState blockstate = level.getBlockState(blockpos);
-            if (blockstate.is(Blocks.NETHER_PORTAL)) {
-                this.handleInsidePortal(blockpos);
-            } else if (blockstate.is(Blocks.END_GATEWAY)) {
-                BlockEntity blockentity = this.level.getBlockEntity(blockpos);
-                if (blockentity instanceof TheEndGatewayBlockEntity gateway && TheEndGatewayBlockEntity.canEntityTeleport(this)) {
-                    TheEndGatewayBlockEntity.teleportEntity(this.level, blockpos, blockstate, this, gateway);
+        //If no entities hit
+        if (!hitEntities(level, start, end)) {
+            if (blockResult.getType() != HitResult.Type.MISS) {
+                BlockPos blockpos = blockResult.getBlockPos();
+                BlockState blockstate = level.getBlockState(blockpos);
+                if (blockstate.is(Blocks.NETHER_PORTAL)) {
+                    this.handleInsidePortal(blockpos);
+                } else if (blockstate.is(Blocks.END_GATEWAY)) {
+                    if (level.getBlockEntity(blockpos) instanceof TheEndGatewayBlockEntity gateway && TheEndGatewayBlockEntity.canEntityTeleport(this)) {
+                        TheEndGatewayBlockEntity.teleportEntity(level, blockpos, blockstate, this, gateway);
+                    }
+                    return;
+                } else if (ForgeEventFactory.onProjectileImpact(this, blockResult)) {
+                    end = disp;
+                } else {
+                    this.onHit(blockResult);
                 }
-            } else if (!ForgeEventFactory.onProjectileImpact(this, blockResult)) {
-                this.onHitBlock(blockResult);
             }
-        } else {
-            this.setPos(entityCollision.getLocation());
+            this.setPos(end);
         }
     }
 
@@ -133,11 +130,16 @@ public class ProjectileCoFH extends Projectile {
         return level.clip(new ClipContext(startPos, endPos, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
     }
 
+    public Stream<EntityHitResult> entityRayTrace(Level level, Vec3 startPos, Vec3 endPos) {
+
+        return ArcheryHelper.findHitEntities(level, this, startPos, endPos, this::canHitEntity);
+    }
+
     /**
      * Replacement for onHitEntity that can handle multiple entities.
-     * @return HitResult with the new location of the projectile.
+     * @return True if entities were hit and further processing (such as block hits) should be stopped.
      */
-    public HitResult hitEntities(Level level, Vec3 startPos, Vec3 endPos) {
+    public boolean hitEntities(Level level, Vec3 startPos, Vec3 endPos) {
 
         Vec3 pos = this.position();
         Optional<EntityHitResult> closest = entityRayTrace(level, startPos, endPos)
@@ -145,27 +147,23 @@ public class ProjectileCoFH extends Projectile {
                 .filter(result -> !ForgeEventFactory.onProjectileImpact(this, result))
                 .findFirst();
         if (closest.isPresent()) {
-            onHitEntity(closest.get());
-            return closest.get();
+            onHit(closest.get());
+            return true;
         }
-        return new MissResult(endPos);
-    }
-
-    public Stream<EntityHitResult> entityRayTrace(Level level, Vec3 startPos, Vec3 endPos) {
-
-        return ArcheryHelper.findHitEntities(level, this, startPos, endPos, this::canHitEntity);
-    }
-
-    @Override
-    public boolean canHitEntity(Entity entity) {
-
-        return super.canHitEntity(entity);
+        return false;
     }
 
     /**
-     * Updates the velocity and rotation of the projectile. Gravity/acceleration effects go here.
+     * Updates the velocity of the projectile. Called each tick. Gravity/acceleration/homing effects go here.
      */
     public void updateVelocity() {
+
+    }
+
+    /**
+     * Updates the rotation of the projectile. Called each tick.
+     */
+    public void updateRotation() {
 
         Vec3 velocity = this.getDeltaMovement();
         this.setXRot((float) (Mth.atan2(velocity.y, velocity.horizontalDistance()) * MathHelper.TO_DEG));

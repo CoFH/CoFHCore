@@ -8,14 +8,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import static cofh.core.network.packet.PacketIDs.PACKET_ITEM_RAYTRACE_BLOCK;
-import static cofh.core.network.packet.PacketIDs.PACKET_ITEM_RAYTRACE_ENTITY;
 
 public class ItemRayTraceBlockPacket extends PacketBase implements IPacketServer {
 

@@ -1,11 +1,11 @@
 package cofh.core.item;
 
 import cofh.core.client.particle.options.BiColorParticleOptions;
+import cofh.core.client.particle.options.ColorParticleOptions;
 import cofh.core.init.CoreParticles;
 import cofh.core.util.helpers.ArcheryHelper;
+import cofh.core.util.helpers.vfx.Color;
 import cofh.lib.util.Constants;
-import cofh.lib.util.helpers.MathHelper;
-import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -70,11 +70,15 @@ public class DevStickItem extends ItemCoFH implements IEntityRayTraceItem, ITrac
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
 
         ItemStack stack = player.getItemInHand(hand);
-        player.startUsingItem(hand);
-        if (level.isClientSide) {
-        }
-        return InteractionResultHolder.consume(stack);
+        //player.startUsingItem(hand);
+        //if (level.isClientSide) {
+        //}
+        //return InteractionResultHolder.consume(stack);
         //return InteractionResultHolder.pass(stack);
+        //if (!level.isClientSide) {
+        //    level.addFreshEntity(new Icicle(level, player, player.getEyePosition(), player.getLookAngle().scale(2.0F)));
+        //}
+        return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
     }
 
     @Override
@@ -89,15 +93,17 @@ public class DevStickItem extends ItemCoFH implements IEntityRayTraceItem, ITrac
         int duration = getUseDuration(stack) - durationRemaining;
         Random rand = new Random();
         if (level.isClientSide) {
-            if (duration % 2 == 0) {
+            if (duration % 6 == 0) {
+                float spread = 0.01F; //MathHelper.clamp(MathHelper.sqrt(Math.max(duration * 0.05F - 0.2F, 0)), 0.01F, 1.5F);
                 Vec3 start = living.getEyePosition();
-                float spread = MathHelper.clamp(MathHelper.sqrt(Math.max(duration * 0.05F - 0.2F, 0)), 0.01F, 1.5F);
-                Vec3 end = start.add(living.getLookAngle().scale(12)).add(rand.nextFloat(-spread, spread), rand.nextFloat(-spread, spread), rand.nextFloat(-spread, spread));
+                Vec3 look = living.getLookAngle();
+                Vec3 end = start.add(look.scale(16)).add(rand.nextFloat(-spread, spread), rand.nextFloat(-spread, spread), rand.nextFloat(-spread, spread));
+
                 BlockHitResult blockHit = level.clip(new ClipContext(start, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, null));
                 if (blockHit.getType() != HitResult.Type.MISS) {
                     end = blockHit.getLocation();
                 }
-                Optional<EntityHitResult> closest = ArcheryHelper.findHitEntities(level, null, start, end, 0.1F, EntitySelector.LIVING_ENTITY_STILL_ALIVE.and(EntitySelector.NO_CREATIVE_OR_SPECTATOR))
+                Optional<EntityHitResult> closest = ArcheryHelper.findHitEntities(level, null, start, end, 0.0F, EntitySelector.LIVING_ENTITY_STILL_ALIVE.and(EntitySelector.NO_CREATIVE_OR_SPECTATOR))
                         .min(Comparator.comparingDouble(result -> result.getLocation().distanceToSqr(start)));
                 if (closest.isPresent()) {
                     end = closest.get().getLocation();
@@ -106,9 +112,14 @@ public class DevStickItem extends ItemCoFH implements IEntityRayTraceItem, ITrac
                     }
                 }
                 level.playLocalSound(start.x, start.y, start.z, SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, 0.5F, 0.5F + spread * 0.2F + rand.nextFloat(0.1F), false);
-                Vec3 pos = living.getEyePosition().add(living.getLookAngle()).add(0, -0.5, 0);
-                float time = (float) end.subtract(start).length() * 0.25F;
-                level.addParticle(new BiColorParticleOptions(CoreParticles.SHARD.get(), 1.0F, time, 0, 0xac3ad0ff, 0x7426a9ff), pos.x, pos.y, pos.z, end.x, end.y, end.z);
+
+                Vec3 pos = start.add(look.cross(new Vec3(0, 0.3, 0))).add(0, -0.1, 0).add(look.scale(0.35F));
+                float time = (float) end.subtract(start).length() * 0.2F;
+                int rgba = 0xac3ad0ff;
+                level.addParticle(new BiColorParticleOptions(CoreParticles.SHARD.get(), 2.0F, time, 0, rgba, 0x7426a9ff), pos.x, pos.y, pos.z, end.x, end.y, end.z);
+                level.addParticle(new ColorParticleOptions(CoreParticles.BLAST.get(), 1.0F, 4 + rand.nextInt(2), time,
+                                new Color(rgba).scaleRGB(rand.nextFloat(0.85F, 1.15F)).pack()),
+                        end.x, end.y, end.z, 0, 0, 0);
 
             }
         }
@@ -118,7 +129,7 @@ public class DevStickItem extends ItemCoFH implements IEntityRayTraceItem, ITrac
     public void releaseUsing(ItemStack stack, Level level, LivingEntity living, int durationRemaining) {
 
         if (living instanceof Player player) {
-            player.getCooldowns().addCooldown(stack.getItem(), 40);
+            player.getCooldowns().addCooldown(stack.getItem(), 10);
         }
         if (level.isClientSide) {
 
@@ -132,7 +143,7 @@ public class DevStickItem extends ItemCoFH implements IEntityRayTraceItem, ITrac
             int invuln = living.invulnerableTime;
             living.getAttribute(Attributes.KNOCKBACK_RESISTANCE).addTransientModifier(new AttributeModifier(Constants.UUID_WEAPON_KNOCKBACK, "b", 1.0, AttributeModifier.Operation.ADDITION));
             living.invulnerableTime = 0;
-            living.hurt(DamageSource.playerAttack(player), 3.5F);
+            living.hurt(DamageSource.playerAttack(player), 6F);
             living.invulnerableTime = invuln;
             living.getAttribute(Attributes.KNOCKBACK_RESISTANCE).removeModifier(Constants.UUID_WEAPON_KNOCKBACK);
 //            float time = (float) hit.subtract(origin).length() * 0.25F;
@@ -146,7 +157,7 @@ public class DevStickItem extends ItemCoFH implements IEntityRayTraceItem, ITrac
 
         Item item = stack.getItem();
         if (!player.getCooldowns().isOnCooldown(item) && duration > 0) {
-            player.getCooldowns().addCooldown(item, 80);
+            player.getCooldowns().addCooldown(item, 10);
         }
     }
 
