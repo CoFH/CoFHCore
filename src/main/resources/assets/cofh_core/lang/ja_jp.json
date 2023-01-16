@@ -7,6 +7,9 @@
   "attribute.name.cofh.hazard_resistance": "危害耐性",
   "attribute.name.cofh.sting_resistance": "刺突耐性",
 
+  "death.attack.knife": "%1$sは%2$sに刺殺された",
+  "death.attack.knife.item": "%1$sは%2$sに%3$sでメッタ刺しにされた",
+
   "forge.swimSpeed": "遊泳速度",
 
   "commands.cofh.heal.success.single": "%sを回復しました",
@@ -39,6 +42,7 @@
   "info.cofh.claimable": "要求可能",
   "info.cofh.click_to_claim": "§e§oClick§r§7 to claim.",
   "info.cofh.click_to_clear": "§e§oShiftとAltを押しながらクリック§r§7で消去します。",
+  "info.cofh.crossbow_loaded": "装填元:",
   "info.cofh.effects": "効果",
   "info.cofh.efficiency": "効率",
   "info.cofh.empty": "空",
@@ -48,6 +52,7 @@
   "info.cofh.heads": "頭",
   "info.cofh.infinite": "無限",
   "info.cofh.infinite_source": "無限の源",
+  "info.cofh.key_not_bound": "キーバインド: CoFH - '%s'はセットされていません。",
   "info.cofh.none": "なし",
   "info.cofh.optional_catalyst": "追加触媒",
   "info.cofh.output": "出力",
@@ -65,7 +70,8 @@
   "info.cofh.hold_ctrl_for_tags": "§e§oCtrlキー§r§7を押すとタグを表示します",
   "info.cofh.hold_shift_for_details": "§e§oShiftキー§r§7を押すと詳細を表示します",
 
-  "info.cofh.mode_change": "'%s'でモードを変更します。",
+  "info.cofh.mode_change": "'%s'か'%s'でモードを変更します。",
+  "info.cofh.mode_toggle": "'%s'でモードを切り替えます。",
   "info.cofh.use_sneak_activate": "スニークしながら使用することで有効化します。",
   "info.cofh_use_sneak_deactivate": "スニークしながら使用することで無効化します。",
 
@@ -151,11 +157,11 @@
 
   "fluid_type.cofh_core.experience": "知識の雫",
   "fluid_type.cofh_core.honey": "ハチミツ",
-  "fluid_type.cofh_core.milk": "牛乳",
   "fluid_type.cofh_core.potion": "ポーション",
   "fluid_type.cofh_core.steam": "蒸気",
 
-  "item.cofh_core.ectoplasm": "エクトプラズム",
+  "info.cofh_core.fluid_filter.0": "流体を保持するアイテムをスロットに置くと、フィルターリストに流体が登録されます。",
+  "info.cofh_core.fluid_filter.1": "追加オプションで動作の微調整が行なえます。",
 
   "info.cofh_core.item_filter.0": "スロットにアイテムを置くとフィルターリストに登録されます。",
   "info.cofh_core.item_filter.1": "追加オプションで動作の微調整が行なえます。",
@@ -213,6 +219,7 @@
   "item.minecraft.lingering_potion.effect.love": "愛の残留ポーション",
   "item.minecraft.lingering_potion.effect.magic_resistance": "魔法耐性の残留ポーション",
   "item.minecraft.lingering_potion.effect.panacea": "残留する万能薬",
+
   "item.minecraft.potion.effect.amplification": "増幅のポーション",
   "item.minecraft.potion.effect.clarity": "純化のポーション",
   "item.minecraft.potion.effect.enderference": "エンダーファレンスのポーション",
@@ -221,6 +228,7 @@
   "item.minecraft.potion.effect.love": "愛のポーション",
   "item.minecraft.potion.effect.magic_resistance": "魔法耐性のポーション",
   "item.minecraft.potion.effect.panacea": "万能薬",
+
   "item.minecraft.splash_potion.effect.amplification": "増幅のスプラッシュポーション",
   "item.minecraft.splash_potion.effect.clarity": "純化のスプラッシュポーション",
   "item.minecraft.splash_potion.effect.enderference": "エンダーファレンスのスプラッシュポーション",
@@ -229,6 +237,7 @@
   "item.minecraft.splash_potion.effect.love": "愛のスプラッシュポーション",
   "item.minecraft.splash_potion.effect.magic_resistance": "魔法耐性のスプラッシュポーション",
   "item.minecraft.splash_potion.effect.panacea": "スプラッシュ万能薬",
+
   "item.minecraft.tipped_arrow.effect.amplification": "増幅の矢",
   "item.minecraft.tipped_arrow.effect.clarity": "純化の矢",
   "item.minecraft.tipped_arrow.effect.enderference": "エンダーファレンスの矢",
