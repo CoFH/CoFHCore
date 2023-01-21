@@ -399,7 +399,6 @@ public final class AreaEffectHelper {
     public static boolean isMature(Level level, BlockPos pos, BlockState state) {
 
         Block block = state.getBlock();
-        System.out.println(block);
         if (block instanceof IHarvestable harvestable) {
             return harvestable.canHarvest(state);
         }

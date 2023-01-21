@@ -17,7 +17,8 @@ import net.minecraftforge.fml.common.Mod;
 import java.util.Map;
 
 import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
-import static net.minecraft.world.InteractionHand.*;
+import static net.minecraft.world.InteractionHand.MAIN_HAND;
+import static net.minecraft.world.InteractionHand.OFF_HAND;
 
 @Mod.EventBusSubscriber (modid = ID_COFH_CORE)
 public class ItemTracker {

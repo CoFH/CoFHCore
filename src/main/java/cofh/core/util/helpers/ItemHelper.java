@@ -15,6 +15,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.function.Predicate;
+
 public final class ItemHelper {
 
     private ItemHelper() {
@@ -211,6 +213,19 @@ public final class ItemHelper {
             stack = player.getOffhandItem();
         }
         return stack;
+    }
+
+    public static ItemStack getMatchingStack(Player player, Predicate<ItemStack> filter) {
+
+        ItemStack stack = player.getMainHandItem();
+        if (!stack.isEmpty() && filter.test(stack)) {
+            return stack;
+        }
+        stack = player.getOffhandItem();
+        if (!stack.isEmpty() && filter.test(stack)) {
+            return stack;
+        }
+        return ItemStack.EMPTY;
     }
     // endregion
 
