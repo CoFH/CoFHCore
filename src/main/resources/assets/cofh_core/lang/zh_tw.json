@@ -160,8 +160,6 @@
   "fluid_type.cofh_core.potion": "藥水",
   "fluid_type.cofh_core.steam": "蒸汽",
 
-  "item.cofh_core.ectoplasm": "翠綠靈質",
-
   "info.cofh_core.fluid_filter.0": "將含有流體的容器放入欄位中以將其新增至篩選列表。",
   "info.cofh_core.fluid_filter.1": "可使用額外選項來精確調整行為。",
 
@@ -221,6 +219,7 @@
   "item.minecraft.lingering_potion.effect.love": "滯留 催情藥水",
   "item.minecraft.lingering_potion.effect.magic_resistance": "滯留 魔抗藥水",
   "item.minecraft.lingering_potion.effect.panacea": "滯留 萬靈藥",
+  
   "item.minecraft.potion.effect.amplification": "增幅藥水",
   "item.minecraft.potion.effect.clarity": "洞察藥水",
   "item.minecraft.potion.effect.enderference": "終界抑制藥水",
@@ -229,6 +228,7 @@
   "item.minecraft.potion.effect.love": "催情藥水",
   "item.minecraft.potion.effect.magic_resistance": "魔抗藥水",
   "item.minecraft.potion.effect.panacea": "萬靈藥",
+  
   "item.minecraft.splash_potion.effect.amplification": "飛濺 增幅藥水",
   "item.minecraft.splash_potion.effect.clarity": "飛濺 洞察藥水",
   "item.minecraft.splash_potion.effect.enderference": "飛濺 終界抑制藥水",
@@ -237,6 +237,7 @@
   "item.minecraft.splash_potion.effect.love": "飛濺 催情藥水",
   "item.minecraft.splash_potion.effect.magic_resistance": "飛濺 魔抗藥水",
   "item.minecraft.splash_potion.effect.panacea": "飛濺 萬靈藥",
+
   "item.minecraft.tipped_arrow.effect.amplification": "增幅之箭",
   "item.minecraft.tipped_arrow.effect.clarity": "洞察之箭",
   "item.minecraft.tipped_arrow.effect.enderference": "終界抑制之箭",
