@@ -160,10 +160,10 @@
   "fluid_type.cofh_core.potion": "藥水",
   "fluid_type.cofh_core.steam": "蒸汽",
 
-  "info.cofh_core.fluid_filter.0": "將含有流體的容器放入欄位中以將其新增至篩選列表。",
+  "info.cofh_core.fluid_filter.0": "將含有流體的容器放入欄位中以將其新增至篩選清單。",
   "info.cofh_core.fluid_filter.1": "可使用額外選項來精確調整行為。",
 
-  "info.cofh_core.item_filter.0": "將物品放入欄位中以將其新增至篩選列表。",
+  "info.cofh_core.item_filter.0": "將物品放入欄位中以將其新增至篩選清單。",
   "info.cofh_core.item_filter.1": "可使用額外選項來精確調整行為。",
 
   "key.cofh.mode_change_increment": "輪換至下一個模式",
