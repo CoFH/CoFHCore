@@ -26,7 +26,6 @@ public class ColorParticleOptions extends CoFHParticleOptions {
         this(type, size, duration, delay,0xFFFFFFFF);
     }
 
-
     public ColorParticleOptions(ParticleType<? extends ColorParticleOptions> type, float size, float duration) {
 
         this(type, size, duration, 0.0F);
