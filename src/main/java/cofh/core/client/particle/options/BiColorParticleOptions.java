@@ -25,6 +25,11 @@ public class BiColorParticleOptions extends ColorParticleOptions {
         this(type, size, duration, delay, 0xFFFFFFFF, 0xFFFFFFFF);
     }
 
+    public BiColorParticleOptions(ParticleType<? extends BiColorParticleOptions> type, float size, float duration) {
+
+        this(type, size, duration, 0.0F);
+    }
+
     public BiColorParticleOptions(ParticleType<? extends BiColorParticleOptions> type) {
 
         this(type, 1.0F, 1.0F, 0.0F);

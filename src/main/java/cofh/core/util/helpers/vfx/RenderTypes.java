@@ -38,9 +38,18 @@ public class RenderTypes {
                     .setShaderState(RENDERTYPE_LINES_SHADER)
                     .createCompositeState(false));
 
+    public static final RenderType FLAT_CUTOUT = opaque("flat_translucent", new TextureStateShard(BLANK_TEXTURE, false, false));
     public static final RenderType FLAT_TRANSLUCENT = translucent("flat_translucent", new TextureStateShard(BLANK_TEXTURE, false, false));
     public static final RenderType LINEAR_GLOW = translucent("glow", new TextureStateShard(LIN_GLOW_TEXTURE, true, false));
     public static final RenderType ROUND_GLOW = translucent("glow", new TextureStateShard(RND_GLOW_TEXTURE, true, false));
+
+    public static RenderType opaque(String name, TextureStateShard texture) {
+
+        return RenderType.create(name, DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true,
+                RenderType.CompositeState.builder().setTextureState(texture)
+                        .setShaderState(NEW_ENTITY_SHADER)
+                        .createCompositeState(false));
+    }
 
     public static RenderType translucent(String name, TextureStateShard texture) {
 

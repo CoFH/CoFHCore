@@ -56,6 +56,26 @@ public final class VFXHelper {
         return new Vector4f(a.x() - b.x(), a.y() - b.y(), a.z() - b.z(), a.w() - b.w());
     }
 
+    /**
+     * Implementation of the color distance algorithm proposed in <a href="https://www.compuphase.com/cmetric.htm">this paper</a>.
+     * @return The approximate subjective difference between the colors.
+     */
+    public static double colorDist(Color c1, Color c2) {
+
+        return Math.sqrt(colorDistSqr(c1, c2));
+    }
+
+    public static double colorDistSqr(Color c1, Color c2) {
+
+        int r1 = c1.r;
+        int r2 = c2.r;
+        int rmean = (r1 + r2) >> 1;
+        int r = r1 - r2;
+        int g = c1.g - c2.g;
+        int b = c1.b - c2.b;
+        return (((512 + rmean) * r * r) >> 8) + 4 * g * g + (((767 - rmean) * b * b) >> 8);
+    }
+
     //public static int mix(float d, int rgba0, int... colors) {
     //
     //    if (colors.length <= 0 || d <= 0) {

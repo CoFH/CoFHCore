@@ -5,10 +5,10 @@ import cofh.lib.util.helpers.MathHelper;
 public class Color {
 
     public static final Color WHITE = new Color(0xFFFFFFFF);
-    public int r;
-    public int g;
-    public int b;
-    public int a;
+    public final int r;
+    public final int g;
+    public final int b;
+    public final int a;
 
     public Color(int rgba) {
 

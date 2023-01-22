@@ -33,6 +33,8 @@ public class PacketIDs {
 
     public static final int PACKET_ITEM_MODE_CHANGE = 64;
     public static final int PACKET_ITEM_LEFT_CLICK = 65;
+    public static final int PACKET_ITEM_RAYTRACE_BLOCK = 66;
+    public static final int PACKET_ITEM_RAYTRACE_ENTITY = 67;
 
     public static final int PACKET_EFFECT_ADD = 96;
     public static final int PACKET_EFFECT_REMOVE = 97;

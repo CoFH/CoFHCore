@@ -1,13 +1,21 @@
 package cofh.core.util.helpers;
 
+import cofh.core.item.IBlockRayTraceItem;
+import cofh.core.item.IEntityRayTraceItem;
 import cofh.core.item.ILeftClickHandlerItem;
 import cofh.core.item.IMultiModeItem;
 import com.google.common.base.Strings;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.phys.Vec3;
+
+import java.util.function.Predicate;
 
 public final class ItemHelper {
 
@@ -206,6 +214,19 @@ public final class ItemHelper {
         }
         return stack;
     }
+
+    public static ItemStack getMatchingStack(Player player, Predicate<ItemStack> filter) {
+
+        ItemStack stack = player.getMainHandItem();
+        if (!stack.isEmpty() && filter.test(stack)) {
+            return stack;
+        }
+        stack = player.getOffhandItem();
+        if (!stack.isEmpty() && filter.test(stack)) {
+            return stack;
+        }
+        return ItemStack.EMPTY;
+    }
     // endregion
 
     // region MODE CHANGE
@@ -276,6 +297,40 @@ public final class ItemHelper {
 
         ItemStack heldItem = player.getMainHandItem();
         ((ILeftClickHandlerItem) heldItem.getItem()).onLeftClick(player, heldItem);
+    }
+    // endregion
+
+    // region RAY TRACE
+    public static boolean isPlayerHoldingEntityRayTraceItem(Player player) {
+
+        if (!isPlayerHoldingSomething(player)) {
+            return false;
+        }
+        return player.getMainHandItem().getItem() instanceof IEntityRayTraceItem;
+    }
+
+    public static void onRayTraceEntity(Player player, int targetId, Vec3 origin, Vec3 hit) {
+
+        ItemStack stack = player.getMainHandItem();
+        Level level = player.level;
+        Entity target = level.getEntity(targetId);
+        if (target != null) {
+            ((IEntityRayTraceItem) stack.getItem()).handleEntityRayTrace(level, stack, player, target, origin, hit);
+        }
+    }
+
+    public static boolean isPlayerHoldingBlockRayTraceItem(Player player) {
+
+        if (!isPlayerHoldingSomething(player)) {
+            return false;
+        }
+        return player.getMainHandItem().getItem() instanceof IBlockRayTraceItem;
+    }
+
+    public static void onRayTraceBlock(Player player, BlockPos pos, Vec3 origin, Vec3 hit) {
+
+        ItemStack stack = player.getMainHandItem();
+        ((IBlockRayTraceItem) stack.getItem()).handleBlockRayTrace(player.level, stack, player, pos, origin, hit);
     }
     // endregion
 }

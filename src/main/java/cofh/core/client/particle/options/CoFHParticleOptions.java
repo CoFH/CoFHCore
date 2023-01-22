@@ -21,6 +21,14 @@ public class CoFHParticleOptions implements ParticleOptions {
         this.delay = delay;
     }
 
+    public CoFHParticleOptions(ParticleType<? extends CoFHParticleOptions> type, float size, float duration) {
+
+        this.type = type;
+        this.size = size;
+        this.duration = duration;
+        this.delay = 0.0F;
+    }
+
     public CoFHParticleOptions(ParticleType<? extends ColorParticleOptions> type) {
 
         this(type, 1.0F, 1.0F, 0.0F);

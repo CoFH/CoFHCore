@@ -1,6 +1,5 @@
 package cofh.core.client.particle.impl;
 
-import cofh.core.util.helpers.vfx.RenderTypes;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.core.particles.SimpleParticleType;
@@ -36,7 +35,8 @@ public class FrostParticle extends TextureSheetParticle {
     @Override
     public ParticleRenderType getRenderType() {
 
-        return RenderTypes.PARTICLE_SHEET_OVER;
+        return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        //return RenderTypes.PARTICLE_SHEET_OVER;
     }
 
     @OnlyIn (Dist.CLIENT)
