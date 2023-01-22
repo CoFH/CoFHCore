@@ -34,8 +34,8 @@ public class TileRedstonePacket extends PacketBase implements IPacketClient {
             return;
         }
         BlockEntity tile = world.getBlockEntity(pos);
-        if (tile instanceof IPacketHandlerTile phTile) {
-            phTile.handleRedstonePacket(buffer);
+        if (tile instanceof IPacketHandlerTile handlerTile) {
+            handlerTile.handleRedstonePacket(buffer);
         }
     }
 

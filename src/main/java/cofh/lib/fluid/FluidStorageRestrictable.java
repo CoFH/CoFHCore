@@ -49,10 +49,7 @@ public class FluidStorageRestrictable extends FluidStorageCoFH {
     @Override
     public FluidStack drain(int maxDrain, FluidAction action) {
 
-        if (maxDrain > this.maxDrain.getAsInt()) {
-            return super.drain(this.maxDrain.getAsInt(), action);
-        }
-        return super.drain(maxDrain, action);
+        return super.drain(Math.min(maxDrain, this.maxDrain.getAsInt()), action);
     }
     // endregion
 }

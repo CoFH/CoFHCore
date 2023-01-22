@@ -22,6 +22,8 @@ import static cofh.lib.util.Constants.*;
  */
 public class ItemStorageCoFH implements IItemHandler, IItemStackHolder, IResourceStorage {
 
+    protected static Predicate<ItemStack> DEFAULT_VALIDATOR = e -> true;
+
     protected final int baseCapacity;
 
     protected Supplier<Boolean> creative = FALSE;
@@ -35,12 +37,12 @@ public class ItemStorageCoFH implements IItemHandler, IItemStackHolder, IResourc
 
     public ItemStorageCoFH() {
 
-        this(e -> true);
+        this(DEFAULT_VALIDATOR);
     }
 
     public ItemStorageCoFH(int capacity) {
 
-        this(capacity, e -> true);
+        this(capacity, DEFAULT_VALIDATOR);
     }
 
     public ItemStorageCoFH(Predicate<ItemStack> validator) {
@@ -205,10 +207,12 @@ public class ItemStorageCoFH implements IItemHandler, IItemStackHolder, IResourc
             return stack;
         }
         if (item.isEmpty()) {
+            int maxStack = capacity <= 0 ? stack.getMaxStackSize() : capacity;
+            int count = Math.min(stack.getCount(), maxStack);
             if (!simulate) {
-                setItemStack(stack);
+                setItemStack(cloneStack(stack, count));
             }
-            return ItemStack.EMPTY;
+            return count >= stack.getCount() ? ItemStack.EMPTY : cloneStack(stack, stack.getCount() - count);
         } else if (itemsEqualWithTags(item, stack)) {
             int totalCount = item.getCount() + stack.getCount();
             int limit = getSlotLimit(0);

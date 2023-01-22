@@ -31,17 +31,11 @@ public class StorageClearPacket extends PacketBase implements IPacketServer {
             return;
         }
         BlockEntity tile = world.getBlockEntity(pos);
-        if (tile instanceof ITileCallback) {
+        if (tile instanceof ITileCallback callback) {
             switch (StorageType.values()[storageType]) {
-                case ENERGY:
-                    ((ITileCallback) tile).clearEnergy(storageIndex);
-                    break;
-                case FLUID:
-                    ((ITileCallback) tile).clearTank(storageIndex);
-                    break;
-                case ITEM:
-                    ((ITileCallback) tile).clearSlot(storageIndex);
-                    break;
+                case ENERGY -> callback.clearEnergy(storageIndex);
+                case FLUID -> callback.clearTank(storageIndex);
+                case ITEM -> callback.clearSlot(storageIndex);
             }
         }
         // TODO: Debug logging?

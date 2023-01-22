@@ -34,8 +34,8 @@ public class TileGuiPacket extends PacketBase implements IPacketClient {
             return;
         }
         BlockEntity tile = world.getBlockEntity(pos);
-        if (tile instanceof IPacketHandlerTile phTile) {
-            phTile.handleGuiPacket(buffer);
+        if (tile instanceof IPacketHandlerTile handlerTile) {
+            handlerTile.handleGuiPacket(buffer);
         }
     }
 

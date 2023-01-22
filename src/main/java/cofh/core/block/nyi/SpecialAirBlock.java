@@ -22,6 +22,8 @@ import net.minecraft.world.level.material.Fluids;
 import javax.annotation.Nullable;
 import java.util.Random;
 
+import static cofh.lib.util.Constants.DIRECTIONS;
+
 public class SpecialAirBlock extends AirBlock {
 
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
@@ -83,7 +85,7 @@ public class SpecialAirBlock extends AirBlock {
 
         if ((rand.nextInt(4) == 0 || this.shouldDisperse(worldIn, pos, 4)) && this.slightlyDisperse(state, worldIn, pos)) {
             BlockPos.MutableBlockPos blockpos$mutable = new BlockPos.MutableBlockPos();
-            for (Direction direction : Direction.values()) {
+            for (Direction direction : DIRECTIONS) {
                 blockpos$mutable.setWithOffset(pos, direction);
                 BlockState blockstate = worldIn.getBlockState(blockpos$mutable);
                 if (blockstate.is(this) && !this.slightlyDisperse(blockstate, worldIn, blockpos$mutable)) {
@@ -107,7 +109,7 @@ public class SpecialAirBlock extends AirBlock {
 
         int i = 0;
         BlockPos.MutableBlockPos blockpos$mutable = new BlockPos.MutableBlockPos();
-        for (Direction direction : Direction.values()) {
+        for (Direction direction : DIRECTIONS) {
             blockpos$mutable.setWithOffset(pos, direction);
             if (worldIn.getBlockState(blockpos$mutable).is(this)) {
                 ++i;

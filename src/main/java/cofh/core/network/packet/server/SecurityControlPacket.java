@@ -31,8 +31,8 @@ public class SecurityControlPacket extends PacketBase implements IPacketServer {
             return;
         }
         BlockEntity tile = world.getBlockEntity(pos);
-        if (tile instanceof ISecurableTile) {
-            ((ISecurableTile) tile).setAccess(AccessMode.VALUES[mode]);
+        if (tile instanceof ISecurableTile securableTile) {
+            securableTile.setAccess(AccessMode.VALUES[mode]);
         }
     }
 

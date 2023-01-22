@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.EnumMap;
 import java.util.function.ToIntFunction;
 
+import static cofh.lib.util.Constants.DIRECTIONS;
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.*;
 
 /**
@@ -29,8 +30,6 @@ public class BlockHelper {
     private BlockHelper() {
 
     }
-
-    public static final Direction[] DIR_VALUES = Direction.values();
 
     public static final byte[] SIDE_LEFT = {4, 5, 5, 4, 2, 3};
     public static final byte[] SIDE_RIGHT = {5, 4, 4, 5, 3, 2};
@@ -76,7 +75,7 @@ public class BlockHelper {
 
     public static BlockEntity getAdjacentTileEntity(Level world, BlockPos pos, int side) {
 
-        return world == null ? null : getAdjacentTileEntity(world, pos, DIR_VALUES[side]);
+        return world == null ? null : getAdjacentTileEntity(world, pos, DIRECTIONS[side]);
     }
 
     public static BlockEntity getAdjacentTileEntity(BlockEntity refTile, Direction dir) {
@@ -252,7 +251,7 @@ public class BlockHelper {
 
         EnumMap<Direction, Direction> map = new EnumMap<>(Direction.class);
         for (int i = 0; i < 6; ++i) {
-            map.put(DIR_VALUES[i], DIR_VALUES[arr[i]]);
+            map.put(DIRECTIONS[i], DIRECTIONS[arr[i]]);
         }
         return map;
     }

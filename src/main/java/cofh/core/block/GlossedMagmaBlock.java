@@ -1,6 +1,5 @@
 package cofh.core.block;
 
-import cofh.lib.util.helpers.BlockHelper;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -23,6 +22,7 @@ import net.minecraft.world.level.material.Material;
 import javax.annotation.Nullable;
 import java.util.Random;
 
+import static cofh.lib.util.Constants.DIRECTIONS;
 import static cofh.lib.util.Utils.getItemEnchantmentLevel;
 
 public class GlossedMagmaBlock extends MagmaBlock {
@@ -73,7 +73,7 @@ public class GlossedMagmaBlock extends MagmaBlock {
 
         if ((rand.nextInt(9) == 0 || this.shouldMelt(worldIn, pos, 4)) && this.slightlyMelt(state, worldIn, pos)) {
             BlockPos.MutableBlockPos blockpos$mutable = new BlockPos.MutableBlockPos();
-            for (Direction direction : BlockHelper.DIR_VALUES) {
+            for (Direction direction : DIRECTIONS) {
                 blockpos$mutable.setWithOffset(pos, direction);
                 BlockState blockstate = worldIn.getBlockState(blockpos$mutable);
                 if (blockstate.is(this) && !this.slightlyMelt(blockstate, worldIn, blockpos$mutable)) {
@@ -102,7 +102,7 @@ public class GlossedMagmaBlock extends MagmaBlock {
 
         int i = 0;
         BlockPos.MutableBlockPos blockpos$mutable = new BlockPos.MutableBlockPos();
-        for (Direction direction : Direction.values()) {
+        for (Direction direction : DIRECTIONS) {
             blockpos$mutable.setWithOffset(pos, direction);
             if (worldIn.getBlockState(blockpos$mutable).is(this)) {
                 ++i;

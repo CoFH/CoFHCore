@@ -35,8 +35,8 @@ public class TileControlPacket extends PacketBase implements IPacketClient {
             return;
         }
         BlockEntity tile = world.getBlockEntity(pos);
-        if (tile instanceof IPacketHandlerTile phTile) {
-            phTile.handleControlPacket(buffer);
+        if (tile instanceof IPacketHandlerTile handlerTile) {
+            handlerTile.handleControlPacket(buffer);
             BlockState state = tile.getLevel().getBlockState(pos);
             tile.getLevel().sendBlockUpdated(pos, state, state, 3);
         }
