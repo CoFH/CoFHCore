@@ -58,12 +58,9 @@ public class CoreClientEvents {
 
     private static final Set<String> NAMESPACES = new ObjectOpenHashSet<>();
 
-    static {
-        NAMESPACES.add(ModIds.ID_COFH_CORE);
-        NAMESPACES.add(ModIds.ID_ARCHERS_PARADOX);
-        NAMESPACES.add(ModIds.ID_ENSORCELLATION);
-        NAMESPACES.add(ModIds.ID_REDSTONE_ARSENAL);
-        NAMESPACES.add(ModIds.ID_THERMAL);
+    public static boolean addNamespace(String namespace) {
+
+        return NAMESPACES.add(namespace);
     }
 
     private CoreClientEvents() {

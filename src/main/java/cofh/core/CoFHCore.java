@@ -12,6 +12,7 @@ import cofh.core.compat.quark.QuarkFlags;
 import cofh.core.config.*;
 import cofh.core.enchantment.HoldingEnchantment;
 import cofh.core.event.ArmorEvents;
+import cofh.core.event.CoreClientEvents;
 import cofh.core.init.*;
 import cofh.core.network.packet.PacketIDs;
 import cofh.core.network.packet.client.*;
@@ -223,6 +224,8 @@ public class CoFHCore {
         });
         event.enqueueWork(CoreKeys::register);
         event.enqueueWork(ProxyClient::registerItemModelProperties);
+
+        event.enqueueWork(() -> CoreClientEvents.addNamespace(ID_COFH_CORE));
     }
 
     private void handleIMC(final InterModProcessEvent event) {
