@@ -13,6 +13,11 @@ public interface IXpContainerItem extends IContainerItem {
 
     int getCapacityXp(ItemStack stack);
 
+    default boolean canStoreXp(ItemStack stack) {
+
+        return true;
+    }
+
     default int getStoredXp(ItemStack stack) {
 
         return stack.getOrCreateTag().getInt(TAG_XP);
@@ -39,6 +44,10 @@ public interface IXpContainerItem extends IContainerItem {
     static boolean storeXpOrb(Player player, ExperienceOrb orb, ItemStack stack) {
 
         IXpContainerItem item = (IXpContainerItem) stack.getItem();
+
+        if (!item.canStoreXp(stack)) {
+            return false;
+        }
         int toAdd = Math.min(item.getSpaceXp(stack), orb.value);
 
         if (toAdd > 0) {
@@ -52,3 +61,4 @@ public interface IXpContainerItem extends IContainerItem {
     }
 
 }
+
