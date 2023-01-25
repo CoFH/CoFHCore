@@ -52,7 +52,7 @@
   "info.cofh.heads": "頭",
   "info.cofh.infinite": "無限",
   "info.cofh.infinite_source": "無限資源",
-  "info.cofh.key_not_bound": "按鍵綁定：CoFH-「%s」未設置。",
+  "info.cofh.key_not_bound": "按鍵綁定：CoFH-「%s」未設定。",
   "info.cofh.none": "無",
   "info.cofh.optional_catalyst": "可選催化劑",
   "info.cofh.output": "輸出",
@@ -221,6 +221,7 @@
   "item.minecraft.lingering_potion.effect.love": "滯留 催情藥水",
   "item.minecraft.lingering_potion.effect.magic_resistance": "滯留 魔抗藥水",
   "item.minecraft.lingering_potion.effect.panacea": "滯留 萬靈藥",
+
   "item.minecraft.potion.effect.amplification": "增幅藥水",
   "item.minecraft.potion.effect.clarity": "洞察藥水",
   "item.minecraft.potion.effect.enderference": "終界抑制藥水",
@@ -229,6 +230,7 @@
   "item.minecraft.potion.effect.love": "催情藥水",
   "item.minecraft.potion.effect.magic_resistance": "魔抗藥水",
   "item.minecraft.potion.effect.panacea": "萬靈藥",
+
   "item.minecraft.splash_potion.effect.amplification": "飛濺 增幅藥水",
   "item.minecraft.splash_potion.effect.clarity": "飛濺 洞察藥水",
   "item.minecraft.splash_potion.effect.enderference": "飛濺 終界抑制藥水",
@@ -237,6 +239,7 @@
   "item.minecraft.splash_potion.effect.love": "飛濺 催情藥水",
   "item.minecraft.splash_potion.effect.magic_resistance": "飛濺 魔抗藥水",
   "item.minecraft.splash_potion.effect.panacea": "飛濺 萬靈藥",
+
   "item.minecraft.tipped_arrow.effect.amplification": "增幅之箭",
   "item.minecraft.tipped_arrow.effect.clarity": "洞察之箭",
   "item.minecraft.tipped_arrow.effect.enderference": "終界抑制之箭",
