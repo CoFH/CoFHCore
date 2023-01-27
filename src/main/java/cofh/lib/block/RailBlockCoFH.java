@@ -15,6 +15,8 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
+import static cofh.core.config.CoreServerConfig.returnDismantleDrops;
+
 public class RailBlockCoFH extends RailBlock implements IDismantleable, IWrenchable {
 
     protected float maxSpeed = 0.4F;
@@ -42,7 +44,7 @@ public class RailBlockCoFH extends RailBlock implements IDismantleable, IWrencha
         if (Utils.isWrench(player.getItemInHand(handIn))) {
             if (player.isSecondaryUseActive()) {
                 if (canDismantle(worldIn, pos, state, player)) {
-                    dismantleBlock(worldIn, pos, state, hit, player, false);
+                    dismantleBlock(worldIn, pos, state, hit, player, returnDismantleDrops());
                     return InteractionResult.SUCCESS;
                 }
             } else {

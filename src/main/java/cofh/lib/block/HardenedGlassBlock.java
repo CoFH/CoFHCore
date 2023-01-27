@@ -13,6 +13,8 @@ import net.minecraft.world.level.block.GlassBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
+import static cofh.core.config.CoreServerConfig.returnDismantleDrops;
+
 public class HardenedGlassBlock extends GlassBlock implements IDismantleable {
 
     public HardenedGlassBlock(Properties properties) {
@@ -32,7 +34,7 @@ public class HardenedGlassBlock extends GlassBlock implements IDismantleable {
         if (Utils.isWrench(player.getItemInHand(handIn))) {
             if (player.isSecondaryUseActive()) {
                 if (canDismantle(worldIn, pos, state, player)) {
-                    dismantleBlock(worldIn, pos, state, hit, player, false);
+                    dismantleBlock(worldIn, pos, state, hit, player, returnDismantleDrops());
                     return InteractionResult.SUCCESS;
                 }
             }
