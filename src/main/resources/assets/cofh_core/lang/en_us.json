@@ -62,7 +62,9 @@
   "info.cofh.tails": "Tails",
   "info.cofh.transfer": "Transfer",
   "info.cofh.type": "Type",
-  "info.cofh.xp": "XP",
+  "info.cofh.unit_mb": "mB",
+  "info.cofh.unit_rf": "RF",
+  "info.cofh.unit_xp": "XP",
 
   "info.cofh.block_tags": "Block Tags",
   "info.cofh.fluid_tags": "Fluid Tags",

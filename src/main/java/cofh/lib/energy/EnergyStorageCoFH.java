@@ -12,6 +12,7 @@ import java.util.function.Supplier;
 
 import static cofh.lib.util.Constants.*;
 import static cofh.lib.util.constants.NBTTags.*;
+import static cofh.lib.util.helpers.StringHelper.localize;
 
 /**
  * Implementation of an Energy Storage object. See {@link IEnergyStorage}.
@@ -300,7 +301,7 @@ public class EnergyStorageCoFH implements IRedstoneFluxStorage, IResourceStorage
     @Override
     public String getUnit() {
 
-        return "RF";
+        return localize("info.cofh.unit_rf");
     }
     // endregion
 }
