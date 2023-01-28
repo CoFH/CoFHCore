@@ -13,6 +13,7 @@ public class NBTTags {
     public static final String TAG_AMOUNT = "Amount";
     public static final String TAG_AMOUNT_IN = "AmountIn";
     public static final String TAG_AMOUNT_OUT = "AmountOut";
+    public static final String TAG_ATTACHMENT = "Attachment";
     public static final String TAG_ARROW_DATA = "ArrowData";
     public static final String TAG_ARROWS = "Arrows";
     public static final String TAG_AUGMENTS = "Augments";

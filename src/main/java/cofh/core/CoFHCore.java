@@ -12,6 +12,7 @@ import cofh.core.compat.quark.QuarkFlags;
 import cofh.core.config.*;
 import cofh.core.enchantment.HoldingEnchantment;
 import cofh.core.event.ArmorEvents;
+import cofh.core.event.CoreClientEvents;
 import cofh.core.init.*;
 import cofh.core.network.packet.PacketIDs;
 import cofh.core.network.packet.client.*;
@@ -44,6 +45,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
@@ -90,6 +92,8 @@ public class CoFHCore {
     public static boolean curiosLoaded = false;
 
     public CoFHCore() {
+
+        ForgeMod.enableMilkFluid();
 
         curiosLoaded = Utils.isModLoaded(ModIds.ID_CURIOS);
 
@@ -223,6 +227,8 @@ public class CoFHCore {
         });
         event.enqueueWork(CoreKeys::register);
         event.enqueueWork(ProxyClient::registerItemModelProperties);
+
+        event.enqueueWork(() -> CoreClientEvents.addNamespace(ID_COFH_CORE));
     }
 
     private void handleIMC(final InterModProcessEvent event) {
