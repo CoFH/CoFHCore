@@ -14,6 +14,7 @@ import java.util.function.Supplier;
 
 import static cofh.lib.util.Constants.*;
 import static cofh.lib.util.constants.NBTTags.TAG_CAPACITY;
+import static cofh.lib.util.helpers.StringHelper.localize;
 
 /**
  * Implementation of a Fluid Storage object. Does NOT implement {@link IFluidTank}.
@@ -282,7 +283,7 @@ public class FluidStorageCoFH implements IFluidHandler, IFluidStackHolder, IReso
     @Override
     public String getUnit() {
 
-        return "mB";
+        return localize("info.cofh.unit_mb");
     }
     // endregion
 }

@@ -105,10 +105,11 @@ public abstract class CoFHParticle extends Particle {
 
     /**
      * Method for rendering impl.
-     * @param buffer Minecraft's main buffer source.
+     *
+     * @param buffer   Minecraft's main buffer source.
      * @param consumer {@link VertexConsumer} from the {@link ParticleRenderType} given by {@link #getRenderType()}. Useless for most particles with custom rendering.
-     * @param time Number of ticks since the particle started rendering.
-     * @param pTicks Partial ticks. The {@code time} parameter should usually be used instead.
+     * @param time     Number of ticks since the particle started rendering.
+     * @param pTicks   Partial ticks. The {@code time} parameter should usually be used instead.
      */
     public abstract void render(PoseStack stack, MultiBufferSource buffer, VertexConsumer consumer, int packedLight, float time, float pTicks);
 

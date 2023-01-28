@@ -15,4 +15,5 @@ public class MissResult extends HitResult {
 
         return Type.MISS;
     }
+
 }

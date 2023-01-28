@@ -19,4 +19,5 @@ public interface IBlockRayTraceItem {
     }
 
     void handleBlockRayTrace(Level level, ItemStack stack, Player player, BlockPos pos, Vec3 origin, Vec3 hit);
+
 }

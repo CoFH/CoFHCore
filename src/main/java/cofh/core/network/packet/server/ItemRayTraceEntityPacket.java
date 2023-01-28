@@ -55,7 +55,7 @@ public class ItemRayTraceEntityPacket extends PacketBase implements IPacketServe
         this.hit = new Vec3(buf.readDouble(), buf.readDouble(), buf.readDouble());
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @OnlyIn (Dist.CLIENT)
     public static void sendToServer(Player player, Entity target, Vec3 origin, Vec3 hit) {
 
         if (player.level.isClientSide) {
