@@ -7,6 +7,7 @@ import cofh.core.item.IMultiModeItem;
 import com.google.common.base.Strings;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -215,7 +216,20 @@ public final class ItemHelper {
         return stack;
     }
 
-    public static ItemStack getMatchingStack(Player player, Predicate<ItemStack> filter) {
+    public static InteractionHand getMatchingHand(Player player, Predicate<ItemStack> filter) {
+
+        ItemStack stack = player.getMainHandItem();
+        if (!stack.isEmpty() && filter.test(stack)) {
+            return InteractionHand.MAIN_HAND;
+        }
+        stack = player.getOffhandItem();
+        if (!stack.isEmpty() && filter.test(stack)) {
+            return InteractionHand.OFF_HAND;
+        }
+        return InteractionHand.MAIN_HAND;
+    }
+
+    public static ItemStack getMatchingHeldStack(Player player, Predicate<ItemStack> filter) {
 
         ItemStack stack = player.getMainHandItem();
         if (!stack.isEmpty() && filter.test(stack)) {

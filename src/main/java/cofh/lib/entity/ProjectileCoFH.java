@@ -4,6 +4,7 @@ import cofh.core.util.helpers.ArcheryHelper;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -199,6 +200,13 @@ public class ProjectileCoFH extends Projectile {
             }
             this.setSharedFlagOnFire(this.remainingFireTicks > 0);
         }
+    }
+
+    @Override
+    public SoundSource getSoundSource() {
+
+        Entity owner = getOwner();
+        return owner == null ? super.getSoundSource() : owner.getSoundSource();
     }
 
 }

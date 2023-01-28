@@ -26,7 +26,7 @@ public class MistParticle extends SpriteParticle {
 
         super(data, level, sprites, x, y, z, dx, dy, dz);
         oRoll = roll = random.nextFloat() * MathHelper.F_TAU;
-        baseColor = new Color(data.rgba0);
+        baseColor = Color.fromRGBA(data.rgba0);
     }
 
     @Override

@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec2;
@@ -54,26 +55,6 @@ public final class VFXHelper {
     public static Vector4f subtract(Vector4f a, Vector4f b) {
 
         return new Vector4f(a.x() - b.x(), a.y() - b.y(), a.z() - b.z(), a.w() - b.w());
-    }
-
-    /**
-     * Implementation of the color distance algorithm proposed in <a href="https://www.compuphase.com/cmetric.htm">this paper</a>.
-     * @return The approximate subjective difference between the colors.
-     */
-    public static double colorDist(Color c1, Color c2) {
-
-        return Math.sqrt(colorDistSqr(c1, c2));
-    }
-
-    public static double colorDistSqr(Color c1, Color c2) {
-
-        int r1 = c1.r;
-        int r2 = c2.r;
-        int rmean = (r1 + r2) >> 1;
-        int r = r1 - r2;
-        int g = c1.g - c2.g;
-        int b = c1.b - c2.b;
-        return (((512 + rmean) * r * r) >> 8) + 4 * g * g + (((767 - rmean) * b * b) >> 8);
     }
 
     //public static int mix(float d, int rgba0, int... colors) {
@@ -351,7 +332,7 @@ public final class VFXHelper {
      * @param heightScale Adjusts how high the blocks travel.
      * @param canRender   Predicate for filtering which blocks are to be rendered.
      */
-    public static void renderShockwave(PoseStack stack, MultiBufferSource buffer, BlockAndTintGetter level, BlockPos origin, float time, float diameter, float heightScale, Predicate<BlockPos> canRender) {
+    public static void renderShockwave(PoseStack stack, MultiBufferSource buffer, Level level, BlockPos origin, float time, float diameter, float heightScale, Predicate<BlockPos> canRender) {
 
         BlockRenderDispatcher renderer = RenderHelper.renderBlock();
         float radius = diameter * 0.5F;
@@ -372,8 +353,8 @@ public final class VFXHelper {
 
                             // ModelData modelData = renderer.getBlockModel(state).getModelData(level, pos, state, ModelData.EMPTY);
 
-                            for (RenderType type : renderer.getBlockModel(state).getRenderTypes(state, MathHelper.RANDOM, ModelData.EMPTY)) {
-                                renderer.renderBatched(state, pos.relative(Direction.UP), level, stack, buffer.getBuffer(type), false, MathHelper.RANDOM, ModelData.EMPTY, type);
+                            for (RenderType type : renderer.getBlockModel(state).getRenderTypes(state, level.random, ModelData.EMPTY)) {
+                                renderer.renderBatched(state, pos.relative(Direction.UP), level, stack, buffer.getBuffer(type), false, level.random, ModelData.EMPTY, type);
                             }
                             stack.popPose();
                         }
@@ -384,7 +365,7 @@ public final class VFXHelper {
         }
     }
 
-    public static void renderShockwave(PoseStack stack, MultiBufferSource buffer, BlockAndTintGetter world, BlockPos origin, float time, float diameter, float heightScale) {
+    public static void renderShockwave(PoseStack stack, MultiBufferSource buffer, Level world, BlockPos origin, float time, float diameter, float heightScale) {
 
         renderShockwave(stack, buffer, world, origin, time, diameter, heightScale, pos -> {
             BlockState state = world.getBlockState(pos);
@@ -711,7 +692,7 @@ public final class VFXHelper {
                     float angle = j * WIND_INCR;
                     nodes[j] = new Vector4f(MathHelper.cos(angle) * 0.5F, y, MathHelper.sin(angle) * 0.5F, 1.0F);
                 }
-                renderStreamLine(stack, builder, packedLight, nodes, new Color(value, value, value, alpha), getWidthFunc(width));
+                renderStreamLine(stack, builder, packedLight, nodes, Color.fromFloat(value, value, value, alpha), getWidthFunc(width));
                 stack.popPose();
             }
         }

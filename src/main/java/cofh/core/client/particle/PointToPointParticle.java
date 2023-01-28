@@ -31,7 +31,7 @@ public abstract class PointToPointParticle extends ColorParticle {
 
     protected void setColor1(int rgba) {
 
-        this.c1 = new Color(rgba);
+        this.c1 = Color.fromRGBA(rgba);
     }
 
     protected void setColor1(Color color) {

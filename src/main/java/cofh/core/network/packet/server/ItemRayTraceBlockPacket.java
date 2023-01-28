@@ -40,10 +40,10 @@ public class ItemRayTraceBlockPacket extends PacketBase implements IPacketServer
 
         buf.writeBlockPos(pos);
         buf.writeDouble(origin.x);
-        buf.writeDouble(origin.y);
+        buf.writeFloat((float) origin.y);
         buf.writeDouble(origin.z);
         buf.writeDouble(hit.x);
-        buf.writeDouble(hit.y);
+        buf.writeFloat((float) hit.y);
         buf.writeDouble(hit.z);
     }
 
@@ -51,8 +51,8 @@ public class ItemRayTraceBlockPacket extends PacketBase implements IPacketServer
     public void read(FriendlyByteBuf buf) {
 
         this.pos = buf.readBlockPos();
-        this.origin = new Vec3(buf.readDouble(), buf.readDouble(), buf.readDouble());
-        this.hit = new Vec3(buf.readDouble(), buf.readDouble(), buf.readDouble());
+        this.origin = new Vec3(buf.readDouble(), buf.readFloat(), buf.readDouble());
+        this.hit = new Vec3(buf.readDouble(), buf.readFloat(), buf.readDouble());
     }
 
     @OnlyIn(Dist.CLIENT)
