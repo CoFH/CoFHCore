@@ -49,20 +49,20 @@ public class DevStickItem extends ItemCoFH implements IEntityRayTraceItem, ITrac
         BlockPos blockPos = context.getClickedPos().relative(context.getClickedFace());
 
         Random rand = new Random();
-//        if (level.isClientSide) {
-//            Vec3 start = pos;
-//            Vec3 end = pos.add(20, 20, 0);
-//            level.addParticle(new BiColorParticleOptions(CoreParticles.SHARD.get(), 1.0F, 500.0F, 30, 0xFF0000FF, 0x0000FFFF), start.x, start.y, start.z, end.x, end.y, end.z);
-//
-//            //Vec3 end = pos.add(5, 5, 0);
-//            //level.addParticle(new BiColorParticleOptions(CoreParticles.BEAM.get(), 1.0F, 1000.0F, rand.nextFloat(2.5F), 0xFF0000FF, 0x0000FFFF), pos.x, pos.y, pos.z, end.x, end.y, end.z);
-//            //for (int i = 0; i < 10; ++i) {
-//            //    level.addParticle(new CylindricalParticleOptions(CoreParticles.WIND_SPIRAL.get(), 1.0F, 10.0F, rand.nextFloat(2.5F), 2.0F), pos.x, pos.y, pos.z, 0, 0, 0);
-//            //}
-//            //level.addParticle(new ColorParticleOptions(CoreParticles.BLAST.get(), 1.0F, 60.0F, 0, 0xFF0000FF), pos.x, pos.y, pos.z, 0, 0, 0);
-//
-//        }
-//        return InteractionResult.sidedSuccess(level.isClientSide);
+        //        if (level.isClientSide) {
+        //            Vec3 start = pos;
+        //            Vec3 end = pos.add(20, 20, 0);
+        //            level.addParticle(new BiColorParticleOptions(CoreParticles.SHARD.get(), 1.0F, 500.0F, 30, 0xFF0000FF, 0x0000FFFF), start.x, start.y, start.z, end.x, end.y, end.z);
+        //
+        //            //Vec3 end = pos.add(5, 5, 0);
+        //            //level.addParticle(new BiColorParticleOptions(CoreParticles.BEAM.get(), 1.0F, 1000.0F, rand.nextFloat(2.5F), 0xFF0000FF, 0x0000FFFF), pos.x, pos.y, pos.z, end.x, end.y, end.z);
+        //            //for (int i = 0; i < 10; ++i) {
+        //            //    level.addParticle(new CylindricalParticleOptions(CoreParticles.WIND_SPIRAL.get(), 1.0F, 10.0F, rand.nextFloat(2.5F), 2.0F), pos.x, pos.y, pos.z, 0, 0, 0);
+        //            //}
+        //            //level.addParticle(new ColorParticleOptions(CoreParticles.BLAST.get(), 1.0F, 60.0F, 0, 0xFF0000FF), pos.x, pos.y, pos.z, 0, 0, 0);
+        //
+        //        }
+        //        return InteractionResult.sidedSuccess(level.isClientSide);
         return InteractionResult.PASS;
     }
 
@@ -146,8 +146,8 @@ public class DevStickItem extends ItemCoFH implements IEntityRayTraceItem, ITrac
             living.hurt(DamageSource.playerAttack(player), 6F);
             living.invulnerableTime = invuln;
             living.getAttribute(Attributes.KNOCKBACK_RESISTANCE).removeModifier(Constants.UUID_WEAPON_KNOCKBACK);
-//            float time = (float) hit.subtract(origin).length() * 0.25F;
-//            ((ServerLevel) level).sendParticles(new BiColorParticleOptions(CoreParticles.SHARD.get(), 1.0F, time, 0, 0xac3ad0ff, 0x7426a9ff), origin.x, origin.y, origin.z, 0, hit.x, hit.y, hit.z, 1.0F);
+            //            float time = (float) hit.subtract(origin).length() * 0.25F;
+            //            ((ServerLevel) level).sendParticles(new BiColorParticleOptions(CoreParticles.SHARD.get(), 1.0F, time, 0, 0xac3ad0ff, 0x7426a9ff), origin.x, origin.y, origin.z, 0, hit.x, hit.y, hit.z, 1.0F);
 
         }
     }

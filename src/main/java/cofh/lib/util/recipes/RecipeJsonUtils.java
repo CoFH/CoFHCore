@@ -102,6 +102,16 @@ public abstract class RecipeJsonUtils {
                 if (amount > 0) {
                     ingredient.setAmount(amount);
                 }
+                if (object.has(NBT)) {
+                    JsonElement nbtElement = object.get(NBT);
+                    CompoundTag nbt;
+                    if (nbtElement.isJsonObject()) {
+                        nbt = TagParser.parseTag(GSON.toJson(nbtElement));
+                    } else {
+                        nbt = TagParser.parseTag(GsonHelper.convertToString(nbtElement, NBT));
+                    }
+                    ingredient.setTag(nbt);
+                }
             } catch (Throwable t) {
                 ingredient = FluidIngredient.of(FluidStack.EMPTY);
             }

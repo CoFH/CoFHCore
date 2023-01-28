@@ -58,6 +58,7 @@ public final class VFXHelper {
 
     /**
      * Implementation of the color distance algorithm proposed in <a href="https://www.compuphase.com/cmetric.htm">this paper</a>.
+     *
      * @return The approximate subjective difference between the colors.
      */
     public static double colorDist(Color c1, Color c2) {

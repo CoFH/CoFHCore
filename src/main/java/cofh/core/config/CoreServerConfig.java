@@ -5,6 +5,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import java.util.function.Supplier;
 
 import static cofh.lib.util.Constants.FALSE;
+import static cofh.lib.util.Constants.TRUE;
 
 public class CoreServerConfig implements IBaseConfig {
 
@@ -12,6 +13,10 @@ public class CoreServerConfig implements IBaseConfig {
     public void apply(ForgeConfigSpec.Builder builder) {
 
         builder.push("Gameplay");
+
+        returnDismantleDrops = builder
+                .comment("If TRUE, dismantled blocks will be placed in the dismantling player's inventory if possible.")
+                .define("Return Dismantle Drops", returnDismantleDrops);
 
         builder.push("Fishing");
 
@@ -38,10 +43,37 @@ public class CoreServerConfig implements IBaseConfig {
         builder.pop();
     }
 
-    public static Supplier<Boolean> enableFishingExhaustion = FALSE;
-    public static Supplier<Double> amountFishingExhaustion = () -> 0.125;
+    public static boolean returnDismantleDrops() {
 
-    public static Supplier<Boolean> enableSaplingGrowthMod = FALSE;
-    public static Supplier<Integer> amountSaplingGrowthMod = () -> 4;
+        return returnDismantleDrops.get();
+    }
+
+    public static boolean enableFishingExhaustion() {
+
+        return enableFishingExhaustion.get();
+    }
+
+    public static float amountFishingExhaustion() {
+
+        return amountFishingExhaustion.get().floatValue();
+    }
+
+    public static boolean enableSaplingGrowthMod() {
+
+        return enableSaplingGrowthMod.get();
+    }
+
+    public static int amountSaplingGrowthMod() {
+
+        return amountSaplingGrowthMod.get();
+    }
+
+    private static Supplier<Boolean> returnDismantleDrops = TRUE;
+
+    private static Supplier<Boolean> enableFishingExhaustion = FALSE;
+    private static Supplier<Double> amountFishingExhaustion = () -> 0.125;
+
+    private static Supplier<Boolean> enableSaplingGrowthMod = FALSE;
+    private static Supplier<Integer> amountSaplingGrowthMod = () -> 4;
 
 }

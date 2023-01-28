@@ -12,12 +12,13 @@ import static cofh.core.init.CoreMobEffects.CHILLED;
 
 /**
  * Hooks into mouse sensitivity.
+ *
  * @author Hekera
  */
 @Mixin (MouseHandler.class)
 public abstract class MouseHandlerMixin {
 
-    @ModifyVariable(
+    @ModifyVariable (
             method = "turnPlayer",
             ordinal = 3,
             at = @At (

@@ -14,6 +14,7 @@ public abstract class PointToPointParticle extends ColorParticle {
 
     /**
      * A particle that goes from some point to another, such as a beam of light.
+     *
      * @param sx X coordinate of the starting point.
      * @param ex X coordinate of the ending point.
      */

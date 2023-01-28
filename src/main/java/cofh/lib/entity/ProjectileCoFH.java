@@ -137,6 +137,7 @@ public class ProjectileCoFH extends Projectile {
 
     /**
      * Replacement for onHitEntity that can handle multiple entities.
+     *
      * @return True if entities were hit and further processing (such as block hits) should be stopped.
      */
     public boolean hitEntities(Level level, Vec3 startPos, Vec3 endPos) {
