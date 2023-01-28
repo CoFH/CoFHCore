@@ -24,7 +24,6 @@ import static cofh.core.network.packet.server.StorageClearPacket.StorageType.*;
 import static cofh.lib.util.Constants.PATH_ELEMENTS;
 import static cofh.lib.util.Constants.TRUE;
 import static cofh.lib.util.helpers.StringHelper.*;
-import static cofh.lib.util.helpers.StringHelper.format;
 import static net.minecraft.client.gui.screens.Screen.hasControlDown;
 import static net.minecraft.client.gui.screens.Screen.hasShiftDown;
 
