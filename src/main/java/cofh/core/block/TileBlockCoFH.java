@@ -34,6 +34,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
+import static cofh.core.config.CoreServerConfig.returnDismantleDrops;
+
 public class TileBlockCoFH extends Block implements EntityBlock, IDismantleable {
 
     protected final Supplier<BlockEntityType<?>> blockEntityType;
@@ -74,7 +76,7 @@ public class TileBlockCoFH extends Block implements EntityBlock, IDismantleable 
             if (Utils.isWrench(player.getItemInHand(handIn))) {
                 if (player.isSecondaryUseActive()) {
                     if (canDismantle(worldIn, pos, state, player)) {
-                        dismantleBlock(worldIn, pos, state, hit, player, false);
+                        dismantleBlock(worldIn, pos, state, hit, player, returnDismantleDrops());
                         return InteractionResult.SUCCESS;
                     }
                 } else {

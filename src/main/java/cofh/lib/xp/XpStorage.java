@@ -12,6 +12,7 @@ import static cofh.lib.util.Constants.FALSE;
 import static cofh.lib.util.Constants.MAX_CAPACITY;
 import static cofh.lib.util.constants.NBTTags.TAG_XP;
 import static cofh.lib.util.constants.NBTTags.TAG_XP_MAX;
+import static cofh.lib.util.helpers.StringHelper.localize;
 
 /**
  * Implementation of an Experience Storage object. See {@link IXpStorage}.
@@ -207,7 +208,7 @@ public class XpStorage implements IXpStorage, IResourceStorage, INBTSerializable
     @Override
     public String getUnit() {
 
-        return "XP";
+        return localize("info.cofh.unit_xp");
     }
     // endregion
 }

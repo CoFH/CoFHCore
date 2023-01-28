@@ -80,14 +80,14 @@ public class CoreCommonEvents {
         if (event.isCanceled()) {
             return;
         }
-        if (!CoreServerConfig.enableFishingExhaustion.get()) {
+        if (!CoreServerConfig.enableFishingExhaustion()) {
             return;
         }
         Entity player = event.getHookEntity().getOwner();
         if (!(player instanceof Player) || player instanceof FakePlayer) {
             return;
         }
-        ((Player) player).causeFoodExhaustion(CoreServerConfig.amountFishingExhaustion.get().floatValue());
+        ((Player) player).causeFoodExhaustion(CoreServerConfig.amountFishingExhaustion());
     }
 
     @SubscribeEvent (priority = EventPriority.LOW)
@@ -130,10 +130,10 @@ public class CoreCommonEvents {
         if (event.isCanceled()) {
             return;
         }
-        if (!CoreServerConfig.enableSaplingGrowthMod.get()) {
+        if (!CoreServerConfig.enableSaplingGrowthMod()) {
             return;
         }
-        if (event.getRandomSource().nextInt(CoreServerConfig.amountSaplingGrowthMod.get()) != 0) {
+        if (event.getRandomSource().nextInt(CoreServerConfig.amountSaplingGrowthMod()) != 0) {
             event.setResult(Event.Result.DENY);
         }
     }

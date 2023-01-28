@@ -29,7 +29,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderHighlightEvent;
-import net.minecraftforge.client.event.RenderLevelLastEvent;
+import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -172,8 +172,11 @@ public class CoreClientEvents {
     }
 
     @SubscribeEvent
-    public static void renderTranslucentEntities(RenderLevelLastEvent event) {
+    public static void renderTranslucentEntities(RenderLevelStageEvent event) {
 
+        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
+            return;
+        }
         ITranslucentRenderer.renderTranslucent(event.getPoseStack(), event.getPartialTick(), event.getLevelRenderer(), event.getProjectionMatrix());
     }
 
@@ -206,8 +209,16 @@ public class CoreClientEvents {
     private static void bufferShapeOutline(VertexConsumer builder, Matrix4f mat, VoxelShape shape, float r, float g, float b, float a) {
 
         shape.forAllEdges((x1, y1, z1, x2, y2, z2) -> {
-            builder.vertex(mat, (float) x1, (float) y1, (float) z1).color(r, g, b, a).endVertex();
-            builder.vertex(mat, (float) x2, (float) y2, (float) z2).color(r, g, b, a).endVertex();
+            double xn = x1 - x2;
+            double yn = y1 - y2;
+            double zn = z1 - z2;
+            double d = Math.sqrt(xn * xn + yn * yn + zn * zn);
+            xn /= d;
+            yn /= d;
+            zn /= d;
+
+            builder.vertex(mat, (float) x1, (float) y1, (float) z1).color(r, g, b, a).normal((float) xn, (float) yn, (float) zn).endVertex();
+            builder.vertex(mat, (float) x2, (float) y2, (float) z2).color(r, g, b, a).normal((float) xn, (float) yn, (float) zn).endVertex();
         });
     }
     // endregion

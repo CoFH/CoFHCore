@@ -43,6 +43,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -93,6 +94,8 @@ public class CoFHCore {
     public static boolean curiosLoaded = false;
 
     public CoFHCore() {
+
+        ForgeMod.enableMilkFluid();
 
         curiosLoaded = Utils.isModLoaded(ID_CURIOS);
 

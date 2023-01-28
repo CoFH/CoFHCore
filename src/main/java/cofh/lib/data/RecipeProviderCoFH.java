@@ -336,12 +336,68 @@ public class RecipeProviderCoFH extends RecipeProvider implements IConditionBuil
     protected void generateSmeltingAndBlastingRecipes(DeferredRegisterCoFH<Item> reg, Consumer<FinishedRecipe> consumer, Item input, Item output, float xp, String folder, String suffix) {
 
         SimpleCookingRecipeBuilder.smelting(Ingredient.of(input), output, xp, 200)
-                .unlockedBy("has_" + name(input), has(input))
+                .unlockedBy(getHasName(input), has(input))
                 .save(consumer, this.modid + ":" + folder + "/" + name(output) + "_from" + suffix + "_smelting");
 
         SimpleCookingRecipeBuilder.blasting(Ingredient.of(input), output, xp, 100)
-                .unlockedBy("has_" + name(input), has(input))
+                .unlockedBy(getHasName(input), has(input))
                 .save(consumer, this.modid + ":" + folder + "/" + name(output) + "_from" + suffix + "_blasting");
+    }
+
+    protected void generateSmeltingAndBlastingRecipes(DeferredRegisterCoFH<Item> reg, Consumer<FinishedRecipe> consumer, TagKey<Item> input, String condition, Item output, float xp, String folder) {
+
+        generateSmeltingAndBlastingRecipes(reg, consumer, input, condition, output, xp, folder, "");
+    }
+
+    protected void generateSmeltingAndBlastingRecipes(DeferredRegisterCoFH<Item> reg, Consumer<FinishedRecipe> consumer, TagKey<Item> input, String condition, Item output, float xp, String folder, String suffix) {
+
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(input), output, xp, 200)
+                .unlockedBy(condition, has(input))
+                .save(consumer, this.modid + ":" + folder + "/" + name(output) + "_from" + suffix + "_smelting");
+
+        SimpleCookingRecipeBuilder.blasting(Ingredient.of(input), output, xp, 100)
+                .unlockedBy(condition, has(input))
+                .save(consumer, this.modid + ":" + folder + "/" + name(output) + "_from" + suffix + "_blasting");
+    }
+
+    protected void generateSmeltingAndCookingRecipes(DeferredRegisterCoFH<Item> reg, Consumer<FinishedRecipe> consumer, Item input, Item output, float xp, String folder) {
+
+        generateSmeltingAndCookingRecipes(reg, consumer, input, output, xp, folder, "");
+    }
+
+    protected void generateSmeltingAndCookingRecipes(DeferredRegisterCoFH<Item> reg, Consumer<FinishedRecipe> consumer, Item input, Item output, float xp, String folder, String suffix) {
+
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(input), output, xp, 200)
+                .unlockedBy(getHasName(input), has(input))
+                .save(consumer, this.modid + ":" + folder + "/" + name(output) + "_from" + suffix + "_smelting");
+
+        SimpleCookingRecipeBuilder.smoking(Ingredient.of(input), output, xp, 100)
+                .unlockedBy(getHasName(input), has(input))
+                .save(consumer, this.modid + ":" + folder + "/" + name(output) + "_from" + suffix + "_smoking");
+
+        SimpleCookingRecipeBuilder.campfireCooking(Ingredient.of(input), output, xp, 600)
+                .unlockedBy(getHasName(input), has(input))
+                .save(consumer, this.modid + ":" + folder + "/" + name(output) + "_from" + suffix + "_campfire_cooking");
+    }
+
+    protected void generateSmeltingAndCookingRecipes(DeferredRegisterCoFH<Item> reg, Consumer<FinishedRecipe> consumer, TagKey<Item> input, String condition, Item output, float xp, String folder) {
+
+        generateSmeltingAndCookingRecipes(reg, consumer, input, condition, output, xp, folder, "");
+    }
+
+    protected void generateSmeltingAndCookingRecipes(DeferredRegisterCoFH<Item> reg, Consumer<FinishedRecipe> consumer, TagKey<Item> input, String condition, Item output, float xp, String folder, String suffix) {
+
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(input), output, xp, 200)
+                .unlockedBy(condition, has(input))
+                .save(consumer, this.modid + ":" + folder + "/" + name(output) + "_from" + suffix + "_smelting");
+
+        SimpleCookingRecipeBuilder.smoking(Ingredient.of(input), output, xp, 100)
+                .unlockedBy(condition, has(input))
+                .save(consumer, this.modid + ":" + folder + "/" + name(output) + "_from" + suffix + "_smoking");
+
+        SimpleCookingRecipeBuilder.campfireCooking(Ingredient.of(input), output, xp, 600)
+                .unlockedBy(condition, has(input))
+                .save(consumer, this.modid + ":" + folder + "/" + name(output) + "_from" + suffix + "_campfire_cooking");
     }
 
     protected void generateStonecuttingRecipe(DeferredRegisterCoFH<Item> reg, Consumer<FinishedRecipe> consumer, Item input, Item output, String folder) {

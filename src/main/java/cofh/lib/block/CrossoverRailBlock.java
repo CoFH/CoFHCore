@@ -22,6 +22,7 @@ import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
 
+import static cofh.core.config.CoreServerConfig.returnDismantleDrops;
 import static cofh.lib.util.constants.BlockStatePropertiesCoFH.RAIL_STRAIGHT_FLAT;
 
 public class CrossoverRailBlock extends BaseRailBlock implements IDismantleable {
@@ -97,7 +98,7 @@ public class CrossoverRailBlock extends BaseRailBlock implements IDismantleable 
         if (Utils.isWrench(player.getItemInHand(handIn))) {
             if (player.isSecondaryUseActive()) {
                 if (canDismantle(worldIn, pos, state, player)) {
-                    dismantleBlock(worldIn, pos, state, hit, player, false);
+                    dismantleBlock(worldIn, pos, state, hit, player, returnDismantleDrops());
                     return InteractionResult.SUCCESS;
                 }
             } else {
