@@ -11,16 +11,22 @@ import cofh.lib.energy.EnergyStorageCoFH;
 import cofh.lib.fluid.FluidStorageCoFH;
 import cofh.lib.inventory.ItemStorageCoFH;
 import cofh.lib.xp.XpStorage;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraftforge.fluids.FluidStack;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
 import static cofh.core.network.packet.server.StorageClearPacket.StorageType.*;
 import static cofh.lib.util.Constants.PATH_ELEMENTS;
 import static cofh.lib.util.Constants.TRUE;
-import static cofh.lib.util.helpers.StringHelper.canLocalize;
-import static cofh.lib.util.helpers.StringHelper.localize;
+import static cofh.lib.util.helpers.StringHelper.*;
+import static cofh.lib.util.helpers.StringHelper.format;
+import static net.minecraft.client.gui.screens.Screen.hasControlDown;
+import static net.minecraft.client.gui.screens.Screen.hasShiftDown;
 
 public class GuiHelper {
 
@@ -216,7 +222,7 @@ public class GuiHelper {
     }
     // endregion
 
-    // region COMMON UX
+    // region COMMON UI
     public static ElementScaled createDefaultProgress(IGuiAccess gui, int posX, int posY, String texture, IntSupplier quantitySup) {
 
         return createDefaultProgress(gui, posX, posY, texture, quantitySup, TRUE);
@@ -262,6 +268,78 @@ public class GuiHelper {
                 .setQuantity(quantitySup)
                 .setSize(16, DURATION)
                 .setTexture(texture, 32, 16);
+    }
+    // endregion
+
+    // region BUTTONS AND TOOLTIPS
+    public static List<Component> createDecControlTooltip(ElementBase element, int mouseX, int mouseY) {
+
+        if (element.enabled()) {
+            int change = 1000;
+
+            if (hasShiftDown()) {
+                change *= 10;
+            }
+            if (hasControlDown()) {
+                change /= 100;
+            }
+            return Collections.singletonList(new TextComponent(
+                    localize("info.cofh.decrease_by")
+                            + " " + format(change)
+                            + "/" + format(change / 10)));
+        }
+        return Collections.emptyList();
+    }
+
+    public static List<Component> createIncControlTooltip(ElementBase element, int mouseX, int mouseY) {
+
+        if (element.enabled()) {
+            int change = 1000;
+
+            if (hasShiftDown()) {
+                change *= 10;
+            }
+            if (hasControlDown()) {
+                change /= 100;
+            }
+            return Collections.singletonList(new TextComponent(
+                    localize("info.cofh.increase_by")
+                            + " " + format(change)
+                            + "/" + format(change / 10)));
+        }
+        return Collections.emptyList();
+    }
+
+    public static int getChangeAmount(int mouseButton) {
+
+        int change = 1000;
+
+        if (hasShiftDown()) {
+            change *= 10;
+        }
+        if (hasControlDown()) {
+            change /= 100;
+        }
+        if (mouseButton == 1) {
+            change /= 10;
+        }
+        return change;
+    }
+
+    public static float getPitch(int mouseButton) {
+
+        float pitch = 0.7F;
+
+        if (hasShiftDown()) {
+            pitch += 0.1F;
+        }
+        if (hasControlDown()) {
+            pitch -= 0.2F;
+        }
+        if (mouseButton == 1) {
+            pitch -= 0.1F;
+        }
+        return pitch;
     }
     // endregion
 
