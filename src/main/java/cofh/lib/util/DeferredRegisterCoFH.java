@@ -6,6 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.RegistryBuilder;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,6 +26,11 @@ public class DeferredRegisterCoFH<T> {
 
         this.modid = modid;
         this.wrappedRegister = wrappedRegister;
+    }
+
+    public static <B> DeferredRegisterCoFH<B> create(ResourceLocation registryName, String modid) {
+
+        return new DeferredRegisterCoFH<>(DeferredRegister.create(registryName, modid), modid);
     }
 
     public static <B> DeferredRegisterCoFH<B> create(IForgeRegistry<B> reg, String modid) {
@@ -54,6 +60,11 @@ public class DeferredRegisterCoFH<T> {
         registryObjects.put(ret.getId(), (RegistryObject<T>) ret);
 
         return ret;
+    }
+
+    public Supplier<IForgeRegistry<T>> makeRegistry(final Supplier<RegistryBuilder<T>> sup) {
+
+        return wrappedRegister.makeRegistry(sup);
     }
 
     public void register(IEventBus bus) {
