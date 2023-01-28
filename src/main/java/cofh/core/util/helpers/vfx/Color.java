@@ -4,21 +4,13 @@ import cofh.lib.util.helpers.MathHelper;
 
 public class Color {
 
-    public static final Color WHITE = new Color(0xFFFFFFFF);
+    public static final Color WHITE = fromRGBA(0xFFFFFFFF);
     public final int r;
     public final int g;
     public final int b;
     public final int a;
 
-    public Color(int rgba) {
-
-        r = (rgba >> 24) & 0xFF;
-        g = (rgba >> 16) & 0xFF;
-        b = (rgba >> 8) & 0xFF;
-        a = rgba & 0xFF;
-    }
-
-    public Color(int r, int g, int b, int a) {
+    protected Color(int r, int g, int b, int a) {
 
         this.r = r;
         this.g = g;
@@ -26,12 +18,29 @@ public class Color {
         this.a = a;
     }
 
-    public Color(float r, float g, float b, float a) {
+    public static Color fromRGB(int rgb) {
 
-        this.r = (int) (r * 255);
-        this.g = (int) (g * 255);
-        this.b = (int) (b * 255);
-        this.a = (int) (a * 255);
+        return new Color((rgb >> 16) & 0xFF, (rgb >> 8) & 0xFF, rgb & 0xFF, 0xFF);
+    }
+
+    public static Color fromRGB(int r, int g, int b) {
+
+        return new Color(r, g, b, 0xFF);
+    }
+
+    public static Color fromRGBA(int rgba) {
+
+        return new Color((rgba >> 24) & 0xFF, (rgba >> 16) & 0xFF, (rgba >> 8) & 0xFF, rgba & 0xFF);
+    }
+
+    public static Color fromRGBA(int r, int g, int b, int a) {
+
+        return new Color(r, g, b, a);
+    }
+
+    public static Color fromFloat(float r, float g, float b, float a) {
+
+        return new Color((int) (r * 255), (int) (g * 255), (int) (b * 255), (int) (a * 255));
     }
 
     protected int scale(int channel, float scale) {
@@ -59,9 +68,14 @@ public class Color {
         return new Color(scale(r, sr), scale(g, sg), scale(b, sb), scale(a, sa));
     }
 
-    public int pack() {
+    public int toRGBA() {
 
         return (r << 24) | (g << 16) | (b << 8) | a;
+    }
+
+    public int toRGB() {
+
+        return (r << 16) | (g << 8) | b;
     }
 
     public boolean equals(Color other) {
@@ -71,7 +85,7 @@ public class Color {
 
     public boolean equals(int other) {
 
-        return equals(new Color(other));
+        return equals(fromRGBA(other));
     }
 
     public boolean sameRGB(Color other) {
@@ -81,7 +95,7 @@ public class Color {
 
     public boolean sameRGB(int other) {
 
-        return sameRGB(new Color(other));
+        return sameRGB(fromRGBA(other));
     }
 
     //Linearly interpolate between colors
@@ -91,6 +105,24 @@ public class Color {
                 MathHelper.interpolate(g, other.g, amount),
                 MathHelper.interpolate(b, other.b, amount),
                 MathHelper.interpolate(a, other.a, amount));
+    }
+
+    /**
+     * Implementation of the color distance algorithm proposed in <a href="https://www.compuphase.com/cmetric.htm">this paper</a>.
+     * @return The approximate subjective difference between the colors.
+     */
+    public double dist(Color other) {
+
+        return Math.sqrt(distSqr(other));
+    }
+
+    public double distSqr(Color other) {
+
+        long rMean = (this.r + other.r) >> 1;
+        long r = this.r - other.r;
+        long g = this.g - other.g;
+        long b = this.b - other.b;
+        return (((512 + rMean) * r * r) >> 8) + 4 * g * g + (((767 - rMean) * b * b) >> 8);
     }
 
 }

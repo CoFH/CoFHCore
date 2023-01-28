@@ -16,7 +16,7 @@ public abstract class ColorParticle extends CoFHParticle {
 
     protected void setColor0(int rgba) {
 
-        this.c0 = new Color(rgba);
+        this.c0 = Color.fromRGBA(rgba);
     }
 
     protected void setColor0(Color color) {
