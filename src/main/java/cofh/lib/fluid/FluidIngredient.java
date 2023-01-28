@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.gson.*;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.FluidTags;
@@ -32,6 +33,7 @@ public class FluidIngredient implements Predicate<FluidStack> {
     private final IFluidList[] values;
     private FluidStack[] fluidStacks;
     private int amount = BUCKET_VOLUME;
+    private CompoundTag tag;
 
     protected FluidIngredient(Stream<? extends IFluidList> fluidLists) {
 
@@ -41,6 +43,12 @@ public class FluidIngredient implements Predicate<FluidStack> {
     public FluidIngredient setAmount(int amount) {
 
         this.amount = amount;
+        return this;
+    }
+
+    public FluidIngredient setTag(CompoundTag tag) {
+
+        this.tag = tag;
         return this;
     }
 
@@ -58,6 +66,7 @@ public class FluidIngredient implements Predicate<FluidStack> {
         for (FluidStack stack : fluidStacks) {
             if (stack.getRawFluid() != Fluids.EMPTY) {
                 stack.setAmount(amount);
+                stack.setTag(tag);
             }
         }
     }

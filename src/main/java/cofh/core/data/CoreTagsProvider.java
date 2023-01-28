@@ -154,7 +154,7 @@ public class CoreTagsProvider {
 
             tag(FluidTagsCoFH.HONEY).add(FLUIDS.get(ID_FLUID_HONEY));
             tag(FluidTagsCoFH.POTION).add(FLUIDS.get(ID_FLUID_POTION));
-            tag(FluidTagsCoFH.EXPERIENCE).add(FLUIDS.get(ID_FLUID_XP));
+            tag(FluidTagsCoFH.EXPERIENCE).add(FLUIDS.get(ID_FLUID_EXPERIENCE));
         }
 
     }
