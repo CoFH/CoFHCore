@@ -109,6 +109,7 @@ public class Color {
 
     /**
      * Implementation of the color distance algorithm proposed in <a href="https://www.compuphase.com/cmetric.htm">this paper</a>.
+     *
      * @return The approximate subjective difference between the colors.
      */
     public double dist(Color other) {
