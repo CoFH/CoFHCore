@@ -10,7 +10,7 @@ import static cofh.lib.util.Utils.getItemEnchantmentLevel;
 import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 
 /**
- * Marker interface for anything that supports the "Holding" enchantment. Can also be done via the Enchantable capability, but this is way less overhead.
+ * Marker interface for anything that supports the "Holding" enchantment.
  */
 public interface IContainerItem {
 

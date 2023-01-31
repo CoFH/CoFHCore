@@ -3,6 +3,7 @@ package cofh.lib.api.block.entity;
 import cofh.lib.api.IStorageCallback;
 import cofh.lib.api.control.ISecurable;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -47,6 +48,23 @@ public interface ITileCallback extends IStorageCallback, ITileLocation {
         return stack;
     }
 
+    default void callBlockUpdate() {
+
+        if (world() == null) {
+            return;
+        }
+        BlockState state = world().getBlockState(pos());
+        world().sendBlockUpdated(pos(), state, state, 3);
+    }
+
+    default void callNeighborStateChange() {
+
+        if (world() == null) {
+            return;
+        }
+        world().updateNeighborsAt(pos(), block());
+    }
+
     default void onControlUpdate() {
 
     }
@@ -67,6 +85,11 @@ public interface ITileCallback extends IStorageCallback, ITileLocation {
     default boolean canPlayerChange(Player player) {
 
         return !(this instanceof ISecurable) || ((ISecurable) this).canAccess(player);
+    }
+
+    default boolean onWrench(Player player, Direction side) {
+
+        return false;
     }
 
 }

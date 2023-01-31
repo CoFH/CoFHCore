@@ -438,13 +438,13 @@ public class ContainerScreenCoFH<T extends AbstractContainerMenu> extends Abstra
 
     // region IGuiAccess
     @Override
-    public Font getFontRenderer() {
+    public final Font getFontRenderer() {
 
         return font;
     }
 
     @Override
-    public Player getPlayer() {
+    public final Player getPlayer() {
 
         return player;
     }

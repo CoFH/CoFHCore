@@ -25,6 +25,8 @@ public class CoreJeiPlugin implements IModPlugin {
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
 
         registration.addGenericGuiContainerHandler(ContainerScreenCoFH.class, new PanelBounds());
+
+        registration.addGhostIngredientHandler(ContainerScreenCoFH.class, new FalseCopySlotGhostHandler());
     }
 
     @Override
