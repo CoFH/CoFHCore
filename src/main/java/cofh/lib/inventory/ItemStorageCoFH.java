@@ -136,7 +136,7 @@ public class ItemStorageCoFH implements IItemHandler, IItemStackHolder, IResourc
     }
     // endregion
 
-    protected final ItemStack loadItemStack(CompoundTag nbt) {
+    public static ItemStack loadItemStack(CompoundTag nbt) {
 
         ItemStack retStack = ItemStack.of(nbt);
         if (nbt.contains("IntCount")) {
