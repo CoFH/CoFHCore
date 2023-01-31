@@ -42,9 +42,10 @@ public class AreaUtils {
 
     public static final int HORZ_MAX = 32;
     public static final int VERT_MAX = 16;
+
     public static final Set<BlockState> REPLACEABLE_AIR = new ObjectOpenHashSet<>(new BlockState[]{AIR.defaultBlockState(), CAVE_AIR.defaultBlockState()});
 
-    public static final IEffectApplier igniteEntities = (target, duration, power, source) -> {
+    public static final IEffectApplier IGNITE_ENTITIES = (target, duration, power, source) -> {
 
         if (!target.fireImmune() && !target.isInWater() && target.getRemainingFireTicks() <= 0) {
             target.setSecondsOnFire(duration / 20);
@@ -55,7 +56,7 @@ public class AreaUtils {
         }
     };
 
-    public static final IEffectApplier chillEntities = (target, duration, power, source) -> {
+    public static final IEffectApplier CHILL_ENTITIES = (target, duration, power, source) -> {
 
         if (target.getRemainingFireTicks() > 0) {
             target.setRemainingFireTicks(0);
@@ -66,7 +67,7 @@ public class AreaUtils {
         }
     };
 
-    public static final IEffectApplier sunderEntities = (target, duration, power, source) -> {
+    public static final IEffectApplier SUNDER_ENTITIES = (target, duration, power, source) -> {
 
         if (target instanceof LivingEntity) {
             LivingEntity living = (LivingEntity) target;
@@ -74,7 +75,7 @@ public class AreaUtils {
         }
     };
 
-    public static final IEffectApplier shockEntities = (target, duration, power, source) -> {
+    public static final IEffectApplier SHOCK_ENTITIES = (target, duration, power, source) -> {
 
         if (target instanceof LivingEntity) {
             LivingEntity living = (LivingEntity) target;
@@ -84,7 +85,7 @@ public class AreaUtils {
         }
     };
 
-    public static final IBlockTransformer fireTransform = (world, pos, face, entity) -> {
+    public static final IBlockTransformer FIRE_TRANSFORM = (world, pos, face, entity) -> {
 
         boolean succeeded = false;
         BlockState state = world.getBlockState(pos);
@@ -97,7 +98,7 @@ public class AreaUtils {
         return succeeded;
     };
 
-    public static final IBlockTransformer fireTransformSpecial = (world, pos, face, entity) -> {
+    public static final IBlockTransformer FIRE_TRANSFORM_SPECIAL = (world, pos, face, entity) -> {
 
         boolean succeeded = false;
         BlockState state = world.getBlockState(pos);
@@ -114,7 +115,7 @@ public class AreaUtils {
         return succeeded;
     };
 
-    public static final IBlockTransformer iceTransform = (world, pos, face, entity) -> {
+    public static final IBlockTransformer ICE_TRANSFORM = (world, pos, face, entity) -> {
 
         boolean succeeded = false;
         BlockState state = world.getBlockState(pos);
@@ -153,7 +154,7 @@ public class AreaUtils {
         return succeeded;
     };
 
-    public static final IBlockTransformer iceSurfaceTransform = (world, pos, face, entity) -> {
+    public static final IBlockTransformer ICE_TRANSFORM_SURFACE = (world, pos, face, entity) -> {
 
         boolean succeeded = false;
         BlockState state = world.getBlockState(pos);
@@ -189,7 +190,7 @@ public class AreaUtils {
         return succeeded;
     };
 
-    public static final IBlockTransformer earthTransform = (world, pos, face, entity) -> {
+    public static final IBlockTransformer EARTH_TRANSFORM = (world, pos, face, entity) -> {
         boolean succeeded = false;
         BlockState state = world.getBlockState(pos);
         Material material = state.getMaterial();
@@ -199,7 +200,7 @@ public class AreaUtils {
         return succeeded;
     };
 
-    public static final IBlockTransformer lightningTransform = (world, pos, face, entity) -> {
+    public static final IBlockTransformer LIGHTNING_TRANSFORM = (world, pos, face, entity) -> {
         boolean succeeded = false;
         BlockState state = world.getBlockState(pos);
         if (state.isAir()) {
@@ -212,9 +213,9 @@ public class AreaUtils {
     // endregion ELEMENTAL
 
     // region CONVERSION
-    public static final IBlockTransformer signalAirTransform = getConversionTransform(REPLACEABLE_AIR, SIGNAL_AIR.get().defaultBlockState(), false);
-    public static final IBlockTransformer glowAirTransform = getConversionTransform(REPLACEABLE_AIR, GLOW_AIR.get().defaultBlockState(), false);
-    public static final IEffectApplier glowEntities = (target, duration, power, source) -> {
+    public static final IBlockTransformer SIGNAL_AIR_TRANSFORM = getConversionTransform(REPLACEABLE_AIR, SIGNAL_AIR.get().defaultBlockState(), false);
+    public static final IBlockTransformer GLOW_AIR_TRANSFORM = getConversionTransform(REPLACEABLE_AIR, GLOW_AIR.get().defaultBlockState(), false);
+    public static final IEffectApplier GLOW_ENTITIES = (target, duration, power, source) -> {
 
         if (target instanceof LivingEntity) {
             LivingEntity living = (LivingEntity) target;
@@ -225,8 +226,8 @@ public class AreaUtils {
             }
         }
     };
-    public static final IBlockTransformer enderAirTransform = getConversionTransform(REPLACEABLE_AIR, ENDER_AIR.get().defaultBlockState(), false);
-    public static final IEffectApplier enderfereEntities = (target, duration, power, source) -> {
+    public static final IBlockTransformer ENDER_AIR_TRANSFORM = getConversionTransform(REPLACEABLE_AIR, ENDER_AIR.get().defaultBlockState(), false);
+    public static final IEffectApplier ENDERFERE_ENTITIES = (target, duration, power, source) -> {
 
         if (target instanceof EnderMan || target instanceof Endermite) {
             LivingEntity living = (LivingEntity) target;
@@ -235,12 +236,12 @@ public class AreaUtils {
         }
     };
 
-    public static final IBlockTransformer myceliumTransform = getConversionTransform(new ObjectOpenHashSet<>(new BlockState[]{DIRT.defaultBlockState(), GRASS_BLOCK.defaultBlockState()}), MYCELIUM.defaultBlockState(), true);
-    public static final IBlockTransformer grassTransform = getConversionTransform(DIRT.defaultBlockState(), GRASS_BLOCK.defaultBlockState(), true);
+    public static final IBlockTransformer MYCELIUM_TRANSFORM = getConversionTransform(new ObjectOpenHashSet<>(new BlockState[]{DIRT.defaultBlockState(), GRASS_BLOCK.defaultBlockState()}), MYCELIUM.defaultBlockState(), true);
+    public static final IBlockTransformer GRASS_TRANSFORM = getConversionTransform(DIRT.defaultBlockState(), GRASS_BLOCK.defaultBlockState(), true);
     // endregion CONVERSION
 
     // region GROWTH
-    public static final IBlockTransformer growMushrooms = new IBlockTransformer() {
+    public static final IBlockTransformer GROW_MUSHROOMS = new IBlockTransformer() {
 
         @Override
         public boolean transformBlock(Level level, BlockPos pos, Direction face, @Nullable Entity entity) {
@@ -277,7 +278,7 @@ public class AreaUtils {
         }
     };
 
-    public static final IBlockTransformer growPlants = (world, pos, face, entity) -> {
+    public static final IBlockTransformer GROW_PLANTS = (world, pos, face, entity) -> {
 
         BlockState state = world.getBlockState(pos);
         if (state.getBlock() instanceof BonemealableBlock) {
@@ -436,6 +437,7 @@ public class AreaUtils {
     }
     // endregion INTERFACES
 
+    // TODO: Refactor Archer's Paradox to not use these.
     // region BURNING
     public static void igniteNearbyEntities(Entity entity, Level levelIn, BlockPos pos, int radius, int duration) {
 

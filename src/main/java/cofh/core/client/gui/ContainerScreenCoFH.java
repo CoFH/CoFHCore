@@ -454,13 +454,13 @@ public class ContainerScreenCoFH<T extends AbstractContainerMenu> extends Abstra
     }
 
     @Override
-    public Font fontRenderer() {
+    public final Font fontRenderer() {
 
         return font;
     }
 
     @Override
-    public Player player() {
+    public final Player player() {
 
         return player;
     }
