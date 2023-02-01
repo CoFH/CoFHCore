@@ -7,7 +7,7 @@ import java.util.function.Supplier;
 import static cofh.lib.util.Constants.FALSE;
 import static cofh.lib.util.Constants.TRUE;
 
-public class CoreServerConfig implements IBaseConfig {
+public class CoreCommonConfig implements IBaseConfig {
 
     @Override
     public void apply(ForgeConfigSpec.Builder builder) {

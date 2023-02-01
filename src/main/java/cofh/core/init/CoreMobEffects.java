@@ -10,7 +10,6 @@ import net.minecraftforge.registries.RegistryObject;
 
 import static cofh.core.CoFHCore.MOB_EFFECTS;
 import static cofh.core.util.references.CoreIDs.*;
-import static cofh.core.util.references.CoreIDs.ID_EFFECT_COLD_RESISTANCE;
 import static cofh.lib.util.Constants.*;
 
 public class CoreMobEffects {

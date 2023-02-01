@@ -53,8 +53,18 @@ public class CoreEnchantConfig implements IBaseConfig {
         }
     }
 
-    public static Supplier<Boolean> improvedFeatherFalling = TRUE;
-    public static Supplier<Boolean> improvedMending = TRUE;
+    public static boolean improvedFeatherFalling() {
+
+        return improvedFeatherFalling.get();
+    }
+
+    public static boolean improvedMending() {
+
+        return improvedMending.get();
+    }
+
+    private static Supplier<Boolean> improvedFeatherFalling = TRUE;
+    private static Supplier<Boolean> improvedMending = TRUE;
 
     private Supplier<Boolean> enableHolding;
     private Supplier<Boolean> treasureHolding;
