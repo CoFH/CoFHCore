@@ -46,6 +46,7 @@ public class ProjectileCoFH extends Projectile {
         gameEvent(GameEvent.PROJECTILE_SHOOT, owner);
         hasBeenShot = true;
         updateVelocity();
+        updateRotation();
     }
 
     @Override

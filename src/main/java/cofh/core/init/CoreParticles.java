@@ -21,9 +21,9 @@ public class CoreParticles {
 
     }
 
-    public static final RegistryObject<SimpleParticleType> FROST = PARTICLES.register(ID_PARTICLE_FROST, () -> new SimpleParticleType(false));
-    public static final RegistryObject<SimpleParticleType> SPARK = PARTICLES.register(ID_PARTICLE_SPARK, () -> new SimpleParticleType(false));
-    public static final RegistryObject<SimpleParticleType> PLASMA = PARTICLES.register(ID_PARTICLE_PLASMA, () -> new SimpleParticleType(false));
+    public static final RegistryObject<SimpleParticleType> FROST = PARTICLES.register(ID_PARTICLE_FROST, () -> new SimpleParticleType(true));
+    public static final RegistryObject<SimpleParticleType> SPARK = PARTICLES.register(ID_PARTICLE_SPARK, () -> new SimpleParticleType(true));
+    public static final RegistryObject<SimpleParticleType> PLASMA = PARTICLES.register(ID_PARTICLE_PLASMA, () -> new SimpleParticleType(true));
 
     public static final RegistryObject<ColorParticleType> FIRE = PARTICLES.register(ID_PARTICLE_FIRE, ColorParticleType::new);
     public static final RegistryObject<ColorParticleType> BLAST = PARTICLES.register(ID_PARTICLE_BLAST, ColorParticleType::new);
