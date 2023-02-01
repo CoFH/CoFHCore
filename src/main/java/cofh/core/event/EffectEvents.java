@@ -87,28 +87,6 @@ public class EffectEvents {
     }
 
     @SubscribeEvent (priority = EventPriority.HIGH)
-    public static void handleLivingAttackEvent(LivingAttackEvent event) {
-
-        if (event.isCanceled()) {
-            return;
-        }
-        LivingEntity entity = event.getEntity();
-        DamageSource source = event.getSource();
-        if (source.isBypassMagic()) {
-            return;
-        }
-        if (source.isExplosion() && entity.hasEffect(EXPLOSION_RESISTANCE.get())) {
-            event.setCanceled(true);
-        } else if (source.isMagic() && entity.hasEffect(MAGIC_RESISTANCE.get())) {
-            event.setCanceled(true);
-        } else if (source == DamageSource.LIGHTNING_BOLT && entity.hasEffect(LIGHTNING_RESISTANCE.get())) {
-            event.setCanceled(true);
-        } else if (source.isFire()) {
-            entity.removeEffect(CHILLED.get());
-        }
-    }
-
-    @SubscribeEvent (priority = EventPriority.HIGH)
     public static void handlePotionColorEvent(PotionColorCalculationEvent event) {
 
         Collection<MobEffectInstance> effects = event.getEffects();
