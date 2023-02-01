@@ -34,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
-import static cofh.core.config.CoreServerConfig.returnDismantleDrops;
+import static cofh.core.config.CoreCommonConfig.returnDismantleDrops;
 
 public class TileBlockCoFH extends Block implements EntityBlock, IDismantleable {
 
