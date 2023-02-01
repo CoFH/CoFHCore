@@ -3,7 +3,6 @@ package cofh.core.event;
 import cofh.core.network.packet.client.EffectAddedPacket;
 import cofh.core.network.packet.client.EffectRemovedPacket;
 import cofh.lib.effect.CustomParticleMobEffect;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -11,7 +10,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraftforge.event.entity.EntityStruckByLightningEvent;
 import net.minecraftforge.event.entity.EntityTeleportEvent;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.PotionColorCalculationEvent;
 import net.minecraftforge.event.entity.living.PotionEvent;
 import net.minecraftforge.event.entity.player.PlayerXpEvent;
@@ -83,28 +81,6 @@ public class EffectEvents {
             } else {
                 living.addEffect(new MobEffectInstance(SHOCKED.get(), 100, 0));
             }
-        }
-    }
-
-    @SubscribeEvent (priority = EventPriority.HIGH)
-    public static void handleLivingAttackEvent(LivingAttackEvent event) {
-
-        if (event.isCanceled()) {
-            return;
-        }
-        LivingEntity entity = event.getEntityLiving();
-        DamageSource source = event.getSource();
-        if (source.isBypassMagic()) {
-            return;
-        }
-        if (source.isExplosion() && entity.hasEffect(EXPLOSION_RESISTANCE.get())) {
-            event.setCanceled(true);
-        } else if (source.isMagic() && entity.hasEffect(MAGIC_RESISTANCE.get())) {
-            event.setCanceled(true);
-        } else if (source == DamageSource.LIGHTNING_BOLT && entity.hasEffect(LIGHTNING_RESISTANCE.get())) {
-            event.setCanceled(true);
-        } else if (source.isFire()) {
-            entity.removeEffect(CHILLED.get());
         }
     }
 

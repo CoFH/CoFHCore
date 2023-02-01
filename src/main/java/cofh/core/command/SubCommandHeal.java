@@ -34,6 +34,8 @@ public class SubCommandHeal {
         for (ServerPlayer entity : targets) {
             // Extinguish Fire
             entity.clearFire();
+            // Remove Frozen
+            entity.setTicksFrozen(0);
             // Clear all negative effects
             PanaceaMobEffect.clearHarmfulEffects(entity);
             // Set to Max Air

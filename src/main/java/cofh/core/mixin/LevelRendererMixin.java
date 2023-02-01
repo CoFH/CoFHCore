@@ -14,16 +14,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
  * Credit to jozufozu and Flywheel for this mixin <3
- * <p>
- * Created by covers1624 on 1/1/22.
+ *
+ * @author covers1624
  */
 @Mixin (LevelRenderer.class)
 public abstract class LevelRendererMixin {
 
     @Inject (
             method = "renderLevel",
-            at = @At (
-                    value = "INVOKE",
+            at = @At (value = "INVOKE",
                     ordinal = 1,
                     target = "Lnet/minecraft/client/renderer/PostChain;process(F)V"
             )
