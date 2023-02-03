@@ -113,7 +113,7 @@ public class ResourcePanel extends PanelBase {
     public void addTooltip(List<Component> tooltipList, int mouseX, int mouseY) {
 
         if (!fullyOpen) {
-            tooltipList.add(getTextComponent(curAmt.getAsInt() + " " + curUnit));
+            tooltipList.add(getTextComponent(curAmt.getAsInt() + " " + localize(curUnit)));
         }
     }
 
