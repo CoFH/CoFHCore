@@ -58,15 +58,9 @@ public final class StringHelper {
         MutableComponent name = fluid.getAttributes().getDisplayName(stack).copy();
 
         switch (fluid.getAttributes().getRarity(stack)) {
-            case UNCOMMON:
-                name.withStyle(ChatFormatting.YELLOW);
-                break;
-            case RARE:
-                name.withStyle(ChatFormatting.AQUA);
-                break;
-            case EPIC:
-                name.withStyle(ChatFormatting.LIGHT_PURPLE);
-                break;
+            case UNCOMMON -> name.withStyle(ChatFormatting.YELLOW);
+            case RARE -> name.withStyle(ChatFormatting.AQUA);
+            case EPIC -> name.withStyle(ChatFormatting.LIGHT_PURPLE);
         }
         return name;
     }
@@ -77,15 +71,9 @@ public final class StringHelper {
         MutableComponent name = item.getName(stack).copy();
 
         switch (item.getRarity(stack)) {
-            case UNCOMMON:
-                name.withStyle(ChatFormatting.YELLOW);
-                break;
-            case RARE:
-                name.withStyle(ChatFormatting.AQUA);
-                break;
-            case EPIC:
-                name.withStyle(ChatFormatting.LIGHT_PURPLE);
-                break;
+            case UNCOMMON -> name.withStyle(ChatFormatting.YELLOW);
+            case RARE -> name.withStyle(ChatFormatting.AQUA);
+            case EPIC -> name.withStyle(ChatFormatting.LIGHT_PURPLE);
         }
         return name;
     }
