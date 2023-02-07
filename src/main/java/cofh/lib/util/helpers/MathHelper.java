@@ -2,6 +2,7 @@ package cofh.lib.util.helpers;
 
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.phys.Vec3;
 
 /**
  * Contains various math-related helper functions. Often faster than conventional implementations.
@@ -369,6 +370,16 @@ public final class MathHelper {
     public static boolean isBitSet(int mask, int bit) {
 
         return (mask & 1 << bit) != 0;
+    }
+
+    /**
+     * Perpendicular distance from a point to a line.
+     */
+    public static double pointToLineDist(Vec3 point, Vec3 lineStart, Vec3 lineEnd) {
+
+        Vec3 center = point.subtract(lineStart);
+        Vec3 disp = lineEnd.subtract(lineStart);
+        return disp.cross(center).length() / disp.length();
     }
 
 }
