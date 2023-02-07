@@ -319,7 +319,6 @@ public final class VFXHelper {
 
     // region SHOCKWAVE
     private static final SortedMap<Float, List<int[]>> shockwaveOffsets = getOffsets(16);
-    public static final List<RenderType> chunkRenderTypes = RenderType.chunkBufferLayers();
 
     /**
      * Renders a block shockwave that radially propagates from the origin.
