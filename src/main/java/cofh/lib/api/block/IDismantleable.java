@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.HitResult;
@@ -24,7 +25,7 @@ public interface IDismantleable extends IForgeBlock {
     default void dismantleBlock(Level world, BlockPos pos, BlockState state, HitResult target, Player player, boolean returnDrops) {
 
         ItemStack dropBlock = this.getCloneItemStack(state, target, world, pos, player);
-        world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+        world.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL_IMMEDIATE);
         if (!returnDrops || player == null || !player.addItem(dropBlock)) {
             Utils.dropDismantleStackIntoWorld(dropBlock, world, pos);
         }

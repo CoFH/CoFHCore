@@ -66,7 +66,9 @@ public class FluidIngredient implements Predicate<FluidStack> {
         for (FluidStack stack : fluidStacks) {
             if (stack.getRawFluid() != Fluids.EMPTY) {
                 stack.setAmount(amount);
-                stack.setTag(tag);
+                if (tag != null) {
+                    stack.setTag(tag);
+                }
             }
         }
     }
