@@ -31,6 +31,7 @@ import net.minecraftforge.network.NetworkHooks;
 import javax.annotation.Nullable;
 
 import static cofh.core.init.CoreEntities.KNIFE;
+import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 
 public class Knife extends AbstractArrow {
 
@@ -185,7 +186,7 @@ public class Knife extends AbstractArrow {
     public void readAdditionalSaveData(CompoundTag nbt) {
 
         super.readAdditionalSaveData(nbt);
-        if (nbt.contains("Knife", 10)) {
+        if (nbt.contains("Knife", TAG_COMPOUND)) {
             this.entityData.set(DATA_ITEM_STACK, ItemStack.of(nbt.getCompound("Knife")));
         }
         this.hitTime = nbt.getInt("HitTime");

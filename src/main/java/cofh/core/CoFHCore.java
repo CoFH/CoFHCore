@@ -30,6 +30,7 @@ import cofh.lib.util.DeferredRegisterCoFH;
 import cofh.lib.util.Utils;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.core.particles.ParticleType;
+import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.effect.MobEffect;
@@ -83,6 +84,7 @@ public class CoFHCore {
 
     public static final DeferredRegisterCoFH<MenuType<?>> CONTAINERS = DeferredRegisterCoFH.create(ForgeRegistries.MENU_TYPES, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<Enchantment> ENCHANTMENTS = DeferredRegisterCoFH.create(ForgeRegistries.ENCHANTMENTS, ID_COFH_CORE);
+    public static final DeferredRegisterCoFH<EntityDataSerializer<?>> ENTITY_DATA_SERIALIZERS = DeferredRegisterCoFH.create(ForgeRegistries.Keys.ENTITY_DATA_SERIALIZERS, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<EntityType<?>> ENTITIES = DeferredRegisterCoFH.create(ForgeRegistries.ENTITY_TYPES, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<MobEffect> MOB_EFFECTS = DeferredRegisterCoFH.create(ForgeRegistries.MOB_EFFECTS, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<ParticleType<?>> PARTICLES = DeferredRegisterCoFH.create(ForgeRegistries.PARTICLE_TYPES, ID_COFH_CORE);
@@ -120,6 +122,7 @@ public class CoFHCore {
         FLUIDS.register(modEventBus);
 
         CONTAINERS.register(modEventBus);
+        ENTITY_DATA_SERIALIZERS.register(modEventBus);
         ENCHANTMENTS.register(modEventBus);
         ENTITIES.register(modEventBus);
         MOB_EFFECTS.register(modEventBus);
@@ -144,6 +147,7 @@ public class CoFHCore {
 
         CoreContainers.register();
         CoreEnchantments.register();
+        CoreEntityDataSerializers.register();
         CoreEntities.register();
         CoreMobEffects.register();
         CoreParticles.register();
