@@ -72,8 +72,8 @@
 
   "info.cofh.mode_change": "Натисніть '%s' або '%s', щоб змінити режим.",
   "info.cofh.mode_toggle": "Натисніть '%s', щоб переключити режим.",
-  "info.cofh.use_sneak_activate": "Застосуйте крадькома, щоб активувати.",
-  "info.cofh_use_sneak_deactivate": "Застосуйте крадькома, щоб деактивувати.",
+  "info.cofh.use_sneak_activate": "Натисніть 'Shift + Застосувати', щоб активувати.",
+  "info.cofh_use_sneak_deactivate": "Натисніть 'Shift + Застосувати', щоб деактивувати.",
 
   "info.cofh.augmentation": "Покращення",
 
