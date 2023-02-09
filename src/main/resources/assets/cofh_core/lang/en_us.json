@@ -216,6 +216,8 @@
   "enchantment.minecraft.unbreaking.desc": "Increases effective durability.",
   "enchantment.minecraft.vanishing_curse.desc": "The item will disappear forever when the owner dies.",
 
+  "fluid_type.minecraft.milk": "Milk",
+
   "item.minecraft.lingering_potion.effect.amplification": "Lingering Potion of Amplification",
   "item.minecraft.lingering_potion.effect.clarity": "Lingering Potion of Clarity",
   "item.minecraft.lingering_potion.effect.enderference": "Lingering Potion of Enderference",

@@ -9,16 +9,19 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -38,12 +41,15 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.EntityTeleportEvent;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModList;
+import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.lwjgl.glfw.GLFW;
 
@@ -163,6 +169,30 @@ public class Utils {
     public static String getKeyNameFromScanCode(int code) {
 
         return GLFW.glfwGetKeyName(-1, code);
+    }
+
+    public static void openEntityScreen(ServerPlayer player, MenuProvider containerSupplier, Entity entity) {
+
+        NetworkHooks.openScreen(player, containerSupplier, buf -> buf.writeVarInt(entity.getId()));
+    }
+
+    public static <E extends Entity> E getEntityFromBuf(FriendlyByteBuf buf, Class<E> type) {
+
+        if (buf == null) {
+            throw new IllegalArgumentException("Null packet buffer.");
+        }
+        return DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> () -> {
+            if (Minecraft.getInstance().level == null) {
+                throw new IllegalStateException("Client world is null.");
+            }
+            int entityId = buf.readVarInt();
+            Entity e = Minecraft.getInstance().level.getEntity(entityId);
+            if (type.isInstance(e)) {
+                // noinspection unchecked
+                return (E) e;
+            }
+            throw new IllegalStateException("Client could not locate entity (id: " + entityId + ")  for entity container or the entity was of an invalid type. This is likely caused by a mod breaking client side entity lookup.");
+        });
     }
 
     // region TIME CHECKS
@@ -464,7 +494,6 @@ public class Utils {
 
         return ForgeRegistries.MOB_EFFECTS.getKey(effect);
     }
-
     // endregion
 
     // region NAMESPACE
