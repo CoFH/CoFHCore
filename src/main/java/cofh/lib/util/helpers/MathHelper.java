@@ -86,8 +86,13 @@ public final class MathHelper {
 
     public static int weightedRound(double d) {
 
+        return weightedRound(d, RANDOM);
+    }
+
+    public static int weightedRound(double d, RandomSource source) {
+
         int base = floor(d);
-        if (RANDOM.nextDouble() < d - base) {
+        if (source.nextDouble() < d - base) {
             return base + 1;
         }
         return base;

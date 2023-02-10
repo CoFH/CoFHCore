@@ -126,4 +126,10 @@ public class Color {
         return (((512 + rMean) * r * r) >> 8) + 4 * g * g + (((767 - rMean) * b * b) >> 8);
     }
 
+    @Override
+    public String toString() {
+
+        return r + "R " + g + "G " + b + "B " + a + "A";
+    }
+
 }
