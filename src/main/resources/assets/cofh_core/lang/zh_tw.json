@@ -28,8 +28,8 @@
   "commands.cofh.recharge.success.multiple": "已超充能 %s 個實體",
   "commands.cofh.repair.success.single": "已修復 %s 的盔甲",
   "commands.cofh.repair.success.multiple": "已修復 %s 個實體的盔甲",
-  "commands.cofh.zap.success.single": "已向 %s 降下天譴",
-  "commands.cofh.zap.success.multiple": "已向 %s 個實體降下天譴",
+  "commands.cofh.zap.success.single": "已電擊 %s",
+  "commands.cofh.zap.success.multiple": "已電擊 %s 個實體",
 
   "info.cofh.another_player": "另一個玩家",
   "info.cofh.amount": "數量",
