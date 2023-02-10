@@ -110,11 +110,12 @@ public class MinecartItemCoFH extends ItemCoFH {
                     d3 = -0.9D;
                 }
             }
-            if (stack.getItem() instanceof MinecartItemCoFH) {
-                ((MinecartItemCoFH) stack.getItem()).createMinecart(stack, world, d0, d1 + d3, d2);
+            if (stack.getItem() instanceof MinecartItemCoFH minecartItem) {
+                minecartItem.createMinecart(stack, world, d0, d1 + d3, d2);
                 stack.shrink(1);
+                return stack;
             }
-            return stack;
+            return ItemStack.EMPTY;
         }
     };
     // endregion
