@@ -17,8 +17,6 @@ import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 
 public class BaseFluidFilter implements IFilter, IFilterOptions {
 
-    public static final int SIZE = 15;
-
     protected List<FluidStack> fluids;
     protected Predicate<FluidStack> rules;
 

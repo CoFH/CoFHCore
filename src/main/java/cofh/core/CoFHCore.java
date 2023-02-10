@@ -59,6 +59,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.NewRegistryEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -101,6 +102,7 @@ public class CoFHCore {
 
         final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
+        modEventBus.addListener(this::registrySetup);
         modEventBus.addListener(this::entityLayerSetup);
         modEventBus.addListener(this::entityRendererSetup);
         modEventBus.addListener(this::capSetup);
@@ -127,7 +129,7 @@ public class CoFHCore {
 
         CONFIG_MANAGER.register(modEventBus)
                 .addClientConfig(new CoreClientConfig())
-                .addServerConfig(new CoreServerConfig())
+                .addCommonConfig(new CoreCommonConfig())
                 .addServerConfig(new CoreCommandConfig())
                 .addServerConfig(new CoreEnchantConfig());
         CONFIG_MANAGER.setupClient();
@@ -165,6 +167,7 @@ public class CoFHCore {
         PACKET_HANDLER.registerPacket(PacketIDs.PACKET_MOTION, PlayerMotionPacket::new);
 
         PACKET_HANDLER.registerPacket(PacketIDs.PACKET_FILTERABLE_GUI_OPEN, TileFilterGuiOpenPacket::new);
+        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_GHOST_ITEM, GhostItemPacket::new);
 
         PACKET_HANDLER.registerPacket(PacketIDs.PACKET_CONTAINER_CONFIG, ContainerConfigPacket::new);
         PACKET_HANDLER.registerPacket(PacketIDs.PACKET_CONTAINER_GUI, ContainerGuiPacket::new);
@@ -187,6 +190,11 @@ public class CoFHCore {
     }
 
     // region INITIALIZATION
+    private void registrySetup(final NewRegistryEvent event) {
+
+        CONFIG_MANAGER.setupCommon();
+    }
+
     private void registerLootData(final RegistryEvent.Register<GlobalLootModifierSerializer<?>> event) {
 
         CoreFlags.manager().setup();

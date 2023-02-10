@@ -94,15 +94,15 @@ public class ResourcePanel extends PanelBase {
         }
         getFontRenderer().drawShadow(matrixStack, localize(resource), sideOffset() + 20, 6, headerColor);
 
-        if (curAmt.getAsInt() > -1) {
+        if (curAmt.getAsInt() >= 0) {
             getFontRenderer().drawShadow(matrixStack, localize(curDesc) + ":", sideOffset() + 6, 18, subheaderColor);
-            getFontRenderer().draw(matrixStack, curAmt.getAsInt() + " " + curUnit, sideOffset() + 14, 30, textColor);
+            getFontRenderer().draw(matrixStack, curAmt.getAsInt() + " " + localize(curUnit), sideOffset() + 14, 30, textColor);
         }
-        if (maxAmt.getAsInt() > -1) {
+        if (maxAmt.getAsInt() >= 0) {
             getFontRenderer().drawShadow(matrixStack, localize(maxDesc) + ":", sideOffset() + 6, 42, subheaderColor);
-            getFontRenderer().draw(matrixStack, maxAmt.getAsInt() + " " + maxUnit, sideOffset() + 14, 54, textColor);
+            getFontRenderer().draw(matrixStack, maxAmt.getAsInt() + " " + localize(maxUnit), sideOffset() + 14, 54, textColor);
         }
-        if (efficiency.getAsDouble() > -1) {
+        if (efficiency.getAsDouble() >= 0) {
             getFontRenderer().drawShadow(matrixStack, localize("info.cofh.efficiency") + ":", sideOffset() + 6, 66, subheaderColor);
             getFontRenderer().draw(matrixStack, DF0.format(efficiency.getAsDouble() * 100) + "%", sideOffset() + 14, 78, textColor);
         }
@@ -113,7 +113,7 @@ public class ResourcePanel extends PanelBase {
     public void addTooltip(List<Component> tooltipList, int mouseX, int mouseY) {
 
         if (!fullyOpen) {
-            tooltipList.add(getTextComponent(curAmt.getAsInt() + " " + curUnit));
+            tooltipList.add(getTextComponent(curAmt.getAsInt() + " " + localize(curUnit)));
         }
     }
 

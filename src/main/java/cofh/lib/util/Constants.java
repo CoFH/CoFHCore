@@ -24,6 +24,8 @@ public class Constants {
 
     }
 
+    public static final PlantType FUNGUS = PlantType.get("fungus");
+
     public static final VoxelShape FULL_CUBE_COLLISION = Block.box(1.0D, 0.0D, 1.0D, 15.9375D, 15.9375D, 15.9375D);
 
     // region GLOBALS
@@ -102,14 +104,13 @@ public class Constants {
     public static float AUG_SCALE_MAX = 100.0F;
     // endregion
 
-    public static final PlantType FUNGUS = PlantType.get("fungus");
-
     // region FONTS
     public static final ResourceLocation ENDER_FONT = new ResourceLocation(ID_COFH_CORE, "ender");
     public static final ResourceLocation INVIS_FONT = new ResourceLocation(ID_COFH_CORE, "invis");
 
     public static final Style ENDER_STYLE = Style.EMPTY.withFont(ENDER_FONT);
     public static final Style INVIS_STYLE = Style.EMPTY.withFont(INVIS_FONT);
+    // endregion
 
     // region TEXTURES
     public static final String PATH_GUI = ID_COFH_CORE + ":textures/gui/";

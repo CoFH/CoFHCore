@@ -142,17 +142,11 @@ public class BlockHelper {
             return true;
         }
         if (properties.contains(AXIS)) {
-            switch (state.getValue(AXIS)) {
-                case Y:
-                    rotState = state.setValue(AXIS, Direction.Axis.X);
-                    break;
-                case X:
-                    rotState = state.setValue(AXIS, Direction.Axis.Z);
-                    break;
-                default:
-                    rotState = state.setValue(AXIS, Direction.Axis.Y);
-                    break;
-            }
+            rotState = switch (state.getValue(AXIS)) {
+                case Y -> state.setValue(AXIS, Direction.Axis.X);
+                case X -> state.setValue(AXIS, Direction.Axis.Z);
+                default -> state.setValue(AXIS, Direction.Axis.Y);
+            };
             if (rotState != state && rotState.canSurvive(world, pos)) {
                 world.setBlockAndUpdate(pos, rotState);
             }
