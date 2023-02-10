@@ -92,7 +92,7 @@
   "info.cofh.filter.allowlist.0": "黑名單",
   "info.cofh.filter.allowlist.1": "白名單",
   "info.cofh.filter.checkNBT.0": "忽略 NBT",
-  "info.cofh.filter.checkNBT.1": "配對 NBT",
+  "info.cofh.filter.checkNBT.1": "符合 NBT",
 
   "info.cofh.configuration": "機器 I/O",
   "info.cofh.transfer_in_disabled": "自動輸入已停用",
