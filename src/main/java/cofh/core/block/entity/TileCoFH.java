@@ -28,8 +28,6 @@ import javax.annotation.Nullable;
 
 public class TileCoFH extends BlockEntity implements ITileCallback, IPacketHandlerTile, ITileXpHandler, IConveyableData {
 
-    protected int numPlayersUsing;
-
     public TileCoFH(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state) {
 
         super(tileEntityTypeIn, pos, state);
@@ -57,19 +55,21 @@ public class TileCoFH extends BlockEntity implements ITileCallback, IPacketHandl
         super.setRemoved();
     }
 
-    public int getPlayersUsing() {
+    public void markChunkUnsaved() {
 
-        return numPlayersUsing;
+        if (this.level != null) {
+            if (this.level.hasChunkAt(this.worldPosition)) {
+                this.level.getChunkAt(this.worldPosition).setUnsaved(true);
+            }
+        }
     }
 
     public void addPlayerUsing() {
 
-        ++numPlayersUsing;
     }
 
     public void removePlayerUsing() {
 
-        --numPlayersUsing;
     }
 
     public void receiveGuiNetworkData(int id, int data) {

@@ -63,7 +63,9 @@
   "info.cofh.transfer": "Transfer",
   "info.cofh.type": "Type",
   "info.cofh.unit_mb": "mB",
+  "info.cofh.unit_mb_t": "mB/t",
   "info.cofh.unit_rf": "RF",
+  "info.cofh.unit_rf_t": "RF/t",
   "info.cofh.unit_xp": "XP",
 
   "info.cofh.block_tags": "Block Tags",
@@ -138,6 +140,7 @@
   "effect.cofh_core.amplification": "Amplification",
   "effect.cofh_core.chilled": "Chilled",
   "effect.cofh_core.clarity": "Clarity",
+  "effect.cofh_core.cold_resistance": "Frost Resistance",
   "effect.cofh_core.eagle_eye": "Eagle Eye",
   "effect.cofh_core.enderference": "Enderference",
   "effect.cofh_core.explosion_resistance": "Blast Resistance",

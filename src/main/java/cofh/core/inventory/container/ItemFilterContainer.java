@@ -54,7 +54,13 @@ public class ItemFilterContainer extends ContainerCoFH implements IFilterOptions
         allowSwap = false;
 
         int slots = filter.size();
-        filterInventory = new InvWrapperGeneric(this, filter.getItems(), slots);
+        filterInventory = new InvWrapperGeneric(this, filter.getItems(), slots) {
+            @Override
+            public void setChanged() {
+
+                filter.setItems(filterInventory.getStacks());
+            }
+        };
 
         int rows = MathHelper.clamp(slots / 3, 1, 3);
         int rowSize = slots / rows;

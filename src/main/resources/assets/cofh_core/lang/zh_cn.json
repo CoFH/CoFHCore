@@ -62,6 +62,10 @@
   "info.cofh.tails": "尾",
   "info.cofh.transfer": "转换",
   "info.cofh.type": "种类",
+  "info.cofh.unit_mb": "mB",
+  "info.cofh.unit_mb_t": "mB/t",
+  "info.cofh.unit_rf": "RF",
+  "info.cofh.unit_rf_t": "RF/t",
   "info.cofh.unit_xp": "经验",
 
   "info.cofh.block_tags": "方块标签",
@@ -136,6 +140,7 @@
   "effect.cofh_core.amplification": "增幅",
   "effect.cofh_core.chilled": "冻僵",
   "effect.cofh_core.clarity": "洞察",
+  "effect.cofh_core.cold_resistance": "冰霜抗性",
   "effect.cofh_core.eagle_eye": "鹰眼",
   "effect.cofh_core.enderference": "影抑",
   "effect.cofh_core.explosion_resistance": "爆裂抗性",
@@ -155,10 +160,10 @@
   "enchantment.cofh_core.holding": "扩容",
   "enchantment.cofh_core.holding.desc": "提升特定物品的存储容量。",
 
-  "fluid_type.cofh_core.experience": "知识精华",
-  "fluid_type.cofh_core.honey": "蜂蜜",
-  "fluid_type.cofh_core.potion": "药水",
-  "fluid_type.cofh_core.steam": "蒸汽",
+  "fluid.cofh_core.experience": "知识精华",
+  "fluid.cofh_core.honey": "蜂蜜",
+  "fluid.cofh_core.potion": "药水",
+  "fluid.cofh_core.steam": "蒸汽",
 
   "item.cofh_core.ectoplasm": "翠绿灵质",
 

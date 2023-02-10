@@ -188,8 +188,7 @@ public class ArmorEvents {
         STING_DAMAGE_TYPES.add("sadiroot");
 
         HAZARD_DAMAGE_TYPES.add("lightningBolt");
-        HAZARD_DAMAGE_TYPES.add("cold");
-        HAZARD_DAMAGE_TYPES.add("lightning");
+        HAZARD_DAMAGE_TYPES.add("freeze");
 
         HAZARD_EFFECTS.add(POISON);
         HAZARD_EFFECTS.add(WITHER);

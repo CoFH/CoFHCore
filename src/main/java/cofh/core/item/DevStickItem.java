@@ -118,7 +118,7 @@ public class DevStickItem extends ItemCoFH implements IEntityRayTraceItem, ITrac
                 int rgba = 0xac3ad0ff;
                 level.addParticle(new BiColorParticleOptions(CoreParticles.SHARD.get(), 2.0F, time, 0, rgba, 0x7426a9ff), pos.x, pos.y, pos.z, end.x, end.y, end.z);
                 level.addParticle(new ColorParticleOptions(CoreParticles.BLAST.get(), 1.0F, 4 + rand.nextInt(2), time,
-                                new Color(rgba).scaleRGB(rand.nextFloat(0.85F, 1.15F)).pack()),
+                                Color.fromRGBA(rgba).scaleRGB(rand.nextFloat(0.85F, 1.15F)).toRGBA()),
                         end.x, end.y, end.z, 0, 0, 0);
 
             }
