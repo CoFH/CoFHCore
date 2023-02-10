@@ -140,6 +140,11 @@ jar {
                 'MixinConfigs'            : 'mixins.cofhcore.json',
         ])
     }
+
+    doFirst {
+        exclude 'cofh/core/data/**'
+        exclude '.cache/**'
+    }
 }
 
 task srcJar(type: Jar) {
