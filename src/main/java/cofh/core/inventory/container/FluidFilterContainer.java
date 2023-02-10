@@ -59,7 +59,13 @@ public class FluidFilterContainer extends ContainerCoFH implements IFilterOption
         allowSwap = false;
 
         int slots = filter.size();
-        filterInventory = new InvWrapperFluids(this, filter.getFluids(), slots);
+        filterInventory = new InvWrapperFluids(this, filter.getFluids(), slots) {
+            @Override
+            public void setChanged() {
+
+                filter.setFluids(filterInventory.getStacks());
+            }
+        };
 
         int rows = MathHelper.clamp(slots / 3, 1, 3);
         int rowSize = slots / rows;

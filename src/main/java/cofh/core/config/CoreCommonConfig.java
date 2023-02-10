@@ -5,9 +5,8 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import java.util.function.Supplier;
 
 import static cofh.lib.util.Constants.FALSE;
-import static cofh.lib.util.Constants.TRUE;
 
-public class CoreServerConfig implements IBaseConfig {
+public class CoreCommonConfig implements IBaseConfig {
 
     @Override
     public void apply(ForgeConfigSpec.Builder builder) {
@@ -68,7 +67,7 @@ public class CoreServerConfig implements IBaseConfig {
         return amountSaplingGrowthMod.get();
     }
 
-    private static Supplier<Boolean> returnDismantleDrops = TRUE;
+    private static Supplier<Boolean> returnDismantleDrops = FALSE;
 
     private static Supplier<Boolean> enableFishingExhaustion = FALSE;
     private static Supplier<Double> amountFishingExhaustion = () -> 0.125;

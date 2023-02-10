@@ -117,7 +117,9 @@ public class ItemTracker {
                 map.remove(player);
             }
         } else if (!(data.matches(current))) {
-            ((ITrackedItem) data.stack.getItem()).onSwapFrom(player, hand, data.stack, data.duration);
+            if (data.stack.getItem() instanceof ITrackedItem tracked) {
+                tracked.onSwapFrom(player, hand, data.stack, data.duration);
+            }
             if (current.getItem() instanceof ITrackedItem) {
                 swapTo(player, hand, current);
             } else {
@@ -129,7 +131,9 @@ public class ItemTracker {
     protected static void swapTo(Player player, InteractionHand hand, ItemStack stack) {
 
         getMap(hand).put(player, new TrackedItemData(stack));
-        ((ITrackedItem) stack.getItem()).onSwapTo(player, hand, stack);
+        if (stack.getItem() instanceof ITrackedItem tracked) {
+            tracked.onSwapTo(player, hand, stack);
+        }
     }
 
     protected static void itemUsed(Player player, InteractionHand hand, ItemStack stack) {
@@ -185,7 +189,10 @@ public class ItemTracker {
 
         public boolean matches(ItemStack to) {
 
-            return ((ITrackedItem) stack.getItem()).matches(stack, to);
+            if (stack.getItem() instanceof ITrackedItem tracked) {
+                return tracked.matches(stack, to);
+            }
+            return ItemStack.matches(stack, to);
         }
 
     }

@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
-import static cofh.core.config.CoreServerConfig.returnDismantleDrops;
+import static cofh.core.config.CoreCommonConfig.returnDismantleDrops;
 
 public class PoweredRailBlockCoFH extends PoweredRailBlock implements IDismantleable, IWrenchable {
 

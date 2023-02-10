@@ -2,6 +2,7 @@ package cofh.lib.util.helpers;
 
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.phys.Vec3;
 
 /**
  * Contains various math-related helper functions. Often faster than conventional implementations.
@@ -47,17 +48,6 @@ public final class MathHelper {
         return min >= max ? min : rand.nextInt(max - min + 1) + min;
     }
 
-    public static int binomialDist(int trials, double success) {
-
-        int ret = 0;
-        for (int i = 0; i < trials; ++i) {
-            if (RANDOM.nextDouble() < success) {
-                ++ret;
-            }
-        }
-        return ret;
-    }
-
     public static int nextInt(int min, int max) {
 
         return nextInt(RANDOM, min, max);
@@ -81,6 +71,31 @@ public final class MathHelper {
     public static double nextDouble(double min, double max) {
 
         return nextDouble(RANDOM, min, max);
+    }
+
+    public static int binomialDist(int trials, double success) {
+
+        int ret = 0;
+        for (int i = 0; i < trials; ++i) {
+            if (RANDOM.nextDouble() < success) {
+                ++ret;
+            }
+        }
+        return ret;
+    }
+
+    public static int weightedRound(double d) {
+
+        return weightedRound(d, RANDOM);
+    }
+
+    public static int weightedRound(double d, RandomSource source) {
+
+        int base = floor(d);
+        if (source.nextDouble() < d - base) {
+            return base + 1;
+        }
+        return base;
     }
     // endregion
 
@@ -360,6 +375,16 @@ public final class MathHelper {
     public static boolean isBitSet(int mask, int bit) {
 
         return (mask & 1 << bit) != 0;
+    }
+
+    /**
+     * Perpendicular distance from a point to a line.
+     */
+    public static double pointToLineDist(Vec3 point, Vec3 lineStart, Vec3 lineEnd) {
+
+        Vec3 center = point.subtract(lineStart);
+        Vec3 disp = lineEnd.subtract(lineStart);
+        return disp.cross(center).length() / disp.length();
     }
 
 }

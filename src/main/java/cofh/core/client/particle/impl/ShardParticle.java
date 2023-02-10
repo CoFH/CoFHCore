@@ -3,6 +3,7 @@ package cofh.core.client.particle.impl;
 import cofh.core.client.particle.PointToPointParticle;
 import cofh.core.client.particle.options.BiColorParticleOptions;
 import cofh.core.util.helpers.RenderHelper;
+import cofh.core.util.helpers.vfx.Color;
 import cofh.core.util.helpers.vfx.RenderTypes;
 import cofh.core.util.helpers.vfx.VFXHelper;
 import cofh.lib.util.helpers.MathHelper;
@@ -77,6 +78,9 @@ public class ShardParticle extends PointToPointParticle {
         }
         // Body
         RenderHelper.renderBipyramid(stack, consumer, packedLight, c0, 4, 0.6F, 0.1F);
+        buffer.getBuffer(RenderTypes.LINEAR_GLOW);
+        buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT);
+        RenderHelper.renderBipyramid(stack, consumer, packedLight, Color.WHITE, 4, 0.4F, 0.066F);
     }
 
     @Nonnull
