@@ -1,7 +1,6 @@
 package cofh.core.item;
 
-import cofh.core.entity.BoatCoFH;
-import cofh.core.entity.ChestBoatCoFH;
+import cofh.core.entity.IOnPlaced;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockSource;
 import net.minecraft.core.Direction;
@@ -12,6 +11,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.ItemStack;
@@ -25,19 +25,20 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public class BoatItemCoFH extends ItemCoFH {
 
     protected static final Predicate<Entity> ENTITY_PREDICATE = EntitySelector.NO_SPECTATORS.and(Entity::isPickable);
 
-    protected final IBoatFactory<? extends BoatCoFH, ? extends ChestBoatCoFH> factory;
-    protected final boolean hasChest;
+    protected final Supplier<EntityType<? extends Boat>> type;
+    protected final IBoatFactory<? extends Boat> factory;
 
-    public BoatItemCoFH(boolean hasChest, IBoatFactory<? extends BoatCoFH, ? extends ChestBoatCoFH> factory, Properties builder) {
+    public BoatItemCoFH(Supplier<EntityType<? extends Boat>> type, IBoatFactory<? extends Boat> factory, Properties builder) {
 
         super(builder);
+        this.type = type;
         this.factory = factory;
-        this.hasChest = hasChest;
         DispenserBlock.registerBehavior(this, DISPENSER_BEHAVIOR);
     }
 
@@ -82,21 +83,21 @@ public class BoatItemCoFH extends ItemCoFH {
 
     protected Boat createBoat(ItemStack stack, Level level, float rotation, double posX, double posY, double posZ) {
 
-        var boat = hasChest ? factory.createChestBoat(level, posX, posY, posZ) : factory.createBoat(level, posX, posY, posZ);
+        var boat = factory.createBoat(type, level, posX, posY, posZ);
         if (stack.hasCustomHoverName()) {
             boat.setCustomName(stack.getHoverName());
         }
-        boat.onPlaced(stack);
+        if (boat instanceof IOnPlaced placedBoat) {
+            placedBoat.onPlaced(stack);
+        }
         boat.setYRot(rotation);
         return boat;
     }
 
     // region FACTORY
-    public interface IBoatFactory<T extends BoatCoFH, U extends ChestBoatCoFH> {
+    public interface IBoatFactory<T extends Boat> {
 
-        T createBoat(Level world, double posX, double posY, double posZ);
-
-        U createChestBoat(Level world, double posX, double posY, double posZ);
+        T createBoat(Supplier<EntityType<? extends Boat>> type, Level world, double posX, double posY, double posZ);
 
     }
     // endregion

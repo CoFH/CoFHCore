@@ -14,6 +14,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkHooks;
 
 import java.util.Map;
+import java.util.function.Supplier;
 
 import static cofh.core.util.references.CoreIDs.ID_HOLDING;
 import static cofh.lib.util.Utils.getEnchantment;
@@ -30,9 +31,13 @@ public class ChestBoatCoFH extends ChestBoat implements IOnPlaced {
         super(type, worldIn);
     }
 
-    public ChestBoatCoFH(Level worldIn, double posX, double posY, double posZ) {
+    public ChestBoatCoFH(Supplier<EntityType<? extends Boat>> type, Level worldIn, double posX, double posY, double posZ) {
 
-        super(worldIn, posX, posY, posZ);
+        this(type.get(), worldIn);
+        this.setPos(posX, posY, posZ);
+        this.xo = posX;
+        this.yo = posY;
+        this.zo = posZ;
     }
 
     public ChestBoatCoFH onPlaced(ItemStack stack) {
