@@ -24,12 +24,15 @@ import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -40,9 +43,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.ForgeRenderTypes;
-import net.minecraftforge.client.event.RenderHighlightEvent;
-import net.minecraftforge.client.event.RenderLevelStageEvent;
-import net.minecraftforge.client.event.RenderTooltipEvent;
+import net.minecraftforge.client.event.*;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -53,6 +54,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static cofh.core.init.CoreMobEffects.TRUE_INVISIBILITY;
 import static cofh.lib.util.Constants.INVIS_STYLE;
 import static cofh.lib.util.constants.NBTTags.TAG_STORED_ENCHANTMENTS;
 import static cofh.lib.util.helpers.StringHelper.*;
@@ -220,6 +222,24 @@ public class CoreClientEvents {
 
 
         ITranslucentRenderer.renderTranslucent(stack, partialTick, event.getLevelRenderer(), event.getProjectionMatrix());
+    }
+
+    @SubscribeEvent (priority = EventPriority.HIGH)
+    public static <T extends LivingEntity, M extends EntityModel<T>> void handleTrueInvisibility(RenderLivingEvent<T, M> event) {
+
+        LivingEntity entity = event.getEntity();
+        if (entity.hasEffect(TRUE_INVISIBILITY.get())) {
+            event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent (priority = EventPriority.HIGH)
+    public static <T extends LivingEntity, M extends EntityModel<T>> void handleTrueInvisibility(RenderHandEvent event) {
+
+        Player player = Minecraft.getInstance().player;
+        if (player != null && player.hasEffect(TRUE_INVISIBILITY.get())) {
+            event.setCanceled(true);
+        }
     }
 
     @SubscribeEvent (priority = EventPriority.LOW)

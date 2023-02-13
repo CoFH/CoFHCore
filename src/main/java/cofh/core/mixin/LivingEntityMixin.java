@@ -4,17 +4,23 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static cofh.core.init.CoreMobEffects.*;
 
 /**
- * @author King Lemming
+ * @author King Lemming and Hek
  */
 @Mixin (LivingEntity.class)
-public class LivingEntityMixin {
+public abstract class LivingEntityMixin {
+
+    @Shadow protected abstract int increaseAirSupply(int p_21307_);
+
+    @Shadow protected abstract void detectEquipmentUpdates();
 
     @Inject (
             method = "canBeAffected(Lnet/minecraft/world/effect/MobEffectInstance;)Z",
@@ -58,6 +64,20 @@ public class LivingEntityMixin {
 
         if (source.isFire()) {
             living.removeEffect(CHILLED.get());
+            //MobEffectInstance instance = living.getEffect(CHILLED.get());
+            //if (instance != null) {
+            //    living.removeEffect(CHILLED.get());
+            //    int amplifier = instance.getAmplifier() - 1;
+            //    if (amplifier >= 0) {
+            //        MobEffectInstance hidden = instance.hiddenEffect;
+            //        int duration = instance.getDuration();
+            //        while (hidden != null && hidden.getAmplifier() >= amplifier) {
+            //            duration = Math.max(duration, hidden.getDuration());
+            //            hidden = hidden.hiddenEffect;
+            //        }
+            //        living.addEffect(new MobEffectInstance(CHILLED.get(), duration, amplifier, instance.isAmbient(), instance.isVisible(), instance.showIcon(), hidden, instance.getFactorData()));
+            //    }
+            //}
         }
         if (!source.isBypassMagic()) {
             if (source.isExplosion() && living.hasEffect(EXPLOSION_RESISTANCE.get())) {
@@ -72,6 +92,21 @@ public class LivingEntityMixin {
             if (source == DamageSource.LIGHTNING_BOLT && living.hasEffect(LIGHTNING_RESISTANCE.get())) {
                 callback.setReturnValue(false);
             }
+        }
+    }
+
+    @Inject (
+            method = "updateInvisibilityStatus()V",
+            at = @At ("HEAD"),
+            cancellable = true
+    )
+    private void trueInvisibility(CallbackInfo callback) {
+
+        LivingEntity living = (LivingEntity) (Object) this;
+        if (living.hasEffect(TRUE_INVISIBILITY.get())) {
+            living.removeEffectParticles();
+            living.setInvisible(true);
+            callback.cancel();
         }
     }
 
