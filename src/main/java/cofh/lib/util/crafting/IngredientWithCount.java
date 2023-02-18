@@ -91,7 +91,7 @@ public class IngredientWithCount extends AbstractIngredient {
         @Override
         public IngredientWithCount parse(JsonObject json) {
 
-            throw new JsonSyntaxException("IngredientWithCount should not be parsed using the serializer, use RecipeJsonUtils instead!");
+            throw new JsonSyntaxException("IngredientWithCount should not be parsed from JSON using the serializer, if you are a modder, use RecipeJsonUtils instead!");
         }
 
         @Override
