@@ -34,7 +34,7 @@ public class LightningAirBlock extends AirBlock implements EntityBlock {
         return ITickableTile.createTicker(level, actualType, LIGHTNING_AIR_TILE.get(), LightningAirTile.class);
     }
 
-    //    @OnlyIn (Dist.CLIENT)
+    //    
     //    @Override
     //    public void animateTick(BlockState stateIn, Level levelIn, BlockPos pos, Random rand) {
     //

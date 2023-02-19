@@ -139,6 +139,18 @@ public class Utils {
         return true;
     }
 
+    public static void spawnXpOrbs(Level world, int xp, Vec3 pos) {
+
+        if (world == null) {
+            return;
+        }
+        while (xp > 0) {
+            int orbAmount = ExperienceOrb.getExperienceValue(xp);
+            xp -= orbAmount;
+            world.addFreshEntity(new ExperienceOrb(world, pos.x, pos.y, pos.z, orbAmount));
+        }
+    }
+
     public static boolean destroyBlock(Level world, BlockPos pos, boolean dropBlock, @Nullable Entity entityIn) {
 
         BlockState state = world.getBlockState(pos);

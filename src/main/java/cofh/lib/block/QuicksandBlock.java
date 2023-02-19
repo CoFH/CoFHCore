@@ -28,10 +28,10 @@ import java.util.function.Supplier;
 
 public class QuicksandBlock extends Block implements BucketPickup {
 
-    protected static final float IN_BLOCK_HORIZONTAL_SPEED_MULTIPLIER = 0.9F;
-    protected static final float IN_BLOCK_VERTICAL_SPEED_MULTIPLIER = 1.5F;
+    protected static final float IN_BLOCK_HORIZONTAL_SPEED_MULTIPLIER = 0.4F;
+    protected static final float IN_BLOCK_VERTICAL_SPEED_MULTIPLIER = 0.2F;
     protected static final float NUM_BLOCKS_TO_FALL_INTO_BLOCK = 2.5F;
-    protected static final VoxelShape FALLING_COLLISION_SHAPE = Shapes.box(0.0D, 0.0D, 0.0D, 1.0D, (double) 0.9F, 1.0D);
+    protected static final VoxelShape FALLING_COLLISION_SHAPE = Shapes.box(0.0D, 0.0D, 0.0D, 1.0D, 0.9D, 1.0D);
     protected static final double MINIMUM_FALL_DISTANCE_FOR_SOUND = 4.0D;
     protected static final double MINIMUM_FALL_DISTANCE_FOR_BIG_SOUND = 7.0D;
 
@@ -90,7 +90,7 @@ public class QuicksandBlock extends Block implements BucketPickup {
                 if (entity.fallDistance > NUM_BLOCKS_TO_FALL_INTO_BLOCK) {
                     return FALLING_COLLISION_SHAPE;
                 }
-                if (entity instanceof FallingBlockEntity) {
+                if (entity instanceof FallingBlockEntity || canEntityWalkOnQuicksand(entity) && collisionContext.isAbove(Shapes.block(), pos, false)) {
                     return super.getCollisionShape(state, blockGetter, pos, collisionContext);
                 }
             }
@@ -102,6 +102,19 @@ public class QuicksandBlock extends Block implements BucketPickup {
     public VoxelShape getVisualShape(BlockState state, BlockGetter blockGetter, BlockPos pos, CollisionContext collisionContext) {
 
         return Shapes.empty();
+    }
+
+    public static boolean canEntityWalkOnQuicksand(Entity entity) {
+
+        double delX = entity.getDeltaMovement().x;
+        double delZ = entity.getDeltaMovement().z;
+
+        if (delX > 0 && delZ > 0) {
+            System.out.println(delX);
+            System.out.println(delZ);
+        }
+
+        return entity instanceof LivingEntity && delX * delX + delZ * delZ < 0.025;
     }
 
     @Override

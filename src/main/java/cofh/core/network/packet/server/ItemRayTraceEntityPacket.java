@@ -10,8 +10,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import static cofh.core.network.packet.PacketIDs.PACKET_ITEM_RAYTRACE_ENTITY;
 
@@ -55,7 +53,6 @@ public class ItemRayTraceEntityPacket extends PacketBase implements IPacketServe
         this.hit = new Vec3(buf.readDouble(), buf.readFloat(), buf.readDouble());
     }
 
-    @OnlyIn (Dist.CLIENT)
     public static void sendToServer(Player player, Entity target, Vec3 origin, Vec3 hit) {
 
         if (player.level.isClientSide) {
