@@ -16,9 +16,13 @@ import javax.annotation.Nonnull;
 
 public class BeamParticle extends PointToPointParticle {
 
+    //The displacement, i.e. the start point subtracted from the end point.
+    protected Vector3f disp;
+
     private BeamParticle(BiColorParticleOptions data, ClientLevel level, double sx, double sy, double sz, double ex, double ey, double ez) {
 
         super(data, level, sx, sy, sz, ex, ey, ez);
+        this.disp = new Vector3f((float) (ex - sx), (float) (ey - sy), (float) (ez - sz));
     }
 
     @Override

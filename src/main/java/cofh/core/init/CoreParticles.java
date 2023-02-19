@@ -1,5 +1,6 @@
 package cofh.core.init;
 
+import cofh.core.client.particle.impl.StreamParticle;
 import cofh.core.client.particle.types.ColorParticleType;
 import cofh.core.client.particle.types.CylindricalParticleType;
 import cofh.core.client.particle.types.PointToPointParticleType;
@@ -37,5 +38,6 @@ public class CoreParticles {
     public static final RegistryObject<PointToPointParticleType> BEAM = PARTICLES.register(ID_PARTICLE_BEAM, PointToPointParticleType::new);
     public static final RegistryObject<PointToPointParticleType> SHARD = PARTICLES.register(ID_PARTICLE_SHARD, PointToPointParticleType::new);
     public static final RegistryObject<PointToPointParticleType> STRAIGHT_ARC = PARTICLES.register(ID_PARTICLE_STRAIGHT_ARC, PointToPointParticleType::new);
+    public static final RegistryObject<PointToPointParticleType> STREAM = PARTICLES.register(ID_PARTICLE_STREAM, PointToPointParticleType::new);
 
 }

@@ -2,7 +2,6 @@ package cofh.core.client.particle.impl;
 
 import cofh.core.client.particle.SpriteParticle;
 import cofh.core.client.particle.options.ColorParticleOptions;
-import cofh.core.util.helpers.vfx.RenderTypes;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.ParticleRenderType;
@@ -23,7 +22,7 @@ public class BlastParticle extends SpriteParticle {
     @Override
     public ParticleRenderType getRenderType() {
 
-        return RenderTypes.PARTICLE_SHEET_OPAQUE;
+        return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
     }
 
     @Override
@@ -33,16 +32,13 @@ public class BlastParticle extends SpriteParticle {
     }
 
     @Override
-    public void tick() {
+    public void move(double dx, double dy, double dz) {
 
-        this.xo = this.x;
-        this.yo = this.y;
-        this.zo = this.z;
-        if (this.age++ >= this.lifetime) {
-            this.remove();
-        } else {
-            this.sprite = sprites.get(this.age, this.lifetime);
-        }
+    }
+
+    @Override
+    protected void updateVelocity() {
+
     }
 
     @Nonnull

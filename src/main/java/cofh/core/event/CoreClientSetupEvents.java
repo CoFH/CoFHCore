@@ -71,6 +71,7 @@ public class CoreClientSetupEvents {
         event.register(BEAM.get(), BeamParticle::factory);
         event.register(STRAIGHT_ARC.get(), ArcParticle::factory);
         event.register(SHARD.get(), ShardParticle::factory);
+        event.register(STREAM.get(), StreamParticle::factory);
     }
 
     // region HELPERS

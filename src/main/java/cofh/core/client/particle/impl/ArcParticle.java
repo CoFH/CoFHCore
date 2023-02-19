@@ -17,6 +17,7 @@ import javax.annotation.Nonnull;
 public class ArcParticle extends PointToPointParticle {
 
     protected final float taper;
+    protected Vector3f disp;
 
     private ArcParticle(BiColorParticleOptions data, ClientLevel level, double sx, double sy, double sz, double ex, double ey, double ez) {
 

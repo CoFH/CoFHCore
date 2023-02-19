@@ -6,6 +6,7 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.client.renderer.texture.TextureAtlas;
@@ -40,42 +41,46 @@ public class RenderTypes {
 
     public static final RenderType FLAT_CUTOUT = opaque("flat_translucent", new TextureStateShard(BLANK_TEXTURE, false, false));
     public static final RenderType FLAT_TRANSLUCENT = translucent("flat_translucent", new TextureStateShard(BLANK_TEXTURE, false, false));
-    public static final RenderType LINEAR_GLOW = translucent("glow", new TextureStateShard(LIN_GLOW_TEXTURE, true, false));
-    public static final RenderType ROUND_GLOW = translucent("glow", new TextureStateShard(RND_GLOW_TEXTURE, true, false));
+    public static final RenderType LINEAR_GLOW = translucent("glow", new TextureStateShard(LIN_GLOW_TEXTURE, false, false));
+    public static final RenderType ROUND_GLOW = translucent("glow", new TextureStateShard(RND_GLOW_TEXTURE, false, false));
 
     public static RenderType opaque(String name, TextureStateShard texture) {
 
         return RenderType.create(name, DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true,
-                RenderType.CompositeState.builder().setTextureState(texture)
+                RenderType.CompositeState.builder()
+                        .setTextureState(texture)
                         .setShaderState(NEW_ENTITY_SHADER)
                         .createCompositeState(false));
+    }
+
+    public static RenderType translucent(ResourceLocation texture) {
+
+        return translucent("cofh_translucent", new RenderStateShard.TextureStateShard(texture, false, false));
     }
 
     public static RenderType translucent(String name, TextureStateShard texture) {
 
         return RenderType.create(name, DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true,
-                RenderType.CompositeState.builder().setTextureState(texture)
+                RenderType.CompositeState.builder()
+                        .setTextureState(texture)
                         .setShaderState(NEW_ENTITY_SHADER)
                         .setWriteMaskState(COLOR_WRITE)
                         .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
                         .createCompositeState(false));
     }
 
-    public static ParticleRenderType CUSTOM = copy(ParticleRenderType.CUSTOM);
-    public static ParticleRenderType PARTICLE_SHEET_OPAQUE = copy(ParticleRenderType.PARTICLE_SHEET_OPAQUE);
-    public static ParticleRenderType PARTICLE_SHEET_TRANSLUCENT = copy(ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT);
     public static ParticleRenderType PARTICLE_SHEET_OVER = translucentSheet(() -> PARTICLE_OVER);
-    public static ParticleRenderType PARTICLE_SHEET_ADDITIVE_MUTLIPLY = translucentSheet(() -> PARTICLE_ADDITIVE_MULTIPLY);
+    public static ParticleRenderType PARTICLE_SHEET_ADDITIVE_MULTIPLY = translucentSheet(() -> PARTICLE_ADDITIVE_MULTIPLY);
     public static ParticleRenderType PARTICLE_SHEET_ADDITIVE_SCREEN = translucentSheet(() -> PARTICLE_ADDITIVE_SCREEN);
 
-    static ParticleRenderTypeCoFH translucentSheet(Supplier<ShaderInstance> shader) {
+    static ParticleRenderType translucentSheet(Supplier<ShaderInstance> shader) {
 
-        return new ParticleRenderTypeCoFH() {
+        return new ParticleRenderType() {
 
             @Override
-            public void begin(BufferBuilder builder, TextureManager manager) { //TODO post shader
+            public void begin(BufferBuilder builder, TextureManager manager) {
 
-                RenderSystem.depthMask(false);
+                RenderSystem.depthMask(false); //TODO post shader
                 RenderSystem.enableBlend();
                 RenderSystem.setShader(shader);
                 RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_PARTICLES);
@@ -90,34 +95,6 @@ public class RenderTypes {
                 RenderSystem.disableBlend();
             }
         };
-    }
-
-    static ParticleRenderTypeCoFH copy(ParticleRenderType type) {
-
-        return new ParticleRenderTypeCoFH() {
-
-            @Override
-            public void begin(BufferBuilder builder, TextureManager manager) {
-
-                type.begin(builder, manager);
-            }
-
-            @Override
-            public void end(Tesselator tess) {
-
-                type.end(tess);
-            }
-
-            @Override
-            public String toString() {
-
-                return type.toString();
-            }
-        };
-    }
-
-    public interface ParticleRenderTypeCoFH extends ParticleRenderType {
-
     }
 
 }

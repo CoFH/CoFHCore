@@ -6,10 +6,7 @@ import com.mojang.blaze3d.platform.GlStateManager.DestFactor;
 import com.mojang.blaze3d.platform.GlStateManager.SourceFactor;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import com.mojang.math.Matrix3f;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector4f;
+import com.mojang.math.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
@@ -41,6 +38,7 @@ public final class RenderHelper {
     }
 
     public static final float RENDER_OFFSET = 1.0F / 512.0F;
+    public static final int FULL_BRIGHT = 0x00F000F0;
     public static final ResourceLocation MC_BLOCK_SHEET = new ResourceLocation("textures/atlas/blocks.png");
     public static final ResourceLocation MC_FONT_DEFAULT = new ResourceLocation("textures/font/ascii.png");
     public static final ResourceLocation MC_FONT_SGA = new ResourceLocation("textures/font/ascii_sga.png");
@@ -591,45 +589,90 @@ public final class RenderHelper {
         matrix.popPose();
     }*/
 
-    public static void renderCuboid(AABB aabb, PoseStack poseStack, VertexConsumer buffer, int light, float r, float g, float b, float a, TextureAtlasSprite icon) {
+    // region GEOMETRY
+    //public static void renderCuboid(AABB aabb, PoseStack poseStack, VertexConsumer buffer, int light, float r, float g, float b, float a, TextureAtlasSprite icon) {
+    //
+    //    var mat4 = poseStack.last().pose();
+    //    var mat3 = poseStack.last().normal();
+    //
+    //    float u0 = icon.getU0();
+    //    float u1 = icon.getU1();
+    //    float v0 = icon.getV0();
+    //    float v1 = icon.getV1();
+    //
+    //    buffer.vertex(mat4, (float) aabb.minX, (float) aabb.minY, (float) aabb.minZ).color(r, g, b, a).uv(u0, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 0.0F, -1.0F, 0.0F).endVertex();
+    //    buffer.vertex(mat4, (float) aabb.maxX, (float) aabb.minY, (float) aabb.minZ).color(r, g, b, a).uv(u1, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 0.0F, -1.0F, 0.0F).endVertex();
+    //    buffer.vertex(mat4, (float) aabb.maxX, (float) aabb.minY, (float) aabb.maxZ).color(r, g, b, a).uv(u1, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 0.0F, -1.0F, 0.0F).endVertex();
+    //    buffer.vertex(mat4, (float) aabb.minX, (float) aabb.minY, (float) aabb.maxZ).color(r, g, b, a).uv(u0, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 0.0F, -1.0F, 0.0F).endVertex();
+    //
+    //    buffer.vertex(mat4, (float) aabb.minX, (float) aabb.maxY, (float) aabb.minZ).color(r, g, b, a).uv(u0, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 0.0F, 1.0F, 0.0F).endVertex();
+    //    buffer.vertex(mat4, (float) aabb.minX, (float) aabb.maxY, (float) aabb.maxZ).color(r, g, b, a).uv(u0, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 0.0F, 1.0F, 0.0F).endVertex();
+    //    buffer.vertex(mat4, (float) aabb.maxX, (float) aabb.maxY, (float) aabb.maxZ).color(r, g, b, a).uv(u1, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 0.0F, 1.0F, 0.0F).endVertex();
+    //    buffer.vertex(mat4, (float) aabb.maxX, (float) aabb.maxY, (float) aabb.minZ).color(r, g, b, a).uv(u1, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 0.0F, 1.0F, 0.0F).endVertex();
+    //
+    //    buffer.vertex(mat4, (float) aabb.minX, (float) aabb.minY, (float) aabb.minZ).color(r, g, b, a).uv(u0, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 0.0F, 0.0F, -1.0F).endVertex();
+    //    buffer.vertex(mat4, (float) aabb.minX, (float) aabb.maxY, (float) aabb.minZ).color(r, g, b, a).uv(u0, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 0.0F, 0.0F, -1.0F).endVertex();
+    //    buffer.vertex(mat4, (float) aabb.maxX, (float) aabb.maxY, (float) aabb.minZ).color(r, g, b, a).uv(u1, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 0.0F, 0.0F, -1.0F).endVertex();
+    //    buffer.vertex(mat4, (float) aabb.maxX, (float) aabb.minY, (float) aabb.minZ).color(r, g, b, a).uv(u1, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 0.0F, 0.0F, -1.0F).endVertex();
+    //
+    //    buffer.vertex(mat4, (float) aabb.minX, (float) aabb.minY, (float) aabb.maxZ).color(r, g, b, a).uv(u0, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 0.0F, 0.0F, 1.0F).endVertex();
+    //    buffer.vertex(mat4, (float) aabb.maxX, (float) aabb.minY, (float) aabb.maxZ).color(r, g, b, a).uv(u1, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 0.0F, 0.0F, 1.0F).endVertex();
+    //    buffer.vertex(mat4, (float) aabb.maxX, (float) aabb.maxY, (float) aabb.maxZ).color(r, g, b, a).uv(u1, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 0.0F, 0.0F, 1.0F).endVertex();
+    //    buffer.vertex(mat4, (float) aabb.minX, (float) aabb.maxY, (float) aabb.maxZ).color(r, g, b, a).uv(u0, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 0.0F, 0.0F, 1.0F).endVertex();
+    //
+    //    buffer.vertex(mat4, (float) aabb.minX, (float) aabb.minY, (float) aabb.minZ).color(r, g, b, a).uv(u0, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, -1.0F, 0.0F, 0.0F).endVertex();
+    //    buffer.vertex(mat4, (float) aabb.minX, (float) aabb.minY, (float) aabb.maxZ).color(r, g, b, a).uv(u0, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, -1.0F, 0.0F, 0.0F).endVertex();
+    //    buffer.vertex(mat4, (float) aabb.minX, (float) aabb.maxY, (float) aabb.maxZ).color(r, g, b, a).uv(u1, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, -1.0F, 0.0F, 0.0F).endVertex();
+    //    buffer.vertex(mat4, (float) aabb.minX, (float) aabb.maxY, (float) aabb.minZ).color(r, g, b, a).uv(u1, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, -1.0F, 0.0F, 0.0F).endVertex();
+    //
+    //    buffer.vertex(mat4, (float) aabb.maxX, (float) aabb.minY, (float) aabb.minZ).color(r, g, b, a).uv(u0, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 1.0F, 0.0F, 0.0F).endVertex();
+    //    buffer.vertex(mat4, (float) aabb.maxX, (float) aabb.maxY, (float) aabb.minZ).color(r, g, b, a).uv(u1, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 1.0F, 0.0F, 0.0F).endVertex();
+    //    buffer.vertex(mat4, (float) aabb.maxX, (float) aabb.maxY, (float) aabb.maxZ).color(r, g, b, a).uv(u1, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 1.0F, 0.0F, 0.0F).endVertex();
+    //    buffer.vertex(mat4, (float) aabb.maxX, (float) aabb.minY, (float) aabb.maxZ).color(r, g, b, a).uv(u0, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 1.0F, 0.0F, 0.0F).endVertex();
+    //}
 
-        var mat4 = poseStack.last().pose();
-        var mat3 = poseStack.last().normal();
+    public static Vector4f[] getCuboidCorners(Matrix4f pose, float w, float l, float h) {
 
-        float u0 = icon.getU0();
-        float u1 = icon.getU1();
-        float v0 = icon.getV0();
-        float v1 = icon.getV1();
+        Vector4f[] corners = {new Vector4f(-w, -l, -h, 1.0F), new Vector4f(-w, -l, h, 1.0F), new Vector4f(w, -l, -h, 1.0F), new Vector4f(w, -l, h, 1.0F),
+                new Vector4f(w, l, -h, 1.0F), new Vector4f(w, l, h, 1.0F), new Vector4f(-w, l, -h, 1.0F), new Vector4f(-w, l, h, 1.0F)};
 
-        buffer.vertex(mat4, (float) aabb.minX, (float) aabb.minY, (float) aabb.minZ).color(r, g, b, a).uv(u0, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 0.0F, -1.0F, 0.0F).endVertex();
-        buffer.vertex(mat4, (float) aabb.maxX, (float) aabb.minY, (float) aabb.minZ).color(r, g, b, a).uv(u1, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 0.0F, -1.0F, 0.0F).endVertex();
-        buffer.vertex(mat4, (float) aabb.maxX, (float) aabb.minY, (float) aabb.maxZ).color(r, g, b, a).uv(u1, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 0.0F, -1.0F, 0.0F).endVertex();
-        buffer.vertex(mat4, (float) aabb.minX, (float) aabb.minY, (float) aabb.maxZ).color(r, g, b, a).uv(u0, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 0.0F, -1.0F, 0.0F).endVertex();
+        for (Vector4f corner : corners) {
+            corner.transform(pose);
+        }
+        return corners;
+    }
 
-        buffer.vertex(mat4, (float) aabb.minX, (float) aabb.maxY, (float) aabb.minZ).color(r, g, b, a).uv(u0, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 0.0F, 1.0F, 0.0F).endVertex();
-        buffer.vertex(mat4, (float) aabb.minX, (float) aabb.maxY, (float) aabb.maxZ).color(r, g, b, a).uv(u0, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 0.0F, 1.0F, 0.0F).endVertex();
-        buffer.vertex(mat4, (float) aabb.maxX, (float) aabb.maxY, (float) aabb.maxZ).color(r, g, b, a).uv(u1, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 0.0F, 1.0F, 0.0F).endVertex();
-        buffer.vertex(mat4, (float) aabb.maxX, (float) aabb.maxY, (float) aabb.minZ).color(r, g, b, a).uv(u1, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 0.0F, 1.0F, 0.0F).endVertex();
+    public static void renderSides(VertexConsumer consumer, int light, Color color, Vector4f[] corners, Vector3f normal, float u0, float v0, float u1, float v1) {
 
-        buffer.vertex(mat4, (float) aabb.minX, (float) aabb.minY, (float) aabb.minZ).color(r, g, b, a).uv(u0, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 0.0F, 0.0F, -1.0F).endVertex();
-        buffer.vertex(mat4, (float) aabb.minX, (float) aabb.maxY, (float) aabb.minZ).color(r, g, b, a).uv(u0, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 0.0F, 0.0F, -1.0F).endVertex();
-        buffer.vertex(mat4, (float) aabb.maxX, (float) aabb.maxY, (float) aabb.minZ).color(r, g, b, a).uv(u1, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 0.0F, 0.0F, -1.0F).endVertex();
-        buffer.vertex(mat4, (float) aabb.maxX, (float) aabb.minY, (float) aabb.minZ).color(r, g, b, a).uv(u1, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 0.0F, 0.0F, -1.0F).endVertex();
+        renderFace(consumer, light, color, corners[1], corners[0], corners[2], corners[3], u0, v0, u1, v1, normal);
+        renderFace(consumer, light, color, corners[3], corners[2], corners[4], corners[5], u0, v0, u1, v1, normal);
+        renderFace(consumer, light, color, corners[5], corners[4], corners[6], corners[7], u0, v0, u1, v1, normal);
+        renderFace(consumer, light, color, corners[7], corners[6], corners[0], corners[1], u0, v0, u1, v1, normal);
+    }
 
-        buffer.vertex(mat4, (float) aabb.minX, (float) aabb.minY, (float) aabb.maxZ).color(r, g, b, a).uv(u0, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 0.0F, 0.0F, 1.0F).endVertex();
-        buffer.vertex(mat4, (float) aabb.maxX, (float) aabb.minY, (float) aabb.maxZ).color(r, g, b, a).uv(u1, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 0.0F, 0.0F, 1.0F).endVertex();
-        buffer.vertex(mat4, (float) aabb.maxX, (float) aabb.maxY, (float) aabb.maxZ).color(r, g, b, a).uv(u1, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 0.0F, 0.0F, 1.0F).endVertex();
-        buffer.vertex(mat4, (float) aabb.minX, (float) aabb.maxY, (float) aabb.maxZ).color(r, g, b, a).uv(u0, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 0.0F, 0.0F, 1.0F).endVertex();
+    public static void renderBottom(VertexConsumer consumer, int light, Color color, Vector4f[] corners, Vector3f normal, float u0, float v0, float u1, float v1) {
 
-        buffer.vertex(mat4, (float) aabb.minX, (float) aabb.minY, (float) aabb.minZ).color(r, g, b, a).uv(u0, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, -1.0F, 0.0F, 0.0F).endVertex();
-        buffer.vertex(mat4, (float) aabb.minX, (float) aabb.minY, (float) aabb.maxZ).color(r, g, b, a).uv(u0, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, -1.0F, 0.0F, 0.0F).endVertex();
-        buffer.vertex(mat4, (float) aabb.minX, (float) aabb.maxY, (float) aabb.maxZ).color(r, g, b, a).uv(u1, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, -1.0F, 0.0F, 0.0F).endVertex();
-        buffer.vertex(mat4, (float) aabb.minX, (float) aabb.maxY, (float) aabb.minZ).color(r, g, b, a).uv(u1, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, -1.0F, 0.0F, 0.0F).endVertex();
+        renderFace(consumer, light, color, corners[6], corners[4], corners[2], corners[0], u0, v0, u1, v1, normal);
+    }
 
-        buffer.vertex(mat4, (float) aabb.maxX, (float) aabb.minY, (float) aabb.minZ).color(r, g, b, a).uv(u0, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 1.0F, 0.0F, 0.0F).endVertex();
-        buffer.vertex(mat4, (float) aabb.maxX, (float) aabb.maxY, (float) aabb.minZ).color(r, g, b, a).uv(u1, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 1.0F, 0.0F, 0.0F).endVertex();
-        buffer.vertex(mat4, (float) aabb.maxX, (float) aabb.maxY, (float) aabb.maxZ).color(r, g, b, a).uv(u1, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 1.0F, 0.0F, 0.0F).endVertex();
-        buffer.vertex(mat4, (float) aabb.maxX, (float) aabb.minY, (float) aabb.maxZ).color(r, g, b, a).uv(u0, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 1.0F, 0.0F, 0.0F).endVertex();
+    public static void renderTop(VertexConsumer consumer, int light, Color color, Vector4f[] corners, Vector3f normal, float u0, float v0, float u1, float v1) {
+
+        renderFace(consumer, light, color, corners[1], corners[3], corners[5], corners[7], u0, v0, u1, v1, normal);
+    }
+
+    public static void renderCuboid(VertexConsumer consumer, int light, Color color, Vector4f[] corners, Vector3f normal, float u0, float v0, float u1, float v1) {
+
+        renderSides(consumer, light, color, corners, normal, u0, v0, u1, v1);
+        renderBottom(consumer, light, color, corners, normal, u0, v0, u1, v1);
+        renderTop(consumer, light, color, corners, normal, u0, v0, u1, v1);
+    }
+
+    public static void renderFace(VertexConsumer consumer, int light, Color color, Vector4f a, Vector4f b, Vector4f c, Vector4f d, float u0, float v0, float u1, float v1, Vector3f normal) {
+
+        consumer.vertex(a.x(), a.y(), a.z()).color(color.r, color.g, color.b, color.a).uv(u0, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(normal.x(), normal.y(), normal.z()).endVertex();
+        consumer.vertex(b.x(), b.y(), b.z()).color(color.r, color.g, color.b, color.a).uv(u1, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(normal.x(), normal.y(), normal.z()).endVertex();
+        consumer.vertex(c.x(), c.y(), c.z()).color(color.r, color.g, color.b, color.a).uv(u1, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(normal.x(), normal.y(), normal.z()).endVertex();
+        consumer.vertex(d.x(), d.y(), d.z()).color(color.r, color.g, color.b, color.a).uv(u0, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(normal.x(), normal.y(), normal.z()).endVertex();
     }
 
     /**
@@ -738,5 +781,6 @@ public final class RenderHelper {
             consumer.vertex(l.x(), l.y(), l.z()).color(r, g, b, a).uv(1, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(norm, 0, 1, 0).endVertex();
         }
     }
+    // endregion
 
 }

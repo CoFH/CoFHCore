@@ -267,6 +267,25 @@ public class Utils {
             world.addParticle(particle, posX + xOffset, posY + yOffset, posZ + zOffset, 0.0D, 0.0D, 0.0D);
         }
     }
+
+    public static void spawnParticles(Level level, ParticleOptions particle, int count, Vec3 pos, float posVar, Vec3 velocity, float velVar) {
+
+        for (int i = 0; i < count; ++i) {
+            spawnParticles(level, particle, pos, posVar, velocity, velVar);
+        }
+    }
+
+    public static void spawnParticles(Level level, ParticleOptions particle, Vec3 pos, float posVar, Vec3 velocity, float velVar) {
+
+        RandomSource rand = level.getRandom();
+        spawnParticles(level, particle, pos.add(rand.nextFloat() * posVar * 2 - posVar, rand.nextFloat() * posVar * 2 - posVar, rand.nextFloat() * posVar * 2 - posVar),
+                velocity.add(rand.nextFloat() * velVar * 2 - velVar, rand.nextFloat() * velVar * 2 - velVar, rand.nextFloat() * velVar * 2 - velVar));
+    }
+
+    public static void spawnParticles(Level level, ParticleOptions particle, Vec3 pos, Vec3 velocity) {
+
+        level.addParticle(particle, pos.x, pos.y, pos.z, velocity.x, velocity.y, velocity.z);
+    }
     // endregion
 
     // region ENTITY UTILS

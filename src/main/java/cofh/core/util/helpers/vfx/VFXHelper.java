@@ -81,7 +81,7 @@ public final class VFXHelper {
     }
 
     // region HELPERS
-    private static void renderNodes(Matrix3f normal, VertexConsumer builder, int packedLight, VFXNode[] nodes, Color color) {
+    public static void renderNodes(Matrix3f normal, VertexConsumer builder, int packedLight, VFXNode[] nodes, Color color) {
 
         nodes[0].renderStart(normal, builder, packedLight, color);
         int count = nodes.length - 1;
@@ -91,7 +91,7 @@ public final class VFXHelper {
         nodes[count].renderEnd(normal, builder, packedLight, color);
     }
 
-    private static void renderNodesCapped(Matrix3f normal, MultiBufferSource buffer, RenderType midType, RenderType capType, int packedLight, VFXNode[] nodes, Color color) {
+    public static void renderNodesCapped(Matrix3f normal, MultiBufferSource buffer, RenderType midType, RenderType capType, int packedLight, VFXNode[] nodes, Color color) {
 
         if (nodes.length < 2) {
             return;
@@ -619,16 +619,15 @@ public final class VFXHelper {
     }
 
     /**
-     * Renders an axially billboarded streamline that generally (not exactly, for performance reasons) follows the given node positions.
+     * Renders an axially billboarded streamline that follows the given node positions.
      *
-     * @param poss      Desired positions of the nodes. Technically speaking, n positions are connected into n - 1 lines, used to determine the billboard angle.
-     *                  The actual nodes that are rendered are midpoints of these lines. If all of that means nothing to you, you're not alone.
+     * @param poss      Desired positions of the nodes.
      * @param widthFunc Function that determines stream width at each node based on the order of nodes.
      *                  Input is a float representing the normalized index of the node (0F for the first node, 1F for the last).
      */
     public static void renderStreamLine(PoseStack stack, VertexConsumer builder, int packedLight, Vector4f[] poss, Color color, Function<Float, Float> widthFunc) {
 
-        if (poss.length < 3) {
+        if (poss.length < 2) {
             return;
         }
         if (color.a <= 0) {
@@ -642,15 +641,17 @@ public final class VFXHelper {
         for (Vector4f pos : poss) {
             pos.transform(pose);
         }
-        int count = poss.length - 1;
-        VFXNode[] nodes = new VFXNode[count];
-        float increment = 1.0F / (count - 1);
-        for (int i = 0; i < count; ++i) {
-            Vector4f start = poss[i];
-            Vector4f end = poss[i + 1];
+        int last = poss.length - 1;
+        VFXNode[] nodes = new VFXNode[poss.length];
+        float increment = 1.0F / last;
+        for (int i = 1; i < last; ++i) {
             float width = widthFunc.apply(increment * i);
-            nodes[i] = new VFXNode(mid(start, end), axialPerp(start, end, width), width);
+            nodes[i] = new VFXNode(poss[i], axialPerp(poss[i - 1], poss[i + 1], width), width);
         }
+        float width = widthFunc.apply(0.0F);
+        nodes[0] = new VFXNode(poss[0], axialPerp(poss[0], poss[1], width), width);
+        width = widthFunc.apply(1.0F);
+        nodes[last] = new VFXNode(poss[last], axialPerp(poss[last - 1], poss[last], width), width);
         renderNodes(normal, builder, packedLight, nodes, color);
     }
 

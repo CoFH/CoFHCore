@@ -9,8 +9,6 @@ import net.minecraft.world.phys.AABB;
 public abstract class PointToPointParticle extends ColorParticle {
 
     protected Color c1 = Color.WHITE;
-    //The displacement, i.e. the start point subtracted from the end point.
-    protected Vector3f disp;
 
     /**
      * A particle that goes from some point to another, such as a beam of light.
@@ -27,7 +25,6 @@ public abstract class PointToPointParticle extends ColorParticle {
         this.bbWidth = (float) Math.max(bound.getXsize(), bound.getZsize());
         this.bbHeight = (float) bound.getYsize();
         setColor1(data.rgba1);
-        this.disp = new Vector3f((float) (ex - sx), (float) (ey - sy), (float) (ez - sz));
     }
 
     protected void setColor1(int rgba) {

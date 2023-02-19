@@ -11,6 +11,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
+import com.mojang.math.Vector3f;
 import com.mojang.math.Vector4f;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleProvider;
@@ -22,10 +23,14 @@ import javax.annotation.Nonnull;
 
 public class ShardParticle extends PointToPointParticle {
 
+    //The displacement, i.e. the start point subtracted from the end point.
+    protected Vector3f disp;
+
     private ShardParticle(BiColorParticleOptions data, ClientLevel level, double sx, double sy, double sz, double ex, double ey, double ez) {
 
         super(data, level, sx, sy, sz, ex, ey, ez);
         this.friction = 1.0F;
+        this.disp = new Vector3f((float) (ex - sx), (float) (ey - sy), (float) (ez - sz));
     }
 
     @Override
