@@ -1,12 +1,14 @@
 package cofh.lib.util.crafting;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import it.unimi.dsi.fastutil.ints.IntList;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.crafting.AbstractIngredient;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
-import net.minecraftforge.common.crafting.VanillaIngredientSerializer;
 
 import javax.annotation.Nullable;
 
@@ -67,7 +69,7 @@ public class IngredientWithCount extends AbstractIngredient {
     @Override
     public IIngredientSerializer<? extends Ingredient> getSerializer() {
 
-        return wrappedIngredient.isVanilla() ? VanillaIngredientSerializer.INSTANCE : wrappedIngredient.getSerializer();
+        return Serializer.INSTANCE;
     }
 
     @Override
@@ -76,4 +78,28 @@ public class IngredientWithCount extends AbstractIngredient {
         return wrappedIngredient.toJson();
     }
 
+    public static class Serializer implements IIngredientSerializer<IngredientWithCount> {
+
+        public static final Serializer INSTANCE = new Serializer();
+
+        @Override
+        public IngredientWithCount parse(FriendlyByteBuf buffer) {
+
+            return new IngredientWithCount(Ingredient.fromNetwork(buffer), buffer.readVarInt());
+        }
+
+        @Override
+        public IngredientWithCount parse(JsonObject json) {
+
+            throw new JsonSyntaxException("IngredientWithCount should not be parsed from JSON using the serializer, if you are a modder, use RecipeJsonUtils instead!");
+        }
+
+        @Override
+        public void write(FriendlyByteBuf buffer, IngredientWithCount ingredient) {
+
+            ingredient.wrappedIngredient.toNetwork(buffer);
+            buffer.writeVarInt(ingredient.count);
+        }
+
+    }
 }
