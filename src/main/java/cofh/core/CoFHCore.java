@@ -28,7 +28,7 @@ import cofh.lib.loot.TileNBTSync;
 import cofh.lib.network.PacketHandler;
 import cofh.lib.util.DeferredRegisterCoFH;
 import cofh.lib.util.Utils;
-import cofh.lib.util.crafting.CustomIngredients;
+import cofh.core.util.crafting.CustomIngredients;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.syncher.EntityDataSerializer;

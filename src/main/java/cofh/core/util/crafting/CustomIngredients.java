@@ -1,5 +1,6 @@
-package cofh.lib.util.crafting;
+package cofh.core.util.crafting;
 
+import cofh.lib.util.crafting.IngredientWithCount;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.crafting.CraftingHelper;
 
