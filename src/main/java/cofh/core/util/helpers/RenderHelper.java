@@ -483,6 +483,21 @@ public final class RenderHelper {
         RenderSystem.setShaderColor(red, green, blue, 1.0F);
     }
 
+    public static float red(int color) {
+
+        return (float) (color >> 16 & 255) / 255.0F;
+    }
+
+    public static float green(int color) {
+
+        return (float) (color >> 8 & 255) / 255.0F;
+    }
+
+    public static float blue(int color) {
+
+        return (float) (color & 255) / 255.0F;
+    }
+
     public static void setPosTexShader() {
 
         RenderSystem.setShader(GameRenderer::getPositionTexShader);

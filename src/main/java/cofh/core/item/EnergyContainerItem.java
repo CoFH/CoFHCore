@@ -2,6 +2,7 @@ package cofh.core.item;
 
 import cofh.lib.api.item.IEnergyContainerItem;
 import cofh.lib.energy.EnergyContainerItemWrapper;
+import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -47,11 +48,11 @@ public abstract class EnergyContainerItem extends ItemCoFH implements IEnergyCon
     protected void tooltipDelegate(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 
         boolean creative = isCreative(stack, ENERGY);
-        tooltip.add(getTextComponent(localize("info.cofh.energy") + ": "
-                + (creative ?
-                localize("info.cofh.infinite") :
-                getScaledNumber(getEnergyStored(stack)) + " / " + getScaledNumber(getMaxEnergyStored(stack)) + " RF")));
-
+        if (getMaxEnergyStored(stack) > 0) {
+            tooltip.add(creative
+                    ? getTextComponent(localize("info.cofh.energy") + ": ").append(getTextComponent("info.cofh.infinite").withStyle(ChatFormatting.LIGHT_PURPLE).withStyle(ChatFormatting.ITALIC))
+                    : getTextComponent(localize("info.cofh.energy") + ": " + getScaledNumber(getEnergyStored(stack)) + " / " + getScaledNumber(getMaxEnergyStored(stack)) + " " + localize("info.cofh.unit_rf")));
+        }
         addEnergyTooltip(stack, worldIn, tooltip, flagIn, getExtract(stack), getReceive(stack), creative);
     }
 

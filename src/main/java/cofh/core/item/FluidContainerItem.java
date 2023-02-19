@@ -5,6 +5,7 @@ import cofh.lib.api.item.IColorableItem;
 import cofh.lib.api.item.IFluidContainerItem;
 import cofh.lib.fluid.FluidContainerItemWrapper;
 import cofh.lib.util.helpers.StringHelper;
+import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -57,13 +58,11 @@ public class FluidContainerItem extends ItemCoFH implements IFluidContainerItem,
         if (!fluid.isEmpty()) {
             tooltip.add(StringHelper.getFluidName(fluid));
         }
-        boolean creative = isCreative(stack, FLUID);
-        tooltip.add(getTextComponent(localize("info.cofh.amount") + ": "
-                + (creative ?
-                localize("info.cofh.infinite") :
-                format(fluid.getAmount()) + " / " + format(getCapacity(stack)) + " mB")));
+        tooltip.add(isCreative(stack, FLUID)
+                ? getTextComponent("info.cofh.infinite").withStyle(ChatFormatting.LIGHT_PURPLE).withStyle(ChatFormatting.ITALIC)
+                : getTextComponent(localize("info.cofh.amount") + ": " + format(fluid.getAmount()) + " / " + format(getCapacity(stack)) + " " + localize("info.cofh.unit_mb")));
 
-        if (hasPotionTag(fluid)) {
+        if (FluidHelper.hasPotionTag(fluid)) {
             tooltip.add(getEmptyLine());
             tooltip.add(getTextComponent(localize("info.cofh.effects") + ":"));
             addPotionTooltip(fluid, tooltip);
@@ -82,8 +81,8 @@ public class FluidContainerItem extends ItemCoFH implements IFluidContainerItem,
             tooltip.add(StringHelper.getFluidName(fluid));
         }
         tooltip.add(isCreative(stack, FLUID)
-                ? getTextComponent("info.cofh.infinite_source")
-                : getTextComponent(localize("info.cofh.amount") + ": " + format(fluid.getAmount()) + " / " + format(getCapacity(stack)) + " mB"));
+                ? getTextComponent("info.cofh.infinite").withStyle(ChatFormatting.LIGHT_PURPLE).withStyle(ChatFormatting.ITALIC)
+                : getTextComponent(localize("info.cofh.amount") + ": " + format(fluid.getAmount()) + " / " + format(getCapacity(stack)) + " " + localize("info.cofh.unit_mb")));
 
         if (hasPotionTag(fluid)) {
             tooltip.add(getEmptyLine());

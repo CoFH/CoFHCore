@@ -4,8 +4,6 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.FaceBakery;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Arrays;
 
@@ -15,7 +13,7 @@ import java.util.Arrays;
  * @author Mojang
  * Thanks tterrag!
  */
-@OnlyIn (Dist.CLIENT)
+
 public class RetexturedBakedQuad extends BakedQuad {
 
     private final TextureAtlasSprite texture;

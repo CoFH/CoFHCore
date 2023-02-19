@@ -4,6 +4,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.function.Supplier;
 
+import static cofh.lib.util.Constants.FALSE;
 import static cofh.lib.util.Constants.TRUE;
 
 public class CoreClientConfig implements IBaseConfig {
@@ -49,7 +50,7 @@ public class CoreClientConfig implements IBaseConfig {
     public static Supplier<Boolean> enableItemDescriptions = TRUE;
     public static Supplier<Boolean> enableItemTags = TRUE;
     public static Supplier<Boolean> enableKeywords = TRUE;
-    public static Supplier<Boolean> alwaysShowDetails = TRUE;
+    public static Supplier<Boolean> alwaysShowDetails = FALSE;
     public static Supplier<Boolean> holdShiftForDetails = TRUE;
 
 }

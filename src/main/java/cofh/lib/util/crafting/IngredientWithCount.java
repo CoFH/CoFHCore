@@ -45,7 +45,7 @@ public class IngredientWithCount extends AbstractIngredient {
     @Override
     public boolean test(@Nullable ItemStack stack) {
 
-        return wrappedIngredient.test(stack);
+        return stack != null && wrappedIngredient.test(stack) && stack.getCount() >= count;
     }
 
     @Override
@@ -102,4 +102,5 @@ public class IngredientWithCount extends AbstractIngredient {
         }
 
     }
+
 }

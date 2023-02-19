@@ -24,7 +24,6 @@ public class TileBlockActive extends TileBlockCoFH {
         builder.add(ACTIVE);
     }
 
-    //    @OnlyIn(Dist.CLIENT)
     //    public void animateTick(BlockState state, Level level, BlockPos pos, Random rand) {
     //
     //        if (state.get(ACTIVE)) {

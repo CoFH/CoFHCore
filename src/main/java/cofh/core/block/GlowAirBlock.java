@@ -13,8 +13,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
 
 import static cofh.core.init.CoreTileEntities.GLOW_AIR_TILE;
@@ -39,7 +37,6 @@ public class GlowAirBlock extends AirBlock implements EntityBlock {
         return ITickableTile.createTicker(level, actualType, GLOW_AIR_TILE.get(), GlowAirTile.class);
     }
 
-    @OnlyIn (Dist.CLIENT)
     @Override
     public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, RandomSource rand) {
 

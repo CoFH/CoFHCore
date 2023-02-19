@@ -9,8 +9,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import static cofh.core.init.CoreEntities.ELECTRIC_ARC;
 import static cofh.core.init.CoreMobEffects.SHOCKED;
@@ -105,7 +103,6 @@ public class ElectricArc extends AbstractAoESpell {
         return this;
     }
 
-    @OnlyIn (Dist.CLIENT)
     public boolean shouldRenderAtSqrDistance(double distSqr) {
 
         double d0 = 64.0D * getViewScale();
