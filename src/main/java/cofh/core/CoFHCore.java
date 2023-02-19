@@ -30,6 +30,7 @@ import cofh.lib.network.PacketHandler;
 import cofh.lib.util.DeferredRegisterCoFH;
 import cofh.lib.util.Utils;
 import cofh.lib.util.constants.ModIds;
+import cofh.core.util.crafting.CustomIngredients;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.resources.ResourceLocation;
@@ -225,6 +226,7 @@ public class CoFHCore {
         event.enqueueWork(TileNBTSync::setup);
         event.enqueueWork(ArmorEvents::setup);
         event.enqueueWork(CoreFluids::setup);
+        event.enqueueWork(CustomIngredients::setup);
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {
