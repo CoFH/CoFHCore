@@ -2,8 +2,6 @@ package cofh.lib.network.packet;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkDirection;
 
 /**
@@ -23,7 +21,7 @@ public interface IPacketServer extends IPacket {
     /**
      * Send this packet to the server.
      */
-    @OnlyIn (Dist.CLIENT)
+
     default void sendToServer() {
 
         if (Minecraft.getInstance().getConnection() != null) {

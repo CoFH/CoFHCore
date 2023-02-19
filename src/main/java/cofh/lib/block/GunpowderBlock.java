@@ -18,8 +18,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FallingBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
@@ -32,7 +30,6 @@ public class GunpowderBlock extends FallingBlock {
         super(properties);
     }
 
-    @OnlyIn (Dist.CLIENT)
     @Override
     public int getDustColor(BlockState state, BlockGetter reader, BlockPos pos) {
 

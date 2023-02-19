@@ -19,8 +19,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import static cofh.lib.util.constants.NBTTags.TAG_FUSE;
 
@@ -118,7 +116,7 @@ public abstract class AbstractTNTMinecart extends AbstractMinecartCoFH implement
     }
 
     @Override
-    @OnlyIn (Dist.CLIENT)
+
     public void handleEntityEvent(byte id) {
 
         if (id == 10) {

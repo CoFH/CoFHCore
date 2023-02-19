@@ -11,12 +11,9 @@ import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
-@OnlyIn (Dist.CLIENT)
 public class ArcParticle extends LevelMatrixStackParticle {
 
     protected final Vector3f dest;
@@ -65,7 +62,6 @@ public class ArcParticle extends LevelMatrixStackParticle {
         return 0x00F000F0;
     }
 
-    @OnlyIn (Dist.CLIENT)
     public static class Factory implements ParticleProvider<SimpleParticleType> {
 
         public Factory(SpriteSet sprite) {

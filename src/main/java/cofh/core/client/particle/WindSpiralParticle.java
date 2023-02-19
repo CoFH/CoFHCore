@@ -13,13 +13,10 @@ import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.SplittableRandom;
 
-@OnlyIn (Dist.CLIENT)
 public class WindSpiralParticle extends LevelMatrixStackParticle {
 
     protected static final float defaultLifetime = 10.0F;
@@ -76,7 +73,6 @@ public class WindSpiralParticle extends LevelMatrixStackParticle {
         VFXHelper.renderStreamLine(stack, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLightIn, poss, rgba, VFXHelper.getWidthFunc((easeSin * 0.08F + 0.01F) * (float) rand.nextDouble(0.3F, 1.0F)));
     }
 
-    @OnlyIn (Dist.CLIENT)
     public static class Factory implements ParticleProvider<SimpleParticleType> {
 
         public Factory(SpriteSet sprite) {

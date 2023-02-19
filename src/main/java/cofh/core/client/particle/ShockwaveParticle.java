@@ -10,12 +10,9 @@ import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
-@OnlyIn (Dist.CLIENT)
 public class ShockwaveParticle extends CustomRenderParticle {
 
     protected float heightScale;
@@ -39,7 +36,6 @@ public class ShockwaveParticle extends CustomRenderParticle {
         VFXHelper.renderShockwave(stack, buffer, level, new BlockPos(x, y, z), (age + partialTicks) * speed, bbWidth * 0.5F, heightScale);
     }
 
-    @OnlyIn (Dist.CLIENT)
     public static class Factory implements ParticleProvider<SimpleParticleType> {
 
         public Factory(SpriteSet sprite) {

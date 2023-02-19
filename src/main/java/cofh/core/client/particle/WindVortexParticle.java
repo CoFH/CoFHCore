@@ -12,13 +12,10 @@ import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.SplittableRandom;
 
-@OnlyIn (Dist.CLIENT)
 public class WindVortexParticle extends LevelMatrixStackParticle {
 
     protected static final float defaultLifetime = 8.0F;
@@ -77,7 +74,6 @@ public class WindVortexParticle extends LevelMatrixStackParticle {
         VFXHelper.renderCyclone(stack, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLight, 1, (float) rand.nextDouble(0.02F, 0.04F), progress * 0.5F + (float) rand.nextDouble(420F), a);
     }
 
-    @OnlyIn (Dist.CLIENT)
     public static class Factory implements ParticleProvider<SimpleParticleType> {
 
         public Factory(SpriteSet sprite) {

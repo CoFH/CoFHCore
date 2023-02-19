@@ -3,12 +3,9 @@ package cofh.core.client.particle;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
-@OnlyIn (Dist.CLIENT)
 public class PlasmaBallParticle extends TextureSheetParticle {
 
     private final SpriteSet spriteSet;
@@ -58,7 +55,6 @@ public class PlasmaBallParticle extends TextureSheetParticle {
         }
     }
 
-    @OnlyIn (Dist.CLIENT)
     public static class Factory implements ParticleProvider<SimpleParticleType> {
 
         private final SpriteSet spriteSet;

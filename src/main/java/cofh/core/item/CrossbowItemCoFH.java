@@ -29,8 +29,6 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -92,7 +90,7 @@ public class CrossbowItemCoFH extends CrossbowItem implements ICoFHItem {
     }
 
     @Override
-    @OnlyIn (Dist.CLIENT)
+
     public void appendHoverText(ItemStack stack, @Nullable Level levelIn, List<Component> tooltip, TooltipFlag flagIn) {
 
         if (isLoaded(stack)) {
