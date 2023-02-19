@@ -28,6 +28,7 @@ import cofh.lib.loot.TileNBTSync;
 import cofh.lib.network.PacketHandler;
 import cofh.lib.util.DeferredRegisterCoFH;
 import cofh.lib.util.Utils;
+import cofh.lib.util.crafting.CustomIngredients;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.syncher.EntityDataSerializer;
@@ -235,6 +236,7 @@ public class CoFHCore {
         event.enqueueWork(TileNBTSync::setup);
         event.enqueueWork(ArmorEvents::setup);
         event.enqueueWork(CoreFluids::setup);
+        event.enqueueWork(CustomIngredients::setup);
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {

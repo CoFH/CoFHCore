@@ -690,7 +690,7 @@ public final class VFXHelper {
                     float angle = j * WIND_INCR;
                     nodes[j] = new Vector4f(MathHelper.cos(angle) * 0.5F, y, MathHelper.sin(angle) * 0.5F, 1.0F);
                 }
-                renderStreamLine(stack, builder, packedLight, nodes, Color.fromFloat(value, value, value, alpha), getWidthFunc(width));
+                renderStreamLine(stack, builder, packedLight, nodes, Color.fromRGBA(value, value, value, alpha), getWidthFunc(width));
                 stack.popPose();
             }
         }
