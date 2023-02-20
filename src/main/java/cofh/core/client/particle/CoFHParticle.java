@@ -1,20 +1,19 @@
 package cofh.core.client.particle;
 
 import cofh.core.client.particle.options.CoFHParticleOptions;
-import cofh.core.util.helpers.RenderHelper;
-import cofh.core.util.helpers.vfx.RenderTypes;
+import cofh.core.event.CoreClientEvents;
 import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Camera;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.Vec3;
+
+import java.util.ArrayDeque;
 
 /**
  * The base class for CoFH particles.
@@ -43,62 +42,26 @@ public abstract class CoFHParticle extends Particle {
         setSize(data.size);
     }
 
-    //Pre-mixin rendering method
-    //@Override
-    //public void render(VertexConsumer consumer, Camera cam, float partialTicks) {
-    //
-    //    float time = this.age + partialTicks - this.delay;
-    //    if (time < 0 || time > this.duration) {
-    //        return;
-    //    }
-    //    Vec3 camPos = cam.getPosition();
-    //    MultiBufferSource buffer = Minecraft.getInstance().renderBuffers().bufferSource();
-    //
-    //    PoseStack sysStack = RenderSystem.getModelViewStack();
-    //    Matrix4f pose = sysStack.last().pose();
-    //    sysStack.popPose();
-    //    RenderSystem.applyModelViewMatrix();
-    //
-    //    PoseStack stack = new PoseStack();
-    //    stack.mulPoseMatrix(pose);
-    //    stack.pushPose();
-    //
-    //    double x = MathHelper.interpolate(this.xo, this.x, partialTicks);
-    //    double y = MathHelper.interpolate(this.yo, this.y, partialTicks);
-    //    double z = MathHelper.interpolate(this.zo, this.z, partialTicks);
-    //    stack.translate(x - camPos.x, y - camPos.y, z - camPos.z);
-    //
-    //    stack.pushPose();
-    //    stack.mulPose(cam.rotation());
-    //    render(stack, buffer, consumer, getLightColor(partialTicks, x, y, z), time, partialTicks, cam);
-    //    stack.popPose();
-    //
-    //    stack.popPose();
-    //
-    //    sysStack.pushPose();
-    //    sysStack.mulPoseMatrix(pose);
-    //    RenderSystem.applyModelViewMatrix();
-    //}
-
     @Override
     public void render(VertexConsumer consumer, Camera cam, float partialTicks) {
 
-        float time = this.age + partialTicks - this.delay;
-        if (time < 0 || time > this.duration) {
+        CoreClientEvents.delayedRenderParticles.computeIfAbsent(getRenderType(), type -> new ArrayDeque<>()).offer(this);
+    }
+
+    public void render(PoseStack stack, MultiBufferSource buffer, VertexConsumer consumer, float pTicks) {
+
+        float time = this.age + pTicks - this.delay;
+        if (time < 0 || this.duration <= time) {
             return;
         }
-        Vec3 camPos = cam.getPosition();
-        MultiBufferSource buffer = Minecraft.getInstance().renderBuffers().bufferSource();
-
-        PoseStack stack = RenderHelper.particleStack;
         stack.pushPose();
 
-        double x = MathHelper.interpolate(this.xo, this.x, partialTicks);
-        double y = MathHelper.interpolate(this.yo, this.y, partialTicks);
-        double z = MathHelper.interpolate(this.zo, this.z, partialTicks);
-        stack.translate(x - camPos.x, y - camPos.y, z - camPos.z);
+        double x = MathHelper.interpolate(this.xo, this.x, pTicks);
+        double y = MathHelper.interpolate(this.yo, this.y, pTicks);
+        double z = MathHelper.interpolate(this.zo, this.z, pTicks);
+        stack.translate(x, y, z);
 
-        render(stack, buffer, consumer, getLightColor(partialTicks, x, y, z), time, partialTicks);
+        render(stack, buffer, consumer, getLightColor(pTicks, x, y, z), time, pTicks);
 
         stack.popPose();
     }
@@ -116,7 +79,7 @@ public abstract class CoFHParticle extends Particle {
     @Override
     public ParticleRenderType getRenderType() {
 
-        return RenderTypes.CUSTOM;
+        return ParticleRenderType.CUSTOM;
     }
 
     @Override

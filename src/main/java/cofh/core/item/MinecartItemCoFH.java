@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.BaseRailBlock;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.RailShape;
+import net.minecraft.world.level.gameevent.GameEvent;
 
 public class MinecartItemCoFH extends ItemCoFH {
 
@@ -30,34 +31,35 @@ public class MinecartItemCoFH extends ItemCoFH {
 
     public InteractionResult useOn(UseOnContext context) {
 
-        Level world = context.getLevel();
+        Level level = context.getLevel();
         BlockPos blockpos = context.getClickedPos();
-        BlockState blockstate = world.getBlockState(blockpos);
+        BlockState blockstate = level.getBlockState(blockpos);
 
         if (!blockstate.is(BlockTags.RAILS)) {
             return InteractionResult.FAIL;
         }
         ItemStack stack = context.getItemInHand();
-        if (!world.isClientSide) {
-            RailShape railshape = blockstate.getBlock() instanceof BaseRailBlock rail ? rail.getRailDirection(blockstate, world, blockpos, null) : RailShape.NORTH_SOUTH;
+        if (!level.isClientSide) {
+            RailShape railshape = blockstate.getBlock() instanceof BaseRailBlock rail ? rail.getRailDirection(blockstate, level, blockpos, null) : RailShape.NORTH_SOUTH;
             double d0 = 0.0D;
             if (railshape.isAscending()) {
                 d0 = 0.5D;
             }
-            createMinecart(stack, world, (double) blockpos.getX() + 0.5D, (double) blockpos.getY() + 0.0625D + d0, (double) blockpos.getZ() + 0.5D);
+            createMinecart(stack, level, (double) blockpos.getX() + 0.5D, (double) blockpos.getY() + 0.0625D + d0, (double) blockpos.getZ() + 0.5D);
+            level.gameEvent(GameEvent.ENTITY_PLACE, blockpos, GameEvent.Context.of(context.getPlayer(), level.getBlockState(blockpos.below())));
         }
         stack.shrink(1);
-        return InteractionResult.SUCCESS;
+        return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
-    protected void createMinecart(ItemStack stack, Level world, double posX, double posY, double posZ) {
+    protected void createMinecart(ItemStack stack, Level level, double posX, double posY, double posZ) {
 
-        AbstractMinecartCoFH minecart = factory.createMinecart(world, posX, posY, posZ);
+        AbstractMinecartCoFH minecart = factory.createMinecart(level, posX, posY, posZ);
         if (stack.hasCustomHoverName()) {
             minecart.setCustomName(stack.getHoverName());
         }
         minecart.onPlaced(stack);
-        world.addFreshEntity(minecart);
+        level.addFreshEntity(minecart);
     }
 
     // region FACTORY
@@ -108,11 +110,12 @@ public class MinecartItemCoFH extends ItemCoFH {
                     d3 = -0.9D;
                 }
             }
-            if (stack.getItem() instanceof MinecartItemCoFH) {
-                ((MinecartItemCoFH) stack.getItem()).createMinecart(stack, world, d0, d1 + d3, d2);
+            if (stack.getItem() instanceof MinecartItemCoFH minecartItem) {
+                minecartItem.createMinecart(stack, world, d0, d1 + d3, d2);
                 stack.shrink(1);
+                return stack;
             }
-            return stack;
+            return ItemStack.EMPTY;
         }
     };
     // endregion

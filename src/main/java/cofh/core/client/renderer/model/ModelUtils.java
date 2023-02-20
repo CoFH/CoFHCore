@@ -11,8 +11,6 @@ import net.minecraft.client.resources.model.SimpleBakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -33,7 +31,6 @@ public class ModelUtils {
     public static final ModelProperty<byte[]> SIDES = new ModelProperty<>();
     public static final ModelProperty<ResourceLocation> UNDERLAY = new ModelProperty<>();
 
-    @OnlyIn (Dist.CLIENT)
     public static class WrappedBakedModelBuilder {
 
         private final List<BakedQuad> builderGeneralQuads = new ArrayList<>();

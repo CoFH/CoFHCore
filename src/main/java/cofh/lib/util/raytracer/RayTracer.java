@@ -6,8 +6,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeMod;
 
 public class RayTracer {
@@ -77,7 +75,6 @@ public class RayTracer {
         return player.getAttribute(ForgeMod.REACH_DISTANCE.get()).getValue();
     }
 
-    @OnlyIn (Dist.CLIENT)
     private static double getBlockReachDistanceClient() {
 
         return Minecraft.getInstance().gameMode.getPickRange();

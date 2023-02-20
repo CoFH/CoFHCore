@@ -1,5 +1,6 @@
 package cofh.core.event;
 
+import cofh.core.client.model.FluidContainerItemModel;
 import cofh.core.client.particle.impl.*;
 import cofh.lib.api.item.IColorableItem;
 import net.minecraft.client.color.item.ItemColors;
@@ -48,6 +49,7 @@ public class CoreClientSetupEvents {
     @SubscribeEvent
     public static void registerModels(final RegisterGeometryLoaders event) {
 
+        event.register("fluid_container", new FluidContainerItemModel.Loader());
     }
 
     @SubscribeEvent
@@ -69,6 +71,7 @@ public class CoreClientSetupEvents {
         event.register(BEAM.get(), BeamParticle::factory);
         event.register(STRAIGHT_ARC.get(), ArcParticle::factory);
         event.register(SHARD.get(), ShardParticle::factory);
+        event.register(STREAM.get(), StreamParticle::factory);
     }
 
     // region HELPERS

@@ -11,17 +11,18 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 
-@OnlyIn (Dist.CLIENT)
 public class BeamParticle extends PointToPointParticle {
+
+    //The displacement, i.e. the start point subtracted from the end point.
+    protected Vector3f disp;
 
     private BeamParticle(BiColorParticleOptions data, ClientLevel level, double sx, double sy, double sz, double ex, double ey, double ez) {
 
         super(data, level, sx, sy, sz, ex, ey, ez);
+        this.disp = new Vector3f((float) (ex - sx), (float) (ey - sy), (float) (ez - sz));
     }
 
     @Override

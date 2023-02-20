@@ -1,5 +1,6 @@
 package cofh.core.util.helpers;
 
+import cofh.lib.api.item.IFluidContainerItem;
 import cofh.lib.fluid.FluidStorageCoFH;
 import cofh.lib.tags.FluidTagsCoFH;
 import cofh.lib.util.helpers.BlockHelper;
@@ -203,6 +204,12 @@ public final class FluidHelper {
 
         if (!container.isEmpty()) {
             Optional<FluidStack> fluidContained = getFluidHandlerCap(container).map(c -> c.getFluidInTank(0));
+            if (fluidContained.isPresent() && !fluidContained.get().isEmpty()) {
+                return fluidContained;
+            }
+            if (container.getItem() instanceof IFluidContainerItem fluidContainerItem) {
+                fluidContained = Optional.of(fluidContainerItem.getFluid(container));
+            }
             if (fluidContained.isPresent() && !fluidContained.get().isEmpty()) {
                 return fluidContained;
             }

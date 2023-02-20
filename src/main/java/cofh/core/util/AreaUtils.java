@@ -115,13 +115,11 @@ public class AreaUtils {
         return succeeded;
     };
 
-    public static final IBlockTransformer ICE_TRANSFORM = (world, pos, face, entity) -> {
+
+    public static final IBlockTransformer ICE_TRANSFORM_TEMPORARY = (world, pos, face, entity) -> {
 
         boolean succeeded = false;
         BlockState state = world.getBlockState(pos);
-        // TODO separate config values pain
-        boolean permanentWater = true;
-        boolean permanentLava = true;
 
         // CAMPFIRE/FIRE
         if (AreaUtils.isLitCampfire(state)) {
@@ -138,18 +136,44 @@ public class AreaUtils {
         // WATER
         boolean isFull = state.getBlock() == WATER && state.getValue(LiquidBlock.LEVEL) == 0;
         if (state.getMaterial() == Material.WATER && isFull && state.canSurvive(world, pos) && world.isUnobstructed(state, pos, CollisionContext.empty())) {
-            succeeded |= world.setBlockAndUpdate(pos, permanentWater ? ICE.defaultBlockState() : FROSTED_ICE.defaultBlockState());
-            if (!permanentWater) {
-                world.scheduleTick(pos, FROSTED_ICE, MathHelper.nextInt(world.random, 60, 120));
-            }
+            succeeded |= world.setBlockAndUpdate(pos, FROSTED_ICE.defaultBlockState());
+            world.scheduleTick(pos, FROSTED_ICE, MathHelper.nextInt(world.random, 60, 120));
         }
         // LAVA
         isFull = state.getBlock() == LAVA && state.getValue(LiquidBlock.LEVEL) == 0;
         if (state.getMaterial() == Material.LAVA && isFull && state.canSurvive(world, pos) && world.isUnobstructed(state, pos, CollisionContext.empty())) {
-            succeeded |= world.setBlockAndUpdate(pos, permanentLava ? OBSIDIAN.defaultBlockState() : GLOSSED_MAGMA.get().defaultBlockState());
-            if (!permanentLava) {
-                world.scheduleTick(pos, GLOSSED_MAGMA.get(), MathHelper.nextInt(world.random, 60, 120));
-            }
+            succeeded |= world.setBlockAndUpdate(pos, GLOSSED_MAGMA.get().defaultBlockState());
+            world.scheduleTick(pos, GLOSSED_MAGMA.get(), MathHelper.nextInt(world.random, 60, 120));
+        }
+        return succeeded;
+    };
+
+    public static final IBlockTransformer ICE_TRANSFORM = (world, pos, face, entity) -> {
+
+        boolean succeeded = false;
+        BlockState state = world.getBlockState(pos);
+
+        // CAMPFIRE/FIRE
+        if (AreaUtils.isLitCampfire(state)) {
+            succeeded |= world.setBlockAndUpdate(pos, state.setValue(BlockStateProperties.LIT, false));
+        }
+        // SNOW
+        if (world.isEmptyBlock(pos) && AreaUtils.isValidSnowPosition(world, pos)) {
+            succeeded |= world.setBlockAndUpdate(pos, SNOW.defaultBlockState());
+        }
+        // FIRE
+        if (state.getBlock() == FIRE) {
+            succeeded |= world.setBlockAndUpdate(pos, AIR.defaultBlockState());
+        }
+        // WATER
+        boolean isFull = state.getBlock() == WATER && state.getValue(LiquidBlock.LEVEL) == 0;
+        if (state.getMaterial() == Material.WATER && isFull && state.canSurvive(world, pos) && world.isUnobstructed(state, pos, CollisionContext.empty())) {
+            succeeded |= world.setBlockAndUpdate(pos, ICE.defaultBlockState());
+        }
+        // LAVA
+        isFull = state.getBlock() == LAVA && state.getValue(LiquidBlock.LEVEL) == 0;
+        if (state.getMaterial() == Material.LAVA && isFull && state.canSurvive(world, pos) && world.isUnobstructed(state, pos, CollisionContext.empty())) {
+            succeeded |= world.setBlockAndUpdate(pos, OBSIDIAN.defaultBlockState());
         }
         return succeeded;
     };
