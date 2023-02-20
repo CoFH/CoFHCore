@@ -143,6 +143,9 @@ public abstract class ElementResourceStorage extends ElementBase {
 
     protected int getScaled(int scale) {
 
+        if (storage.isCreative()) {
+            return scale;
+        }
         double fraction = (double) storage.getStored() * scale / storage.getCapacity();
         int amount = MathHelper.clamp(MathHelper.round(fraction), 0, scale);
         return fraction > 0 ? Math.max(minDisplay, amount) : amount;

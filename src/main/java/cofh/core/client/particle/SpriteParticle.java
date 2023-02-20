@@ -1,7 +1,6 @@
 package cofh.core.client.particle;
 
 import cofh.core.client.particle.options.ColorParticleOptions;
-import cofh.core.util.helpers.vfx.RenderTypes;
 import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -32,9 +31,51 @@ public abstract class SpriteParticle extends ColorParticle {
     }
 
     @Override
+    public void tick() {
+
+        this.xo = this.x;
+        this.yo = this.y;
+        this.zo = this.z;
+        if (this.age >= this.lifetime) {
+            this.remove();
+            return;
+        }
+        if (this.age++ < this.delay) {
+            return;
+        }
+        setSprite();
+        this.move(this.xd, this.yd, this.zd);
+        updateVelocity();
+    }
+
+    protected void setSprite() {
+
+        int max = MathHelper.ceil(this.duration * 128);
+        int time = MathHelper.clamp(MathHelper.floor((this.age - this.delay) * 128), 0, max);
+        this.sprite = sprites.get(time, max);
+    }
+
+    protected void updateVelocity() {
+
+        this.yd -= 0.04D * (double)this.gravity;
+        if (this.speedUpWhenYMotionIsBlocked && this.y == this.yo) {
+            this.xd *= 1.1D;
+            this.zd *= 1.1D;
+        }
+
+        this.xd *= this.friction;
+        this.yd *= this.friction;
+        this.zd *= this.friction;
+        if (this.onGround) {
+            this.xd *= 0.7F;
+            this.zd *= 0.7F;
+        }
+    }
+
+    @Override
     public ParticleRenderType getRenderType() {
 
-        return RenderTypes.PARTICLE_SHEET_TRANSLUCENT;
+        return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
     }
 
     @Override

@@ -4,8 +4,6 @@ import cofh.lib.inventory.wrapper.InvWrapperCoFH;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
@@ -59,7 +57,6 @@ public class SlotCoFH extends Slot {
         return container.canPlaceItem(slot, stack);
     }
 
-    @OnlyIn (Dist.CLIENT)
     @Override
     public boolean isActive() {
 

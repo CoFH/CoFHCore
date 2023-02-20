@@ -65,6 +65,7 @@ public class CoreIDs {
     public static final String ID_PARTICLE_EXPLOSION = "explosion";
     public static final String ID_PARTICLE_BEAM = "beam";
     public static final String ID_PARTICLE_SHARD = "shard";
+    public static final String ID_PARTICLE_STREAM = "stream";
 
     public static final String ID_SOUND_ELECTRICITY = ID_COFH_CORE + ":misc.electricity";
 
