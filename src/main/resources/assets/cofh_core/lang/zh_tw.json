@@ -213,6 +213,8 @@
   "enchantment.minecraft.unbreaking.desc": "降低耐久度損耗機率。",
   "enchantment.minecraft.vanishing_curse.desc": "帶有該附魔的物品會在使用者死亡後澈底消失。",
 
+  "fluid_type.minecraft.milk": "Milk",
+
   "item.minecraft.lingering_potion.effect.amplification": "滯留 增幅藥水",
   "item.minecraft.lingering_potion.effect.clarity": "滯留 洞察藥水",
   "item.minecraft.lingering_potion.effect.enderference": "滯留 終界抑制藥水",
