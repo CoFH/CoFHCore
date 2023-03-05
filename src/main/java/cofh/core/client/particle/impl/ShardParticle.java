@@ -44,7 +44,7 @@ public class ShardParticle extends PointToPointParticle {
     @Override
     public void render(PoseStack stack, MultiBufferSource buffer, VertexConsumer consumer, int packedLight, float time, float pTicks) {
 
-        float progress = time / duration;
+        float progress = 1.0F - MathHelper.cos(time / duration * MathHelper.F_PI * 0.5F);
         float dx = disp.x() * progress;
         float dy = disp.y() * progress;
         float dz = disp.z() * progress;

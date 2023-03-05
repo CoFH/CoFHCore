@@ -64,8 +64,8 @@ public class WindVortexParticle extends CylindricalParticle {
             poss[i] = new Vector4f(r * MathHelper.cos(rot), 0.25F, r * MathHelper.sin(rot), 1.0F);
         }
         Color color = c0.scaleAlpha(easePlat);
-        VFXHelper.renderStreamLine(stack, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLight, poss, color, VFXHelper.getWidthFunc((float) rand.nextDouble(0.04F, 0.05F)));
-        VFXHelper.renderCyclone(stack, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLight, 1, (float) rand.nextDouble(0.04F, 0.05F), progress * 0.5F + (float) rand.nextDouble(420F), color.a * 0.00392157F);
+        VFXHelper.renderStreamLine(stack, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLight, poss, color, VFXHelper.getWidthFunc((float) rand.nextDouble(0.05F, 0.07F)));
+        VFXHelper.renderCyclone(stack, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLight, 1, (float) rand.nextDouble(0.05F, 0.07F), progress * 0.5F + (float) rand.nextDouble(420F), color.a * 0.00392157F);
     }
 
     @Nonnull
