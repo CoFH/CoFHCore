@@ -1,22 +1,27 @@
 package cofh.core.network.packet.server;
 
 import cofh.core.CoFHCore;
+import cofh.core.item.IBlockRayTraceItem;
 import cofh.core.util.helpers.ItemHelper;
 import cofh.lib.network.packet.IPacketServer;
 import cofh.lib.network.packet.PacketBase;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
 import static cofh.core.network.packet.PacketIDs.PACKET_ITEM_RAYTRACE_BLOCK;
 
 public class ItemRayTraceBlockPacket extends PacketBase implements IPacketServer {
 
-    protected BlockPos pos;
+    protected InteractionHand hand;
     protected Vec3 origin;
-    protected Vec3 hit;
+    protected BlockHitResult result;
 
     public ItemRayTraceBlockPacket() {
 
@@ -26,41 +31,39 @@ public class ItemRayTraceBlockPacket extends PacketBase implements IPacketServer
     @Override
     public void handleServer(ServerPlayer player) {
 
-        if (!ItemHelper.isPlayerHoldingEntityRayTraceItem(player)) {
-            return;
+        ItemStack stack = player.getItemInHand(hand);
+        if (stack.getItem() instanceof IBlockRayTraceItem item) {
+            item.handleBlockRayTrace(player.level, player, hand, stack, origin, result);
         }
-        ItemHelper.onRayTraceBlock(player, pos, origin, hit);
     }
 
     @Override
     public void write(FriendlyByteBuf buf) {
 
-        buf.writeBlockPos(pos);
+        buf.writeEnum(hand);
         buf.writeDouble(origin.x);
         buf.writeFloat((float) origin.y);
         buf.writeDouble(origin.z);
-        buf.writeDouble(hit.x);
-        buf.writeFloat((float) hit.y);
-        buf.writeDouble(hit.z);
+        buf.writeBlockHitResult(result);
     }
 
     @Override
     public void read(FriendlyByteBuf buf) {
 
-        this.pos = buf.readBlockPos();
+        this.hand = buf.readEnum(InteractionHand.class);
         this.origin = new Vec3(buf.readDouble(), buf.readFloat(), buf.readDouble());
-        this.hit = new Vec3(buf.readDouble(), buf.readFloat(), buf.readDouble());
+        this.result = buf.readBlockHitResult();
     }
 
-    public static void sendToServer(Player player, BlockPos pos, Vec3 origin, Vec3 hit) {
+    public static void sendToServer(Player player, InteractionHand hand, Vec3 origin, BlockHitResult result) {
 
         if (player.level.isClientSide) {
             Player client = CoFHCore.PROXY.getClientPlayer();
             if (client != null && client.equals(player)) {
                 ItemRayTraceBlockPacket packet = new ItemRayTraceBlockPacket();
-                packet.pos = pos;
+                packet.hand = hand;
                 packet.origin = origin;
-                packet.hit = hit;
+                packet.result = result;
                 packet.sendToServer();
             }
         }

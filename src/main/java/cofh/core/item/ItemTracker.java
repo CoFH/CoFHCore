@@ -1,6 +1,5 @@
-package cofh.lib.util;
+package cofh.core.item;
 
-import cofh.core.item.ITrackedItem;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;

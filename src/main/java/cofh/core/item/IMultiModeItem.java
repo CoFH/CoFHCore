@@ -14,12 +14,17 @@ import static cofh.lib.util.constants.NBTTags.TAG_MODE;
  */
 public interface IMultiModeItem {
 
+    default CompoundTag getOrCreateModeTag(ItemStack stack) {
+
+        return stack.getOrCreateTag();
+    }
+
     /**
      * Get the current mode of an item.
      */
     default int getMode(ItemStack stack) {
 
-        return !stack.hasTag() ? 0 : stack.getTag().getInt(TAG_MODE);
+        return getOrCreateModeTag(stack).getInt(TAG_MODE);
     }
 
     /**
@@ -34,11 +39,8 @@ public interface IMultiModeItem {
         if (getNumModes(stack) <= 1) {
             mode = 0;
         }
-        if (!stack.hasTag()) {
-            stack.setTag(new CompoundTag());
-        }
         if (mode < getNumModes(stack)) {
-            stack.getTag().putInt("Mode", mode);
+            getOrCreateModeTag(stack).putInt(TAG_MODE, mode);
             return true;
         }
         return false;
@@ -52,15 +54,12 @@ public interface IMultiModeItem {
         if (getNumModes(stack) <= 1) {
             return false;
         }
-        if (!stack.hasTag()) {
-            stack.setTag(new CompoundTag());
-        }
         int curMode = getMode(stack);
         ++curMode;
         if (curMode >= getNumModes(stack)) {
             curMode = 0;
         }
-        stack.getTag().putInt("Mode", curMode);
+        getOrCreateModeTag(stack).putInt(TAG_MODE, curMode);
         return true;
     }
 
@@ -73,15 +72,12 @@ public interface IMultiModeItem {
         if (getNumModes(stack) <= 2) {
             return false;
         }
-        if (!stack.hasTag()) {
-            stack.setTag(new CompoundTag());
-        }
         int curMode = getMode(stack);
         --curMode;
         if (curMode < 0) {
             curMode = getNumModes(stack) - 1;
         }
-        stack.getTag().putInt("Mode", curMode);
+        getOrCreateModeTag(stack).putInt(TAG_MODE, curMode);
         return true;
     }
 

@@ -1,20 +1,13 @@
 package cofh.core.item;
 
 import cofh.core.client.particle.options.BiColorParticleOptions;
-import cofh.core.client.particle.options.ColorParticleOptions;
-import cofh.core.init.CoreParticles;
-import cofh.core.util.helpers.ArcheryHelper;
-import cofh.core.util.helpers.vfx.Color;
 import cofh.lib.util.Constants;
 import net.minecraft.core.BlockPos;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -22,16 +15,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.Comparator;
-import java.util.Optional;
 import java.util.Random;
+
+import static cofh.core.init.CoreParticles.STREAM;
 
 public class DevStickItem extends ItemCoFH implements IEntityRayTraceItem, ITrackedItem {
 
@@ -70,6 +59,12 @@ public class DevStickItem extends ItemCoFH implements IEntityRayTraceItem, ITrac
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
 
         ItemStack stack = player.getItemInHand(hand);
+
+        if (level.isClientSide()) {
+            Vec3 pos = player.getEyePosition();
+            Vec3 to = player.getEyePosition().add(10, 0, 0);
+            level.addParticle(new BiColorParticleOptions(STREAM.get(), 6, 200, 0, 0xFFFFFFFF, 0xFFFFFFFF), pos.x, pos.y, pos.z, to.x, to.y, to.z);
+        }
         //player.startUsingItem(hand);
         //if (level.isClientSide) {
         //}
@@ -90,39 +85,6 @@ public class DevStickItem extends ItemCoFH implements IEntityRayTraceItem, ITrac
     @Override
     public void onUseTick(Level level, LivingEntity living, ItemStack stack, int durationRemaining) {
 
-        int duration = getUseDuration(stack) - durationRemaining;
-        Random rand = new Random();
-        if (level.isClientSide) {
-            if (duration % 6 == 0) {
-                float spread = 0.01F; //MathHelper.clamp(MathHelper.sqrt(Math.max(duration * 0.05F - 0.2F, 0)), 0.01F, 1.5F);
-                Vec3 start = living.getEyePosition();
-                Vec3 look = living.getLookAngle();
-                Vec3 end = start.add(look.scale(16)).add(rand.nextFloat(-spread, spread), rand.nextFloat(-spread, spread), rand.nextFloat(-spread, spread));
-
-                BlockHitResult blockHit = level.clip(new ClipContext(start, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, null));
-                if (blockHit.getType() != HitResult.Type.MISS) {
-                    end = blockHit.getLocation();
-                }
-                Optional<EntityHitResult> closest = ArcheryHelper.findHitEntities(level, null, start, end, 0.0F, EntitySelector.LIVING_ENTITY_STILL_ALIVE.and(EntitySelector.NO_CREATIVE_OR_SPECTATOR))
-                        .min(Comparator.comparingDouble(result -> result.getLocation().distanceToSqr(start)));
-                if (closest.isPresent()) {
-                    end = closest.get().getLocation();
-                    if (living instanceof Player player) {
-                        sendEntityRayTrace(player, closest.get().getEntity(), start, end);
-                    }
-                }
-                level.playLocalSound(start.x, start.y, start.z, SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, 0.5F, 0.5F + spread * 0.2F + rand.nextFloat(0.1F), false);
-
-                Vec3 pos = start.add(look.cross(new Vec3(0, 0.3, 0))).add(0, -0.1, 0).add(look.scale(0.35F));
-                float time = (float) end.subtract(start).length() * 0.2F;
-                int rgba = 0xac3ad0ff;
-                level.addParticle(new BiColorParticleOptions(CoreParticles.SHARD.get(), 2.0F, time, 0, rgba, 0x7426a9ff), pos.x, pos.y, pos.z, end.x, end.y, end.z);
-                level.addParticle(new ColorParticleOptions(CoreParticles.BLAST.get(), 1.0F, 4 + rand.nextInt(2), time,
-                                Color.fromRGBA(rgba).scaleRGB(rand.nextFloat(0.85F, 1.15F)).toRGBA()),
-                        end.x, end.y, end.z, 0, 0, 0);
-
-            }
-        }
     }
 
     @Override
@@ -137,7 +99,7 @@ public class DevStickItem extends ItemCoFH implements IEntityRayTraceItem, ITrac
     }
 
     @Override
-    public void handleEntityRayTrace(Level level, ItemStack stack, Player player, Entity target, Vec3 origin, Vec3 hit) {
+    public void handleEntityRayTrace(Level level, Player player, InteractionHand hand, ItemStack stack, Vec3 origin, Entity target, Vec3 hit) {
 
         if (target instanceof LivingEntity living) {
             int invuln = living.invulnerableTime;
