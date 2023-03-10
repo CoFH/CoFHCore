@@ -55,9 +55,9 @@ public class CoreClientSetupEvents {
     @SubscribeEvent
     public static void registerParticleFactories(final RegisterParticleProvidersEvent event) {
 
-        event.register(FROST.get(), FrostParticle.Factory::new);
-        event.register(PLASMA.get(), PlasmaBallParticle.Factory::new);
-        event.register(SPARK.get(), SparkParticle.Factory::new);
+        event.register(FROST.get(), FrostParticle::factory);
+        event.register(PLASMA.get(), PlasmaBallParticle::factory);
+        event.register(SPARK.get(), SparkParticle::factory);
 
         event.register(FIRE.get(), FireParticle::factory);
         event.register(BLAST.get(), BlastParticle::factory);

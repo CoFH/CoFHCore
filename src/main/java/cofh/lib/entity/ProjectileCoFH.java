@@ -30,14 +30,17 @@ import java.util.stream.Stream;
 
 public class ProjectileCoFH extends Projectile {
 
+    protected float power;
+
     public ProjectileCoFH(EntityType<? extends ProjectileCoFH> type, Level level) {
 
         super(type, level);
     }
 
-    public ProjectileCoFH(EntityType<? extends ProjectileCoFH> type, Level level, Entity owner, Vec3 position, Vec3 velocity) {
+    public ProjectileCoFH(EntityType<? extends ProjectileCoFH> type, Level level, Entity owner, Vec3 position, Vec3 velocity, float power) {
 
         this(type, level);
+        this.power = power;
         setOwner(owner);
         setPos(position);
         setDeltaMovement(velocity);
@@ -173,6 +176,11 @@ public class ProjectileCoFH extends Projectile {
         this.setYRot((float) (Mth.atan2(velocity.x, velocity.z) * MathHelper.TO_DEG));
     }
 
+    public float getPower() {
+
+        return power;
+    }
+
     public void fireTick() {
 
         boolean inLava = this.isInLava();
@@ -209,6 +217,12 @@ public class ProjectileCoFH extends Projectile {
 
         Entity owner = getOwner();
         return owner == null ? super.getSoundSource() : owner.getSoundSource();
+    }
+
+    @Override
+    public boolean shouldRenderAtSqrDistance(double sqrDist) {
+
+        return sqrDist < 4096 * getViewScale();
     }
 
 }

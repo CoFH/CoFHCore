@@ -1,9 +1,11 @@
 package cofh.core.client.particle.impl;
 
+import cofh.core.client.particle.options.ColorParticleOptions;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.core.particles.SimpleParticleType;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class PlasmaBallParticle extends TextureSheetParticle {
@@ -55,23 +57,10 @@ public class PlasmaBallParticle extends TextureSheetParticle {
         }
     }
 
-    public static class Factory implements ParticleProvider<SimpleParticleType> {
+    @Nonnull
+    public static ParticleProvider<SimpleParticleType> factory(SpriteSet spriteSet) {
 
-        private final SpriteSet spriteSet;
-
-        public Factory(SpriteSet sprite) {
-
-            this.spriteSet = sprite;
-        }
-
-        @Nullable
-        @Override
-        public Particle createParticle(SimpleParticleType data, ClientLevel level, double x, double y, double z, double dx, double dy, double dz) {
-
-            PlasmaBallParticle particle = new PlasmaBallParticle(level, x, y, z, dx, dy, dz, spriteSet);
-            return particle;
-        }
-
+        return (data, level, x, y, z, dx, dy, dz) -> new PlasmaBallParticle(level, x, y, z, dx, dy, dz, spriteSet);
     }
 
 }

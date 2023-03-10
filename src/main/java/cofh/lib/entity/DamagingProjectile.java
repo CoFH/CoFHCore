@@ -9,8 +9,6 @@ import net.minecraft.world.phys.Vec3;
 
 public abstract class DamagingProjectile extends ProjectileCoFH {
 
-    protected float power;
-
     public DamagingProjectile(EntityType<? extends DamagingProjectile> type, Level level) {
 
         super(type, level);
@@ -18,8 +16,7 @@ public abstract class DamagingProjectile extends ProjectileCoFH {
 
     public DamagingProjectile(EntityType<? extends DamagingProjectile> type, Level level, Entity owner, Vec3 position, Vec3 velocity, float power) {
 
-        super(type, level, owner, position, velocity);
-        this.power = power;
+        super(type, level, owner, position, velocity, power);
     }
 
     @Override
@@ -33,11 +30,6 @@ public abstract class DamagingProjectile extends ProjectileCoFH {
 
     protected void onHurt(EntityHitResult result) {
 
-    }
-
-    public float getPower() {
-
-        return power;
     }
 
     public abstract float getDamage(EntityHitResult result);

@@ -67,17 +67,7 @@ public class RayTracer {
 
     public static double getBlockReachDistance(Player player) {
 
-        return player.level.isClientSide ? getBlockReachDistanceClient() : player instanceof ServerPlayer serverplayer ? getBlockReachDistanceServer(serverplayer) : 5D;
-    }
-
-    private static double getBlockReachDistanceServer(ServerPlayer player) {
-
-        return player.getAttribute(ForgeMod.REACH_DISTANCE.get()).getValue();
-    }
-
-    private static double getBlockReachDistanceClient() {
-
-        return Minecraft.getInstance().gameMode.getPickRange();
+        return player.getReachDistance();
     }
 
 }
