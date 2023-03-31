@@ -5,9 +5,10 @@ import cofh.core.capability.CapabilityAreaEffect;
 import cofh.core.capability.CapabilityShieldItem;
 import cofh.core.client.gui.FluidFilterScreen;
 import cofh.core.client.gui.ItemFilterScreen;
+import cofh.core.client.renderer.entity.ElectricFieldRenderer;
 import cofh.core.client.renderer.entity.model.ArmorFullSuitModel;
-import cofh.core.client.renderer.entity.model.ElectricArcRenderer;
-import cofh.core.client.renderer.entity.model.KnifeRenderer;
+import cofh.core.client.renderer.entity.ElectricArcRenderer;
+import cofh.core.client.renderer.entity.KnifeRenderer;
 import cofh.core.command.CoFHCommand;
 import cofh.core.compat.curios.CuriosProxy;
 import cofh.core.compat.quark.QuarkFlags;
@@ -221,8 +222,9 @@ public class CoFHCore {
     private void entityRendererSetup(final EntityRenderersEvent.RegisterRenderers event) {
 
         event.registerEntityRenderer(KNIFE.get(), KnifeRenderer::new);
+        event.registerEntityRenderer(SHOCKWAVE.get(), NothingRenderer::new);
         event.registerEntityRenderer(ELECTRIC_ARC.get(), ElectricArcRenderer::new);
-        event.registerEntityRenderer(ELECTRIC_FIELD.get(), NothingRenderer::new);
+        event.registerEntityRenderer(ELECTRIC_FIELD.get(), ElectricFieldRenderer::new);
     }
 
     private void capSetup(RegisterCapabilitiesEvent event) {

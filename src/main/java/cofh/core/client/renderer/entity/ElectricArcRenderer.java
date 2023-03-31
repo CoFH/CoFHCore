@@ -1,4 +1,4 @@
-package cofh.core.client.renderer.entity.model;
+package cofh.core.client.renderer.entity;
 
 import cofh.core.entity.ElectricArc;
 import cofh.core.util.helpers.vfx.Color;

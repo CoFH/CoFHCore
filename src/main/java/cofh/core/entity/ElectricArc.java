@@ -45,7 +45,7 @@ public class ElectricArc extends AbstractAoESpell {
     public void activeTick() {
 
         if (level.isClientSide) {
-            level.addParticle((SimpleParticleType) SPARK.get(), this.getX() + random.nextGaussian() * radius, this.getY() + random.nextFloat() * 0.25F, this.getZ() + random.nextGaussian() * radius, 0.0D, 0.0D, 0.0D);
+            level.addParticle(SPARK.get(), this.getX() + random.nextGaussian() * radius, this.getY() + random.nextFloat() * 0.25F, this.getZ() + random.nextGaussian() * radius, 0.0D, 0.0D, 0.0D);
         }
     }
 
@@ -53,7 +53,7 @@ public class ElectricArc extends AbstractAoESpell {
     public void onCast() {
 
         if (level.isClientSide) {
-            level.addParticle((SimpleParticleType) PLASMA.get(), this.getX(), this.getY() + 6, this.getZ(), 0.0D, 0.0D, 0.0D);
+            level.addParticle(PLASMA.get(), this.getX(), this.getY() + 6, this.getZ(), 0.0D, 0.0D, 0.0D);
         } else {
             strike();
         }

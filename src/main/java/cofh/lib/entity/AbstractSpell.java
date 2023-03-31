@@ -35,7 +35,7 @@ public abstract class AbstractSpell extends Entity {
             onCast();
             this.firstTick = false;
         }
-        if (tickCount > duration) {
+        if (!level.isClientSide() && tickCount > duration) {
             this.discard();
         } else {
             activeTick();

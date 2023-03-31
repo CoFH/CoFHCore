@@ -46,6 +46,11 @@ public final class VFXHelper {
         return new VFXNode(MathHelper.interpolate(a.xp, b.xp, d), MathHelper.interpolate(a.xn, b.xn, d), MathHelper.interpolate(a.yp, b.yp, d), MathHelper.interpolate(a.yn, b.yn, d), MathHelper.interpolate(a.z, b.z, d), MathHelper.interpolate(a.width, b.width, d));
     }
 
+    public static Vector4f interpolate(Vector4f a, Vector4f b, float d) {
+
+        return new Vector4f(MathHelper.interpolate(a.x(), b.x(), d), MathHelper.interpolate(a.y(), b.y(), d), MathHelper.interpolate(a.z(), b.z(), d), MathHelper.interpolate(a.w(), b.w(), d));
+    }
+
     private static VFXNode interpolateCap(VFXNode a, VFXNode b) {
 
         return interpolate(a, b, 1.0F + b.width * 0.5F / MathHelper.dist(a.xMid() - b.xMid(), a.yMid() - b.yMid(), a.z - b.z)); //TODO

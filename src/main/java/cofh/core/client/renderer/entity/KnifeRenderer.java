@@ -1,4 +1,4 @@
-package cofh.core.client.renderer.entity.model;
+package cofh.core.client.renderer.entity;
 
 import cofh.core.entity.Knife;
 import cofh.core.util.helpers.RenderHelper;
