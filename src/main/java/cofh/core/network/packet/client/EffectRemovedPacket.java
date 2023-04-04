@@ -12,6 +12,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import static cofh.core.network.packet.PacketIDs.PACKET_EFFECT_REMOVE;
+import static cofh.lib.util.Constants.NETWORK_UPDATE_DISTANCE;
 import static cofh.lib.util.Utils.getRegistryName;
 
 public class EffectRemovedPacket extends PacketBase implements IPacketClient {
@@ -58,7 +59,7 @@ public class EffectRemovedPacket extends PacketBase implements IPacketClient {
             EffectRemovedPacket packet = new EffectRemovedPacket();
             packet.entity = entity;
             packet.effect = effect;
-            packet.sendToClients();
+            packet.sendToAllAround(entity.position(), NETWORK_UPDATE_DISTANCE, entity.level.dimension());
         }
     }
 
