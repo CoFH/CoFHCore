@@ -11,6 +11,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import static cofh.core.network.packet.PacketIDs.PACKET_EFFECT_ADD;
+import static cofh.lib.util.Constants.NETWORK_UPDATE_DISTANCE;
 
 public class EffectAddedPacket extends PacketBase implements IPacketClient {
 
@@ -54,7 +55,7 @@ public class EffectAddedPacket extends PacketBase implements IPacketClient {
             EffectAddedPacket packet = new EffectAddedPacket();
             packet.entity = entity;
             packet.effect = effect;
-            packet.sendToClients();
+            packet.sendToAllAround(entity.position(), NETWORK_UPDATE_DISTANCE, entity.level.dimension());
         }
     }
 
