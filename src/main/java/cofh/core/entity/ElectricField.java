@@ -29,6 +29,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 import static cofh.core.init.CoreEntities.ELECTRIC_FIELD;
 
@@ -50,6 +51,7 @@ public class ElectricField extends AbstractAoESpell implements IEntityAdditional
         this.radius = radius;
         this.duration = duration;
         this.power = power;
+        setBoundingBox(getBoundingBox().inflate(radius));
     }
 
     public ElectricField(Level level, Vec3 pos, float radius, int duration) {
@@ -58,7 +60,7 @@ public class ElectricField extends AbstractAoESpell implements IEntityAdditional
     }
 
     @Override
-    public void tick() {
+    public void activeTick() {
 
         if (!level.isClientSide()) {
             int max = 16;
@@ -69,19 +71,22 @@ public class ElectricField extends AbstractAoESpell implements IEntityAdditional
                 ++lastArc;
             }
         }
-        super.tick();
     }
 
     protected void summonArc() {
 
         Vec3 pos = position();
-        List<Entity> entities = AreaUtils.getEntitiesInSphere(level, position(), radius, this, EntitySelector.LIVING_ENTITY_STILL_ALIVE.and(entity -> !entity.equals(owner)));
+        Predicate<Entity> filter = EntitySelector.LIVING_ENTITY_STILL_ALIVE;
+        if (owner != null) {
+            filter = filter.and(entity -> !entity.isPassengerOfSameVehicle(owner));
+        }
+        List<Entity> entities = AreaUtils.getEntitiesInSphere(level, pos, radius, this, filter);
 
         Vec3 end;
         if (random.nextInt(5) < entities.size()) {
             end = entities.get(random.nextInt(entities.size())).getBoundingBox().getCenter();
         } else {
-            end = new Vec3(random.nextFloat() * 2 - 1, -random.nextFloat(), random.nextFloat() * 2 - 1).normalize().scale(radius).add(pos);
+            end = new Vec3(random.nextGaussian(), -Math.abs(random.nextGaussian()), random.nextGaussian()).normalize().scale(radius).add(pos);
         }
         pos = pos.add(0, radius - 0.5F, 0);
 
@@ -97,12 +102,6 @@ public class ElectricField extends AbstractAoESpell implements IEntityAdditional
                 living.addEffect(new MobEffectInstance(CoreMobEffects.SHOCKED.get(), 80, 0, true, false, true));
             }
         });
-    }
-
-    @Override
-    public AABB getBoundingBoxForCulling() {
-
-        return this.getBoundingBox().inflate(radius);
     }
 
     public float getRadius() {
@@ -132,6 +131,7 @@ public class ElectricField extends AbstractAoESpell implements IEntityAdditional
 
         duration = additionalData.readInt();
         radius = additionalData.readFloat();
+        setBoundingBox(getBoundingBox().inflate(radius));
     }
 
 }

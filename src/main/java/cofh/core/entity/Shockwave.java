@@ -3,6 +3,7 @@ package cofh.core.entity;
 import cofh.core.client.particle.options.CylindricalParticleOptions;
 import cofh.core.init.CoreEntities;
 import cofh.core.util.AreaUtils;
+import cofh.core.util.helpers.vfx.VFXHelper;
 import cofh.lib.entity.AbstractAoESpell;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.core.BlockPos;
@@ -13,6 +14,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 import static cofh.core.init.CoreMobEffects.SUNDERED;
@@ -52,7 +54,24 @@ public class Shockwave extends AbstractAoESpell {
     @Override
     public void activeTick() {
 
-        if (!level.isClientSide()) {
+        if (level.isClientSide()) {
+            BlockPos center = this.blockPosition();
+            VFXHelper.SHOCKWAVE_OFFSETS
+                    .subMap(Math.min(tickCount * speed, radius), Math.min((tickCount + 1) * speed, radius))
+                    .values().forEach(offs -> offs.forEach(off -> {
+                        if (level.getRandom().nextBoolean()) {
+                            for (int y = 1; y >= -1; --y) {
+                                BlockPos pos = center.offset(off.apply(y));
+                                BlockState state = level.getBlockState(pos);
+                                if (!state.isAir() && state.isRedstoneConductor(level, pos) && state.isCollisionShapeFullBlock(level, pos) &&
+                                        !state.hasBlockEntity() && !level.getBlockState(pos.above()).isCollisionShapeFullBlock(level, pos.above())) {
+                                    level.addDestroyBlockEffect(pos, state);
+                                    return;
+                                }
+                            }
+                        }
+                    }));
+        } else {
             attack();
         }
     }

@@ -48,6 +48,7 @@ public class CoreIDs {
     public static final String ID_SHOCKWAVE = "shockwave";
     public static final String ID_ELECTRIC_ARC = "electric_arc";
     public static final String ID_ELECTRIC_FIELD = "electric_field";
+    public static final String ID_FROST_FIELD = "frost_field";
     public static final String ID_BLACK_HOLE = "black_hole";
 
     public static final String ID_PARTICLE_SNOW = "snow";

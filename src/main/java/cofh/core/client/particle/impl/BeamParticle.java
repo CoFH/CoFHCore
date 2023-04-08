@@ -41,7 +41,7 @@ public class BeamParticle extends PointToPointParticle {
         float easeCos = 0.5F * MathHelper.cos(rad * 0.5F) + 0.5F;
         float easeCub = 1.0F - MathHelper.easeInCubic(progress);
         Vector3f end = disp.copy();
-        end.mul(1.0F - MathHelper.cos(Math.min(rad * 2.0F, MathHelper.F_PI * 0.5F)));
+        end.mul(Math.min(time * 12.0F / VFXHelper.length(end), 1.0F));
         VFXHelper.alignVertical(stack, Vector3f.ZERO, end);
         VFXHelper.renderBeam(stack, buffer, packedLight, this.size * easeCos,
                 c0.scaleAlpha(easeCub), c1.scaleAlpha(easeCub));

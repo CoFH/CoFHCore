@@ -1,19 +1,24 @@
 package cofh.core.item;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+import com.mojang.datafixers.util.Pair;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2LongMap;
+import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import java.util.Map;
+import javax.annotation.Nullable;
+
+import java.util.Objects;
 
 import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 import static net.minecraft.world.InteractionHand.MAIN_HAND;
@@ -22,24 +27,54 @@ import static net.minecraft.world.InteractionHand.OFF_HAND;
 @Mod.EventBusSubscriber (modid = ID_COFH_CORE)
 public class ItemTracker {
 
-    protected static Map<Player, TrackedItemData> MAIN_HAND_DATA = new Object2ObjectOpenHashMap<>();
-    protected static Map<Player, TrackedItemData> OFF_HAND_DATA = new Object2ObjectOpenHashMap<>();
-
-    public static Map<Player, TrackedItemData> getMap(InteractionHand hand) {
-
-        return hand == OFF_HAND ? OFF_HAND_DATA : MAIN_HAND_DATA;
+    //TODO weak reference players
+    protected static BiMap<Hand, ItemStack> HELD = HashBiMap.create();
+    protected static Object2IntMap<ItemStack> USING = new Object2IntOpenHashMap<>();
+    protected static Object2LongMap<ItemStack> TIME = new Object2LongOpenHashMap<>();
+    static {
+        USING.defaultReturnValue(-1);
+        TIME.defaultReturnValue(-1);
     }
 
-    public static TrackedItemData getData(Player player, InteractionHand hand) {
+    /**
+     * Gets the duration for which the given item has been used.
+     */
+    public static int getUsingDuration(ItemStack stack) {
 
-        return ItemTracker.getMap(hand).get(player);
+        return USING.getInt(stack);
+    }
+
+    /**
+     * Stores a time value associated with the item until it is swapped off of.
+     */
+    public static void recordTime(ItemStack stack, long time) {
+
+        TIME.computeLongIfPresent(stack, (key, old) -> time);
+    }
+
+    /**
+     * Recalls the previously recorded time value, or -1 if not present.
+     */
+    public static long getRecordedTime(ItemStack stack) {
+
+        return TIME.getLong(stack);
+    }
+
+    @Nullable
+    public static Pair<Player, InteractionHand> getUser(ItemStack stack) {
+
+        Hand hand = HELD.inverse().get(stack);
+        if (hand == null) {
+            return null;
+        }
+        return Pair.of(hand.player, hand.hand);
     }
 
     @SubscribeEvent (priority = EventPriority.LOWEST)
     public static void playerTick(TickEvent.PlayerTickEvent event) {
 
         Player player = event.player;
-        if (event.phase != TickEvent.Phase.START || player.level.isClientSide) {
+        if (event.phase != TickEvent.Phase.START) {
             return;
         }
         updateData(player, MAIN_HAND);
@@ -47,151 +82,87 @@ public class ItemTracker {
     }
 
     @SubscribeEvent (priority = EventPriority.LOWEST)
-    public static void onUse(PlayerInteractEvent.RightClickItem event) {
-
-        if (!event.isCanceled() && event.getCancellationResult() == InteractionResult.SUCCESS && !event.getLevel().isClientSide) {
-            itemUsed(event.getEntity(), event.getHand(), event.getItemStack());
-        }
-    }
-
-    @SubscribeEvent (priority = EventPriority.LOWEST)
-    public static void onUseOn(PlayerInteractEvent.RightClickBlock event) {
-
-        if (!event.isCanceled() && event.getCancellationResult() == InteractionResult.SUCCESS && !event.getLevel().isClientSide) {
-            itemUsed(event.getEntity(), event.getHand(), event.getItemStack());
-        }
-    }
-
-    @SubscribeEvent (priority = EventPriority.LOWEST)
-    public static void onUseEntity(PlayerInteractEvent.EntityInteract event) {
-
-        if (!event.isCanceled() && event.getCancellationResult() == InteractionResult.SUCCESS && !event.getLevel().isClientSide) {
-            itemUsed(event.getEntity(), event.getHand(), event.getItemStack());
-        }
-    }
-
-    @SubscribeEvent (priority = EventPriority.LOWEST)
     public static void onStartUsing(LivingEntityUseItemEvent.Start event) {
 
-        if (!event.isCanceled() && event.getEntity() instanceof Player player && !player.level.isClientSide) {
-            itemUsed(player, player.getUsedItemHand(), event.getItem());
-            itemUsing(player, player.getUsedItemHand(), event.getItem(), event.getDuration());
+        if (!event.isCanceled()) {
+            updateUsing(event.getItem(), event.getDuration());
         }
     }
 
     @SubscribeEvent (priority = EventPriority.LOWEST)
     public static void onTickUsing(LivingEntityUseItemEvent.Tick event) {
 
-        if (!event.isCanceled() && event.getEntity() instanceof Player player && !player.level.isClientSide) {
-            itemUsing(player, player.getUsedItemHand(), event.getItem(), event.getDuration());
+        if (!event.isCanceled()) {
+            updateUsing(event.getItem(), event.getDuration());
         }
     }
 
     @SubscribeEvent
     public static void onEndUsing(LivingEntityUseItemEvent.Stop event) {
 
-        if (event.getEntity() instanceof Player player && !player.level.isClientSide) {
-            itemUsing(player, player.getUsedItemHand(), event.getItem(), -1);
-        }
+        stopUsing(event.getItem());
     }
 
     @SubscribeEvent
     public static void onFinishUsing(LivingEntityUseItemEvent.Finish event) {
 
-        if (event.getEntity() instanceof Player player && !player.level.isClientSide) {
-            itemUsing(player, player.getUsedItemHand(), event.getItem(), -1);
-        }
+        stopUsing(event.getItem());
     }
 
     // region HELPERS
     protected static void updateData(Player player, InteractionHand hand) {
 
-        Map<Player, TrackedItemData> map = getMap(hand);
-        TrackedItemData data = map.get(player);
+        Hand key = new Hand(player, hand);
+        ItemStack previous = HELD.remove(key);
+        int duration = USING.removeInt(previous);
+        long time = TIME.removeLong(previous);
         ItemStack current = player.getItemInHand(hand);
-        if (data == null) {
-            if (current.getItem() instanceof ITrackedItem) {
-                swapTo(player, hand, current);
-            } else {
-                map.remove(player);
+        if (previous != null && previous.getItem() instanceof ITrackedItem item) {
+            if (item.matches(previous, current)) {
+                HELD.put(key, current);
+                USING.put(current, duration);
+                TIME.put(current, time);
+                return;
             }
-        } else if (!(data.matches(current))) {
-            if (data.stack.getItem() instanceof ITrackedItem tracked) {
-                tracked.onSwapFrom(player, hand, data.stack, data.duration);
-            }
-            if (current.getItem() instanceof ITrackedItem) {
-                swapTo(player, hand, current);
-            } else {
-                map.remove(player);
-            }
+            item.onSwapFrom(player, hand, previous, current, duration);
+        }
+        if (current.getItem() instanceof ITrackedItem item) {
+            HELD.put(key, current);
+            USING.put(current, duration);
+            TIME.put(current, time);
+            item.onSwapTo(player, hand, previous, current);
         }
     }
 
-    protected static void swapTo(Player player, InteractionHand hand, ItemStack stack) {
+    protected static void updateUsing(ItemStack stack, int duration) {
 
-        getMap(hand).put(player, new TrackedItemData(stack));
-        if (stack.getItem() instanceof ITrackedItem tracked) {
-            tracked.onSwapTo(player, hand, stack);
-        }
+        USING.computeIntIfPresent(stack, (key, old) -> stack.getUseDuration() - duration);
     }
 
-    protected static void itemUsed(Player player, InteractionHand hand, ItemStack stack) {
+    protected static void stopUsing(ItemStack stack) {
 
-        if (stack.getItem() instanceof ITrackedItem) {
-            Map<Player, TrackedItemData> map = getMap(hand);
-            TrackedItemData data = map.get(player);
-            if (data == null || !data.matches(stack)) {
-                data = new TrackedItemData(stack);
-                map.put(player, data);
-            }
-            data.lastUse = player.level.getGameTime();
-        }
-    }
-
-    protected static void itemUsing(Player player, InteractionHand hand, ItemStack stack, int duration) {
-
-        if (stack.getItem() instanceof ITrackedItem) {
-            Map<Player, TrackedItemData> map = getMap(hand);
-            TrackedItemData data = map.get(player);
-            if (data == null || !data.matches(stack)) {
-                data = new TrackedItemData(stack);
-                map.put(player, data);
-            }
-            if (duration < 0) {
-                data.duration = duration;
-            } else {
-                data.duration = stack.getUseDuration() - duration;
-            }
-        }
+        USING.computeIntIfPresent(stack, (key, old) -> -1);
     }
     // endregion
 
-    public static class TrackedItemData {
+    protected record Hand(Player player, InteractionHand hand) {
 
-        public ItemStack stack;
+        @Override
+        public boolean equals(Object o) {
 
-        /**
-         * The last time the item was starting to be used, i.e. {@link net.minecraft.world.item.Item#use(Level, Player, InteractionHand)}.
-         * -1 if the item has not yet been used after swapping to it.
-         */
-        public long lastUse = -1;
-
-        /**
-         * The number of ticks the item has been used for. -1 if the item is not currently being used.
-         */
-        public int duration = -1;
-
-        public TrackedItemData(ItemStack stack) {
-
-            this.stack = stack;
+            if (this == o) {
+                return true;
+            }
+            if (o instanceof Hand other) {
+                return player.equals(other.player) && player.isLocalPlayer() == other.player.isLocalPlayer() && hand.equals(other.hand);
+            }
+            return false;
         }
 
-        public boolean matches(ItemStack to) {
+        @Override
+        public int hashCode() {
 
-            if (stack.getItem() instanceof ITrackedItem tracked) {
-                return tracked.matches(stack, to);
-            }
-            return ItemStack.matches(stack, to);
+            return Objects.hash(player.isLocalPlayer(), player, hand);
         }
 
     }

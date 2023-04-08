@@ -82,7 +82,7 @@ public class ShardParticle extends PointToPointParticle {
         RenderHelper.renderBipyramid(stack, consumer, packedLight, c0, 4, 0.6F, 0.1F);
         buffer.getBuffer(RenderTypes.LINEAR_GLOW);
         buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT);
-        RenderHelper.renderBipyramid(stack, consumer, packedLight, Color.WHITE, 4, 0.4F, 0.066F);
+        RenderHelper.renderBipyramid(stack, consumer, packedLight, c0.mix(Color.WHITE, 0.5F), 4, 0.4F, 0.066F);
     }
 
     @Nonnull

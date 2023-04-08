@@ -225,6 +225,7 @@ public class CoFHCore {
         event.registerEntityRenderer(SHOCKWAVE.get(), NothingRenderer::new);
         event.registerEntityRenderer(ELECTRIC_ARC.get(), ElectricArcRenderer::new);
         event.registerEntityRenderer(ELECTRIC_FIELD.get(), ElectricFieldRenderer::new);
+        event.registerEntityRenderer(FROST_FIELD.get(), NothingRenderer::new);
     }
 
     private void capSetup(RegisterCapabilitiesEvent event) {

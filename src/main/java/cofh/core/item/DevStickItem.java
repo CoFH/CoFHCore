@@ -114,13 +114,13 @@ public class DevStickItem extends ItemCoFH implements IEntityRayTraceItem, ITrac
         }
     }
 
-    @Override
-    public void onSwapFrom(Player player, InteractionHand hand, ItemStack stack, int duration) {
-
-        Item item = stack.getItem();
-        if (!player.getCooldowns().isOnCooldown(item) && duration > 0) {
-            player.getCooldowns().addCooldown(item, 10);
-        }
-    }
+    //@Override
+    //public void onSwapFrom(Player player, InteractionHand hand, ItemStack stack, int duration) {
+    //
+    //    Item item = stack.getItem();
+    //    if (!player.getCooldowns().isOnCooldown(item) && duration > 0) {
+    //        player.getCooldowns().addCooldown(item, 10);
+    //    }
+    //}
 
 }

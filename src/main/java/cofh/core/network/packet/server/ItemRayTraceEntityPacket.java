@@ -32,7 +32,7 @@ public class ItemRayTraceEntityPacket extends PacketBase implements IPacketServe
 
         ItemStack stack = player.getItemInHand(hand);
         if (stack.getItem() instanceof IEntityRayTraceItem item) {
-            Entity target = player.level.getEntity(targetId);
+            Entity target = player.getLevel().getEntityOrPart(targetId);
             if (target != null) {
                 item.handleEntityRayTrace(player.level, player, hand, stack, origin, target, target.position().add(offset));
             }
