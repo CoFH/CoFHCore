@@ -56,7 +56,7 @@ public class ItemRayTraceEntityPacket extends PacketBase implements IPacketServe
     public static void sendToServer(Player player, Entity target, Vec3 origin, Vec3 hit) {
 
         if (player.level.isClientSide) {
-            Player client = Minecraft.getInstance().player;
+            Player client = CoFHCore.PROXY.getClientPlayer();
             if (client != null && client.equals(player)) {
                 ItemRayTraceEntityPacket packet = new ItemRayTraceEntityPacket();
                 packet.targetId = target.getId();

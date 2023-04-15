@@ -41,19 +41,19 @@ public class ConfigManager {
         return this;
     }
 
-    public ConfigManager addCommonConfig(IBaseConfig config) {
+    public synchronized ConfigManager addCommonConfig(IBaseConfig config) {
 
         commonSubConfigs.add(config);
         return this;
     }
 
-    public ConfigManager addClientConfig(IBaseConfig config) {
+    public synchronized ConfigManager addClientConfig(IBaseConfig config) {
 
         clientSubConfigs.add(config);
         return this;
     }
 
-    public ConfigManager addServerConfig(IBaseConfig config) {
+    public synchronized ConfigManager addServerConfig(IBaseConfig config) {
 
         serverSubConfigs.add(config);
         return this;
