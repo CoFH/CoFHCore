@@ -22,6 +22,7 @@ import net.minecraftforge.registries.tags.ITagManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -260,19 +261,17 @@ public final class AreaEffectHelper {
 
         BlockState state = world.getBlockState(pos);
         Block block = state.getBlock();
-        ITagManager<Block> tags = ForgeRegistries.BLOCKS.tags();
-        if (tags == null) {
-            return ImmutableList.of();
-        }
 
         Predicate<BlockPos> exact = p -> world.getBlockState(p).is(block) && canToolAffect(tool, stack, world, p);
         // Match logs based on tag
-        Predicate<BlockPos> match = tags.getReverseTag(state.getBlock()).map(rev -> {
-            if (rev.containsTag(BlockTags.LOGS)) {
-                return rev.getTagKeys().filter(key -> key.location().getPath().contains("_logs")).findAny().map(key -> exact.or(p -> world.getBlockState(p).is(key))).orElse(exact);
-            }
-            return exact;
-        }).orElse(exact);
+        Predicate<BlockPos> match = Optional.ofNullable(ForgeRegistries.BLOCKS.tags()).flatMap(tags ->
+            tags.getReverseTag(block).map(rev -> {
+                if (rev.containsTag(BlockTags.LOGS)) {
+                    return rev.getTagKeys().filter(key -> key.location().getPath().contains("_logs")).findAny().map(key -> exact.or(p -> world.getBlockState(p).is(key))).orElse(exact);
+                }
+                return exact;
+            })
+        ).orElse(exact);
 
         BlockPos.MutableBlockPos mutable = pos.mutable();
         ImmutableList.Builder<BlockPos> builder = ImmutableList.builder();
