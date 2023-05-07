@@ -3,8 +3,13 @@ package cofh.core.util.helpers;
 import cofh.lib.api.block.IHarvestable;
 import cofh.lib.util.raytracer.RayTracer;
 import com.google.common.collect.ImmutableList;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DiggerItem;
@@ -22,15 +27,18 @@ import net.minecraftforge.registries.tags.ITagManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static cofh.core.capability.CapabilityAreaEffect.AREA_EFFECT_ITEM_CAPABILITY;
 import static cofh.core.util.references.EnsorcIDs.ID_EXCAVATING;
 import static cofh.lib.util.Utils.getEnchantment;
 import static cofh.lib.util.Utils.getItemEnchantmentLevel;
 import static cofh.lib.util.constants.ModIds.ID_ENSORCELLATION;
+import static cofh.lib.util.constants.NBTTags.*;
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.*;
 
 public final class AreaEffectHelper {
@@ -55,6 +63,18 @@ public final class AreaEffectHelper {
     public static ImmutableList<BlockPos> getAreaEffectBlocks(ItemStack stack, BlockPos pos, Player player) {
 
         int encExcavating = getItemEnchantmentLevel(getEnchantment(ID_ENSORCELLATION, ID_EXCAVATING), stack);
+        if (!stack.isEmpty() && stack.hasTag()) {
+            CompoundTag tag = stack.getTag();
+            if (tag.contains(TAG_INFUSION_ENCHANT, Tag.TAG_LIST)) {
+                ListTag list = tag.getList(TAG_INFUSION_ENCHANT, Tag.TAG_COMPOUND);
+                for (int i = 0; i < list.size(); ++i) {
+                    CompoundTag enchant = list.getCompound(i);
+                    if (enchant.getString(TAG_ID).equals("thaumcraft:destructive")) {
+                        encExcavating += enchant.getInt(TAG_LEVEL);
+                    }
+                }
+            }
+        }
         if (encExcavating > 0) {
             return getBreakableBlocksRadius(stack, pos, player, encExcavating);
         }
