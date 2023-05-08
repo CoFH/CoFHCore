@@ -92,7 +92,7 @@ public class ElectricField extends AbstractAoESpell implements IEntityAdditional
 
         BlockHitResult raytrace = level.clip(new ClipContext(pos, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
         end = raytrace.getLocation();
-        ((ServerLevel) level).sendParticles(new BiColorParticleOptions(CoreParticles.STRAIGHT_ARC.get(), 0.2F, 7, 0, 0xFFFFFFFF, 0xFFFC52A4), pos.x, pos.y, pos.z, 0, end.x, end.y, end.z, 1.0F);
+        ((ServerLevel) level).sendParticles(new BiColorParticleOptions(CoreParticles.STRAIGHT_ARC.get(), 0.2F, 4, 0, 0xFFFFFFFF, 0xFFFC52A4), pos.x, pos.y, pos.z, 0, end.x, end.y, end.z, 1.0F);
 
         float padding = 0.1F;
         ArcheryHelper.findHitEntities(entities.stream(), pos, end, new Vec3(padding, padding, padding)).forEach(result -> {
