@@ -38,7 +38,7 @@ public class BlastWaveParticle extends CylindricalParticle {
         float easeSin = MathHelper.sin(progress * MathHelper.F_PI * 0.5F);
         float easeCub = MathHelper.easeOutCubic(progress);
 
-        VFXHelper.renderCyclone(stack, buffer, getLightColor(time), size * easeSin, height * easeSin, 2, 0.2F * easeCub, time * 0.05F + (float) rand.nextDouble(69F), 0.5F * MathHelper.easePlateau(progress));
+        VFXHelper.renderCyclone(stack, buffer, getLightColor(time), size * easeSin, height * easeSin, 2, 0.015F * size * easeCub, time * 0.05F + (float) rand.nextDouble(69F), 0.5F * MathHelper.easePlateau(progress));
     }
 
     @Nonnull

@@ -24,11 +24,6 @@ public class ShieldItemWrapper implements IShieldItem, ICapabilityProvider {
         this.shieldItem = shieldItem;
     }
 
-    @Override
-    public void onBlock(LivingEntity entity, DamageSource source, float amount) {
-
-    }
-
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull final Capability<T> cap, final @Nullable Direction side) {
