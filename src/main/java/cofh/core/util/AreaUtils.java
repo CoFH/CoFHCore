@@ -115,7 +115,6 @@ public class AreaUtils {
         return succeeded;
     };
 
-
     public static final IBlockTransformer ICE_TRANSFORM_TEMPORARY = (world, pos, face, entity) -> {
 
         boolean succeeded = false;
@@ -160,6 +159,10 @@ public class AreaUtils {
         // SNOW
         if (world.isEmptyBlock(pos) && AreaUtils.isValidSnowPosition(world, pos)) {
             succeeded |= world.setBlockAndUpdate(pos, SNOW.defaultBlockState());
+
+            // TODO: This is just a quick testing hack to be used occassionally.
+            //            var duct = ForgeRegistries.BLOCKS.getValue(new ResourceLocation("thermal:fluid_duct_windowed"));
+            //            succeeded |= world.setBlockAndUpdate(pos, duct.defaultBlockState());
         }
         // FIRE
         if (state.getBlock() == FIRE) {

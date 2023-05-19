@@ -21,6 +21,7 @@ import cofh.core.network.packet.client.*;
 import cofh.core.network.packet.server.*;
 import cofh.core.util.Proxy;
 import cofh.core.util.ProxyClient;
+import cofh.core.util.crafting.CustomIngredients;
 import cofh.core.util.helpers.ArcheryHelper;
 import cofh.core.util.references.IMCMethods;
 import cofh.lib.client.renderer.entity.NothingRenderer;
@@ -28,7 +29,6 @@ import cofh.lib.loot.TileNBTSync;
 import cofh.lib.network.PacketHandler;
 import cofh.lib.util.DeferredRegisterCoFH;
 import cofh.lib.util.Utils;
-import cofh.core.util.crafting.CustomIngredients;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.syncher.EntityDataSerializer;
@@ -171,6 +171,7 @@ public class CoFHCore {
 
         PACKET_HANDLER.registerPacket(PacketIDs.PACKET_MODEL_UPDATE, ModelUpdatePacket::new);
 
+        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_OVERLAY, OverlayMessagePacket::new);
         PACKET_HANDLER.registerPacket(PacketIDs.PACKET_MOTION, PlayerMotionPacket::new);
 
         PACKET_HANDLER.registerPacket(PacketIDs.PACKET_FILTERABLE_GUI_OPEN, TileFilterGuiOpenPacket::new);

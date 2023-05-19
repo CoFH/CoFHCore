@@ -27,11 +27,8 @@ public class ProxyClient extends Proxy {
 
     // region HELPERS
     @Override
-    public void setOverlayMessage(Player player, Component message) {
+    public void setOverlayMessage(Component message) {
 
-        if (Utils.isFakePlayer(player)) {
-            return;
-        }
         Minecraft.getInstance().gui.setOverlayMessage(message, false);
     }
 
