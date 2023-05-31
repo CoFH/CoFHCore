@@ -6,6 +6,7 @@ import cofh.core.util.helpers.vfx.VFXHelper;
 import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Quaternion;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
@@ -33,6 +34,9 @@ public class BlastWaveParticle extends CylindricalParticle {
     @Override
     public void render(PoseStack stack, MultiBufferSource buffer, VertexConsumer consumer, int packedLightIn, float time, float pTicks) {
 
+        if (!rotation.equals(Quaternion.ONE)) {
+            stack.mulPose(rotation);
+        }
         SplittableRandom rand = new SplittableRandom(seed);
         float progress = time / duration;
         float easeSin = MathHelper.sin(progress * MathHelper.F_PI * 0.5F);

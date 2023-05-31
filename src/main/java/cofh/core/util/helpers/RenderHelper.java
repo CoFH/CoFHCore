@@ -1,5 +1,6 @@
 package cofh.core.util.helpers;
 
+import cofh.core.event.CoreClientEvents;
 import cofh.core.util.helpers.vfx.Color;
 import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.platform.GlStateManager.DestFactor;
@@ -8,7 +9,9 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.*;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -19,7 +22,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.phys.AABB;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
@@ -46,6 +48,11 @@ public final class RenderHelper {
     public static PoseStack particleStack = new PoseStack();
 
     // region ACCESSORS
+    public static MultiBufferSource.BufferSource bufferSource() {
+
+        return Minecraft.getInstance().renderBuffers().bufferSource();
+    }
+
     public static TextureManager engine() {
 
         return Minecraft.getInstance().getTextureManager();
@@ -69,6 +76,26 @@ public final class RenderHelper {
     public static BlockRenderDispatcher renderBlock() {
 
         return Minecraft.getInstance().getBlockRenderer();
+    }
+
+    public static EntityModelSet entityModels() {
+
+        return Minecraft.getInstance().getEntityModels();
+    }
+
+    public static int renderTime() {
+
+        return CoreClientEvents.renderTime;
+    }
+
+    public static float partialTick() {
+
+        return Minecraft.getInstance().getPartialTick();
+    }
+
+    public static float frameDelta() {
+
+        return Minecraft.getInstance().getDeltaFrameTime();
     }
     // endregion
 

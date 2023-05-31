@@ -1,8 +1,10 @@
 package cofh.lib.entity;
 
 import cofh.core.util.helpers.ArcheryHelper;
+import cofh.lib.util.constants.NBTTags;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -223,6 +225,20 @@ public class ProjectileCoFH extends Projectile {
     public boolean shouldRenderAtSqrDistance(double sqrDist) {
 
         return sqrDist < 4096 * getViewScale();
+    }
+
+    @Override
+    protected void addAdditionalSaveData(CompoundTag tag) {
+
+        super.addAdditionalSaveData(tag);
+        tag.putFloat(NBTTags.TAG_POWER, this.power);
+    }
+
+    @Override
+    protected void readAdditionalSaveData(CompoundTag tag) {
+
+        super.readAdditionalSaveData(tag);
+        this.power = tag.getFloat(NBTTags.TAG_POWER);
     }
 
 }

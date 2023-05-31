@@ -3,10 +3,7 @@ package cofh.core.item;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.mojang.datafixers.util.Pair;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2LongMap;
-import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
+import it.unimi.dsi.fastutil.objects.*;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -18,6 +15,7 @@ import net.minecraftforge.fml.common.Mod;
 
 import javax.annotation.Nullable;
 
+import java.util.Map;
 import java.util.Objects;
 
 import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
@@ -28,12 +26,12 @@ import static net.minecraft.world.InteractionHand.OFF_HAND;
 public class ItemTracker {
 
     //TODO weak reference players
-    protected static BiMap<Hand, ItemStack> HELD = HashBiMap.create();
+    protected static Map<Hand, ItemStack> HELD = new Object2ObjectOpenHashMap<>();
     protected static Object2IntMap<ItemStack> USING = new Object2IntOpenHashMap<>();
-    protected static Object2LongMap<ItemStack> TIME = new Object2LongOpenHashMap<>();
+    //protected static Object2LongMap<ItemStack> TIME = new Object2LongOpenHashMap<>();
     static {
         USING.defaultReturnValue(-1);
-        TIME.defaultReturnValue(-1);
+        //TIME.defaultReturnValue(-1);
     }
 
     /**
@@ -44,31 +42,40 @@ public class ItemTracker {
         return USING.getInt(stack);
     }
 
-    /**
-     * Stores a time value associated with the item until it is swapped off of.
-     */
-    public static void recordTime(ItemStack stack, long time) {
+    ///**
+    // * Stores a time value associated with the item until it is swapped off of.
+    // */
+    //public static void recordTime(ItemStack stack, long time) {
+    //
+    //    TIME.computeLongIfPresent(stack, (key, old) -> time);
+    //}
 
-        TIME.computeLongIfPresent(stack, (key, old) -> time);
-    }
+    ///**
+    // * Recalls the previously recorded time value, or -1 if not present.
+    // */
+    //public static long getRecordedTime(ItemStack stack) {
+    //
+    //    return TIME.getLong(stack);
+    //}
 
-    /**
-     * Recalls the previously recorded time value, or -1 if not present.
-     */
-    public static long getRecordedTime(ItemStack stack) {
-
-        return TIME.getLong(stack);
-    }
-
-    @Nullable
-    public static Pair<Player, InteractionHand> getUser(ItemStack stack) {
-
-        Hand hand = HELD.inverse().get(stack);
-        if (hand == null) {
-            return null;
-        }
-        return Pair.of(hand.player, hand.hand);
-    }
+    //@Nullable
+    //public static Pair<Player, InteractionHand> getUser(ItemStack stack) {
+    //
+    //    if (stack.getItem() instanceof ITrackedItem tracked) {
+    //        return HELD.entrySet().stream()
+    //                .filter(entry -> tracked.matches(stack, entry.getValue()))
+    //                .findFirst()
+    //                .map(entry -> {
+    //                    Hand hand = entry.getKey();
+    //                    if (hand == null) {
+    //                        return null;
+    //                    }
+    //                    return Pair.of(hand.player, hand.hand);
+    //                })
+    //                .orElse(null);
+    //    }
+    //    return null;
+    //}
 
     @SubscribeEvent (priority = EventPriority.LOWEST)
     public static void playerTick(TickEvent.PlayerTickEvent event) {
@@ -115,13 +122,13 @@ public class ItemTracker {
         Hand key = new Hand(player, hand);
         ItemStack previous = HELD.remove(key);
         int duration = USING.removeInt(previous);
-        long time = TIME.removeLong(previous);
+        //long time = TIME.removeLong(previous);
         ItemStack current = player.getItemInHand(hand);
         if (previous != null && previous.getItem() instanceof ITrackedItem item) {
             if (item.matches(previous, current)) {
                 HELD.put(key, current);
                 USING.put(current, duration);
-                TIME.put(current, time);
+                //TIME.put(current, time);
                 return;
             }
             item.onSwapFrom(player, hand, previous, current, duration);
@@ -129,7 +136,7 @@ public class ItemTracker {
         if (current.getItem() instanceof ITrackedItem item) {
             HELD.put(key, current);
             USING.put(current, duration);
-            TIME.put(current, time);
+            //TIME.put(current, time);
             item.onSwapTo(player, hand, previous, current);
         }
     }

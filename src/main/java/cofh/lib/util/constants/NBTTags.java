@@ -61,6 +61,7 @@ public class NBTTags {
     public static final String TAG_NAME = "Name";
     public static final String TAG_ORIGIN = "Origin";
     public static final String TAG_POTION = "Potion";
+    public static final String TAG_POWER = "Power";
     public static final String TAG_PRIMED = "Primed";
     public static final String TAG_PROCESS = "Proc";
     public static final String TAG_PROCESS_MAX = "ProcMax";
