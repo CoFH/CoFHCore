@@ -16,9 +16,21 @@ public interface IEntityRayTraceItem {
 
     default void sendEntityRayTrace(Player player, InteractionHand hand, Vec3 origin, Entity target, Vec3 hit) {
 
-        ItemRayTraceEntityPacket.sendToServer(player, hand, origin, target, hit);
+        sendEntityRayTrace(player, hand, origin, target, hit, 0);
     }
 
-    void handleEntityRayTrace(Level level, Player player, InteractionHand hand, ItemStack stack, Vec3 origin, Entity target, Vec3 hit);
+    default void sendEntityRayTrace(Player player, InteractionHand hand, Vec3 origin, Entity target, Vec3 hit, float power) {
+
+        ItemRayTraceEntityPacket.sendToServer(player, hand, origin, target, hit, power);
+    }
+
+    default void handleEntityRayTrace(Level level, Player player, InteractionHand hand, ItemStack stack, Vec3 origin, Entity target, Vec3 hit) {
+
+    }
+
+    default void handleEntityRayTrace(Level level, Player player, InteractionHand hand, ItemStack stack, Vec3 origin, Entity target, Vec3 hit, float power) {
+
+        handleEntityRayTrace(level, player, hand, stack, origin, target, hit);
+    }
 
 }

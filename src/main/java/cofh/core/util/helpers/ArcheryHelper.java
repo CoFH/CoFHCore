@@ -18,9 +18,11 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.LazyOptional;
 
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -233,12 +235,12 @@ public final class ArcheryHelper {
 
     public static Stream<EntityHitResult> findHitEntities(Level world, Entity exclude, Vec3 startPos, Vec3 endPos, double padding, Predicate<Entity> filter) {
 
-        return findHitEntities(world, exclude, startPos, endPos, new AABB(startPos, endPos).inflate(1.5D), new Vec3(padding, padding, padding), filter);
+        return findHitEntities(world, exclude, startPos, endPos, new Vec3(padding, padding, padding), filter);
     }
 
     public static Stream<EntityHitResult> findHitEntities(Level world, Entity exclude, Vec3 startPos, Vec3 endPos, Vec3 padding, Predicate<Entity> filter) {
 
-        return findHitEntities(world, exclude, startPos, endPos, new AABB(startPos, endPos).inflate(1.5D), padding, filter);
+        return findHitEntities(world, exclude, startPos, endPos, new AABB(startPos, endPos).inflate(padding.x, padding.y, padding.z), padding, filter);
     }
 
     public static Stream<EntityHitResult> findHitEntities(Level world, Entity exclude, Vec3 startPos, Vec3 endPos, AABB searchArea, Vec3 padding, Predicate<Entity> filter) {
@@ -250,6 +252,16 @@ public final class ArcheryHelper {
 
         return entities.map(entity -> entity.getBoundingBox().inflate(padding.x(), padding.y(), padding.z()).clip(startPos, endPos).map(hitPos -> new EntityHitResult(entity, hitPos)).orElse(null))
                 .filter(Objects::nonNull);
+    }
+
+    public static Comparator<Vec3> compareDistance(Vec3 loc) {
+
+        return Comparator.comparingDouble(v -> v.distanceToSqr(loc));
+    }
+
+    public static Comparator<HitResult> compareHitDistance(Vec3 loc) {
+
+        return Comparator.comparingDouble(hit -> hit.getLocation().distanceToSqr(loc));
     }
 
 }

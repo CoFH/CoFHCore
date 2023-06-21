@@ -202,6 +202,9 @@ public final class VFXHelper {
      */
     public static Quaternion alignVertical(Vector3f dir) {
 
+        if (dir.x() == 0 && dir.y() == 0 && dir.z() == 0) {
+            return Quaternion.ONE;
+        }
         Vector3f d = dir.copy();
         d.mul(1 / length(d));
         d.add(0, 1, 0);

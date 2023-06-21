@@ -21,6 +21,7 @@ public class ItemRayTraceEntityPacket extends PacketBase implements IPacketServe
     protected Vec3 origin;
     protected int targetId;
     protected Vec3 offset;
+    protected float power;
 
     public ItemRayTraceEntityPacket() {
 
@@ -34,7 +35,7 @@ public class ItemRayTraceEntityPacket extends PacketBase implements IPacketServe
         if (stack.getItem() instanceof IEntityRayTraceItem item) {
             Entity target = player.getLevel().getEntityOrPart(targetId);
             if (target != null) {
-                item.handleEntityRayTrace(player.level, player, hand, stack, origin, target, target.position().add(offset));
+                item.handleEntityRayTrace(player.level, player, hand, stack, origin, target, target.position().add(offset), power);
             }
         }
     }
@@ -50,6 +51,7 @@ public class ItemRayTraceEntityPacket extends PacketBase implements IPacketServe
         buf.writeFloat((float) offset.x);
         buf.writeFloat((float) offset.y);
         buf.writeFloat((float) offset.z);
+        buf.writeFloat(power);
     }
 
     @Override
@@ -59,9 +61,10 @@ public class ItemRayTraceEntityPacket extends PacketBase implements IPacketServe
         this.origin = new Vec3(buf.readDouble(), buf.readFloat(), buf.readDouble());
         this.targetId = buf.readInt();
         this.offset = new Vec3(buf.readFloat(), buf.readFloat(), buf.readFloat());
+        this.power = buf.readFloat();
     }
 
-    public static void sendToServer(Player player, InteractionHand hand, Vec3 origin, Entity target, Vec3 hit) {
+    public static void sendToServer(Player player, InteractionHand hand, Vec3 origin, Entity target, Vec3 hit, float power) {
 
         if (player.level.isClientSide) {
             Player client = CoFHCore.PROXY.getClientPlayer();
@@ -71,6 +74,7 @@ public class ItemRayTraceEntityPacket extends PacketBase implements IPacketServe
                 packet.origin = origin;
                 packet.targetId = target.getId();
                 packet.offset = hit.subtract(target.position());
+                packet.power = power;
                 packet.sendToServer();
             }
         }

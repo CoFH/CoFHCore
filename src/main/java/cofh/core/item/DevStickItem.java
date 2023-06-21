@@ -3,6 +3,11 @@ package cofh.core.item;
 import cofh.core.client.particle.options.BiColorParticleOptions;
 import cofh.lib.util.Constants;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -17,7 +22,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.world.BiomeModifier;
+import net.minecraftforge.common.world.ForgeBiomeModifiers;
+import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.List;
 import java.util.Random;
 
 import static cofh.core.init.CoreParticles.STREAM;
@@ -59,12 +68,20 @@ public class DevStickItem extends ItemCoFH implements IEntityRayTraceItem, ITrac
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
 
         ItemStack stack = player.getItemInHand(hand);
-
-        if (level.isClientSide()) {
-            Vec3 pos = player.getEyePosition();
-            Vec3 to = player.getEyePosition().add(10, 0, 0);
-            level.addParticle(new BiColorParticleOptions(STREAM.get(), 6, 200, 0, 0xFFFFFFFF, 0xFFFFFFFF), pos.x, pos.y, pos.z, to.x, to.y, to.z);
+        if (level.isClientSide) {
+        } else {
+            System.out.println("biome modifiers");
+            final RegistryAccess registries = level.getServer().registryAccess();
+            // The order of holders() is the order modifiers were loaded in.
+            registries.registryOrThrow(ForgeRegistries.Keys.BIOME_MODIFIERS)
+                    .holders()
+                    .forEach(holder -> holder.unwrapKey().ifPresent(key -> System.out.println(key.location())));
         }
+        //if (level.isClientSide()) {
+        //    Vec3 pos = player.getEyePosition();
+        //    Vec3 to = player.getEyePosition().add(10, 0, 0);
+        //    level.addParticle(new BiColorParticleOptions(STREAM.get(), 6, 200, 0, 0xFFFFFFFF, 0xFFFFFFFF), pos.x, pos.y, pos.z, to.x, to.y, to.z);
+        //}
         //player.startUsingItem(hand);
         //if (level.isClientSide) {
         //}
