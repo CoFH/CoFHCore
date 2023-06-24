@@ -18,12 +18,15 @@ public final class MathHelper {
     public static final RandomSource RANDOM = RandomSource.create();
     public static final double PI = Math.PI;
     public static final double PI_2 = Math.PI * 2.0D;
-    public static final float F_PI = (float) Math.PI;
-    public static final float F_TAU = (float) Math.PI * 2.0F;
     public static final double PHI = 1.618033988749894;
     public static final double TO_DEG = 57.29577951308232;
     public static final double TO_RAD = 0.017453292519943;
     public static final double SQRT_2 = 1.414213562373095;
+
+    public static final float F_PI = (float) Math.PI;
+    public static final float F_TAU = (float) Math.PI * 2.0F;
+    public static final float F_TO_DEG = (float) TO_DEG;
+    public static final float F_TO_RAD = (float) TO_RAD;
 
     public static final double[] SIN_TABLE = new double[65536];
     public static final float[] ASIN_TABLE = new float[65536];

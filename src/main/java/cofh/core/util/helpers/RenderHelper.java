@@ -10,10 +10,13 @@ import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.EntityModelSet;
+import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.*;
 import net.minecraft.core.BlockPos;
@@ -78,9 +81,14 @@ public final class RenderHelper {
         return Minecraft.getInstance().getBlockRenderer();
     }
 
-    public static EntityModelSet entityModels() {
+    public static EntityRenderDispatcher renderEntity() {
 
-        return Minecraft.getInstance().getEntityModels();
+        return Minecraft.getInstance().getEntityRenderDispatcher();
+    }
+
+    public static ModelPart bakeLayer(ModelLayerLocation location) {
+
+        return Minecraft.getInstance().getEntityModels().bakeLayer(location);
     }
 
     public static int renderTime() {
