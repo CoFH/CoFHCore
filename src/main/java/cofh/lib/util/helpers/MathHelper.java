@@ -2,6 +2,7 @@ package cofh.lib.util.helpers;
 
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
 /**
@@ -126,6 +127,11 @@ public final class MathHelper {
     public static float asin(float d) {
 
         return ASIN_TABLE[(int) (d * 32768.0F + 32768.0F) & 65535];
+    }
+
+    public static float acos(float d) {
+
+        return asin(-d) + F_PI * 0.5F;
     }
     // endregion
 
@@ -388,6 +394,19 @@ public final class MathHelper {
         Vec3 center = point.subtract(lineStart);
         Vec3 disp = lineEnd.subtract(lineStart);
         return disp.cross(center).length() / disp.length();
+    }
+
+    public static Vec2 decomposeLookVector(Vec3 v) {
+
+        float xRot = v.y <= -1 ? MathHelper.F_PI * 0.5F : asin((float) -v.y);
+        if (Math.abs(-v.y) > 0.9999) {
+            return new Vec2(xRot * F_TO_DEG, 0);
+        }
+        float yRot = asin((float) v.x / cos(xRot));
+        if (v.z < 0) {
+            yRot = MathHelper.F_PI - yRot;
+        }
+        return new Vec2(xRot * F_TO_DEG, -yRot * F_TO_DEG);
     }
 
 }
