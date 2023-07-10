@@ -8,6 +8,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import static cofh.core.network.packet.PacketIDs.PACKET_EFFECT_ADD;
@@ -26,7 +27,7 @@ public class EffectAddedPacket extends PacketBase implements IPacketClient {
     @Override
     public void handleClient() {
 
-        if (!entity.equals(Minecraft.getInstance().player)) {
+        if (entity != null && !entity.equals(Minecraft.getInstance().player)) {
             entity.forceAddEffect(effect, null);
         }
     }
@@ -42,7 +43,11 @@ public class EffectAddedPacket extends PacketBase implements IPacketClient {
     @Override
     public void read(FriendlyByteBuf buf) {
 
-        Entity e = Minecraft.getInstance().player.level.getEntity(buf.readInt());
+        Player p = Minecraft.getInstance().player;
+        if (p == null) {
+            return;
+        }
+        Entity e = p.level.getEntity(buf.readInt());
         if (e instanceof LivingEntity) {
             this.entity = (LivingEntity) e;
             effect = new MobEffectInstance(ForgeRegistries.MOB_EFFECTS.getValue(buf.readResourceLocation()), buf.readInt());
