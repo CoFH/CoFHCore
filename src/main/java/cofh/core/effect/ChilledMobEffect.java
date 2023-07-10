@@ -60,7 +60,7 @@ public class ChilledMobEffect extends CustomParticleMobEffect {
             int duration = instance.getDuration();
             int amplifier = instance.getAmplifier();
             if (amplifier < 5 && rand.nextFloat(250) < duration) {
-                target.addEffect(new MobEffectInstance(CHILLED.get(), add,  amplifier + 1, true, false, true));
+                target.addEffect(new MobEffectInstance(CHILLED.get(), add, amplifier + 1, true, false, true));
             } else if (duration < 250) {
                 target.addEffect(new MobEffectInstance(CHILLED.get(), duration + add, amplifier, true, false, true));
             }

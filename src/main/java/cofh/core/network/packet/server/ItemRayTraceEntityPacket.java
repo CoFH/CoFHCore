@@ -2,9 +2,9 @@ package cofh.core.network.packet.server;
 
 import cofh.core.CoFHCore;
 import cofh.core.item.IEntityRayTraceItem;
+import cofh.core.util.ProxyUtils;
 import cofh.lib.network.packet.IPacketServer;
 import cofh.lib.network.packet.PacketBase;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -67,7 +67,7 @@ public class ItemRayTraceEntityPacket extends PacketBase implements IPacketServe
     public static void sendToServer(Player player, InteractionHand hand, Vec3 origin, Entity target, Vec3 hit, float power) {
 
         if (player.level.isClientSide) {
-            Player client = CoFHCore.PROXY.getClientPlayer();
+            Player client = ProxyUtils.getClientPlayer();
             if (client != null && client.equals(player)) {
                 ItemRayTraceEntityPacket packet = new ItemRayTraceEntityPacket();
                 packet.hand = hand;

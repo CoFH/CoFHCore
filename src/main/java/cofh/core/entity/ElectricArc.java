@@ -1,7 +1,6 @@
 package cofh.core.entity;
 
 import cofh.lib.entity.AbstractAoESpell;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;

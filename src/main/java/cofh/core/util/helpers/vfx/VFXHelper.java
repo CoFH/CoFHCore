@@ -3,7 +3,6 @@ package cofh.core.util.helpers.vfx;
 import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.util.helpers.MathHelper;
 import com.google.common.collect.ImmutableSortedMap;
-import com.google.common.collect.ImmutableSortedMultiset;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.*;
@@ -25,7 +24,6 @@ import net.minecraftforge.client.model.data.ModelData;
 import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 import static cofh.core.util.helpers.vfx.RenderTypes.*;
 
@@ -358,8 +356,8 @@ public final class VFXHelper {
 
         renderShockwave(stack, buffer, world, origin, time, diameter, heightScale, (pos, state) ->
                 !state.isAir() && state.isRedstoneConductor(world, pos) &&
-                state.isCollisionShapeFullBlock(world, pos) && !state.hasBlockEntity() &&
-                !world.getBlockState(pos.above()).isCollisionShapeFullBlock(world, pos.above()));
+                        state.isCollisionShapeFullBlock(world, pos) && !state.hasBlockEntity() &&
+                        !world.getBlockState(pos.above()).isCollisionShapeFullBlock(world, pos.above()));
     }
 
     private static SortedMap<Float, List<Function<Integer, Vec3i>>> getOffsets(int maxRadius) {

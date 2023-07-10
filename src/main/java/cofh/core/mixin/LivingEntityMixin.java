@@ -1,20 +1,15 @@
 package cofh.core.mixin;
 
-import cofh.lib.api.capability.IShieldItem;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.Optional;
 
 import static cofh.core.capability.CapabilityShieldItem.SHIELD_ITEM_CAPABILITY;
 import static cofh.core.init.CoreMobEffects.*;
@@ -25,11 +20,14 @@ import static cofh.core.init.CoreMobEffects.*;
 @Mixin (LivingEntity.class)
 public abstract class LivingEntityMixin {
 
-    @Shadow protected abstract int increaseAirSupply(int p_21307_);
+    @Shadow
+    protected abstract int increaseAirSupply(int p_21307_);
 
-    @Shadow protected abstract void detectEquipmentUpdates();
+    @Shadow
+    protected abstract void detectEquipmentUpdates();
 
-    @Shadow public abstract ItemStack getUseItem();
+    @Shadow
+    public abstract ItemStack getUseItem();
 
     @Inject (
             method = "canBeAffected(Lnet/minecraft/world/effect/MobEffectInstance;)Z",

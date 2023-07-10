@@ -29,7 +29,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 import static cofh.core.init.CoreBlocks.*;
 import static cofh.core.init.CoreMobEffects.*;

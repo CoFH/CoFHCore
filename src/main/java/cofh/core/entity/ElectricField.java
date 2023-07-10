@@ -6,10 +6,6 @@ import cofh.core.init.CoreParticles;
 import cofh.core.util.AreaUtils;
 import cofh.core.util.helpers.ArcheryHelper;
 import cofh.lib.entity.AbstractAoESpell;
-import cofh.lib.util.helpers.MathHelper;
-import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
@@ -20,9 +16,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -109,7 +103,7 @@ public class ElectricField extends AbstractAoESpell implements IEntityAdditional
         return radius;
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @OnlyIn (Dist.CLIENT)
     public int getTextureIndex(int max) {
 
         if (tickCount < 3 || duration - tickCount < 3) {

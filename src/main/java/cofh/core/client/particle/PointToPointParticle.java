@@ -2,7 +2,6 @@ package cofh.core.client.particle;
 
 import cofh.core.client.particle.options.BiColorParticleOptions;
 import cofh.core.util.helpers.vfx.Color;
-import com.mojang.math.Vector3f;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.phys.AABB;
 

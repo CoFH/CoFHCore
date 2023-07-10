@@ -1,6 +1,5 @@
 package cofh.core.item;
 
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -12,7 +11,7 @@ public interface ITrackedItem {
     /**
      * Called on both sides when the player swaps to this item.
      *
-     * @param from    The previously held stack, or null if its is not an ITrackedItem
+     * @param from The previously held stack, or null if its is not an ITrackedItem
      */
     default void onSwapTo(Player player, InteractionHand hand, @Nullable ItemStack from, ItemStack to) {
 

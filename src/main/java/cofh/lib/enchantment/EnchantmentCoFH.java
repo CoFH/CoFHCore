@@ -24,7 +24,6 @@ public abstract class EnchantmentCoFH extends Enchantment {
     public EnchantmentCoFH setEnable(boolean enable) {
 
         this.enable = enable;
-        descriptionId = enable ? getDescriptionId() : "enchantment.cofh_core.disabled";
         return this;
     }
 
@@ -44,6 +43,12 @@ public abstract class EnchantmentCoFH extends Enchantment {
 
         this.maxLevel = maxLevel;
         return this;
+    }
+
+    @Override
+    public String getDescriptionId() {
+
+        return isEnabled() ? this.getOrCreateDescriptionId() : "enchantment.cofh_core.disabled";
     }
 
     public boolean isEnabled() {

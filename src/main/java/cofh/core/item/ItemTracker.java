@@ -1,9 +1,8 @@
 package cofh.core.item;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
-import com.mojang.datafixers.util.Pair;
-import it.unimi.dsi.fastutil.objects.*;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -12,8 +11,6 @@ import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-
-import javax.annotation.Nullable;
 
 import java.util.Map;
 import java.util.Objects;
@@ -28,6 +25,7 @@ public class ItemTracker {
     //TODO weak reference players
     protected static Map<Hand, ItemStack> HELD = new Object2ObjectOpenHashMap<>();
     protected static Object2IntMap<ItemStack> USING = new Object2IntOpenHashMap<>();
+
     //protected static Object2LongMap<ItemStack> TIME = new Object2LongOpenHashMap<>();
     static {
         USING.defaultReturnValue(-1);

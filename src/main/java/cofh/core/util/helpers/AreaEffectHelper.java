@@ -3,13 +3,11 @@ package cofh.core.util.helpers;
 import cofh.lib.api.block.IHarvestable;
 import cofh.lib.util.raytracer.RayTracer;
 import com.google.common.collect.ImmutableList;
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DiggerItem;
@@ -23,15 +21,12 @@ import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.tags.ITagManager;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static cofh.core.capability.CapabilityAreaEffect.AREA_EFFECT_ITEM_CAPABILITY;
 import static cofh.core.util.references.EnsorcIDs.ID_EXCAVATING;
@@ -285,12 +280,12 @@ public final class AreaEffectHelper {
         Predicate<BlockPos> exact = p -> world.getBlockState(p).is(block) && canToolAffect(tool, stack, world, p);
         // Match logs based on tag
         Predicate<BlockPos> match = Optional.ofNullable(ForgeRegistries.BLOCKS.tags()).flatMap(tags ->
-            tags.getReverseTag(block).map(rev -> {
-                if (rev.containsTag(BlockTags.LOGS)) {
-                    return rev.getTagKeys().filter(key -> key.location().getPath().contains("_logs")).findAny().map(key -> exact.or(p -> world.getBlockState(p).is(key))).orElse(exact);
-                }
-                return exact;
-            })
+                tags.getReverseTag(block).map(rev -> {
+                    if (rev.containsTag(BlockTags.LOGS)) {
+                        return rev.getTagKeys().filter(key -> key.location().getPath().contains("_logs")).findAny().map(key -> exact.or(p -> world.getBlockState(p).is(key))).orElse(exact);
+                    }
+                    return exact;
+                })
         ).orElse(exact);
 
         BlockPos.MutableBlockPos mutable = pos.mutable();

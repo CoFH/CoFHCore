@@ -12,7 +12,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 
 import javax.annotation.Nonnull;
 
-public class MistParticle extends  GasParticle {
+public class MistParticle extends GasParticle {
 
     protected MistParticle(ColorParticleOptions data, ClientLevel level, SpriteSet sprites, double x, double y, double z, double dx, double dy, double dz) {
 

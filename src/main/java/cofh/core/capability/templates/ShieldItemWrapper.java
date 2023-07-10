@@ -3,8 +3,6 @@ package cofh.core.capability.templates;
 import cofh.core.capability.CapabilityShieldItem;
 import cofh.lib.api.capability.IShieldItem;
 import net.minecraft.core.Direction;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;

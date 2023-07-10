@@ -2,11 +2,9 @@ package cofh.core.network.packet.server;
 
 import cofh.core.CoFHCore;
 import cofh.core.item.IBlockRayTraceItem;
-import cofh.core.util.helpers.ItemHelper;
+import cofh.core.util.ProxyUtils;
 import cofh.lib.network.packet.IPacketServer;
 import cofh.lib.network.packet.PacketBase;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -58,7 +56,7 @@ public class ItemRayTraceBlockPacket extends PacketBase implements IPacketServer
     public static void sendToServer(Player player, InteractionHand hand, Vec3 origin, BlockHitResult result) {
 
         if (player.level.isClientSide) {
-            Player client = CoFHCore.PROXY.getClientPlayer();
+            Player client = ProxyUtils.getClientPlayer();
             if (client != null && client.equals(player)) {
                 ItemRayTraceBlockPacket packet = new ItemRayTraceBlockPacket();
                 packet.hand = hand;
