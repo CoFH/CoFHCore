@@ -21,12 +21,6 @@ import static cofh.core.init.CoreMobEffects.*;
 public abstract class LivingEntityMixin {
 
     @Shadow
-    protected abstract int increaseAirSupply(int p_21307_);
-
-    @Shadow
-    protected abstract void detectEquipmentUpdates();
-
-    @Shadow
     public abstract ItemStack getUseItem();
 
     @Inject (

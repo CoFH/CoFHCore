@@ -214,10 +214,7 @@ public class CoreClientEvents {
             renderType.end(tesselator);
         }
         stack.popPose();
-
         light.turnOffLightLayer();
-
-
         ITranslucentRenderer.renderTranslucent(stack, partialTick, event.getLevelRenderer(), event.getProjectionMatrix());
     }
 
