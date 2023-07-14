@@ -18,8 +18,6 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 
 import java.util.List;
@@ -91,7 +89,7 @@ public class ElectricField extends AbstractAoESpell implements IEntityAdditional
         float padding = 0.1F;
         ArcheryHelper.findHitEntities(entities.stream(), pos, end, new Vec3(padding, padding, padding)).forEach(result -> {
             Entity target = result.getEntity();
-            target.hurt(DamageSource.LIGHTNING_BOLT, power * 4.0F); //TODO damage source, directionality
+            target.hurt(DamageSource.LIGHTNING_BOLT, power * 4.0F); // TODO damage source, directionality
             if (target instanceof LivingEntity living && random.nextFloat() < power * 0.4F) {
                 living.addEffect(new MobEffectInstance(CoreMobEffects.SHOCKED.get(), 80, 0, true, false, true));
             }
@@ -103,7 +101,6 @@ public class ElectricField extends AbstractAoESpell implements IEntityAdditional
         return radius;
     }
 
-    @OnlyIn (Dist.CLIENT)
     public int getTextureIndex(int max) {
 
         if (tickCount < 3 || duration - tickCount < 3) {
