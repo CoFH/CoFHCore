@@ -87,8 +87,7 @@
   "info.cofh.energy_stored": "Energy Stored",
   "info.cofh.energy_use": "Energy Use",
 
-  "info.cofh.fluid_filter": "Fluid Filter",
-  "info.cofh.item_filter": "Item Filter",
+  "info.cofh.filter": "Filter",
   "info.cofh.filter.allowlist.0": "Deny List",
   "info.cofh.filter.allowlist.1": "Allow List",
   "info.cofh.filter.checkNBT.0": "Ignore NBT",

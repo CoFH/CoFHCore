@@ -17,8 +17,7 @@ public class PacketIDs {
     public static final int PACKET_OVERLAY = 16;
     public static final int PACKET_MOTION = 17;
 
-    public static final int PACKET_FILTERABLE_GUI_OPEN = 20;
-    public static final int PACKET_GHOST_ITEM = 21;
+    public static final int PACKET_GHOST_ITEM = 20;
 
     public static final int PACKET_CONTAINER_CONFIG = 24;
     public static final int PACKET_CONTAINER_GUI = 25;

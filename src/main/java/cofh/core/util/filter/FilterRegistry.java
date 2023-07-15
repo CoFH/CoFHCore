@@ -1,7 +1,6 @@
 package cofh.core.util.filter;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 
 import java.util.Map;
@@ -27,20 +26,17 @@ public class FilterRegistry {
         return true;
     }
 
-    public static IFilter getHeldFilter(String type, CompoundTag nbt) {
+    public static IFilter getFilter(String type, int size, CompoundTag nbt) {
 
         if (FILTER_FACTORY_MAP.containsKey(type)) {
-            return FILTER_FACTORY_MAP.get(type).createFilter(nbt, true, BlockPos.ZERO);
+            return FILTER_FACTORY_MAP.get(type).createFilter(size, nbt);
         }
         return EmptyFilter.INSTANCE;
     }
 
-    public static IFilter getTileFilter(String type, CompoundTag nbt, IFilterableTile tile) {
+    public static IFilter getFilter(String type, CompoundTag nbt) {
 
-        if (FILTER_FACTORY_MAP.containsKey(type)) {
-            return FILTER_FACTORY_MAP.get(type).createFilter(nbt, false, tile.pos());
-        }
-        return EmptyFilter.INSTANCE;
+        return getFilter(type, 15, nbt);
     }
 
 }

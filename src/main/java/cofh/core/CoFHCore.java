@@ -3,8 +3,6 @@ package cofh.core;
 import cofh.core.capability.CapabilityArchery;
 import cofh.core.capability.CapabilityAreaEffect;
 import cofh.core.capability.CapabilityShieldItem;
-import cofh.core.client.gui.FluidFilterScreen;
-import cofh.core.client.gui.ItemFilterScreen;
 import cofh.core.client.renderer.entity.ElectricArcRenderer;
 import cofh.core.client.renderer.entity.ElectricFieldRenderer;
 import cofh.core.client.renderer.entity.KnifeRenderer;
@@ -30,14 +28,12 @@ import cofh.lib.loot.TileNBTSync;
 import cofh.lib.network.PacketHandler;
 import cofh.lib.util.DeferredRegisterCoFH;
 import cofh.lib.util.Utils;
-import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -65,8 +61,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import static cofh.core.client.renderer.entity.model.ArmorFullSuitModel.ARMOR_FULL_SUIT_LAYER;
-import static cofh.core.init.CoreContainers.FLUID_FILTER_CONTAINER;
-import static cofh.core.init.CoreContainers.ITEM_FILTER_CONTAINER;
 import static cofh.core.init.CoreEntities.*;
 import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 import static cofh.lib.util.constants.ModIds.ID_CURIOS;
@@ -84,7 +78,6 @@ public class CoFHCore {
     public static final DeferredRegisterCoFH<Item> ITEMS = DeferredRegisterCoFH.create(ForgeRegistries.ITEMS, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<Fluid> FLUIDS = DeferredRegisterCoFH.create(ForgeRegistries.FLUIDS, ID_COFH_CORE);
 
-    public static final DeferredRegisterCoFH<MenuType<?>> CONTAINERS = DeferredRegisterCoFH.create(ForgeRegistries.MENU_TYPES, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<Enchantment> ENCHANTMENTS = DeferredRegisterCoFH.create(ForgeRegistries.ENCHANTMENTS, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<EntityDataSerializer<?>> ENTITY_DATA_SERIALIZERS = DeferredRegisterCoFH.create(ForgeRegistries.Keys.ENTITY_DATA_SERIALIZERS, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<EntityType<?>> ENTITIES = DeferredRegisterCoFH.create(ForgeRegistries.ENTITY_TYPES, ID_COFH_CORE);
@@ -123,7 +116,6 @@ public class CoFHCore {
         ITEMS.register(modEventBus);
         FLUIDS.register(modEventBus);
 
-        CONTAINERS.register(modEventBus);
         ENTITY_DATA_SERIALIZERS.register(modEventBus);
         ENCHANTMENTS.register(modEventBus);
         ENTITIES.register(modEventBus);
@@ -147,7 +139,6 @@ public class CoFHCore {
         CoreBlocks.register();
         CoreFluids.register();
 
-        CoreContainers.register();
         CoreEnchantments.register();
         CoreEntityDataSerializers.register();
         CoreEntities.register();
@@ -175,7 +166,6 @@ public class CoFHCore {
         PACKET_HANDLER.registerPacket(PacketIDs.PACKET_OVERLAY, OverlayMessagePacket::new);
         PACKET_HANDLER.registerPacket(PacketIDs.PACKET_MOTION, PlayerMotionPacket::new);
 
-        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_FILTERABLE_GUI_OPEN, TileFilterGuiOpenPacket::new);
         PACKET_HANDLER.registerPacket(PacketIDs.PACKET_GHOST_ITEM, GhostItemPacket::new);
 
         PACKET_HANDLER.registerPacket(PacketIDs.PACKET_CONTAINER_CONFIG, ContainerConfigPacket::new);
@@ -245,10 +235,6 @@ public class CoFHCore {
 
     private void clientSetup(final FMLClientSetupEvent event) {
 
-        event.enqueueWork(() -> {
-            MenuScreens.register(FLUID_FILTER_CONTAINER.get(), FluidFilterScreen::new);
-            MenuScreens.register(ITEM_FILTER_CONTAINER.get(), ItemFilterScreen::new);
-        });
         event.enqueueWork(ProxyClient::registerItemModelProperties);
 
         event.enqueueWork(() -> CoreClientEvents.addNamespace(ID_COFH_CORE));

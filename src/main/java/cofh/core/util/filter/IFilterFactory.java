@@ -1,6 +1,5 @@
 package cofh.core.util.filter;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 
 /**
@@ -8,6 +7,6 @@ import net.minecraft.nbt.CompoundTag;
  */
 public interface IFilterFactory<T extends IFilter> {
 
-    T createFilter(CompoundTag nbt, boolean held, BlockPos pos);
+    T createFilter(int size, CompoundTag nbt);
 
 }

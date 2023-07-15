@@ -2,6 +2,7 @@ package cofh.core.util.helpers;
 
 import cofh.core.util.filter.EmptyFilter;
 import cofh.core.util.filter.IFilter;
+import cofh.core.util.filter.IFilterable;
 import cofh.core.util.filter.IFilterableTile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
@@ -28,7 +29,7 @@ public final class FilterHelper {
         return getPropertyWithDefault(stack, TAG_FILTER_TYPE, "");
     }
 
-    public static boolean hasFilter(IFilterableTile filterable) {
+    public static boolean hasFilter(IFilterable filterable) {
 
         if (filterable == null) {
             return false;

@@ -41,6 +41,7 @@ public class CoreTextures {
         event.addSprite(new ResourceLocation(ICONS_ + "icon_config"));
         event.addSprite(new ResourceLocation(ICONS_ + "icon_enchantment"));
         event.addSprite(new ResourceLocation(ICONS_ + "icon_energy"));
+        event.addSprite(new ResourceLocation(ICONS_ + "icon_filter"));
         event.addSprite(new ResourceLocation(ICONS_ + "icon_nope"));
         event.addSprite(new ResourceLocation(ICONS_ + "icon_information"));
         event.addSprite(new ResourceLocation(ICONS_ + "icon_steam"));
@@ -86,6 +87,7 @@ public class CoreTextures {
         ICON_CONFIG = map.getSprite(new ResourceLocation(ICONS_ + "icon_config"));
         ICON_ENCHANTMENT = map.getSprite(new ResourceLocation(ICONS_ + "icon_enchantment"));
         ICON_ENERGY = map.getSprite(new ResourceLocation(ICONS_ + "icon_energy"));
+        ICON_FILTER = map.getSprite(new ResourceLocation(ICONS_ + "icon_filter"));
         ICON_NOPE = map.getSprite(new ResourceLocation(ICONS_ + "icon_nope"));
         ICON_INFORMATION = map.getSprite(new ResourceLocation(ICONS_ + "icon_information"));
         ICON_STEAM = map.getSprite(new ResourceLocation(ICONS_ + "icon_steam"));
@@ -126,6 +128,7 @@ public class CoreTextures {
     public static TextureAtlasSprite ICON_CONFIG;
     public static TextureAtlasSprite ICON_ENCHANTMENT;
     public static TextureAtlasSprite ICON_ENERGY;
+    public static TextureAtlasSprite ICON_FILTER;
     public static TextureAtlasSprite ICON_NOPE;
     public static TextureAtlasSprite ICON_INFORMATION;
     public static TextureAtlasSprite ICON_STEAM;
