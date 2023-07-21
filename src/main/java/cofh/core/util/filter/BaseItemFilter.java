@@ -17,6 +17,8 @@ import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 
 public class BaseItemFilter implements IFilter, IFilterOptions {
 
+    public static final BaseItemFilter ZERO = new BaseItemFilter(0);
+
     protected List<ItemStack> items;
     protected Predicate<ItemStack> rules;
 

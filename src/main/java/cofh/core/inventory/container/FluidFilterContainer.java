@@ -2,10 +2,7 @@ package cofh.core.inventory.container;
 
 import cofh.core.network.packet.client.ContainerGuiPacket;
 import cofh.core.network.packet.server.ContainerConfigPacket;
-import cofh.core.util.filter.BaseFluidFilter;
-import cofh.core.util.filter.IFilterOptions;
-import cofh.core.util.filter.IFilterableItem;
-import cofh.core.util.filter.IFilterableTile;
+import cofh.core.util.filter.*;
 import cofh.core.util.helpers.FilterHelper;
 import cofh.lib.inventory.container.slot.SlotFalseCopy;
 import cofh.lib.inventory.container.slot.SlotLocked;
@@ -13,6 +10,7 @@ import cofh.lib.inventory.wrapper.InvWrapperFluids;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
@@ -25,36 +23,51 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static cofh.core.init.CoreContainers.FLUID_FILTER_CONTAINER;
+import static cofh.core.util.filter.FilterHolderType.ITEM;
+import static cofh.core.util.filter.FilterHolderType.SELF;
 import static cofh.core.util.helpers.FilterHelper.hasFilter;
 
 public class FluidFilterContainer extends ContainerCoFH implements IFilterOptions {
 
     protected BlockEntity tile;
-    protected IFilterableTile filterableTile;
+    protected Entity entity;
+    protected IFilterable filterable;
 
     protected ItemStack filterStack;
     protected IFilterableItem filterableItem;
     public SlotLocked lockedSlot;
 
-    protected BaseFluidFilter filter;
+    protected BaseFluidFilter filter = BaseFluidFilter.ZERO;
     protected InvWrapperFluids filterInventory;
 
-    public final boolean held;
+    public final FilterHolderType type;
 
-    public FluidFilterContainer(int windowId, Level world, Inventory inventory, Player player, boolean held, BlockPos pos) {
+    public FluidFilterContainer(int windowId, Level world, Inventory inventory, Player player, int holder, int id, BlockPos pos) {
 
         super(FLUID_FILTER_CONTAINER.get(), windowId, inventory, player);
 
-        this.held = held;
+        type = FilterHolderType.from(holder);
 
-        if (held) {
-            filterStack = hasFilter(player.getMainHandItem()) ? player.getMainHandItem() : player.getOffhandItem();
-            filterableItem = (IFilterableItem) filterStack.getItem();
-            filter = (BaseFluidFilter) filterableItem.getFilter(filterStack);
-        } else {
-            tile = world.getBlockEntity(pos);
-            filterableTile = (IFilterableTile) tile;
-            filter = (BaseFluidFilter) filterableTile.getFilter();
+        switch (type) {
+            case SELF, ITEM -> {
+                filterStack = hasFilter(player.getMainHandItem()) ? player.getMainHandItem() : player.getOffhandItem();
+                filterableItem = (IFilterableItem) filterStack.getItem();
+                filter = (BaseFluidFilter) filterableItem.getFilter(filterStack);
+            }
+            case TILE -> {
+                tile = world.getBlockEntity(pos);
+                if (hasFilter(tile)) {
+                    filterable = (IFilterable) tile;
+                    filter = (BaseFluidFilter) filterable.getFilter();
+                }
+            }
+            case ENTITY -> {
+                entity = world.getEntity(id);
+                if (hasFilter(entity)) {
+                    filterable = (IFilterable) entity;
+                    filter = (BaseFluidFilter) filterable.getFilter();
+                }
+            }
         }
         allowSwap = false;
 
@@ -82,7 +95,7 @@ public class FluidFilterContainer extends ContainerCoFH implements IFilterOption
     @Override
     protected void bindPlayerInventory(Inventory inventory) {
 
-        if (held) {
+        if (type == SELF || type == ITEM) {
             int xOffset = getPlayerInventoryHorizontalOffset();
             int yOffset = getPlayerInventoryVerticalOffset();
 
@@ -104,9 +117,19 @@ public class FluidFilterContainer extends ContainerCoFH implements IFilterOption
         }
     }
 
-    public IFilterableTile getFilterableTile() {
+    public IFilterable getFilterable() {
 
-        return filterableTile;
+        return filterable;
+    }
+
+    public IFilterableItem getFilterableItem() {
+
+        return filterableItem;
+    }
+
+    public ItemStack getFilterStack() {
+
+        return filterStack;
     }
 
     public int getFilterSize() {
@@ -128,10 +151,16 @@ public class FluidFilterContainer extends ContainerCoFH implements IFilterOption
     @Override
     public boolean stillValid(Player player) {
 
-        if (held) {
+        if (type == SELF || type == ITEM) {
             return lockedSlot.getItem() == filterStack;
         }
-        if (!FilterHelper.hasFilter(filterableTile)) {
+        if (entity != null) {
+            if (!FilterHelper.hasFilter(entity)) {
+                return false;
+            }
+            return !entity.isRemoved() && entity.position().distanceToSqr(player.position()) <= 64D;
+        }
+        if (!FilterHelper.hasFilter(tile)) {
             return false;
         }
         return tile != null && !tile.isRemoved() && tile.getBlockPos().distToCenterSqr(player.position()) <= 64D;
@@ -149,11 +178,11 @@ public class FluidFilterContainer extends ContainerCoFH implements IFilterOption
 
         filter.setFluids(filterInventory.getStacks());
 
-        if (held) {
+        if (type == SELF || type == ITEM) {
             filter.write(filterStack.getOrCreateTag());
             filterableItem.onFilterChanged(filterStack);
         } else {
-            filterableTile.onFilterChanged();
+            filterable.onFilterChanged();
         }
         super.removed(playerIn);
     }

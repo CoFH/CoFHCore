@@ -3,8 +3,12 @@ package cofh.core.util.filter;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 import java.util.Map;
+
+import static cofh.core.util.filter.FilterHolderType.*;
 
 public class FilterRegistry {
 
@@ -27,18 +31,26 @@ public class FilterRegistry {
         return true;
     }
 
-    public static IFilter getHeldFilter(String type, CompoundTag nbt) {
+    public static IFilter getFilter(String type, CompoundTag nbt) {
 
         if (FILTER_FACTORY_MAP.containsKey(type)) {
-            return FILTER_FACTORY_MAP.get(type).createFilter(nbt, true, BlockPos.ZERO);
+            return FILTER_FACTORY_MAP.get(type).createFilter(nbt, ITEM, -1, BlockPos.ZERO);
         }
         return EmptyFilter.INSTANCE;
     }
 
-    public static IFilter getTileFilter(String type, CompoundTag nbt, IFilterableTile tile) {
+    public static IFilter getFilter(String type, CompoundTag nbt, BlockEntity tile) {
 
         if (FILTER_FACTORY_MAP.containsKey(type)) {
-            return FILTER_FACTORY_MAP.get(type).createFilter(nbt, false, tile.pos());
+            return FILTER_FACTORY_MAP.get(type).createFilter(nbt, TILE, -1, tile.getBlockPos());
+        }
+        return EmptyFilter.INSTANCE;
+    }
+
+    public static IFilter getFilter(String type, CompoundTag nbt, Entity entity) {
+
+        if (FILTER_FACTORY_MAP.containsKey(type)) {
+            return FILTER_FACTORY_MAP.get(type).createFilter(nbt, ENTITY, entity.getId(), BlockPos.ZERO);
         }
         return EmptyFilter.INSTANCE;
     }

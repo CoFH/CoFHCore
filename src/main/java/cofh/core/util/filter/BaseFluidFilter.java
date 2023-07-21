@@ -17,6 +17,8 @@ import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 
 public class BaseFluidFilter implements IFilter, IFilterOptions {
 
+    public static final BaseFluidFilter ZERO = new BaseFluidFilter(0);
+
     protected List<FluidStack> fluids;
     protected Predicate<FluidStack> rules;
 
