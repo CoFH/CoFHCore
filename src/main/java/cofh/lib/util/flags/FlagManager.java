@@ -37,8 +37,10 @@ public class FlagManager {
 
     private Supplier<Boolean> getOrCreateFlag(String flag) {
 
-        FLAGS.putIfAbsent(flag, FALSE);
-        return FLAGS.get(flag);
+        synchronized (FLAGS) {
+            FLAGS.putIfAbsent(flag, FALSE);
+            return FLAGS.get(flag);
+        }
     }
 
     public void setFlag(String flag, boolean enable) {
