@@ -105,7 +105,7 @@ public class Shockwave extends AbstractAoESpell {
             if (AreaUtils.closestPointOnAABB(center, entity.getBoundingBox()).subtract(center).horizontalDistanceSqr() > r2) {
                 continue;
             }
-            //TODO damage source
+            // TODO damage source
             DamageSource source = this.owner instanceof Player player ? DamageSource.playerAttack(player) : DamageSource.mobAttack(this.owner);
             if (entity.hurt(source, damage)) {
                 hitSomething = true;

@@ -122,7 +122,7 @@ public class StreamParticle extends PointToPointParticle {
     }
 
     protected List<Direction> successorOrder() {
-        //TODO
+        // TODO
         return List.of(Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST, Direction.UP, Direction.DOWN);
     }
 

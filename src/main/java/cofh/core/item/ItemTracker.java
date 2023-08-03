@@ -22,7 +22,7 @@ import static net.minecraft.world.InteractionHand.OFF_HAND;
 @Mod.EventBusSubscriber (modid = ID_COFH_CORE)
 public class ItemTracker {
 
-    //TODO weak reference players
+    // TODO weak reference players
     protected static Map<Hand, ItemStack> HELD = new Object2ObjectOpenHashMap<>();
     protected static Object2IntMap<ItemStack> USING = new Object2IntOpenHashMap<>();
 

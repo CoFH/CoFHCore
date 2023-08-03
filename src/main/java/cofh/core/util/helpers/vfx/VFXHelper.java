@@ -56,7 +56,7 @@ public final class VFXHelper {
 
     private static VFXNode interpolateCap(VFXNode a, VFXNode b) {
 
-        return interpolate(a, b, 1.0F + b.width * 0.5F / MathHelper.dist(a.xMid() - b.xMid(), a.yMid() - b.yMid(), a.z - b.z)); //TODO
+        return interpolate(a, b, 1.0F + b.width * 0.5F / MathHelper.dist(a.xMid() - b.xMid(), a.yMid() - b.yMid(), a.z - b.z)); // TODO
     }
 
     public static Vector4f subtract(Vector4f a, Vector4f b) {
