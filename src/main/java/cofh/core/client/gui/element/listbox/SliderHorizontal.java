@@ -36,7 +36,7 @@ public class SliderHorizontal extends ElementSlider {
     @Override
     public void dragSlider(int v, int y) {
 
-        v += Math.round(_sliderWidth * (v / (float) width) + (_sliderWidth * 0.25f));
+        v += Math.round(_sliderWidth * (v / (float) width - 0.25f));
         setValue(_valueMin + ((_valueMax - _valueMin) * v / width));
     }
 

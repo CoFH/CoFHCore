@@ -111,10 +111,18 @@ public abstract class ElementBase {
         return this;
     }
 
-    public final ElementBase setSize(int width, int height) {
+    public ElementBase setSize(int width, int height) {
 
         this.width = width;
         this.height = height;
+        return this;
+    }
+
+    public final ElementBase setTexture(ResourceLocation texture, int texW, int texH) {
+
+        this.texture = texture;
+        this.texW = texW;
+        this.texH = texH;
         return this;
     }
 
