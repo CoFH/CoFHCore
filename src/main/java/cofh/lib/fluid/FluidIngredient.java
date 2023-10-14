@@ -62,12 +62,12 @@ public class FluidIngredient implements Predicate<FluidStack> {
 
         if (this.fluidStacks == null) {
             this.fluidStacks = Arrays.stream(this.values).flatMap((ingredientList) -> ingredientList.getFluids().stream()).distinct().toArray(FluidStack[]::new);
-        }
-        for (FluidStack stack : fluidStacks) {
-            if (stack.getRawFluid() != Fluids.EMPTY) {
-                stack.setAmount(amount);
-                if (tag != null) {
-                    stack.setTag(tag);
+            for (FluidStack stack : fluidStacks) {
+                if (stack.getRawFluid() != Fluids.EMPTY) {
+                    stack.setAmount(amount);
+                    if (tag != null) {
+                        stack.setTag(tag);
+                    }
                 }
             }
         }
@@ -97,6 +97,7 @@ public class FluidIngredient implements Predicate<FluidStack> {
 
         this.dissolve();
         buffer.writeVarInt(this.fluidStacks.length);
+        buffer.writeVarInt(this.amount);
         for (FluidStack matchingStack : this.fluidStacks) {
             buffer.writeFluidStack(matchingStack);
         }
@@ -144,7 +145,8 @@ public class FluidIngredient implements Predicate<FluidStack> {
     public static FluidIngredient fromNetwork(FriendlyByteBuf buffer) {
 
         int i = buffer.readVarInt();
-        return fromValues(Stream.generate(() -> new SingleFluidList(buffer.readFluidStack())).limit(i));
+        int amount = buffer.readVarInt();
+        return fromValues(Stream.generate(() -> new SingleFluidList(buffer.readFluidStack())).limit(i)).setAmount(amount);
     }
 
     public static FluidIngredient fromJson(@Nullable JsonElement jsonElement) {
