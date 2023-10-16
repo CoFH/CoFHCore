@@ -17,7 +17,6 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -426,7 +425,7 @@ public final class AreaEffectHelper {
             BlockState root = level.getBlockState(pos.relative(plant.growthDirection.getOpposite()));
             return root.is(plant.getBodyBlock());
         }
-        if (block instanceof BambooBlock || block instanceof CactusBlock || block instanceof SugarCaneBlock) {
+        if (block instanceof BambooStalkBlock || block instanceof CactusBlock || block instanceof SugarCaneBlock) {
             BlockState below = level.getBlockState(pos.relative(Direction.DOWN));
             return below.is(block);
         }
@@ -436,7 +435,6 @@ public final class AreaEffectHelper {
         if (block instanceof LeavesBlock) {
             return !state.getOptionalValue(LeavesBlock.PERSISTENT).orElse(false);
         }
-        Material material = state.getMaterial();
         return state.getOptionalValue(AGE_1).map(v -> v >= 1)
                 .or(() -> state.getOptionalValue(AGE_2).map(v -> v >= 2))
                 .or(() -> state.getOptionalValue(AGE_3).map(v -> v >= 3))
@@ -446,7 +444,7 @@ public final class AreaEffectHelper {
                 .or(() -> state.getOptionalValue(AGE_25).map(v -> v >= 25))
                 .orElse(block instanceof BigDripleafBlock || block instanceof BigDripleafStemBlock ||
                         block instanceof HugeMushroomBlock || state.is(BlockTags.TALL_FLOWERS) ||
-                        material.equals(Material.VEGETABLE) || material.equals(Material.MOSS));
+                        block instanceof StemGrownBlock || block instanceof MossBlock);
     }
     // endregion
 }

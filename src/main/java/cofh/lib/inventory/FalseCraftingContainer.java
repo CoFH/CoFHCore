@@ -3,12 +3,12 @@ package cofh.lib.inventory;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.inventory.TransientCraftingContainer;
 import net.minecraft.world.item.ItemStack;
 
-public class FalseCraftingInventory extends CraftingContainer {
+public class FalseCraftingContainer extends TransientCraftingContainer {
 
-    public FalseCraftingInventory(int width, int height) {
+    public FalseCraftingContainer(int width, int height) {
 
         super(FALSE_CONTAINER, width, height);
     }

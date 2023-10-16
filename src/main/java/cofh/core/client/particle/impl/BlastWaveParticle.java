@@ -6,11 +6,11 @@ import cofh.core.util.helpers.vfx.VFXHelper;
 import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Quaternion;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.MultiBufferSource;
+import org.joml.Quaternionf;
 
 import javax.annotation.Nonnull;
 import java.util.SplittableRandom;
@@ -34,7 +34,7 @@ public class BlastWaveParticle extends CylindricalParticle {
     @Override
     public void render(PoseStack stack, MultiBufferSource buffer, VertexConsumer consumer, int packedLightIn, float time, float pTicks) {
 
-        if (!rotation.equals(Quaternion.ONE)) {
+        if (!rotation.equals(new Quaternionf())) {
             stack.mulPose(rotation);
         }
         SplittableRandom rand = new SplittableRandom(seed);

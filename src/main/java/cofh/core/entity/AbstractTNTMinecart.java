@@ -7,6 +7,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -83,10 +84,10 @@ public abstract class AbstractTNTMinecart extends AbstractMinecartCoFH implement
     public void destroy(DamageSource source) {
 
         double d0 = this.getDeltaMovement().horizontalDistanceSqr();
-        if (!source.isFire() && !source.isExplosion() && !(d0 >= (double) 0.01F)) {
+        if (!source.is(DamageTypeTags.IS_FIRE) && !source.is(DamageTypeTags.IS_EXPLOSION) && !(d0 >= (double) 0.01F)) {
             detonated = true;
             super.destroy(source);
-            if (!source.isExplosion() && this.level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
+            if (!source.is(DamageTypeTags.IS_EXPLOSION) && this.level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
                 this.spawnAtLocation(getBlock());
             }
         } else {

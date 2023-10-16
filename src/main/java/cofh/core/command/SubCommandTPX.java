@@ -31,9 +31,9 @@ public class SubCommandTPX {
     private static int execute(CommandSourceStack source, Collection<? extends Entity> targets) {
 
         if (targets.size() == 1) {
-            source.sendSuccess(Component.translatable("commands.cofh.tpx.success.single", targets.iterator().next().getDisplayName()), true);
+            source.sendSuccess(() -> Component.translatable("commands.cofh.tpx.success.single", targets.iterator().next().getDisplayName()), true);
         } else {
-            source.sendSuccess(Component.translatable("commands.cofh.tpx.success.multiple", targets.size()), true);
+            source.sendSuccess(() -> Component.translatable("commands.cofh.tpx.success.multiple", targets.size()), true);
         }
         return targets.size();
     }

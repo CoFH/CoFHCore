@@ -3,16 +3,16 @@ package cofh.core.client.particle;
 import cofh.core.client.particle.options.CylindricalParticleOptions;
 import cofh.core.util.helpers.vfx.VFXHelper;
 import cofh.lib.util.helpers.MathHelper;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 public abstract class CylindricalParticle extends ColorParticle {
 
     public float height;
-    public Quaternion rotation = Quaternion.ONE;
+    public Quaternionf rotation = new Quaternionf();
 
     public CylindricalParticle(CylindricalParticleOptions data, ClientLevel level, double x, double y, double z) {
 

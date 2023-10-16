@@ -64,7 +64,7 @@ public class RayTracer {
 
     public static double getBlockReachDistance(Player player) {
 
-        return player.getReachDistance();
+        return player.getBlockReach();
     }
 
 }

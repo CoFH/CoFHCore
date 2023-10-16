@@ -5,13 +5,13 @@ import cofh.core.util.helpers.vfx.Color;
 import cofh.core.util.helpers.vfx.VFXHelper;
 import cofh.lib.client.renderer.entity.ITranslucentRenderer;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
+import org.joml.Vector3f;
 
 public class ElectricArcRenderer extends EntityRenderer<ElectricArc> implements ITranslucentRenderer {
 

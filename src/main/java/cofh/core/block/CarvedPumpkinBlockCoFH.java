@@ -2,9 +2,9 @@ package cofh.core.block;
 
 import cofh.core.util.ProxyUtils;
 import net.minecraft.Util;
-import net.minecraft.core.Registry;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CarvedPumpkinBlock;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class CarvedPumpkinBlockCoFH extends CarvedPumpkinBlock {
 
@@ -32,7 +32,7 @@ public class CarvedPumpkinBlockCoFH extends CarvedPumpkinBlock {
     @Override
     public String getDescriptionId() {
 
-        String specificTranslation = Util.makeDescriptionId("block", Registry.BLOCK.getKey(this));
+        String specificTranslation = Util.makeDescriptionId("block", ForgeRegistries.BLOCKS.getKey(this));
         if (ProxyUtils.canLocalize(specificTranslation)) {
             return specificTranslation;
         }

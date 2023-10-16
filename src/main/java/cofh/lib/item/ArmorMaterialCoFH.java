@@ -2,7 +2,7 @@ package cofh.lib.item;
 
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.LazyLoadedValue;
-import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.crafting.Ingredient;
 
@@ -32,17 +32,17 @@ public class ArmorMaterialCoFH implements ArmorMaterial {
         this.repairMaterial = new LazyLoadedValue<>(repairMaterialSupplier);
     }
 
-    // region IArmorMaterial
+    // region ArmorMaterial
     @Override
-    public int getDurabilityForSlot(EquipmentSlot slotIn) {
+    public int getDurabilityForType(ArmorItem.Type pType) {
 
-        return MAX_DAMAGE_ARRAY[slotIn.getIndex()] * this.maxDamageFactor;
+        return MAX_DAMAGE_ARRAY[pType.ordinal()] * this.maxDamageFactor;
     }
 
     @Override
-    public int getDefenseForSlot(EquipmentSlot slotIn) {
+    public int getDefenseForType(ArmorItem.Type pType) {
 
-        return this.damageReductionAmountArray[slotIn.getIndex()];
+        return this.damageReductionAmountArray[pType.ordinal()];
     }
 
     @Override

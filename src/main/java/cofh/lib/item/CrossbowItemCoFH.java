@@ -7,10 +7,7 @@ import cofh.lib.api.capability.IArcheryAmmoItem;
 import cofh.lib.api.item.ICoFHItem;
 import cofh.lib.util.Utils;
 import cofh.lib.util.helpers.MathHelper;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -28,10 +25,10 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -292,7 +289,7 @@ public class CrossbowItemCoFH extends CrossbowItem implements ICoFHItem {
     public Projectile shootProjectile(Player shooter, Projectile projectile, float speed, float inaccuracy, float angle) {
 
         Vector3f vector3f = new Vector3f(shooter.getViewVector(1.0F));
-        vector3f.transform(new Quaternion(new Vector3f(shooter.getUpVector(1.0F)), angle, true));
+        vector3f.transform(new Quaternionf(new Vector3f(shooter.getUpVector(1.0F)), angle, true));
         projectile.shoot(vector3f.x(), vector3f.y(), vector3f.z(), speed, inaccuracy);
         return projectile;
     }
@@ -335,21 +332,6 @@ public class CrossbowItemCoFH extends CrossbowItem implements ICoFHItem {
 
         this.showInGroups = showInGroups;
         return this;
-    }
-
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-
-        if (!showInGroups.get() || displayGroup != null && displayGroup.get() != null && displayGroup.get() != group) {
-            return;
-        }
-        super.fillItemCategory(group, items);
-    }
-
-    @Override
-    public Collection<CreativeModeTab> getCreativeTabs() {
-
-        return displayGroup != null && displayGroup.get() != null ? Collections.singletonList(displayGroup.get()) : super.getCreativeTabs();
     }
 
     @Override

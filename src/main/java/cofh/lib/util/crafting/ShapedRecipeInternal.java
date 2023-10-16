@@ -4,7 +4,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.*;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.inventory.CraftingContainer;
@@ -271,7 +271,7 @@ public class ShapedRecipeInternal implements CraftingRecipe, IShapedRecipe<Craft
     public static ItemStack itemFromJson(JsonObject p_199798_0_) {
 
         String s = GsonHelper.getAsString(p_199798_0_, "item");
-        Item item = Registry.ITEM.getOptional(new ResourceLocation(s)).orElseThrow(() -> {
+        Item item = BuiltInRegistries.ITEM.getOptional(new ResourceLocation(s)).orElseThrow(() -> {
             return new JsonSyntaxException("Unknown item '" + s + "'");
         });
         if (p_199798_0_.has("data")) {

@@ -2,7 +2,7 @@ package cofh.lib.client.renderer.entity;
 
 import cofh.lib.entity.PrimedTntCoFH;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -34,9 +34,9 @@ public class TntRendererCoFH extends EntityRenderer<PrimedTntCoFH> {
             float f1 = 1.0F + f * 0.3F;
             poseStackIn.scale(f1, f1, f1);
         }
-        poseStackIn.mulPose(Vector3f.YP.rotationDegrees(-90.0F));
+        poseStackIn.mulPose(Axis.YP.rotationDegrees(-90.0F));
         poseStackIn.translate(-0.5D, -0.5D, 0.5D);
-        poseStackIn.mulPose(Vector3f.YP.rotationDegrees(90.0F));
+        poseStackIn.mulPose(Axis.YP.rotationDegrees(90.0F));
         renderFlash(entityIn.getBlock().defaultBlockState(), poseStackIn, bufferIn, packedLightIn, entityIn.getFuse() / 5 % 2 == 0);
         poseStackIn.popPose();
         super.render(entityIn, entityYaw, partialTicks, poseStackIn, bufferIn, packedLightIn);

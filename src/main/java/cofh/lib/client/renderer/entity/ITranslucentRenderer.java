@@ -1,7 +1,6 @@
 package cofh.lib.client.renderer.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Matrix4f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.LevelRenderer;
@@ -12,6 +11,7 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Matrix4f;
 
 /**
  * Any entity renderers that have transparency should implement this interface in order to render (mostly) properly.

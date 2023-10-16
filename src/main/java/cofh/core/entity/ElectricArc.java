@@ -1,7 +1,6 @@
 package cofh.core.entity;
 
 import cofh.lib.entity.AbstractAoESpell;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -75,7 +74,7 @@ public class ElectricArc extends AbstractAoESpell {
 
     public boolean attack(Entity entity) {
 
-        if (entity.hurt(DamageSource.LIGHTNING_BOLT, this.damage)) {
+        if (entity.hurt(entity.level.damageSources().lightningBolt(), this.damage)) {
             if (entity instanceof LivingEntity) {
                 ((LivingEntity) entity).addEffect(new MobEffectInstance(SHOCKED.get(), 100, 0));
             }

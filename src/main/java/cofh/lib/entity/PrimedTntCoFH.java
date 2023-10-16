@@ -3,6 +3,7 @@ package cofh.lib.entity;
 import cofh.lib.api.IDetonatable;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EntityType;
@@ -40,7 +41,7 @@ public abstract class PrimedTntCoFH extends PrimedTnt implements IDetonatable {
     }
 
     @Override
-    public Packet<?> getAddEntityPacket() {
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
 
         return NetworkHooks.getEntitySpawningPacket(this);
     }

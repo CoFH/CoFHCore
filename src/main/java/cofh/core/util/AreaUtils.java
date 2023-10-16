@@ -6,7 +6,6 @@ import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -19,7 +18,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -32,6 +30,8 @@ import java.util.function.Predicate;
 
 import static cofh.core.init.CoreBlocks.*;
 import static cofh.core.init.CoreMobEffects.*;
+import static net.minecraft.tags.BlockTags.MINEABLE_WITH_PICKAXE;
+import static net.minecraft.tags.BlockTags.MINEABLE_WITH_SHOVEL;
 import static net.minecraft.world.level.block.Blocks.*;
 
 public class AreaUtils {
@@ -128,13 +128,13 @@ public class AreaUtils {
         }
         // WATER
         boolean isFull = state.getBlock() == WATER && state.getValue(LiquidBlock.LEVEL) == 0;
-        if (state.getMaterial() == Material.WATER && isFull && state.canSurvive(world, pos) && world.isUnobstructed(state, pos, CollisionContext.empty())) {
+        if (isFull && state.canSurvive(world, pos) && world.isUnobstructed(state, pos, CollisionContext.empty())) {
             succeeded |= world.setBlockAndUpdate(pos, FROSTED_ICE.defaultBlockState());
             world.scheduleTick(pos, FROSTED_ICE, MathHelper.nextInt(world.random, 60, 120));
         }
         // LAVA
         isFull = state.getBlock() == LAVA && state.getValue(LiquidBlock.LEVEL) == 0;
-        if (state.getMaterial() == Material.LAVA && isFull && state.canSurvive(world, pos) && world.isUnobstructed(state, pos, CollisionContext.empty())) {
+        if (isFull && state.canSurvive(world, pos) && world.isUnobstructed(state, pos, CollisionContext.empty())) {
             succeeded |= world.setBlockAndUpdate(pos, GLOSSED_MAGMA.get().defaultBlockState());
             world.scheduleTick(pos, GLOSSED_MAGMA.get(), MathHelper.nextInt(world.random, 60, 120));
         }
@@ -164,12 +164,12 @@ public class AreaUtils {
         }
         // WATER
         boolean isFull = state.getBlock() == WATER && state.getValue(LiquidBlock.LEVEL) == 0;
-        if (state.getMaterial() == Material.WATER && isFull && state.canSurvive(world, pos) && world.isUnobstructed(state, pos, CollisionContext.empty())) {
+        if (isFull && state.canSurvive(world, pos) && world.isUnobstructed(state, pos, CollisionContext.empty())) {
             succeeded |= world.setBlockAndUpdate(pos, ICE.defaultBlockState());
         }
         // LAVA
         isFull = state.getBlock() == LAVA && state.getValue(LiquidBlock.LEVEL) == 0;
-        if (state.getMaterial() == Material.LAVA && isFull && state.canSurvive(world, pos) && world.isUnobstructed(state, pos, CollisionContext.empty())) {
+        if (isFull && state.canSurvive(world, pos) && world.isUnobstructed(state, pos, CollisionContext.empty())) {
             succeeded |= world.setBlockAndUpdate(pos, OBSIDIAN.defaultBlockState());
         }
         return succeeded;
@@ -193,7 +193,7 @@ public class AreaUtils {
         BlockPos above = pos.relative(Direction.UP);
         if (world.getBlockState(above).isAir()) {
             boolean isFull = state.getBlock() == WATER && state.getValue(LiquidBlock.LEVEL) == 0;
-            if (state.getMaterial() == Material.WATER && isFull && state.canSurvive(world, pos) && world.isUnobstructed(state, pos, CollisionContext.empty())) {
+            if (isFull && state.canSurvive(world, pos) && world.isUnobstructed(state, pos, CollisionContext.empty())) {
                 succeeded |= world.setBlockAndUpdate(pos, frozenWater);
                 if (!permanentWater) {
                     world.scheduleTick(pos, FROSTED_ICE, MathHelper.nextInt(world.random, 60, 120));
@@ -201,7 +201,7 @@ public class AreaUtils {
             }
             // LAVA
             isFull = state.getBlock() == LAVA && state.getValue(LiquidBlock.LEVEL) == 0;
-            if (state.getMaterial() == Material.LAVA && isFull && state.canSurvive(world, pos) && world.isUnobstructed(state, pos, CollisionContext.empty())) {
+            if (isFull && state.canSurvive(world, pos) && world.isUnobstructed(state, pos, CollisionContext.empty())) {
                 succeeded |= world.setBlockAndUpdate(pos, frozenLava);
                 if (!permanentLava) {
                     world.scheduleTick(pos, GLOSSED_MAGMA.get(), MathHelper.nextInt(world.random, 60, 120));
@@ -227,9 +227,8 @@ public class AreaUtils {
     public static final IBlockTransformer EARTH_TRANSFORM = (world, pos, face, entity) -> {
         boolean succeeded = false;
         BlockState state = world.getBlockState(pos);
-        Material material = state.getMaterial();
-        if (material == Material.STONE || material == Material.DIRT || state.getBlock() instanceof SnowyDirtBlock) {
-            succeeded |= Utils.destroyBlock(world, pos, true, entity);
+        if (state.is(MINEABLE_WITH_SHOVEL) || state.is(MINEABLE_WITH_PICKAXE)) {
+            succeeded = Utils.destroyBlock(world, pos, true, entity);
         }
         return succeeded;
     };
@@ -239,7 +238,7 @@ public class AreaUtils {
         BlockState state = world.getBlockState(pos);
         if (state.isAir()) {
             if (isValidLightningBoltPosition(world, pos, 1.0F)) {
-                succeeded |= world.setBlockAndUpdate(pos, LIGHTNING_AIR.get().defaultBlockState());
+                succeeded = world.setBlockAndUpdate(pos, LIGHTNING_AIR.get().defaultBlockState());
             }
         }
         return succeeded;
@@ -255,7 +254,7 @@ public class AreaUtils {
             LivingEntity living = (LivingEntity) target;
             living.addEffect(new MobEffectInstance(MobEffects.GLOWING, duration, power));
             if (living.getMobType() == MobType.UNDEAD) {
-                living.hurt(DamageSource.explosion(source instanceof LivingEntity ? (LivingEntity) source : null), 4.0F);
+                living.hurt(living.level.damageSources().indirectMagic(source instanceof LivingEntity ? source : null, null), 4.0F);
                 living.setSecondsOnFire(duration / 20);
             }
         }
@@ -266,7 +265,7 @@ public class AreaUtils {
         if (target instanceof EnderMan || target instanceof Endermite) {
             LivingEntity living = (LivingEntity) target;
             living.addEffect(new MobEffectInstance(ENDERFERENCE.get(), duration, power));
-            living.hurt(DamageSource.explosion(source instanceof LivingEntity ? (LivingEntity) source : null), 4.0F);
+            living.hurt(living.level.damageSources().indirectMagic(source instanceof LivingEntity ? source : null, null), 4.0F);
         }
     };
 
@@ -288,12 +287,12 @@ public class AreaUtils {
         }
 
         @Override
-        public void transformSphere(Level levelIn, Vec3 pos, float radius, float chance, int max, @Nullable Entity entity) {
+        public void transformSphere(Level levelIn, Vec3 pos, int radius, float chance, int max, @Nullable Entity entity) {
 
-            float f = Math.min(HORZ_MAX, radius);
-            float v = Math.min(VERT_MAX, radius);
-            float f2 = f * f;
-            BlockPos origin = new BlockPos(pos);
+            int f = Math.min(HORZ_MAX, radius);
+            int v = Math.min(VERT_MAX, radius);
+            int f2 = f * f;
+            BlockPos origin = BlockPos.containing(pos);
 
             if (transformBlock(levelIn, origin.relative(Direction.UP), Direction.DOWN, entity)) {
                 --max;
@@ -323,7 +322,7 @@ public class AreaUtils {
                     growable.performBonemeal((ServerLevel) world, world.random, pos, state);
                 } catch (Exception e) {
                     // Vanilla issue causes bamboo to crash if grown close to world height
-                    if (!(growable instanceof BambooBlock)) {
+                    if (!(growable instanceof BambooStalkBlock)) {
                         throw e;
                     }
                 }
@@ -441,12 +440,12 @@ public class AreaUtils {
 
         boolean transformBlock(Level level, BlockPos pos, Direction face, @Nullable Entity entity);
 
-        default void transformSphere(Level level, Vec3 pos, float radius, @Nullable Entity entity) {
+        default void transformSphere(Level level, Vec3 pos, int radius, @Nullable Entity entity) {
 
-            float f = Math.min(HORZ_MAX, radius);
-            float v = Math.min(VERT_MAX, radius);
+            int f = Math.min(HORZ_MAX, radius);
+            int v = Math.min(VERT_MAX, radius);
             float f2 = f * f;
-            BlockPos origin = new BlockPos(pos);
+            BlockPos origin = BlockPos.containing(pos);
 
             for (BlockPos iterPos : BlockPos.betweenClosed(origin.offset(-f, -v, -f), origin.offset(f + 1, v + 1, f + 1))) {
                 if (iterPos.distSqr(origin) < f2) {
@@ -455,12 +454,12 @@ public class AreaUtils {
             }
         }
 
-        default void transformSphere(Level levelIn, Vec3 pos, float radius, float chance, @Nullable Entity entity) {
+        default void transformSphere(Level levelIn, Vec3 pos, int radius, float chance, @Nullable Entity entity) {
 
-            float f = Math.min(HORZ_MAX, radius);
-            float v = Math.min(VERT_MAX, radius);
+            int f = Math.min(HORZ_MAX, radius);
+            int v = Math.min(VERT_MAX, radius);
             float f2 = f * f;
-            BlockPos origin = new BlockPos(pos);
+            BlockPos origin = BlockPos.containing(pos);
 
             for (BlockPos iterPos : BlockPos.betweenClosed(origin.offset(-f, -v, -f), origin.offset(f, v, f))) {
                 double distSqr = iterPos.distSqr(origin);
@@ -470,12 +469,12 @@ public class AreaUtils {
             }
         }
 
-        default void transformSphere(Level levelIn, Vec3 pos, float radius, float chance, int max, @Nullable Entity entity) {
+        default void transformSphere(Level levelIn, Vec3 pos, int radius, float chance, int max, @Nullable Entity entity) {
 
-            float f = Math.min(HORZ_MAX, radius);
-            float v = Math.min(VERT_MAX, radius);
+            int f = Math.min(HORZ_MAX, radius);
+            int v = Math.min(VERT_MAX, radius);
             float f2 = f * f;
-            BlockPos origin = new BlockPos(pos);
+            BlockPos origin = BlockPos.containing(pos);
 
             if (transformBlock(levelIn, origin, Direction.DOWN, entity)) {
                 --max;
@@ -510,9 +509,9 @@ public class AreaUtils {
 
     public static void igniteNearbyGround(Entity entity, Level levelIn, BlockPos pos, int radius, double chance) {
 
-        float f = (float) Math.min(HORZ_MAX, radius);
-        float v = (float) Math.min(VERT_MAX, radius);
-        float f2 = f * f;
+        int f = Math.min(HORZ_MAX, radius);
+        int v = Math.min(VERT_MAX, radius);
+        int f2 = f * f;
         BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 
         for (BlockPos blockpos : BlockPos.betweenClosed(pos.offset(-f, -v, -f), pos.offset(f, v, f))) {
@@ -531,9 +530,9 @@ public class AreaUtils {
 
     public static void igniteSpecial(Entity entity, Level levelIn, BlockPos pos, int radius, boolean campfire, boolean tnt, @Nullable Entity igniter) {
 
-        float f = (float) Math.min(HORZ_MAX, radius);
-        float v = (float) Math.min(VERT_MAX, radius);
-        float f2 = f * f;
+        int f = Math.min(HORZ_MAX, radius);
+        int v = Math.min(VERT_MAX, radius);
+        int f2 = f * f;
 
         for (BlockPos blockpos : BlockPos.betweenClosed(pos.offset(-f, -v, -f), pos.offset(f, v, f))) {
             double distance = blockpos.distToCenterSqr(entity.position());
@@ -554,7 +553,7 @@ public class AreaUtils {
         BlockPos below = pos.below();
         BlockState state = levelIn.getBlockState(below);
         if (Block.isFaceFull(state.getCollisionShape(levelIn, below), Direction.UP)) {
-            return state.getMaterial().isFlammable() || levelIn.random.nextDouble() < chance; // Random chance.
+            return state.isFlammable(levelIn, pos, Direction.UP) || levelIn.random.nextDouble() < chance; // Random chance.
         }
         return false;
     }
@@ -564,9 +563,9 @@ public class AreaUtils {
     public static void freezeNearbyGround(Entity entity, Level levelIn, BlockPos pos, int radius) {
 
         BlockState state = SNOW.defaultBlockState();
-        float f = (float) Math.min(HORZ_MAX, radius);
-        float v = (float) Math.min(VERT_MAX, radius);
-        float f2 = f * f;
+        int f = Math.min(HORZ_MAX, radius);
+        int v = Math.min(VERT_MAX, radius);
+        int f2 = f * f;
         BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 
         for (BlockPos blockpos : BlockPos.betweenClosed(pos.offset(-f, -v, -f), pos.offset(f, v, f))) {
@@ -585,9 +584,9 @@ public class AreaUtils {
 
     public static void freezeSpecial(Entity entity, Level levelIn, BlockPos pos, int radius, boolean campfire, boolean fire) {
 
-        float f = (float) Math.min(HORZ_MAX, radius);
-        float v = (float) Math.min(VERT_MAX, radius);
-        float f2 = f * f;
+        int f = Math.min(HORZ_MAX, radius);
+        int v = Math.min(VERT_MAX, radius);
+        int f2 = f * f;
 
         for (BlockPos blockpos : BlockPos.betweenClosed(pos.offset(-f, -v, -f), pos.offset(f, v, f))) {
             double distance = blockpos.distToCenterSqr(entity.position());
@@ -605,9 +604,9 @@ public class AreaUtils {
     public static void freezeSurfaceWater(Entity entity, Level level, BlockPos pos, int radius, boolean permanent) {
 
         BlockState state = permanent ? ICE.defaultBlockState() : FROSTED_ICE.defaultBlockState();
-        float f = (float) Math.min(HORZ_MAX, radius);
-        float v = (float) Math.min(VERT_MAX, radius);
-        float f2 = f * f;
+        int f = Math.min(HORZ_MAX, radius);
+        int v = Math.min(VERT_MAX, radius);
+        int f2 = f * f;
         BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 
         for (BlockPos blockpos : BlockPos.betweenClosed(pos.offset(-f, -v, -f), pos.offset(f, v, f))) {
@@ -618,7 +617,7 @@ public class AreaUtils {
                 if (blockstate1.isAir()) {
                     BlockState blockstate2 = level.getBlockState(blockpos);
                     boolean isFull = blockstate2.getBlock() == WATER && blockstate2.getValue(LiquidBlock.LEVEL) == 0;
-                    if (blockstate2.getMaterial() == Material.WATER && isFull && state.canSurvive(level, blockpos) && level.isUnobstructed(state, blockpos, CollisionContext.empty())) {
+                    if (isFull && state.canSurvive(level, blockpos) && level.isUnobstructed(state, blockpos, CollisionContext.empty())) {
                         level.setBlockAndUpdate(blockpos, state);
                         if (!permanent) {
                             level.scheduleTick(blockpos, FROSTED_ICE, MathHelper.nextInt(level.random, 60, 120));
@@ -632,16 +631,16 @@ public class AreaUtils {
     public static void freezeAllWater(Entity entity, Level levelIn, BlockPos pos, int radius, boolean permanent) {
 
         BlockState state = permanent ? ICE.defaultBlockState() : FROSTED_ICE.defaultBlockState();
-        float f = (float) Math.min(HORZ_MAX, radius);
-        float v = (float) Math.min(VERT_MAX, radius);
-        float f2 = f * f;
+        int f = Math.min(HORZ_MAX, radius);
+        int v = Math.min(VERT_MAX, radius);
+        int f2 = f * f;
 
         for (BlockPos blockpos : BlockPos.betweenClosed(pos.offset(-f, -v, -f), pos.offset(f, v, f))) {
             double distance = blockpos.distToCenterSqr(entity.position());
             if (distance < f2) {
                 BlockState blockstate2 = levelIn.getBlockState(blockpos);
                 boolean isFull = blockstate2.getBlock() == WATER && blockstate2.getValue(LiquidBlock.LEVEL) == 0;
-                if (blockstate2.getMaterial() == Material.WATER && isFull && state.canSurvive(levelIn, blockpos) && levelIn.isUnobstructed(state, blockpos, CollisionContext.empty())) {
+                if (isFull && state.canSurvive(levelIn, blockpos) && levelIn.isUnobstructed(state, blockpos, CollisionContext.empty())) {
                     levelIn.setBlockAndUpdate(blockpos, state);
                     if (!permanent) {
                         levelIn.scheduleTick(blockpos, FROSTED_ICE, MathHelper.nextInt(levelIn.random, 60, 120));
@@ -657,9 +656,9 @@ public class AreaUtils {
             return;
         }
         BlockState state = permanent ? OBSIDIAN.defaultBlockState() : GLOSSED_MAGMA.get().defaultBlockState();
-        float f = (float) Math.min(HORZ_MAX, radius);
-        float v = (float) Math.min(VERT_MAX, radius);
-        float f2 = f * f;
+        int f = Math.min(HORZ_MAX, radius);
+        int v = Math.min(VERT_MAX, radius);
+        int f2 = f * f;
         BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 
         for (BlockPos blockpos : BlockPos.betweenClosed(pos.offset(-f, -v, -f), pos.offset(f, v, f))) {
@@ -670,7 +669,7 @@ public class AreaUtils {
                 if (blockstate1.isAir()) {
                     BlockState blockstate2 = levelIn.getBlockState(blockpos);
                     boolean isFull = blockstate2.getBlock() == LAVA && blockstate2.getValue(LiquidBlock.LEVEL) == 0;
-                    if (blockstate2.getMaterial() == Material.LAVA && isFull && state.canSurvive(levelIn, blockpos) && levelIn.isUnobstructed(state, blockpos, CollisionContext.empty())) {
+                    if (isFull && state.canSurvive(levelIn, blockpos) && levelIn.isUnobstructed(state, blockpos, CollisionContext.empty())) {
                         levelIn.setBlockAndUpdate(blockpos, state);
                         if (!permanent) {
                             levelIn.scheduleTick(blockpos, GLOSSED_MAGMA.get(), MathHelper.nextInt(levelIn.random, 60, 120));
@@ -687,16 +686,16 @@ public class AreaUtils {
             return;
         }
         BlockState state = permanent ? OBSIDIAN.defaultBlockState() : GLOSSED_MAGMA.get().defaultBlockState();
-        float f = (float) Math.min(HORZ_MAX, radius);
-        float v = (float) Math.min(VERT_MAX, radius);
-        float f2 = f * f;
+        int f = Math.min(HORZ_MAX, radius);
+        int v = Math.min(VERT_MAX, radius);
+        int f2 = f * f;
 
         for (BlockPos blockpos : BlockPos.betweenClosed(pos.offset(-f, -v, -f), pos.offset(f, v, f))) {
             double distance = blockpos.distToCenterSqr(entity.position());
             if (distance < f2) {
                 BlockState blockstate2 = levelIn.getBlockState(blockpos);
                 boolean isFull = blockstate2.getBlock() == LAVA && blockstate2.getValue(LiquidBlock.LEVEL) == 0;
-                if (blockstate2.getMaterial() == Material.LAVA && isFull && state.canSurvive(levelIn, blockpos) && levelIn.isUnobstructed(state, blockpos, CollisionContext.empty())) {
+                if (isFull && state.canSurvive(levelIn, blockpos) && levelIn.isUnobstructed(state, blockpos, CollisionContext.empty())) {
                     levelIn.setBlockAndUpdate(blockpos, state);
                     if (!permanent) {
                         levelIn.scheduleTick(blockpos, GLOSSED_MAGMA.get(), MathHelper.nextInt(levelIn.random, 60, 120));
@@ -730,9 +729,9 @@ public class AreaUtils {
 
     public static void transformArea(Entity entity, Level levelIn, BlockPos pos, BlockState replaceable, BlockState replacement, int radius, boolean requireAir) {
 
-        float f = (float) Math.min(HORZ_MAX, radius);
-        float v = (float) Math.min(VERT_MAX, radius);
-        float f2 = f * f;
+        int f = Math.min(HORZ_MAX, radius);
+        int v = Math.min(VERT_MAX, radius);
+        int f2 = f * f;
         BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 
         if (requireAir) {
@@ -762,9 +761,9 @@ public class AreaUtils {
 
     public static void transformArea(Entity entity, Level levelIn, BlockPos pos, Set<BlockState> replaceable, BlockState replacement, int radius, boolean requireAir) {
 
-        float f = (float) Math.min(HORZ_MAX, radius);
-        float v = (float) Math.min(VERT_MAX, radius);
-        float f2 = f * f;
+        int f = Math.min(HORZ_MAX, radius);
+        int v = Math.min(VERT_MAX, radius);
+        int f2 = f * f;
         BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 
         if (requireAir) {
@@ -826,9 +825,9 @@ public class AreaUtils {
 
     public static void zapNearbyGround(Entity entity, Level levelIn, BlockPos pos, int radius, double chance, int max) {
 
-        float f = (float) Math.min(HORZ_MAX, radius);
-        float v = (float) Math.min(VERT_MAX, radius);
-        float f2 = f * f;
+        int f = Math.min(HORZ_MAX, radius);
+        int v = Math.min(VERT_MAX, radius);
+        int f2 = f * f;
         BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
         int count = 0;
 
@@ -852,9 +851,9 @@ public class AreaUtils {
 
     public static void growMushrooms(Entity entity, Level levelIn, BlockPos pos, int radius, int count) {
 
-        float f = (float) Math.min(HORZ_MAX, radius);
-        float v = (float) Math.min(VERT_MAX, radius);
-        float f2 = f * f;
+        int f = Math.min(HORZ_MAX, radius);
+        int v = Math.min(VERT_MAX, radius);
+        int f2 = f * f;
         int grow = 0;
         BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 
@@ -892,9 +891,9 @@ public class AreaUtils {
 
     public static void growPlants(Entity entity, Level levelIn, BlockPos pos, int radius) {
 
-        float f = (float) Math.min(HORZ_MAX, radius);
-        float v = (float) Math.min(VERT_MAX, radius);
-        float f2 = f * f;
+        int f = Math.min(HORZ_MAX, radius);
+        int v = Math.min(VERT_MAX, radius);
+        int f2 = f * f;
 
         BlockState state;
         for (BlockPos iterPos : BlockPos.betweenClosed(pos.offset(-f, -v, -f), pos.offset(f, v, f))) {
@@ -911,7 +910,7 @@ public class AreaUtils {
                                     growable.performBonemeal((ServerLevel) levelIn, levelIn.random, iterPos, state);
                                 } catch (Exception e) {
                                     // Vanilla issue causes bamboo to crash if grown close to world height
-                                    if (!(growable instanceof BambooBlock)) {
+                                    if (!(growable instanceof BambooStalkBlock)) {
                                         throw e;
                                     }
                                 }
@@ -927,9 +926,9 @@ public class AreaUtils {
 
     public static void growPlants(Entity entity, Level levelIn, BlockPos pos, int radius, int count) {
 
-        float f = (float) Math.min(HORZ_MAX, radius);
-        float v = (float) Math.min(VERT_MAX, radius);
-        float f2 = f * f;
+        int f = Math.min(HORZ_MAX, radius);
+        int v = Math.min(VERT_MAX, radius);
+        int f2 = f * f;
         int grow = 0;
 
         BlockState state = levelIn.getBlockState(entity.blockPosition());
@@ -944,7 +943,7 @@ public class AreaUtils {
                             ++grow;
                         } catch (Exception e) {
                             // Vanilla issue causes bamboo to crash if grown close to world height
-                            if (!(growable instanceof BambooBlock)) {
+                            if (!(growable instanceof BambooStalkBlock)) {
                                 throw e;
                             }
                         }
@@ -970,7 +969,7 @@ public class AreaUtils {
                                     ++grow;
                                 } catch (Exception e) {
                                     // Vanilla issue causes bamboo to crash if grown close to world height
-                                    if (!(growable instanceof BambooBlock)) {
+                                    if (!(growable instanceof BambooStalkBlock)) {
                                         throw e;
                                     }
                                 }

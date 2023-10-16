@@ -3,13 +3,18 @@ package cofh.core.data;
 import cofh.lib.tags.BlockTagsCoFH;
 import cofh.lib.tags.FluidTagsCoFH;
 import cofh.lib.tags.ItemTagsCoFH;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.FluidTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.concurrent.CompletableFuture;
 
 import static cofh.core.CoFHCore.FLUIDS;
 import static cofh.core.util.references.CoreIDs.*;
@@ -19,9 +24,9 @@ public class CoreTagsProvider {
 
     public static class Block extends BlockTagsProvider {
 
-        public Block(DataGenerator gen, ExistingFileHelper existingFileHelper) {
+        public Block(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper) {
 
-            super(gen, ID_COFH_CORE, existingFileHelper);
+            super(output, lookupProvider, ID_COFH_CORE, existingFileHelper);
         }
 
         @Override
@@ -31,7 +36,7 @@ public class CoreTagsProvider {
         }
 
         @Override
-        protected void addTags() {
+        protected void addTags(HolderLookup.Provider pProvider) {
 
             tag(BlockTagsCoFH.PUMPKINS_CARVED).add(Blocks.CARVED_PUMPKIN);
         }
@@ -40,9 +45,9 @@ public class CoreTagsProvider {
 
     public static class Item extends ItemTagsProvider {
 
-        public Item(DataGenerator gen, BlockTagsProvider blockTagProvider, ExistingFileHelper existingFileHelper) {
+        public Item(PackOutput pOutput, CompletableFuture<HolderLookup.Provider> pLookupProvider, CompletableFuture<TagsProvider.TagLookup<net.minecraft.world.level.block.Block>> pBlockTags, ExistingFileHelper existingFileHelper) {
 
-            super(gen, blockTagProvider, ID_COFH_CORE, existingFileHelper);
+            super(pOutput, pLookupProvider, pBlockTags, ID_COFH_CORE, existingFileHelper);
         }
 
         @Override
@@ -52,7 +57,7 @@ public class CoreTagsProvider {
         }
 
         @Override
-        protected void addTags() {
+        protected void addTags(HolderLookup.Provider pProvider) {
 
             copy(BlockTagsCoFH.PUMPKINS_CARVED, ItemTagsCoFH.PUMPKINS_CARVED);
 
@@ -138,9 +143,9 @@ public class CoreTagsProvider {
 
     public static class Fluid extends FluidTagsProvider {
 
-        public Fluid(DataGenerator gen, ExistingFileHelper existingFileHelper) {
+        public Fluid(PackOutput pOutput, CompletableFuture<HolderLookup.Provider> pProvider, ExistingFileHelper existingFileHelper) {
 
-            super(gen, ID_COFH_CORE, existingFileHelper);
+            super(pOutput, pProvider, ID_COFH_CORE, existingFileHelper);
         }
 
         @Override
@@ -150,7 +155,7 @@ public class CoreTagsProvider {
         }
 
         @Override
-        protected void addTags() {
+        protected void addTags(HolderLookup.Provider pProvider) {
 
             tag(FluidTagsCoFH.EXPERIENCE).add(FLUIDS.get(ID_FLUID_EXPERIENCE));
             tag(FluidTagsCoFH.HONEY).add(FLUIDS.get(ID_FLUID_HONEY));

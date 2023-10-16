@@ -32,11 +32,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.templates.EmptyFluidHandler;
@@ -180,24 +180,24 @@ public final class FluidHelper {
 
     public static boolean hasFluidHandlerCap(BlockEntity tile, Direction face) {
 
-        return tile != null && tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, face).isPresent();
+        return tile != null && tile.getCapability(ForgeCapabilities.FLUID_HANDLER, face).isPresent();
     }
 
     public static IFluidHandler getFluidHandlerCap(BlockEntity tile, Direction face) {
 
-        return tile == null ? EmptyFluidHandler.INSTANCE : tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, face).orElse(EmptyFluidHandler.INSTANCE);
+        return tile == null ? EmptyFluidHandler.INSTANCE : tile.getCapability(ForgeCapabilities.FLUID_HANDLER, face).orElse(EmptyFluidHandler.INSTANCE);
     }
     // endregion
 
     // region CAPABILITY HELPERS
     public static boolean hasFluidHandlerCap(ItemStack item) {
 
-        return !item.isEmpty() && item.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent();
+        return !item.isEmpty() && item.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent();
     }
 
     public static LazyOptional<IFluidHandlerItem> getFluidHandlerCap(@Nonnull ItemStack stack) {
 
-        return stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY);
+        return stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM);
     }
 
     public static Optional<FluidStack> getFluidContainedInItem(@Nonnull ItemStack container) {
@@ -363,7 +363,7 @@ public final class FluidHelper {
             FluidStack containedFluid = getFluidContainedInItem(stack).orElse(FluidStack.EMPTY);
             int tankSpace = getCapacityForItem(stack) - containedFluid.getAmount();
             if (!containedFluid.isEmpty() && tankSpace > 0) {
-                stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).ifPresent(e -> {
+                stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).ifPresent(e -> {
                     if (player.getAbilities().instabuild) {
                         handler.drain(new FluidStack(containedFluid, tankSpace), EXECUTE);
                     } else {

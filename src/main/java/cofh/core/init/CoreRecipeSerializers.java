@@ -2,9 +2,9 @@ package cofh.core.init;
 
 import cofh.core.util.crafting.SecureRecipe;
 import cofh.core.util.crafting.ShapedPotionNBTRecipe;
+import cofh.lib.util.crafting.SimpleRecipeSerializer;
 import cofh.lib.util.flags.TagExistsRecipeCondition;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.registries.RegistryObject;
 

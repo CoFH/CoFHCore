@@ -45,7 +45,7 @@ public final class SoundHelper {
 
     public static void playClickSound(float volume, float pitch) {
 
-        playSimpleSound(SoundEvents.UI_BUTTON_CLICK, volume, pitch);
+        playSimpleSound(SoundEvents.UI_BUTTON_CLICK.get(), volume, pitch);
     }
 
     public static void playSimpleSound(SoundEvent sound, float volume, float pitch) {

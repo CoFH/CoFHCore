@@ -19,48 +19,49 @@ public class CoreTextures {
 
     private static final String BLOCK_ATLAS = "minecraft:textures/atlas/blocks.png";
 
-    @SubscribeEvent
-    public static void preStitch(TextureStitchEvent.Pre event) {
-
-        if (!event.getAtlas().location().toString().equals(BLOCK_ATLAS)) {
-            return;
-        }
-        event.addSprite(new ResourceLocation(ICONS_ + "icon_access_public"));
-        event.addSprite(new ResourceLocation(ICONS_ + "icon_access_team"));
-        event.addSprite(new ResourceLocation(ICONS_ + "icon_access_friends"));
-        event.addSprite(new ResourceLocation(ICONS_ + "icon_access_private"));
-
-        event.addSprite(new ResourceLocation(ICONS_ + "icon_accept"));
-        event.addSprite(new ResourceLocation(ICONS_ + "icon_accept_inactive"));
-        event.addSprite(new ResourceLocation(ICONS_ + "icon_augment"));
-        event.addSprite(new ResourceLocation(ICONS_ + "icon_button"));
-        event.addSprite(new ResourceLocation(ICONS_ + "icon_button_highlight"));
-        event.addSprite(new ResourceLocation(ICONS_ + "icon_button_inactive"));
-        event.addSprite(new ResourceLocation(ICONS_ + "icon_cancel"));
-        event.addSprite(new ResourceLocation(ICONS_ + "icon_cancel_inactive"));
-        event.addSprite(new ResourceLocation(ICONS_ + "icon_config"));
-        event.addSprite(new ResourceLocation(ICONS_ + "icon_enchantment"));
-        event.addSprite(new ResourceLocation(ICONS_ + "icon_energy"));
-        event.addSprite(new ResourceLocation(ICONS_ + "icon_nope"));
-        event.addSprite(new ResourceLocation(ICONS_ + "icon_information"));
-        event.addSprite(new ResourceLocation(ICONS_ + "icon_steam"));
-        event.addSprite(new ResourceLocation(ICONS_ + "icon_tutorial"));
-
-        event.addSprite(new ResourceLocation(ICONS_ + "icon_input"));
-        event.addSprite(new ResourceLocation(ICONS_ + "icon_output"));
-
-        event.addSprite(new ResourceLocation(ICONS_ + "icon_redstone_off"));
-        event.addSprite(new ResourceLocation(ICONS_ + "icon_redstone_on"));
-
-        event.addSprite(new ResourceLocation(ICONS_ + "icon_rs_torch_off"));
-        event.addSprite(new ResourceLocation(ICONS_ + "icon_rs_torch_on"));
-
-        event.addSprite(new ResourceLocation(ICONS_ + "icon_arrow_down"));
-        event.addSprite(new ResourceLocation(ICONS_ + "icon_arrow_down_inactive"));
-
-        event.addSprite(new ResourceLocation(ICONS_ + "icon_arrow_up"));
-        event.addSprite(new ResourceLocation(ICONS_ + "icon_arrow_up_inactive"));
-    }
+    // TODO: 1.20 Fix
+    //    @SubscribeEvent
+    //    public static void preStitch(TextureStitchEvent.Pre event) {
+    //
+    //        if (!event.getAtlas().location().toString().equals(BLOCK_ATLAS)) {
+    //            return;
+    //        }
+    //        event.addSprite(new ResourceLocation(ICONS_ + "icon_access_public"));
+    //        event.addSprite(new ResourceLocation(ICONS_ + "icon_access_team"));
+    //        event.addSprite(new ResourceLocation(ICONS_ + "icon_access_friends"));
+    //        event.addSprite(new ResourceLocation(ICONS_ + "icon_access_private"));
+    //
+    //        event.addSprite(new ResourceLocation(ICONS_ + "icon_accept"));
+    //        event.addSprite(new ResourceLocation(ICONS_ + "icon_accept_inactive"));
+    //        event.addSprite(new ResourceLocation(ICONS_ + "icon_augment"));
+    //        event.addSprite(new ResourceLocation(ICONS_ + "icon_button"));
+    //        event.addSprite(new ResourceLocation(ICONS_ + "icon_button_highlight"));
+    //        event.addSprite(new ResourceLocation(ICONS_ + "icon_button_inactive"));
+    //        event.addSprite(new ResourceLocation(ICONS_ + "icon_cancel"));
+    //        event.addSprite(new ResourceLocation(ICONS_ + "icon_cancel_inactive"));
+    //        event.addSprite(new ResourceLocation(ICONS_ + "icon_config"));
+    //        event.addSprite(new ResourceLocation(ICONS_ + "icon_enchantment"));
+    //        event.addSprite(new ResourceLocation(ICONS_ + "icon_energy"));
+    //        event.addSprite(new ResourceLocation(ICONS_ + "icon_nope"));
+    //        event.addSprite(new ResourceLocation(ICONS_ + "icon_information"));
+    //        event.addSprite(new ResourceLocation(ICONS_ + "icon_steam"));
+    //        event.addSprite(new ResourceLocation(ICONS_ + "icon_tutorial"));
+    //
+    //        event.addSprite(new ResourceLocation(ICONS_ + "icon_input"));
+    //        event.addSprite(new ResourceLocation(ICONS_ + "icon_output"));
+    //
+    //        event.addSprite(new ResourceLocation(ICONS_ + "icon_redstone_off"));
+    //        event.addSprite(new ResourceLocation(ICONS_ + "icon_redstone_on"));
+    //
+    //        event.addSprite(new ResourceLocation(ICONS_ + "icon_rs_torch_off"));
+    //        event.addSprite(new ResourceLocation(ICONS_ + "icon_rs_torch_on"));
+    //
+    //        event.addSprite(new ResourceLocation(ICONS_ + "icon_arrow_down"));
+    //        event.addSprite(new ResourceLocation(ICONS_ + "icon_arrow_down_inactive"));
+    //
+    //        event.addSprite(new ResourceLocation(ICONS_ + "icon_arrow_up"));
+    //        event.addSprite(new ResourceLocation(ICONS_ + "icon_arrow_up_inactive"));
+    //    }
 
     @SubscribeEvent
     public static void postStitch(TextureStitchEvent.Post event) {

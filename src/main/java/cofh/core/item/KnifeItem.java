@@ -1,9 +1,8 @@
 package cofh.core.item;
 
-import cofh.core.entity.Knife;
+import cofh.core.entity.ThrownKnife;
 import cofh.lib.item.SwordItemCoFH;
 import cofh.lib.util.helpers.MathHelper;
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.Position;
 import net.minecraft.core.dispenser.AbstractProjectileDispenseBehavior;
 import net.minecraft.sounds.SoundEvents;
@@ -21,8 +20,6 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.function.Supplier;
 
 import static cofh.lib.util.Constants.TRUE;
@@ -78,7 +75,7 @@ public class KnifeItem extends SwordItemCoFH {
                 return;
             }
             if (!world.isClientSide) {
-                Knife knife = new Knife(world, player, stack);
+                ThrownKnife knife = new ThrownKnife(world, player, stack);
                 knife.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, power * 3.0F, 0.1F);
                 if (player.getAbilities().instabuild) {
                     knife.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
@@ -120,21 +117,6 @@ public class KnifeItem extends SwordItemCoFH {
     }
 
     @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-
-        if (!showInGroups.get() || displayGroup != null && displayGroup.get() != null && displayGroup.get() != group) {
-            return;
-        }
-        super.fillItemCategory(group, items);
-    }
-
-    @Override
-    public Collection<CreativeModeTab> getCreativeTabs() {
-
-        return displayGroup != null && displayGroup.get() != null ? Collections.singletonList(displayGroup.get()) : super.getCreativeTabs();
-    }
-
-    @Override
     public String getCreatorModId(ItemStack itemStack) {
 
         return modId == null || modId.isEmpty() ? super.getCreatorModId(itemStack) : modId;
@@ -147,7 +129,7 @@ public class KnifeItem extends SwordItemCoFH {
         @Override
         public Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
 
-            Knife knife = new Knife(worldIn, position.x(), position.y(), position.z(), stackIn);
+            ThrownKnife knife = new ThrownKnife(worldIn, position.x(), position.y(), position.z(), stackIn);
             knife.pickup = AbstractArrow.Pickup.ALLOWED;
             return knife;
         }

@@ -7,8 +7,7 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.material.MapColor;
 
 public class OreBlockCoFH extends Block {
 
@@ -17,12 +16,12 @@ public class OreBlockCoFH extends Block {
 
     public static OreBlockCoFH createStoneOre() {
 
-        return new OreBlockCoFH(Properties.of(Material.STONE, MaterialColor.STONE).strength(3.0F, 3.0F).sound(SoundType.STONE).requiresCorrectToolForDrops());
+        return new OreBlockCoFH(Properties.of().mapColor(MapColor.STONE).strength(3.0F, 3.0F).sound(SoundType.STONE).requiresCorrectToolForDrops());
     }
 
     public static OreBlockCoFH createDeepslateOre() {
 
-        return new OreBlockCoFH(Properties.of(Material.STONE, MaterialColor.DEEPSLATE).strength(4.5F, 3.0F).sound(SoundType.DEEPSLATE).requiresCorrectToolForDrops());
+        return new OreBlockCoFH(Properties.of().mapColor(MapColor.DEEPSLATE).strength(4.5F, 3.0F).sound(SoundType.DEEPSLATE).requiresCorrectToolForDrops());
     }
 
     public OreBlockCoFH(Properties properties) {

@@ -3,6 +3,7 @@ package cofh.core.util.crafting;
 import cofh.lib.util.crafting.ShapedRecipeInternal;
 import com.google.gson.JsonObject;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -49,7 +50,7 @@ public class ShapedPotionNBTRecipe implements CraftingRecipe, IShapedRecipe<Craf
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer inv) {
+    public ItemStack assemble(CraftingContainer inv, RegistryAccess registryAccess) {
 
         ItemStack result = wrappedRecipe.getResultItem().copy();
 
@@ -70,9 +71,9 @@ public class ShapedPotionNBTRecipe implements CraftingRecipe, IShapedRecipe<Craf
     }
 
     @Override
-    public ItemStack getResultItem() {
+    public ItemStack getResultItem(RegistryAccess registryAccess) {
 
-        return wrappedRecipe.getResultItem();
+        return wrappedRecipe.getResultItem(registryAccess);
     }
 
     @Override
@@ -145,7 +146,7 @@ public class ShapedPotionNBTRecipe implements CraftingRecipe, IShapedRecipe<Craf
             for (Ingredient ingredient : recipe.getIngredients()) {
                 ingredient.toNetwork(buffer);
             }
-            buffer.writeItem(recipe.getResultItem());
+            buffer.writeItem(recipe.wrappedRecipe.result);
         }
 
     }

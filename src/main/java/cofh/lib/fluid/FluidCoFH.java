@@ -1,7 +1,6 @@
 package cofh.lib.fluid;
 
 import cofh.lib.util.DeferredRegisterCoFH;
-import com.mojang.math.Vector3f;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.LiquidBlock;
@@ -9,6 +8,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.registries.RegistryObject;
+import org.joml.Vector3f;
 
 import java.util.function.Supplier;
 

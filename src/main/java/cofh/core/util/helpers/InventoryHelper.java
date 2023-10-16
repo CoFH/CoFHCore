@@ -9,7 +9,7 @@ import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.wrapper.EmptyHandler;
@@ -225,13 +225,13 @@ public final class InventoryHelper {
 
     public static boolean hasItemHandlerCap(BlockEntity tile, Direction face) {
 
-        return tile != null && tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face).isPresent() || tile instanceof Container;
+        return tile != null && tile.getCapability(ForgeCapabilities.ITEM_HANDLER, face).isPresent() || tile instanceof Container;
     }
 
     public static IItemHandler getItemHandlerCap(BlockEntity tile, Direction face) {
 
-        if (tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face).isPresent()) {
-            return tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face).orElse(EmptyHandler.INSTANCE);
+        if (tile.getCapability(ForgeCapabilities.ITEM_HANDLER, face).isPresent()) {
+            return tile.getCapability(ForgeCapabilities.ITEM_HANDLER, face).orElse(EmptyHandler.INSTANCE);
         } else if (tile instanceof WorldlyContainer && face != null) {
             return new SidedInvWrapper(((WorldlyContainer) tile), face);
         } else if (tile instanceof Container) {

@@ -5,7 +5,6 @@ import cofh.lib.api.item.ICoFHItem;
 import cofh.lib.util.helpers.SecurityHelper;
 import com.google.common.collect.Sets;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -16,7 +15,9 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ToolAction;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -116,21 +117,6 @@ public class ItemCoFH extends Item implements ICoFHItem {
 
         this.showInGroups = showInGroups;
         return this;
-    }
-
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-
-        if (!showInGroups.get() || displayGroup != null && displayGroup.get() != null && displayGroup.get() != group) {
-            return;
-        }
-        super.fillItemCategory(group, items);
-    }
-
-    @Override
-    public Collection<CreativeModeTab> getCreativeTabs() {
-
-        return displayGroup != null && displayGroup.get() != null ? Collections.singletonList(displayGroup.get()) : super.getCreativeTabs();
     }
 
     @Override

@@ -33,7 +33,7 @@ public class CoreShaders {
 
     private static void registerShader(RegisterShadersEvent event, String id, VertexFormat format, Consumer<ShaderInstance> callback) throws IOException {
 
-        event.registerShader(new ShaderInstance(event.getResourceManager(), new ResourceLocation(ID_COFH_CORE, id), format), callback);
+        event.registerShader(new ShaderInstance(event.getResourceProvider(), new ResourceLocation(ID_COFH_CORE, id), format), callback);
     }
 
 }

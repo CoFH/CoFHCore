@@ -13,6 +13,8 @@ public class BlockTagsCoFH {
 
     }
 
+    public static final TagKey<Block> MINEABLE_WITH_SICKLE = forgeTag("mineable/sickle");
+
     public static final TagKey<Block> ORES_APATITE = forgeTag("ores/apatite");
     public static final TagKey<Block> ORES_CINNABAR = forgeTag("ores/cinnabar");
     public static final TagKey<Block> ORES_LEAD = forgeTag("ores/lead");

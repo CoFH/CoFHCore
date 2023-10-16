@@ -295,7 +295,7 @@ public class Utils {
             return false;
         }
         if (stack.getItem() instanceof ArmorItem armorItem) {
-            int index = armorItem.getSlot().getIndex();
+            int index = armorItem.getEquipmentSlot().getIndex();
             if (player.getInventory().armor.get(index).isEmpty()) {
                 player.getInventory().armor.set(index, stack);
                 return true;
@@ -419,7 +419,7 @@ public class Utils {
             return false;
         }
         if (entity instanceof ServerPlayer player && !isFakePlayer(entity)) {
-            if (player.connection.getConnection().isConnected() && !player.isSleeping()) {
+            if (player.connection.connection.isConnected() && !player.isSleeping()) {
                 if (entity.isPassenger()) {
                     entity.stopRiding();
                 }

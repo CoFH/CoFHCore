@@ -6,7 +6,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 
 public class EnergyChargeMobEffect extends MobEffectCoFH {
 
@@ -38,17 +38,17 @@ public class EnergyChargeMobEffect extends MobEffectCoFH {
 
         // Main Inventory
         for (ItemStack stack : player.getInventory().items) {
-            stack.getCapability(CapabilityEnergy.ENERGY, null)
+            stack.getCapability(ForgeCapabilities.ENERGY, null)
                     .ifPresent(c -> c.receiveEnergy(chargeAmount, false));
         }
         // Armor Inventory
         for (ItemStack stack : player.getInventory().armor) {
-            stack.getCapability(CapabilityEnergy.ENERGY, null)
+            stack.getCapability(ForgeCapabilities.ENERGY, null)
                     .ifPresent(c -> c.receiveEnergy(chargeAmount, false));
         }
         // Offhand
         for (ItemStack stack : player.getInventory().offhand) {
-            stack.getCapability(CapabilityEnergy.ENERGY, null)
+            stack.getCapability(ForgeCapabilities.ENERGY, null)
                     .ifPresent(c -> c.receiveEnergy(chargeAmount, false));
         }
     }
@@ -76,17 +76,17 @@ public class EnergyChargeMobEffect extends MobEffectCoFH {
 
         // Main Inventory
         for (ItemStack stack : player.getInventory().items) {
-            stack.getCapability(CapabilityEnergy.ENERGY, null)
+            stack.getCapability(ForgeCapabilities.ENERGY, null)
                     .ifPresent(c -> c.extractEnergy(drainAmount, false));
         }
         // Armor Inventory
         for (ItemStack stack : player.getInventory().armor) {
-            stack.getCapability(CapabilityEnergy.ENERGY, null)
+            stack.getCapability(ForgeCapabilities.ENERGY, null)
                     .ifPresent(c -> c.extractEnergy(drainAmount, false));
         }
         // Offhand
         for (ItemStack stack : player.getInventory().offhand) {
-            stack.getCapability(CapabilityEnergy.ENERGY, null)
+            stack.getCapability(ForgeCapabilities.ENERGY, null)
                     .ifPresent(c -> c.extractEnergy(drainAmount, false));
         }
     }

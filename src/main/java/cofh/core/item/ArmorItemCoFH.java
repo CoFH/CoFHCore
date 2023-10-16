@@ -3,7 +3,6 @@ package cofh.core.item;
 import cofh.core.util.ProxyUtils;
 import cofh.lib.api.item.ICoFHItem;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.core.NonNullList;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
@@ -13,8 +12,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.UUID;
 import java.util.function.Supplier;
 
@@ -76,21 +73,6 @@ public class ArmorItemCoFH extends ArmorItem implements ICoFHItem {
 
         this.showInGroups = showInGroups;
         return this;
-    }
-
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-
-        if (!showInGroups.get() || displayGroup != null && displayGroup.get() != null && displayGroup.get() != group) {
-            return;
-        }
-        super.fillItemCategory(group, items);
-    }
-
-    @Override
-    public Collection<CreativeModeTab> getCreativeTabs() {
-
-        return displayGroup != null && displayGroup.get() != null ? Collections.singletonList(displayGroup.get()) : super.getCreativeTabs();
     }
 
     @Override

@@ -2,7 +2,6 @@ package cofh.core.item;
 
 import cofh.core.capability.templates.ArcheryBowItemWrapper;
 import cofh.lib.api.item.ICoFHItem;
-import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.CreativeModeTab;
@@ -11,8 +10,6 @@ import net.minecraft.world.item.Tier;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.function.Supplier;
 
 import static cofh.lib.util.Constants.TRUE;
@@ -88,21 +85,6 @@ public class BowItemCoFH extends BowItem implements ICoFHItem {
 
         this.showInGroups = showInGroups;
         return this;
-    }
-
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-
-        if (!showInGroups.get() || displayGroup != null && displayGroup.get() != null && displayGroup.get() != group) {
-            return;
-        }
-        super.fillItemCategory(group, items);
-    }
-
-    @Override
-    public Collection<CreativeModeTab> getCreativeTabs() {
-
-        return displayGroup != null && displayGroup.get() != null ? Collections.singletonList(displayGroup.get()) : super.getCreativeTabs();
     }
 
     @Override

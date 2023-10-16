@@ -5,7 +5,6 @@ import cofh.lib.util.helpers.MathHelper;
 import com.google.common.collect.ImmutableSortedMap;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.*;
 import it.unimi.dsi.fastutil.floats.Float2ObjectOpenHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -20,7 +19,10 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec2;
 import net.minecraftforge.client.model.data.ModelData;
+import org.joml.*;
 
+import java.lang.Math;
+import java.util.Random;
 import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
@@ -198,10 +200,10 @@ public final class VFXHelper {
      * Returns a quaternion that transforms a matrix stack such that YP points in the given direction.
      * XP, YP, and ZP remain orthogonal to each other.
      */
-    public static Quaternion alignVertical(Vector3f dir) {
+    public static Quaternionf alignVertical(Vector3f dir) {
 
         if (dir.x() == 0 && dir.y() == 0 && dir.z() == 0) {
-            return Quaternion.ONE;
+            return new Quaternionf();
         }
         Vector3f d = dir.copy();
         d.mul(1 / length(d));

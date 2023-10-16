@@ -35,9 +35,9 @@ public class SubCommandRecharge {
             entity.addEffect(new MobEffectInstance(SUPERCHARGE.get(), 1200, 0, false, false));
         }
         if (targets.size() == 1) {
-            source.sendSuccess(Component.translatable("commands.cofh.recharge.success.single", targets.iterator().next().getDisplayName()), true);
+            source.sendSuccess(() -> Component.translatable("commands.cofh.recharge.success.single", targets.iterator().next().getDisplayName()), true);
         } else {
-            source.sendSuccess(Component.translatable("commands.cofh.recharge.success.multiple", targets.size()), true);
+            source.sendSuccess(() -> Component.translatable("commands.cofh.recharge.success.multiple", targets.size()), true);
         }
         return targets.size();
     }

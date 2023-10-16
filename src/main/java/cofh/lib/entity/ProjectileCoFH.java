@@ -6,9 +6,9 @@ import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -60,7 +60,7 @@ public class ProjectileCoFH extends Projectile {
     }
 
     @Override
-    public Packet<?> getAddEntityPacket() {
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
 
         return NetworkHooks.getEntitySpawningPacket(this);
     }
@@ -88,7 +88,7 @@ public class ProjectileCoFH extends Projectile {
 
         updateInWaterStateAndDoFluidPushing();
         fireTick();
-        checkOutOfWorld();
+        checkBelowWorld();
         setOldPosAndRot();
         projectileTick(level);
         checkInsideBlocks();
@@ -199,7 +199,7 @@ public class ProjectileCoFH extends Projectile {
                     this.clearFire();
                 } else {
                     if (this.remainingFireTicks % 20 == 0 && !inLava) {
-                        this.hurt(DamageSource.ON_FIRE, 1.0F);
+                        this.hurt(level.damageSources().onFire(), 1.0F);
                     }
 
                     this.setRemainingFireTicks(this.remainingFireTicks - 1);

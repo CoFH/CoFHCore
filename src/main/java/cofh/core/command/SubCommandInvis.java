@@ -63,15 +63,15 @@ public class SubCommandInvis {
         }
         if (flag) {
             if (targets.size() == 1) {
-                source.sendSuccess(Component.translatable("commands.cofh.invis.success.single", targets.iterator().next().getDisplayName()), true);
+                source.sendSuccess(() -> Component.translatable("commands.cofh.invis.success.single", targets.iterator().next().getDisplayName()), true);
             } else {
-                source.sendSuccess(Component.translatable("commands.cofh.invis.success.multiple", targets.size()), true);
+                source.sendSuccess(() -> Component.translatable("commands.cofh.invis.success.multiple", targets.size()), true);
             }
         } else {
             if (targets.size() == 1) {
-                source.sendSuccess(Component.translatable("commands.cofh.invis.remove.single", targets.iterator().next().getDisplayName()), true);
+                source.sendSuccess(() -> Component.translatable("commands.cofh.invis.remove.single", targets.iterator().next().getDisplayName()), true);
             } else {
-                source.sendSuccess(Component.translatable("commands.cofh.invis.remove.multiple", targets.size()), true);
+                source.sendSuccess(() -> Component.translatable("commands.cofh.invis.remove.multiple", targets.size()), true);
             }
         }
         return targets.size();

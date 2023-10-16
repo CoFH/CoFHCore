@@ -1,7 +1,7 @@
 package cofh.lib.util.flags;
 
 import com.google.gson.JsonObject;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.GsonHelper;
@@ -18,7 +18,7 @@ public class TagExistsRecipeCondition implements ICondition {
 
     public TagExistsRecipeCondition(ResourceLocation tag) {
 
-        this.tag = TagKey.create(Registry.ITEM_REGISTRY, tag);
+        this.tag = TagKey.create(Registries.ITEM, tag);
     }
 
     @Override

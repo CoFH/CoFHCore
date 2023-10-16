@@ -1,13 +1,9 @@
 package cofh.core.client.model;
 
 import cofh.core.util.helpers.FluidHelper;
-import com.google.common.collect.Sets;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
-import com.mojang.datafixers.util.Pair;
-import com.mojang.math.Quaternion;
 import com.mojang.math.Transformation;
-import com.mojang.math.Vector3f;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.RenderType;
@@ -30,12 +26,12 @@ import net.minecraftforge.client.model.SimpleModelState;
 import net.minecraftforge.client.model.geometry.*;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Function;
 
 import static cofh.lib.util.Constants.BUCKET_VOLUME;
@@ -44,8 +40,8 @@ import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 public final class FluidContainerItemModel implements IUnbakedGeometry<FluidContainerItemModel> {
 
     // Depth offsets to prevent Z-fighting
-    private static final Transformation FLUID_TRANSFORM = new Transformation(Vector3f.ZERO, Quaternion.ONE, new Vector3f(1, 1, 1.002f), Quaternion.ONE);
-    private static final Transformation COVER_TRANSFORM = new Transformation(Vector3f.ZERO, Quaternion.ONE, new Vector3f(1, 1, 1.004f), Quaternion.ONE);
+    private static final Transformation FLUID_TRANSFORM = new Transformation(new Vector3f(), new Quaternionf(), new Vector3f(1, 1, 1.002f), new Quaternionf());
+    private static final Transformation COVER_TRANSFORM = new Transformation(new Vector3f(), new Quaternionf(), new Vector3f(1, 1, 1.004f), new Quaternionf());
     // Transformer to set quads to max brightness
     private static final IQuadTransformer MAX_LIGHTMAP_TRANSFORMER = QuadTransformers.applyingLightmap(0x00F000F0);
 
@@ -63,7 +59,7 @@ public final class FluidContainerItemModel implements IUnbakedGeometry<FluidCont
     }
 
     @Override
-    public BakedModel bake(IGeometryBakingContext context, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, ItemOverrides overrides, ResourceLocation modelLocation) {
+    public BakedModel bake(IGeometryBakingContext context, ModelBaker baker, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, ItemOverrides overrides, ResourceLocation modelLocation) {
 
         Material particleLocation = context.hasMaterial("particle") ? context.getMaterial("particle") : null;
         Material fluidMaskLocation = context.hasMaterial("fluid_mask") ? context.getMaterial("fluid_mask") : null;
@@ -77,12 +73,12 @@ public final class FluidContainerItemModel implements IUnbakedGeometry<FluidCont
             particleSprite = fluidSprite != null ? fluidSprite : spriteGetter.apply(baseLocation);
         }
         var itemContext = StandaloneGeometryBakingContext.builder(context).withGui3d(false).withUseBlockLight(false).build(modelLocation);
-        var modelBuilder = CompositeModel.Baked.builder(itemContext, particleSprite, new ContainedFluidOverrideHandler(bakery, itemContext, this), context.getTransforms());
+        var modelBuilder = CompositeModel.Baked.builder(itemContext, particleSprite, new ContainedFluidOverrideHandler(baker, itemContext, this), context.getTransforms());
         var normalRenderTypes = getLayerRenderTypes();
 
         if (baseLocation != null) {
             var baseSprite = spriteGetter.apply(baseLocation);
-            var unbaked = UnbakedGeometryHelper.createUnbakedItemElements(0, baseSprite);
+            var unbaked = UnbakedGeometryHelper.createUnbakedItemElements(0, baseSprite.contents());
             var quads = UnbakedGeometryHelper.bakeElements(unbaked, $ -> baseSprite, modelState, modelLocation);
             modelBuilder.addQuads(normalRenderTypes, quads);
         }
@@ -92,7 +88,7 @@ public final class FluidContainerItemModel implements IUnbakedGeometry<FluidCont
             if (templateSprite != null) {
                 // Fluid layer
                 var transformedState = new SimpleModelState(modelState.getRotation().compose(FLUID_TRANSFORM), modelState.isUvLocked());
-                var unbaked = UnbakedGeometryHelper.createUnbakedItemMaskElements(1, templateSprite); // Use template as mask
+                var unbaked = UnbakedGeometryHelper.createUnbakedItemMaskElements(1, templateSprite.contents()); // Use template as mask
                 var quads = UnbakedGeometryHelper.bakeElements(unbaked, $ -> fluidSprite, transformedState, modelLocation); // Bake with fluid texture
 
                 var unlit = fluid.getFluidType().getLightLevel() > 0;
@@ -105,23 +101,6 @@ public final class FluidContainerItemModel implements IUnbakedGeometry<FluidCont
         }
         modelBuilder.setParticle(particleSprite);
         return modelBuilder.build();
-    }
-
-    @Override
-    public Collection<Material> getMaterials(IGeometryBakingContext owner, Function<ResourceLocation, UnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
-
-        Set<Material> texs = Sets.newHashSet();
-
-        if (owner.hasMaterial("particle")) {
-            texs.add(owner.getMaterial("particle"));
-        }
-        if (owner.hasMaterial("fluid_mask")) {
-            texs.add(owner.getMaterial("fluid_mask"));
-        }
-        if (owner.hasMaterial("layer0")) {
-            texs.add(owner.getMaterial("layer0"));
-        }
-        return texs;
     }
 
     public static RenderTypeGroup getLayerRenderTypes() {
@@ -151,13 +130,13 @@ public final class FluidContainerItemModel implements IUnbakedGeometry<FluidCont
     private static final class ContainedFluidOverrideHandler extends ItemOverrides {
 
         private final Map<Integer, BakedModel> cache = new Int2ObjectOpenHashMap<>(); // contains all the baked models since they'll never change
-        private final ModelBakery bakery;
+        private final ModelBaker baker;
         private final IGeometryBakingContext owner;
         private final FluidContainerItemModel parent;
 
-        private ContainedFluidOverrideHandler(ModelBakery bakery, IGeometryBakingContext owner, FluidContainerItemModel parent) {
+        private ContainedFluidOverrideHandler(ModelBaker baker, IGeometryBakingContext owner, FluidContainerItemModel parent) {
 
-            this.bakery = bakery;
+            this.baker = baker;
             this.owner = owner;
             this.parent = parent;
         }
@@ -169,7 +148,7 @@ public final class FluidContainerItemModel implements IUnbakedGeometry<FluidCont
             int fluidHash = FluidHelper.fluidHashcode(fluidStack);
             if (!cache.containsKey(fluidHash)) {
                 FluidContainerItemModel unbaked = this.parent.withProperties(fluidStack);
-                BakedModel bakedModel = unbaked.bake(owner, bakery, Material::sprite, BlockModelRotation.X0_Y0, this, new ResourceLocation(ID_COFH_CORE, "fluid_container_override"));
+                BakedModel bakedModel = unbaked.bake(owner, baker, Material::sprite, BlockModelRotation.X0_Y0, this, new ResourceLocation(ID_COFH_CORE, "fluid_container_override"));
                 cache.put(fluidHash, bakedModel);
                 return bakedModel;
             }

@@ -221,7 +221,7 @@ public class CoFHCore {
 
     private void entityRendererSetup(final EntityRenderersEvent.RegisterRenderers event) {
 
-        event.registerEntityRenderer(KNIFE.get(), KnifeRenderer::new);
+        event.registerEntityRenderer(THROWN_KNIFE.get(), KnifeRenderer::new);
         event.registerEntityRenderer(SHOCKWAVE.get(), NothingRenderer::new);
         event.registerEntityRenderer(ELECTRIC_ARC.get(), ElectricArcRenderer::new);
         event.registerEntityRenderer(ELECTRIC_FIELD.get(), ElectricFieldRenderer::new);

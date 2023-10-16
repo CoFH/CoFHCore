@@ -3,16 +3,20 @@ package cofh.core.entity;
 import cofh.core.item.KnifeItem;
 import cofh.lib.util.Utils;
 import cofh.lib.util.helpers.MathHelper;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.IndirectEntityDamageSource;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -30,28 +34,29 @@ import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
-import static cofh.core.init.CoreEntities.KNIFE;
+import static cofh.core.init.CoreEntities.THROWN_KNIFE;
+import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 
-public class Knife extends AbstractArrow {
+public class ThrownKnife extends AbstractArrow {
 
-    protected static final EntityDataAccessor<ItemStack> DATA_ITEM_STACK = SynchedEntityData.defineId(Knife.class, EntityDataSerializers.ITEM_STACK);
+    protected static final EntityDataAccessor<ItemStack> DATA_ITEM_STACK = SynchedEntityData.defineId(ThrownKnife.class, EntityDataSerializers.ITEM_STACK);
     protected int hitTime = -1;
 
-    public Knife(EntityType<? extends AbstractArrow> type, Level worldIn) {
+    public ThrownKnife(EntityType<? extends AbstractArrow> type, Level worldIn) {
 
         super(type, worldIn);
     }
 
-    public Knife(Level world, double x, double y, double z, ItemStack stack) {
+    public ThrownKnife(Level world, double x, double y, double z, ItemStack stack) {
 
-        super(KNIFE.get(), x, y, z, world);
+        super(THROWN_KNIFE.get(), x, y, z, world);
         this.entityData.set(DATA_ITEM_STACK, stack.copy());
     }
 
-    public Knife(Level world, LivingEntity owner, ItemStack stack) {
+    public ThrownKnife(Level world, LivingEntity owner, ItemStack stack) {
 
-        super(KNIFE.get(), owner, world);
+        super(THROWN_KNIFE.get(), owner, world);
         this.entityData.set(DATA_ITEM_STACK, stack.copy());
     }
 
@@ -69,7 +74,7 @@ public class Knife extends AbstractArrow {
     }
 
     @Override
-    public Packet<?> getAddEntityPacket() {
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
 
         return NetworkHooks.getEntitySpawningPacket(this);
     }
@@ -215,7 +220,9 @@ public class Knife extends AbstractArrow {
 
     public DamageSource damageSource() {
 
-        return (new IndirectEntityDamageSource("knife", this, getOwner())).setProjectile();
+        return this.level.damageSources().source(KNIFE, this, getOwner());
     }
+
+    public static final ResourceKey<DamageType> KNIFE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(ID_COFH_CORE, "knife"));
 
 }

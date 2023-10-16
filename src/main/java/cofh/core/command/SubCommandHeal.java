@@ -47,9 +47,9 @@ public class SubCommandHeal {
             entity.setHealth(entity.getMaxHealth());
         }
         if (targets.size() == 1) {
-            source.sendSuccess(Component.translatable("commands.cofh.heal.success.single", targets.iterator().next().getDisplayName()), true);
+            source.sendSuccess(() -> Component.translatable("commands.cofh.heal.success.single", targets.iterator().next().getDisplayName()), true);
         } else {
-            source.sendSuccess(Component.translatable("commands.cofh.heal.success.multiple", targets.size()), true);
+            source.sendSuccess(() -> Component.translatable("commands.cofh.heal.success.multiple", targets.size()), true);
         }
         return targets.size();
     }

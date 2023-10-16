@@ -7,7 +7,6 @@ import com.mojang.blaze3d.platform.GlStateManager.DestFactor;
 import com.mojang.blaze3d.platform.GlStateManager.SourceFactor;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import com.mojang.math.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -27,8 +26,10 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
+import org.joml.*;
 import org.lwjgl.opengl.GL11;
 
+import java.lang.Math;
 import java.util.List;
 
 /**
@@ -561,21 +562,21 @@ public final class RenderHelper {
             case NORTH -> poseStackIn.translate(x + 0.75, y + 0.84375, z + RenderHelper.RENDER_OFFSET * 145);
             case SOUTH -> {
                 poseStackIn.translate(x + 0.25, y + 0.84375, z + 1 - RenderHelper.RENDER_OFFSET * 145);
-                poseStackIn.mulPose(new Quaternion(0, 180, 0, true));
+                poseStackIn.mulPose(new Quaternionf(0, 180, 0, true));
             }
             case WEST -> {
                 poseStackIn.translate(x + RenderHelper.RENDER_OFFSET * 145, y + 0.84375, z + 0.25);
-                poseStackIn.mulPose(new Quaternion(0, 90, 0, true));
+                poseStackIn.mulPose(new Quaternionf(0, 90, 0, true));
             }
             case EAST -> {
                 poseStackIn.translate(x + 1 - RenderHelper.RENDER_OFFSET * 145, y + 0.84375, z + 0.75);
-                poseStackIn.mulPose(new Quaternion(0, 270, 0, true));
+                poseStackIn.mulPose(new Quaternionf(0, 270, 0, true));
             }
             default -> {
             }
         }
         poseStackIn.scale(0.03125F, 0.03125F, -RenderHelper.RENDER_OFFSET);
-        poseStackIn.mulPose(new Quaternion(0, 0, 180, true));
+        poseStackIn.mulPose(new Quaternionf(0, 0, 180, true));
 
         // renderItem().renderAndDecorateItem(stack, 0, 0);
 

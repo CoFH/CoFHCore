@@ -42,9 +42,9 @@ public class SubCommandRepair {
             }
         }
         if (targets.size() == 1) {
-            source.sendSuccess(Component.translatable("commands.cofh.repair.success.single", targets.iterator().next().getDisplayName()), true);
+            source.sendSuccess(() -> Component.translatable("commands.cofh.repair.success.single", targets.iterator().next().getDisplayName()), true);
         } else {
-            source.sendSuccess(Component.translatable("commands.cofh.repair.success.multiple", targets.size()), true);
+            source.sendSuccess(() -> Component.translatable("commands.cofh.repair.success.multiple", targets.size()), true);
         }
         return repairedEquipment;
     }

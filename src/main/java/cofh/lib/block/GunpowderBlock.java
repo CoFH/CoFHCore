@@ -75,7 +75,7 @@ public class GunpowderBlock extends FallingBlock {
     public void wasExploded(Level world, BlockPos pos, Explosion explosionIn) {
 
         if (!world.isClientSide) {
-            explode(world, pos, explosionIn.getSourceMob());
+            explode(world, pos, explosionIn.getIndirectSourceEntity());
         }
     }
 
@@ -96,7 +96,7 @@ public class GunpowderBlock extends FallingBlock {
     private static void explode(Level world, BlockPos pos, @Nullable LivingEntity igniter) {
 
         if (!world.isClientSide) {
-            world.explode(igniter, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, EXPLOSION_STRENGTH, Explosion.BlockInteraction.BREAK);
+            world.explode(igniter, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, EXPLOSION_STRENGTH, Level.ExplosionInteraction.BLOCK);
         }
     }
     // endregion

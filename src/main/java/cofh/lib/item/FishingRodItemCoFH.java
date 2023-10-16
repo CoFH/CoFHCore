@@ -1,7 +1,6 @@
 package cofh.lib.item;
 
 import cofh.lib.api.item.ICoFHItem;
-import net.minecraft.core.NonNullList;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
@@ -16,8 +15,6 @@ import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Random;
 import java.util.function.Supplier;
 
@@ -115,21 +112,6 @@ public class FishingRodItemCoFH extends FishingRodItem implements ICoFHItem {
 
         this.showInGroups = showInGroups;
         return this;
-    }
-
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-
-        if (!showInGroups.get() || displayGroup != null && displayGroup.get() != null && displayGroup.get() != group) {
-            return;
-        }
-        super.fillItemCategory(group, items);
-    }
-
-    @Override
-    public Collection<CreativeModeTab> getCreativeTabs() {
-
-        return displayGroup != null && displayGroup.get() != null ? Collections.singletonList(displayGroup.get()) : super.getCreativeTabs();
     }
 
     @Override

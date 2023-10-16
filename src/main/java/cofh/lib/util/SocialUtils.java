@@ -27,7 +27,7 @@ public class SocialUtils {
 
     private static FriendData friends(ServerPlayer player) {
 
-        return player.getLevel().getDataStorage().computeIfAbsent(FriendData::new, FriendData::new, TAG_FRIENDS);
+        return player.serverLevel().getDataStorage().computeIfAbsent(FriendData::new, FriendData::new, TAG_FRIENDS);
     }
 
     // region FRIEND PASSTHROUGH

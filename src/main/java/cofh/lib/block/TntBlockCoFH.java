@@ -51,7 +51,7 @@ public class TntBlockCoFH extends TntBlock {
     public void wasExploded(Level worldIn, BlockPos pos, Explosion explosionIn) {
 
         if (!worldIn.isClientSide) {
-            PrimedTntCoFH entity = factory.createTNT(worldIn, ((float) pos.getX() + 0.5F), pos.getY(), ((float) pos.getZ() + 0.5F), explosionIn.getSourceMob());
+            PrimedTntCoFH entity = factory.createTNT(worldIn, ((float) pos.getX() + 0.5F), pos.getY(), ((float) pos.getZ() + 0.5F), explosionIn.getIndirectSourceEntity());
             entity.setFuse((short) (worldIn.random.nextInt(entity.getFuse() / 4) + entity.getFuse() / 8));
             worldIn.addFreshEntity(entity);
         }

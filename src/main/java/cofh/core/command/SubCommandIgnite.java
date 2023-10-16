@@ -45,9 +45,9 @@ public class SubCommandIgnite {
             entity.setSecondsOnFire(duration);
         }
         if (targets.size() == 1) {
-            source.sendSuccess(Component.translatable("commands.cofh.ignite.success.single", targets.iterator().next().getDisplayName()), true);
+            source.sendSuccess(() -> Component.translatable("commands.cofh.ignite.success.single", targets.iterator().next().getDisplayName()), true);
         } else {
-            source.sendSuccess(Component.translatable("commands.cofh.ignite.success.multiple", targets.size()), true);
+            source.sendSuccess(() -> Component.translatable("commands.cofh.ignite.success.multiple", targets.size()), true);
         }
         return targets.size();
     }

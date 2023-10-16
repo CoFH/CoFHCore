@@ -6,8 +6,6 @@ import cofh.lib.util.constants.ModIds;
 import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
-import com.mojang.math.Vector4f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.culling.Frustum;
@@ -15,6 +13,8 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 import java.util.SplittableRandom;
 import java.util.stream.IntStream;

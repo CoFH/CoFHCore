@@ -120,12 +120,12 @@ public final class ItemHelper {
     // region COMPARISON
     public static boolean itemsEqualWithTags(ItemStack stackA, ItemStack stackB) {
 
-        return itemsEqual(stackA, stackB) && ItemStack.tagMatches(stackA, stackB);
+        return ItemStack.isSameItemSameTags(stackA, stackB);
     }
 
     public static boolean itemsEqual(ItemStack stackA, ItemStack stackB) {
 
-        return ItemStack.isSame(stackA, stackB);
+        return ItemStack.isSameItem(stackA, stackB);
     }
 
     /**
