@@ -2,6 +2,7 @@ package cofh.lib.util.flags;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.minecraftforge.common.crafting.CraftingHelper;
@@ -32,7 +33,7 @@ public class FlagManager {
 
     public void setup() {
 
-        Registry.register(Registry.LOOT_CONDITION_TYPE, id, flagConditionType);
+        Registry.register(BuiltInRegistries.LOOT_CONDITION_TYPE, id, flagConditionType);
     }
 
     private Supplier<Boolean> getOrCreateFlag(String flag) {

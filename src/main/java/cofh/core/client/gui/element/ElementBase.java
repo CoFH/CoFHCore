@@ -3,6 +3,7 @@ package cofh.core.client.gui.element;
 import cofh.core.client.gui.IGuiAccess;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
@@ -56,11 +57,11 @@ public abstract class ElementBase {
         this.height = height;
     }
 
-    public void drawBackground(PoseStack matrixStack, int mouseX, int mouseY) {
+    public void drawBackground(GuiGraphics pGuiGraphics, int mouseX, int mouseY) {
 
     }
 
-    public void drawForeground(PoseStack matrixStack, int mouseX, int mouseY) {
+    public void drawForeground(GuiGraphics pGuiGraphics, int mouseX, int mouseY) {
 
     }
 

@@ -1,15 +1,22 @@
 package cofh.lib.util.crafting;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.google.gson.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -17,7 +24,6 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.crafting.IShapedRecipe;
 
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 /**
@@ -34,15 +40,24 @@ public class ShapedRecipeInternal implements CraftingRecipe, IShapedRecipe<Craft
     public final ItemStack result;
     public final ResourceLocation id;
     public final String group;
+    public final CraftingBookCategory category;
+    public final boolean showNotification;
 
-    public ShapedRecipeInternal(ResourceLocation p_i48162_1_, String p_i48162_2_, int p_i48162_3_, int p_i48162_4_, NonNullList<Ingredient> p_i48162_5_, ItemStack p_i48162_6_) {
+    private ShapedRecipeInternal(ResourceLocation pId, String pGroup, CraftingBookCategory pCategory, int pWidth, int pHeight, NonNullList<Ingredient> pRecipeItems, ItemStack pResult, boolean pShowNotification) {
 
-        this.id = p_i48162_1_;
-        this.group = p_i48162_2_;
-        this.width = p_i48162_3_;
-        this.height = p_i48162_4_;
-        this.recipeItems = p_i48162_5_;
-        this.result = p_i48162_6_;
+        this.id = pId;
+        this.group = pGroup;
+        this.category = pCategory;
+        this.width = pWidth;
+        this.height = pHeight;
+        this.recipeItems = pRecipeItems;
+        this.result = pResult;
+        this.showNotification = pShowNotification;
+    }
+
+    public ShapedRecipeInternal(ResourceLocation pId, String pGroup, CraftingBookCategory pCategory, int pWidth, int pHeight, NonNullList<Ingredient> pRecipeItems, ItemStack pResult) {
+
+        this(pId, pGroup, pCategory, pWidth, pHeight, pRecipeItems, pResult, false);
     }
 
     public ResourceLocation getId() {
@@ -60,7 +75,12 @@ public class ShapedRecipeInternal implements CraftingRecipe, IShapedRecipe<Craft
         return this.group;
     }
 
-    public ItemStack getResultItem() {
+    public CraftingBookCategory category() {
+
+        return this.category;
+    }
+
+    public ItemStack getResultItem(RegistryAccess pRegistryAccess) {
 
         return this.result;
     }
@@ -70,20 +90,25 @@ public class ShapedRecipeInternal implements CraftingRecipe, IShapedRecipe<Craft
         return this.recipeItems;
     }
 
-    public boolean canCraftInDimensions(int p_194133_1_, int p_194133_2_) {
+    public boolean showNotification() {
 
-        return p_194133_1_ >= this.width && p_194133_2_ >= this.height;
+        return this.showNotification;
     }
 
-    public boolean matches(CraftingContainer p_77569_1_, Level p_77569_2_) {
+    public boolean canCraftInDimensions(int pWidth, int pHeight) {
 
-        for (int i = 0; i <= p_77569_1_.getWidth() - this.width; ++i) {
-            for (int j = 0; j <= p_77569_1_.getHeight() - this.height; ++j) {
-                if (this.matches(p_77569_1_, i, j, true)) {
+        return pWidth >= this.width && pHeight >= this.height;
+    }
+
+    public boolean matches(CraftingContainer pInv, Level pLevel) {
+
+        for (int i = 0; i <= pInv.getWidth() - this.width; ++i) {
+            for (int j = 0; j <= pInv.getHeight() - this.height; ++j) {
+                if (this.matches(pInv, i, j, true)) {
                     return true;
                 }
 
-                if (this.matches(p_77569_1_, i, j, false)) {
+                if (this.matches(pInv, i, j, false)) {
                     return true;
                 }
             }
@@ -92,22 +117,22 @@ public class ShapedRecipeInternal implements CraftingRecipe, IShapedRecipe<Craft
         return false;
     }
 
-    public boolean matches(CraftingContainer p_77573_1_, int p_77573_2_, int p_77573_3_, boolean p_77573_4_) {
+    private boolean matches(CraftingContainer pCraftingInventory, int pWidth, int pHeight, boolean pMirrored) {
 
-        for (int i = 0; i < p_77573_1_.getWidth(); ++i) {
-            for (int j = 0; j < p_77573_1_.getHeight(); ++j) {
-                int k = i - p_77573_2_;
-                int l = j - p_77573_3_;
+        for (int i = 0; i < pCraftingInventory.getWidth(); ++i) {
+            for (int j = 0; j < pCraftingInventory.getHeight(); ++j) {
+                int k = i - pWidth;
+                int l = j - pHeight;
                 Ingredient ingredient = Ingredient.EMPTY;
                 if (k >= 0 && l >= 0 && k < this.width && l < this.height) {
-                    if (p_77573_4_) {
+                    if (pMirrored) {
                         ingredient = this.recipeItems.get(this.width - k - 1 + l * this.width);
                     } else {
                         ingredient = this.recipeItems.get(k + l * this.width);
                     }
                 }
 
-                if (!ingredient.test(p_77573_1_.getItem(i + j * p_77573_1_.getWidth()))) {
+                if (!ingredient.test(pCraftingInventory.getItem(i + j * pCraftingInventory.getWidth()))) {
                     return false;
                 }
             }
@@ -116,19 +141,14 @@ public class ShapedRecipeInternal implements CraftingRecipe, IShapedRecipe<Craft
         return true;
     }
 
-    public ItemStack assemble(CraftingContainer p_77572_1_) {
+    public ItemStack assemble(CraftingContainer pContainer, RegistryAccess pRegistryAccess) {
 
-        return this.getResultItem().copy();
+        return this.getResultItem(pRegistryAccess).copy();
     }
 
     public int getWidth() {
 
         return this.width;
-    }
-
-    public int getHeight() {
-
-        return this.height;
     }
 
     @Override
@@ -137,28 +157,33 @@ public class ShapedRecipeInternal implements CraftingRecipe, IShapedRecipe<Craft
         return getWidth();
     }
 
+    public int getHeight() {
+
+        return this.height;
+    }
+
     @Override
     public int getRecipeHeight() {
 
         return getHeight();
     }
 
-    public static NonNullList<Ingredient> dissolvePattern(String[] p_192402_0_, Map<String, Ingredient> p_192402_1_, int p_192402_2_, int p_192402_3_) {
+    static NonNullList<Ingredient> dissolvePattern(String[] pPattern, Map<String, Ingredient> pKeys, int pPatternWidth, int pPatternHeight) {
 
-        NonNullList<Ingredient> nonnulllist = NonNullList.withSize(p_192402_2_ * p_192402_3_, Ingredient.EMPTY);
-        Set<String> set = Sets.newHashSet(p_192402_1_.keySet());
+        NonNullList<Ingredient> nonnulllist = NonNullList.withSize(pPatternWidth * pPatternHeight, Ingredient.EMPTY);
+        Set<String> set = Sets.newHashSet(pKeys.keySet());
         set.remove(" ");
 
-        for (int i = 0; i < p_192402_0_.length; ++i) {
-            for (int j = 0; j < p_192402_0_[i].length(); ++j) {
-                String s = p_192402_0_[i].substring(j, j + 1);
-                Ingredient ingredient = p_192402_1_.get(s);
+        for (int i = 0; i < pPattern.length; ++i) {
+            for (int j = 0; j < pPattern[i].length(); ++j) {
+                String s = pPattern[i].substring(j, j + 1);
+                Ingredient ingredient = pKeys.get(s);
                 if (ingredient == null) {
                     throw new JsonSyntaxException("Pattern references symbol '" + s + "' but it's not defined in the key");
                 }
 
                 set.remove(s);
-                nonnulllist.set(j + p_192402_2_ * i, ingredient);
+                nonnulllist.set(j + pPatternWidth * i, ingredient);
             }
         }
 
@@ -169,15 +194,16 @@ public class ShapedRecipeInternal implements CraftingRecipe, IShapedRecipe<Craft
         }
     }
 
-    public static String[] shrink(String... p_194134_0_) {
+    @VisibleForTesting
+    static String[] shrink(String... pToShrink) {
 
         int i = Integer.MAX_VALUE;
         int j = 0;
         int k = 0;
         int l = 0;
 
-        for (int i1 = 0; i1 < p_194134_0_.length; ++i1) {
-            String s = p_194134_0_[i1];
+        for (int i1 = 0; i1 < pToShrink.length; ++i1) {
+            String s = pToShrink[i1];
             i = Math.min(i, firstNonSpace(s));
             int j1 = lastNonSpace(s);
             j = Math.max(j, j1);
@@ -192,47 +218,57 @@ public class ShapedRecipeInternal implements CraftingRecipe, IShapedRecipe<Craft
             }
         }
 
-        if (p_194134_0_.length == l) {
+        if (pToShrink.length == l) {
             return new String[0];
         } else {
-            String[] astring = new String[p_194134_0_.length - l - k];
+            String[] astring = new String[pToShrink.length - l - k];
 
             for (int k1 = 0; k1 < astring.length; ++k1) {
-                astring[k1] = p_194134_0_[k1 + k].substring(i, j + 1);
+                astring[k1] = pToShrink[k1 + k].substring(i, j + 1);
             }
 
             return astring;
         }
     }
 
-    public static int firstNonSpace(String p_194135_0_) {
+    public boolean isIncomplete() {
+
+        NonNullList<Ingredient> nonnulllist = this.getIngredients();
+        return nonnulllist.isEmpty() || nonnulllist.stream().filter((p_151277_) -> {
+            return !p_151277_.isEmpty();
+        }).anyMatch((p_151273_) -> {
+            return net.minecraftforge.common.ForgeHooks.hasNoElements(p_151273_);
+        });
+    }
+
+    private static int firstNonSpace(String pEntry) {
 
         int i;
-        for (i = 0; i < p_194135_0_.length() && p_194135_0_.charAt(i) == ' '; ++i) {
+        for (i = 0; i < pEntry.length() && pEntry.charAt(i) == ' '; ++i) {
         }
 
         return i;
     }
 
-    public static int lastNonSpace(String p_194136_0_) {
+    private static int lastNonSpace(String pEntry) {
 
         int i;
-        for (i = p_194136_0_.length() - 1; i >= 0 && p_194136_0_.charAt(i) == ' '; --i) {
+        for (i = pEntry.length() - 1; i >= 0 && pEntry.charAt(i) == ' '; --i) {
         }
 
         return i;
     }
 
-    public static String[] patternFromJson(JsonArray p_192407_0_) {
+    static String[] patternFromJson(JsonArray pPatternArray) {
 
-        String[] astring = new String[p_192407_0_.size()];
+        String[] astring = new String[pPatternArray.size()];
         if (astring.length > MAX_HEIGHT) {
             throw new JsonSyntaxException("Invalid pattern: too many rows, " + MAX_HEIGHT + " is maximum");
         } else if (astring.length == 0) {
             throw new JsonSyntaxException("Invalid pattern: empty pattern not allowed");
         } else {
             for (int i = 0; i < astring.length; ++i) {
-                String s = GsonHelper.convertToString(p_192407_0_.get(i), "pattern[" + i + "]");
+                String s = GsonHelper.convertToString(pPatternArray.get(i), "pattern[" + i + "]");
                 if (s.length() > MAX_WIDTH) {
                     throw new JsonSyntaxException("Invalid pattern: too many columns, " + MAX_WIDTH + " is maximum");
                 }
@@ -248,37 +284,41 @@ public class ShapedRecipeInternal implements CraftingRecipe, IShapedRecipe<Craft
         }
     }
 
-    public static Map<String, Ingredient> keyFromJson(JsonObject p_192408_0_) {
+    static Map<String, Ingredient> keyFromJson(JsonObject pKeyEntry) {
 
         Map<String, Ingredient> map = Maps.newHashMap();
 
-        for (Entry<String, JsonElement> entry : p_192408_0_.entrySet()) {
+        for (Map.Entry<String, JsonElement> entry : pKeyEntry.entrySet()) {
             if (entry.getKey().length() != 1) {
-                throw new JsonSyntaxException("Invalid key entry: '" + entry.getKey() + "' is an invalid symbol (must be 1 character only).");
+                throw new JsonSyntaxException("Invalid key entry: '" + (String) entry.getKey() + "' is an invalid symbol (must be 1 character only).");
             }
 
             if (" ".equals(entry.getKey())) {
                 throw new JsonSyntaxException("Invalid key entry: ' ' is a reserved symbol.");
             }
 
-            map.put(entry.getKey(), Ingredient.fromJson(entry.getValue()));
+            map.put(entry.getKey(), Ingredient.fromJson(entry.getValue(), false));
         }
 
         map.put(" ", Ingredient.EMPTY);
         return map;
     }
 
-    public static ItemStack itemFromJson(JsonObject p_199798_0_) {
+    public static ItemStack itemStackFromJson(JsonObject pStackObject) {
 
-        String s = GsonHelper.getAsString(p_199798_0_, "item");
-        Item item = BuiltInRegistries.ITEM.getOptional(new ResourceLocation(s)).orElseThrow(() -> {
+        return net.minecraftforge.common.crafting.CraftingHelper.getItemStack(pStackObject, true, true);
+    }
+
+    public static Item itemFromJson(JsonObject pItemObject) {
+
+        String s = GsonHelper.getAsString(pItemObject, "item");
+        Item item = BuiltInRegistries.ITEM.getOptional(ResourceLocation.tryParse(s)).orElseThrow(() -> {
             return new JsonSyntaxException("Unknown item '" + s + "'");
         });
-        if (p_199798_0_.has("data")) {
-            throw new JsonParseException("Disallowed data tag found");
+        if (item == Items.AIR) {
+            throw new JsonSyntaxException("Empty ingredient not allowed here");
         } else {
-            int i = GsonHelper.getAsInt(p_199798_0_, "count", 1);
-            return net.minecraftforge.common.crafting.CraftingHelper.getItemStack(p_199798_0_, true);
+            return item;
         }
     }
 

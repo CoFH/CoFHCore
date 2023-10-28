@@ -55,23 +55,23 @@ public class CoreClientSetupEvents {
     @SubscribeEvent
     public static void registerParticleFactories(final RegisterParticleProvidersEvent event) {
 
-        event.register(FROST.get(), FrostParticle::factory);
-        event.register(PLASMA.get(), PlasmaBallParticle::factory);
-        event.register(SPARK.get(), SparkParticle::factory);
+        event.registerSpriteSet(FROST.get(), FrostParticle::factory);
+        event.registerSpriteSet(PLASMA.get(), PlasmaBallParticle::factory);
+        event.registerSpriteSet(SPARK.get(), SparkParticle::factory);
 
-        event.register(FIRE.get(), FireParticle::factory);
-        event.register(BLAST.get(), BlastParticle::factory);
-        event.register(MIST.get(), MistParticle::factory);
+        event.registerSpriteSet(FIRE.get(), FireParticle::factory);
+        event.registerSpriteSet(BLAST.get(), BlastParticle::factory);
+        event.registerSpriteSet(MIST.get(), MistParticle::factory);
 
-        event.register(SHOCKWAVE.get(), ShockwaveParticle::factory);
-        event.register(BLAST_WAVE.get(), BlastWaveParticle::factory);
-        event.register(WIND_VORTEX.get(), WindVortexParticle::factory);
-        event.register(WIND_SPIRAL.get(), WindSpiralParticle::factory);
+        event.registerSpriteSet(SHOCKWAVE.get(), ShockwaveParticle::factory);
+        event.registerSpriteSet(BLAST_WAVE.get(), BlastWaveParticle::factory);
+        event.registerSpriteSet(WIND_VORTEX.get(), WindVortexParticle::factory);
+        event.registerSpriteSet(WIND_SPIRAL.get(), WindSpiralParticle::factory);
 
-        event.register(BEAM.get(), BeamParticle::factory);
-        event.register(STRAIGHT_ARC.get(), ArcParticle::factory);
-        event.register(SHARD.get(), ShardParticle::factory);
-        event.register(STREAM.get(), StreamParticle::factory);
+        event.registerSpriteSet(BEAM.get(), BeamParticle::factory);
+        event.registerSpriteSet(STRAIGHT_ARC.get(), ArcParticle::factory);
+        event.registerSpriteSet(SHARD.get(), ShardParticle::factory);
+        event.registerSpriteSet(STREAM.get(), StreamParticle::factory);
     }
 
     // region HELPERS

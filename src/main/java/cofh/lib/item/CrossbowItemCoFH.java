@@ -25,6 +25,7 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
@@ -258,7 +259,6 @@ public class CrossbowItemCoFH extends CrossbowItem implements ICoFHItem {
                         level.playSound(null, shooter.getX(), shooter.getY(), shooter.getZ(), SoundEvents.CROSSBOW_SHOOT, SoundSource.PLAYERS, 1.0F, pitch);
                     }
                 }
-
                 onCrossbowShot(shooter, hand, crossbow, damage);
             }
         }
@@ -288,8 +288,10 @@ public class CrossbowItemCoFH extends CrossbowItem implements ICoFHItem {
 
     public Projectile shootProjectile(Player shooter, Projectile projectile, float speed, float inaccuracy, float angle) {
 
-        Vector3f vector3f = new Vector3f(shooter.getViewVector(1.0F));
-        vector3f.transform(new Quaternionf(new Vector3f(shooter.getUpVector(1.0F)), angle, true));
+        Vec3 vec31 = shooter.getUpVector(1.0F);
+        Quaternionf quaternionf = (new Quaternionf()).setAngleAxis((angle * ((float) Math.PI / 180F)), vec31.x, vec31.y, vec31.z);
+        Vec3 vec3 = shooter.getViewVector(1.0F);
+        Vector3f vector3f = vec3.toVector3f().rotate(quaternionf);
         projectile.shoot(vector3f.x(), vector3f.y(), vector3f.z(), speed, inaccuracy);
         return projectile;
     }
@@ -298,7 +300,6 @@ public class CrossbowItemCoFH extends CrossbowItem implements ICoFHItem {
     public void onCrossbowShot(Player shooter, InteractionHand hand, ItemStack crossbow, int damage) {
 
         crossbow.hurtAndBreak(damage, shooter, (entity) -> entity.broadcastBreakEvent(hand));
-
         if (shooter instanceof ServerPlayer) {
             if (!shooter.level.isClientSide()) {
                 CriteriaTriggers.SHOT_CROSSBOW.trigger((ServerPlayer) shooter, crossbow);

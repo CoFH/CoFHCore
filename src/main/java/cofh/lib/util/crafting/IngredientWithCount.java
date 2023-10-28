@@ -26,20 +26,13 @@ public class IngredientWithCount extends AbstractIngredient {
     @Override
     public ItemStack[] getItems() {
 
-        this.dissolve();
-        return wrappedIngredient.itemStacks;
-    }
-
-    @Override
-    public void dissolve() {
-
-        wrappedIngredient.dissolve();
         if (wrappedIngredient.itemStacks == null) {
-            return;
+            wrappedIngredient.getItems();
+            for (ItemStack stack : wrappedIngredient.itemStacks) {
+                stack.setCount(count);
+            }
         }
-        for (ItemStack stack : wrappedIngredient.itemStacks) {
-            stack.setCount(count);
-        }
+        return wrappedIngredient.getItems();
     }
 
     @Override

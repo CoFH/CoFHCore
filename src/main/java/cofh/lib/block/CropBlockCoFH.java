@@ -16,6 +16,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -158,7 +159,7 @@ public class CropBlockCoFH extends CropBlock implements IHarvestable {
     }
 
     @Override
-    protected int getAge(BlockState state) {
+    public int getAge(BlockState state) {
 
         return state.getValue(getAgeProperty());
     }
@@ -222,7 +223,7 @@ public class CropBlockCoFH extends CropBlock implements IHarvestable {
 
     // region BonemealableBlock
     @Override
-    public boolean isValidBonemealTarget(BlockGetter worldIn, BlockPos pos, BlockState state, boolean isClient) {
+    public boolean isValidBonemealTarget(LevelReader worldIn, BlockPos pos, BlockState state, boolean isClient) {
 
         return !canHarvest(state);
     }

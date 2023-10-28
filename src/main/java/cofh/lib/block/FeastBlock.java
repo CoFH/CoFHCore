@@ -128,7 +128,7 @@ public class FeastBlock extends DirectionalBlock4Way {
     @Override
     public boolean canSurvive(BlockState stateIn, LevelReader worldIn, BlockPos pos) {
 
-        return worldIn.getBlockState(pos.below()).getMaterial().isSolid();
+        return worldIn.getBlockState(pos.below()).isSolid();
     }
 
     @Override

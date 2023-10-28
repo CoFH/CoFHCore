@@ -9,10 +9,11 @@ import com.google.common.collect.Sets;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minecraft.advancements.critereon.*;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
+import net.minecraft.data.recipes.packs.VanillaRecipeProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -26,8 +27,6 @@ import net.minecraftforge.common.crafting.CompoundIngredient;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -37,18 +36,16 @@ import java.util.function.Consumer;
 
 import static cofh.lib.util.constants.ModIds.ID_FORGE;
 
-public class RecipeProviderCoFH extends RecipeProvider implements IConditionBuilder {
-
-    private static final Logger LOGGER = LogManager.getLogger();
+public class RecipeProviderCoFH extends VanillaRecipeProvider implements IConditionBuilder {
 
     protected final String modid;
     protected FlagManager manager;
 
     protected boolean advancements = false;
 
-    public RecipeProviderCoFH(DataGenerator generatorIn, String modid) {
+    public RecipeProviderCoFH(PackOutput output, String modid) {
 
-        super(generatorIn);
+        super(output);
         this.modid = modid;
     }
 
@@ -476,7 +473,7 @@ public class RecipeProviderCoFH extends RecipeProvider implements IConditionBuil
         public JsonObject serializeRecipe() {
 
             JsonObject jsonobject = new JsonObject();
-            jsonobject.addProperty("type", Registry.RECIPE_SERIALIZER.getKey(this.getType()).toString());
+            jsonobject.addProperty("type", BuiltInRegistries.RECIPE_SERIALIZER.getKey(this.getType()).toString());
             this.serializeRecipeData(jsonobject);
             if (!conditions.isEmpty()) {
                 JsonArray conditionArray = new JsonArray();

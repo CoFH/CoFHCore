@@ -93,7 +93,7 @@ public abstract class CoFHParticle extends Particle {
 
     protected int getLightColor(float pTicks, double x, double y, double z) {
 
-        BlockPos blockpos = new BlockPos(x, y, z);
+        BlockPos blockpos = BlockPos.containing(x, y, z);
         return this.level.hasChunkAt(blockpos) ? LevelRenderer.getLightColor(this.level, blockpos) : 0;
     }
 

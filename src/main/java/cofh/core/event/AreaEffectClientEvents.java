@@ -104,7 +104,7 @@ public class AreaEffectClientEvents {
             posestack.pushPose();
             posestack.translate((double) pos.getX() - d0, (double) pos.getY() - d1, (double) pos.getZ() - d2);
             PoseStack.Pose matrixEntry = posestack.last();
-            VertexConsumer matrixBuilder = new SheetedDecalTextureGenerator(vertexBuilder, matrixEntry.pose(), matrixEntry.normal());
+            VertexConsumer matrixBuilder = new SheetedDecalTextureGenerator(vertexBuilder, matrixEntry.pose(), matrixEntry.normal(), 1.0F);
             dispatcher.renderBreakingTexture(level.getBlockState(pos), pos, level, posestack, matrixBuilder);
             posestack.popPose();
         }

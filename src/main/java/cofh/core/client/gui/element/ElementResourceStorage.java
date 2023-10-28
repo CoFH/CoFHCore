@@ -6,6 +6,7 @@ import cofh.lib.api.IResourceStorage;
 import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
@@ -106,8 +107,9 @@ public abstract class ElementResourceStorage extends ElementBase {
     }
 
     @Override
-    public void drawBackground(PoseStack poseStack, int mouseX, int mouseY) {
+    public void drawBackground(GuiGraphics pGuiGraphics, int mouseX, int mouseY) {
 
+        PoseStack poseStack = pGuiGraphics.pose();
         drawStorage(poseStack);
         drawUnderlayTexture(poseStack);
         drawResource(poseStack);

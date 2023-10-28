@@ -3,7 +3,7 @@ package cofh.lib.fluid;
 import com.google.common.collect.Lists;
 import com.google.gson.*;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -248,7 +248,7 @@ public class FluidIngredient implements Predicate<FluidStack> {
 
             List<FluidStack> list = Lists.newArrayList();
 
-            for (Holder<Fluid> fluid : Registry.FLUID.getTagOrEmpty(this.tag)) {
+            for (Holder<Fluid> fluid : BuiltInRegistries.FLUID.getTagOrEmpty(this.tag)) {
                 list.add(new FluidStack(fluid.value(), amount));
             }
             return list;

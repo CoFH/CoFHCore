@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static cofh.core.capability.CapabilityShieldItem.SHIELD_ITEM_CAPABILITY;
 import static cofh.core.init.CoreMobEffects.*;
+import static net.minecraft.tags.DamageTypeTags.*;
 
 /**
  * @author King Lemming and Hek
@@ -63,7 +64,7 @@ public abstract class LivingEntityMixin {
 
         LivingEntity living = (LivingEntity) (Object) this;
 
-        if (source.isFire()) {
+        if (source.is(IS_FIRE)) {
             living.removeEffect(CHILLED.get());
             //MobEffectInstance instance = living.getEffect(CHILLED.get());
             //if (instance != null) {
@@ -80,17 +81,17 @@ public abstract class LivingEntityMixin {
             //    }
             //}
         }
-        if (!source.isBypassMagic()) {
-            if (source.isExplosion() && living.hasEffect(EXPLOSION_RESISTANCE.get())) {
+        if (!source.is(BYPASSES_ENCHANTMENTS)) {
+            if (source.is(IS_EXPLOSION) && living.hasEffect(EXPLOSION_RESISTANCE.get())) {
                 callback.setReturnValue(false);
             }
-            if (source.isMagic() && living.hasEffect(MAGIC_RESISTANCE.get())) {
+            if (source.is(WITCH_RESISTANT_TO) && living.hasEffect(MAGIC_RESISTANCE.get())) {
                 callback.setReturnValue(false);
             }
-            if (source == DamageSource.FREEZE && living.hasEffect(COLD_RESISTANCE.get())) {
+            if (source == living.level.damageSources().freeze() && living.hasEffect(COLD_RESISTANCE.get())) {
                 callback.setReturnValue(false);
             }
-            if (source == DamageSource.LIGHTNING_BOLT && living.hasEffect(LIGHTNING_RESISTANCE.get())) {
+            if (source == living.level.damageSources().lightningBolt() && living.hasEffect(LIGHTNING_RESISTANCE.get())) {
                 callback.setReturnValue(false);
             }
         }

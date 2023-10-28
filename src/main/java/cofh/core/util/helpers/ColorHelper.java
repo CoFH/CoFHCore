@@ -23,8 +23,9 @@ public final class ColorHelper {
 
     public static int getColorFrom(TextureAtlasSprite sprite) {
 
-        if (sprite == null) return -1;
-        if (sprite.getFrameCount() == 0) return -1;
+        if (sprite == null) {
+            return -1;
+        }
         int[][] pixelMatrix = new int[][]{{0}}; // sprite.getFrameTextureData(0);
         int total = 0, red = 0, blue = 0, green = 0;
         for (int pixel : pixelMatrix[pixelMatrix.length - 1]) {
@@ -41,8 +42,9 @@ public final class ColorHelper {
 
     public static int getColorFrom(TextureAtlasSprite sprite, Color filter) {
 
-        if (sprite == null) return -1;
-        if (sprite.getFrameCount() == 0) return -1;
+        if (sprite == null) {
+            return -1;
+        }
         int[][] pixelMatrix = new int[][]{{0}}; // sprite.getFrameTextureData(0);
         int total = 0, red = 0, blue = 0, green = 0;
         for (int pixel : pixelMatrix[pixelMatrix.length - 1]) {

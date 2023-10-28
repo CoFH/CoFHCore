@@ -4,7 +4,7 @@ import cofh.core.client.gui.IGuiAccess;
 import cofh.core.util.helpers.GuiHelper;
 import cofh.lib.inventory.container.slot.SlotCoFH;
 import cofh.lib.util.helpers.MathHelper;
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -50,21 +50,21 @@ public class ElementAugmentSlots extends ElementBase {
     }
 
     @Override
-    public void drawBackground(PoseStack matrixStack, int mouseX, int mouseY) {
+    public void drawBackground(GuiGraphics pGuiGraphics, int mouseX, int mouseY) {
 
         for (ElementBase slot : slots) {
             if (slot.visible()) {
-                slot.drawBackground(matrixStack, mouseX, mouseY);
+                slot.drawBackground(pGuiGraphics, mouseX, mouseY);
             }
         }
     }
 
     @Override
-    public void drawForeground(PoseStack matrixStack, int mouseX, int mouseY) {
+    public void drawForeground(GuiGraphics pGuiGraphics, int mouseX, int mouseY) {
 
         for (ElementBase slot : slots) {
             if (slot.visible()) {
-                slot.drawForeground(matrixStack, mouseX, mouseY);
+                slot.drawForeground(pGuiGraphics, mouseX, mouseY);
             }
         }
     }

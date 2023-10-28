@@ -5,6 +5,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.world.entity.player.Player;
@@ -22,20 +23,20 @@ public interface IGuiAccess {
 
     int blitOffset();
 
-    default void drawIcon(PoseStack matrixStack, TextureAtlasSprite icon, int x, int y) {
+    default void drawIcon(GuiGraphics pGuiGraphics, TextureAtlasSprite icon, int x, int y) {
 
         RenderHelper.setPosTexShader();
         RenderHelper.setBlockTextureSheet();
         RenderHelper.resetShaderColor();
-        GuiComponent.blit(matrixStack, x, y, blitOffset(), 16, 16, icon);
+        pGuiGraphics.blit(x, y, blitOffset(), 16, 16, icon);
     }
 
-    default void drawIcon(PoseStack matrixStack, TextureAtlasSprite icon, int color, int x, int y) {
+    default void drawIcon(GuiGraphics pGuiGraphics, TextureAtlasSprite icon, int color, int x, int y) {
 
         RenderHelper.setPosTexShader();
         RenderHelper.setBlockTextureSheet();
         RenderHelper.setShaderColorFromInt(color);
-        GuiComponent.blit(matrixStack, x, y, blitOffset(), 16, 16, icon);
+        pGuiGraphics.blit(x, y, blitOffset(), 16, 16, icon);
         RenderHelper.resetShaderColor();
     }
 
@@ -56,7 +57,6 @@ public interface IGuiAccess {
         float r = (color >> 16 & 255) / 255.0F;
         float g = (color >> 8 & 255) / 255.0F;
         float b = (color & 255) / 255.0F;
-        RenderSystem.disableTexture();
         RenderSystem.setShader(GameRenderer::getPositionShader);
         RenderSystem.setShaderColor(r, g, b, a);
 
@@ -68,7 +68,6 @@ public interface IGuiAccess {
         buffer.vertex(mat, x2, y1, blitOffset()).endVertex();
         buffer.vertex(mat, x1, y1, blitOffset()).endVertex();
         Tesselator.getInstance().end();
-        RenderSystem.enableTexture();
     }
 
     default void drawColoredModalRect(PoseStack poseStack, int x1, int y1, int x2, int y2, int color) {
@@ -89,7 +88,6 @@ public interface IGuiAccess {
         float g = (color >> 8 & 255) / 255.0F;
         float b = (color & 255) / 255.0F;
         RenderSystem.enableBlend();
-        RenderSystem.disableTexture();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA.value, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA.value);
         RenderSystem.setShader(GameRenderer::getPositionShader);
         RenderSystem.setShaderColor(r, g, b, a);
@@ -102,16 +100,15 @@ public interface IGuiAccess {
         buffer.vertex(mat, x2, y1, blitOffset()).endVertex();
         buffer.vertex(mat, x1, y1, blitOffset()).endVertex();
         Tesselator.getInstance().end();
-        RenderSystem.enableTexture();
         RenderSystem.disableBlend();
     }
 
-    default void drawTexturedModalRect(PoseStack poseStack, int x, int y, int textureX, int textureY, int width, int height) {
+    default void drawTexturedModalRect(GuiGraphics pGuiGraphics, int x, int y, int textureX, int textureY, int width, int height) {
 
         final float f = 0.00390625F;
         Tesselator tessellator = Tesselator.getInstance();
 
-        Matrix4f mat = poseStack.last().pose();
+        Matrix4f mat = pGuiGraphics.pose().last().pose();
         BufferBuilder bufferbuilder = tessellator.getBuilder();
         bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
         bufferbuilder.vertex(mat, x, (y + height), blitOffset()).uv(((float) textureX * f), ((float) (textureY + height) * f)).endVertex();

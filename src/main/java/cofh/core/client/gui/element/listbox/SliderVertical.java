@@ -28,16 +28,16 @@ public class SliderVertical extends ElementSlider {
     @Override
     public int getSliderY() {
 
-        int dist = _valueMax - _valueMin;
-        int maxPos = height - _sliderHeight;
-        return Math.min(dist == 0 ? 0 : maxPos * (_value - _valueMin) / dist, maxPos);
+        int dist = valueMax - valueMin;
+        int maxPos = height - sliderHeight;
+        return Math.min(dist == 0 ? 0 : maxPos * (value - valueMin) / dist, maxPos);
     }
 
     @Override
     public void dragSlider(int x, int v) {
 
-        v += Math.round(_sliderHeight * (v / (float) height) + (_sliderHeight * 0.25f));
-        setValue(_valueMin + ((_valueMax - _valueMin) * v / height));
+        v += Math.round(sliderHeight * (v / (float) height) + (sliderHeight * 0.25f));
+        setValue(valueMin + ((valueMax - valueMin) * v / height));
     }
 
 }

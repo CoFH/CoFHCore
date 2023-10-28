@@ -1,7 +1,7 @@
 package cofh.lib.data;
 
 import cofh.lib.util.Utils;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
@@ -15,9 +15,9 @@ import java.util.function.Supplier;
 
 public abstract class BlockStateProviderCoFH extends BlockStateProvider {
 
-    public BlockStateProviderCoFH(DataGenerator gen, String modid, ExistingFileHelper existingFileHelper) {
+    public BlockStateProviderCoFH(PackOutput output, String modid, ExistingFileHelper existingFileHelper) {
 
-        super(gen, modid, existingFileHelper);
+        super(output, modid, existingFileHelper);
     }
 
     // region HELPERS

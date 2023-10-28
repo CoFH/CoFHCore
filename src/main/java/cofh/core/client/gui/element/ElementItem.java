@@ -1,8 +1,7 @@
 package cofh.core.client.gui.element;
 
 import cofh.core.client.gui.IGuiAccess;
-import cofh.core.util.helpers.RenderHelper;
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.function.Supplier;
@@ -30,10 +29,10 @@ public class ElementItem extends ElementBase {
     }
 
     @Override
-    public void drawForeground(PoseStack matrixStack, int mouseX, int mouseY) {
+    public void drawForeground(GuiGraphics pGuiGraphics, int mouseX, int mouseY) {
 
         if (!renderStack.get().isEmpty()) {
-            RenderHelper.renderItem().renderAndDecorateItem(renderStack.get(), posX(), posY());
+            pGuiGraphics.renderItem(renderStack.get(), posX(), posY());
         }
     }
 

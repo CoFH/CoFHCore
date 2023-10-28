@@ -34,7 +34,7 @@ public class ElectricFieldRenderer extends EntityRenderer<ElectricField> impleme
         stack.pushPose();
 
         int time = MathHelper.floor((entity.tickCount + partialTicks) * 0.75F);
-        SplittableRandom rand = new SplittableRandom(time * 69420);
+        SplittableRandom rand = new SplittableRandom(time * 69420L);
         float rot = rand.nextFloat(MathHelper.F_TAU);
 
         packedLight = 0x00F000F0;

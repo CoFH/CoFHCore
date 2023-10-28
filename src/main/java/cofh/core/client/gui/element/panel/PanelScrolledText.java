@@ -3,7 +3,7 @@ package cofh.core.client.gui.element.panel;
 import cofh.core.client.gui.IGuiAccess;
 import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.util.helpers.MathHelper;
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
@@ -38,27 +38,27 @@ public abstract class PanelScrolledText extends PanelBase {
     public abstract Component getTitle();
 
     @Override
-    public void drawForeground(PoseStack matrixStack) {
+    public void drawForeground(GuiGraphics pGuiGraphics) {
 
-        drawPanelIcon(matrixStack, getIcon());
+        drawPanelIcon(pGuiGraphics, getIcon());
         if (!fullyOpen) {
             return;
         }
         if (scrollable) {
             if (firstLine > 0) {
-                gui.drawIcon(matrixStack, ICON_ARROW_UP, sideOffset() + maxWidth - 20, 16);
+                gui.drawIcon(pGuiGraphics, ICON_ARROW_UP, sideOffset() + maxWidth - 20, 16);
             } else {
-                gui.drawIcon(matrixStack, ICON_ARROW_UP_INACTIVE, sideOffset() + maxWidth - 20, 16);
+                gui.drawIcon(pGuiGraphics, ICON_ARROW_UP_INACTIVE, sideOffset() + maxWidth - 20, 16);
             }
             if (firstLine < maxFirstLine) {
-                gui.drawIcon(matrixStack, ICON_ARROW_DOWN, sideOffset() + maxWidth - 20, 76);
+                gui.drawIcon(pGuiGraphics, ICON_ARROW_DOWN, sideOffset() + maxWidth - 20, 76);
             } else {
-                gui.drawIcon(matrixStack, ICON_ARROW_DOWN_INACTIVE, sideOffset() + maxWidth - 20, 76);
+                gui.drawIcon(pGuiGraphics, ICON_ARROW_DOWN_INACTIVE, sideOffset() + maxWidth - 20, 76);
             }
         }
-        fontRenderer().drawShadow(matrixStack, getTitle().getString(), sideOffset() + 18, 6, headerColor);
+        pGuiGraphics.drawString(fontRenderer(), getTitle().getString(), sideOffset() + 18, 6, headerColor, true);
         for (int i = firstLine; i < firstLine + numLines; ++i) {
-            fontRenderer().draw(matrixStack, myText.get(i), sideOffset() + 2, 20 + (i - firstLine) * fontRenderer().lineHeight, textColor);
+            pGuiGraphics.drawString(fontRenderer(), myText.get(i), sideOffset() + 2, 20 + (i - firstLine) * fontRenderer().lineHeight, textColor);
         }
         RenderHelper.resetShaderColor();
     }

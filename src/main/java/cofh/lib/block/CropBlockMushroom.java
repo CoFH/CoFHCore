@@ -96,7 +96,7 @@ public class CropBlockMushroom extends CropBlockCoFH {
 
     // region BonemealableBlock
     @Override
-    public boolean isValidBonemealTarget(BlockGetter worldIn, BlockPos pos, BlockState state, boolean isClient) {
+    public boolean isValidBonemealTarget(LevelReader worldIn, BlockPos pos, BlockState state, boolean isClient) {
 
         return false;
     }

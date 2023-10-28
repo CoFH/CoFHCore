@@ -9,7 +9,7 @@ import cofh.core.network.packet.server.FilterableGuiTogglePacket;
 import cofh.core.util.helpers.FilterHelper;
 import cofh.core.util.helpers.RenderHelper;
 import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.MenuProvider;
@@ -106,15 +106,15 @@ public class FluidFilterScreen extends ContainerScreenCoFH<FluidFilterContainer>
     }
 
     @Override
-    protected void renderLabels(PoseStack poseStack, int mouseX, int mouseY) {
+    protected void renderLabels(GuiGraphics pGuiGraphics, int mouseX, int mouseY) {
 
-        super.renderLabels(poseStack, mouseX, mouseY);
+        super.renderLabels(pGuiGraphics, mouseX, mouseY);
 
         if (menu.lockedSlot != null) {
             GlStateManager._enableBlend();
             RenderHelper.setPosTexShader();
             RenderHelper.setShaderTexture0(SLOT_OVERLAY);
-            drawTexturedModalRect(poseStack, menu.lockedSlot.x, menu.lockedSlot.y, 0, 0, 16, 16, 16, 16);
+            drawTexturedModalRect(pGuiGraphics.pose(), menu.lockedSlot.x, menu.lockedSlot.y, 0, 0, 16, 16, 16, 16);
             GlStateManager._disableBlend();
         }
     }

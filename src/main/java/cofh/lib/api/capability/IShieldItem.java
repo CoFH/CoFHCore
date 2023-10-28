@@ -6,6 +6,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.phys.Vec3;
 
+import static net.minecraft.tags.DamageTypeTags.BYPASSES_SHIELD;
+
 public interface IShieldItem {
 
     /**
@@ -44,7 +46,7 @@ public interface IShieldItem {
                 return false;
             }
         }
-        if (!source.isBypassArmor() && living.isBlocking()) {
+        if (!source.is(BYPASSES_SHIELD) && living.isBlocking()) {
             return canBlockDamagePosition(living, source.getSourcePosition());
         }
         return false;

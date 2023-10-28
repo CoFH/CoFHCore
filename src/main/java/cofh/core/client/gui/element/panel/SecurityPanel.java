@@ -6,8 +6,8 @@ import cofh.core.client.gui.element.SimpleTooltip;
 import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.api.control.ISecurable;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
@@ -142,7 +142,7 @@ public class SecurityPanel extends PanelBase {
     }
 
     @Override
-    protected void drawBackground(PoseStack poseStack) {
+    protected void drawBackground(GuiGraphics pGuiGraphics) {
 
         switch (mySecurable.getAccess()) {
             case PUBLIC:
@@ -158,7 +158,7 @@ public class SecurityPanel extends PanelBase {
                 backgroundColor = 0x90b040;
                 break;
         }
-        super.drawBackground(poseStack);
+        super.drawBackground(pGuiGraphics);
 
         if (!fullyOpen) {
             return;
@@ -168,45 +168,45 @@ public class SecurityPanel extends PanelBase {
         float colorB = (backgroundColor & 255) / 255.0F * 0.6F;
         RenderHelper.setPosTexShader();
         RenderSystem.setShaderColor(colorR, colorG, colorB, 1.0F);
-        gui.drawTexturedModalRect(poseStack, 34, 18, 16, 20, 44, 44);
+        gui.drawTexturedModalRect(pGuiGraphics, 34, 18, 16, 20, 44, 44);
         RenderHelper.resetShaderColor();
     }
 
     @Override
-    protected void drawForeground(PoseStack matrixStack) {
+    protected void drawForeground(GuiGraphics pGuiGraphics) {
 
         switch (mySecurable.getAccess()) {
             case PUBLIC:
-                drawPanelIcon(matrixStack, ICON_ACCESS_PUBLIC);
+                drawPanelIcon(pGuiGraphics, ICON_ACCESS_PUBLIC);
                 break;
             case PRIVATE:
-                drawPanelIcon(matrixStack, ICON_ACCESS_PRIVATE);
+                drawPanelIcon(pGuiGraphics, ICON_ACCESS_PRIVATE);
                 break;
             case FRIENDS:
-                drawPanelIcon(matrixStack, ICON_ACCESS_FRIENDS);
+                drawPanelIcon(pGuiGraphics, ICON_ACCESS_FRIENDS);
                 break;
             case TEAM:
-                drawPanelIcon(matrixStack, ICON_ACCESS_TEAM);
+                drawPanelIcon(pGuiGraphics, ICON_ACCESS_TEAM);
                 break;
         }
         if (!fullyOpen) {
             return;
         }
-        fontRenderer().drawShadow(matrixStack, localize("info.cofh.security"), sideOffset() + 18, 6, headerColor);
-        fontRenderer().drawShadow(matrixStack, localize("info.cofh.access") + ":", sideOffset() + 6, 66, subheaderColor);
+        pGuiGraphics.drawString(fontRenderer(), localize("info.cofh.security"), sideOffset() + 18, 6, headerColor, true);
+        pGuiGraphics.drawString(fontRenderer(), localize("info.cofh.access") + ":", sideOffset() + 6, 66, subheaderColor, true);
 
         switch (mySecurable.getAccess()) {
             case PUBLIC:
-                fontRenderer().draw(matrixStack, localize("info.cofh.access_public"), sideOffset() + 14, 78, textColor);
+                pGuiGraphics.drawString(fontRenderer(), localize("info.cofh.access_public"), sideOffset() + 14, 78, textColor);
                 break;
             case PRIVATE:
-                fontRenderer().draw(matrixStack, localize("info.cofh.access_private"), sideOffset() + 14, 78, textColor);
+                pGuiGraphics.drawString(fontRenderer(), localize("info.cofh.access_private"), sideOffset() + 14, 78, textColor);
                 break;
             case FRIENDS:
-                fontRenderer().draw(matrixStack, localize("info.cofh.access_friends"), sideOffset() + 14, 78, textColor);
+                pGuiGraphics.drawString(fontRenderer(), localize("info.cofh.access_friends"), sideOffset() + 14, 78, textColor);
                 break;
             case TEAM:
-                fontRenderer().draw(matrixStack, localize("info.cofh.access_team"), sideOffset() + 14, 78, textColor);
+                pGuiGraphics.drawString(fontRenderer(), localize("info.cofh.access_team"), sideOffset() + 14, 78, textColor);
                 break;
         }
         RenderHelper.resetShaderColor();

@@ -8,7 +8,6 @@ import cofh.core.util.helpers.ArcheryHelper;
 import cofh.lib.entity.AbstractAoESpell;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
@@ -89,7 +88,7 @@ public class ElectricField extends AbstractAoESpell implements IEntityAdditional
         float padding = 0.1F;
         ArcheryHelper.findHitEntities(entities.stream(), pos, end, new Vec3(padding, padding, padding)).forEach(result -> {
             Entity target = result.getEntity();
-            target.hurt(DamageSource.LIGHTNING_BOLT, power * 4.0F); // TODO damage source, directionality
+            target.hurt(this.level.damageSources().lightningBolt(), power * 4.0F); // TODO damage source, directionality
             if (target instanceof LivingEntity living && random.nextFloat() < power * 0.4F) {
                 living.addEffect(new MobEffectInstance(CoreMobEffects.SHOCKED.get(), 80, 0, true, false, true));
             }

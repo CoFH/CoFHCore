@@ -1,7 +1,7 @@
 package cofh.lib.data;
 
 import cofh.lib.util.DeferredRegisterCoFH;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
@@ -21,9 +21,9 @@ public abstract class ItemModelProviderCoFH extends ItemModelProvider {
     public static final String PROJECTILES = "projectiles";
     public static final String TOOLS = "tools";
 
-    public ItemModelProviderCoFH(DataGenerator generator, String modid, ExistingFileHelper existingFileHelper) {
+    public ItemModelProviderCoFH(PackOutput output, String modid, ExistingFileHelper existingFileHelper) {
 
-        super(generator, modid, existingFileHelper);
+        super(output, modid, existingFileHelper);
     }
 
     protected void standardToolSet(DeferredRegisterCoFH<Item> reg, String prefix) {

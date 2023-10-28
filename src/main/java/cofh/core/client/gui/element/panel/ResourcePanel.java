@@ -2,7 +2,7 @@ package cofh.core.client.gui.element.panel;
 
 import cofh.core.client.gui.IGuiAccess;
 import cofh.core.util.helpers.RenderHelper;
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
 
@@ -86,25 +86,25 @@ public class ResourcePanel extends PanelBase {
     }
 
     @Override
-    protected void drawForeground(PoseStack matrixStack) {
+    protected void drawForeground(GuiGraphics pGuiGraphics) {
 
-        drawPanelIcon(matrixStack, icon);
+        drawPanelIcon(pGuiGraphics, icon);
         if (!fullyOpen) {
             return;
         }
-        fontRenderer().drawShadow(matrixStack, localize(resource), sideOffset() + 20, 6, headerColor);
+        pGuiGraphics.drawString(fontRenderer(), localize(resource), sideOffset() + 20, 6, headerColor, true);
 
         if (curAmt.getAsInt() >= 0) {
-            fontRenderer().drawShadow(matrixStack, localize(curDesc) + ":", sideOffset() + 6, 18, subheaderColor);
-            fontRenderer().draw(matrixStack, curAmt.getAsInt() + " " + localize(curUnit), sideOffset() + 14, 30, textColor);
+            pGuiGraphics.drawString(fontRenderer(), localize(curDesc) + ":", sideOffset() + 6, 18, subheaderColor, true);
+            pGuiGraphics.drawString(fontRenderer(), curAmt.getAsInt() + " " + localize(curUnit), sideOffset() + 14, 30, textColor);
         }
         if (maxAmt.getAsInt() >= 0) {
-            fontRenderer().drawShadow(matrixStack, localize(maxDesc) + ":", sideOffset() + 6, 42, subheaderColor);
-            fontRenderer().draw(matrixStack, maxAmt.getAsInt() + " " + localize(maxUnit), sideOffset() + 14, 54, textColor);
+            pGuiGraphics.drawString(fontRenderer(), localize(maxDesc) + ":", sideOffset() + 6, 42, subheaderColor, true);
+            pGuiGraphics.drawString(fontRenderer(), maxAmt.getAsInt() + " " + localize(maxUnit), sideOffset() + 14, 54, textColor);
         }
         if (efficiency.getAsDouble() >= 0) {
-            fontRenderer().drawShadow(matrixStack, localize("info.cofh.efficiency") + ":", sideOffset() + 6, 66, subheaderColor);
-            fontRenderer().draw(matrixStack, DF0.format(efficiency.getAsDouble() * 100) + "%", sideOffset() + 14, 78, textColor);
+            pGuiGraphics.drawString(fontRenderer(), localize("info.cofh.efficiency") + ":", sideOffset() + 6, 66, subheaderColor, true);
+            pGuiGraphics.drawString(fontRenderer(), DF0.format(efficiency.getAsDouble() * 100) + "%", sideOffset() + 14, 78, textColor);
         }
         RenderHelper.resetShaderColor();
     }

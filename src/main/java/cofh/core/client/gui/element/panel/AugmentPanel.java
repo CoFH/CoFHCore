@@ -6,7 +6,7 @@ import cofh.core.client.gui.element.ElementAugmentSlots;
 import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.inventory.container.slot.SlotCoFH;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 
 import javax.annotation.Nonnull;
@@ -49,21 +49,21 @@ public class AugmentPanel extends PanelBase {
     }
 
     @Override
-    protected void drawForeground(PoseStack matrixStack) {
+    protected void drawForeground(GuiGraphics pGuiGraphics) {
 
-        drawPanelIcon(matrixStack, CoreTextures.ICON_AUGMENT);
+        drawPanelIcon(pGuiGraphics, CoreTextures.ICON_AUGMENT);
         if (!fullyOpen) {
             return;
         }
-        fontRenderer().drawShadow(matrixStack, localize("info.cofh.augmentation"), sideOffset() + 18, 6, headerColor);
+        pGuiGraphics.drawString(fontRenderer(), localize("info.cofh.augmentation"), sideOffset() + 18, 6, headerColor, true);
 
         RenderHelper.resetShaderColor();
     }
 
     @Override
-    protected void drawBackground(PoseStack poseStack) {
+    protected void drawBackground(GuiGraphics pGuiGraphics) {
 
-        super.drawBackground(poseStack);
+        super.drawBackground(pGuiGraphics);
 
         if (!fullyOpen) {
             return;
@@ -73,7 +73,7 @@ public class AugmentPanel extends PanelBase {
         float colorB = (backgroundColor & 255) / 255.0F * 0.6F;
         RenderHelper.setPosTexShader();
         RenderSystem.setShaderColor(colorR, colorG, colorB, 1.0F);
-        gui.drawTexturedModalRect(poseStack, sideOffset() + slotsBorderX1, slotsBorderY1, 16, 20, slotsBorderX2 - slotsBorderX1, slotsBorderY2 - slotsBorderY1);
+        gui.drawTexturedModalRect(pGuiGraphics, sideOffset() + slotsBorderX1, slotsBorderY1, 16, 20, slotsBorderX2 - slotsBorderX1, slotsBorderY2 - slotsBorderY1);
         RenderHelper.resetShaderColor();
     }
 

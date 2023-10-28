@@ -106,7 +106,7 @@ public class Shockwave extends AbstractAoESpell {
                 continue;
             }
             // TODO damage source
-            DamageSource source = this.owner instanceof Player player ? DamageSource.playerAttack(player) : DamageSource.mobAttack(this.owner);
+            DamageSource source = this.owner instanceof Player player ? this.owner.level.damageSources().playerAttack(player) : this.owner.level.damageSources().mobAttack(this.owner);
             if (entity.hurt(source, damage)) {
                 hitSomething = true;
                 entity.addEffect(new MobEffectInstance(SUNDERED.get(), debuffDuration, MathHelper.weightedRound(strength, this.random) - 1, false, false));

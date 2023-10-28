@@ -2,7 +2,7 @@ package cofh.core.client.gui.element;
 
 import cofh.core.client.gui.IGuiAccess;
 import cofh.core.util.helpers.RenderHelper;
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 
@@ -61,14 +61,14 @@ public class ElementConditionalLayered extends ElementBase {
     }
 
     @Override
-    public void drawBackground(PoseStack matrixStack, int mouseX, int mouseY) {
+    public void drawBackground(GuiGraphics pGuiGraphics, int mouseX, int mouseY) {
 
         for (IconWrapper icon : conditionalTextures) {
             if (icon.display.get()) {
                 if (icon.color != WHITE) {
-                    gui.drawIcon(matrixStack, icon.texture.get(), icon.color.getAsInt(), posX(), posY());
+                    gui.drawIcon(pGuiGraphics, icon.texture.get(), icon.color.getAsInt(), posX(), posY());
                 } else {
-                    gui.drawIcon(matrixStack, icon.texture.get(), posX(), posY());
+                    gui.drawIcon(pGuiGraphics, icon.texture.get(), posX(), posY());
                 }
             }
         }

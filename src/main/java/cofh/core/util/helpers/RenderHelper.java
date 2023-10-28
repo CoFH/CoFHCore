@@ -8,6 +8,7 @@ import com.mojang.blaze3d.platform.GlStateManager.SourceFactor;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.GameRenderer;
@@ -231,7 +232,7 @@ public final class RenderHelper {
     // endregion
 
     // region MATRIX DRAW METHODS
-    public static void drawFluid(PoseStack matrixStack, int x, int y, FluidStack fluid, int width, int height) {
+    public static void drawFluid(GuiGraphics pGuiGraphics, int x, int y, FluidStack fluid, int width, int height) {
 
         if (fluid.isEmpty()) {
             return;
@@ -244,10 +245,10 @@ public final class RenderHelper {
         setBlockTextureSheet();
         setShaderColorFromInt(color);
 
-        drawTiledTexture(matrixStack, x, y, getTexture(IClientFluidTypeExtensions.of(fluid.getFluid()).getStillTexture(fluid)), width, height);
+        drawTiledTexture(pGuiGraphics, x, y, getTexture(IClientFluidTypeExtensions.of(fluid.getFluid()).getStillTexture(fluid)), width, height);
     }
 
-    public static void drawIcon(PoseStack matrixStack, TextureAtlasSprite icon, float z) {
+    public static void drawIcon(GuiGraphics pGuiGraphics, TextureAtlasSprite icon, float z) {
 
         Matrix4f matrix = matrixStack.last().pose();
 
@@ -261,7 +262,7 @@ public final class RenderHelper {
 
     }
 
-    public static void drawIcon(PoseStack matrixStack, float x, float y, float z, TextureAtlasSprite icon, int width, int height) {
+    public static void drawIcon(GuiGraphics pGuiGraphics, float x, float y, float z, TextureAtlasSprite icon, int width, int height) {
 
         Matrix4f matrix = matrixStack.last().pose();
 
@@ -274,7 +275,7 @@ public final class RenderHelper {
         tesselator().end();
     }
 
-    public static void drawTiledTexture(PoseStack matrixStack, int x, int y, TextureAtlasSprite icon, int width, int height) {
+    public static void drawTiledTexture(GuiGraphics pGuiGraphics, int x, int y, TextureAtlasSprite icon, int width, int height) {
 
         int drawHeight;
         int drawWidth;
@@ -283,13 +284,13 @@ public final class RenderHelper {
             for (int j = 0; j < height; j += 16) {
                 drawWidth = Math.min(width - i, 16);
                 drawHeight = Math.min(height - j, 16);
-                drawScaledTexturedModalRectFromSprite(matrixStack, x + i, y + j, icon, drawWidth, drawHeight);
+                drawScaledTexturedModalRectFromSprite(pGuiGraphics, x + i, y + j, icon, drawWidth, drawHeight);
             }
         }
         resetShaderColor();
     }
 
-    public static void drawScaledTexturedModalRectFromSprite(PoseStack matrixStack, int x, int y, TextureAtlasSprite icon, int width, int height) {
+    public static void drawScaledTexturedModalRectFromSprite(GuiGraphics guiGraphics, int x, int y, TextureAtlasSprite icon, int width, int height) {
 
         if (icon == null) {
             return;
@@ -315,7 +316,6 @@ public final class RenderHelper {
 
     public static void drawStencil(PoseStack matrixStack, int xStart, int yStart, int xEnd, int yEnd, int flag) {
 
-        RenderSystem.disableTexture();
         RenderSystem.setShader(GameRenderer::getPositionShader);
         GL11.glStencilFunc(GL11.GL_ALWAYS, flag, flag);
         GL11.glStencilOp(GL11.GL_ZERO, GL11.GL_ZERO, GL11.GL_REPLACE);
@@ -335,7 +335,6 @@ public final class RenderHelper {
         buffer.vertex(matrix, xStart, yStart, 0).endVertex();
         tesselator().end();
 
-        RenderSystem.enableTexture();
         GL11.glStencilFunc(GL11.GL_EQUAL, flag, flag);
         GL11.glStencilMask(0);
         RenderSystem.colorMask(true, true, true, true);

@@ -2,7 +2,7 @@ package cofh.core.client.gui.element;
 
 import cofh.core.client.gui.IGuiAccess;
 import cofh.core.util.helpers.RenderHelper;
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 
 /**
  * Basic element which can render an arbitrary texture.
@@ -27,11 +27,11 @@ public class ElementTexture extends ElementBase {
     }
 
     @Override
-    public void drawBackground(PoseStack matrixStack, int mouseX, int mouseY) {
+    public void drawBackground(GuiGraphics pGuiGraphics, int mouseX, int mouseY) {
 
         RenderHelper.setPosTexShader();
         RenderHelper.setShaderTexture0(texture);
-        drawTexturedModalRect(matrixStack, posX(), posY(), texU, texV, width, height);
+        drawTexturedModalRect(pGuiGraphics.pose(), posX(), posY(), texU, texV, width, height);
     }
 
 }

@@ -8,7 +8,7 @@ import cofh.lib.api.control.IReconfigurable;
 import cofh.lib.api.control.ITransferControllable;
 import cofh.lib.util.helpers.BlockHelper;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -90,34 +90,34 @@ public class ConfigPanel extends PanelBase {
     }
 
     @Override
-    protected void drawForeground(PoseStack matrixStack) {
+    protected void drawForeground(GuiGraphics pGuiGraphics) {
 
-        drawPanelIcon(matrixStack, CoreTextures.ICON_CONFIG);
+        drawPanelIcon(pGuiGraphics, CoreTextures.ICON_CONFIG);
         if (!fullyOpen) {
             return;
         }
-        fontRenderer().drawShadow(matrixStack, localize("info.cofh.configuration"), sideOffset() + 18, 6, headerColor);
+        pGuiGraphics.drawString(fontRenderer(), localize("info.cofh.configuration"), sideOffset() + 18, 6, headerColor, true);
 
         if (myTransfer != null) {
             if (myTransfer.hasTransferIn()) {
-                gui.drawIcon(matrixStack, myTransfer.getTransferIn() ? ICON_BUTTON_HIGHLIGHT : ICON_BUTTON, 8, 34);
+                gui.drawIcon(pGuiGraphics, myTransfer.getTransferIn() ? ICON_BUTTON_HIGHLIGHT : ICON_BUTTON, 8, 34);
             } else {
-                gui.drawIcon(matrixStack, ICON_BUTTON_INACTIVE, 8, 34);
+                gui.drawIcon(pGuiGraphics, ICON_BUTTON_INACTIVE, 8, 34);
             }
             if (myTransfer.hasTransferOut()) {
-                gui.drawIcon(matrixStack, myTransfer.getTransferOut() ? ICON_BUTTON_HIGHLIGHT : ICON_BUTTON, 8, 54);
+                gui.drawIcon(pGuiGraphics, myTransfer.getTransferOut() ? ICON_BUTTON_HIGHLIGHT : ICON_BUTTON, 8, 54);
             } else {
-                gui.drawIcon(matrixStack, ICON_BUTTON_INACTIVE, 8, 54);
+                gui.drawIcon(pGuiGraphics, ICON_BUTTON_INACTIVE, 8, 54);
             }
-            gui.drawIcon(matrixStack, ICON_INPUT, 8, 34);
-            gui.drawIcon(matrixStack, ICON_OUTPUT, 8, 54);
+            gui.drawIcon(pGuiGraphics, ICON_INPUT, 8, 34);
+            gui.drawIcon(pGuiGraphics, ICON_OUTPUT, 8, 54);
         }
     }
 
     @Override
-    protected void drawBackground(PoseStack poseStack) {
+    protected void drawBackground(GuiGraphics pGuiGraphics) {
 
-        super.drawBackground(poseStack);
+        super.drawBackground(pGuiGraphics);
 
         if (!fullyOpen) {
             return;
@@ -129,10 +129,10 @@ public class ConfigPanel extends PanelBase {
         RenderSystem.setShaderColor(colorR, colorG, colorB, 1.0F);
 
         if (myTransfer == null) {
-            gui.drawTexturedModalRect(poseStack, 16, 20, 16, 20, 64, 64);
+            gui.drawTexturedModalRect(pGuiGraphics, 16, 20, 16, 20, 64, 64);
         } else {
-            gui.drawTexturedModalRect(poseStack, 28, 20, 16, 20, 64, 64);
-            gui.drawTexturedModalRect(poseStack, 6, 32, 16, 20, 20, 40);
+            gui.drawTexturedModalRect(pGuiGraphics, 28, 20, 16, 20, 64, 64);
+            gui.drawTexturedModalRect(pGuiGraphics, 6, 32, 16, 20, 20, 40);
         }
         RenderHelper.resetShaderColor();
     }

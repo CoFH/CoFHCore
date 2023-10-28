@@ -3,6 +3,7 @@ package cofh.core.client.gui.element;
 import cofh.core.client.gui.IGuiAccess;
 import cofh.core.util.helpers.RenderHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 
 import java.util.function.IntSupplier;
 
@@ -36,8 +37,9 @@ public class ElementScaled extends ElementBase {
     }
 
     @Override
-    public void drawBackground(PoseStack poseStack, int mouseX, int mouseY) {
+    public void drawBackground(GuiGraphics pGuiGraphics, int mouseX, int mouseY) {
 
+        PoseStack poseStack = pGuiGraphics.pose();
         RenderHelper.setPosTexShader();
         RenderHelper.setShaderTexture0(texture);
         int quantity = quantitySup.getAsInt();

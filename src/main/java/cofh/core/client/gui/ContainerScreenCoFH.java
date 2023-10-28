@@ -5,7 +5,6 @@ import cofh.core.client.gui.element.panel.InfoPanel;
 import cofh.core.client.gui.element.panel.PanelBase;
 import cofh.core.client.gui.element.panel.PanelTracker;
 import cofh.core.util.helpers.RenderHelper;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -83,7 +82,7 @@ public class ContainerScreenCoFH<T extends AbstractContainerMenu> extends Abstra
         RenderHelper.resetShaderColor();
         RenderHelper.setShaderTexture0(texture);
 
-        drawTexturedModalRect(pGuiGraphics.pose(), leftPos, topPos, 0, 0, imageWidth, imageHeight);
+        drawTexturedModalRect(pGuiGraphics, leftPos, topPos, 0, 0, imageWidth, imageHeight);
 
         pGuiGraphics.pose().pushPose();
         pGuiGraphics.pose().translate(leftPos, topPos, 0.0F);
@@ -95,23 +94,23 @@ public class ContainerScreenCoFH<T extends AbstractContainerMenu> extends Abstra
     }
 
     @Override
-    protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY) {
+    protected void renderLabels(GuiGraphics pGuiGraphics, int mouseX, int mouseY) {
 
         if (drawTitle & title != null) {
-            fontRenderer().draw(matrixStack, localize(title.getString()), getCenteredOffset(localize(title.getString())), 6, 0x404040);
+            pGuiGraphics.drawString(font, localize(title.getString()), getCenteredOffset(localize(title.getString())), 6, 0x404040);
         }
         if (drawInventory) {
-            fontRenderer().draw(matrixStack, localize("container.inventory"), 8, imageHeight - 96 + 3, 0x404040);
+            pGuiGraphics.drawString(font, localize("container.inventory"), 8, imageHeight - 96 + 3, 0x404040);
         }
-        drawPanels(matrixStack, true);
-        drawElements(matrixStack, true);
+        drawPanels(pGuiGraphics, true);
+        drawElements(pGuiGraphics, true);
     }
 
-    protected void renderSlotGradient(PoseStack matrixStack, Slot slot, int color1, int color2) {
+    protected void renderSlotGradient(GuiGraphics pGuiGraphics, Slot slot, int color1, int color2) {
 
         int x = guiLeft() + slot.x;
         int y = guiTop() + slot.y;
-        fillGradient(matrixStack, x, y, x + SLOT_SIZE_INNER, y + SLOT_SIZE_INNER, color1, color2);
+        pGuiGraphics.fillGradient(x, y, x + SLOT_SIZE_INNER, y + SLOT_SIZE_INNER, color1, color2);
     }
 
     // region ELEMENTS
@@ -127,7 +126,7 @@ public class ContainerScreenCoFH<T extends AbstractContainerMenu> extends Abstra
         if (element != null && element.visible()) {
             element.addTooltip(tooltip, mX, mY);
         }
-        renderTooltip(pGuiGraphics, tooltip, Optional.empty(), mX + leftPos, mY + topPos, font);
+        pGuiGraphics.renderTooltip(font, tooltip, Optional.empty(), mX + leftPos, mY + topPos);
         tooltip.clear();
     }
 
@@ -139,13 +138,13 @@ public class ContainerScreenCoFH<T extends AbstractContainerMenu> extends Abstra
         if (foreground) {
             for (ElementBase c : elements) {
                 if (c.visible()) {
-                    c.drawForeground(matrixStack, mX, mY);
+                    c.drawForeground(pGuiGraphics, mX, mY);
                 }
             }
         } else {
             for (ElementBase c : elements) {
                 if (c.visible()) {
-                    c.drawBackground(matrixStack, mX, mY);
+                    c.drawBackground(pGuiGraphics, mX, mY);
                 }
             }
         }
@@ -166,10 +165,10 @@ public class ContainerScreenCoFH<T extends AbstractContainerMenu> extends Abstra
                     continue;
                 }
                 if (panel.side == PanelBase.LEFT) {
-                    panel.drawForeground(matrixStack, mX, mY);
+                    panel.drawForeground(pGuiGraphics, mX, mY);
                     yPosLeft += panel.height();
                 } else {
-                    panel.drawForeground(matrixStack, mX, mY);
+                    panel.drawForeground(pGuiGraphics, mX, mY);
                     yPosRight += panel.height();
                 }
             }
@@ -181,11 +180,11 @@ public class ContainerScreenCoFH<T extends AbstractContainerMenu> extends Abstra
                 }
                 if (panel.side == PanelBase.LEFT) {
                     panel.setPosition(0, yPosLeft);
-                    panel.drawBackground(matrixStack, mX, mY);
+                    panel.drawBackground(pGuiGraphics, mX, mY);
                     yPosLeft += panel.height();
                 } else {
                     panel.setPosition(imageWidth, yPosRight);
-                    panel.drawBackground(matrixStack, mX, mY);
+                    panel.drawBackground(pGuiGraphics, mX, mY);
                     yPosRight += panel.height();
                 }
             }
@@ -469,7 +468,7 @@ public class ContainerScreenCoFH<T extends AbstractContainerMenu> extends Abstra
     @Override
     public int blitOffset() {
 
-        return getBlitOffset();
+        return 0;
     }
     // endregion
 }

@@ -4,6 +4,7 @@ import cofh.lib.api.block.entity.ITileCallback;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -24,7 +25,7 @@ public class TileNBTSync extends LootItemConditionalFunction {
         if (INSTANCE != null) {
             return;
         }
-        INSTANCE = Registry.register(Registry.LOOT_FUNCTION_TYPE, new ResourceLocation(ID_COFH_CORE + ":nbt_sync"), new LootItemFunctionType(new Serializer()));
+        INSTANCE = Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE, new ResourceLocation(ID_COFH_CORE + ":nbt_sync"), new LootItemFunctionType(new Serializer()));
     }
 
     protected TileNBTSync(LootItemCondition[] conditionsIn) {

@@ -75,7 +75,7 @@ public class RenderTypes {
         return RenderType.create(name, DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true,
                 RenderType.CompositeState.builder()
                         .setTextureState(texture)
-                        .setShaderState(NEW_ENTITY_SHADER)
+                        .setShaderState(RENDERTYPE_ENTITY_SOLID_SHADER)
                         .createCompositeState(false));
     }
 
@@ -84,7 +84,7 @@ public class RenderTypes {
         return RenderType.create("cofh:translucent", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true,
                 RenderType.CompositeState.builder()
                         .setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
-                        .setShaderState(NEW_ENTITY_SHADER)
+                        .setShaderState(RENDERTYPE_ENTITY_TRANSLUCENT_SHADER)
                         .setWriteMaskState(COLOR_DEPTH_WRITE)
                         .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
                         .createCompositeState(false));
@@ -95,7 +95,7 @@ public class RenderTypes {
         return RenderType.create("cofh:translucent", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true,
                 RenderType.CompositeState.builder()
                         .setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
-                        .setShaderState(NEW_ENTITY_SHADER)
+                        .setShaderState(RENDERTYPE_ENTITY_TRANSLUCENT_SHADER)
                         .setWriteMaskState(COLOR_WRITE)
                         .setCullState(NO_CULL)
                         .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
@@ -107,7 +107,7 @@ public class RenderTypes {
         return RenderType.create("cofh:translucent", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true,
                 RenderType.CompositeState.builder()
                         .setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
-                        .setShaderState(NEW_ENTITY_SHADER)
+                        .setShaderState(RENDERTYPE_ENTITY_TRANSLUCENT_SHADER)
                         .setWriteMaskState(COLOR_WRITE)
                         .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
                         .createCompositeState(false));

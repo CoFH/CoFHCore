@@ -4,7 +4,7 @@ import cofh.core.client.gui.IGuiAccess;
 import cofh.core.util.helpers.FluidHelper;
 import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.util.helpers.StringHelper;
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -27,7 +27,7 @@ public class ElementFluid extends ElementBase {
     }
 
     @Override
-    public void drawBackground(PoseStack matrixStack, int mouseX, int mouseY) {
+    public void drawBackground(GuiGraphics pGuiGraphics, int mouseX, int mouseY) {
 
         RenderHelper.drawFluid(guiLeft() + posX(), guiTop() + posY(), fluidSup.get(), width, height);
     }

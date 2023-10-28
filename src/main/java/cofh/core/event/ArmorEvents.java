@@ -24,6 +24,7 @@ import java.util.Set;
 import static cofh.core.init.CoreMobEffects.CHILLED;
 import static cofh.core.init.CoreMobEffects.SHOCKED;
 import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
+import static net.minecraft.tags.DamageTypeTags.IS_FIRE;
 import static net.minecraft.world.effect.MobEffects.POISON;
 import static net.minecraft.world.effect.MobEffects.WITHER;
 
@@ -46,7 +47,7 @@ public class ArmorEvents {
 
         double hazRes = getHazardResistance(entity);
         if (hazRes > 0.0D) {
-            if (source.isFire() || HAZARD_DAMAGE_TYPES.contains(source.getMsgId())) {
+            if (source.is(IS_FIRE) || HAZARD_DAMAGE_TYPES.contains(source.getMsgId())) {
                 if (entity.getRandom().nextDouble() < hazRes) {
                     entity.clearFire();
                     attemptDamagePlayerArmor(entity, amount);
@@ -123,7 +124,7 @@ public class ArmorEvents {
 
         if (entity instanceof Player player) {
             if (100 * entity.level.random.nextFloat() < amount) {
-                player.getInventory().hurtArmor(DamageSource.GENERIC, Math.min(20.0F, amount), Inventory.ALL_ARMOR_SLOTS);
+                player.getInventory().hurtArmor(entity.level.damageSources().generic(), Math.min(20.0F, amount), Inventory.ALL_ARMOR_SLOTS);
             }
         }
     }

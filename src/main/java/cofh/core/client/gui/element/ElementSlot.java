@@ -3,6 +3,7 @@ package cofh.core.client.gui.element;
 import cofh.core.client.gui.IGuiAccess;
 import cofh.core.util.helpers.RenderHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.function.Supplier;
@@ -56,16 +57,17 @@ public class ElementSlot extends ElementBase {
     }
 
     @Override
-    public void drawBackground(PoseStack poseStack, int mouseX, int mouseY) {
+    public void drawBackground(GuiGraphics pGuiGraphics, int mouseX, int mouseY) {
 
+        PoseStack poseStack = pGuiGraphics.pose();
         drawSlot(poseStack);
         drawUnderlayTexture(poseStack);
     }
 
     @Override
-    public void drawForeground(PoseStack poseStack, int mouseX, int mouseY) {
+    public void drawForeground(GuiGraphics pGuiGraphics, int mouseX, int mouseY) {
 
-        drawOverlayTexture(poseStack);
+        drawOverlayTexture(pGuiGraphics.pose());
     }
 
     protected void drawSlot(PoseStack poseStack) {

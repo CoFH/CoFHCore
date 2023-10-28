@@ -88,7 +88,7 @@ public class ArcheryEvents {
         if (!(attacker instanceof LivingEntity)) {
             return;
         }
-        if (source.msgId.equals(DAMAGE_ARROW)) {
+        if (source.getMsgId().equals(DAMAGE_ARROW)) {
             int encVolley = getHeldEnchantmentLevel((LivingEntity) attacker, getEnchantment(ID_ENSORCELLATION, ID_VOLLEY));
             if (encVolley > 0) {
                 entity.invulnerableTime = 0;
