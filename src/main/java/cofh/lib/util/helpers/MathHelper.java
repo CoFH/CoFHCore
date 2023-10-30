@@ -4,6 +4,9 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
+import org.joml.*;
+
+import java.lang.Math;
 
 /**
  * Contains various math-related helper functions. Often faster than conventional implementations.
@@ -31,6 +34,14 @@ public final class MathHelper {
 
     public static final double[] SIN_TABLE = new double[65536];
     public static final float[] ASIN_TABLE = new float[65536];
+
+    public static Vector3f XN = new Vector3f(-1.0F, 0.0F, 0.0F);
+    public static Vector3f XP = new Vector3f(1.0F, 0.0F, 0.0F);
+    public static Vector3f YN = new Vector3f(0.0F, -1.0F, 0.0F);
+    public static Vector3f YP = new Vector3f(0.0F, 1.0F, 0.0F);
+    public static Vector3f ZN = new Vector3f(0.0F, 0.0F, -1.0F);
+    public static Vector3f ZP = new Vector3f(0.0F, 0.0F, 1.0F);
+    public static Vector3f ZERO = new Vector3f(0.0F, 0.0F, 0.0F);
 
     static {
         for (int i = 0; i < 65536; ++i) {
@@ -409,4 +420,45 @@ public final class MathHelper {
         return new Vec2(xRot * F_TO_DEG, -yRot * F_TO_DEG);
     }
 
+    // 1.20 Hacks below this
+
+    // TODO: Is there a more proper way to handle this now w/ new library?
+
+    public static Vector3f transform(Vector3f vec, Matrix3f mat) {
+
+        float f = vec.x;
+        float f1 = vec.y;
+        float f2 = vec.z;
+
+        vec.x = mat.m00 * f + mat.m01 * f1 + mat.m02 * f2;
+        vec.y = mat.m10 * f + mat.m11 * f1 + mat.m12 * f2;
+        vec.z = mat.m20 * f + mat.m21 * f1 + mat.m22 * f2;
+
+        return vec;
+    }
+
+    public static Vector4f transform(Vector4f vec, Matrix4f mat) {
+
+        float f = vec.x;
+        float f1 = vec.y;
+        float f2 = vec.z;
+        float f3 = vec.w;
+
+        vec.x = mat.m00() * f + mat.m01() * f1 + mat.m02() * f2 + mat.m03() * f3;
+        vec.y = mat.m10() * f + mat.m11() * f1 + mat.m12() * f2 + mat.m13() * f3;
+        vec.z = mat.m20() * f + mat.m21() * f1 + mat.m22() * f2 + mat.m23() * f3;
+        vec.w = mat.m30() * f + mat.m31() * f1 + mat.m32() * f2 + mat.m33() * f3;
+
+        return vec;
+    }
+
+    public static Quaternionf quaternion(float x, float y, float z) {
+
+        return new Quaternionf().rotationXYZ(x * ((float) Math.PI / 180F), y * ((float) Math.PI / 180F), z * ((float) Math.PI / 180F));
+    }
+
+    public static Vector4f toVector4f(Vector3f vec) {
+
+        return new Vector4f(vec.x, vec.y, vec.z, 1.0F);
+    }
 }

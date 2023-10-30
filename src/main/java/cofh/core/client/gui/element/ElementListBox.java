@@ -173,7 +173,7 @@ public class ElementListBox extends ElementBase {
 
         int e = elements.size();
         while (nextElement < e && heightDrawn <= getContentHeight()) {
-            heightDrawn += drawElement(poseStack, nextElement, getContentLeft(), getContentTop() + heightDrawn);
+            heightDrawn += drawElement(pGuiGraphics, nextElement, getContentLeft(), getContentTop() + heightDrawn);
             ++nextElement;
         }
         poseStack.popPose();

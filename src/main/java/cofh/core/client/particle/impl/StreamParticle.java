@@ -70,11 +70,11 @@ public class StreamParticle extends PointToPointParticle {
         int floor = MathHelper.floor(start);
         Vector4f[] poss = new Vector4f[ceil - floor + 1];
         for (int i = floor; i <= ceil; ++i) {
-            poss[i - floor] = new Vector4f(curve.get(i));
+            poss[i - floor] = MathHelper.toVector4f(curve.get(i));
         }
-        poss[0].lerp(new Vector4f(curve.get(floor + 1)), start - floor);
+        poss[0].lerp(MathHelper.toVector4f(curve.get(floor + 1)), start - floor);
         float offset = ceil - end;
-        poss[poss.length - 1].lerp(new Vector4f(curve.get(ceil - 1)), offset);
+        poss[poss.length - 1].lerp(MathHelper.toVector4f(curve.get(ceil - 1)), offset);
 
         if (poss.length < 2) {
             return;
@@ -85,7 +85,7 @@ public class StreamParticle extends PointToPointParticle {
         Matrix3f normal = stackEntry.normal();
 
         for (Vector4f pos : poss) {
-            pos.transform(pose);
+            MathHelper.transform(pos, pose);
         }
         int last = poss.length - 1;
         VFXHelper.VFXNode[] nodes = new VFXHelper.VFXNode[poss.length];
@@ -128,8 +128,8 @@ public class StreamParticle extends PointToPointParticle {
 
     protected Vec3[] findPath() {
 
-        BlockPos start = new BlockPos(x, y, z);
-        BlockPos end = new BlockPos(dest);
+        BlockPos start = new BlockPos((int) x, (int) y, (int) z);
+        BlockPos end = new BlockPos((int) dest.x, (int) dest.y, (int) dest.z);
         List<Direction> order = successorOrder();
         int capacity = distManhattan(start, end) * 2;
         PriorityQueue<Node> open = new ObjectHeapPriorityQueue<>(capacity, Comparator.comparingInt(n -> n.total + n.heuristic));

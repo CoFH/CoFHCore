@@ -205,7 +205,7 @@ public final class VFXHelper {
         if (dir.x() == 0 && dir.y() == 0 && dir.z() == 0) {
             return new Quaternionf();
         }
-        Vector3f d = dir.copy();
+        Vector3f d = new Vector3f(dir);
         d.mul(1 / length(d));
         d.add(0, 1, 0);
         d.normalize();
@@ -227,7 +227,7 @@ public final class VFXHelper {
      */
     public static void alignVertical(PoseStack stack, Vector3f start, Vector3f end) {
 
-        Vector3f diff = end.copy();
+        Vector3f diff = new Vector3f(end);
         diff.sub(start);
         float scale = length(diff);
         stack.translate(start.x(), start.y(), start.z());
@@ -246,7 +246,7 @@ public final class VFXHelper {
         RenderType type = FLAT_TRANSLUCENT;
         VertexConsumer builder = buffer.getBuffer(type);
         Vector4f center = new Vector4f(0, 0, 0, 1);
-        center.transform(stack.last().pose());
+        MathHelper.transform(center, stack.last().pose());
         Matrix3f normal = stack.last().normal();
         float xp = center.x() + 0.5F;
         float xn = center.x() - 0.5F;
@@ -429,9 +429,9 @@ public final class VFXHelper {
             Matrix3f normal = stackEntry.normal();
 
             Vector4f start = new Vector4f(0, 0, 0, 1);
-            start.transform(pose);
+            MathHelper.transform(start, pose);
             Vector4f end = new Vector4f(0, 1, 0, 1);
-            end.transform(pose);
+            MathHelper.transform(end, pose);
             Vec2 perp = axialPerp(start, end, 1.0F);
 
             //These are calculated first so they are not affected by differing taper values.
@@ -444,15 +444,15 @@ public final class VFXHelper {
 
             float incr = 1.0F / nodeCount;
             for (int i = 0; i < arcCount; ++i) {
-                stack.mulPose(Vector3f.YP.rotationDegrees(rotations[i]));
+                stack.mulPose(MathHelper.YP.rotationDegrees(rotations[i]));
                 Vector3f[] arc = randomArcs[i];
                 VFXNode[] outer = new VFXNode[last - first];
                 VFXNode[] inner = new VFXNode[last - first];
                 for (int j = first; j < last; ++j) {
                     Vector4f center = new Vector4f(0, arc[j].y(), 0, 1.0F);
-                    center.transform(pose);
-                    Vector4f pos = new Vector4f(arc[j]);
-                    pos.transform(pose);
+                    MathHelper.transform(center, pose);
+                    Vector4f pos = MathHelper.toVector4f(arc[j]);
+                    MathHelper.transform(pos, pose);
                     float dot = subtract(pos, center).dot(new Vector4f(perp.x, perp.y, 0, 0));
                     float xc = center.x() + perp.x * dot * 3.0F;
                     float yc = center.y() + perp.y * dot * 3.0F;
@@ -573,9 +573,9 @@ public final class VFXHelper {
         Matrix4f pose = last.pose();
         Matrix3f normal = last.normal();
         Vector4f start = new Vector4f(0, 0, 0, 1);
-        start.transform(pose);
+        MathHelper.transform(start, pose);
         Vector4f end = new Vector4f(0, 1, 0, 1);
-        end.transform(pose);
+        MathHelper.transform(end, pose);
         Vec2 perp = axialPerp(start, end, width);
 
         float sx = start.x();
@@ -627,7 +627,7 @@ public final class VFXHelper {
         Matrix3f normal = stackEntry.normal();
 
         for (Vector4f pos : poss) {
-            pos.transform(pose);
+            MathHelper.transform(pos, pose);
         }
         int last = poss.length - 1;
         VFXNode[] nodes = new VFXNode[poss.length];
@@ -661,7 +661,7 @@ public final class VFXHelper {
         SplittableRandom rand = new SplittableRandom(69420);
 
         stack.pushPose();
-        stack.mulPose(Vector3f.YP.rotation(time * 6.2832F));
+        stack.mulPose(MathHelper.YP.rotation(time * 6.2832F));
         for (int i = 0; i < streamCount; ++i) {
             float relRot = (rand.nextFloat() - 0.5F) * time * 0.5F + 2 * i;
             float scale = 1.0F + (rand.nextFloat() + MathHelper.sin(time * 0.1F + i)) * 0.1F;
@@ -673,7 +673,7 @@ public final class VFXHelper {
             if (alpha > 0) {
                 Vector4f[] nodes = new Vector4f[length];
                 stack.pushPose();
-                stack.mulPose(Vector3f.YP.rotation(relRot));
+                stack.mulPose(MathHelper.YP.rotation(relRot));
                 stack.scale(scale, scale, scale);
                 for (int j = 0; j < length; ++j) {
                     float angle = j * WIND_INCR;

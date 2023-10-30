@@ -62,9 +62,9 @@ public class ShardParticle extends PointToPointParticle {
 
         // Trail
         Vector4f start = new Vector4f(0, 0, 0, 1);
-        start.transform(pose);
+        MathHelper.transform(start, pose);
         Vector4f end = new Vector4f(0, -Math.min(dist / size, 3.0F), 0, 1);
-        end.transform(pose);
+        MathHelper.transform(end, pose);
         Vec2 perp = VFXHelper.axialPerp(start, end, 1.0F);
         float w = 0.12F * size;
         float xs = perp.x * w;

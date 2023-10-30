@@ -92,7 +92,7 @@ public abstract class SpriteParticle extends ColorParticle {
     public void render(PoseStack stack, MultiBufferSource buffer, VertexConsumer consumer, int packedLight, float time, float pTicks) {
 
         Vector4f center = new Vector4f(0, 0, 0, 1);
-        center.transform(stack.last().pose());
+        MathHelper.transform(center, stack.last().pose());
 
         float x = center.x();
         float y = center.y();

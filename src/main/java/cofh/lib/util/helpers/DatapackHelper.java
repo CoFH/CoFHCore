@@ -15,6 +15,8 @@ public final class DatapackHelper {
 
     }
 
+    // TODO: Fix
+
     //    public static <T> JsonCodecProvider<T> datapackProvider(String modId, PackOutput output, ExistingFileHelper existingFileHelper, RegistryOps<JsonElement> registryOps, ResourceKey<Registry<T>> registryKey, Map<ResourceLocation, T> entries) {
     //
     //        return forDatapackRegistry(output, existingFileHelper, modId, registryOps, registryKey, entries);
@@ -25,10 +27,10 @@ public final class DatapackHelper {
     //        return forDatapackRegistry(output, existingFileHelper, modId, registryOps, Biome.DIRECT_CODEC, registryKey, entries);
     //    }
 
-    public static <T> HolderSet<T> tagSingle(Registry<T> tagGetter, TagKey<T> biome) {
-
-        return new HolderSet.Named<>(tagGetter, biome);
-    }
+    //    public static <T> HolderSet<T> tagSingle(Registry<T> tagGetter, TagKey<T> biome) {
+    //
+    //        return new HolderSet.Named<>(tagGetter, biome);
+    //    }
 
     @SafeVarargs
     public static <T> HolderSet<T> tagsAnd(Registry<T> tagGetter, TagKey<T>... biomes) {

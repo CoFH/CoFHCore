@@ -31,7 +31,7 @@ public class ShockwaveParticle extends CylindricalParticle {
     @Override
     public void render(PoseStack stack, MultiBufferSource buffer, VertexConsumer consumer, int packedLightIn, float time, float pTicks) {
 
-        VFXHelper.renderShockwave(stack, buffer, level, new BlockPos(x, y, z), time * (size * 0.5F + 5) / duration, size, height);
+        VFXHelper.renderShockwave(stack, buffer, level, new BlockPos((int) x, (int) y, (int) z), time * (size * 0.5F + 5) / duration, size, height);
     }
 
     @Nonnull

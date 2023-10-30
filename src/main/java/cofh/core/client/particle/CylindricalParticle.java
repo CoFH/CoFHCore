@@ -7,7 +7,6 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Quaternionf;
-import org.joml.Vector3f;
 
 public abstract class CylindricalParticle extends ColorParticle {
 
@@ -43,7 +42,7 @@ public abstract class CylindricalParticle extends ColorParticle {
 
     protected void setDirection(Vec3 direction) {
 
-        rotation = VFXHelper.alignVertical(new Vector3f(direction));
+        rotation = VFXHelper.alignVertical(direction.toVector3f());
     }
 
     protected void recalcBB(double xDir, double yDir, double zDir) {

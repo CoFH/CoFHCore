@@ -52,7 +52,7 @@ public class ArcParticle extends PointToPointParticle {
         float progress = time / duration;
         float easeCos = MathHelper.cos(progress * MathHelper.F_PI * 0.5F);
         float easeCub = 1.0F - MathHelper.easeInCubic(progress);
-        VFXHelper.alignVertical(stack, Vector3f.ZERO, disp);
+        VFXHelper.alignVertical(stack, MathHelper.ZERO, disp);
         VFXHelper.renderStraightArcs(stack, buffer, packedLight, 2, this.size * (easeCos * 1.5F - 0.5F), 0.015F,
                 VFXHelper.getSeedWithTime(seed, age), c0.scaleAlpha(easeCub), c1.scaleAlpha(easeCub), Math.min(easeCos * -2.5F + 1.25F, taper));
     }

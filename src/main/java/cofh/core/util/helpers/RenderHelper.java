@@ -27,10 +27,12 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
-import org.joml.*;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.lwjgl.opengl.GL11;
 
-import java.lang.Math;
 import java.util.List;
 
 /**
@@ -250,7 +252,7 @@ public final class RenderHelper {
 
     public static void drawIcon(GuiGraphics pGuiGraphics, TextureAtlasSprite icon, float z) {
 
-        Matrix4f matrix = matrixStack.last().pose();
+        Matrix4f matrix = pGuiGraphics.pose().last().pose();
 
         BufferBuilder buffer = tesselator().getBuilder();
         buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
@@ -264,7 +266,7 @@ public final class RenderHelper {
 
     public static void drawIcon(GuiGraphics pGuiGraphics, float x, float y, float z, TextureAtlasSprite icon, int width, int height) {
 
-        Matrix4f matrix = matrixStack.last().pose();
+        Matrix4f matrix = pGuiGraphics.pose().last().pose();
 
         BufferBuilder buffer = tesselator().getBuilder();
         buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
@@ -290,7 +292,7 @@ public final class RenderHelper {
         resetShaderColor();
     }
 
-    public static void drawScaledTexturedModalRectFromSprite(GuiGraphics guiGraphics, int x, int y, TextureAtlasSprite icon, int width, int height) {
+    public static void drawScaledTexturedModalRectFromSprite(GuiGraphics pGuiGraphics, int x, int y, TextureAtlasSprite icon, int width, int height) {
 
         if (icon == null) {
             return;
@@ -303,7 +305,7 @@ public final class RenderHelper {
         float u = minU + (maxU - minU) * width / 16F;
         float v = minV + (maxV - minV) * height / 16F;
 
-        Matrix4f matrix = matrixStack.last().pose();
+        Matrix4f matrix = pGuiGraphics.pose().last().pose();
 
         BufferBuilder buffer = tesselator().getBuilder();
         buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
@@ -393,7 +395,7 @@ public final class RenderHelper {
 
     public static boolean textureExists(ResourceLocation location) {
 
-        return !(getTexture(location) instanceof MissingTextureAtlasSprite);
+        return getTexture(location).atlasLocation() != MissingTextureAtlasSprite.getLocation();
     }
     // endregion
 
@@ -561,21 +563,21 @@ public final class RenderHelper {
             case NORTH -> poseStackIn.translate(x + 0.75, y + 0.84375, z + RenderHelper.RENDER_OFFSET * 145);
             case SOUTH -> {
                 poseStackIn.translate(x + 0.25, y + 0.84375, z + 1 - RenderHelper.RENDER_OFFSET * 145);
-                poseStackIn.mulPose(new Quaternionf(0, 180, 0, true));
+                poseStackIn.mulPose(MathHelper.quaternion(0, 180, 0));
             }
             case WEST -> {
                 poseStackIn.translate(x + RenderHelper.RENDER_OFFSET * 145, y + 0.84375, z + 0.25);
-                poseStackIn.mulPose(new Quaternionf(0, 90, 0, true));
+                poseStackIn.mulPose(MathHelper.quaternion(0, 90, 0));
             }
             case EAST -> {
                 poseStackIn.translate(x + 1 - RenderHelper.RENDER_OFFSET * 145, y + 0.84375, z + 0.75);
-                poseStackIn.mulPose(new Quaternionf(0, 270, 0, true));
+                poseStackIn.mulPose(MathHelper.quaternion(0, 270, 0));
             }
             default -> {
             }
         }
         poseStackIn.scale(0.03125F, 0.03125F, -RenderHelper.RENDER_OFFSET);
-        poseStackIn.mulPose(new Quaternionf(0, 0, 180, true));
+        poseStackIn.mulPose(MathHelper.quaternion(0, 0, 180));
 
         // renderItem().renderAndDecorateItem(stack, 0, 0);
 
@@ -672,7 +674,7 @@ public final class RenderHelper {
                 new Vector4f(w, l, -h, 1.0F), new Vector4f(w, l, h, 1.0F), new Vector4f(-w, l, -h, 1.0F), new Vector4f(-w, l, h, 1.0F)};
 
         for (Vector4f corner : corners) {
-            corner.transform(pose);
+            MathHelper.transform(corner, pose);
         }
         return corners;
     }
@@ -742,12 +744,11 @@ public final class RenderHelper {
         }
         v[6] = v[0];
         v[7] = v[1];
-        u.transform(pose);
-        l.transform(pose);
+        MathHelper.transform(u, pose);
+        MathHelper.transform(l, pose);
         for (int i = 0; i < 6; ++i) {
-            v[i].transform(pose);
+            MathHelper.transform(v[i], pose);
         }
-
         for (int i = 0; i < 6; i += 2) {
             Vector4f v0 = v[i];
             Vector4f v1 = v[i + 1];
@@ -796,12 +797,11 @@ public final class RenderHelper {
             v[i] = new Vector4f(radius * MathHelper.sin(i * angle), 0, radius * MathHelper.cos(i * angle), 1);
         }
         v[baseEdges] = v[0];
-        u.transform(pose);
-        l.transform(pose);
+        MathHelper.transform(u, pose);
+        MathHelper.transform(l, pose);
         for (int i = 0; i < baseEdges; ++i) {
-            v[i].transform(pose);
+            MathHelper.transform(v[i], pose);
         }
-
         for (int i = 0; i < baseEdges; ++i) {
             Vector4f v0 = v[i];
             Vector4f v1 = v[i + 1];
