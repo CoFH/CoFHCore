@@ -14,15 +14,14 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.BowItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
-
-import java.util.function.Supplier;
-
-import static cofh.lib.util.Constants.TRUE;
 
 public class KnifeItem extends SwordItemCoFH {
 
@@ -91,28 +90,12 @@ public class KnifeItem extends SwordItemCoFH {
     }
 
     // region DISPLAY
-    protected Supplier<CreativeModeTab> displayGroup;
-    protected Supplier<Boolean> showInGroups = TRUE;
     protected String modId = "";
-
-    @Override
-    public KnifeItem setDisplayGroup(Supplier<CreativeModeTab> displayGroup) {
-
-        this.displayGroup = displayGroup;
-        return this;
-    }
 
     @Override
     public KnifeItem setModId(String modId) {
 
         this.modId = modId;
-        return this;
-    }
-
-    @Override
-    public KnifeItem setShowInGroups(Supplier<Boolean> showInGroups) {
-
-        this.showInGroups = showInGroups;
         return this;
     }
 

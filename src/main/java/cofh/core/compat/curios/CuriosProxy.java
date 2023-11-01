@@ -12,12 +12,15 @@ public class CuriosProxy {
 
     public static void register() {
 
-        if (CoFHCore.curiosLoaded) {
-            instance = new CuriosIntegration();
-            FMLJavaModLoadingContext.get().getModEventBus().addListener(CuriosIntegration::sendImc);
-        } else {
-            instance = new CuriosProxy();
-        }
+        instance = new CuriosProxy();
+
+        // TODO: Fix
+//        if (CoFHCore.curiosLoaded) {
+//            instance = new CuriosIntegration();
+//            FMLJavaModLoadingContext.get().getModEventBus().addListener(CuriosIntegration::sendImc);
+//        } else {
+//            instance = new CuriosProxy();
+//        }
     }
 
     public static LazyOptional<IItemHandlerModifiable> getAllWorn(LivingEntity living) {

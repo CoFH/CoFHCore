@@ -7,15 +7,12 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
-import java.util.function.Supplier;
-
-import static cofh.lib.util.Constants.TRUE;
 
 public class ArmorItemCoFH extends ArmorItem implements ICoFHItem {
 
@@ -44,34 +41,18 @@ public class ArmorItemCoFH extends ArmorItem implements ICoFHItem {
             UUID.fromString("A8BD3E20-FA60-47AF-8A09-B1A57D26F3CC")
     };
 
-    public ArmorItemCoFH(ArmorMaterial materialIn, EquipmentSlot slot, Properties builder) {
+    public ArmorItemCoFH(ArmorMaterial pMaterial, ArmorItem.Type pType, Item.Properties pProperties) {
 
-        super(materialIn, slot, builder);
+        super(pMaterial, pType, pProperties);
     }
 
     // region DISPLAY
-    protected Supplier<CreativeModeTab> displayGroup;
-    protected Supplier<Boolean> showInGroups = TRUE;
     protected String modId = "";
-
-    @Override
-    public ArmorItemCoFH setDisplayGroup(Supplier<CreativeModeTab> displayGroup) {
-
-        this.displayGroup = displayGroup;
-        return this;
-    }
 
     @Override
     public ArmorItemCoFH setModId(String modId) {
 
         this.modId = modId;
-        return this;
-    }
-
-    @Override
-    public ArmorItemCoFH setShowInGroups(Supplier<Boolean> showInGroups) {
-
-        this.showInGroups = showInGroups;
         return this;
     }
 

@@ -168,7 +168,7 @@ public class ShapedRecipeInternal implements CraftingRecipe, IShapedRecipe<Craft
         return getHeight();
     }
 
-    static NonNullList<Ingredient> dissolvePattern(String[] pPattern, Map<String, Ingredient> pKeys, int pPatternWidth, int pPatternHeight) {
+    public static NonNullList<Ingredient> dissolvePattern(String[] pPattern, Map<String, Ingredient> pKeys, int pPatternWidth, int pPatternHeight) {
 
         NonNullList<Ingredient> nonnulllist = NonNullList.withSize(pPatternWidth * pPatternHeight, Ingredient.EMPTY);
         Set<String> set = Sets.newHashSet(pKeys.keySet());
@@ -195,7 +195,7 @@ public class ShapedRecipeInternal implements CraftingRecipe, IShapedRecipe<Craft
     }
 
     @VisibleForTesting
-    static String[] shrink(String... pToShrink) {
+    public static String[] shrink(String... pToShrink) {
 
         int i = Integer.MAX_VALUE;
         int j = 0;
@@ -259,7 +259,7 @@ public class ShapedRecipeInternal implements CraftingRecipe, IShapedRecipe<Craft
         return i;
     }
 
-    static String[] patternFromJson(JsonArray pPatternArray) {
+    public static String[] patternFromJson(JsonArray pPatternArray) {
 
         String[] astring = new String[pPatternArray.size()];
         if (astring.length > MAX_HEIGHT) {
@@ -284,7 +284,7 @@ public class ShapedRecipeInternal implements CraftingRecipe, IShapedRecipe<Craft
         }
     }
 
-    static Map<String, Ingredient> keyFromJson(JsonObject pKeyEntry) {
+    public static Map<String, Ingredient> keyFromJson(JsonObject pKeyEntry) {
 
         Map<String, Ingredient> map = Maps.newHashMap();
 

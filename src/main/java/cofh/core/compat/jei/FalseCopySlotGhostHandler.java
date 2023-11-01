@@ -4,6 +4,7 @@ import cofh.core.client.gui.ContainerScreenCoFH;
 import cofh.core.network.packet.server.GhostItemPacket;
 import cofh.lib.inventory.container.slot.SlotFalseCopy;
 import mezz.jei.api.gui.handlers.IGhostIngredientHandler;
+import mezz.jei.api.ingredients.ITypedIngredient;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -19,12 +20,12 @@ import static cofh.core.util.helpers.ItemHelper.cloneStack;
 public class FalseCopySlotGhostHandler implements IGhostIngredientHandler<ContainerScreenCoFH> {
 
     @Override
-    public <I> List<Target<I>> getTargets(ContainerScreenCoFH gui, I ingredient, boolean doStart) {
+    public <I> List<Target<I>> getTargetsTyped(ContainerScreenCoFH gui, ITypedIngredient<I> ingredient, boolean doStart) {
 
         ItemStack ingStack = ItemStack.EMPTY;
         if (ingredient instanceof FluidStack fluid && fluid.getFluid().getBucket() != Items.AIR) {
             ingStack = cloneStack(fluid.getFluid().getBucket());
-        } else if (ingredient instanceof ItemStack item) {
+        } else if (ingredient.getIngredient() instanceof ItemStack item) {
             ingStack = cloneStack(item);
         }
         List<Target<I>> targets = new ArrayList<>();

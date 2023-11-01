@@ -28,7 +28,8 @@ public class CoreShaders {
         registerShader(event, "particle_over", DefaultVertexFormat.PARTICLE, s -> PARTICLE_OVER = s);
         registerShader(event, "particle_add", DefaultVertexFormat.PARTICLE, s -> PARTICLE_ADDITIVE_MULTIPLY = s);
         registerShader(event, "particle_screen", DefaultVertexFormat.PARTICLE, s -> PARTICLE_ADDITIVE_SCREEN = s);
-        registerShader(event, "pixelation", DefaultVertexFormat.NEW_ENTITY, s -> ENTITY_PIXELATE = s);
+        // TODO: Uncomment when implemented
+        // registerShader(event, "pixelation", DefaultVertexFormat.NEW_ENTITY, s -> ENTITY_PIXELATE = s);
     }
 
     private static void registerShader(RegisterShadersEvent event, String id, VertexFormat format, Consumer<ShaderInstance> callback) throws IOException {

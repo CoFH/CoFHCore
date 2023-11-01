@@ -11,10 +11,7 @@ import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;
-import net.minecraft.world.item.crafting.CraftingRecipe;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.crafting.IShapedRecipe;
 
@@ -26,9 +23,9 @@ public class ShapedPotionNBTRecipe implements CraftingRecipe, IShapedRecipe<Craf
 
     private final ShapedRecipeInternal wrappedRecipe;
 
-    public ShapedPotionNBTRecipe(ResourceLocation id, String group, int width, int height, NonNullList<Ingredient> recipeItems, ItemStack result) {
+    public ShapedPotionNBTRecipe(ResourceLocation pId, String pGroup, CraftingBookCategory pCategory, int pWidth, int pHeight, NonNullList<Ingredient> pRecipeItems, ItemStack pResult) {
 
-        wrappedRecipe = new ShapedRecipeInternal(id, group, width, height, recipeItems, result);
+        wrappedRecipe = new ShapedRecipeInternal(pId, pGroup, pCategory, pWidth, pHeight, pRecipeItems, pResult);
     }
 
     @Override
@@ -52,7 +49,7 @@ public class ShapedPotionNBTRecipe implements CraftingRecipe, IShapedRecipe<Craf
     @Override
     public ItemStack assemble(CraftingContainer inv, RegistryAccess registryAccess) {
 
-        ItemStack result = wrappedRecipe.getResultItem().copy();
+        ItemStack result = wrappedRecipe.getResultItem(registryAccess).copy();
 
         for (int i = 0; i < inv.getContainerSize(); ++i) {
             ItemStack stack = inv.getItem(i);
@@ -106,19 +103,26 @@ public class ShapedPotionNBTRecipe implements CraftingRecipe, IShapedRecipe<Craf
         return wrappedRecipe.getHeight();
     }
 
+    @Override
+    public CraftingBookCategory category() {
+
+        return wrappedRecipe.category;
+    }
+
     // region SERIALIZER
     public static class Serializer implements RecipeSerializer<ShapedPotionNBTRecipe> {
 
         public ShapedPotionNBTRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
 
             String s = GsonHelper.getAsString(json, "group", "");
+            CraftingBookCategory craftingbookcategory = CraftingBookCategory.CODEC.byName(GsonHelper.getAsString(json, "category", (String) null), CraftingBookCategory.MISC);
             Map<String, Ingredient> map = ShapedRecipeInternal.keyFromJson(GsonHelper.getAsJsonObject(json, "key"));
             String[] astring = ShapedRecipeInternal.shrink(ShapedRecipeInternal.patternFromJson(GsonHelper.getAsJsonArray(json, "pattern")));
             int i = astring[0].length();
             int j = astring.length;
             NonNullList<Ingredient> nonnulllist = ShapedRecipeInternal.dissolvePattern(astring, map, i, j);
             ItemStack itemstack = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result"));
-            return new ShapedPotionNBTRecipe(recipeId, s, i, j, nonnulllist, itemstack);
+            return new ShapedPotionNBTRecipe(recipeId, s, craftingbookcategory, i, j, nonnulllist, itemstack);
         }
 
         @Override
@@ -127,13 +131,14 @@ public class ShapedPotionNBTRecipe implements CraftingRecipe, IShapedRecipe<Craf
             int i = buffer.readVarInt();
             int j = buffer.readVarInt();
             String s = buffer.readUtf(32767);
+            CraftingBookCategory craftingbookcategory = buffer.readEnum(CraftingBookCategory.class);
             NonNullList<Ingredient> nonnulllist = NonNullList.withSize(i * j, Ingredient.EMPTY);
 
             for (int k = 0; k < nonnulllist.size(); ++k) {
                 nonnulllist.set(k, Ingredient.fromNetwork(buffer));
             }
             ItemStack itemstack = buffer.readItem();
-            return new ShapedPotionNBTRecipe(recipeId, s, i, j, nonnulllist, itemstack);
+            return new ShapedPotionNBTRecipe(recipeId, s, craftingbookcategory, i, j, nonnulllist, itemstack);
         }
 
         @Override

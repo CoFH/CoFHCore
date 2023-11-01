@@ -209,7 +209,7 @@ public final class VFXHelper {
         d.mul(1 / length(d));
         d.add(0, 1, 0);
         d.normalize();
-        return d.rotation(MathHelper.F_PI);
+        return MathHelper.rotation(d, MathHelper.F_PI);
     }
 
     /**
@@ -444,7 +444,7 @@ public final class VFXHelper {
 
             float incr = 1.0F / nodeCount;
             for (int i = 0; i < arcCount; ++i) {
-                stack.mulPose(MathHelper.YP.rotationDegrees(rotations[i]));
+                stack.mulPose(MathHelper.rotationDegrees(MathHelper.YP, rotations[i]));
                 Vector3f[] arc = randomArcs[i];
                 VFXNode[] outer = new VFXNode[last - first];
                 VFXNode[] inner = new VFXNode[last - first];
@@ -661,7 +661,7 @@ public final class VFXHelper {
         SplittableRandom rand = new SplittableRandom(69420);
 
         stack.pushPose();
-        stack.mulPose(MathHelper.YP.rotation(time * 6.2832F));
+        stack.mulPose(MathHelper.rotation(MathHelper.YP, time * 6.2332F));
         for (int i = 0; i < streamCount; ++i) {
             float relRot = (rand.nextFloat() - 0.5F) * time * 0.5F + 2 * i;
             float scale = 1.0F + (rand.nextFloat() + MathHelper.sin(time * 0.1F + i)) * 0.1F;
@@ -673,7 +673,7 @@ public final class VFXHelper {
             if (alpha > 0) {
                 Vector4f[] nodes = new Vector4f[length];
                 stack.pushPose();
-                stack.mulPose(MathHelper.YP.rotation(relRot));
+                stack.mulPose(MathHelper.rotation(MathHelper.YP, relRot));
                 stack.scale(scale, scale, scale);
                 for (int j = 0; j < length; ++j) {
                     float angle = j * WIND_INCR;

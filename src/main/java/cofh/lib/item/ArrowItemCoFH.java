@@ -8,15 +8,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ArrowItem;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
 
-import java.util.function.Supplier;
-
-import static cofh.lib.util.Constants.TRUE;
 import static cofh.lib.util.Utils.getItemEnchantmentLevel;
 
 public class ArrowItemCoFH extends ArrowItem implements ICoFHItem {
@@ -51,28 +47,12 @@ public class ArrowItemCoFH extends ArrowItem implements ICoFHItem {
     }
 
     // region DISPLAY
-    protected Supplier<CreativeModeTab> displayGroup;
-    protected Supplier<Boolean> showInGroups = TRUE;
     protected String modId = "";
-
-    @Override
-    public ArrowItemCoFH setDisplayGroup(Supplier<CreativeModeTab> displayGroup) {
-
-        this.displayGroup = displayGroup;
-        return this;
-    }
 
     @Override
     public ArrowItemCoFH setModId(String modId) {
 
         this.modId = modId;
-        return this;
-    }
-
-    @Override
-    public ArrowItemCoFH setShowInGroups(Supplier<Boolean> showInGroups) {
-
-        this.showInGroups = showInGroups;
         return this;
     }
 

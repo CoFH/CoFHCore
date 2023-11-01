@@ -457,8 +457,25 @@ public final class MathHelper {
         return new Quaternionf().rotationXYZ(x * ((float) Math.PI / 180F), y * ((float) Math.PI / 180F), z * ((float) Math.PI / 180F));
     }
 
+    public static Quaternionf rotation(Vector3f vec, float angle) {
+
+        float f = sin(angle / 2.0F);
+        float i = vec.x() * f;
+        float j = vec.y() * f;
+        float k = vec.z() * f;
+        float r = cos(angle / 2.0F);
+
+        return new Quaternionf(i, j, k, r);
+    }
+
+    public static Quaternionf rotationDegrees(Vector3f vec, float angle) {
+
+        return rotation(vec, angle * ((float) Math.PI / 180F));
+    }
+
     public static Vector4f toVector4f(Vector3f vec) {
 
         return new Vector4f(vec.x, vec.y, vec.z, 1.0F);
     }
+
 }

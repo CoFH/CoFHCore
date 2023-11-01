@@ -4,15 +4,11 @@ import cofh.core.capability.templates.ArcheryBowItemWrapper;
 import cofh.lib.api.item.ICoFHItem;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.BowItem;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
-import java.util.function.Supplier;
-
-import static cofh.lib.util.Constants.TRUE;
 
 public class BowItemCoFH extends BowItem implements ICoFHItem {
 
@@ -62,28 +58,12 @@ public class BowItemCoFH extends BowItem implements ICoFHItem {
     }
 
     // region DISPLAY
-    protected Supplier<CreativeModeTab> displayGroup;
-    protected Supplier<Boolean> showInGroups = TRUE;
     protected String modId = "";
-
-    @Override
-    public BowItemCoFH setDisplayGroup(Supplier<CreativeModeTab> displayGroup) {
-
-        this.displayGroup = displayGroup;
-        return this;
-    }
 
     @Override
     public BowItemCoFH setModId(String modId) {
 
         this.modId = modId;
-        return this;
-    }
-
-    @Override
-    public BowItemCoFH setShowInGroups(Supplier<Boolean> showInGroups) {
-
-        this.showInGroups = showInGroups;
         return this;
     }
 

@@ -3,7 +3,6 @@ package cofh.lib.api.item;
 import cofh.core.item.IMultiModeItem;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
@@ -11,7 +10,6 @@ import net.minecraftforge.common.extensions.IForgeItem;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.function.Supplier;
 
 import static cofh.core.client.CoreKeys.MULTIMODE_DECREMENT;
 import static cofh.core.client.CoreKeys.MULTIMODE_INCREMENT;
@@ -26,11 +24,7 @@ import static net.minecraft.ChatFormatting.YELLOW;
  */
 public interface ICoFHItem extends IForgeItem {
 
-    ICoFHItem setDisplayGroup(Supplier<CreativeModeTab> displayGroup);
-
     ICoFHItem setModId(String modId);
-
-    ICoFHItem setShowInGroups(Supplier<Boolean> showInGroups);
 
     default void addEnergyTooltip(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn, int extract, int receive, boolean creative) {
 

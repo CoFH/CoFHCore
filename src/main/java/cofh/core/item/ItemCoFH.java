@@ -6,7 +6,6 @@ import cofh.lib.util.helpers.SecurityHelper;
 import com.google.common.collect.Sets;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -18,11 +17,9 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static cofh.lib.util.Constants.TRUE;
 import static cofh.lib.util.helpers.StringHelper.getTextComponent;
 import static net.minecraft.ChatFormatting.*;
 
@@ -94,28 +91,12 @@ public class ItemCoFH extends Item implements ICoFHItem {
     }
 
     // region DISPLAY
-    protected Supplier<CreativeModeTab> displayGroup;
-    protected Supplier<Boolean> showInGroups = TRUE;
     protected String modId = "";
-
-    @Override
-    public ItemCoFH setDisplayGroup(Supplier<CreativeModeTab> displayGroup) {
-
-        this.displayGroup = displayGroup;
-        return this;
-    }
 
     @Override
     public ItemCoFH setModId(String modId) {
 
         this.modId = modId;
-        return this;
-    }
-
-    @Override
-    public ItemCoFH setShowInGroups(Supplier<Boolean> showInGroups) {
-
-        this.showInGroups = showInGroups;
         return this;
     }
 

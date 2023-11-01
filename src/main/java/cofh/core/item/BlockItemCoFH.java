@@ -3,7 +3,6 @@ package cofh.core.item;
 import cofh.core.config.CoreClientConfig;
 import cofh.lib.api.item.ICoFHItem;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
@@ -15,8 +14,6 @@ import net.minecraft.world.level.block.Block;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -79,14 +76,14 @@ public class BlockItemCoFH extends BlockItem implements ICoFHItem {
         return modId == null || modId.isEmpty() ? super.getCreatorModId(itemStack) : modId;
     }
 
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-
-        if (!showInGroups.get() || getBlock() == null || displayGroup != null && displayGroup.get() != null && displayGroup.get() != group) {
-            return;
-        }
-        super.fillItemCategory(group, items);
-    }
+    //    @Override
+    //    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
+    //
+    //        if (!showInGroups.get() || getBlock() == null || displayGroup != null && displayGroup.get() != null && displayGroup.get() != group) {
+    //            return;
+    //        }
+    //        super.fillItemCategory(group, items);
+    //    }
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
@@ -110,7 +107,7 @@ public class BlockItemCoFH extends BlockItem implements ICoFHItem {
     }
 
     @Override
-    public int getEnchantmentValue() {
+    public int getEnchantmentValue(ItemStack stack) {
 
         return enchantability;
     }
@@ -121,10 +118,10 @@ public class BlockItemCoFH extends BlockItem implements ICoFHItem {
         return burnTime;
     }
 
-    @Override
-    public Collection<CreativeModeTab> getCreativeTabs() {
-
-        return displayGroup != null && displayGroup.get() != null ? Collections.singletonList(displayGroup.get()) : super.getCreativeTabs();
-    }
+    //    @Override
+    //    public Collection<CreativeModeTab> getCreativeTabs() {
+    //
+    //        return displayGroup != null && displayGroup.get() != null ? Collections.singletonList(displayGroup.get()) : super.getCreativeTabs();
+    //    }
 
 }

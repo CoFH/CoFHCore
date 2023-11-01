@@ -1,10 +1,8 @@
 package cofh.core.item;
 
 import cofh.lib.api.item.IColorableItem;
-import net.minecraft.core.NonNullList;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 
@@ -27,14 +25,14 @@ public class SpawnEggItemCoFH extends ForgeSpawnEggItem implements IColorableIte
         return this;
     }
 
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-
-        if (!showInGroups.get()) {
-            return;
-        }
-        super.fillItemCategory(group, items);
-    }
+    //    @Override
+    //    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
+    //
+    //        if (!showInGroups.get()) {
+    //            return;
+    //        }
+    //        super.fillItemCategory(group, items);
+    //    }
 
     public int getColor(ItemStack item, int colorIndex) {
 

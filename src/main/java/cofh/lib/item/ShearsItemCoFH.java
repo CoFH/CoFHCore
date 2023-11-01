@@ -4,16 +4,11 @@ import cofh.lib.api.item.ICoFHItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.dispenser.ShearsDispenseItemBehavior;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShearsItem;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.DispenserBlock;
-
-import java.util.function.Supplier;
-
-import static cofh.lib.util.Constants.TRUE;
 
 public class ShearsItemCoFH extends ShearsItem implements ICoFHItem {
 
@@ -38,7 +33,7 @@ public class ShearsItemCoFH extends ShearsItem implements ICoFHItem {
     }
 
     @Override
-    public int getEnchantmentValue() {
+    public int getEnchantmentValue(ItemStack stack) {
 
         return enchantability;
     }
@@ -50,28 +45,12 @@ public class ShearsItemCoFH extends ShearsItem implements ICoFHItem {
     }
 
     // region DISPLAY
-    protected Supplier<CreativeModeTab> displayGroup;
-    protected Supplier<Boolean> showInGroups = TRUE;
     protected String modId = "";
-
-    @Override
-    public ICoFHItem setDisplayGroup(Supplier<CreativeModeTab> displayGroup) {
-
-        this.displayGroup = displayGroup;
-        return this;
-    }
 
     @Override
     public ICoFHItem setModId(String modId) {
 
         this.modId = modId;
-        return this;
-    }
-
-    @Override
-    public ICoFHItem setShowInGroups(Supplier<Boolean> showInGroups) {
-
-        this.showInGroups = showInGroups;
         return this;
     }
 

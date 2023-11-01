@@ -31,10 +31,8 @@ import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.function.Supplier;
 
 import static cofh.core.capability.CapabilityArchery.AMMO_ITEM_CAPABILITY;
-import static cofh.lib.util.Constants.TRUE;
 import static cofh.lib.util.constants.NBTTags.TAG_AMMO;
 
 public class CrossbowItemCoFH extends CrossbowItem implements ICoFHItem {
@@ -310,28 +308,12 @@ public class CrossbowItemCoFH extends CrossbowItem implements ICoFHItem {
     // endregion
 
     // region DISPLAY
-    protected Supplier<CreativeModeTab> displayGroup;
-    protected Supplier<Boolean> showInGroups = TRUE;
     protected String modId = "";
-
-    @Override
-    public CrossbowItemCoFH setDisplayGroup(Supplier<CreativeModeTab> displayGroup) {
-
-        this.displayGroup = displayGroup;
-        return this;
-    }
 
     @Override
     public CrossbowItemCoFH setModId(String modId) {
 
         this.modId = modId;
-        return this;
-    }
-
-    @Override
-    public CrossbowItemCoFH setShowInGroups(Supplier<Boolean> showInGroups) {
-
-        this.showInGroups = showInGroups;
         return this;
     }
 
