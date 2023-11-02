@@ -35,12 +35,6 @@ public final class MathHelper {
     public static final double[] SIN_TABLE = new double[65536];
     public static final float[] ASIN_TABLE = new float[65536];
 
-    public static Vector3f XN = new Vector3f(-1.0F, 0.0F, 0.0F);
-    public static Vector3f XP = new Vector3f(1.0F, 0.0F, 0.0F);
-    public static Vector3f YN = new Vector3f(0.0F, -1.0F, 0.0F);
-    public static Vector3f YP = new Vector3f(0.0F, 1.0F, 0.0F);
-    public static Vector3f ZN = new Vector3f(0.0F, 0.0F, -1.0F);
-    public static Vector3f ZP = new Vector3f(0.0F, 0.0F, 1.0F);
     public static Vector3f ZERO = new Vector3f(0.0F, 0.0F, 0.0F);
 
     static {
@@ -466,11 +460,6 @@ public final class MathHelper {
         float r = cos(angle / 2.0F);
 
         return new Quaternionf(i, j, k, r);
-    }
-
-    public static Quaternionf rotationDegrees(Vector3f vec, float angle) {
-
-        return rotation(vec, angle * ((float) Math.PI / 180F));
     }
 
     public static Vector4f toVector4f(Vector3f vec) {

@@ -20,6 +20,7 @@ public class CoreTextures {
     private static final String BLOCK_ATLAS = "minecraft:textures/atlas/blocks.png";
 
     // TODO: 1.20 Fix
+
     //    @SubscribeEvent
     //    public static void preStitch(TextureStitchEvent.Pre event) {
     //

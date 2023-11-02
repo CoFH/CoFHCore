@@ -5,6 +5,7 @@ import cofh.lib.util.helpers.MathHelper;
 import com.google.common.collect.ImmutableSortedMap;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import it.unimi.dsi.fastutil.floats.Float2ObjectOpenHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -444,7 +445,7 @@ public final class VFXHelper {
 
             float incr = 1.0F / nodeCount;
             for (int i = 0; i < arcCount; ++i) {
-                stack.mulPose(MathHelper.rotationDegrees(MathHelper.YP, rotations[i]));
+                stack.mulPose(Axis.YP.rotationDegrees(rotations[i]));
                 Vector3f[] arc = randomArcs[i];
                 VFXNode[] outer = new VFXNode[last - first];
                 VFXNode[] inner = new VFXNode[last - first];
@@ -661,7 +662,7 @@ public final class VFXHelper {
         SplittableRandom rand = new SplittableRandom(69420);
 
         stack.pushPose();
-        stack.mulPose(MathHelper.rotation(MathHelper.YP, time * 6.2332F));
+        stack.mulPose(Axis.YP.rotation(time * 6.2332F));
         for (int i = 0; i < streamCount; ++i) {
             float relRot = (rand.nextFloat() - 0.5F) * time * 0.5F + 2 * i;
             float scale = 1.0F + (rand.nextFloat() + MathHelper.sin(time * 0.1F + i)) * 0.1F;
@@ -673,7 +674,7 @@ public final class VFXHelper {
             if (alpha > 0) {
                 Vector4f[] nodes = new Vector4f[length];
                 stack.pushPose();
-                stack.mulPose(MathHelper.rotation(MathHelper.YP, relRot));
+                stack.mulPose(Axis.YP.rotation(relRot));
                 stack.scale(scale, scale, scale);
                 for (int j = 0; j < length; ++j) {
                     float angle = j * WIND_INCR;
