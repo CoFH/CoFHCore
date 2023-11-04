@@ -12,7 +12,7 @@ public interface IDetonatable {
 
     interface IDetonateAction {
 
-        void detonate(Level world, Entity explosive, @Nullable Entity owner, Vec3 pos, float radius, int duration, int amplifier);
+        void detonate(Level world, Entity explosive, @Nullable Entity owner, Vec3 pos, int radius, int duration, int amplifier);
 
     }
 

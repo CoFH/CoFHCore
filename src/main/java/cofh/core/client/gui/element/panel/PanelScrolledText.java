@@ -4,13 +4,13 @@ import cofh.core.client.gui.IGuiAccess;
 import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 
 import java.util.List;
 
-import static cofh.core.client.gui.CoreTextures.*;
+import static cofh.core.util.helpers.GuiHelper.*;
 
 public abstract class PanelScrolledText extends PanelBase {
 
@@ -33,7 +33,7 @@ public abstract class PanelScrolledText extends PanelBase {
         scrollable = maxFirstLine > 0;
     }
 
-    public abstract TextureAtlasSprite getIcon();
+    public abstract ResourceLocation getIcon();
 
     public abstract Component getTitle();
 
@@ -58,7 +58,7 @@ public abstract class PanelScrolledText extends PanelBase {
         }
         pGuiGraphics.drawString(fontRenderer(), getTitle().getString(), sideOffset() + 18, 6, headerColor, true);
         for (int i = firstLine; i < firstLine + numLines; ++i) {
-            pGuiGraphics.drawString(fontRenderer(), myText.get(i), sideOffset() + 2, 20 + (i - firstLine) * fontRenderer().lineHeight, textColor);
+            pGuiGraphics.drawString(fontRenderer(), myText.get(i), sideOffset() + 2, 20 + (i - firstLine) * fontRenderer().lineHeight, textColor, false);
         }
         RenderHelper.resetShaderColor();
     }

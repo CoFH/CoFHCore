@@ -1,6 +1,5 @@
 package cofh.core.client.gui.element.panel;
 
-import cofh.core.client.gui.CoreTextures;
 import cofh.core.client.gui.IGuiAccess;
 import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.api.control.IRedstoneControllable;
@@ -11,7 +10,7 @@ import net.minecraft.network.chat.Component;
 
 import java.util.List;
 
-import static cofh.core.client.gui.CoreTextures.*;
+import static cofh.core.util.helpers.GuiHelper.*;
 import static cofh.lib.api.control.IRedstoneControllable.ControlMode.*;
 import static cofh.lib.util.helpers.SoundHelper.playClickSound;
 import static cofh.lib.util.helpers.StringHelper.localize;
@@ -51,7 +50,7 @@ public class RSControlPanel extends PanelBase {
     @Override
     protected void drawForeground(GuiGraphics pGuiGraphics) {
 
-        drawPanelIcon(pGuiGraphics, CoreTextures.ICON_REDSTONE_ON);
+        drawPanelIcon(pGuiGraphics, ICON_REDSTONE_ON);
         if (!fullyOpen) {
             return;
         }
@@ -66,18 +65,18 @@ public class RSControlPanel extends PanelBase {
         switch (myRSControllable.getMode()) {
             case DISABLED -> {
                 gui.drawIcon(pGuiGraphics, ICON_BUTTON_HIGHLIGHT, 28, 20);
-                pGuiGraphics.drawString(fontRenderer(), localize("info.cofh.disabled"), sideOffset() + 14, 54, textColor);
-                pGuiGraphics.drawString(fontRenderer(), localize("info.cofh.ignored"), sideOffset() + 14, 78, textColor);
+                pGuiGraphics.drawString(fontRenderer(), localize("info.cofh.disabled"), sideOffset() + 14, 54, textColor, false);
+                pGuiGraphics.drawString(fontRenderer(), localize("info.cofh.ignored"), sideOffset() + 14, 78, textColor, false);
             }
             case LOW -> {
                 gui.drawIcon(pGuiGraphics, ICON_BUTTON_HIGHLIGHT, 48, 20);
-                pGuiGraphics.drawString(fontRenderer(), localize("info.cofh.enabled"), sideOffset() + 14, 54, textColor);
-                pGuiGraphics.drawString(fontRenderer(), localize("info.cofh.low"), sideOffset() + 14, 78, textColor);
+                pGuiGraphics.drawString(fontRenderer(), localize("info.cofh.enabled"), sideOffset() + 14, 54, textColor, false);
+                pGuiGraphics.drawString(fontRenderer(), localize("info.cofh.low"), sideOffset() + 14, 78, textColor, false);
             }
             case HIGH -> {
                 gui.drawIcon(pGuiGraphics, ICON_BUTTON_HIGHLIGHT, 68, 20);
-                pGuiGraphics.drawString(fontRenderer(), localize("info.cofh.enabled"), sideOffset() + 14, 54, textColor);
-                pGuiGraphics.drawString(fontRenderer(), localize("info.cofh.high"), sideOffset() + 14, 78, textColor);
+                pGuiGraphics.drawString(fontRenderer(), localize("info.cofh.enabled"), sideOffset() + 14, 54, textColor, false);
+                pGuiGraphics.drawString(fontRenderer(), localize("info.cofh.high"), sideOffset() + 14, 78, textColor, false);
             }
             default -> {
             }

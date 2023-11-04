@@ -6,7 +6,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-import static cofh.core.init.CoreTileEntities.GLOW_AIR_TILE;
+import static cofh.core.init.CoreBlockEntities.GLOW_AIR_TILE;
 
 public class GlowAirTile extends BlockEntity implements ITickableTile {
 

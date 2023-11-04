@@ -155,7 +155,7 @@ public class CoFHCore {
         CoreParticles.register();
         CoreRecipeSerializers.register();
         CoreSounds.register();
-        CoreTileEntities.register();
+        CoreBlockEntities.register();
 
         CuriosProxy.register();
 

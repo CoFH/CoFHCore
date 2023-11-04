@@ -1,6 +1,5 @@
 package cofh.core.client.gui.element.panel;
 
-import cofh.core.client.gui.CoreTextures;
 import cofh.core.client.gui.IGuiAccess;
 import cofh.core.client.gui.element.ElementAugmentSlots;
 import cofh.core.util.helpers.RenderHelper;
@@ -13,6 +12,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.function.IntSupplier;
 
+import static cofh.core.util.helpers.GuiHelper.ICON_AUGMENT;
 import static cofh.lib.util.helpers.StringHelper.localize;
 
 public class AugmentPanel extends PanelBase {
@@ -51,7 +51,7 @@ public class AugmentPanel extends PanelBase {
     @Override
     protected void drawForeground(GuiGraphics pGuiGraphics) {
 
-        drawPanelIcon(pGuiGraphics, CoreTextures.ICON_AUGMENT);
+        drawPanelIcon(pGuiGraphics, ICON_AUGMENT);
         if (!fullyOpen) {
             return;
         }

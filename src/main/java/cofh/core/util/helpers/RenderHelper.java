@@ -395,7 +395,7 @@ public final class RenderHelper {
 
     public static boolean textureExists(ResourceLocation location) {
 
-        return getTexture(location).atlasLocation() != MissingTextureAtlasSprite.getLocation();
+        return getTexture(location) != getTexture(MissingTextureAtlasSprite.getLocation());
     }
     // endregion
 

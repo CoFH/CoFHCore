@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-import static cofh.core.init.CoreTileEntities.SIGNAL_AIR_TILE;
+import static cofh.core.init.CoreBlockEntities.SIGNAL_AIR_TILE;
 
 public class SignalAirBlock extends AirBlock implements EntityBlock {
 

@@ -29,7 +29,7 @@ public class KnifeRenderer extends EntityRenderer<ThrownKnife> {
 
         poseStackIn.pushPose();
         poseStackIn.mulPose(Axis.YP.rotationDegrees(Mth.lerp(partialTicks, entityIn.yRotO, entityIn.getYRot()) + 90));
-        if (entityIn.inGround()) {
+        if (entityIn.inGround) {
             Vec3 pos = entityIn.position().subtract(Vec3.atCenterOf(entityIn.blockPosition()));
             double y = Math.abs(pos.y);
             if (Math.abs(pos.x) > y || Math.abs(pos.z) > y) {

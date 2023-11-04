@@ -11,9 +11,9 @@ import static cofh.core.CoFHCore.TILE_ENTITIES;
 import static cofh.core.init.CoreBlocks.*;
 import static cofh.core.util.references.CoreIDs.*;
 
-public class CoreTileEntities {
+public class CoreBlockEntities {
 
-    private CoreTileEntities() {
+    private CoreBlockEntities() {
 
     }
 

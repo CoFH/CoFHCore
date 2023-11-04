@@ -8,6 +8,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import org.joml.Matrix4f;
 
@@ -23,20 +24,37 @@ public interface IGuiAccess {
 
     int blitOffset();
 
-    default void drawIcon(GuiGraphics pGuiGraphics, TextureAtlasSprite icon, int x, int y) {
+    default void drawSprite(GuiGraphics pGuiGraphics, TextureAtlasSprite sprite, int x, int y) {
 
         RenderHelper.setPosTexShader();
         RenderHelper.setBlockTextureSheet();
         RenderHelper.resetShaderColor();
-        pGuiGraphics.blit(x, y, blitOffset(), 16, 16, icon);
+        pGuiGraphics.blit(x, y, blitOffset(), 16, 16, sprite);
     }
 
-    default void drawIcon(GuiGraphics pGuiGraphics, TextureAtlasSprite icon, int color, int x, int y) {
+    default void drawSprite(GuiGraphics pGuiGraphics, TextureAtlasSprite sprite, int color, int x, int y) {
 
         RenderHelper.setPosTexShader();
         RenderHelper.setBlockTextureSheet();
         RenderHelper.setShaderColorFromInt(color);
-        pGuiGraphics.blit(x, y, blitOffset(), 16, 16, icon);
+        pGuiGraphics.blit(x, y, blitOffset(), 16, 16, sprite);
+        RenderHelper.resetShaderColor();
+    }
+
+    default void drawIcon(GuiGraphics pGuiGraphics, ResourceLocation texture, int x, int y) {
+
+        RenderHelper.setPosTexShader();
+        RenderHelper.setShaderTexture0(texture);
+        RenderHelper.resetShaderColor();
+        drawTexturedModalRect(pGuiGraphics.pose(), x, y, 0, 0, 16, 16, 16, 16);
+    }
+
+    default void drawIcon(GuiGraphics pGuiGraphics, ResourceLocation texture, int color, int x, int y) {
+
+        RenderHelper.setPosTexShader();
+        RenderHelper.setShaderTexture0(texture);
+        RenderHelper.setShaderColorFromInt(color);
+        drawTexturedModalRect(pGuiGraphics.pose(), x, y, 0, 0, 16, 16, 16, 16);
         RenderHelper.resetShaderColor();
     }
 
@@ -103,19 +121,29 @@ public interface IGuiAccess {
         RenderSystem.disableBlend();
     }
 
-    default void drawTexturedModalRect(GuiGraphics pGuiGraphics, int x, int y, int textureX, int textureY, int width, int height) {
+    default void drawTexturedModalRect(GuiGraphics guiGraphics, int x, int y, int textureX, int textureY, int width, int height) {
+
+        drawTexturedModalRect(guiGraphics.pose(), x, y, textureX, textureY, width, height);
+    }
+
+    default void drawTexturedModalRect(PoseStack poseStack, int x, int y, int textureX, int textureY, int width, int height) {
 
         final float f = 0.00390625F;
-        Tesselator tessellator = Tesselator.getInstance();
+        Tesselator tesselator = Tesselator.getInstance();
 
-        Matrix4f mat = pGuiGraphics.pose().last().pose();
-        BufferBuilder bufferbuilder = tessellator.getBuilder();
+        Matrix4f mat = poseStack.last().pose();
+        BufferBuilder bufferbuilder = tesselator.getBuilder();
         bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
         bufferbuilder.vertex(mat, x, (y + height), blitOffset()).uv(((float) textureX * f), ((float) (textureY + height) * f)).endVertex();
         bufferbuilder.vertex(mat, (x + width), (y + height), blitOffset()).uv(((float) (textureX + width) * f), ((float) (textureY + height) * f)).endVertex();
         bufferbuilder.vertex(mat, (x + width), y, blitOffset()).uv(((float) (textureX + width) * f), ((float) textureY * f)).endVertex();
         bufferbuilder.vertex(mat, x, y, blitOffset()).uv(((float) textureX * f), ((float) textureY * f)).endVertex();
-        tessellator.end();
+        tesselator.end();
+    }
+
+    default void drawTexturedModalRect(GuiGraphics guiGraphics, int x, int y, int u, int v, int width, int height, float texW, float texH) {
+
+        drawTexturedModalRect(guiGraphics.pose(), x, y, u, v, width, height, texW, texH);
     }
 
     default void drawTexturedModalRect(PoseStack poseStack, int x, int y, int u, int v, int width, int height, float texW, float texH) {

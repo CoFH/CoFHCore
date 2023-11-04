@@ -3,8 +3,8 @@ package cofh.core.client.gui.element.panel;
 import cofh.core.client.gui.IGuiAccess;
 import cofh.core.util.helpers.RenderHelper;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
 import java.util.function.DoubleSupplier;
@@ -21,7 +21,7 @@ public class ResourcePanel extends PanelBase {
     public static int defaultBackgroundColorOut = 0xd0650b;
     public static int defaultBackgroundColorIn = 0x0a76d0;
 
-    private TextureAtlasSprite icon;
+    private ResourceLocation icon;
 
     private String resource = "";
 
@@ -55,7 +55,7 @@ public class ResourcePanel extends PanelBase {
         setVisible(() -> !resource.isEmpty());
     }
 
-    public ResourcePanel setResource(TextureAtlasSprite icon, String resource, boolean producer) {
+    public ResourcePanel setResource(ResourceLocation icon, String resource, boolean producer) {
 
         this.icon = icon;
         this.resource = resource;
@@ -96,15 +96,15 @@ public class ResourcePanel extends PanelBase {
 
         if (curAmt.getAsInt() >= 0) {
             pGuiGraphics.drawString(fontRenderer(), localize(curDesc) + ":", sideOffset() + 6, 18, subheaderColor, true);
-            pGuiGraphics.drawString(fontRenderer(), curAmt.getAsInt() + " " + localize(curUnit), sideOffset() + 14, 30, textColor);
+            pGuiGraphics.drawString(fontRenderer(), curAmt.getAsInt() + " " + localize(curUnit), sideOffset() + 14, 30, textColor, false);
         }
         if (maxAmt.getAsInt() >= 0) {
             pGuiGraphics.drawString(fontRenderer(), localize(maxDesc) + ":", sideOffset() + 6, 42, subheaderColor, true);
-            pGuiGraphics.drawString(fontRenderer(), maxAmt.getAsInt() + " " + localize(maxUnit), sideOffset() + 14, 54, textColor);
+            pGuiGraphics.drawString(fontRenderer(), maxAmt.getAsInt() + " " + localize(maxUnit), sideOffset() + 14, 54, textColor, false);
         }
         if (efficiency.getAsDouble() >= 0) {
             pGuiGraphics.drawString(fontRenderer(), localize("info.cofh.efficiency") + ":", sideOffset() + 6, 66, subheaderColor, true);
-            pGuiGraphics.drawString(fontRenderer(), DF0.format(efficiency.getAsDouble() * 100) + "%", sideOffset() + 14, 78, textColor);
+            pGuiGraphics.drawString(fontRenderer(), DF0.format(efficiency.getAsDouble() * 100) + "%", sideOffset() + 14, 78, textColor, false);
         }
         RenderHelper.resetShaderColor();
     }

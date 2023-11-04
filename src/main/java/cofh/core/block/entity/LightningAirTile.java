@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
-import static cofh.core.init.CoreTileEntities.LIGHTNING_AIR_TILE;
+import static cofh.core.init.CoreBlockEntities.LIGHTNING_AIR_TILE;
 
 public class LightningAirTile extends BlockEntity implements ITickableTile {
 

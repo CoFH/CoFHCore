@@ -66,9 +66,9 @@ public class ElementConditionalLayered extends ElementBase {
         for (IconWrapper icon : conditionalTextures) {
             if (icon.display.get()) {
                 if (icon.color != WHITE) {
-                    gui.drawIcon(pGuiGraphics, icon.texture.get(), icon.color.getAsInt(), posX(), posY());
+                    gui.drawSprite(pGuiGraphics, icon.texture.get(), icon.color.getAsInt(), posX(), posY());
                 } else {
-                    gui.drawIcon(pGuiGraphics, icon.texture.get(), posX(), posY());
+                    gui.drawSprite(pGuiGraphics, icon.texture.get(), posX(), posY());
                 }
             }
         }

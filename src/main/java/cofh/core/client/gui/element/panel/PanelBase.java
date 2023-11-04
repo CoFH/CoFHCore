@@ -8,7 +8,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.Rect2i;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
@@ -79,9 +78,9 @@ public abstract class PanelBase extends ElementBase {
         }
     }
 
-    protected void drawPanelIcon(GuiGraphics pGuiGraphics, TextureAtlasSprite iconName) {
+    protected void drawPanelIcon(GuiGraphics pGuiGraphics, ResourceLocation texture) {
 
-        gui.drawIcon(pGuiGraphics, iconName, sideOffset(), 3);
+        gui.drawIcon(pGuiGraphics, texture, sideOffset(), 3);
     }
 
     protected void drawForeground(GuiGraphics pGuiGraphics) {

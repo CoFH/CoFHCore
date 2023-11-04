@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-import static cofh.core.init.CoreTileEntities.GLOW_AIR_TILE;
+import static cofh.core.init.CoreBlockEntities.GLOW_AIR_TILE;
 
 public class GlowAirBlock extends AirBlock implements EntityBlock {
 

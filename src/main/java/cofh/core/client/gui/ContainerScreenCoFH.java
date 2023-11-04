@@ -97,10 +97,10 @@ public class ContainerScreenCoFH<T extends AbstractContainerMenu> extends Abstra
     protected void renderLabels(GuiGraphics pGuiGraphics, int mouseX, int mouseY) {
 
         if (drawTitle & title != null) {
-            pGuiGraphics.drawString(font, localize(title.getString()), getCenteredOffset(localize(title.getString())), 6, 0x404040);
+            pGuiGraphics.drawString(font, localize(title.getString()), getCenteredOffset(localize(title.getString())), 6, 0x404040, false);
         }
         if (drawInventory) {
-            pGuiGraphics.drawString(font, localize("container.inventory"), 8, imageHeight - 96 + 3, 0x404040);
+            pGuiGraphics.drawString(font, localize("container.inventory"), 8, imageHeight - 96 + 3, 0x404040, false);
         }
         drawPanels(pGuiGraphics, true);
         drawElements(pGuiGraphics, true);

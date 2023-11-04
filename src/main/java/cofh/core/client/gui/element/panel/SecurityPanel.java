@@ -13,7 +13,7 @@ import net.minecraft.network.chat.Component;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import static cofh.core.client.gui.CoreTextures.*;
+import static cofh.core.util.helpers.GuiHelper.*;
 import static cofh.lib.api.control.ISecurable.AccessMode.*;
 import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 import static cofh.lib.util.helpers.SoundHelper.playClickSound;
@@ -197,16 +197,16 @@ public class SecurityPanel extends PanelBase {
 
         switch (mySecurable.getAccess()) {
             case PUBLIC:
-                pGuiGraphics.drawString(fontRenderer(), localize("info.cofh.access_public"), sideOffset() + 14, 78, textColor);
+                pGuiGraphics.drawString(fontRenderer(), localize("info.cofh.access_public"), sideOffset() + 14, 78, textColor, false);
                 break;
             case PRIVATE:
-                pGuiGraphics.drawString(fontRenderer(), localize("info.cofh.access_private"), sideOffset() + 14, 78, textColor);
+                pGuiGraphics.drawString(fontRenderer(), localize("info.cofh.access_private"), sideOffset() + 14, 78, textColor, false);
                 break;
             case FRIENDS:
-                pGuiGraphics.drawString(fontRenderer(), localize("info.cofh.access_friends"), sideOffset() + 14, 78, textColor);
+                pGuiGraphics.drawString(fontRenderer(), localize("info.cofh.access_friends"), sideOffset() + 14, 78, textColor, false);
                 break;
             case TEAM:
-                pGuiGraphics.drawString(fontRenderer(), localize("info.cofh.access_team"), sideOffset() + 14, 78, textColor);
+                pGuiGraphics.drawString(fontRenderer(), localize("info.cofh.access_team"), sideOffset() + 14, 78, textColor, false);
                 break;
         }
         RenderHelper.resetShaderColor();

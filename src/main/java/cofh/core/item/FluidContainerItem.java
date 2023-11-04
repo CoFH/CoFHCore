@@ -8,6 +8,7 @@ import cofh.lib.util.helpers.StringHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -113,6 +114,13 @@ public class FluidContainerItem extends ItemCoFH implements IFluidContainerItem,
     public int getBarWidth(ItemStack stack) {
 
         return (int) Math.round(13.0D * getFluidAmount(stack) / (double) getCapacity(stack));
+    }
+
+    @Override
+    public int getBarColor(ItemStack stack) {
+
+        float f = Math.max(0.0F, (float) getFluidAmount(stack) / getCapacity(stack));
+        return Mth.hsvToRgb(f / 3.0F, 1.0F, 1.0F);
     }
 
     @Override

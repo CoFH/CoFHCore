@@ -113,12 +113,6 @@ public class ThrownKnife extends AbstractArrow {
         super.tick();
     }
 
-    protected boolean hasReturnOwner() {
-
-        Entity owner = this.getOwner();
-        return owner != null && owner.isAlive() && !(owner instanceof ServerPlayer && owner.isSpectator());
-    }
-
     @Nullable
     protected EntityHitResult findHitEntity(Vec3 start, Vec3 end) {
 
@@ -213,16 +207,17 @@ public class ThrownKnife extends AbstractArrow {
         }
     }
 
-    public boolean inGround() {
+    protected boolean hasReturnOwner() {
 
-        return this.inGround;
+        Entity owner = this.getOwner();
+        return owner != null && owner.isAlive() && !(owner instanceof ServerPlayer && owner.isSpectator());
     }
 
-    public DamageSource damageSource() {
+    protected DamageSource damageSource() {
 
-        return this.level.damageSources().source(KNIFE, this, getOwner());
+        return this.level.damageSources().source(KNIFE_DAMAGE, this, getOwner());
     }
 
-    public static final ResourceKey<DamageType> KNIFE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(ID_COFH_CORE, "knife"));
+    protected static final ResourceKey<DamageType> KNIFE_DAMAGE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(ID_COFH_CORE, "knife"));
 
 }

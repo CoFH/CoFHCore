@@ -1,9 +1,10 @@
 package cofh.core.client.gui.element.panel;
 
-import cofh.core.client.gui.CoreTextures;
 import cofh.core.client.gui.IGuiAccess;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+
+import static cofh.core.util.helpers.GuiHelper.ICON_ENCHANTMENT;
 
 public class EnchantPanel extends PanelScrolledText {
 
@@ -29,9 +30,9 @@ public class EnchantPanel extends PanelScrolledText {
     }
 
     @Override
-    public TextureAtlasSprite getIcon() {
+    public ResourceLocation getIcon() {
 
-        return CoreTextures.ICON_ENCHANTMENT;
+        return ICON_ENCHANTMENT;
     }
 
     @Override

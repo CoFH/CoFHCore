@@ -22,7 +22,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 import static cofh.core.init.CoreMobEffects.ENDERFERENCE;
-import static cofh.core.init.CoreTileEntities.ENDER_AIR_TILE;
+import static cofh.core.init.CoreBlockEntities.ENDER_AIR_TILE;
 
 public class EnderAirBlock extends AirBlock implements EntityBlock {
 

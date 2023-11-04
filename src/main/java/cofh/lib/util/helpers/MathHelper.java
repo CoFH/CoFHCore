@@ -35,7 +35,7 @@ public final class MathHelper {
     public static final double[] SIN_TABLE = new double[65536];
     public static final float[] ASIN_TABLE = new float[65536];
 
-    public static Vector3f ZERO = new Vector3f(0.0F, 0.0F, 0.0F);
+    public static Vector3f ZERO = new Vector3f();
 
     static {
         for (int i = 0; i < 65536; ++i) {
