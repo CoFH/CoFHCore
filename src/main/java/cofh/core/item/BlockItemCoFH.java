@@ -48,18 +48,6 @@ public class BlockItemCoFH extends BlockItem implements ICoFHItem {
         return this;
     }
 
-    public BlockItemCoFH setDisplayGroup(Supplier<CreativeModeTab> displayGroup) {
-
-        this.displayGroup = displayGroup;
-        return this;
-    }
-
-    public BlockItemCoFH setShowInGroups(Supplier<Boolean> showInGroups) {
-
-        this.showInGroups = showInGroups;
-        return this;
-    }
-
     public BlockItemCoFH setModId(String modId) {
 
         this.modId = modId;

@@ -21,8 +21,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-import static cofh.core.init.CoreMobEffects.ENDERFERENCE;
 import static cofh.core.init.CoreBlockEntities.ENDER_AIR_TILE;
+import static cofh.core.init.CoreMobEffects.ENDERFERENCE;
 
 public class EnderAirBlock extends AirBlock implements EntityBlock {
 

@@ -38,7 +38,7 @@ public class FeatureConfig implements IBaseConfig {
         if (enable.get()) {
             builder.push(name);
 
-            generate = builder.comment("Whether this ore should spawn in the world.").define("Enable", true);
+            generate = builder.comment("Whether this feature should naturally spawn in the world.").define("Enable", true);
 
             builder.pop();
         }

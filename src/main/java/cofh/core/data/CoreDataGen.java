@@ -24,7 +24,6 @@ public class CoreDataGen {
         ExistingFileHelper exFileHelper = event.getExistingFileHelper();
 
         CoreTagsProvider.Block blockTags = new CoreTagsProvider.Block(output, event.getLookupProvider(), exFileHelper);
-
         gen.addProvider(event.includeServer(), blockTags);
         gen.addProvider(event.includeServer(), new CoreTagsProvider.Item(output, event.getLookupProvider(), blockTags.contentsGetter(), exFileHelper));
         gen.addProvider(event.includeServer(), new CoreTagsProvider.Fluid(output, event.getLookupProvider(), exFileHelper));

@@ -29,12 +29,7 @@ public class CoreTagsProvider {
             super(output, lookupProvider, ID_COFH_CORE, existingFileHelper);
         }
 
-        @Override
-        public String getName() {
-
-            return "CoFH Core: Block Tags";
-        }
-
+        @SuppressWarnings ("unchecked")
         @Override
         protected void addTags(HolderLookup.Provider pProvider) {
 
@@ -48,12 +43,6 @@ public class CoreTagsProvider {
         public Item(PackOutput pOutput, CompletableFuture<HolderLookup.Provider> pLookupProvider, CompletableFuture<TagsProvider.TagLookup<net.minecraft.world.level.block.Block>> pBlockTags, ExistingFileHelper existingFileHelper) {
 
             super(pOutput, pLookupProvider, pBlockTags, ID_COFH_CORE, existingFileHelper);
-        }
-
-        @Override
-        public String getName() {
-
-            return "CoFH Core: Item Tags";
         }
 
         @Override
@@ -146,12 +135,6 @@ public class CoreTagsProvider {
         public Fluid(PackOutput pOutput, CompletableFuture<HolderLookup.Provider> pProvider, ExistingFileHelper existingFileHelper) {
 
             super(pOutput, pProvider, ID_COFH_CORE, existingFileHelper);
-        }
-
-        @Override
-        public String getName() {
-
-            return "CoFH Core: Fluid Tags";
         }
 
         @Override
