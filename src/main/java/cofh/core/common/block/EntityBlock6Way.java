@@ -17,15 +17,14 @@ import net.minecraft.world.phys.HitResult;
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
-import static cofh.lib.util.constants.BlockStatePropertiesCoFH.ACTIVE;
 import static cofh.lib.util.constants.BlockStatePropertiesCoFH.FACING_ALL;
 
-public class TileBlockActive6Way extends TileBlockActive implements IWrenchable {
+public class EntityBlock6Way extends EntityBlockCoFH implements IWrenchable {
 
-    public TileBlockActive6Way(Properties builder, Class<?> tileClass, Supplier<BlockEntityType<?>> blockEntityType) {
+    public EntityBlock6Way(Properties builder, Class<?> tileClass, Supplier<BlockEntityType<?>> blockEntityType) {
 
         super(builder, tileClass, blockEntityType);
-        this.registerDefaultState(this.stateDefinition.any().setValue(ACTIVE, false).setValue(FACING_ALL, Direction.UP));
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING_ALL, Direction.UP));
     }
 
     @Override

@@ -1,6 +1,6 @@
 package cofh.core.common.block;
 
-import cofh.core.common.block.entity.EnderAirTile;
+import cofh.core.common.block.entity.EnderAirBlockEntity;
 import cofh.lib.api.block.entity.ITickableTile;
 import cofh.lib.util.Utils;
 import net.minecraft.core.BlockPos;
@@ -37,14 +37,14 @@ public class EnderAirBlock extends AirBlock implements EntityBlock {
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
 
-        return new EnderAirTile(pos, state);
+        return new EnderAirBlockEntity(pos, state);
     }
 
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> actualType) {
 
-        return ITickableTile.createTicker(level, actualType, ENDER_AIR_TILE.get(), EnderAirTile.class);
+        return ITickableTile.createTicker(level, actualType, ENDER_AIR_TILE.get(), EnderAirBlockEntity.class);
     }
 
     @Override

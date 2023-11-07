@@ -8,11 +8,11 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import static cofh.core.init.CoreBlockEntities.ENDER_AIR_TILE;
 
-public class EnderAirTile extends BlockEntity implements ITickableTile {
+public class EnderAirBlockEntity extends BlockEntity implements ITickableTile {
 
     protected int duration = 200;
 
-    public EnderAirTile(BlockPos pos, BlockState state) {
+    public EnderAirBlockEntity(BlockPos pos, BlockState state) {
 
         super(ENDER_AIR_TILE.get(), pos, state);
     }

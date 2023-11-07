@@ -1,6 +1,6 @@
 package cofh.core.common.block;
 
-import cofh.core.common.block.entity.GlowAirTile;
+import cofh.core.common.block.entity.GlowAirBlockEntity;
 import cofh.lib.api.block.entity.ITickableTile;
 import cofh.lib.util.Utils;
 import net.minecraft.core.BlockPos;
@@ -27,14 +27,14 @@ public class GlowAirBlock extends AirBlock implements EntityBlock {
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
 
-        return new GlowAirTile(pos, state);
+        return new GlowAirBlockEntity(pos, state);
     }
 
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> actualType) {
 
-        return ITickableTile.createTicker(level, actualType, GLOW_AIR_TILE.get(), GlowAirTile.class);
+        return ITickableTile.createTicker(level, actualType, GLOW_AIR_TILE.get(), GlowAirBlockEntity.class);
     }
 
     @Override

@@ -26,9 +26,9 @@ import net.minecraftforge.common.util.FakePlayer;
 
 import javax.annotation.Nullable;
 
-public class TileCoFH extends BlockEntity implements ITileCallback, IPacketHandlerTile, ITileXpHandler, IConveyableData {
+public class BlockEntityCoFH extends BlockEntity implements ITileCallback, IPacketHandlerTile, ITileXpHandler, IConveyableData {
 
-    public TileCoFH(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state) {
+    public BlockEntityCoFH(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state) {
 
         super(tileEntityTypeIn, pos, state);
     }

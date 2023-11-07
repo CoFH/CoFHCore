@@ -13,11 +13,11 @@ import net.minecraft.world.phys.Vec3;
 
 import static cofh.core.init.CoreBlockEntities.LIGHTNING_AIR_TILE;
 
-public class LightningAirTile extends BlockEntity implements ITickableTile {
+public class LightningAirBlockEntity extends BlockEntity implements ITickableTile {
 
     protected int duration = 100;
 
-    public LightningAirTile(BlockPos pos, BlockState state) {
+    public LightningAirBlockEntity(BlockPos pos, BlockState state) {
 
         super(LIGHTNING_AIR_TILE.get(), pos, state);
         duration = MathHelper.nextInt(MathHelper.RANDOM, 20, duration);

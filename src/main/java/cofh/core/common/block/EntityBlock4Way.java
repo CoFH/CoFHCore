@@ -13,15 +13,14 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
-import static cofh.lib.util.constants.BlockStatePropertiesCoFH.ACTIVE;
 import static cofh.lib.util.constants.BlockStatePropertiesCoFH.FACING_HORIZONTAL;
 
-public class TileBlockActive4Way extends TileBlockActive implements IWrenchable {
+public class EntityBlock4Way extends EntityBlockCoFH implements IWrenchable {
 
-    public TileBlockActive4Way(Properties builder, Class<?> tileClass, Supplier<BlockEntityType<?>> blockEntityType) {
+    public EntityBlock4Way(Properties builder, Class<?> tileClass, Supplier<BlockEntityType<?>> blockEntityType) {
 
         super(builder, tileClass, blockEntityType);
-        this.registerDefaultState(this.stateDefinition.any().setValue(ACTIVE, false).setValue(FACING_HORIZONTAL, Direction.NORTH));
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING_HORIZONTAL, Direction.NORTH));
     }
 
     @Override

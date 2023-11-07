@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import static cofh.lib.util.constants.NBTTags.TAG_BLOCK_ENTITY;
 
-public class SecurableBlockEntity extends TileCoFH implements ISecurableTile {
+public class SecurableBlockEntity extends BlockEntityCoFH implements ISecurableTile {
 
     protected SecurityControlModule securityControl = new SecurityControlModule(this);
 

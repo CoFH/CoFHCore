@@ -9,9 +9,9 @@ import java.util.function.Supplier;
 
 import static cofh.lib.util.constants.BlockStatePropertiesCoFH.ACTIVE;
 
-public class TileBlockActive extends TileBlockCoFH {
+public class EntityBlockActive extends EntityBlockCoFH {
 
-    public TileBlockActive(Properties builder, Class<?> tileClass, Supplier<BlockEntityType<?>> blockEntityType) {
+    public EntityBlockActive(Properties builder, Class<?> tileClass, Supplier<BlockEntityType<?>> blockEntityType) {
 
         super(builder, tileClass, blockEntityType);
         this.registerDefaultState(this.stateDefinition.any().setValue(ACTIVE, false));

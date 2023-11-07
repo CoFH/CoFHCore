@@ -1,6 +1,6 @@
 package cofh.core.common.block;
 
-import cofh.core.common.block.entity.TileCoFH;
+import cofh.core.common.block.entity.BlockEntityCoFH;
 import cofh.core.util.ProxyUtils;
 import cofh.lib.api.block.IDismantleable;
 import cofh.lib.api.block.entity.ITickableTile;
@@ -36,12 +36,12 @@ import java.util.function.Supplier;
 
 import static cofh.core.common.config.CoreCommonConfig.returnDismantleDrops;
 
-public class TileBlockCoFH extends Block implements EntityBlock, IDismantleable {
+public class EntityBlockCoFH extends Block implements EntityBlock, IDismantleable {
 
     protected final Supplier<BlockEntityType<?>> blockEntityType;
     protected final Class<?> tileClass;
 
-    public TileBlockCoFH(Properties builder, Class<?> tileClass, Supplier<BlockEntityType<?>> blockEntityType) {
+    public EntityBlockCoFH(Properties builder, Class<?> tileClass, Supplier<BlockEntityType<?>> blockEntityType) {
 
         super(builder);
         this.blockEntityType = blockEntityType;
@@ -68,7 +68,7 @@ public class TileBlockCoFH extends Block implements EntityBlock, IDismantleable 
             return InteractionResult.SUCCESS;
         }
         BlockEntity tile = worldIn.getBlockEntity(pos);
-        if (tile instanceof TileCoFH cofhTile && !tile.isRemoved()) {
+        if (tile instanceof BlockEntityCoFH cofhTile && !tile.isRemoved()) {
             if (!cofhTile.canPlayerChange(player) && SecurityHelper.hasSecurity(tile)) {
                 ProxyUtils.setOverlayMessage(player, Component.translatable("info.cofh.secure_warning", SecurityHelper.getOwnerName(tile)));
                 return InteractionResult.PASS;
@@ -100,7 +100,7 @@ public class TileBlockCoFH extends Block implements EntityBlock, IDismantleable 
 
     protected boolean onBlockActivatedDelegate(Level world, BlockPos pos, BlockState state, Player player, InteractionHand hand, BlockHitResult result) {
 
-        TileCoFH tile = (TileCoFH) world.getBlockEntity(pos);
+        BlockEntityCoFH tile = (BlockEntityCoFH) world.getBlockEntity(pos);
         if (tile == null || !tile.canPlayerChange(player)) {
             return false;
         }
@@ -110,7 +110,7 @@ public class TileBlockCoFH extends Block implements EntityBlock, IDismantleable 
     @Override
     public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
 
-        TileCoFH tile = (TileCoFH) worldIn.getBlockEntity(pos);
+        BlockEntityCoFH tile = (BlockEntityCoFH) worldIn.getBlockEntity(pos);
         if (tile != null) {
             tile.neighborChanged(blockIn, fromPos);
         }
@@ -127,7 +127,7 @@ public class TileBlockCoFH extends Block implements EntityBlock, IDismantleable 
         if (!offhand.isEmpty() && offhand.getItem() instanceof IPlacementItem placementItem) {
             placementItem.onBlockPlacement(offhand, new UseOnContext(player, InteractionHand.OFF_HAND, RayTracer.retrace(player)));
         }
-        TileCoFH tile = (TileCoFH) worldIn.getBlockEntity(pos);
+        BlockEntityCoFH tile = (BlockEntityCoFH) worldIn.getBlockEntity(pos);
         if (tile != null) {
             tile.onPlacedBy(worldIn, pos, state, placer, stack);
         }
@@ -138,8 +138,8 @@ public class TileBlockCoFH extends Block implements EntityBlock, IDismantleable 
 
         if (state.getBlock() != newState.getBlock()) {
             BlockEntity tile = worldIn.getBlockEntity(pos);
-            if (tile instanceof TileCoFH) {
-                ((TileCoFH) tile).onReplaced(state, worldIn, pos, newState);
+            if (tile instanceof BlockEntityCoFH) {
+                ((BlockEntityCoFH) tile).onReplaced(state, worldIn, pos, newState);
             }
             super.onRemove(state, worldIn, pos, newState, isMoving);
         }
@@ -156,8 +156,8 @@ public class TileBlockCoFH extends Block implements EntityBlock, IDismantleable 
     public float getDestroyProgress(BlockState state, Player player, BlockGetter worldIn, BlockPos pos) {
 
         BlockEntity tile = worldIn.getBlockEntity(pos);
-        if (tile instanceof TileCoFH tileCoFH && !tile.isRemoved()) {
-            if (!tileCoFH.canPlayerChange(player)) {
+        if (tile instanceof BlockEntityCoFH blockEntityCoFH && !tile.isRemoved()) {
+            if (!blockEntityCoFH.canPlayerChange(player)) {
                 return -1;
             }
         }
@@ -179,7 +179,7 @@ public class TileBlockCoFH extends Block implements EntityBlock, IDismantleable 
     @Override
     public boolean canDismantle(Level world, BlockPos pos, BlockState state, Player player) {
 
-        if (world.getBlockEntity(pos) instanceof TileCoFH tile) {
+        if (world.getBlockEntity(pos) instanceof BlockEntityCoFH tile) {
             return tile.canPlayerChange(player);
         }
         return false;

@@ -1,6 +1,6 @@
 package cofh.core.common.inventory;
 
-import cofh.core.common.block.entity.TileCoFH;
+import cofh.core.common.block.entity.BlockEntityCoFH;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -12,13 +12,13 @@ import javax.annotation.Nullable;
 
 public class TileCoFHContainer extends ContainerCoFH {
 
-    protected final TileCoFH baseTile;
+    protected final BlockEntityCoFH baseTile;
 
     public TileCoFHContainer(@Nullable MenuType<?> type, int windowId, Level world, BlockPos pos, Inventory inventory, Player player) {
 
         super(type, windowId, inventory, player);
         BlockEntity tile = world.getBlockEntity(pos);
-        baseTile = tile instanceof TileCoFH ? (TileCoFH) tile : null;
+        baseTile = tile instanceof BlockEntityCoFH ? (BlockEntityCoFH) tile : null;
 
         if (baseTile != null) {
             baseTile.addPlayerUsing();

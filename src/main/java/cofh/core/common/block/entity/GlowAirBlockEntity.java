@@ -8,11 +8,11 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import static cofh.core.init.CoreBlockEntities.GLOW_AIR_TILE;
 
-public class GlowAirTile extends BlockEntity implements ITickableTile {
+public class GlowAirBlockEntity extends BlockEntity implements ITickableTile {
 
     protected int duration = 200;
 
-    public GlowAirTile(BlockPos pos, BlockState state) {
+    public GlowAirBlockEntity(BlockPos pos, BlockState state) {
 
         super(GLOW_AIR_TILE.get(), pos, state);
     }
