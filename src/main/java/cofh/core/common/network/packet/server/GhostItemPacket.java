@@ -1,7 +1,7 @@
 package cofh.core.common.network.packet.server;
 
 import cofh.core.CoFHCore;
-import cofh.core.common.inventory.ContainerCoFH;
+import cofh.core.common.inventory.ContainerMenuCoFH;
 import cofh.lib.common.inventory.SlotFalseCopy;
 import cofh.lib.common.network.packet.IPacketServer;
 import cofh.lib.common.network.packet.PacketBase;
@@ -27,7 +27,7 @@ public class GhostItemPacket extends PacketBase implements IPacketServer {
     @Override
     public void handleServer(ServerPlayer player) {
 
-        if (player.containerMenu instanceof ContainerCoFH container) {
+        if (player.containerMenu instanceof ContainerMenuCoFH container) {
             Slot slot = container.getSlot(slotNumber);
             if (slot instanceof SlotFalseCopy) {
                 slot.set(cloneStack(stack, count));

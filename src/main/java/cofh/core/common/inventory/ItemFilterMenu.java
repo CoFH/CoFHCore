@@ -1,12 +1,11 @@
 package cofh.core.common.inventory;
 
-import cofh.core.common.network.packet.client.ContainerGuiPacket;
 import cofh.core.common.network.packet.server.ContainerConfigPacket;
 import cofh.core.util.filter.*;
 import cofh.core.util.helpers.FilterHelper;
 import cofh.lib.common.inventory.SlotFalseCopy;
 import cofh.lib.common.inventory.SlotLocked;
-import cofh.lib.common.inventory.wrapper.InvWrapperFluids;
+import cofh.lib.common.inventory.wrapper.InvWrapperGeneric;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -17,17 +16,13 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.fluids.FluidStack;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static cofh.core.init.CoreContainers.FLUID_FILTER_CONTAINER;
+import static cofh.core.init.CoreContainers.ITEM_FILTER_CONTAINER;
 import static cofh.core.util.filter.FilterHolderType.ITEM;
 import static cofh.core.util.filter.FilterHolderType.SELF;
 import static cofh.core.util.helpers.FilterHelper.hasFilter;
 
-public class FluidFilterContainer extends ContainerCoFH implements IFilterOptions {
+public class ItemFilterMenu extends ContainerMenuCoFH implements IFilterOptions {
 
     protected BlockEntity tile;
     protected Entity entity;
@@ -37,14 +32,14 @@ public class FluidFilterContainer extends ContainerCoFH implements IFilterOption
     protected IFilterableItem filterableItem;
     public SlotLocked lockedSlot;
 
-    protected BaseFluidFilter filter = BaseFluidFilter.ZERO;
-    protected InvWrapperFluids filterInventory;
+    protected BaseItemFilter filter = BaseItemFilter.ZERO;
+    protected InvWrapperGeneric filterInventory;
 
     public final FilterHolderType type;
 
-    public FluidFilterContainer(int windowId, Level world, Inventory inventory, Player player, int holder, int id, BlockPos pos) {
+    public ItemFilterMenu(int windowId, Level world, Inventory inventory, Player player, int holder, int id, BlockPos pos) {
 
-        super(FLUID_FILTER_CONTAINER.get(), windowId, inventory, player);
+        super(ITEM_FILTER_CONTAINER.get(), windowId, inventory, player);
 
         type = FilterHolderType.from(holder);
 
@@ -52,31 +47,31 @@ public class FluidFilterContainer extends ContainerCoFH implements IFilterOption
             case SELF, ITEM -> {
                 filterStack = hasFilter(player.getMainHandItem()) ? player.getMainHandItem() : player.getOffhandItem();
                 filterableItem = (IFilterableItem) filterStack.getItem();
-                filter = (BaseFluidFilter) filterableItem.getFilter(filterStack);
+                filter = (BaseItemFilter) filterableItem.getFilter(filterStack);
             }
             case TILE -> {
                 tile = world.getBlockEntity(pos);
                 if (hasFilter(tile)) {
                     filterable = (IFilterable) tile;
-                    filter = (BaseFluidFilter) filterable.getFilter();
+                    filter = (BaseItemFilter) filterable.getFilter();
                 }
             }
             case ENTITY -> {
                 entity = world.getEntity(id);
                 if (hasFilter(entity)) {
                     filterable = (IFilterable) entity;
-                    filter = (BaseFluidFilter) filterable.getFilter();
+                    filter = (BaseItemFilter) filterable.getFilter();
                 }
             }
         }
         allowSwap = false;
 
         int slots = filter.size();
-        filterInventory = new InvWrapperFluids(this, filter.getFluids(), slots) {
+        filterInventory = new InvWrapperGeneric(this, filter.getItems(), slots) {
             @Override
             public void setChanged() {
 
-                filter.setFluids(filterInventory.getStacks());
+                filter.setItems(filterInventory.getStacks());
             }
         };
 
@@ -137,11 +132,6 @@ public class FluidFilterContainer extends ContainerCoFH implements IFilterOption
         return filter.size();
     }
 
-    public List<FluidStack> getFilterStacks() {
-
-        return filterInventory.getStacks();
-    }
-
     @Override
     protected int getMergeableSlotCount() {
 
@@ -167,16 +157,9 @@ public class FluidFilterContainer extends ContainerCoFH implements IFilterOption
     }
 
     @Override
-    public void broadcastChanges() {
-
-        super.broadcastChanges();
-        ContainerGuiPacket.sendToClient(this, player);
-    }
-
-    @Override
     public void removed(Player playerIn) {
 
-        filter.setFluids(filterInventory.getStacks());
+        filter.setItems(filterInventory.getStacks());
 
         if (type == SELF || type == ITEM) {
             filter.write(filterStack.getOrCreateTag());
@@ -202,28 +185,6 @@ public class FluidFilterContainer extends ContainerCoFH implements IFilterOption
 
         filter.setAllowList(buffer.readBoolean());
         filter.setCheckNBT(buffer.readBoolean());
-    }
-
-    @Override
-    public FriendlyByteBuf getGuiPacket(FriendlyByteBuf buffer) {
-
-        byte size = (byte) filter.getFluids().size();
-        buffer.writeByte(size);
-        for (int i = 0; i < size; ++i) {
-            buffer.writeFluidStack(getFilterStacks().get(i));
-        }
-        return buffer;
-    }
-
-    @Override
-    public void handleGuiPacket(FriendlyByteBuf buffer) {
-
-        byte size = buffer.readByte();
-        List<FluidStack> fluidStacks = new ArrayList<>(size);
-        for (int i = 0; i < size; ++i) {
-            fluidStacks.add(buffer.readFluidStack());
-        }
-        filterInventory.readFromSource(fluidStacks);
     }
     // endregion
 

@@ -1,7 +1,7 @@
 package cofh.core.common.network.packet.server;
 
 import cofh.core.CoFHCore;
-import cofh.core.common.inventory.ContainerCoFH;
+import cofh.core.common.inventory.ContainerMenuCoFH;
 import cofh.lib.common.network.packet.IPacketServer;
 import cofh.lib.common.network.packet.PacketBase;
 import io.netty.buffer.Unpooled;
@@ -22,7 +22,7 @@ public class ContainerConfigPacket extends PacketBase implements IPacketServer {
     @Override
     public void handleServer(ServerPlayer player) {
 
-        if (player.containerMenu instanceof ContainerCoFH container) {
+        if (player.containerMenu instanceof ContainerMenuCoFH container) {
             container.handleConfigPacket(buffer);
         }
     }
@@ -39,7 +39,7 @@ public class ContainerConfigPacket extends PacketBase implements IPacketServer {
         buffer = buf;
     }
 
-    public static void sendToServer(ContainerCoFH container) {
+    public static void sendToServer(ContainerMenuCoFH container) {
 
         if (container == null) {
             return;

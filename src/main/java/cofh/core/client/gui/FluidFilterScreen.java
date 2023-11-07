@@ -4,7 +4,7 @@ import cofh.core.client.gui.element.ElementButton;
 import cofh.core.client.gui.element.ElementFluid;
 import cofh.core.client.gui.element.ElementTexture;
 import cofh.core.client.gui.element.SimpleTooltip;
-import cofh.core.common.inventory.FluidFilterContainer;
+import cofh.core.common.inventory.FluidFilterMenu;
 import cofh.core.common.network.packet.server.FilterableGuiTogglePacket;
 import cofh.core.util.helpers.FilterHelper;
 import cofh.core.util.helpers.RenderHelper;
@@ -23,7 +23,7 @@ import static cofh.lib.util.Constants.PATH_ELEMENTS;
 import static cofh.lib.util.Constants.PATH_GUI;
 import static cofh.lib.util.helpers.SoundHelper.playClickSound;
 
-public class FluidFilterScreen extends ContainerScreenCoFH<FluidFilterContainer> {
+public class FluidFilterScreen extends ContainerScreenCoFH<FluidFilterMenu> {
 
     public static final ResourceLocation TEXTURE = new ResourceLocation(PATH_GUI + "generic.png");
     public static final ResourceLocation SLOT_OVERLAY = new ResourceLocation(PATH_ELEMENTS + "locked_overlay_slot.png");
@@ -33,7 +33,7 @@ public class FluidFilterScreen extends ContainerScreenCoFH<FluidFilterContainer>
     public static final String TEX_IGNORE_NBT = PATH_GUI + "filters/filter_ignore_nbt.png";
     public static final String TEX_USE_NBT = PATH_GUI + "filters/filter_use_nbt.png";
 
-    public FluidFilterScreen(FluidFilterContainer container, Inventory inv, Component titleIn) {
+    public FluidFilterScreen(FluidFilterMenu container, Inventory inv, Component titleIn) {
 
         super(container, inv, titleIn);
 

@@ -1,7 +1,7 @@
 package cofh.core.common.network.packet.client;
 
 import cofh.core.CoFHCore;
-import cofh.core.common.inventory.ContainerCoFH;
+import cofh.core.common.inventory.ContainerMenuCoFH;
 import cofh.core.util.ProxyUtils;
 import cofh.lib.common.network.packet.IPacketClient;
 import cofh.lib.common.network.packet.PacketBase;
@@ -25,7 +25,7 @@ public class ContainerGuiPacket extends PacketBase implements IPacketClient {
     public void handleClient() {
 
         Player player = ProxyUtils.getClientPlayer();
-        if (player.containerMenu instanceof ContainerCoFH container) {
+        if (player.containerMenu instanceof ContainerMenuCoFH container) {
             container.handleGuiPacket(buffer);
         }
     }
@@ -42,7 +42,7 @@ public class ContainerGuiPacket extends PacketBase implements IPacketClient {
         buffer = buf;
     }
 
-    public static void sendToClient(ContainerCoFH container, Player player) {
+    public static void sendToClient(ContainerMenuCoFH container, Player player) {
 
         if (container != null && player instanceof ServerPlayer serverPlayer) {
             ContainerGuiPacket packet = new ContainerGuiPacket();

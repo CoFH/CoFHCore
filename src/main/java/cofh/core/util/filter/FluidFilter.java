@@ -1,6 +1,6 @@
 package cofh.core.util.filter;
 
-import cofh.core.common.inventory.FluidFilterContainer;
+import cofh.core.common.inventory.FluidFilterMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
@@ -36,7 +36,7 @@ public class FluidFilter extends BaseFluidFilter implements MenuProvider {
     @Override
     public AbstractContainerMenu createMenu(int i, Inventory inventory, Player player) {
 
-        return new FluidFilterContainer(i, player.level, inventory, player, holderType.ordinal(), id, pos);
+        return new FluidFilterMenu(i, player.level, inventory, player, holderType.ordinal(), id, pos);
     }
 
 }

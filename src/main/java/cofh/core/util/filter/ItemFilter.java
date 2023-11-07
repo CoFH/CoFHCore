@@ -1,6 +1,6 @@
 package cofh.core.util.filter;
 
-import cofh.core.common.inventory.ItemFilterContainer;
+import cofh.core.common.inventory.ItemFilterMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
@@ -36,7 +36,7 @@ public class ItemFilter extends BaseItemFilter implements MenuProvider {
     @Override
     public AbstractContainerMenu createMenu(int i, Inventory inventory, Player player) {
 
-        return new ItemFilterContainer(i, player.level, inventory, player, holderType.ordinal(), id, pos);
+        return new ItemFilterMenu(i, player.level, inventory, player, holderType.ordinal(), id, pos);
     }
 
 }

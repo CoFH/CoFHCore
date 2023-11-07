@@ -17,7 +17,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class ContainerCoFH extends AbstractContainerMenu {
+public abstract class ContainerMenuCoFH extends AbstractContainerMenu {
 
     protected boolean allowSwap = true;
     protected boolean falseSlotSupport = true;
@@ -27,7 +27,7 @@ public abstract class ContainerCoFH extends AbstractContainerMenu {
 
     protected List<SlotCoFH> augmentSlots = new ArrayList<>();
 
-    public ContainerCoFH(@Nullable MenuType<?> type, int id, Inventory inventory, Player player) {
+    public ContainerMenuCoFH(@Nullable MenuType<?> type, int id, Inventory inventory, Player player) {
 
         super(type, id);
         this.player = player;
