@@ -1,7 +1,7 @@
 package cofh.core.util;
 
 import cofh.core.CoFHCore;
-import cofh.core.network.packet.client.OverlayMessagePacket;
+import cofh.core.common.network.packet.client.OverlayMessagePacket;
 import cofh.lib.api.IProxyItemPropertyGetter;
 import cofh.lib.api.block.entity.IAreaEffectTile;
 import net.minecraft.network.chat.Component;

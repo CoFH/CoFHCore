@@ -1,6 +1,6 @@
 package cofh.core.util.control;
 
-import cofh.core.network.packet.server.SideConfigPacket;
+import cofh.core.common.network.packet.server.SideConfigPacket;
 import cofh.lib.api.control.IReconfigurable;
 import cofh.lib.util.Utils;
 import cofh.lib.util.helpers.BlockHelper;

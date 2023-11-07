@@ -1,6 +1,6 @@
 package cofh.core.client.renderer.entity;
 
-import cofh.core.entity.ThrownKnife;
+import cofh.core.common.entity.ThrownKnife;
 import cofh.core.util.helpers.RenderHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;

@@ -1,6 +1,6 @@
 package cofh.lib.util.recipes;
 
-import cofh.lib.inventory.FalseIInventory;
+import cofh.lib.common.inventory.FalseIInventory;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;

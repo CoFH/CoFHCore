@@ -1,7 +1,7 @@
 package cofh.core.init;
 
-import cofh.core.inventory.container.FluidFilterContainer;
-import cofh.core.inventory.container.ItemFilterContainer;
+import cofh.core.common.inventory.FluidFilterContainer;
+import cofh.core.common.inventory.ItemFilterContainer;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.registries.RegistryObject;

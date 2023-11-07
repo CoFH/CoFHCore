@@ -1,6 +1,6 @@
 package cofh.core.client.renderer.entity;
 
-import cofh.core.entity.ElectricField;
+import cofh.core.common.entity.ElectricField;
 import cofh.lib.client.renderer.entity.ITranslucentRenderer;
 import cofh.lib.util.constants.ModIds;
 import cofh.lib.util.helpers.MathHelper;

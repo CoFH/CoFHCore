@@ -1,7 +1,7 @@
 package cofh.core.client.particle;
 
+import cofh.core.client.event.CoreClientEvents;
 import cofh.core.client.particle.options.CoFHParticleOptions;
-import cofh.core.event.CoreClientEvents;
 import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;

@@ -1,6 +1,6 @@
 package cofh.core.init;
 
-import cofh.core.block.*;
+import cofh.core.common.block.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.registries.RegistryObject;

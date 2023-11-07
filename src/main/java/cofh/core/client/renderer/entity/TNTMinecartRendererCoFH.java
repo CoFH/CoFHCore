@@ -1,6 +1,6 @@
 package cofh.core.client.renderer.entity;
 
-import cofh.core.entity.AbstractTNTMinecart;
+import cofh.core.common.entity.AbstractTNTMinecart;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.MultiBufferSource;

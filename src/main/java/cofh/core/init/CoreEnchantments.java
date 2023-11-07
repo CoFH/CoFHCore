@@ -1,7 +1,7 @@
 package cofh.core.init;
 
-import cofh.core.enchantment.HoldingEnchantment;
-import cofh.lib.enchantment.EnchantmentCoFH;
+import cofh.core.common.enchantment.HoldingEnchantment;
+import cofh.lib.common.enchantment.EnchantmentCoFH;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraftforge.registries.RegistryObject;

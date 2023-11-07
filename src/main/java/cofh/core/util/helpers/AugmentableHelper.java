@@ -1,6 +1,6 @@
 package cofh.core.util.helpers;
 
-import cofh.core.item.IAugmentableItem;
+import cofh.core.common.item.IAugmentableItem;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;

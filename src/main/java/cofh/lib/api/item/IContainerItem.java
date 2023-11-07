@@ -1,6 +1,6 @@
 package cofh.lib.api.item;
 
-import cofh.core.item.IAugmentableItem;
+import cofh.core.common.item.IAugmentableItem;
 import cofh.lib.api.ContainerType;
 import cofh.lib.util.Utils;
 import net.minecraft.nbt.CompoundTag;

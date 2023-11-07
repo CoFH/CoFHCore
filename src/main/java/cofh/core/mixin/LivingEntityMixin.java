@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import static cofh.core.capability.CapabilityShieldItem.SHIELD_ITEM_CAPABILITY;
+import static cofh.core.common.capability.CapabilityShieldItem.SHIELD_ITEM_CAPABILITY;
 import static cofh.core.init.CoreMobEffects.*;
 import static net.minecraft.tags.DamageTypeTags.*;
 

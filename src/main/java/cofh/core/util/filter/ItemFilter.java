@@ -1,6 +1,6 @@
 package cofh.core.util.filter;
 
-import cofh.core.inventory.container.ItemFilterContainer;
+import cofh.core.common.inventory.ItemFilterContainer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;

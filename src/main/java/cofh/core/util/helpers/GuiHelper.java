@@ -1,16 +1,16 @@
 package cofh.core.util.helpers;
 
-import cofh.core.block.entity.ITileXpHandler;
 import cofh.core.client.gui.IGuiAccess;
 import cofh.core.client.gui.element.*;
-import cofh.core.network.packet.server.ClaimXPPacket;
-import cofh.core.network.packet.server.StorageClearPacket;
+import cofh.core.common.block.entity.ITileXpHandler;
+import cofh.core.common.network.packet.server.ClaimXPPacket;
+import cofh.core.common.network.packet.server.StorageClearPacket;
 import cofh.lib.api.block.entity.ITileCallback;
 import cofh.lib.api.control.IReconfigurable;
-import cofh.lib.energy.EnergyStorageCoFH;
-import cofh.lib.fluid.FluidStorageCoFH;
-import cofh.lib.inventory.ItemStorageCoFH;
-import cofh.lib.xp.XpStorage;
+import cofh.lib.common.energy.EnergyStorageCoFH;
+import cofh.lib.common.fluid.FluidStorageCoFH;
+import cofh.lib.common.inventory.ItemStorageCoFH;
+import cofh.lib.common.xp.XpStorage;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
-import static cofh.core.network.packet.server.StorageClearPacket.StorageType.*;
+import static cofh.core.common.network.packet.server.StorageClearPacket.StorageType.*;
 import static cofh.lib.util.Constants.*;
 import static cofh.lib.util.helpers.StringHelper.*;
 import static net.minecraft.client.gui.screens.Screen.hasControlDown;

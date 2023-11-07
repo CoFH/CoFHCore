@@ -1,6 +1,6 @@
 package cofh.core.util.control;
 
-import cofh.core.network.packet.server.TransferControlPacket;
+import cofh.core.common.network.packet.server.TransferControlPacket;
 import cofh.lib.api.control.ITransferControllable;
 import cofh.lib.util.Utils;
 import net.minecraft.nbt.CompoundTag;

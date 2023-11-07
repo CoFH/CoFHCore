@@ -1,6 +1,6 @@
 package cofh.core.client.renderer.entity;
 
-import cofh.core.entity.ElectricArc;
+import cofh.core.common.entity.ElectricArc;
 import cofh.core.util.helpers.vfx.Color;
 import cofh.core.util.helpers.vfx.VFXHelper;
 import cofh.lib.client.renderer.entity.ITranslucentRenderer;

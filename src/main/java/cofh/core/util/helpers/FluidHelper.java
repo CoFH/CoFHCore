@@ -1,8 +1,8 @@
 package cofh.core.util.helpers;
 
 import cofh.lib.api.item.IFluidContainerItem;
-import cofh.lib.fluid.FluidStorageCoFH;
-import cofh.lib.tags.FluidTagsCoFH;
+import cofh.lib.common.fluid.FluidStorageCoFH;
+import cofh.lib.init.tags.FluidTagsCoFH;
 import cofh.lib.util.helpers.BlockHelper;
 import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;

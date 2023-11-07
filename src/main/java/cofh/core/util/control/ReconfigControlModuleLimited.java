@@ -1,6 +1,6 @@
 package cofh.core.util.control;
 
-import cofh.core.network.packet.server.SideConfigPacket;
+import cofh.core.common.network.packet.server.SideConfigPacket;
 import cofh.lib.util.Utils;
 import net.minecraft.core.Direction;
 

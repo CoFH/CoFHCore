@@ -1,9 +1,9 @@
 package cofh.core.init;
 
-import cofh.core.fluid.ExperienceFluid;
-import cofh.core.fluid.HoneyFluid;
-import cofh.core.fluid.PotionFluid;
-import cofh.lib.tags.FluidTagsCoFH;
+import cofh.core.common.fluid.ExperienceFluid;
+import cofh.core.common.fluid.HoneyFluid;
+import cofh.core.common.fluid.PotionFluid;
+import cofh.lib.init.tags.FluidTagsCoFH;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.fluids.FluidStack;

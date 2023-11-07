@@ -1,7 +1,7 @@
 package cofh.core.util.helpers;
 
-import cofh.core.capability.templates.ArcheryAmmoItemWrapper;
-import cofh.core.capability.templates.ArcheryBowItemWrapper;
+import cofh.core.common.capability.templates.ArcheryAmmoItemWrapper;
+import cofh.core.common.capability.templates.ArcheryBowItemWrapper;
 import cofh.core.compat.curios.CuriosProxy;
 import cofh.lib.api.capability.IArcheryAmmoItem;
 import cofh.lib.api.capability.IArcheryBowItem;
@@ -29,8 +29,8 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import static cofh.core.capability.CapabilityArchery.AMMO_ITEM_CAPABILITY;
-import static cofh.core.capability.CapabilityArchery.BOW_ITEM_CAPABILITY;
+import static cofh.core.common.capability.CapabilityArchery.AMMO_ITEM_CAPABILITY;
+import static cofh.core.common.capability.CapabilityArchery.BOW_ITEM_CAPABILITY;
 import static cofh.core.util.references.EnsorcIDs.ID_TRUESHOT;
 import static cofh.core.util.references.EnsorcIDs.ID_VOLLEY;
 import static cofh.lib.util.Utils.getEnchantment;

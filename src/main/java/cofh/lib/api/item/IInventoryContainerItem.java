@@ -1,6 +1,6 @@
 package cofh.lib.api.item;
 
-import cofh.lib.inventory.SimpleItemInv;
+import cofh.lib.common.inventory.SimpleItemInv;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;

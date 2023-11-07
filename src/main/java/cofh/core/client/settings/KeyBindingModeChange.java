@@ -1,6 +1,6 @@
 package cofh.core.client.settings;
 
-import cofh.core.network.packet.server.ItemModeChangePacket;
+import cofh.core.common.network.packet.server.ItemModeChangePacket;
 import net.minecraft.client.KeyMapping;
 import net.minecraftforge.client.settings.KeyConflictContext;
 

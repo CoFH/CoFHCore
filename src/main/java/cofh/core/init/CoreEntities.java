@@ -1,6 +1,6 @@
 package cofh.core.init;
 
-import cofh.core.entity.*;
+import cofh.core.common.entity.*;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.registries.RegistryObject;

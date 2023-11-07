@@ -1,8 +1,8 @@
 package cofh.core.compat.jei;
 
 import cofh.core.client.gui.ContainerScreenCoFH;
-import cofh.core.network.packet.server.GhostItemPacket;
-import cofh.lib.inventory.container.slot.SlotFalseCopy;
+import cofh.core.common.network.packet.server.GhostItemPacket;
+import cofh.lib.common.inventory.SlotFalseCopy;
 import mezz.jei.api.gui.handlers.IGhostIngredientHandler;
 import mezz.jei.api.ingredients.ITypedIngredient;
 import net.minecraft.client.renderer.Rect2i;

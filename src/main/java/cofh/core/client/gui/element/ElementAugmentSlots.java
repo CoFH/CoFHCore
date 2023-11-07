@@ -2,7 +2,7 @@ package cofh.core.client.gui.element;
 
 import cofh.core.client.gui.IGuiAccess;
 import cofh.core.util.helpers.GuiHelper;
-import cofh.lib.inventory.container.slot.SlotCoFH;
+import cofh.lib.common.inventory.SlotCoFH;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.client.gui.GuiGraphics;
 

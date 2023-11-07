@@ -1,6 +1,6 @@
 package cofh.core.util.helpers;
 
-import cofh.core.event.CoreClientEvents;
+import cofh.core.client.event.CoreClientEvents;
 import cofh.core.util.helpers.vfx.Color;
 import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.platform.GlStateManager.DestFactor;

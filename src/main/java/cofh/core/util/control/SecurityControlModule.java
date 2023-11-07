@@ -1,6 +1,6 @@
 package cofh.core.util.control;
 
-import cofh.core.network.packet.server.SecurityControlPacket;
+import cofh.core.common.network.packet.server.SecurityControlPacket;
 import cofh.lib.api.control.ISecurable;
 import cofh.lib.util.Utils;
 import cofh.lib.util.helpers.SecurityHelper;
