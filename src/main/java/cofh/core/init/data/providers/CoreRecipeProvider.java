@@ -1,6 +1,6 @@
 package cofh.core.init.data.providers;
 
-import cofh.core.init.CoreFlags;
+import cofh.core.util.CoreFlags;
 import cofh.lib.init.data.RecipeProviderCoFH;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;

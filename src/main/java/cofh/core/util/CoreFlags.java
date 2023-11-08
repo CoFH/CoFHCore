@@ -1,4 +1,4 @@
-package cofh.core.init;
+package cofh.core.util;
 
 import cofh.lib.util.flags.FlagManager;
 

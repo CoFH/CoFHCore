@@ -20,6 +20,7 @@ import cofh.core.common.network.packet.server.*;
 import cofh.core.compat.curios.CuriosProxy;
 import cofh.core.compat.quark.QuarkFlags;
 import cofh.core.init.*;
+import cofh.core.util.CoreFlags;
 import cofh.core.util.Proxy;
 import cofh.core.util.ProxyClient;
 import cofh.core.util.crafting.CustomIngredients;
