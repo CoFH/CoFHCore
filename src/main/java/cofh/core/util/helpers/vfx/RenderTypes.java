@@ -26,23 +26,49 @@ public class RenderTypes {
     public static final ResourceLocation LIN_GLOW_TEXTURE = new ResourceLocation(ID_COFH_CORE, "textures/render/glow_linear.png");
     public static final ResourceLocation RND_GLOW_TEXTURE = new ResourceLocation(ID_COFH_CORE, "textures/render/glow_round.png");
 
-    public static final RenderType OVERLAY_LINES = RenderType.create("overlay_lines",
+    private static final DepthTestStateShard DISABLE_DEPTH = new DepthTestStateShard("none", 519) {
+        @Override
+        public void setupRenderState() {
+
+            RenderSystem.disableDepthTest();
+        }
+    };
+
+    public static final RenderType OVERLAY_LINES = RenderType.create("cofh:overlay_lines",
             DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.LINES, 256, false, true,
-            RenderType.CompositeState.builder().setLineState(THICK_LINES)
-                    .setLayeringState(VIEW_OFFSET_Z_LAYERING)
-                    .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
-                    .setTextureState(NO_TEXTURE)
-                    .setDepthTestState(NO_DEPTH_TEST)
-                    .setCullState(NO_CULL)
-                    .setLightmapState(NO_LIGHTMAP)
-                    .setWriteMaskState(COLOR_DEPTH_WRITE)
+            RenderType.CompositeState.builder()
+                    .setLineState(THICK_LINES)
                     .setShaderState(RENDERTYPE_LINES_SHADER)
+                    // .setLayeringState(VIEW_OFFSET_Z_LAYERING)
+                    .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+                    .setCullState(NO_CULL)
+                    .setWriteMaskState(COLOR_WRITE)
+                    .setDepthTestState(NO_DEPTH_TEST)
                     .createCompositeState(false));
 
-    public static final RenderType FLAT_CUTOUT = opaque("flat_translucent", new TextureStateShard(BLANK_TEXTURE, false, false));
-    public static final RenderType FLAT_TRANSLUCENT = translucent("flat_translucent", new TextureStateShard(BLANK_TEXTURE, false, false));
-    public static final RenderType LINEAR_GLOW = translucent("glow", new TextureStateShard(LIN_GLOW_TEXTURE, false, false));
-    public static final RenderType ROUND_GLOW = translucent("glow", new TextureStateShard(RND_GLOW_TEXTURE, false, false));
+    public static final RenderType OVERLAY_BOX = RenderType.create("cofh:overlay_box",
+            DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.QUADS, 256, false, true,
+            RenderType.CompositeState.builder()
+                    .setShaderState(POSITION_COLOR_SHADER)
+                    .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+                    .setWriteMaskState(COLOR_WRITE)
+                    .setDepthTestState(NO_DEPTH_TEST)
+                    .createCompositeState(false)
+    );
+
+    //    public static final RenderType BOX = RenderType.create("cofh:box_depth",
+    //            DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.QUADS, 256, false, true,
+    //            RenderType.CompositeState.builder()
+    //                    .setShaderState(POSITION_COLOR_SHADER)
+    //                    .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+    //                    .setWriteMaskState(COLOR_WRITE)
+    //                    .createCompositeState(false)
+    //    );
+
+    public static final RenderType FLAT_CUTOUT = opaque("cofh:opaque", new TextureStateShard(BLANK_TEXTURE, false, false));
+    public static final RenderType FLAT_TRANSLUCENT = translucentNoDepthWrite(BLANK_TEXTURE);
+    public static final RenderType LINEAR_GLOW = translucentNoDepthWrite(LIN_GLOW_TEXTURE);
+    public static final RenderType ROUND_GLOW = translucentNoDepthWrite(RND_GLOW_TEXTURE);
 
     public static RenderType opaque(String name, TextureStateShard texture) {
 
@@ -55,14 +81,32 @@ public class RenderTypes {
 
     public static RenderType translucent(ResourceLocation texture) {
 
-        return translucent("cofh_translucent", new RenderStateShard.TextureStateShard(texture, false, false));
+        return RenderType.create("cofh:translucent", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true,
+                RenderType.CompositeState.builder()
+                        .setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
+                        .setShaderState(NEW_ENTITY_SHADER)
+                        .setWriteMaskState(COLOR_DEPTH_WRITE)
+                        .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+                        .createCompositeState(false));
     }
 
-    public static RenderType translucent(String name, TextureStateShard texture) {
+    public static RenderType translucentNoCull(ResourceLocation texture) {
 
-        return RenderType.create(name, DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true,
+        return RenderType.create("cofh:translucent", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true,
                 RenderType.CompositeState.builder()
-                        .setTextureState(texture)
+                        .setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
+                        .setShaderState(NEW_ENTITY_SHADER)
+                        .setWriteMaskState(COLOR_WRITE)
+                        .setCullState(NO_CULL)
+                        .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+                        .createCompositeState(false));
+    }
+
+    public static RenderType translucentNoDepthWrite(ResourceLocation texture) {
+
+        return RenderType.create("cofh:translucent", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true,
+                RenderType.CompositeState.builder()
+                        .setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
                         .setShaderState(NEW_ENTITY_SHADER)
                         .setWriteMaskState(COLOR_WRITE)
                         .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
@@ -80,7 +124,7 @@ public class RenderTypes {
             @Override
             public void begin(BufferBuilder builder, TextureManager manager) {
 
-                RenderSystem.depthMask(false); //TODO post shader
+                RenderSystem.depthMask(false); // TODO post shader
                 RenderSystem.enableBlend();
                 RenderSystem.setShader(shader);
                 RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_PARTICLES);

@@ -1,6 +1,5 @@
 package cofh.core.init;
 
-import cofh.core.client.particle.impl.StreamParticle;
 import cofh.core.client.particle.types.ColorParticleType;
 import cofh.core.client.particle.types.CylindricalParticleType;
 import cofh.core.client.particle.types.PointToPointParticleType;

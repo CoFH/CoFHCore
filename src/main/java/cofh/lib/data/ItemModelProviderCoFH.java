@@ -132,7 +132,7 @@ public abstract class ItemModelProviderCoFH extends ItemModelProvider {
 
     protected ItemModelBuilder generated(Supplier<? extends ItemLike> item, ResourceLocation texture) {
 
-        return getBuilder(name(item)).parent(new UncheckedModelFile("item/generated")).texture("layer0", texture);
+        return getBuilder(name(item)).parent(new UncheckedModelFile("minecraft:item/generated")).texture("layer0", texture);
     }
 
     protected ItemModelBuilder handheld(Supplier<? extends ItemLike> item) {
@@ -147,7 +147,7 @@ public abstract class ItemModelProviderCoFH extends ItemModelProvider {
 
     protected ItemModelBuilder handheld(Supplier<? extends ItemLike> item, ResourceLocation texture) {
 
-        return withExistingParent(name(item), "item/handheld").texture("layer0", texture);
+        return withExistingParent(name(item), "minecraft:item/handheld").texture("layer0", texture);
     }
     // endregion
 }

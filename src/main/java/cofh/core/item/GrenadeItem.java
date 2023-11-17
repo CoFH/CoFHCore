@@ -77,7 +77,7 @@ public class GrenadeItem extends ItemCoFH {
     private static final AbstractProjectileDispenseBehavior DISPENSER_BEHAVIOR = new AbstractProjectileDispenseBehavior() {
 
         @Override
-        protected Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
+        public Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
 
             GrenadeItem grenadeItem = ((GrenadeItem) stackIn.getItem());
             AbstractGrenade grenade = grenadeItem.factory.createGrenade(worldIn, position.x(), position.y(), position.z());

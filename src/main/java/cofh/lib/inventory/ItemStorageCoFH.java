@@ -207,7 +207,7 @@ public class ItemStorageCoFH implements IItemHandler, IItemStackHolder, IResourc
             return stack;
         }
         if (item.isEmpty()) {
-            int maxStack = capacity <= 0 ? stack.getMaxStackSize() : capacity;
+            int maxStack = getSlotLimit(slot);
             int count = Math.min(stack.getCount(), maxStack);
             if (!simulate) {
                 setItemStack(cloneStack(stack, count));

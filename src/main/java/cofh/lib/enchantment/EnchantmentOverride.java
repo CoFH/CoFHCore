@@ -11,12 +11,6 @@ public abstract class EnchantmentOverride extends EnchantmentCoFH {
         super(rarityIn, typeIn, slots);
     }
 
-    public EnchantmentCoFH setEnable(boolean enable) {
-
-        this.enable = enable;
-        return this;
-    }
-
     @Override
     public boolean isEnabled() {
 

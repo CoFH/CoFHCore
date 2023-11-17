@@ -46,10 +46,10 @@ public class AreaEffectEvents {
             return;
         }
         BlockPos origin = event.getPos();
-        if (HARVESTED_BLOCKS.contains(origin)) {
+        if (isAreaHarvested(origin)) {
             return;
         }
-        HARVESTED_BLOCKS.add(origin);
+        //HARVESTED_BLOCKS.add(origin);
         ItemStack stack = player.getMainHandItem();
         if (!validAreaEffectMiningItem(stack)) {
             return;
@@ -176,6 +176,11 @@ public class AreaEffectEvents {
     //}
 
     // region HELPERS
+    public static boolean isAreaHarvested(BlockPos pos) {
+
+        return HARVESTED_BLOCKS.contains(pos);
+    }
+
     private static float getMaxHardness(BlockGetter world, List<BlockPos> areaBlocks, float curHardness) {
 
         float maxHardness = curHardness;

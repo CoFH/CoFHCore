@@ -31,7 +31,7 @@ public class IOItemHandler extends SimpleItemHandler {
     public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
 
         if (!allowInsert.get()) {
-            return ItemStack.EMPTY;
+            return stack;
         }
         return super.insertItem(slot, stack, simulate);
     }

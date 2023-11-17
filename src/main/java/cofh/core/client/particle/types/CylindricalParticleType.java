@@ -13,7 +13,7 @@ public class CylindricalParticleType extends ParticleType<CylindricalParticleOpt
 
     public CylindricalParticleType() {
 
-        this(false);
+        this(true);
     }
 
     @Override

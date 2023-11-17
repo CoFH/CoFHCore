@@ -35,7 +35,11 @@ public abstract class MouseHandlerMixin {
         if (effect == null) {
             return sensitivity;
         }
-        float reduction = 15F / (16F + effect.getAmplifier());
+        int amplifier = effect.getAmplifier();
+        if (amplifier < 0) {
+            return sensitivity;
+        }
+        float reduction = 15F / (16F + amplifier);
         reduction *= reduction;
         reduction *= reduction;
         return sensitivity * Math.max(reduction * reduction, 0.1F);

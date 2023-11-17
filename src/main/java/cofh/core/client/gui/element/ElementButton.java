@@ -11,6 +11,11 @@ public class ElementButton extends ElementBase {
         super(gui, posX, posY);
     }
 
+    public ElementButton(IGuiAccess gui, int posX, int posY, int width, int height) {
+
+        super(gui, posX, posY, width, height);
+    }
+
     @Override
     public void drawBackground(PoseStack matrixStack, int mouseX, int mouseY) {
 

@@ -4,7 +4,7 @@ import cofh.core.client.gui.element.ElementButton;
 import cofh.core.client.gui.element.ElementTexture;
 import cofh.core.client.gui.element.SimpleTooltip;
 import cofh.core.inventory.container.ItemFilterContainer;
-import cofh.core.network.packet.server.TileFilterGuiOpenPacket;
+import cofh.core.network.packet.server.FilterableGuiTogglePacket;
 import cofh.core.util.helpers.FilterHelper;
 import cofh.core.util.helpers.RenderHelper;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -51,25 +51,54 @@ public class ItemFilterScreen extends ContainerScreenCoFH<ItemFilterContainer> {
         }
         addButtons();
 
-        // Filter Tab
-        addElement(new ElementTexture(this, 4, -21)
-                .setUV(24, 0)
-                .setSize(24, 21)
-                .setTexture(TAB_TOP, 48, 32)
-                .setVisible(() -> FilterHelper.hasFilter(menu.getFilterableTile())));
-        addElement(new ElementTexture(this, 8, -17) {
+        switch (menu.type) {
+            case ITEM -> {
+                if (menu.getFilterableItem().hasGui(menu.getFilterStack())) {
+                    // Filter Tab
+                    addElement(new ElementTexture(this, 4, -21)
+                            .setUV(24, 0)
+                            .setSize(24, 21)
+                            .setTexture(TAB_TOP, 48, 32)
+                            .setVisible(() -> FilterHelper.hasFilter(menu.getFilterStack())));
+                    addElement(new ElementTexture(this, 8, -17) {
 
-            @Override
-            public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+                        @Override
+                        public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
 
-                TileFilterGuiOpenPacket.openTileGui(menu.getFilterableTile());
-                return true;
+                            FilterableGuiTogglePacket.openGui(menu.getFilterStack());
+                            return true;
+                        }
+                    }
+                            .setSize(16, 16)
+                            .setTexture(NAV_BACK, 16, 16)
+                            .setTooltipFactory((element, mouseX, mouseY) -> menu.getFilterableItem() instanceof MenuProvider menuProvider ? Collections.singletonList(menuProvider.getDisplayName()) : Collections.emptyList())
+                            .setVisible(() -> FilterHelper.hasFilter(menu.getFilterStack())));
+                }
+            }
+            case TILE, ENTITY -> {
+                if (menu.getFilterable().hasGui()) {
+                    // Filter Tab
+                    addElement(new ElementTexture(this, 4, -21)
+                            .setUV(24, 0)
+                            .setSize(24, 21)
+                            .setTexture(TAB_TOP, 48, 32)
+                            .setVisible(() -> FilterHelper.hasFilter(menu.getFilterable())));
+                    addElement(new ElementTexture(this, 8, -17) {
+
+                        @Override
+                        public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+
+                            FilterableGuiTogglePacket.openGui(menu.getFilterable());
+                            return true;
+                        }
+                    }
+                            .setSize(16, 16)
+                            .setTexture(NAV_BACK, 16, 16)
+                            .setTooltipFactory((element, mouseX, mouseY) -> menu.getFilterable() instanceof MenuProvider menuProvider ? Collections.singletonList(menuProvider.getDisplayName()) : Collections.emptyList())
+                            .setVisible(() -> FilterHelper.hasFilter(menu.getFilterable())));
+                }
             }
         }
-                .setSize(16, 16)
-                .setTexture(NAV_BACK, 16, 16)
-                .setTooltipFactory((element, mouseX, mouseY) -> menu.getFilterableTile() instanceof MenuProvider menuProvider ? Collections.singletonList(menuProvider.getDisplayName()) : Collections.emptyList())
-                .setVisible(() -> FilterHelper.hasFilter(menu.getFilterableTile())));
     }
 
     @Override

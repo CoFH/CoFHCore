@@ -2,6 +2,7 @@ package cofh.lib.util.helpers;
 
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
 /**
@@ -18,12 +19,15 @@ public final class MathHelper {
     public static final RandomSource RANDOM = RandomSource.create();
     public static final double PI = Math.PI;
     public static final double PI_2 = Math.PI * 2.0D;
-    public static final float F_PI = (float) Math.PI;
-    public static final float F_TAU = (float) Math.PI * 2.0F;
     public static final double PHI = 1.618033988749894;
     public static final double TO_DEG = 57.29577951308232;
     public static final double TO_RAD = 0.017453292519943;
     public static final double SQRT_2 = 1.414213562373095;
+
+    public static final float F_PI = (float) Math.PI;
+    public static final float F_TAU = (float) Math.PI * 2.0F;
+    public static final float F_TO_DEG = (float) TO_DEG;
+    public static final float F_TO_RAD = (float) TO_RAD;
 
     public static final double[] SIN_TABLE = new double[65536];
     public static final float[] ASIN_TABLE = new float[65536];
@@ -123,6 +127,11 @@ public final class MathHelper {
     public static float asin(float d) {
 
         return ASIN_TABLE[(int) (d * 32768.0F + 32768.0F) & 65535];
+    }
+
+    public static float acos(float d) {
+
+        return asin(-d) + F_PI * 0.5F;
     }
     // endregion
 
@@ -385,6 +394,19 @@ public final class MathHelper {
         Vec3 center = point.subtract(lineStart);
         Vec3 disp = lineEnd.subtract(lineStart);
         return disp.cross(center).length() / disp.length();
+    }
+
+    public static Vec2 decomposeLookVector(Vec3 v) {
+
+        float xRot = v.y <= -1 ? MathHelper.F_PI * 0.5F : asin((float) -v.y);
+        if (Math.abs(-v.y) > 0.9999) {
+            return new Vec2(xRot * F_TO_DEG, 0);
+        }
+        float yRot = asin((float) v.x / cos(xRot));
+        if (v.z < 0) {
+            yRot = MathHelper.F_PI - yRot;
+        }
+        return new Vec2(xRot * F_TO_DEG, -yRot * F_TO_DEG);
     }
 
 }

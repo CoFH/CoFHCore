@@ -44,28 +44,28 @@ public class WindVortexParticle extends CylindricalParticle {
         float progress = time / duration;
         float easePlat = MathHelper.easePlateau(progress);
 
-        stack.scale(size * 0.2F, height * rand.nextFloat(-0.5F, 0.5F), size * 0.2F);
+        stack.scale(size * 0.17F, height * rand.nextFloat(-0.5F, 0.5F), size * 0.17F);
 
         float incr = VFXHelper.WIND_INCR;
-        Vector4f[] poss = new Vector4f[rand.nextInt(10, 20)];
+        Vector4f[] posns = new Vector4f[rand.nextInt(10, 20)];
         float angle = 3.125F * (1.0F - progress);
-        int outer = MathHelper.clamp(MathHelper.ceil(angle / incr), 0, poss.length);
+        int outer = MathHelper.clamp(MathHelper.ceil(angle / incr), 0, posns.length);
         for (int i = 0; i < outer; ++i) {
             float rot = angle - i * incr;
-            float r = 0.5F + 0.3F * rot * (1.0F - MathHelper.cos(rot));
+            float r = 0.6F + 0.4F * rot * (1.0F - MathHelper.cos(rot));
             float y = 0.25F + 0.25F * (1.0F - MathHelper.cos(rot * 0.32F * MathHelper.F_PI * 0.5F));
             rot += roll;
-            poss[i] = new Vector4f(r * MathHelper.cos(rot), y, r * MathHelper.sin(rot), 1.0F);
+            posns[i] = new Vector4f(r * MathHelper.cos(rot), y, r * MathHelper.sin(rot), 1.0F);
         }
-        for (int i = outer; i < poss.length; ++i) {
+        for (int i = outer; i < posns.length; ++i) {
             float rot = angle - i * incr;
-            float r = 0.5F;
+            float r = 0.6F;
             rot += roll;
-            poss[i] = new Vector4f(r * MathHelper.cos(rot), 0.25F, r * MathHelper.sin(rot), 1.0F);
+            posns[i] = new Vector4f(r * MathHelper.cos(rot), 0.25F, r * MathHelper.sin(rot), 1.0F);
         }
         Color color = c0.scaleAlpha(easePlat);
-        VFXHelper.renderStreamLine(stack, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLight, poss, color, VFXHelper.getWidthFunc((float) rand.nextDouble(0.04F, 0.05F)));
-        VFXHelper.renderCyclone(stack, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLight, 1, (float) rand.nextDouble(0.04F, 0.05F), progress * 0.5F + (float) rand.nextDouble(420F), color.a * 0.00392157F);
+        VFXHelper.renderStreamLine(stack, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLight, posns, color, VFXHelper.getWidthFunc((float) rand.nextDouble(0.05F, 0.07F)));
+        VFXHelper.renderCyclone(stack, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLight, 1, (float) rand.nextDouble(0.05F, 0.07F), progress * 0.5F + (float) rand.nextDouble(420F), color.a * 0.00392157F);
     }
 
     @Nonnull

@@ -115,7 +115,7 @@ public class ArrowItemCoFH extends ArrowItem implements ICoFHItem {
     private static final AbstractProjectileDispenseBehavior DISPENSER_BEHAVIOR = new AbstractProjectileDispenseBehavior() {
 
         @Override
-        protected Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
+        public Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
 
             ArrowItemCoFH arrowItem = ((ArrowItemCoFH) stackIn.getItem());
             AbstractArrow arrow = arrowItem.factory.createArrow(worldIn, position.x(), position.y(), position.z());

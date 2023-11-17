@@ -2,9 +2,11 @@ package cofh.core.util.helpers.vfx;
 
 import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.util.helpers.MathHelper;
+import com.google.common.collect.ImmutableSortedMap;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.*;
+import it.unimi.dsi.fastutil.floats.Float2ObjectOpenHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -12,6 +14,7 @@ import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
@@ -19,8 +22,8 @@ import net.minecraft.world.phys.Vec2;
 import net.minecraftforge.client.model.data.ModelData;
 
 import java.util.*;
+import java.util.function.BiPredicate;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 import static cofh.core.util.helpers.vfx.RenderTypes.*;
 
@@ -46,9 +49,14 @@ public final class VFXHelper {
         return new VFXNode(MathHelper.interpolate(a.xp, b.xp, d), MathHelper.interpolate(a.xn, b.xn, d), MathHelper.interpolate(a.yp, b.yp, d), MathHelper.interpolate(a.yn, b.yn, d), MathHelper.interpolate(a.z, b.z, d), MathHelper.interpolate(a.width, b.width, d));
     }
 
+    public static Vector4f interpolate(Vector4f a, Vector4f b, float d) {
+
+        return new Vector4f(MathHelper.interpolate(a.x(), b.x(), d), MathHelper.interpolate(a.y(), b.y(), d), MathHelper.interpolate(a.z(), b.z(), d), MathHelper.interpolate(a.w(), b.w(), d));
+    }
+
     private static VFXNode interpolateCap(VFXNode a, VFXNode b) {
 
-        return interpolate(a, b, 1.0F + b.width * 0.5F / MathHelper.dist(a.xMid() - b.xMid(), a.yMid() - b.yMid(), a.z - b.z)); //TODO
+        return interpolate(a, b, 1.0F + b.width * 0.5F / MathHelper.dist(a.xMid() - b.xMid(), a.yMid() - b.yMid(), a.z - b.z)); // TODO
     }
 
     public static Vector4f subtract(Vector4f a, Vector4f b) {
@@ -192,21 +200,14 @@ public final class VFXHelper {
      */
     public static Quaternion alignVertical(Vector3f dir) {
 
-        Vector3f d = dir.copy();
-        d.normalize();
-        boolean neg = d.y() < 0;
-        if (d.x() * d.x() + d.z() * d.z() > 0.001) {
-            d.cross(Vector3f.YP);
-            float angle = -MathHelper.asin(length(d));
-            if (neg) {
-                angle = -(MathHelper.F_PI + angle);
-            }
-            d.normalize();
-            return d.rotation(angle);
-        } else if (neg) {
-            return Vector3f.XP.rotation(MathHelper.F_PI);
+        if (dir.x() == 0 && dir.y() == 0 && dir.z() == 0) {
+            return Quaternion.ONE;
         }
-        return Quaternion.ONE;
+        Vector3f d = dir.copy();
+        d.mul(1 / length(d));
+        d.add(0, 1, 0);
+        d.normalize();
+        return d.rotation(MathHelper.F_PI);
     }
 
     /**
@@ -215,20 +216,7 @@ public final class VFXHelper {
      */
     public static void alignVertical(PoseStack stack, Vector3f dir) {
 
-        Vector3f d = dir.copy();
-        d.normalize();
-        boolean neg = d.y() < 0;
-        if (d.x() * d.x() + d.z() * d.z() > 0.001) {
-            d.cross(Vector3f.YP);
-            float angle = -MathHelper.asin(length(d));
-            if (neg) {
-                angle = -(MathHelper.F_PI + angle);
-            }
-            d.normalize();
-            stack.mulPose(d.rotation(angle));
-        } else if (neg) {
-            stack.mulPose(Vector3f.XP.rotation(MathHelper.F_PI));
-        }
+        stack.mulPose(alignVertical(dir));
     }
 
     /**
@@ -318,7 +306,7 @@ public final class VFXHelper {
     // endregion
 
     // region SHOCKWAVE
-    private static final SortedMap<Float, List<int[]>> shockwaveOffsets = getOffsets(16);
+    public static final SortedMap<Float, List<Function<Integer, Vec3i>>> SHOCKWAVE_OFFSETS = getOffsets(16);
 
     /**
      * Renders a block shockwave that radially propagates from the origin.
@@ -330,23 +318,24 @@ public final class VFXHelper {
      * @param heightScale Adjusts how high the blocks travel.
      * @param canRender   Predicate for filtering which blocks are to be rendered.
      */
-    public static void renderShockwave(PoseStack stack, MultiBufferSource buffer, Level level, BlockPos origin, float time, float diameter, float heightScale, Predicate<BlockPos> canRender) {
+    public static void renderShockwave(PoseStack stack, MultiBufferSource buffer, Level level, BlockPos origin, float time, float diameter, float heightScale, BiPredicate<BlockPos, BlockState> canRender) {
 
         BlockRenderDispatcher renderer = RenderHelper.renderBlock();
         float radius = diameter * 0.5F;
         float invRadius = 1 / radius;
-        SortedMap<Float, List<int[]>> blocks = shockwaveOffsets.subMap(Math.min(time - 5, radius), Math.min(time, radius));
+        SortedMap<Float, List<Function<Integer, Vec3i>>> blocks = SHOCKWAVE_OFFSETS.subMap(Math.min(time - 5, radius), Math.min(time, radius));
         for (Float dist : blocks.keySet()) {
             float progress = time - dist;
             double height = heightScale * 0.16 * (radius - dist * 0.5F) * progress * (5 - progress) * invRadius;
-            for (int[] offset : blocks.get(dist)) {
+            for (Function<Integer, Vec3i> offsetFunc : blocks.get(dist)) {
                 for (int y = 1; y >= -1; --y) {
-                    BlockPos pos = origin.offset(offset[0], y, offset[1]);
+                    Vec3i offset = offsetFunc.apply(y);
+                    BlockPos pos = origin.offset(offset);
                     BlockState state = level.getBlockState(pos);
-                    if (canRender.test(pos)) {
+                    if (canRender.test(pos, state)) {
                         if (state.getRenderShape() == RenderShape.MODEL) {
                             stack.pushPose();
-                            stack.translate(offset[0], height + y, offset[1]);
+                            stack.translate(offset.getX(), height + y, offset.getZ());
                             stack.scale(1.01F, 1.01F, 1.01F);
 
                             // ModelData modelData = renderer.getBlockModel(state).getModelData(level, pos, state, ModelData.EMPTY);
@@ -365,50 +354,47 @@ public final class VFXHelper {
 
     public static void renderShockwave(PoseStack stack, MultiBufferSource buffer, Level world, BlockPos origin, float time, float diameter, float heightScale) {
 
-        renderShockwave(stack, buffer, world, origin, time, diameter, heightScale, pos -> {
-            BlockState state = world.getBlockState(pos);
-            return !state.isAir() && state.isRedstoneConductor(world, pos) && // TODO: hardness/blast resist?
-                    state.isCollisionShapeFullBlock(world, pos) && !state.hasBlockEntity() &&
-                    !world.getBlockState(pos.above()).isCollisionShapeFullBlock(world, pos.above());
-        });
+        renderShockwave(stack, buffer, world, origin, time, diameter, heightScale, (pos, state) ->
+                !state.isAir() && state.isRedstoneConductor(world, pos) &&
+                        state.isCollisionShapeFullBlock(world, pos) && !state.hasBlockEntity() &&
+                        !world.getBlockState(pos.above()).isCollisionShapeFullBlock(world, pos.above()));
     }
 
-    private static SortedMap<Float, List<int[]>> getOffsets(int maxRadius) {
+    private static SortedMap<Float, List<Function<Integer, Vec3i>>> getOffsets(int maxRadius) {
 
-        SortedMap<Float, List<int[]>> blocks = new TreeMap<>();
+        Map<Float, List<Function<Integer, Vec3i>>> blocks = new Float2ObjectOpenHashMap<>();
         float maxSqr = maxRadius * maxRadius;
-        for (int x = 0; x <= MathHelper.ceil(maxRadius); ++x) {
-            for (int z = 0; z <= x; ++z) {
+        for (int x = -maxRadius; x <= maxRadius; ++x) {
+            for (int z = -maxRadius; z <= maxRadius; ++z) {
                 int distSqr = x * x + z * z;
                 if (distSqr < maxSqr) {
                     float dist = MathHelper.sqrt(distSqr);
-                    if (!blocks.containsKey(dist)) {
-                        blocks.put(dist, new ArrayList<>());
-                    }
-                    addReflections(blocks.get(dist), x, z);
+                    final int fx = x;
+                    final int fz = z;
+                    blocks.computeIfAbsent(dist, d -> new ArrayList<>()).add(y -> new Vec3i(fx, y, fz));
                 }
             }
         }
-        return blocks;
+        return ImmutableSortedMap.copyOf(blocks);
     }
 
-    private static void addReflections(List<int[]> list, int x, int z) {
-
-        list.add(new int[]{x, z});
-        list.add(new int[]{-x, -z});
-        if (z != 0) {
-            list.add(new int[]{-x, z});
-            list.add(new int[]{x, -z});
-        }
-        if (x != 0 && x != z) {
-            list.add(new int[]{z, x});
-            list.add(new int[]{-z, -x});
-            if (z != 0) {
-                list.add(new int[]{-z, x});
-                list.add(new int[]{z, -x});
-            }
-        }
-    }
+    //private static void addReflections(List<int[]> list, int x, int z) {
+    //
+    //    list.add(y -> new V);
+    //    list.add(new int[]{-x, -z});
+    //    if (z != 0) {
+    //        list.add(new int[]{-x, z});
+    //        list.add(new int[]{x, -z});
+    //    }
+    //    if (x != 0 && x != z) {
+    //        list.add(new int[]{z, x});
+    //        list.add(new int[]{-z, -x});
+    //        if (z != 0) {
+    //            list.add(new int[]{-z, x});
+    //            list.add(new int[]{z, -x});
+    //        }
+    //    }
+    //}
     // endregion
 
     // region ELECTRICITY

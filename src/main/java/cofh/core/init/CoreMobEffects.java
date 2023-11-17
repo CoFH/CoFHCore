@@ -33,6 +33,7 @@ public class CoreMobEffects {
     public static final RegistryObject<MobEffect> CLARITY = MOB_EFFECTS.register(ID_EFFECT_CLARITY, () -> new MobEffectCoFH(MobEffectCategory.BENEFICIAL, 0x70FF00));
     public static final RegistryObject<MobEffect> LOVE = MOB_EFFECTS.register(ID_EFFECT_LOVE, () -> new LoveMobEffect(MobEffectCategory.BENEFICIAL, 0xFF7099));
     public static final RegistryObject<MobEffect> PANACEA = MOB_EFFECTS.register(ID_EFFECT_PANACEA, () -> new PanaceaMobEffect(MobEffectCategory.BENEFICIAL, 0x769CD7));
+    public static final RegistryObject<MobEffect> TRUE_INVISIBILITY = MOB_EFFECTS.register(ID_EFFECT_TRUE_INVISIBILITY, () -> new MobEffectCoFH(MobEffectCategory.BENEFICIAL, 0x7F8392));
 
     public static final RegistryObject<MobEffect> ENDERFERENCE = MOB_EFFECTS.register(ID_EFFECT_ENDERFERENCE, () -> new MobEffectCoFH(MobEffectCategory.NEUTRAL, 0x093755)); // 0x1B574D));
     public static final RegistryObject<MobEffect> SLIMED = MOB_EFFECTS.register(ID_EFFECT_SLIMED, () -> new MobEffectCoFH(MobEffectCategory.NEUTRAL, 0x8CD782));

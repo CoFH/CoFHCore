@@ -5,6 +5,9 @@ import cofh.lib.util.raytracer.RayTracer;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DiggerItem;
@@ -18,10 +21,10 @@ import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.tags.ITagManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -30,6 +33,7 @@ import static cofh.core.util.references.EnsorcIDs.ID_EXCAVATING;
 import static cofh.lib.util.Utils.getEnchantment;
 import static cofh.lib.util.Utils.getItemEnchantmentLevel;
 import static cofh.lib.util.constants.ModIds.ID_ENSORCELLATION;
+import static cofh.lib.util.constants.NBTTags.*;
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.*;
 
 public final class AreaEffectHelper {
@@ -54,6 +58,18 @@ public final class AreaEffectHelper {
     public static ImmutableList<BlockPos> getAreaEffectBlocks(ItemStack stack, BlockPos pos, Player player) {
 
         int encExcavating = getItemEnchantmentLevel(getEnchantment(ID_ENSORCELLATION, ID_EXCAVATING), stack);
+        if (!stack.isEmpty() && stack.hasTag()) {
+            CompoundTag tag = stack.getTag();
+            if (tag.contains(TAG_INFUSION_ENCHANT, Tag.TAG_LIST)) {
+                ListTag list = tag.getList(TAG_INFUSION_ENCHANT, Tag.TAG_COMPOUND);
+                for (int i = 0; i < list.size(); ++i) {
+                    CompoundTag enchant = list.getCompound(i);
+                    if (enchant.getString(TAG_ID).equals("thaumcraft:destructive")) {
+                        encExcavating += enchant.getInt(TAG_LEVEL);
+                    }
+                }
+            }
+        }
         if (encExcavating > 0) {
             return getBreakableBlocksRadius(stack, pos, player, encExcavating);
         }
@@ -260,19 +276,17 @@ public final class AreaEffectHelper {
 
         BlockState state = world.getBlockState(pos);
         Block block = state.getBlock();
-        ITagManager<Block> tags = ForgeRegistries.BLOCKS.tags();
-        if (tags == null) {
-            return ImmutableList.of();
-        }
 
         Predicate<BlockPos> exact = p -> world.getBlockState(p).is(block) && canToolAffect(tool, stack, world, p);
         // Match logs based on tag
-        Predicate<BlockPos> match = tags.getReverseTag(state.getBlock()).map(rev -> {
-            if (rev.containsTag(BlockTags.LOGS)) {
-                return rev.getTagKeys().filter(key -> key.location().getPath().contains("_logs")).findAny().map(key -> exact.or(p -> world.getBlockState(p).is(key))).orElse(exact);
-            }
-            return exact;
-        }).orElse(exact);
+        Predicate<BlockPos> match = Optional.ofNullable(ForgeRegistries.BLOCKS.tags()).flatMap(tags ->
+                tags.getReverseTag(block).map(rev -> {
+                    if (rev.containsTag(BlockTags.LOGS)) {
+                        return rev.getTagKeys().filter(key -> key.location().getPath().contains("_logs")).findAny().map(key -> exact.or(p -> world.getBlockState(p).is(key))).orElse(exact);
+                    }
+                    return exact;
+                })
+        ).orElse(exact);
 
         BlockPos.MutableBlockPos mutable = pos.mutable();
         ImmutableList.Builder<BlockPos> builder = ImmutableList.builder();

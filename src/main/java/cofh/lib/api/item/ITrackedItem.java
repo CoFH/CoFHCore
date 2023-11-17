@@ -61,7 +61,7 @@
 //        ItemStack newMain = player.getMainHandItem();
 //        ItemStack newOff = player.getOffhandItem();
 //        if (oldMain != null && oldMain.stack.getItem() instanceof ITrackedItem item) {
-//            if (!oldMain.stack.equals(newMain)) { //TODO itemstack equality
+//            if (!oldMain.stack.equals(newMain)) { // TODO itemstack equality
 //                if (oldMain.stack.equals(newOff)) {
 //                    offHand.put(player, oldMain);
 //                    item.onSwapHand(player, OFF_HAND, oldMain);

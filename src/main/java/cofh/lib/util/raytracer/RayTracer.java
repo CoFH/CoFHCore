@@ -1,12 +1,9 @@
 package cofh.lib.util.raytracer;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.ForgeMod;
 
 public class RayTracer {
 
@@ -67,17 +64,7 @@ public class RayTracer {
 
     public static double getBlockReachDistance(Player player) {
 
-        return player.level.isClientSide ? getBlockReachDistanceClient() : player instanceof ServerPlayer serverplayer ? getBlockReachDistanceServer(serverplayer) : 5D;
-    }
-
-    private static double getBlockReachDistanceServer(ServerPlayer player) {
-
-        return player.getAttribute(ForgeMod.REACH_DISTANCE.get()).getValue();
-    }
-
-    private static double getBlockReachDistanceClient() {
-
-        return Minecraft.getInstance().gameMode.getPickRange();
+        return player.getReachDistance();
     }
 
 }

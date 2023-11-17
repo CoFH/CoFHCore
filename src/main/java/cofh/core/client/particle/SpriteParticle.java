@@ -57,7 +57,7 @@ public abstract class SpriteParticle extends ColorParticle {
 
     protected void updateVelocity() {
 
-        this.yd -= 0.04D * (double)this.gravity;
+        this.yd -= 0.04D * (double) this.gravity;
         if (this.speedUpWhenYMotionIsBlocked && this.y == this.yo) {
             this.xd *= 1.1D;
             this.zd *= 1.1D;

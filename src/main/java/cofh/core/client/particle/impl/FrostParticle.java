@@ -1,10 +1,13 @@
 package cofh.core.client.particle.impl;
 
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.*;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.core.particles.SimpleParticleType;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 
 public class FrostParticle extends TextureSheetParticle {
 
@@ -36,25 +39,15 @@ public class FrostParticle extends TextureSheetParticle {
         //return RenderTypes.PARTICLE_SHEET_OVER;
     }
 
-    public static class Factory implements ParticleProvider<SimpleParticleType> {
+    @Nonnull
+    public static ParticleProvider<SimpleParticleType> factory(SpriteSet spriteSet) {
 
-        private final SpriteSet spriteSet;
-
-        public Factory(SpriteSet sprite) {
-
-            this.spriteSet = sprite;
-        }
-
-        @Nullable
-        @Override
-        public Particle createParticle(SimpleParticleType data, ClientLevel level, double x, double y, double z, double dx, double dy, double dz) {
-
+        return (data, level, x, y, z, dx, dy, dz) -> {
             FrostParticle particle = new FrostParticle(level, x, y, z, dx, dy, dz);
             particle.pickSprite(spriteSet);
             particle.setAlpha(level.random.nextFloat() * 0.2F + 0.7F);
             return particle;
-        }
-
+        };
     }
 
 }

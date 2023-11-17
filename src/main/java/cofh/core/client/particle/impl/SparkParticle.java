@@ -1,10 +1,13 @@
 package cofh.core.client.particle.impl;
 
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.*;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.core.particles.SimpleParticleType;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 
 public class SparkParticle extends TextureSheetParticle {
 
@@ -45,22 +48,10 @@ public class SparkParticle extends TextureSheetParticle {
         return 0x00F000F0;
     }
 
-    public static class Factory implements ParticleProvider<SimpleParticleType> {
+    @Nonnull
+    public static ParticleProvider<SimpleParticleType> factory(SpriteSet spriteSet) {
 
-        private final SpriteSet spriteSet;
-
-        public Factory(SpriteSet sprite) {
-
-            this.spriteSet = sprite;
-        }
-
-        @Nullable
-        @Override
-        public Particle createParticle(SimpleParticleType data, ClientLevel level, double x, double y, double z, double dx, double dy, double dz) {
-
-            return new SparkParticle(level, x, y, z, dx, dy, dz, spriteSet);
-        }
-
+        return (data, level, x, y, z, dx, dy, dz) -> new SparkParticle(level, x, y, z, dx, dy, dz, spriteSet);
     }
 
 }

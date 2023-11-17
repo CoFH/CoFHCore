@@ -12,16 +12,4 @@ public abstract class AbstractAoESpell extends AbstractSpell {
         super(type, level);
     }
 
-    //@Override
-    //protected void readAdditionalSaveData(CompoundTag nbt) {
-    //
-    //    nbt.putFloat(NBTTags.TAG_AUGMENT_RADIUS, radius);
-    //}
-    //
-    //@Override
-    //protected void addAdditionalSaveData(CompoundTag nbt) {
-    //
-    //    radius = nbt.getFloat(NBTTags.TAG_AUGMENT_RADIUS);
-    //}
-
 }

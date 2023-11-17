@@ -1,23 +1,27 @@
 package cofh.core.network.packet.server;
 
 import cofh.core.CoFHCore;
-import cofh.core.util.helpers.ItemHelper;
+import cofh.core.item.IEntityRayTraceItem;
+import cofh.core.util.ProxyUtils;
 import cofh.lib.network.packet.IPacketServer;
 import cofh.lib.network.packet.PacketBase;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
 import static cofh.core.network.packet.PacketIDs.PACKET_ITEM_RAYTRACE_ENTITY;
 
 public class ItemRayTraceEntityPacket extends PacketBase implements IPacketServer {
 
-    protected int targetId;
+    protected InteractionHand hand;
     protected Vec3 origin;
-    protected Vec3 hit;
+    protected int targetId;
+    protected Vec3 offset;
+    protected float power;
 
     public ItemRayTraceEntityPacket() {
 
@@ -27,41 +31,50 @@ public class ItemRayTraceEntityPacket extends PacketBase implements IPacketServe
     @Override
     public void handleServer(ServerPlayer player) {
 
-        if (!ItemHelper.isPlayerHoldingEntityRayTraceItem(player)) {
-            return;
+        ItemStack stack = player.getItemInHand(hand);
+        if (stack.getItem() instanceof IEntityRayTraceItem item) {
+            Entity target = player.getLevel().getEntityOrPart(targetId);
+            if (target != null) {
+                item.handleEntityRayTrace(player.level, player, hand, stack, origin, target, target.position().add(offset), power);
+            }
         }
-        ItemHelper.onRayTraceEntity(player, targetId, origin, hit);
     }
 
     @Override
     public void write(FriendlyByteBuf buf) {
 
-        buf.writeInt(targetId);
+        buf.writeEnum(hand);
         buf.writeDouble(origin.x);
         buf.writeFloat((float) origin.y);
         buf.writeDouble(origin.z);
-        buf.writeDouble(hit.x);
-        buf.writeFloat((float) hit.y);
-        buf.writeDouble(hit.z);
+        buf.writeInt(targetId);
+        buf.writeFloat((float) offset.x);
+        buf.writeFloat((float) offset.y);
+        buf.writeFloat((float) offset.z);
+        buf.writeFloat(power);
     }
 
     @Override
     public void read(FriendlyByteBuf buf) {
 
-        this.targetId = buf.readInt();
+        this.hand = buf.readEnum(InteractionHand.class);
         this.origin = new Vec3(buf.readDouble(), buf.readFloat(), buf.readDouble());
-        this.hit = new Vec3(buf.readDouble(), buf.readFloat(), buf.readDouble());
+        this.targetId = buf.readInt();
+        this.offset = new Vec3(buf.readFloat(), buf.readFloat(), buf.readFloat());
+        this.power = buf.readFloat();
     }
 
-    public static void sendToServer(Player player, Entity target, Vec3 origin, Vec3 hit) {
+    public static void sendToServer(Player player, InteractionHand hand, Vec3 origin, Entity target, Vec3 hit, float power) {
 
         if (player.level.isClientSide) {
-            Player client = CoFHCore.PROXY.getClientPlayer();
+            Player client = ProxyUtils.getClientPlayer();
             if (client != null && client.equals(player)) {
                 ItemRayTraceEntityPacket packet = new ItemRayTraceEntityPacket();
-                packet.targetId = target.getId();
+                packet.hand = hand;
                 packet.origin = origin;
-                packet.hit = hit;
+                packet.targetId = target.getId();
+                packet.offset = hit.subtract(target.position());
+                packet.power = power;
                 packet.sendToServer();
             }
         }

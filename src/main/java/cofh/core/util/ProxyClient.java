@@ -3,7 +3,6 @@ package cofh.core.util;
 import cofh.core.event.CoreClientSetupEvents;
 import cofh.lib.api.IProxyItemPropertyGetter;
 import cofh.lib.api.block.entity.IAreaEffectTile;
-import cofh.lib.util.Utils;
 import cofh.lib.util.helpers.SoundHelper;
 import cofh.lib.util.helpers.StringHelper;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -27,11 +26,8 @@ public class ProxyClient extends Proxy {
 
     // region HELPERS
     @Override
-    public void setOverlayMessage(Player player, Component message) {
+    public void setOverlayMessage(Component message) {
 
-        if (Utils.isFakePlayer(player)) {
-            return;
-        }
         Minecraft.getInstance().gui.setOverlayMessage(message, false);
     }
 

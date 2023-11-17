@@ -143,6 +143,11 @@ public final class StringHelper {
 
         return getTextComponent(key).withStyle(INVIS_STYLE);
     }
+
+    public static MutableComponent getRomanNumeral(int number) {
+
+        return Component.translatable("enchantment.level." + number);
+    }
     // endregion
 
     // region RESOURCE LOCATION

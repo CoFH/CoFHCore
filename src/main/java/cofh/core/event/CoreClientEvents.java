@@ -6,23 +6,23 @@ import cofh.lib.client.renderer.entity.ITranslucentRenderer;
 import cofh.lib.util.Utils;
 import cofh.lib.util.constants.ModIds;
 import cofh.lib.util.raytracer.VoxelShapeBlockHitResult;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix4f;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import net.minecraft.CrashReport;
-import net.minecraft.CrashReportCategory;
-import net.minecraft.ReportedException;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.particle.Particle;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.particle.ParticleRenderType;
-import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.ListTag;
@@ -30,6 +30,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -39,10 +41,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.ForgeRenderTypes;
-import net.minecraftforge.client.event.RenderHighlightEvent;
-import net.minecraftforge.client.event.RenderLevelStageEvent;
-import net.minecraftforge.client.event.RenderTooltipEvent;
+import net.minecraftforge.client.event.*;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -53,12 +52,12 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static cofh.core.init.CoreMobEffects.TRUE_INVISIBILITY;
 import static cofh.lib.util.Constants.INVIS_STYLE;
 import static cofh.lib.util.constants.NBTTags.TAG_STORED_ENCHANTMENTS;
 import static cofh.lib.util.helpers.StringHelper.*;
 import static net.minecraft.ChatFormatting.DARK_GRAY;
 import static net.minecraft.ChatFormatting.GRAY;
-import static net.minecraft.client.renderer.RenderStateShard.*;
 import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 
 @Mod.EventBusSubscriber (value = Dist.CLIENT, modid = ModIds.ID_COFH_CORE)
@@ -215,11 +214,26 @@ public class CoreClientEvents {
             renderType.end(tesselator);
         }
         stack.popPose();
-
         light.turnOffLightLayer();
-
-
         ITranslucentRenderer.renderTranslucent(stack, partialTick, event.getLevelRenderer(), event.getProjectionMatrix());
+    }
+
+    @SubscribeEvent (priority = EventPriority.HIGH)
+    public static <T extends LivingEntity, M extends EntityModel<T>> void handleTrueInvisibility(RenderLivingEvent<T, M> event) {
+
+        LivingEntity entity = event.getEntity();
+        if (entity.hasEffect(TRUE_INVISIBILITY.get()) && entity.isInvisible()) {
+            event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent (priority = EventPriority.HIGH)
+    public static <T extends LivingEntity, M extends EntityModel<T>> void handleTrueInvisibility(RenderHandEvent event) {
+
+        Player player = Minecraft.getInstance().player;
+        if (player != null && player.hasEffect(TRUE_INVISIBILITY.get()) && player.isInvisible()) {
+            event.setCanceled(true);
+        }
     }
 
     @SubscribeEvent (priority = EventPriority.LOW)

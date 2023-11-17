@@ -382,7 +382,7 @@ public class Utils {
 
     public static boolean dropDismantleStackIntoWorld(ItemStack stack, Level world, BlockPos pos) {
 
-        if (stack.isEmpty()) {
+        if (stack.isEmpty() || Utils.isClientWorld(world)) {
             return false;
         }
         float f = 0.3F;

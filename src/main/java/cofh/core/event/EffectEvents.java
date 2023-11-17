@@ -10,6 +10,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraftforge.event.entity.EntityStruckByLightningEvent;
 import net.minecraftforge.event.entity.EntityTeleportEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.event.entity.living.PotionColorCalculationEvent;
 import net.minecraftforge.event.entity.player.PlayerXpEvent;
@@ -116,6 +117,16 @@ public class EffectEvents {
         MobEffectInstance effect = event.getEffectInstance();
         if (effect != null && effect.getEffect() instanceof CustomParticleMobEffect) {
             EffectRemovedPacket.sendToClient(event.getEntity(), event.getEffectInstance());
+        }
+    }
+
+    @SubscribeEvent (priority = EventPriority.HIGH)
+    public static void handleTargetChangeEvent(LivingEvent.LivingVisibilityEvent event) {
+
+        LivingEntity entity = event.getEntity();
+        if (entity.hasEffect(TRUE_INVISIBILITY.get())) {
+            float armor = Math.max(entity.getArmorCoverPercentage(), 0.1F) * 0.7F;
+            event.modifyVisibility(0.07F / armor);
         }
     }
 

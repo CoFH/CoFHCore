@@ -1,10 +1,7 @@
 package cofh.core.inventory.container;
 
 import cofh.core.network.packet.server.ContainerConfigPacket;
-import cofh.core.util.filter.BaseItemFilter;
-import cofh.core.util.filter.IFilterOptions;
-import cofh.core.util.filter.IFilterableItem;
-import cofh.core.util.filter.IFilterableTile;
+import cofh.core.util.filter.*;
 import cofh.core.util.helpers.FilterHelper;
 import cofh.lib.inventory.container.slot.SlotFalseCopy;
 import cofh.lib.inventory.container.slot.SlotLocked;
@@ -12,6 +9,7 @@ import cofh.lib.inventory.wrapper.InvWrapperGeneric;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
@@ -20,36 +18,51 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 import static cofh.core.init.CoreContainers.ITEM_FILTER_CONTAINER;
+import static cofh.core.util.filter.FilterHolderType.ITEM;
+import static cofh.core.util.filter.FilterHolderType.SELF;
 import static cofh.core.util.helpers.FilterHelper.hasFilter;
 
 public class ItemFilterContainer extends ContainerCoFH implements IFilterOptions {
 
     protected BlockEntity tile;
-    protected IFilterableTile filterableTile;
+    protected Entity entity;
+    protected IFilterable filterable;
 
     protected ItemStack filterStack;
     protected IFilterableItem filterableItem;
     public SlotLocked lockedSlot;
 
-    protected BaseItemFilter filter;
+    protected BaseItemFilter filter = BaseItemFilter.ZERO;
     protected InvWrapperGeneric filterInventory;
 
-    public final boolean held;
+    public final FilterHolderType type;
 
-    public ItemFilterContainer(int windowId, Level world, Inventory inventory, Player player, boolean held, BlockPos pos) {
+    public ItemFilterContainer(int windowId, Level world, Inventory inventory, Player player, int holder, int id, BlockPos pos) {
 
         super(ITEM_FILTER_CONTAINER.get(), windowId, inventory, player);
 
-        this.held = held;
+        type = FilterHolderType.from(holder);
 
-        if (held) {
-            filterStack = hasFilter(player.getMainHandItem()) ? player.getMainHandItem() : player.getOffhandItem();
-            filterableItem = (IFilterableItem) filterStack.getItem();
-            filter = (BaseItemFilter) filterableItem.getFilter(filterStack);
-        } else {
-            tile = world.getBlockEntity(pos);
-            filterableTile = (IFilterableTile) tile;
-            filter = (BaseItemFilter) filterableTile.getFilter();
+        switch (type) {
+            case SELF, ITEM -> {
+                filterStack = hasFilter(player.getMainHandItem()) ? player.getMainHandItem() : player.getOffhandItem();
+                filterableItem = (IFilterableItem) filterStack.getItem();
+                filter = (BaseItemFilter) filterableItem.getFilter(filterStack);
+            }
+            case TILE -> {
+                tile = world.getBlockEntity(pos);
+                if (hasFilter(tile)) {
+                    filterable = (IFilterable) tile;
+                    filter = (BaseItemFilter) filterable.getFilter();
+                }
+            }
+            case ENTITY -> {
+                entity = world.getEntity(id);
+                if (hasFilter(entity)) {
+                    filterable = (IFilterable) entity;
+                    filter = (BaseItemFilter) filterable.getFilter();
+                }
+            }
         }
         allowSwap = false;
 
@@ -77,7 +90,7 @@ public class ItemFilterContainer extends ContainerCoFH implements IFilterOptions
     @Override
     protected void bindPlayerInventory(Inventory inventory) {
 
-        if (held) {
+        if (type == SELF || type == ITEM) {
             int xOffset = getPlayerInventoryHorizontalOffset();
             int yOffset = getPlayerInventoryVerticalOffset();
 
@@ -99,9 +112,19 @@ public class ItemFilterContainer extends ContainerCoFH implements IFilterOptions
         }
     }
 
-    public IFilterableTile getFilterableTile() {
+    public IFilterable getFilterable() {
 
-        return filterableTile;
+        return filterable;
+    }
+
+    public IFilterableItem getFilterableItem() {
+
+        return filterableItem;
+    }
+
+    public ItemStack getFilterStack() {
+
+        return filterStack;
     }
 
     public int getFilterSize() {
@@ -118,10 +141,16 @@ public class ItemFilterContainer extends ContainerCoFH implements IFilterOptions
     @Override
     public boolean stillValid(Player player) {
 
-        if (held) {
+        if (type == SELF || type == ITEM) {
             return lockedSlot.getItem() == filterStack;
         }
-        if (!FilterHelper.hasFilter(filterableTile)) {
+        if (entity != null) {
+            if (!FilterHelper.hasFilter(entity)) {
+                return false;
+            }
+            return !entity.isRemoved() && entity.position().distanceToSqr(player.position()) <= 64D;
+        }
+        if (!FilterHelper.hasFilter(tile)) {
             return false;
         }
         return tile != null && !tile.isRemoved() && tile.getBlockPos().distToCenterSqr(player.position()) <= 64D;
@@ -132,11 +161,11 @@ public class ItemFilterContainer extends ContainerCoFH implements IFilterOptions
 
         filter.setItems(filterInventory.getStacks());
 
-        if (held) {
+        if (type == SELF || type == ITEM) {
             filter.write(filterStack.getOrCreateTag());
             filterableItem.onFilterChanged(filterStack);
         } else {
-            filterableTile.onFilterChanged();
+            filterable.onFilterChanged();
         }
         super.removed(playerIn);
     }

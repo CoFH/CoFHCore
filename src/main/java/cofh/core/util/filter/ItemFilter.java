@@ -12,15 +12,17 @@ import org.jetbrains.annotations.Nullable;
 public class ItemFilter extends BaseItemFilter implements MenuProvider {
 
     public static final Component DISPLAY_NAME = Component.translatable("info.cofh.item_filter");
-    public static final IFilterFactory<IFilter> FACTORY = (nbt, held, pos) -> new ItemFilter(15, held, pos).read(nbt);
+    public static final IFilterFactory<IFilter> FACTORY = (nbt, holderType, id, pos) -> new ItemFilter(15, holderType, id, pos).read(nbt);
 
-    protected final boolean held;
+    protected final FilterHolderType holderType;
+    protected final int id;
     protected final BlockPos pos;
 
-    public ItemFilter(int size, boolean held, BlockPos pos) {
+    public ItemFilter(int size, FilterHolderType holderType, int id, BlockPos pos) {
 
         super(size);
-        this.held = held;
+        this.holderType = holderType;
+        this.id = id;
         this.pos = pos;
     }
 
@@ -34,7 +36,7 @@ public class ItemFilter extends BaseItemFilter implements MenuProvider {
     @Override
     public AbstractContainerMenu createMenu(int i, Inventory inventory, Player player) {
 
-        return new ItemFilterContainer(i, player.level, inventory, player, held, pos);
+        return new ItemFilterContainer(i, player.level, inventory, player, holderType.ordinal(), id, pos);
     }
 
 }

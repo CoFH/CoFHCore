@@ -145,7 +145,7 @@ public class KnifeItem extends SwordItemCoFH {
     private static final AbstractProjectileDispenseBehavior DISPENSER_BEHAVIOR = new AbstractProjectileDispenseBehavior() {
 
         @Override
-        protected Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
+        public Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
 
             Knife knife = new Knife(worldIn, position.x(), position.y(), position.z(), stackIn);
             knife.pickup = AbstractArrow.Pickup.ALLOWED;

@@ -10,11 +10,11 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 
 import javax.annotation.Nullable;
 
-public class TileContainer extends ContainerCoFH {
+public class TileCoFHContainer extends ContainerCoFH {
 
     protected final TileCoFH baseTile;
 
-    public TileContainer(@Nullable MenuType<?> type, int windowId, Level world, BlockPos pos, Inventory inventory, Player player) {
+    public TileCoFHContainer(@Nullable MenuType<?> type, int windowId, Level world, BlockPos pos, Inventory inventory, Player player) {
 
         super(type, windowId, inventory, player);
         BlockEntity tile = world.getBlockEntity(pos);

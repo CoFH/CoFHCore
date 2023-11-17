@@ -1,7 +1,6 @@
 package cofh.core.entity;
 
 import cofh.lib.entity.AbstractAoESpell;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -45,7 +44,7 @@ public class ElectricArc extends AbstractAoESpell {
     public void activeTick() {
 
         if (level.isClientSide) {
-            level.addParticle((SimpleParticleType) SPARK.get(), this.getX() + random.nextGaussian() * radius, this.getY() + random.nextFloat() * 0.25F, this.getZ() + random.nextGaussian() * radius, 0.0D, 0.0D, 0.0D);
+            level.addParticle(SPARK.get(), this.getX() + random.nextGaussian() * radius, this.getY() + random.nextFloat() * 0.25F, this.getZ() + random.nextGaussian() * radius, 0.0D, 0.0D, 0.0D);
         }
     }
 
@@ -53,7 +52,7 @@ public class ElectricArc extends AbstractAoESpell {
     public void onCast() {
 
         if (level.isClientSide) {
-            level.addParticle((SimpleParticleType) PLASMA.get(), this.getX(), this.getY() + 6, this.getZ(), 0.0D, 0.0D, 0.0D);
+            level.addParticle(PLASMA.get(), this.getX(), this.getY() + 6, this.getZ(), 0.0D, 0.0D, 0.0D);
         } else {
             strike();
         }

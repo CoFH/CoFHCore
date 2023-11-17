@@ -1,8 +1,10 @@
 package cofh.lib.entity;
 
 import cofh.core.util.helpers.ArcheryHelper;
+import cofh.lib.util.constants.NBTTags;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -30,14 +32,17 @@ import java.util.stream.Stream;
 
 public class ProjectileCoFH extends Projectile {
 
+    protected float power;
+
     public ProjectileCoFH(EntityType<? extends ProjectileCoFH> type, Level level) {
 
         super(type, level);
     }
 
-    public ProjectileCoFH(EntityType<? extends ProjectileCoFH> type, Level level, Entity owner, Vec3 position, Vec3 velocity) {
+    public ProjectileCoFH(EntityType<? extends ProjectileCoFH> type, Level level, Entity owner, Vec3 position, Vec3 velocity, float power) {
 
         this(type, level);
+        this.power = power;
         setOwner(owner);
         setPos(position);
         setDeltaMovement(velocity);
@@ -173,6 +178,11 @@ public class ProjectileCoFH extends Projectile {
         this.setYRot((float) (Mth.atan2(velocity.x, velocity.z) * MathHelper.TO_DEG));
     }
 
+    public float getPower() {
+
+        return power;
+    }
+
     public void fireTick() {
 
         boolean inLava = this.isInLava();
@@ -209,6 +219,26 @@ public class ProjectileCoFH extends Projectile {
 
         Entity owner = getOwner();
         return owner == null ? super.getSoundSource() : owner.getSoundSource();
+    }
+
+    @Override
+    public boolean shouldRenderAtSqrDistance(double sqrDist) {
+
+        return sqrDist < 4096 * getViewScale();
+    }
+
+    @Override
+    protected void addAdditionalSaveData(CompoundTag tag) {
+
+        super.addAdditionalSaveData(tag);
+        tag.putFloat(NBTTags.TAG_POWER, this.power);
+    }
+
+    @Override
+    protected void readAdditionalSaveData(CompoundTag tag) {
+
+        super.readAdditionalSaveData(tag);
+        this.power = tag.getFloat(NBTTags.TAG_POWER);
     }
 
 }

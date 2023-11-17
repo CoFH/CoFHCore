@@ -50,8 +50,7 @@ public class AreaUtils {
         if (!target.fireImmune() && !target.isInWater() && target.getRemainingFireTicks() <= 0) {
             target.setSecondsOnFire(duration / 20);
         }
-        if (target instanceof LivingEntity) {
-            LivingEntity living = (LivingEntity) target;
+        if (target instanceof LivingEntity living) {
             living.removeEffect(CHILLED.get());
         }
     };
@@ -61,27 +60,22 @@ public class AreaUtils {
         if (target.getRemainingFireTicks() > 0) {
             target.setRemainingFireTicks(0);
         }
-        if (target instanceof LivingEntity) {
-            LivingEntity living = (LivingEntity) target;
+        if (target instanceof LivingEntity living) {
             living.addEffect(new MobEffectInstance(CHILLED.get(), duration, power));
         }
     };
 
     public static final IEffectApplier SUNDER_ENTITIES = (target, duration, power, source) -> {
 
-        if (target instanceof LivingEntity) {
-            LivingEntity living = (LivingEntity) target;
+        if (target instanceof LivingEntity living) {
             living.addEffect(new MobEffectInstance(SUNDERED.get(), duration, power));
         }
     };
 
     public static final IEffectApplier SHOCK_ENTITIES = (target, duration, power, source) -> {
 
-        if (target instanceof LivingEntity) {
-            LivingEntity living = (LivingEntity) target;
-            if (!living.hasEffect(LIGHTNING_RESISTANCE.get())) {
-                living.addEffect(new MobEffectInstance(SHOCKED.get(), duration, power));
-            }
+        if (target instanceof LivingEntity living && !living.hasEffect(LIGHTNING_RESISTANCE.get())) {
+            living.addEffect(new MobEffectInstance(SHOCKED.get(), duration, power));
         }
     };
 
@@ -114,7 +108,6 @@ public class AreaUtils {
         }
         return succeeded;
     };
-
 
     public static final IBlockTransformer ICE_TRANSFORM_TEMPORARY = (world, pos, face, entity) -> {
 
@@ -160,6 +153,10 @@ public class AreaUtils {
         // SNOW
         if (world.isEmptyBlock(pos) && AreaUtils.isValidSnowPosition(world, pos)) {
             succeeded |= world.setBlockAndUpdate(pos, SNOW.defaultBlockState());
+
+            // TODO: This is just a quick testing hack to be used occassionally.
+            //            var duct = ForgeRegistries.BLOCKS.getValue(new ResourceLocation("thermal:fluid_duct_windowed"));
+            //            succeeded |= world.setBlockAndUpdate(pos, duct.defaultBlockState());
         }
         // FIRE
         if (state.getBlock() == FIRE) {
@@ -209,6 +206,19 @@ public class AreaUtils {
                 if (!permanentLava) {
                     world.scheduleTick(pos, GLOSSED_MAGMA.get(), MathHelper.nextInt(world.random, 60, 120));
                 }
+            }
+        }
+        return succeeded;
+    };
+
+    public static final IBlockTransformer SNOW_LAYER_TRANSFORM = (world, pos, face, entity) -> {
+
+        boolean succeeded = false;
+        BlockState state = world.getBlockState(pos);
+        if (state.getBlock() == SNOW && state.hasProperty(BlockStateProperties.LAYERS)) {
+            int val = state.getValue(BlockStateProperties.LAYERS) + 1;
+            if (BlockStateProperties.LAYERS.getPossibleValues().contains(val)) {
+                succeeded = world.setBlockAndUpdate(pos, state.setValue(BlockStateProperties.LAYERS, val));
             }
         }
         return succeeded;
@@ -378,6 +388,29 @@ public class AreaUtils {
     public static boolean isUnlitTNT(BlockState state) {
 
         return state.getBlock() instanceof TntBlock;
+    }
+
+    public static List<Entity> getEntitiesInSphere(Level level, Vec3 center, double radius, @Nullable Entity exclude, Predicate<Entity> filter) {
+
+        double r2 = radius * radius;
+        Predicate<Entity> inSphere = entity -> closestPointOnAABB(center, entity.getBoundingBox()).subtract(center).lengthSqr() <= r2;
+        return level.getEntities(exclude, new AABB(center.x - radius, center.y - radius, center.z - radius, center.x + radius, center.y + radius, center.z + radius), inSphere.and(filter));
+    }
+
+    public static List<Entity> getEntitiesInCylinder(Level level, Vec3 center, double radius, double height, @Nullable Entity exclude, Predicate<Entity> filter) {
+
+        double halfHeight = 0.5 * height;
+        double r2 = radius * radius;
+        Predicate<Entity> inCylinder = entity -> {
+            Vec3 diff = closestPointOnAABB(center, entity.getBoundingBox()).subtract(center);
+            return Math.abs(diff.y) <= halfHeight && diff.horizontalDistanceSqr() <= r2;
+        };
+        return level.getEntities(exclude, new AABB(center.x - radius, center.y - halfHeight, center.z - radius, center.x + radius, center.y + halfHeight, center.z + radius), inCylinder.and(filter));
+    }
+
+    public static Vec3 closestPointOnAABB(Vec3 point, AABB box) {
+
+        return new Vec3(MathHelper.clamp(point.x, box.minX, box.maxX), MathHelper.clamp(point.y, box.minY, box.maxY), MathHelper.clamp(point.z, box.minZ, box.maxZ));
     }
     // endregion HELPERS
 

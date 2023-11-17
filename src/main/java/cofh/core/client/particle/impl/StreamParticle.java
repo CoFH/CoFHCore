@@ -22,8 +22,6 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -32,7 +30,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-@OnlyIn (Dist.CLIENT)
 public class StreamParticle extends PointToPointParticle {
 
     protected Vec3 dest;
@@ -125,7 +122,7 @@ public class StreamParticle extends PointToPointParticle {
     }
 
     protected List<Direction> successorOrder() {
-        //TODO
+        // TODO
         return List.of(Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST, Direction.UP, Direction.DOWN);
     }
 
