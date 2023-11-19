@@ -27,10 +27,10 @@ public class ItemFilterScreen extends ContainerScreenCoFH<ItemFilterMenu> {
     public static final ResourceLocation TEXTURE = new ResourceLocation(PATH_GUI + "generic.png");
     public static final ResourceLocation SLOT_OVERLAY = new ResourceLocation(PATH_ELEMENTS + "locked_overlay_slot.png");
 
-    public static final String TEX_DENY_LIST = PATH_GUI + "filters/filter_deny_list.png";
-    public static final String TEX_ALLOW_LIST = PATH_GUI + "filters/filter_allow_list.png";
-    public static final String TEX_IGNORE_NBT = PATH_GUI + "filters/filter_ignore_nbt.png";
-    public static final String TEX_USE_NBT = PATH_GUI + "filters/filter_use_nbt.png";
+    public static final ResourceLocation TEX_DENY_LIST = new ResourceLocation(PATH_GUI + "filters/filter_deny_list.png");
+    public static final ResourceLocation TEX_ALLOW_LIST = new ResourceLocation(PATH_GUI + "filters/filter_allow_list.png");
+    public static final ResourceLocation TEX_IGNORE_NBT = new ResourceLocation(PATH_GUI + "filters/filter_ignore_nbt.png");
+    public static final ResourceLocation TEX_USE_NBT = new ResourceLocation(PATH_GUI + "filters/filter_use_nbt.png");
 
     public ItemFilterScreen(ItemFilterMenu container, Inventory inv, Component titleIn) {
 

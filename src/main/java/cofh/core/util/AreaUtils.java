@@ -389,11 +389,15 @@ public class AreaUtils {
         return state.getBlock() instanceof TntBlock;
     }
 
-    public static List<Entity> getEntitiesInSphere(Level level, Vec3 center, double radius, @Nullable Entity exclude, Predicate<Entity> filter) {
+    public static <E extends Entity> Predicate<E> inSphere(Vec3 center, double radius) {
 
         double r2 = radius * radius;
-        Predicate<Entity> inSphere = entity -> closestPointOnAABB(center, entity.getBoundingBox()).subtract(center).lengthSqr() <= r2;
-        return level.getEntities(exclude, new AABB(center.x - radius, center.y - radius, center.z - radius, center.x + radius, center.y + radius, center.z + radius), inSphere.and(filter));
+        return entity -> closestPointOnAABB(center, entity.getBoundingBox()).distanceToSqr(center) <= r2;
+    }
+
+    public static List<Entity> getEntitiesInSphere(Level level, Vec3 center, double radius, @Nullable Entity exclude, Predicate<Entity> filter) {
+
+        return level.getEntities(exclude, new AABB(center.x - radius, center.y - radius, center.z - radius, center.x + radius, center.y + radius, center.z + radius), inSphere(center, radius).and(filter));
     }
 
     public static List<Entity> getEntitiesInCylinder(Level level, Vec3 center, double radius, double height, @Nullable Entity exclude, Predicate<Entity> filter) {

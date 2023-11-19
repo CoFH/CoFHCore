@@ -298,6 +298,7 @@ public abstract class RecipeJsonUtils {
     public static final String ADJACENT = "adjacent";
     public static final String AMOUNT = "amount";
     public static final String AMPLIFIER = "amplifier";
+    public static final String ATTRIBUTE = "attribute";
     public static final String BASE = "base";
     public static final String BELOW = "below";
     public static final String CHANCE = "chance";
@@ -329,6 +330,7 @@ public abstract class RecipeJsonUtils {
     public static final String MIN_CHANCE = "min_chance";
     public static final String MOD_LOADED = "mod";
     public static final String NBT = "nbt";
+    public static final String OPERATION = "operation";
     public static final String OUTPUT = "output";
     public static final String OUTPUT_MOD = "output_mod";
     public static final String OUTPUTS = "outputs";
