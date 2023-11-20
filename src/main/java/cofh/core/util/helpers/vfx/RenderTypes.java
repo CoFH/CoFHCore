@@ -84,7 +84,7 @@ public class RenderTypes {
         return RenderType.create("cofh:translucent", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true,
                 RenderType.CompositeState.builder()
                         .setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
-                        .setShaderState(RENDERTYPE_ENTITY_TRANSLUCENT_SHADER)
+                        .setShaderState(RENDERTYPE_TRANSLUCENT_NO_CRUMBLING_SHADER)
                         .setWriteMaskState(COLOR_DEPTH_WRITE)
                         .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
                         .setLightmapState(LIGHTMAP)
@@ -96,7 +96,7 @@ public class RenderTypes {
         return RenderType.create("cofh:translucent", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true,
                 RenderType.CompositeState.builder()
                         .setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
-                        .setShaderState(RENDERTYPE_ENTITY_TRANSLUCENT_SHADER)
+                        .setShaderState(RENDERTYPE_TRANSLUCENT_NO_CRUMBLING_SHADER)
                         .setWriteMaskState(COLOR_WRITE)
                         .setCullState(NO_CULL)
                         .setLightmapState(LIGHTMAP)
@@ -117,7 +117,7 @@ public class RenderTypes {
                 //        .createCompositeState(false));
                 RenderType.CompositeState.builder()
                         .setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
-                        .setShaderState(RENDERTYPE_ENTITY_TRANSLUCENT_SHADER)
+                        .setShaderState(RENDERTYPE_TRANSLUCENT_NO_CRUMBLING_SHADER)
                         .setWriteMaskState(COLOR_WRITE)
                         .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
                         .setLightmapState(LIGHTMAP)
