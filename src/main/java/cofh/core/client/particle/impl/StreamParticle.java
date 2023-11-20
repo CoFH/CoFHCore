@@ -127,8 +127,8 @@ public class StreamParticle extends PointToPointParticle {
 
     protected Vec3[] findPath() {
 
-        BlockPos start = new BlockPos((int) x, (int) y, (int) z);
-        BlockPos end = new BlockPos((int) dest.x, (int) dest.y, (int) dest.z);
+        BlockPos start = BlockPos.containing(x, y, z);
+        BlockPos end = BlockPos.containing(dest);
         List<Direction> order = successorOrder();
         int capacity = distManhattan(start, end) * 2;
         PriorityQueue<Node> open = new ObjectHeapPriorityQueue<>(capacity, Comparator.comparingInt(n -> n.total + n.heuristic));
