@@ -674,7 +674,7 @@ public final class RenderHelper {
                 new Vector4f(w, l, -h, 1.0F), new Vector4f(w, l, h, 1.0F), new Vector4f(-w, l, -h, 1.0F), new Vector4f(-w, l, h, 1.0F)};
 
         for (Vector4f corner : corners) {
-            MathHelper.transform(corner, pose);
+            corner.mul(pose);
         }
         return corners;
     }
@@ -735,20 +735,15 @@ public final class RenderHelper {
         //float h = 0.5F * (float) Math.sqrt(lenSqr - rad * rad);
         float h = 0.1666667F * height;
 
-        Vector4f u = new Vector4f(0, 3 * h, 0, 1);
-        Vector4f l = new Vector4f(0, -3 * h, 0, 1);
+        Vector4f u = new Vector4f(0, 3 * h, 0, 1).mul(pose);
+        Vector4f l = new Vector4f(0, -3 * h, 0, 1).mul(pose);
         Vector4f[] v = new Vector4f[8];
         for (int i = 0; i < 6; ++i) {
-            v[i] = new Vector4f(radius * MathHelper.sin(i * 1.0472F), h, radius * MathHelper.cos(i * 1.0472F), 1);
+            v[i] = new Vector4f(radius * MathHelper.sin(i * 1.0472F), h, radius * MathHelper.cos(i * 1.0472F), 1).mul(pose);
             h = -h;
         }
         v[6] = v[0];
         v[7] = v[1];
-        MathHelper.transform(u, pose);
-        MathHelper.transform(l, pose);
-        for (int i = 0; i < 6; ++i) {
-            MathHelper.transform(v[i], pose);
-        }
         for (int i = 0; i < 6; i += 2) {
             Vector4f v0 = v[i];
             Vector4f v1 = v[i + 1];
@@ -789,19 +784,14 @@ public final class RenderHelper {
         Matrix4f pose = last.pose();
         Matrix3f norm = last.normal();
 
-        Vector4f u = new Vector4f(0, height * 0.5F, 0, 1);
-        Vector4f l = new Vector4f(0, height * -0.5F, 0, 1);
+        Vector4f u = new Vector4f(0, height * 0.5F, 0, 1).mul(pose);
+        Vector4f l = new Vector4f(0, height * -0.5F, 0, 1).mul(pose);
         Vector4f[] v = new Vector4f[baseEdges + 1];
         float angle = MathHelper.F_TAU / baseEdges;
         for (int i = 0; i < baseEdges; ++i) {
-            v[i] = new Vector4f(radius * MathHelper.sin(i * angle), 0, radius * MathHelper.cos(i * angle), 1);
+            v[i] = new Vector4f(radius * MathHelper.sin(i * angle), 0, radius * MathHelper.cos(i * angle), 1).mul(pose);
         }
         v[baseEdges] = v[0];
-        MathHelper.transform(u, pose);
-        MathHelper.transform(l, pose);
-        for (int i = 0; i < baseEdges; ++i) {
-            MathHelper.transform(v[i], pose);
-        }
         for (int i = 0; i < baseEdges; ++i) {
             Vector4f v0 = v[i];
             Vector4f v1 = v[i + 1];

@@ -18,7 +18,6 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.Vec2;
 import net.minecraftforge.client.model.data.ModelData;
 import org.joml.*;
 
@@ -67,6 +66,16 @@ public final class VFXHelper {
         return new Vector4f(a.x() - b.x(), a.y() - b.y(), a.z() - b.z(), a.w() - b.w());
     }
 
+    public static Vector3f normal(Matrix3f transform) {
+
+        return new Vector3f(0, 1, 0).mul(transform);
+    }
+
+    public static Vector3f normal(PoseStack stack) {
+
+        return normal(stack.last().normal());
+    }
+
     //public static int mix(float d, int rgba0, int... colors) {
     //
     //    if (colors.length <= 0 || d <= 0) {
@@ -92,7 +101,7 @@ public final class VFXHelper {
     }
 
     // region HELPERS
-    public static void renderNodes(Matrix3f normal, VertexConsumer builder, int packedLight, VFXNode[] nodes, Color color) {
+    public static void renderNodes(Vector3f normal, VertexConsumer builder, int packedLight, VFXNode[] nodes, Color color) {
 
         nodes[0].renderStart(normal, builder, packedLight, color);
         int count = nodes.length - 1;
@@ -102,7 +111,7 @@ public final class VFXHelper {
         nodes[count].renderEnd(normal, builder, packedLight, color);
     }
 
-    public static void renderNodesCapped(Matrix3f normal, MultiBufferSource buffer, RenderType midType, RenderType capType, int packedLight, VFXNode[] nodes, Color color) {
+    public static void renderNodesCapped(Vector3f normal, MultiBufferSource buffer, RenderType midType, RenderType capType, int packedLight, VFXNode[] nodes, Color color) {
 
         if (nodes.length < 2) {
             return;
@@ -117,7 +126,7 @@ public final class VFXHelper {
         interpolateCap(nodes[nodes.length - 2], nodes[nodes.length - 1]).renderEnd(normal, consumer, packedLight, color, 0, 0.5F, 1.0F, 1.0F);
     }
 
-    public static Vec2 axialPerp(Vector4f start, Vector4f end, float width) {
+    public static Vector2f axialPerp(Vector4f start, Vector4f end, float width) {
 
         float x = -start.x();
         float y = -start.y();
@@ -138,10 +147,10 @@ public final class VFXHelper {
             x *= normalize;
             y *= normalize;
         }
-        return new Vec2(-y, x);
+        return new Vector2f(-y, x);
     }
 
-    public static Vec2 axialPerp(Vector3f start, Vector3f end, float width) {
+    public static Vector2f axialPerp(Vector3f start, Vector3f end, float width) {
 
         float x = -start.x();
         float y = -start.y();
@@ -162,7 +171,7 @@ public final class VFXHelper {
             x *= normalize;
             y *= normalize;
         }
-        return new Vec2(-y, x);
+        return new Vector2f(-y, x);
     }
 
     //public static VFXNode axialPerp(Matrix4f pose, Vector3f start, Vector3f end, float width) {
@@ -206,11 +215,7 @@ public final class VFXHelper {
         if (dir.x() == 0 && dir.y() == 0 && dir.z() == 0) {
             return new Quaternionf();
         }
-        Vector3f d = new Vector3f(dir);
-        d.mul(1 / length(d));
-        d.add(0, 1, 0);
-        d.normalize();
-        return MathHelper.rotation(d, MathHelper.F_PI);
+        return MathHelper.rotation(new Vector3f(dir).normalize().add(0, 1, 0).normalize(), MathHelper.F_PI);
     }
 
     /**
@@ -246,8 +251,7 @@ public final class VFXHelper {
 
         RenderType type = FLAT_TRANSLUCENT;
         VertexConsumer builder = buffer.getBuffer(type);
-        Vector4f center = new Vector4f(0, 0, 0, 1);
-        MathHelper.transform(center, stack.last().pose());
+        Vector4f center = new Vector4f(0, 0, 0, 1).mul(stack.last().pose());
         Matrix3f normal = stack.last().normal();
         float xp = center.x() + 0.5F;
         float xn = center.x() - 0.5F;
@@ -418,57 +422,50 @@ public final class VFXHelper {
     public static void renderStraightArcs(PoseStack stack, MultiBufferSource buffer, int packedLight, int arcCount, float arcWidth, float widthVar, long seed, Color coreColor, Color glowColor, float taperOffset) {
 
         SplittableRandom rand = new SplittableRandom(seed);
-        stack.pushPose();
 
         int nodeCount = arcs[0].length;
         int first = MathHelper.clamp((int) (nodeCount * (taperOffset - 0.25F) + 1), 0, nodeCount);
         int last = MathHelper.clamp((int) (nodeCount * (1.25F + taperOffset) + 1), 0, nodeCount);
 
-        if (last - first > 1) {
-            PoseStack.Pose stackEntry = stack.last();
-            Matrix4f pose = stackEntry.pose();
-            Matrix3f normal = stackEntry.normal();
+        if (last - first <= 1) {
+            return;
+        }
+        stack.pushPose();
+        Matrix4f pose = stack.last().pose();
+        Vector3f normal = normal(stack);
+        Vector2f perp = axialPerp(new Vector4f(0, 0, 0, 1).mul(pose), new Vector4f(0, 1, 0, 1).mul(pose), 1.0F);
 
-            Vector4f start = new Vector4f(0, 0, 0, 1);
-            MathHelper.transform(start, pose);
-            Vector4f end = new Vector4f(0, 1, 0, 1);
-            MathHelper.transform(end, pose);
-            Vec2 perp = axialPerp(start, end, 1.0F);
+        //These are calculated first so they are not affected by differing taper values.
+        Vector3f[][] randomArcs = new Vector3f[nodeCount][arcCount];
+        float[] rotations = new float[arcCount];
+        for (int i = 0; i < arcCount; ++i) {
+            randomArcs[i] = arcs[rand.nextInt(arcs.length)];
+            rotations[i] = (float) rand.nextDouble(360.0F);
+        }
 
-            //These are calculated first so they are not affected by differing taper values.
-            Vector3f[][] randomArcs = new Vector3f[nodeCount][arcCount];
-            float[] rotations = new float[arcCount];
-            for (int i = 0; i < arcCount; ++i) {
-                randomArcs[i] = arcs[rand.nextInt(arcs.length)];
-                rotations[i] = (float) rand.nextDouble(360.0F);
+        float incr = 1.0F / nodeCount;
+        for (int i = 0; i < arcCount; ++i) {
+            stack.mulPose(Axis.YP.rotationDegrees(rotations[i]));
+            Vector3f[] arc = randomArcs[i];
+            VFXNode[] outer = new VFXNode[last - first];
+            VFXNode[] inner = new VFXNode[last - first];
+            for (int j = first; j < last; ++j) {
+                Vector4f center = new Vector4f(0, arc[j].y(), 0, 1.0F).mul(pose);
+                Vector4f pos = MathHelper.toVector4f(arc[j]).mul(pose);
+                float dot = subtract(pos, center).dot(new Vector4f(perp.x, perp.y, 0, 0));
+                float xc = center.x() + perp.x * dot * 3.0F;
+                float yc = center.y() + perp.y * dot * 3.0F;
+                float width = Math.max(arcWidth + (float) rand.nextDouble(-1.0F, 1.0F) * widthVar, 0) * MathHelper.clamp(4.0F * (0.75F - Math.abs(j * incr - 0.5F - taperOffset)), 0.0F, 1.0F);
+                float xw = perp.x * width;
+                float yw = perp.y * width;
+                inner[j - first] = new VFXNode(xc + xw, xc - xw, yc + yw, yc - yw, center.z(), width);
+                width = Math.max(width, arcWidth);
+                xw += perp.x * width * 1.5F;
+                yw += perp.y * width * 1.5F;
+                outer[j - first] = new VFXNode(xc + xw, xc - xw, yc + yw, yc - yw, center.z(), width);
             }
-
-            float incr = 1.0F / nodeCount;
-            for (int i = 0; i < arcCount; ++i) {
-                stack.mulPose(Axis.YP.rotationDegrees(rotations[i]));
-                Vector3f[] arc = randomArcs[i];
-                VFXNode[] outer = new VFXNode[last - first];
-                VFXNode[] inner = new VFXNode[last - first];
-                for (int j = first; j < last; ++j) {
-                    Vector4f center = new Vector4f(0, arc[j].y(), 0, 1.0F);
-                    MathHelper.transform(center, pose);
-                    Vector4f pos = MathHelper.toVector4f(arc[j]);
-                    MathHelper.transform(pos, pose);
-                    float dot = subtract(pos, center).dot(new Vector4f(perp.x, perp.y, 0, 0));
-                    float xc = center.x() + perp.x * dot * 3.0F;
-                    float yc = center.y() + perp.y * dot * 3.0F;
-                    float width = Math.max(arcWidth + (float) rand.nextDouble(-1.0F, 1.0F) * widthVar, 0) * MathHelper.clamp(4.0F * (0.75F - Math.abs(j * incr - 0.5F - taperOffset)), 0.0F, 1.0F);
-                    float xw = perp.x * width;
-                    float yw = perp.y * width;
-                    inner[j - first] = new VFXNode(xc + xw, xc - xw, yc + yw, yc - yw, center.z(), width);
-                    width = Math.max(width, arcWidth);
-                    xw += perp.x * width * 1.5F;
-                    yw += perp.y * width * 1.5F;
-                    outer[j - first] = new VFXNode(xc + xw, xc - xw, yc + yw, yc - yw, center.z(), width);
-                }
-                renderNodesCapped(normal, buffer, LINEAR_GLOW, ROUND_GLOW, packedLight, outer, glowColor);
-                renderNodesCapped(normal, buffer, LINEAR_GLOW, ROUND_GLOW, packedLight, inner, coreColor);
-            }
+            renderNodesCapped(normal, buffer, LINEAR_GLOW, ROUND_GLOW, packedLight, outer, glowColor);
+            renderNodesCapped(normal, buffer, LINEAR_GLOW, ROUND_GLOW, packedLight, inner, coreColor);
         }
         stack.popPose();
     }
@@ -570,14 +567,11 @@ public final class VFXHelper {
      */
     public static void renderBeam(PoseStack stack, MultiBufferSource buffer, int packedLight, float width, Color coreColor, Color glowColor) {
 
-        PoseStack.Pose last = stack.last();
-        Matrix4f pose = last.pose();
-        Matrix3f normal = last.normal();
-        Vector4f start = new Vector4f(0, 0, 0, 1);
-        MathHelper.transform(start, pose);
-        Vector4f end = new Vector4f(0, 1, 0, 1);
-        MathHelper.transform(end, pose);
-        Vec2 perp = axialPerp(start, end, width);
+        Matrix4f pose = stack.last().pose();
+        Vector3f normal = normal(stack);
+        Vector4f start = new Vector4f(0, 0, 0, 1).mul(pose);
+        Vector4f end = new Vector4f(0, 1, 0, 1).mul(pose);
+        Vector2f perp = axialPerp(start, end, width);
 
         float sx = start.x();
         float sy = start.y();
@@ -588,7 +582,7 @@ public final class VFXHelper {
 
         VFXNode[] outer = {new VFXNode(sx + perp.x, sx - perp.x, sy + perp.y, sy - perp.y, sz, width),
                 new VFXNode(ex + perp.x, ex - perp.x, ey + perp.y, ey - perp.y, ez, width)};
-        perp = perp.scale(0.5F);
+        perp.mul(0.5F);
         width *= 0.5F;
         VFXNode[] inner = {new VFXNode(sx + perp.x, sx - perp.x, sy + perp.y, sy - perp.y, sz, width),
                 new VFXNode(ex + perp.x, ex - perp.x, ey + perp.y, ey - perp.y, ez, width)};
@@ -610,43 +604,41 @@ public final class VFXHelper {
     /**
      * Renders an axially billboarded streamline that follows the given node positions.
      *
-     * @param poss      Desired positions of the nodes.
+     * @param posns      Desired positions of the nodes.
      * @param widthFunc Function that determines stream width at each node based on the order of nodes.
      *                  Input is a float representing the normalized index of the node (0F for the first node, 1F for the last).
      */
-    public static void renderStreamLine(PoseStack stack, VertexConsumer builder, int packedLight, Vector4f[] poss, Color color, Function<Float, Float> widthFunc) {
+    public static void renderStreamLine(PoseStack stack, VertexConsumer builder, int packedLight, Vector4f[] posns, Color color, Function<Float, Float> widthFunc) {
 
-        if (poss.length < 2) {
+        if (posns.length < 2) {
             return;
         }
         if (color.a <= 0) {
             return;
         }
 
-        PoseStack.Pose stackEntry = stack.last();
-        Matrix4f pose = stackEntry.pose();
-        Matrix3f normal = stackEntry.normal();
-
-        for (Vector4f pos : poss) {
-            MathHelper.transform(pos, pose);
+        Matrix4f pose = stack.last().pose();
+        Vector3f normal = normal(stack);
+        for (Vector4f pos : posns) {
+            pos.mul(pose);
         }
-        int last = poss.length - 1;
-        VFXNode[] nodes = new VFXNode[poss.length];
+        int last = posns.length - 1;
+        VFXNode[] nodes = new VFXNode[posns.length];
         float increment = 1.0F / last;
         for (int i = 1; i < last; ++i) {
             float width = widthFunc.apply(increment * i);
-            nodes[i] = new VFXNode(poss[i], axialPerp(poss[i - 1], poss[i + 1], width), width);
+            nodes[i] = new VFXNode(posns[i], axialPerp(posns[i - 1], posns[i + 1], width), width);
         }
         float width = widthFunc.apply(0.0F);
-        nodes[0] = new VFXNode(poss[0], axialPerp(poss[0], poss[1], width), width);
+        nodes[0] = new VFXNode(posns[0], axialPerp(posns[0], posns[1], width), width);
         width = widthFunc.apply(1.0F);
-        nodes[last] = new VFXNode(poss[last], axialPerp(poss[last - 1], poss[last], width), width);
+        nodes[last] = new VFXNode(posns[last], axialPerp(posns[last - 1], posns[last], width), width);
         renderNodes(normal, builder, packedLight, nodes, color);
     }
 
-    public static void renderStreamLine(PoseStack stack, MultiBufferSource buffer, int packedLight, Vector4f[] poss, Color color, Function<Float, Float> widthFunc) {
+    public static void renderStreamLine(PoseStack stack, MultiBufferSource buffer, int packedLight, Vector4f[] posns, Color color, Function<Float, Float> widthFunc) {
 
-        renderStreamLine(stack, buffer.getBuffer(FLAT_TRANSLUCENT), packedLight, poss, color, widthFunc);
+        renderStreamLine(stack, buffer.getBuffer(FLAT_TRANSLUCENT), packedLight, posns, color, widthFunc);
     }
 
     /**
@@ -713,7 +705,7 @@ public final class VFXHelper {
             this.width = width;
         }
 
-        public VFXNode(Vector4f pos, Vec2 perp, float width) {
+        public VFXNode(Vector4f pos, Vector2f perp, float width) {
 
             this(pos.x() + perp.x, pos.x() - perp.x, pos.y() + perp.y, pos.y() - perp.y, pos.z(), width);
         }
@@ -733,48 +725,48 @@ public final class VFXHelper {
             return (yp + yn) * 0.5F;
         }
 
-        public VFXNode renderStart(Matrix3f normal, VertexConsumer builder, int packedLight, Color col, float u0, float v0, float u1, float v1) {
+        public VFXNode renderStart(Vector3f normal, VertexConsumer builder, int packedLight, Color col, float u0, float v0, float u1, float v1) {
 
-            builder.vertex(xp, yp, z).color(col.r, col.g, col.b, col.a).uv(u0, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
-            builder.vertex(xn, yn, z).color(col.r, col.g, col.b, col.a).uv(u1, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
+            builder.vertex(xp, yp, z).color(col.r, col.g, col.b, col.a).uv(u0, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal.x, normal.y, normal.z).endVertex();
+            builder.vertex(xn, yn, z).color(col.r, col.g, col.b, col.a).uv(u1, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal.x, normal.y, normal.z).endVertex();
             return this;
         }
 
-        public VFXNode renderStart(Matrix3f normal, VertexConsumer builder, int packedLight, Color color) {
+        public VFXNode renderStart(Vector3f normal, VertexConsumer builder, int packedLight, Color color) {
 
             return renderStart(normal, builder, packedLight, color, 0, 0, 1, 1);
         }
 
-        public VFXNode renderEnd(Matrix3f normal, VertexConsumer builder, int packedLight, Color col, float u0, float v0, float u1, float v1) {
+        public VFXNode renderEnd(Vector3f normal, VertexConsumer builder, int packedLight, Color col, float u0, float v0, float u1, float v1) {
 
-            builder.vertex(xn, yn, z).color(col.r, col.g, col.b, col.a).uv(u1, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
-            builder.vertex(xp, yp, z).color(col.r, col.g, col.b, col.a).uv(u0, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
+            builder.vertex(xn, yn, z).color(col.r, col.g, col.b, col.a).uv(u1, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal.x, normal.y, normal.z).endVertex();
+            builder.vertex(xp, yp, z).color(col.r, col.g, col.b, col.a).uv(u0, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal.x, normal.y, normal.z).endVertex();
             return this;
         }
 
-        public VFXNode renderEnd(Matrix3f normal, VertexConsumer builder, int packedLight, Color color) {
+        public VFXNode renderEnd(Vector3f normal, VertexConsumer builder, int packedLight, Color color) {
 
             return renderEnd(normal, builder, packedLight, color, 0, 0, 1, 1);
         }
 
-        public VFXNode renderMid(Matrix3f normal, VertexConsumer builder, int packedLight, Color col, float u0, float v0, float u1, float v1, float u2, float v2, float u3, float v3) {
+        public VFXNode renderMid(Vector3f normal, VertexConsumer builder, int packedLight, Color col, float u0, float v0, float u1, float v1, float u2, float v2, float u3, float v3) {
 
             renderEnd(normal, builder, packedLight, col, u0, v0, u1, v1);
             renderStart(normal, builder, packedLight, col, u2, v2, u3, v3);
             return this;
         }
 
-        public VFXNode renderMid(Matrix3f normal, VertexConsumer builder, int packedLight, Color col, float u0, float v0, float u1, float v1, float u2, float v2) {
+        public VFXNode renderMid(Vector3f normal, VertexConsumer builder, int packedLight, Color col, float u0, float v0, float u1, float v1, float u2, float v2) {
 
             return renderMid(normal, builder, packedLight, col, u0, v0, u1, v1, u1, v1, u2, v2);
         }
 
-        public VFXNode renderMid(Matrix3f normal, VertexConsumer builder, int packedLight, Color col, float u0, float v0, float u1, float v1) {
+        public VFXNode renderMid(Vector3f normal, VertexConsumer builder, int packedLight, Color col, float u0, float v0, float u1, float v1) {
 
             return renderMid(normal, builder, packedLight, col, u0, v0, u1, v1, u0, v0, u1, v1);
         }
 
-        public VFXNode renderMid(Matrix3f normal, VertexConsumer builder, int packedLight, Color col) {
+        public VFXNode renderMid(Vector3f normal, VertexConsumer builder, int packedLight, Color col) {
 
             return renderMid(normal, builder, packedLight, col, 0, 0, 1, 1);
         }

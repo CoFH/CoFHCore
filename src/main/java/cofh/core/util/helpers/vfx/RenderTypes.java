@@ -87,6 +87,7 @@ public class RenderTypes {
                         .setShaderState(RENDERTYPE_ENTITY_TRANSLUCENT_SHADER)
                         .setWriteMaskState(COLOR_DEPTH_WRITE)
                         .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+                        .setLightmapState(LIGHTMAP)
                         .createCompositeState(false));
     }
 
@@ -98,6 +99,7 @@ public class RenderTypes {
                         .setShaderState(RENDERTYPE_ENTITY_TRANSLUCENT_SHADER)
                         .setWriteMaskState(COLOR_WRITE)
                         .setCullState(NO_CULL)
+                        .setLightmapState(LIGHTMAP)
                         .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
                         .createCompositeState(false));
     }
@@ -105,11 +107,20 @@ public class RenderTypes {
     public static RenderType translucentNoDepthWrite(ResourceLocation texture) {
 
         return RenderType.create("cofh:translucent", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true,
+                //RenderType.CompositeState.builder()
+                //        .setShaderState(RenderType.RENDERTYPE_ENTITY_TRANSLUCENT_SHADER)
+                //        .setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
+                //        .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+                //        .setCullState(CULL)
+                //        .setLightmapState(LIGHTMAP)
+                //        .setOverlayState(OVERLAY)
+                //        .createCompositeState(false));
                 RenderType.CompositeState.builder()
                         .setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
                         .setShaderState(RENDERTYPE_ENTITY_TRANSLUCENT_SHADER)
                         .setWriteMaskState(COLOR_WRITE)
                         .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+                        .setLightmapState(LIGHTMAP)
                         .createCompositeState(false));
     }
 

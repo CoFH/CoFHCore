@@ -1,9 +1,11 @@
 package cofh.core.util.helpers.vfx;
 
 import cofh.lib.util.helpers.MathHelper;
+import net.minecraft.client.gui.GuiGraphics;
 
 public class Color {
 
+    public static final float INT_TO_FLOAT = 0.003921569F;
     public static final Color WHITE = fromRGBA(0xFFFFFFFF);
     public final int r;
     public final int g;
@@ -46,6 +48,11 @@ public class Color {
     protected int scale(int channel, float scale) {
 
         return MathHelper.clamp((int) (channel * scale), 0, 255);
+    }
+
+    public void apply(GuiGraphics graphics) {
+
+        graphics.setColor(r * INT_TO_FLOAT, g * INT_TO_FLOAT, b * INT_TO_FLOAT, a * INT_TO_FLOAT);
     }
 
     public Color scaleRGB(float scale) {

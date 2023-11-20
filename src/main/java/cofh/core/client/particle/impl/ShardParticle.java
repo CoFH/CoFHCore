@@ -14,12 +14,10 @@ import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.phys.Vec2;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
-import org.joml.Vector3f;
-import org.joml.Vector4f;
+import org.joml.*;
 
 import javax.annotation.Nonnull;
+import java.lang.Math;
 
 public class ShardParticle extends PointToPointParticle {
 
@@ -56,16 +54,13 @@ public class ShardParticle extends PointToPointParticle {
         //}
 
         VFXHelper.alignVertical(stack, disp);
-        PoseStack.Pose last = stack.last();
-        Matrix4f pose = last.pose();
-        Matrix3f norm = last.normal();
+        Matrix4f pose = stack.last().pose();
+        Vector3f norm = VFXHelper.normal(stack);
 
         // Trail
-        Vector4f start = new Vector4f(0, 0, 0, 1);
-        MathHelper.transform(start, pose);
-        Vector4f end = new Vector4f(0, -Math.min(dist / size, 3.0F), 0, 1);
-        MathHelper.transform(end, pose);
-        Vec2 perp = VFXHelper.axialPerp(start, end, 1.0F);
+        Vector4f start = new Vector4f(0, 0, 0, 1).mul(pose);
+        Vector4f end = new Vector4f(0, -Math.min(dist / size, 3.0F), 0, 1).mul(pose);
+        Vector2f perp = VFXHelper.axialPerp(start, end, 1.0F);
         float w = 0.12F * size;
         float xs = perp.x * w;
         float ys = perp.y * w;

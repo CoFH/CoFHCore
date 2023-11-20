@@ -39,8 +39,7 @@ public class ElectricFieldRenderer extends EntityRenderer<ElectricField> impleme
 
         packedLight = 0x00F000F0;
 
-        Vector4f center = new Vector4f(0, entity.getRadius() - 0.5F, 0, 1);
-        MathHelper.transform(center, stack.last().pose());
+        Vector4f center = new Vector4f(0, entity.getRadius() - 0.5F, 0, 1).mul(stack.last().pose());
         VertexConsumer consumer = buffer.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity)));
 
         float x = center.x();
@@ -53,8 +52,7 @@ public class ElectricFieldRenderer extends EntityRenderer<ElectricField> impleme
         float a = w * (cos - sin);
         float b = w * (sin + cos);
 
-        Vector3f normal = new Vector3f(0, 1, 0);
-        MathHelper.transform(normal, stack.last().normal());
+        Vector3f normal = new Vector3f(0, 1, 0).mul(stack.last().normal());
         float nx = normal.x();
         float ny = normal.y();
         float nz = normal.z();

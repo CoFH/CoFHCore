@@ -453,11 +453,11 @@ public final class MathHelper {
 
     public static Quaternionf rotation(Vector3f vec, float angle) {
 
-        float f = sin(angle / 2.0F);
+        float f = sin(angle * 0.5F);
         float i = vec.x() * f;
         float j = vec.y() * f;
         float k = vec.z() * f;
-        float r = cos(angle / 2.0F);
+        float r = cos(angle * 0.5F);
 
         return new Quaternionf(i, j, k, r);
     }

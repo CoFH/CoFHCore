@@ -68,36 +68,35 @@ public class StreamParticle extends PointToPointParticle {
         }
         float start = Math.max(0, end - size * 4);
         int floor = MathHelper.floor(start);
-        Vector4f[] poss = new Vector4f[ceil - floor + 1];
+        Vector4f[] posns = new Vector4f[ceil - floor + 1];
         for (int i = floor; i <= ceil; ++i) {
-            poss[i - floor] = MathHelper.toVector4f(curve.get(i));
+            posns[i - floor] = MathHelper.toVector4f(curve.get(i));
         }
-        poss[0].lerp(MathHelper.toVector4f(curve.get(floor + 1)), start - floor);
+        posns[0].lerp(MathHelper.toVector4f(curve.get(floor + 1)), start - floor);
         float offset = ceil - end;
-        poss[poss.length - 1].lerp(MathHelper.toVector4f(curve.get(ceil - 1)), offset);
+        posns[posns.length - 1].lerp(MathHelper.toVector4f(curve.get(ceil - 1)), offset);
 
-        if (poss.length < 2) {
+        if (posns.length < 2) {
             return;
         }
 
-        PoseStack.Pose stackEntry = stack.last();
-        Matrix4f pose = stackEntry.pose();
-        Matrix3f normal = stackEntry.normal();
+        Matrix4f pose = stack.last().pose();
+        Vector3f normal = VFXHelper.normal(stack);
 
-        for (Vector4f pos : poss) {
-            MathHelper.transform(pos, pose);
+        for (Vector4f pos : posns) {
+            pos.mul(pose);
         }
-        int last = poss.length - 1;
-        VFXHelper.VFXNode[] nodes = new VFXHelper.VFXNode[poss.length];
-        inv = 1.0F / poss.length;
+        int last = posns.length - 1;
+        VFXHelper.VFXNode[] nodes = new VFXHelper.VFXNode[posns.length];
+        inv = 1.0F / posns.length;
         for (int i = 1; i < last; ++i) {
             float width = (MathHelper.sin(i + offset) * 0.1F + 0.2F) * MathHelper.easePlateau(inv);
-            nodes[i] = new VFXHelper.VFXNode(poss[i], VFXHelper.axialPerp(poss[i - 1], poss[i + 1], width), width);
+            nodes[i] = new VFXHelper.VFXNode(posns[i], VFXHelper.axialPerp(posns[i - 1], posns[i + 1], width), width);
         }
         float width = 0;
-        nodes[0] = new VFXHelper.VFXNode(poss[0], VFXHelper.axialPerp(poss[0], poss[1], width), width);
+        nodes[0] = new VFXHelper.VFXNode(posns[0], VFXHelper.axialPerp(posns[0], posns[1], width), width);
         width = 0;
-        nodes[last] = new VFXHelper.VFXNode(poss[last], VFXHelper.axialPerp(poss[last - 1], poss[last], width), width);
+        nodes[last] = new VFXHelper.VFXNode(posns[last], VFXHelper.axialPerp(posns[last - 1], posns[last], width), width);
         VFXHelper.renderNodes(normal, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLight, nodes, c0);
 
 

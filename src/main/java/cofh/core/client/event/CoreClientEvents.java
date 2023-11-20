@@ -65,7 +65,7 @@ public class CoreClientEvents {
 
     public static int renderTime;
     public static float renderFrame;
-    public static final Map<ParticleRenderType, Deque<CoFHParticle>> delayedRenderParticles = new Object2ObjectOpenHashMap<>();
+    public static final Map<ParticleRenderType, Queue<CoFHParticle>> delayedRenderParticles = new Object2ObjectOpenHashMap<>();
 
     private static final Set<String> NAMESPACES = new ObjectOpenHashSet<>();
 
@@ -205,7 +205,7 @@ public class CoreClientEvents {
         for (ParticleRenderType renderType : delayedRenderParticles.keySet()) {
             RenderSystem.setShader(GameRenderer::getParticleShader);
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            Deque<CoFHParticle> particles = delayedRenderParticles.get(renderType);
+            Queue<CoFHParticle> particles = delayedRenderParticles.get(renderType);
 
             renderType.begin(consumer, manager);
             while (!particles.isEmpty()) {
