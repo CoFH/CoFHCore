@@ -9,6 +9,7 @@ public class NBTTags {
     public static final String TAG_ACCESSIBLE = "Accessible";
     public static final String TAG_ACTIVE = "Active";
     public static final String TAG_ACTIVE_PREV = "ActivePrev";
+    public static final String TAG_AGE = "Age";
     public static final String TAG_AMMO = "Ammo";
     public static final String TAG_AMOUNT = "Amount";
     public static final String TAG_AMOUNT_IN = "AmountIn";
@@ -32,6 +33,7 @@ public class NBTTags {
     public static final String TAG_COOLANT_MAX = "CoolantMax";
     public static final String TAG_CREATIVE = "Creative";
     public static final String TAG_DAMAGE = "Damage";
+    public static final String TAG_DURATION = "Duration";
     public static final String TAG_ENCHANTMENTS = "Enchantments";
     public static final String TAG_ENDER_ADDRESS = "EnderAddress";
     public static final String TAG_ENTITY = "EntityTag";
@@ -60,6 +62,7 @@ public class NBTTags {
     public static final String TAG_MODE = "Mode";
     public static final String TAG_NAME = "Name";
     public static final String TAG_ORIGIN = "Origin";
+    public static final String TAG_OWNER = "Owner";
     public static final String TAG_POTION = "Potion";
     public static final String TAG_POWER = "Power";
     public static final String TAG_PRIMED = "Primed";

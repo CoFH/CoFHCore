@@ -1,13 +1,16 @@
 package cofh.core.init.data.providers;
 
 import cofh.lib.init.tags.BlockTagsCoFH;
+import cofh.lib.init.tags.DamageTypeTagsCoFH;
 import cofh.lib.init.tags.FluidTagsCoFH;
 import cofh.lib.init.tags.ItemTagsCoFH;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
+import net.minecraft.data.tags.DamageTypeTagsProvider;
 import net.minecraft.data.tags.FluidTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.data.BlockTagsProvider;
@@ -143,6 +146,21 @@ public class CoreTagsProvider {
             tag(FluidTagsCoFH.EXPERIENCE).add(FLUIDS.get(ID_FLUID_EXPERIENCE));
             tag(FluidTagsCoFH.HONEY).add(FLUIDS.get(ID_FLUID_HONEY));
             tag(FluidTagsCoFH.POTION).add(FLUIDS.get(ID_FLUID_POTION));
+        }
+
+    }
+
+    public static class DamageType extends DamageTypeTagsProvider {
+
+        public DamageType(PackOutput pOutput, CompletableFuture<HolderLookup.Provider> pProvider, ExistingFileHelper existingFileHelper) {
+
+            super(pOutput, pProvider, ID_COFH_CORE, existingFileHelper);
+        }
+
+        @Override
+        protected void addTags(HolderLookup.Provider pProvider) {
+
+            tag(DamageTypeTagsCoFH.IS_MAGIC).add(DamageTypes.MAGIC, DamageTypes.INDIRECT_MAGIC);
         }
 
     }

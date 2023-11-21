@@ -4,45 +4,39 @@ import cofh.core.client.particle.options.ColorParticleOptions;
 import cofh.core.common.effect.ChilledMobEffect;
 import cofh.core.util.AreaUtils;
 import cofh.core.util.helpers.vfx.Color;
-import cofh.lib.common.entity.AbstractAoESpell;
+import cofh.lib.common.entity.AbstractFieldSpell;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 
-import java.util.Random;
 import java.util.function.Predicate;
-import java.util.random.RandomGenerator;
 
 import static cofh.core.init.CoreEntities.FROST_FIELD;
 import static cofh.core.init.CoreParticles.FROST;
 import static cofh.core.init.CoreParticles.MIST;
 
-public class FrostField extends AbstractAoESpell implements IEntityAdditionalSpawnData {
-
-    protected RandomGenerator rand = new Random();
-    protected float power;
+public class FrostField extends AbstractFieldSpell {
 
     public FrostField(EntityType<? extends FrostField> type, Level level) {
 
         super(type, level);
     }
 
-    public FrostField(Level level, LivingEntity owner, Vec3 pos, float radius, int duration, float power) {
+    public FrostField(Level level, Vec3 pos, LivingEntity owner, float power, int duration, float radius) {
 
-        this(FROST_FIELD.get(), level);
-        this.moveTo(pos);
-        this.owner = owner;
+        super(FROST_FIELD.get(), level, pos, owner, power, duration, radius);
+    }
+
+    @Override
+    protected void setRadius(float radius) {
+
         this.radius = radius;
-        this.duration = duration;
-        this.power = power;
-        setBoundingBox(getBoundingBox().inflate(radius, 0.75F, radius));
+        setBoundingBox(getType().getAABB(getX(), getY(), getZ()).inflate(radius, 0, radius));
     }
 
     @Override
@@ -80,21 +74,6 @@ public class FrostField extends AbstractAoESpell implements IEntityAdditionalSpa
         double r = radius * Math.sqrt(rand.nextFloat());
         float angle = rand.nextFloat(MathHelper.F_TAU);
         return center.add(r * MathHelper.cos(angle), rand.nextFloat(height), r * MathHelper.sin(angle));
-    }
-
-    @Override
-    public void writeSpawnData(FriendlyByteBuf buffer) {
-
-        buffer.writeInt(duration);
-        buffer.writeFloat(radius);
-    }
-
-    @Override
-    public void readSpawnData(FriendlyByteBuf additionalData) {
-
-        duration = additionalData.readInt();
-        radius = additionalData.readFloat();
-        setBoundingBox(getBoundingBox().inflate(radius, 0.75F, radius));
     }
 
 }

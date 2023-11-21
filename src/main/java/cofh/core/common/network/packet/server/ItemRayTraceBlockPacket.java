@@ -31,7 +31,7 @@ public class ItemRayTraceBlockPacket extends PacketBase implements IPacketServer
 
         ItemStack stack = player.getItemInHand(hand);
         if (stack.getItem() instanceof IBlockRayTraceItem item) {
-            item.handleBlockRayTrace(player.level, player, hand, stack, origin, result);
+            item.handleBlockRayTrace(player.serverLevel(), player, hand, stack, origin, result);
         }
     }
 

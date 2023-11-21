@@ -1,12 +1,17 @@
 package cofh.core.common.entity;
 
 import cofh.lib.common.entity.AbstractAoESpell;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+
+import javax.annotation.Nullable;
 
 import static cofh.core.init.CoreEntities.ELECTRIC_ARC;
 import static cofh.core.init.CoreMobEffects.SHOCKED;
@@ -15,36 +20,42 @@ import static cofh.core.init.CoreParticles.SPARK;
 
 public class ElectricArc extends AbstractAoESpell {
 
-    public static final int defaultDuration = 10;
     protected boolean cosmetic = false;
-    public float damage = 5.0F;
     public long seed = random.nextLong();
 
     public ElectricArc(EntityType<? extends ElectricArc> type, Level level) {
 
         super(type, level);
-        radius = 1.5F;
-        duration = defaultDuration;
-        noCulling = true;
     }
 
-    public ElectricArc(Level level, Vec3 pos) {
+    public ElectricArc(Level level, Vec3 pos, @Nullable Entity owner) {
 
-        this(ELECTRIC_ARC.get(), level);
-        this.moveTo(pos);
+        super(ELECTRIC_ARC.get(), level, pos, owner, 5.0F);
     }
 
-    public ElectricArc(Level level, Entity target) {
+    public ElectricArc(Level level, @Nullable Entity owner, Entity target) {
 
-        this(level, target.position());
+        this(level, target.position(), owner);
     }
 
     @Override
     public void activeTick() {
 
         if (level.isClientSide) {
-            level.addParticle(SPARK.get(), this.getX() + random.nextGaussian() * radius, this.getY() + random.nextFloat() * 0.25F, this.getZ() + random.nextGaussian() * radius, 0.0D, 0.0D, 0.0D);
+            level.addParticle(SPARK.get(), this.getX() + random.nextGaussian() * getRadius(), this.getY() + random.nextFloat() * 0.25F, this.getZ() + random.nextGaussian() * getRadius(), 0.0D, 0.0D, 0.0D);
         }
+    }
+
+    @Override
+    public int getDuration() {
+
+        return 10;
+    }
+
+    @Override
+    protected float getRadius() {
+
+        return 1.5F;
     }
 
     @Override
@@ -66,33 +77,25 @@ public class ElectricArc extends AbstractAoESpell {
             return false;
         }
         boolean hitSomething = false;
-        for (Entity entity : level.getEntities(this, this.getBoundingBox().inflate(radius), Entity::isAlive)) {
-            hitSomething |= attack(entity);
+        Entity owner = getOwner();
+        for (Entity entity : level.getEntities(this, this.getBoundingBox().inflate(getRadius()), Entity::isAlive)) {
+            hitSomething |= attack(entity, owner);
         }
         return hitSomething;
     }
 
-    public boolean attack(Entity entity) {
+    public boolean attack(Entity entity, Entity owner) {
 
-        if (entity.hurt(entity.level.damageSources().lightningBolt(), this.damage)) {
-            if (entity instanceof LivingEntity) {
-                ((LivingEntity) entity).addEffect(new MobEffectInstance(SHOCKED.get(), 100, 0));
+        if (entity.equals(owner)) {
+            return false;
+        }
+        if (entity.hurt(entity.level.damageSources().source(getDamageType(), this, owner == null ? this : owner), getPower())) {
+            if (entity instanceof LivingEntity living) {
+                living.addEffect(new MobEffectInstance(SHOCKED.get(), 100, 0));
             }
             return true;
         }
         return false;
-    }
-
-    public ElectricArc setDamage(float damage) {
-
-        this.damage = damage;
-        return this;
-    }
-
-    public ElectricArc setRadius(float radius) {
-
-        this.radius = radius;
-        return this;
     }
 
     public ElectricArc setCosmetic(boolean cosmetic) {
@@ -101,10 +104,9 @@ public class ElectricArc extends AbstractAoESpell {
         return this;
     }
 
-    public boolean shouldRenderAtSqrDistance(double distSqr) {
+    protected ResourceKey<DamageType> getDamageType() {
 
-        double d0 = 64.0D * getViewScale();
-        return distSqr < d0 * d0;
+        return DamageTypes.LIGHTNING_BOLT;
     }
 
 }

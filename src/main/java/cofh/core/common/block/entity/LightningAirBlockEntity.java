@@ -32,7 +32,7 @@ public class LightningAirBlockEntity extends BlockEntity implements ITickableTil
         if (--duration <= 0) {
 
             if (level.canSeeSky(worldPosition) && level instanceof ServerLevel) {
-                level.addFreshEntity(new ElectricArc(level, Vec3.atBottomCenterOf(getBlockPos())));
+                level.addFreshEntity(new ElectricArc(level, Vec3.atBottomCenterOf(getBlockPos()), null));
 
                 if (level.canSeeSky(worldPosition) && level instanceof ServerLevel) {
                     Utils.spawnLightningBolt(level, worldPosition, null);

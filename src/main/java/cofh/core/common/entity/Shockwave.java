@@ -1,7 +1,5 @@
 package cofh.core.common.entity;
 
-import cofh.core.client.particle.options.CylindricalParticleOptions;
-import cofh.core.init.CoreEntities;
 import cofh.core.util.AreaUtils;
 import cofh.core.util.helpers.vfx.VFXHelper;
 import cofh.lib.common.entity.AbstractAoESpell;
@@ -9,46 +7,26 @@ import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 import static cofh.core.init.CoreMobEffects.SUNDERED;
-import static cofh.core.init.CoreParticles.SHOCKWAVE;
 
-public class Shockwave extends AbstractAoESpell {
+public abstract class Shockwave extends AbstractAoESpell {
 
-    public static final float speed = 1.0F;
+    public Shockwave(EntityType<? extends Shockwave> type, Level level) {
 
-    public float power;
-    public int debuffDuration = 100;
-
-    public Shockwave(EntityType<? extends Shockwave> type, Level world) {
-
-        super(type, world);
-        radius = 8.0F;
-        duration = MathHelper.ceil(radius / speed);
+        super(type, level);
     }
 
-    public Shockwave(Level world, LivingEntity attacker, Vec3 pos, float power) {
+    public Shockwave(EntityType<? extends Shockwave> type, Level level, Vec3 pos, Entity owner, float power) {
 
-        this(CoreEntities.SHOCKWAVE.get(), world);
-        this.owner = attacker;
-        setPos(pos.x(), pos.y(), pos.z());
-        this.power = power;
-    }
-
-    @Override
-    public void onCast() {
-
-        if (level.isClientSide) {
-            BlockPos pos = this.blockPosition();
-            level.addParticle(new CylindricalParticleOptions(SHOCKWAVE.get(), radius * 2, duration + 5, 0.6F), pos.getX(), pos.getY(), pos.getZ(), 0, 0, 0);
-        }
+        super(type, level, pos, owner, power);
     }
 
     @Override
@@ -56,6 +34,8 @@ public class Shockwave extends AbstractAoESpell {
 
         if (level.isClientSide()) {
             BlockPos center = this.blockPosition();
+            float speed = getSpeed();
+            float radius = getRadius();
             VFXHelper.SHOCKWAVE_OFFSETS
                     .subMap(Math.min(tickCount * speed, radius), Math.min((tickCount + 1) * speed, radius))
                     .values().forEach(offs -> offs.forEach(off -> {
@@ -71,33 +51,48 @@ public class Shockwave extends AbstractAoESpell {
                             }
                         }
                     }));
-        } else {
-            attack();
+        } else if (attack()) {
+            onHit();
         }
     }
 
-    public int getDuration() {
+    public float getSpeed() {
 
-        return duration;
+        return 1.0F;
     }
 
+    @Override
+    public int getDuration() {
+
+        return MathHelper.ceil(getRadius() / getSpeed());
+    }
+
+    @Override
     public float getRadius() {
 
-        return radius;
+        return getBbWidth() * 0.5F;
+    }
+
+    public int getDebuffDuration() {
+
+        return 100;
     }
 
     public boolean attack() {
 
         boolean hitSomething = false;
+        float speed = getSpeed();
         float dist = tickCount * speed;
         float r = speed * 0.75F;
         float r2 = r * r;
+        int duration = getDuration();
         float strength = power * (duration - (tickCount * 0.5F)) / duration;
-        float damage = strength * 8.0F;
+        float damage = strength * getPower();
 
         Vec3 pos = this.position();
+        Entity owner = getOwner();
         for (LivingEntity entity : level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(dist + r, 2, dist + r), EntitySelector.NO_CREATIVE_OR_SPECTATOR)) {
-            if (entity.equals(this.owner)) {
+            if (entity.equals(owner)) {
                 continue;
             }
             Vec3 relPos = entity.position().subtract(pos);
@@ -105,15 +100,20 @@ public class Shockwave extends AbstractAoESpell {
             if (AreaUtils.closestPointOnAABB(center, entity.getBoundingBox()).subtract(center).horizontalDistanceSqr() > r2) {
                 continue;
             }
-            // TODO damage source
-            DamageSource source = this.owner instanceof Player player ? this.owner.level.damageSources().playerAttack(player) : this.owner.level.damageSources().mobAttack(this.owner);
+            DamageSource source = getDamageSource();
             if (entity.hurt(source, damage)) {
                 hitSomething = true;
-                entity.addEffect(new MobEffectInstance(SUNDERED.get(), debuffDuration, MathHelper.weightedRound(strength, this.random) - 1, false, false));
+                entity.addEffect(new MobEffectInstance(SUNDERED.get(), getDebuffDuration(), MathHelper.weightedRound(strength, this.random) - 1, false, false));
                 entity.knockback(0.8F, -relPos.x(), -relPos.z());
             }
         }
         return hitSomething;
     }
+
+    protected void onHit() {
+
+    }
+
+    protected abstract DamageSource getDamageSource();
 
 }

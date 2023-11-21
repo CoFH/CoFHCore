@@ -15,6 +15,7 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -22,6 +23,9 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageSources;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -45,6 +49,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.entity.PartEntity;
 import net.minecraftforge.event.entity.EntityTeleportEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.DistExecutor;
@@ -205,6 +210,22 @@ public class Utils {
             }
             throw new IllegalStateException("Client could not locate entity (id: " + entityId + ")  for entity container or the entity was of an invalid type. This is likely caused by a mod breaking client side entity lookup.");
         });
+    }
+
+    public static boolean hurt(Entity target, DamageSource source, float amount, int invuln) {
+
+        if (target instanceof PartEntity<?> part) {
+            target = part.getParent();
+        }
+        int time = target.invulnerableTime;
+        boolean hurt = target.hurt(source, amount);
+        target.invulnerableTime = Math.max(time, invuln);
+        return hurt;
+    }
+
+    public static DamageSource withLocation(DamageSources sources, ResourceKey<DamageType> type, @Nullable Entity directEntity, @Nullable Entity causingEntity, Vec3 location) {
+
+        return new DamageSource(sources.damageTypes.getHolderOrThrow(type), directEntity, causingEntity, location);
     }
 
     // region TIME CHECKS

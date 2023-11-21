@@ -1,6 +1,8 @@
 package cofh.lib.common.entity;
 
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
@@ -32,8 +34,18 @@ public abstract class DamagingProjectile extends ProjectileCoFH {
 
     }
 
-    public abstract float getDamage(EntityHitResult result);
+    protected abstract float getDamage(EntityHitResult result);
 
-    public abstract DamageSource getDamageSource(EntityHitResult result);
+    protected abstract ResourceKey<DamageType> getDamageType(EntityHitResult result);
+
+    protected DamageSource getDamageSource(EntityHitResult result) {
+
+        Entity owner = getOwner();
+        ResourceKey<DamageType> type = getDamageType(result);
+        if (owner == null) {
+            return level.damageSources().source(type, this);
+        }
+        return level.damageSources().source(type, this, owner);
+    }
 
 }

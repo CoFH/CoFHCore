@@ -5,9 +5,11 @@ import cofh.core.init.CoreMobEffects;
 import cofh.core.init.CoreParticles;
 import cofh.core.util.AreaUtils;
 import cofh.core.util.helpers.ArcheryHelper;
-import cofh.lib.common.entity.AbstractAoESpell;
-import net.minecraft.network.FriendlyByteBuf;
+import cofh.lib.common.entity.AbstractFieldSpell;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
@@ -17,16 +19,14 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 
 import java.util.List;
 import java.util.function.Predicate;
 
 import static cofh.core.init.CoreEntities.ELECTRIC_FIELD;
 
-public class ElectricField extends AbstractAoESpell implements IEntityAdditionalSpawnData {
+public class ElectricField extends AbstractFieldSpell {
 
-    protected float power;
     protected int lastArc = 0;
 
     public ElectricField(EntityType<? extends ElectricField> type, Level level) {
@@ -34,20 +34,16 @@ public class ElectricField extends AbstractAoESpell implements IEntityAdditional
         super(type, level);
     }
 
-    public ElectricField(Level level, LivingEntity owner, Vec3 pos, float radius, int duration, float power) {
+    public ElectricField(Level level, Entity owner, Vec3 pos, float power, int duration, float radius) {
 
-        this(ELECTRIC_FIELD.get(), level);
-        this.moveTo(pos);
-        this.owner = owner;
-        this.radius = radius;
-        this.duration = duration;
-        this.power = power;
-        setBoundingBox(getBoundingBox().inflate(radius));
+        super(ELECTRIC_FIELD.get(), level, pos, owner, power, duration, radius);
     }
 
-    public ElectricField(Level level, Vec3 pos, float radius, int duration) {
+    @Override
+    protected void setRadius(float radius) {
 
-        this(level, null, pos, radius, duration, 1.0F);
+        this.radius = radius;
+        setBoundingBox(getType().getAABB(getX(), getY(), getZ()).inflate(radius));
     }
 
     @Override
@@ -68,16 +64,18 @@ public class ElectricField extends AbstractAoESpell implements IEntityAdditional
 
         Vec3 pos = position();
         Predicate<Entity> filter = EntitySelector.LIVING_ENTITY_STILL_ALIVE;
+        Entity owner = getOwner();
         if (owner != null) {
             filter = filter.and(entity -> !entity.isPassengerOfSameVehicle(owner));
         }
+        float radius = getRadius();
         List<Entity> entities = AreaUtils.getEntitiesInSphere(level, pos, radius, this, filter);
 
         Vec3 end;
-        if (random.nextInt(5) < entities.size()) {
-            end = entities.get(random.nextInt(entities.size())).getBoundingBox().getCenter();
+        if (rand.nextInt(5) < entities.size()) {
+            end = entities.get(rand.nextInt(entities.size())).getBoundingBox().getCenter();
         } else {
-            end = new Vec3(random.nextGaussian(), -Math.abs(random.nextGaussian()), random.nextGaussian()).normalize().scale(radius).add(pos);
+            end = new Vec3(rand.nextGaussian(), -Math.abs(rand.nextGaussian()), rand.nextGaussian()).normalize().scale(radius).add(pos);
         }
         pos = pos.add(0, radius - 0.5F, 0);
 
@@ -88,16 +86,11 @@ public class ElectricField extends AbstractAoESpell implements IEntityAdditional
         float padding = 0.1F;
         ArcheryHelper.findHitEntities(entities.stream(), pos, end, new Vec3(padding, padding, padding)).forEach(result -> {
             Entity target = result.getEntity();
-            target.hurt(this.level.damageSources().lightningBolt(), power * 4.0F); // TODO damage source, directionality
-            if (target instanceof LivingEntity living && random.nextFloat() < power * 0.4F) {
+            target.hurt(level.damageSources().source(getDamageType(), this, owner == null ? this : owner), power * 4.0F); // TODO directionality
+            if (target instanceof LivingEntity living && rand.nextFloat() < power * 0.4F) {
                 living.addEffect(new MobEffectInstance(CoreMobEffects.SHOCKED.get(), 80, 0, true, false, true));
             }
         });
-    }
-
-    public float getRadius() {
-
-        return radius;
     }
 
     public int getTextureIndex(int max) {
@@ -109,19 +102,9 @@ public class ElectricField extends AbstractAoESpell implements IEntityAdditional
         }
     }
 
-    @Override
-    public void writeSpawnData(FriendlyByteBuf buffer) {
+    protected ResourceKey<DamageType> getDamageType() {
 
-        buffer.writeInt(duration);
-        buffer.writeFloat(radius);
-    }
-
-    @Override
-    public void readSpawnData(FriendlyByteBuf additionalData) {
-
-        duration = additionalData.readInt();
-        radius = additionalData.readFloat();
-        setBoundingBox(getBoundingBox().inflate(radius));
+        return DamageTypes.LIGHTNING_BOLT;
     }
 
 }
