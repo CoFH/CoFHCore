@@ -2,7 +2,6 @@ package cofh.core.util.helpers.vfx;
 
 import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.util.helpers.MathHelper;
-import com.google.common.collect.ImmutableSortedMap;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -14,7 +13,6 @@ import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
@@ -26,7 +24,6 @@ import java.util.Random;
 import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static cofh.core.util.helpers.vfx.RenderTypes.*;
 
@@ -314,7 +311,7 @@ public final class VFXHelper {
     // endregion
 
     // region SHOCKWAVE
-    public static final Float2ReferenceSortedMap<Vector2i[]> SHOCKWAVE_OFFSETS =  getOffsets(16);
+    public static final Float2ReferenceSortedMap<Vector2i[]> SHOCKWAVE_OFFSETS = getOffsets(16);
 
     /**
      * Renders a block shockwave that radially propagates from the origin.
