@@ -223,7 +223,7 @@ public class Utils {
         return hurt;
     }
 
-    public static DamageSource withLocation(DamageSources sources, ResourceKey<DamageType> type, @Nullable Entity directEntity, @Nullable Entity causingEntity, Vec3 location) {
+    public static DamageSource source(DamageSources sources, ResourceKey<DamageType> type, @Nullable Entity directEntity, @Nullable Entity causingEntity, Vec3 location) {
 
         return new DamageSource(sources.damageTypes.getHolderOrThrow(type), directEntity, causingEntity, location);
     }

@@ -39,7 +39,7 @@ public class ElectricFieldRenderer extends EntityRenderer<ElectricField> impleme
 
         packedLight = 0x00F000F0;
 
-        Vector4f center = new Vector4f(0, entity.getRadius() - 0.5F, 0, 1).mul(stack.last().pose());
+        Vector4f center = new Vector4f(0, entity.getEyeHeight(), 0, 1).mul(stack.last().pose());
         VertexConsumer consumer = buffer.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity)));
 
         float x = center.x();

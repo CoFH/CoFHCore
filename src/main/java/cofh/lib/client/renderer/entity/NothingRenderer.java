@@ -22,9 +22,9 @@ public class NothingRenderer extends EntityRenderer<Entity> {
     }
 
     @Override
-    public boolean shouldRender(Entity entity, Frustum helper, double p_225626_3_, double p_225626_5_, double p_225626_7_) {
+    public boolean shouldRender(Entity entity, Frustum frustum, double x, double y, double z) {
 
-        return false;
+        return super.shouldRender(entity, frustum, x, y, z);
     }
 
     @Override

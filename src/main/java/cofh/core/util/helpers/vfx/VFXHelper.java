@@ -6,7 +6,7 @@ import com.google.common.collect.ImmutableSortedMap;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import it.unimi.dsi.fastutil.floats.Float2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.floats.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -26,6 +26,7 @@ import java.util.Random;
 import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static cofh.core.util.helpers.vfx.RenderTypes.*;
 
@@ -313,7 +314,7 @@ public final class VFXHelper {
     // endregion
 
     // region SHOCKWAVE
-    public static final SortedMap<Float, List<Function<Integer, Vec3i>>> SHOCKWAVE_OFFSETS = getOffsets(16);
+    public static final Float2ReferenceSortedMap<Vector2i[]> SHOCKWAVE_OFFSETS =  getOffsets(16);
 
     /**
      * Renders a block shockwave that radially propagates from the origin.
@@ -330,23 +331,20 @@ public final class VFXHelper {
         BlockRenderDispatcher renderer = RenderHelper.renderBlock();
         float radius = diameter * 0.5F;
         float invRadius = 1 / radius;
-        SortedMap<Float, List<Function<Integer, Vec3i>>> blocks = SHOCKWAVE_OFFSETS.subMap(Math.min(time - 5, radius), Math.min(time, radius));
-        for (Float dist : blocks.keySet()) {
+        for (Float2ReferenceMap.Entry<Vector2i[]> entry : SHOCKWAVE_OFFSETS.subMap(Math.min(time - 5, radius), Math.min(time, radius)).float2ReferenceEntrySet()) {
+            float dist = entry.getFloatKey();
             float progress = time - dist;
-            double height = heightScale * 0.16 * (radius - dist * 0.5F) * progress * (5 - progress) * invRadius;
-            for (Function<Integer, Vec3i> offsetFunc : blocks.get(dist)) {
+            double height = heightScale * 0.16 * (radius - dist * 0.5F) * progress * (5 - progress) * invRadius / Math.max(dist * 0.25F, 1.0F);
+            for (Vector2i offset : entry.getValue()) {
                 for (int y = 1; y >= -1; --y) {
-                    Vec3i offset = offsetFunc.apply(y);
-                    BlockPos pos = origin.offset(offset);
+                    BlockPos pos = origin.offset(offset.x, y, offset.y);
                     BlockState state = level.getBlockState(pos);
                     if (canRender.test(pos, state)) {
                         if (state.getRenderShape() == RenderShape.MODEL) {
                             stack.pushPose();
-                            stack.translate(offset.getX(), height + y, offset.getZ());
+                            stack.translate(offset.x, height + y, offset.y);
                             stack.scale(1.01F, 1.01F, 1.01F);
-
                             // ModelData modelData = renderer.getBlockModel(state).getModelData(level, pos, state, ModelData.EMPTY);
-
                             for (RenderType type : renderer.getBlockModel(state).getRenderTypes(state, level.random, ModelData.EMPTY)) {
                                 renderer.renderBatched(state, pos.relative(Direction.UP), level, stack, buffer.getBuffer(type), false, level.random, ModelData.EMPTY, type);
                             }
@@ -367,41 +365,23 @@ public final class VFXHelper {
                         !world.getBlockState(pos.above()).isCollisionShapeFullBlock(world, pos.above()));
     }
 
-    private static SortedMap<Float, List<Function<Integer, Vec3i>>> getOffsets(int maxRadius) {
+    private static Float2ReferenceSortedMap<Vector2i[]> getOffsets(int maxRadius) {
 
-        Map<Float, List<Function<Integer, Vec3i>>> blocks = new Float2ObjectOpenHashMap<>();
+        Float2ReferenceMap<List<Vector2i>> blocks = new Float2ReferenceOpenHashMap<>();
         float maxSqr = maxRadius * maxRadius;
         for (int x = -maxRadius; x <= maxRadius; ++x) {
             for (int z = -maxRadius; z <= maxRadius; ++z) {
                 int distSqr = x * x + z * z;
                 if (distSqr < maxSqr) {
                     float dist = MathHelper.sqrt(distSqr);
-                    final int fx = x;
-                    final int fz = z;
-                    blocks.computeIfAbsent(dist, d -> new ArrayList<>()).add(y -> new Vec3i(fx, y, fz));
+                    blocks.computeIfAbsent(dist, d -> new ArrayList<>()).add(new Vector2i(x, z));
                 }
             }
         }
-        return ImmutableSortedMap.copyOf(blocks);
+        Float2ReferenceSortedMap<Vector2i[]> out = new Float2ReferenceAVLTreeMap<>();
+        blocks.float2ReferenceEntrySet().forEach(entry -> out.put(entry.getFloatKey(), entry.getValue().toArray(Vector2i[]::new)));
+        return Float2ReferenceSortedMaps.unmodifiable(out);
     }
-
-    //private static void addReflections(List<int[]> list, int x, int z) {
-    //
-    //    list.add(y -> new V);
-    //    list.add(new int[]{-x, -z});
-    //    if (z != 0) {
-    //        list.add(new int[]{-x, z});
-    //        list.add(new int[]{x, -z});
-    //    }
-    //    if (x != 0 && x != z) {
-    //        list.add(new int[]{z, x});
-    //        list.add(new int[]{-z, -x});
-    //        if (z != 0) {
-    //            list.add(new int[]{-z, x});
-    //            list.add(new int[]{z, -x});
-    //        }
-    //    }
-    //}
     // endregion
 
     // region ELECTRICITY
