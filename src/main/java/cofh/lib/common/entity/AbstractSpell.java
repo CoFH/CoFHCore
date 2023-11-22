@@ -26,11 +26,13 @@ public abstract class AbstractSpell extends Entity implements TraceableEntity {
     public AbstractSpell(EntityType<? extends AbstractSpell> type, Level level) {
 
         super(type, level);
+        this.noPhysics = true;
     }
 
     public AbstractSpell(EntityType<? extends AbstractSpell> type, Level level, Vec3 pos, @Nullable Entity owner, float power) {
 
         this(type, level);
+        this.noPhysics = true;
         moveTo(pos);
         if (owner != null) {
             this.owner = owner;

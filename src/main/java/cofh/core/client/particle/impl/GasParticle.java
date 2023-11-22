@@ -29,7 +29,7 @@ public abstract class GasParticle extends SpriteParticle {
     @Override
     public void tick() {
 
-        if (this.age > this.delay) {
+        if (this.age >= this.delay) {
             int max = MathHelper.ceil(this.duration * 128);
             int time = MathHelper.clamp(MathHelper.floor((this.age - this.delay) * 128), 0, max);
             this.sprite = sprites.get(time, max);

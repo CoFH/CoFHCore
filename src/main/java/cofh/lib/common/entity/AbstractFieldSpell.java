@@ -3,8 +3,11 @@ package cofh.lib.common.entity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 
@@ -32,6 +35,7 @@ public abstract class AbstractFieldSpell extends AbstractAoESpell implements IEn
         super(type, level, pos, owner, power);
         this.duration = duration;
         setRadius(radius);
+
     }
 
     @Override
@@ -49,6 +53,25 @@ public abstract class AbstractFieldSpell extends AbstractAoESpell implements IEn
     protected void setRadius(float radius) {
 
         this.radius = radius;
+        refreshDimensions();
+    }
+
+    @Override
+    public EntityDimensions getDimensions(Pose pose) {
+
+        return getType().getDimensions().scale(radius * 2, 1);
+    }
+
+    @Override
+    protected float getEyeHeight(Pose pose, EntityDimensions dimensions) {
+
+        return dimensions.height * 0.45F;
+    }
+
+    @Override
+    protected AABB makeBoundingBox() {
+
+        return dimensions.makeBoundingBox(position().subtract(0, dimensions.height * 0.5F, 0));
     }
 
     @Override

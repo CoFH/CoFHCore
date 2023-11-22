@@ -19,9 +19,11 @@ public class ShockwaveRenderer extends EntityRenderer<Shockwave> {
     public void render(Shockwave entity, float entityYaw, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
 
         float time = entity.tickCount + partialTicks;
-        float duration = entity.getDuration() + 5;
         float size = entity.getBbWidth();
-        VFXHelper.renderShockwave(stack, buffer, entity.level, entity.blockPosition(), time * (size * 0.5F + 5) / duration, size, entity.getBbWidth());
+        stack.pushPose();
+        stack.translate(-0.5, 0, -0.5);
+        VFXHelper.renderShockwave(stack, buffer, entity.level, entity.blockPosition(), time * entity.getSpeed(), size, entity.getBbHeight());
+        stack.popPose();
     }
 
     @Override
