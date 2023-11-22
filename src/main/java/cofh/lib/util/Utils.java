@@ -228,6 +228,11 @@ public class Utils {
         return new DamageSource(sources.damageTypes.getHolderOrThrow(type), directEntity, causingEntity, location);
     }
 
+    public static Item.Properties itemProperties() {
+
+        return new Item.Properties();
+    }
+
     // region TIME CHECKS
     public static final int TIME_CONSTANT = 40;
     public static final int TIME_CONSTANT_HALF = TIME_CONSTANT / 2;

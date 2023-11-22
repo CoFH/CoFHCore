@@ -10,6 +10,7 @@ import net.minecraft.data.tags.DamageTypeTagsProvider;
 import net.minecraft.data.tags.FluidTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
@@ -35,6 +36,8 @@ public class CoreTagsProvider {
         @SuppressWarnings ("unchecked")
         @Override
         protected void addTags(HolderLookup.Provider pProvider) {
+
+            tag(BlockTagsCoFH.MINEABLE_WITH_SICKLE).addTags(BlockTags.MINEABLE_WITH_HOE, BlockTags.SWORD_EFFICIENT);
 
             tag(BlockTagsCoFH.PUMPKINS_CARVED).add(Blocks.CARVED_PUMPKIN);
         }

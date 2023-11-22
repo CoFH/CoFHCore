@@ -1,6 +1,9 @@
 package cofh.core.init;
 
-import cofh.core.common.entity.*;
+import cofh.core.common.entity.ElectricArc;
+import cofh.core.common.entity.ElectricField;
+import cofh.core.common.entity.FrostField;
+import cofh.core.common.entity.ThrownKnife;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.registries.RegistryObject;

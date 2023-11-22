@@ -44,6 +44,13 @@ public abstract class EnergyContainerItem extends ItemCoFH implements IEnergyCon
         return this;
     }
 
+    public EnergyContainerItem setMaxTransfer(int maxTransfer) {
+
+        this.extract = maxTransfer;
+        this.receive = maxTransfer;
+        return this;
+    }
+
     @Override
     protected void tooltipDelegate(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 

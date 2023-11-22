@@ -604,7 +604,7 @@ public final class VFXHelper {
     /**
      * Renders an axially billboarded streamline that follows the given node positions.
      *
-     * @param posns      Desired positions of the nodes.
+     * @param posns     Desired positions of the nodes.
      * @param widthFunc Function that determines stream width at each node based on the order of nodes.
      *                  Input is a float representing the normalized index of the node (0F for the first node, 1F for the last).
      */

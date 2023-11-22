@@ -9,7 +9,6 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 
 import javax.annotation.Nullable;
-
 import java.util.SplittableRandom;
 import java.util.random.RandomGenerator;
 
