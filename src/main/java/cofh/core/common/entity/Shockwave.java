@@ -114,7 +114,7 @@ public abstract class Shockwave extends AbstractAoESpell {
             if (AreaUtils.closestPointOnAABB(center, entity.getBoundingBox()).subtract(center).horizontalDistanceSqr() > r2) {
                 continue;
             }
-            DamageSource source = getDamageSource();
+            DamageSource source = getDamageSource(center);
             if (entity.hurt(source, damage)) {
                 hitSomething = true;
                 entity.addEffect(new MobEffectInstance(SUNDERED.get(), getDebuffDuration(), MathHelper.weightedRound(strength, this.random) - 1, false, false));
@@ -133,6 +133,6 @@ public abstract class Shockwave extends AbstractAoESpell {
 
     }
 
-    protected abstract DamageSource getDamageSource();
+    protected abstract DamageSource getDamageSource(Vec3 pos);
 
 }

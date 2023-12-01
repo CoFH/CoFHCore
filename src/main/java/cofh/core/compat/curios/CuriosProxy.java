@@ -16,7 +16,7 @@ public class CuriosProxy {
 
         if (CoFHCore.curiosLoaded) {
             instance = new CuriosIntegration();
-            FMLJavaModLoadingContext.get().getModEventBus().addListener(CuriosIntegration::sendImc);
+            //FMLJavaModLoadingContext.get().getModEventBus().addListener(CuriosIntegration::sendImc);
         } else {
             instance = new CuriosProxy();
         }

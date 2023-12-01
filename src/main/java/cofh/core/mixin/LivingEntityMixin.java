@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static cofh.core.common.capability.CapabilityShieldItem.SHIELD_ITEM_CAPABILITY;
 import static cofh.core.init.CoreMobEffects.*;
+import static cofh.lib.init.tags.DamageTypeTagsCoFH.IS_MAGIC;
 import static net.minecraft.tags.DamageTypeTags.*;
 
 /**
@@ -85,7 +86,7 @@ public abstract class LivingEntityMixin {
             if (source.is(IS_EXPLOSION) && living.hasEffect(EXPLOSION_RESISTANCE.get())) {
                 callback.setReturnValue(false);
             }
-            if (source.is(WITCH_RESISTANT_TO) && living.hasEffect(MAGIC_RESISTANCE.get())) {
+            if (source.is(IS_MAGIC) && living.hasEffect(MAGIC_RESISTANCE.get())) {
                 callback.setReturnValue(false);
             }
             if (source == living.level.damageSources().freeze() && living.hasEffect(COLD_RESISTANCE.get())) {
