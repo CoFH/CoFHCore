@@ -40,12 +40,11 @@ public abstract class SpriteParticle extends ColorParticle {
             this.remove();
             return;
         }
-        if (this.age++ < this.delay) {
-            return;
+        if (this.age++ >= this.delay) {
+            setSprite();
+            this.move(this.xd, this.yd, this.zd);
+            updateVelocity();
         }
-        setSprite();
-        this.move(this.xd, this.yd, this.zd);
-        updateVelocity();
     }
 
     protected void setSprite() {

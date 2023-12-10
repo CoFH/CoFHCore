@@ -42,6 +42,10 @@ public class CoreClientConfig implements IBaseConfig {
                 .comment("If TRUE, CoFH Items will display a message prompting to hold Shift to see full details (charge state, etc.). This does not change the behavior, only if the informational message should display.")
                 .define("Show 'Hold Shift for Details' Message", holdShiftForDetails);
 
+        particleDynamicLighting = builder
+                .comment("If TRUE, certain CoFH particles will dynamically emit light.")
+                .define("Dynamically Light Particles", particleDynamicLighting);
+
         builder.pop();
     }
 
@@ -52,5 +56,6 @@ public class CoreClientConfig implements IBaseConfig {
     public static Supplier<Boolean> enableKeywords = TRUE;
     public static Supplier<Boolean> alwaysShowDetails = FALSE;
     public static Supplier<Boolean> holdShiftForDetails = TRUE;
+    public static Supplier<Boolean> particleDynamicLighting = TRUE;
 
 }

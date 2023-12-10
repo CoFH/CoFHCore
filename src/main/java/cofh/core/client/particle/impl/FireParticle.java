@@ -1,6 +1,8 @@
 package cofh.core.client.particle.impl;
 
 import cofh.core.client.particle.options.ColorParticleOptions;
+import cofh.core.common.TransientLightManager;
+import cofh.core.common.config.CoreClientConfig;
 import cofh.core.util.helpers.vfx.RenderTypes;
 import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -10,10 +12,12 @@ import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.core.BlockPos;
 
 import javax.annotation.Nonnull;
 
 public class FireParticle extends GasParticle {
+
 
     private FireParticle(ColorParticleOptions data, ClientLevel level, SpriteSet sprites, double x, double y, double z, double dx, double dy, double dz) {
 
@@ -21,6 +25,23 @@ public class FireParticle extends GasParticle {
         gravity = -0.3F;
         friction = 0.9F;
         groundFriction = 0.2F;
+    }
+
+    @Override
+    public void tick() {
+
+        super.tick();
+        if (CoreClientConfig.particleDynamicLighting.get() && this.age >= this.delay) {
+            int x = MathHelper.floor(this.x);
+            int y = MathHelper.floor(this.y);
+            int z = MathHelper.floor(this.z);
+            TransientLightManager.addLight(BlockPos.asLong(x, y, z), getDynamicLightLevel());
+        }
+    }
+
+    protected int getDynamicLightLevel() {
+
+        return Math.max(0, MathHelper.floor(10 - 10 * (age - delay) / duration)) + 1;
     }
 
     @Override
