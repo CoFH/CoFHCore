@@ -3,7 +3,6 @@ package cofh.core;
 import cofh.core.client.event.CoreClientEvents;
 import cofh.core.client.gui.FluidFilterScreen;
 import cofh.core.client.gui.ItemFilterScreen;
-import cofh.core.client.renderer.entity.ElectricArcRenderer;
 import cofh.core.client.renderer.entity.ElectricFieldRenderer;
 import cofh.core.client.renderer.entity.KnifeRenderer;
 import cofh.core.client.renderer.entity.model.ArmorFullSuitModel;
@@ -223,7 +222,6 @@ public class CoFHCore {
     private void entityRendererSetup(final EntityRenderersEvent.RegisterRenderers event) {
 
         event.registerEntityRenderer(THROWN_KNIFE.get(), KnifeRenderer::new);
-        event.registerEntityRenderer(ELECTRIC_ARC.get(), ElectricArcRenderer::new);
         event.registerEntityRenderer(ELECTRIC_FIELD.get(), ElectricFieldRenderer::new);
         event.registerEntityRenderer(FROST_FIELD.get(), NothingRenderer::new);
     }

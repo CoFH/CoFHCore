@@ -1,6 +1,5 @@
 package cofh.core.common.block.entity;
 
-import cofh.core.common.entity.ElectricArc;
 import cofh.lib.api.block.entity.ITickableTile;
 import cofh.lib.util.Utils;
 import cofh.lib.util.helpers.MathHelper;
@@ -9,7 +8,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.Vec3;
 
 import static cofh.core.init.CoreBlockEntities.LIGHTNING_AIR_TILE;
 
@@ -32,11 +30,9 @@ public class LightningAirBlockEntity extends BlockEntity implements ITickableTil
         if (--duration <= 0) {
 
             if (level.canSeeSky(worldPosition) && level instanceof ServerLevel) {
-                level.addFreshEntity(new ElectricArc(level, Vec3.atBottomCenterOf(getBlockPos()), null));
+                //level.addFreshEntity(new ElectricArc(level, Vec3.atBottomCenterOf(getBlockPos()), null));
 
-                if (level.canSeeSky(worldPosition) && level instanceof ServerLevel) {
-                    Utils.spawnLightningBolt(level, worldPosition, null);
-                }
+                Utils.spawnLightningBolt(level, worldPosition, null);
                 this.level.setBlockAndUpdate(worldPosition, Blocks.AIR.defaultBlockState());
                 this.level.removeBlockEntity(this.worldPosition);
                 this.setRemoved();
