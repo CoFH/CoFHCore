@@ -18,7 +18,6 @@ import javax.annotation.Nonnull;
 
 public class FireParticle extends GasParticle {
 
-
     private FireParticle(ColorParticleOptions data, ClientLevel level, SpriteSet sprites, double x, double y, double z, double dx, double dy, double dz) {
 
         super(data, level, sprites, x, y, z, dx, dy, dz);

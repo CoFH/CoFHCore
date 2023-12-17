@@ -64,7 +64,7 @@ public class ArcParticle extends PointToPointParticle {
 
         return 8;
     }
-    
+
     protected LongList traversePath() {
 
         LongList path = new LongArrayList();
@@ -78,14 +78,14 @@ public class ArcParticle extends PointToPointParticle {
         int signX = Mth.sign(dx);
         int signY = Mth.sign(dy);
         int signZ = Mth.sign(dz);
-        double d9 = signX == 0 ? Double.MAX_VALUE : (double)signX / dx;
-        double d10 = signY == 0 ? Double.MAX_VALUE : (double)signY / dy;
-        double d11 = signZ == 0 ? Double.MAX_VALUE : (double)signZ / dz;
+        double d9 = signX == 0 ? Double.MAX_VALUE : (double) signX / dx;
+        double d10 = signY == 0 ? Double.MAX_VALUE : (double) signY / dy;
+        double d11 = signZ == 0 ? Double.MAX_VALUE : (double) signZ / dz;
         double d12 = d9 * (signX > 0 ? 1.0D - Mth.frac(x) : Mth.frac(x));
         double d13 = d10 * (signY > 0 ? 1.0D - Mth.frac(y) : Mth.frac(y));
         double d14 = d11 * (signZ > 0 ? 1.0D - Mth.frac(z) : Mth.frac(z));
 
-        while(d12 <= 1.0D || d13 <= 1.0D || d14 <= 1.0D) {
+        while (d12 <= 1.0D || d13 <= 1.0D || d14 <= 1.0D) {
             if (d12 < d13) {
                 if (d12 < d14) {
                     i += signX;

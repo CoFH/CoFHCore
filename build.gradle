@@ -105,7 +105,7 @@ repositories {
 }
 
 dependencies {
-    minecraft "net.neoforged:forge:${mc_version}-${forge_version}"
+    minecraft "net.neoforged:forge:${mc_version}-${neoforge_version}"
 
     // compile against the JEI API but do not include it at runtime
     compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}")

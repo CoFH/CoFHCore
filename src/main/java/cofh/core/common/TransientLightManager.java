@@ -33,7 +33,8 @@ public class TransientLightManager {
 
     /**
      * Places a light source lasting one tick in the client level.
-     * @param pos The position to place the light source at.
+     *
+     * @param pos   The position to place the light source at.
      * @param level The light level of the light source.
      */
     public static void addLight(long pos, int level) {
