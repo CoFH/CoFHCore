@@ -67,20 +67,6 @@ public abstract class LivingEntityMixin {
 
         if (source.is(IS_FIRE)) {
             living.removeEffect(CHILLED.get());
-            //MobEffectInstance instance = living.getEffect(CHILLED.get());
-            //if (instance != null) {
-            //    living.removeEffect(CHILLED.get());
-            //    int amplifier = instance.getAmplifier() - 1;
-            //    if (amplifier >= 0) {
-            //        MobEffectInstance hidden = instance.hiddenEffect;
-            //        int duration = instance.getDuration();
-            //        while (hidden != null && hidden.getAmplifier() >= amplifier) {
-            //            duration = Math.max(duration, hidden.getDuration());
-            //            hidden = hidden.hiddenEffect;
-            //        }
-            //        living.addEffect(new MobEffectInstance(CHILLED.get(), duration, amplifier, instance.isAmbient(), instance.isVisible(), instance.showIcon(), hidden, instance.getFactorData()));
-            //    }
-            //}
         }
         if (!source.is(BYPASSES_ENCHANTMENTS)) {
             if (source.is(IS_EXPLOSION) && living.hasEffect(EXPLOSION_RESISTANCE.get())) {
