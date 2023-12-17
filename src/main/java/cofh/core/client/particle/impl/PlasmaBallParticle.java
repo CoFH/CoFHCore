@@ -1,10 +1,14 @@
 package cofh.core.client.particle.impl;
 
+import cofh.core.common.TransientLightManager;
+import cofh.core.common.config.CoreClientConfig;
+import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
 
 import javax.annotation.Nonnull;
@@ -33,6 +37,9 @@ public class PlasmaBallParticle extends TextureSheetParticle {
 
         oRoll = roll = random.nextFloat() * 2 * (float) Math.PI;
         setSpriteFromAge(spriteSet);
+        if (CoreClientConfig.particleDynamicLighting.get()) {
+            TransientLightManager.addLight(BlockPos.asLong(MathHelper.floor(x), MathHelper.floor(y), MathHelper.floor(z)), 8);
+        }
         super.tick();
     }
 

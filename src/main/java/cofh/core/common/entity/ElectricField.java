@@ -1,12 +1,15 @@
 package cofh.core.common.entity;
 
 import cofh.core.client.particle.options.BiColorParticleOptions;
+import cofh.core.common.TransientLightManager;
+import cofh.core.common.config.CoreClientConfig;
 import cofh.core.init.CoreMobEffects;
 import cofh.core.init.CoreParticles;
 import cofh.core.util.AreaUtils;
 import cofh.core.util.helpers.ArcheryHelper;
 import cofh.lib.common.entity.AbstractFieldSpell;
 import cofh.lib.util.Utils;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
@@ -60,6 +63,8 @@ public class ElectricField extends AbstractFieldSpell {
             } else {
                 ++lastArc;
             }
+        } else if (CoreClientConfig.particleDynamicLighting.get()) {
+            TransientLightManager.addLight(BlockPos.containing(getEyePosition()), 8);
         }
     }
 
