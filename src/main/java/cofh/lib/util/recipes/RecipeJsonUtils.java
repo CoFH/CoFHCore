@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mojang.logging.LogUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.resources.ResourceLocation;
@@ -18,6 +19,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.slf4j.Logger;
 
 import java.util.List;
 
@@ -26,6 +28,7 @@ import static cofh.lib.util.Constants.BUCKET_VOLUME;
 
 public abstract class RecipeJsonUtils {
 
+    private static final Logger LOG = LogUtils.getLogger();
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
     private RecipeJsonUtils() {
@@ -45,6 +48,7 @@ public abstract class RecipeJsonUtils {
                 ingredient = Ingredient.fromJson(element);
             } catch (Throwable t) {
                 ingredient = Ingredient.of(ItemStack.EMPTY);
+                LOG.debug("Invalid Ingredient - using EMPTY instead!", t);
             }
         } else {
             JsonElement subElement = element.getAsJsonObject();
@@ -66,6 +70,7 @@ public abstract class RecipeJsonUtils {
                 }
             } catch (Throwable t) {
                 ingredient = Ingredient.of(ItemStack.EMPTY);
+                LOG.debug("Invalid Ingredient - using EMPTY instead!", t);
             }
         }
         return ingredient;
@@ -83,6 +88,7 @@ public abstract class RecipeJsonUtils {
                 ingredient = FluidIngredient.fromJson(element);
             } catch (Throwable t) {
                 ingredient = FluidIngredient.of(FluidStack.EMPTY);
+                LOG.debug("Invalid Ingredient - using EMPTY instead!", t);
             }
         } else {
             JsonElement subElement = element.getAsJsonObject();
@@ -114,6 +120,7 @@ public abstract class RecipeJsonUtils {
                 }
             } catch (Throwable t) {
                 ingredient = FluidIngredient.of(FluidStack.EMPTY);
+                LOG.debug("Invalid Ingredient - using EMPTY instead!", t);
             }
         }
         return ingredient;
@@ -211,6 +218,7 @@ public abstract class RecipeJsonUtils {
                     }
                     stack.setTag(nbt);
                 } catch (Exception e) {
+                    LOG.debug("Invalid ItemStack - using EMPTY instead!", e);
                     return ItemStack.EMPTY;
                 }
             }
@@ -261,6 +269,7 @@ public abstract class RecipeJsonUtils {
                     }
                     stack.setTag(nbt);
                 } catch (Exception e) {
+                    LOG.debug("Invalid FluidStack - using EMPTY instead!", e);
                     return FluidStack.EMPTY;
                 }
             }
