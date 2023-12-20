@@ -1,10 +1,20 @@
 {
+
+  "_comment": "========================================================================================================",
+
+  "_comment": "CoFH General / Lib",
+
+  "_comment": "========================================================================================================",
+
   "attribute.name.cofh.fall_distance": "Расстояние падения",
   "attribute.name.cofh.hazard_resistance": "Сопротивление опасности",
   "attribute.name.cofh.sting_resistance": "Устойчивость к укусам",
+
   "death.attack.knife": "%1$s был зарезан %2$s!",
   "death.attack.knife.item": "%1$s был зарезан %2$s с помощью %3$s!",
+
   "forge.swimSpeed": "Скорость плавания",
+
   "commands.cofh.heal.success.single": "%s исцелён",
   "commands.cofh.heal.success.multiple": "Исцелены %s сущностей",
   "commands.cofh.ignite.success.single": "%s зажжён",
@@ -17,12 +27,13 @@
   "commands.cofh.invuln.remove.multiple": "Убрана неуязвимость у %s сущностей",
   "commands.cofh.invuln.success.single": "%s стал неуязвимым",
   "commands.cofh.invuln.success.multiple": "%s сущностей стали неуязвимыми",
-  "commands.cofh.recharge.success.single": "%s суперзаряжен",
-  "commands.cofh.recharge.success.multiple": "%s сущностей суперзаряжены",
+  "commands.cofh.recharge.success.single": "%s супер-заряжен",
+  "commands.cofh.recharge.success.multiple": "%s сущностей супер-заряжены",
   "commands.cofh.repair.success.single": "Экипировка %s починена",
   "commands.cofh.repair.success.multiple": "Экипировка %s сущностей починена",
   "commands.cofh.zap.success.single": "%s забит",
   "commands.cofh.zap.success.multiple": "%s сущностей забиты",
+
   "info.cofh.another_player": "Другой игрок",
   "info.cofh.amount": "Количество",
   "info.cofh.amount_unmodifiable": "Неизменяемое количество",
@@ -59,42 +70,52 @@
   "info.cofh.unit_rf": "мВ",
   "info.cofh.unit_rf_t": "RF/т.",
   "info.cofh.unit_xp": "Опыт",
-  "info.cofh.xp": "Опыт",
+
   "info.cofh.block_tags": "Теги блока",
   "info.cofh.fluid_tags": "Теги жидкости",
   "info.cofh.item_tags": "Теги предметов",
   "info.cofh.hold_ctrl_for_tags": "Удерживайте §e§oCtrl§r§7 для тегов",
   "info.cofh.hold_shift_for_details": "Удерживайте §e§oShift§r§7 для подробностей",
+
   "info.cofh.mode_change": "Нажмите '%s' или '%s' для смены режима.",
   "info.cofh.mode_toggle": "Нажмите '%s' для смены режима.",
   "info.cofh.use_sneak_activate": "Используйте крадясь для включения.",
   "info.cofh_use_sneak_deactivate": "Используйте крадясь для отключения.",
+
   "info.cofh.augmentation": "Улучшения",
+
   "info.cofh.energy_max_prod": "Макс. производ.",
   "info.cofh.energy_max_use": "Макс. исп.",
   "info.cofh.energy_prod": "Производ. энерг.",
   "info.cofh.energy_stored": "Накопленная энергия",
   "info.cofh.energy_use": "Исп. энергии",
+
   "info.cofh.fluid_filter": "Жидкостный фильтр",
   "info.cofh.item_filter": "Предметный фильтр",
   "info.cofh.filter.allowlist.0": "Запрещающий лист",
   "info.cofh.filter.allowlist.1": "Разрешающий лист",
   "info.cofh.filter.checkNBT.0": "Игнорировать NBT",
   "info.cofh.filter.checkNBT.1": "Использовать NBT",
+
   "info.cofh.configuration": "Конфигурация",
   "info.cofh.transfer_in_disabled": "Авто-вход отключён",
   "info.cofh.transfer_in_enabled": "Авто-вход включён",
   "info.cofh.transfer_in_unavailable": "Авто-вход недоступен",
+
   "info.cofh.transfer_out_disabled": "Авто-выход отключён",
   "info.cofh.transfer_out_enabled": "Авто-выход включён",
   "info.cofh.transfer_out_unavailable": "Авто-выход недоступен",
+
   "info.cofh.decrease_by": "Уменьшить на",
   "info.cofh.increase_by": "Увеличить на",
+
   "info.cofh.information": "Информация",
+
   "info.cofh.secure_block": "Теперь этот блок принадлежит Вам.",
   "info.cofh.secure_item": "Теперь этот предмет принадлежит Вам.",
   "info.cofh.secure_notice": "Примечание: Операторы сервера могут свободно получать доступ к 'защищённым' блокам.",
   "info.cofh.secure_warning": "Это личное и принадлежит %s! Вы могли потерять руку!",
+
   "info.cofh.security": "Безопасность",
   "info.cofh.access": "Доступ",
   "info.cofh.access_friends": "Для друзей",
@@ -102,6 +123,7 @@
   "info.cofh.access_public": "Публичный",
   "info.cofh.access_team": "Командный",
   "info.cofh.owner": "Владелец",
+
   "info.cofh.redstone_control": "Управление",
   "info.cofh.control_status": "Статус",
   "info.cofh.current_signal": "Сигнал: %s",
@@ -111,7 +133,15 @@
   "info.cofh.high": "Высокий",
   "info.cofh.low": "Низкий",
   "info.cofh.signal_required": "Требуется сигнал",
+
+  "_comment": "========================================================================================================",
+
+  "_comment": "CoFH Core",
+
+  "_comment": "========================================================================================================",
+
   "block.cofh_core.glossed_magma": "Блестящая магма",
+
   "effect.cofh_core.amplification": "Усиление",
   "effect.cofh_core.chilled": "Переохлаждение",
   "effect.cofh_core.clarity": "Ясность",
@@ -127,22 +157,35 @@
   "effect.cofh_core.shocked": "Шок",
   "effect.cofh_core.slimed": "Слизневое падение",
   "effect.cofh_core.sundered": "Разлука",
-  "effect.cofh_core.supercharge": "Суперзаряженность",
+  "effect.cofh_core.supercharge": "Супер-заряженность",
+  "effect.cofh_core.true_invisibility": "Истинная невидимость",
   "effect.cofh_core.wrenched": "Кручение!",
+
   "enchantment.cofh_core.disabled": "Мерцание",
   "enchantment.cofh_core.disabled.desc": "Отключает чары, которые ничего не делают.",
   "enchantment.cofh_core.holding": "Удержание",
   "enchantment.cofh_core.holding.desc": "Увеличивает ёмкость хранения определённых предметов.",
+
   "fluid_type.cofh_core.experience": "Эсенция знаний",
   "fluid_type.cofh_core.honey": "Мёд",
   "fluid_type.cofh_core.potion": "Зелье",
   "fluid_type.cofh_core.steam": "Пар",
+
   "info.cofh_core.fluid_filter.0": "Поместите предметы, содержащие жидкость, в слоты, чтобы добавить жидкость в список фильтра.",
   "info.cofh_core.fluid_filter.1": "Дополнительные параметры могут быть использованы для тонкой настройки поведения.",
+
   "info.cofh_core.item_filter.0": "Поместите предметы в слоты, чтобы добавить их в список фильтра.",
   "info.cofh_core.item_filter.1": "Дополнительные параметры можно использовать для точной настройки поведения.",
+
   "key.cofh.mode_change_increment": "Циклический режим: вперёд",
   "key.cofh.mode_change_decrement": "Циклический режим: реверс",
+
+  "_comment": "========================================================================================================",
+
+  "_comment": "Minecraft",
+
+  "_comment": "========================================================================================================",
+
   "enchantment.minecraft.aqua_affinity.desc": "Устраняет ограничение скорости добычи под водой.",
   "enchantment.minecraft.bane_of_arthropods.desc": "Замедляет и увеличивает урон по членистоногим мобам.",
   "enchantment.minecraft.binding_curse.desc": "Предотвращает снятие экипировки.",
@@ -172,7 +215,7 @@
   "enchantment.minecraft.punch.desc": "Увеличивает силу отдачи стрелы.",
   "enchantment.minecraft.quick_charge.desc": "Уменьшает время перезарядки арбалета.",
   "enchantment.minecraft.respiration.desc": "Увеличивает время дыхания под водой.",
-  "enchantment.minecraft.riptide.desc": "Брошенные трезубцы тянут за собой владельца при определенных условиях.",
+  "enchantment.minecraft.riptide.desc": "Брошенные трезубцы тянут за собой владельца при определённых условиях.",
   "enchantment.minecraft.sharpness.desc": "Увеличивает наносимый урон.",
   "enchantment.minecraft.silk_touch.desc": "При разрушении блока выпадает этот блок, даже если из него должно выпадать что-то другое.",
   "enchantment.minecraft.smite.desc": "Увеличивает урон, наносимый нежити.",
@@ -180,6 +223,9 @@
   "enchantment.minecraft.thorns.desc": "С некоторым шансом наносит урон атакующему.",
   "enchantment.minecraft.unbreaking.desc": "С некоторым шансом инструмент не потратит прочность",
   "enchantment.minecraft.vanishing_curse.desc": "Предметы уничтожаются после смерти.",
+
+  "fluid_type.minecraft.milk": "Молоко",
+
   "item.minecraft.lingering_potion.effect.amplification": "Туманное зелье усиления",
   "item.minecraft.lingering_potion.effect.clarity": "Туманное зелье ясности",
   "item.minecraft.lingering_potion.effect.enderference": "Туманное зелье эндерференции",
@@ -188,6 +234,7 @@
   "item.minecraft.lingering_potion.effect.love": "Туманное зелье любви",
   "item.minecraft.lingering_potion.effect.magic_resistance": "Туманное зелье магического сопротивления",
   "item.minecraft.lingering_potion.effect.panacea": "Туманная панацея",
+
   "item.minecraft.potion.effect.amplification": "Зелье усиления",
   "item.minecraft.potion.effect.clarity": "Зелье ясности",
   "item.minecraft.potion.effect.enderference": "Зелье эндерференции",
@@ -196,14 +243,16 @@
   "item.minecraft.potion.effect.love": "Зелье любви",
   "item.minecraft.potion.effect.magic_resistance": "Зелье защиты магией",
   "item.minecraft.potion.effect.panacea": "Панацея",
+
   "item.minecraft.splash_potion.effect.amplification": "Взрывное зелье усиления",
   "item.minecraft.splash_potion.effect.clarity": "Взрывное зелье ясности",
   "item.minecraft.splash_potion.effect.enderference": "Взрывное зелье эндерференции",
-  "item.minecraft.splash_potion.effect.explosion_resistance": "Взрывное зелье взрывоустойкости",
+  "item.minecraft.splash_potion.effect.explosion_resistance": "Взрывное зелье взрывостойкости",
   "item.minecraft.splash_potion.effect.lightning_resistance": "Взрывное зелье молниезащиты",
   "item.minecraft.splash_potion.effect.love": "Взрывное зелье любви",
   "item.minecraft.splash_potion.effect.magic_resistance": "Взрывное зелье защиты магией",
   "item.minecraft.splash_potion.effect.panacea": "Взрывная панацея",
+
   "item.minecraft.tipped_arrow.effect.amplification": "Стрела усиления",
   "item.minecraft.tipped_arrow.effect.clarity": "Стрела ясности",
   "item.minecraft.tipped_arrow.effect.enderference": "Стрела эндерференции",
