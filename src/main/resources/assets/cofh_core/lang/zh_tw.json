@@ -52,7 +52,7 @@
   "info.cofh.heads": "頭",
   "info.cofh.infinite": "無限",
   "info.cofh.infinite_source": "無限資源",
-  "info.cofh.key_not_bound": "按鍵綁定：CoFH-「%s」未設定。",
+  "info.cofh.key_not_bound": "按鍵綁定：CoFH -「%s」未設定。",
   "info.cofh.none": "無",
   "info.cofh.optional_catalyst": "可選催化劑",
   "info.cofh.output": "輸出",
@@ -63,7 +63,9 @@
   "info.cofh.transfer": "傳輸",
   "info.cofh.type": "種類",
   "info.cofh.unit_mb": "mB",
+  "info.cofh.unit_mb_t": "mB/t",
   "info.cofh.unit_rf": "RF",
+  "info.cofh.unit_rf_t": "RF/t",
   "info.cofh.unit_xp": "XP",
 
   "info.cofh.block_tags": "方塊標籤",
@@ -138,6 +140,7 @@
   "effect.cofh_core.amplification": "增幅",
   "effect.cofh_core.chilled": "霜凍",
   "effect.cofh_core.clarity": "洞察",
+  "effect.cofh_core.cold_resistance": "抗寒",
   "effect.cofh_core.eagle_eye": "鷹眼",
   "effect.cofh_core.enderference": "終界抑制",
   "effect.cofh_core.explosion_resistance": "爆炸抗性",
@@ -150,6 +153,7 @@
   "effect.cofh_core.slimed": "黏著",
   "effect.cofh_core.sundered": "割裂",
   "effect.cofh_core.supercharge": "超充能",
+  "effect.cofh_core.true_invisibility": "隱匿",
   "effect.cofh_core.wrenched": "扭傷！",
 
   "enchantment.cofh_core.disabled": "附魔閃光",
@@ -212,6 +216,8 @@
   "enchantment.minecraft.thorns.desc": "對攻擊者造成傷害。",
   "enchantment.minecraft.unbreaking.desc": "降低耐久度損耗機率。",
   "enchantment.minecraft.vanishing_curse.desc": "帶有該附魔的物品會在使用者死亡後澈底消失。",
+
+  "fluid_type.minecraft.milk": "鮮奶",
 
   "item.minecraft.lingering_potion.effect.amplification": "滯留 增幅藥水",
   "item.minecraft.lingering_potion.effect.clarity": "滯留 洞察藥水",
