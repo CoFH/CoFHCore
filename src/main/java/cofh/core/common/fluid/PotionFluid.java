@@ -51,7 +51,7 @@ public class PotionFluid extends FluidCoFH {
         super(FLUIDS, ID_FLUID_POTION);
 
         // This is only used for testing.
-        // bucket = ITEMS.register(bucket(key), () -> new BucketItem(stillFluid, properties().containerItem(Items.BUCKET).maxStackSize(1).group(ItemGroup.BREWING)));
+        // bucket = toolsTab(1000, ITEMS.register(bucket(key), () -> new BucketItem(stillFluid, properties().containerItem(Items.BUCKET).maxStackSize(1).group(ItemGroup.BREWING)));
     }
 
     @Override

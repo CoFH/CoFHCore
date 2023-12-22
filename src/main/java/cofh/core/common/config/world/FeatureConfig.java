@@ -13,7 +13,7 @@ public class FeatureConfig implements IBaseConfig {
     public static final FeatureConfig EMPTY_CONFIG = new FeatureConfig("empty", FALSE);
 
     protected String name;
-    protected Supplier<Boolean> enable = FALSE;
+    protected Supplier<Boolean> enable;
     protected Supplier<Boolean> generate = TRUE;
 
     public FeatureConfig(String name, Supplier<Boolean> enable) {
