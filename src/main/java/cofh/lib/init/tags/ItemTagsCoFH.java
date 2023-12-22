@@ -34,6 +34,7 @@ public class ItemTagsCoFH {
     public static final TagKey<Item> COINS_STEEL = forgeTag("coins/steel");
     public static final TagKey<Item> COINS_TIN = forgeTag("coins/tin");
 
+    // TODO: Remove in 11.1
     public static final TagKey<Item> CROPS_AMARANTH = forgeTag("crops/amaranth");
     public static final TagKey<Item> CROPS_BARLEY = forgeTag("crops/barley");
     public static final TagKey<Item> CROPS_BELL_PEPPER = forgeTag("crops/bell_pepper");
@@ -194,6 +195,7 @@ public class ItemTagsCoFH {
     public static final TagKey<Item> RAW_MATERIALS_SILVER = forgeTag("raw_materials/silver");
     public static final TagKey<Item> RAW_MATERIALS_TIN = forgeTag("raw_materials/tin");
 
+    // TODO: Remove in 11.1
     public static final TagKey<Item> SEEDS_AMARANTH = forgeTag("seeds/amaranth");
     public static final TagKey<Item> SEEDS_BARLEY = forgeTag("seeds/barley");
     public static final TagKey<Item> SEEDS_BELL_PEPPER = forgeTag("seeds/bell_pepper");

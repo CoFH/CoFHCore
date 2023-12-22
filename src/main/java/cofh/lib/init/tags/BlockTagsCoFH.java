@@ -15,6 +15,7 @@ public class BlockTagsCoFH {
 
     public static final TagKey<Block> MINEABLE_WITH_SICKLE = forgeTag("mineable/sickle");
 
+    // TODO: Remove in 11.1
     public static final TagKey<Block> ORES_APATITE = forgeTag("ores/apatite");
     public static final TagKey<Block> ORES_CINNABAR = forgeTag("ores/cinnabar");
     public static final TagKey<Block> ORES_LEAD = forgeTag("ores/lead");
@@ -26,6 +27,7 @@ public class BlockTagsCoFH {
     public static final TagKey<Block> ORES_SULFUR = forgeTag("ores/sulfur");
     public static final TagKey<Block> ORES_TIN = forgeTag("ores/tin");
 
+    // TODO: Remove in 11.1 (As appropriate)
     public static final TagKey<Block> STORAGE_BLOCKS_APATITE = forgeTag("storage_blocks/apatite");
     public static final TagKey<Block> STORAGE_BLOCKS_BAMBOO = forgeTag("storage_blocks/bamboo");
     public static final TagKey<Block> STORAGE_BLOCKS_BITUMEN = forgeTag("storage_blocks/bitumen");
