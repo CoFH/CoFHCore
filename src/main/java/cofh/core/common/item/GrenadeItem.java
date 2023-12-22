@@ -49,7 +49,7 @@ public class GrenadeItem extends ItemCoFH {
         if (!playerIn.getAbilities().instabuild) {
             stack.shrink(1);
         }
-        return InteractionResultHolder.success(stack);
+        return InteractionResultHolder.sidedSuccess(stack, worldIn.isClientSide());
     }
 
     protected void createGrenade(ItemStack stack, Level world, Player player) {

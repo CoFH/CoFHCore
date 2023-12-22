@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+// TODO 1.21 Remove
 @Mixin (MultiPlayerGameMode.class)
 public abstract class MultiPlayerGameModeMixin {
 
