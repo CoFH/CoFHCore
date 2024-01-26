@@ -24,7 +24,7 @@ import java.util.Set;
 import static cofh.core.init.CoreMobEffects.CHILLED;
 import static cofh.core.init.CoreMobEffects.SHOCKED;
 import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
-import static net.minecraft.tags.DamageTypeTags.IS_FIRE;
+import static net.minecraft.tags.DamageTypeTags.*;
 import static net.minecraft.world.effect.MobEffects.POISON;
 import static net.minecraft.world.effect.MobEffects.WITHER;
 
@@ -47,7 +47,7 @@ public class ArmorEvents {
 
         double hazRes = getHazardResistance(entity);
         if (hazRes > 0.0D) {
-            if (source.is(IS_FIRE) || HAZARD_DAMAGE_TYPES.contains(source.getMsgId())) {
+            if (source.is(IS_FIRE) || source.is(IS_FREEZING) || source.is(IS_LIGHTNING)) {
                 if (entity.getRandom().nextDouble() < hazRes) {
                     entity.clearFire();
                     attemptDamagePlayerArmor(entity, amount);
@@ -187,9 +187,6 @@ public class ArmorEvents {
         STING_DAMAGE_TYPES.add("cactus");
         STING_DAMAGE_TYPES.add("sweetBerryBush");
         STING_DAMAGE_TYPES.add("sadiroot");
-
-        HAZARD_DAMAGE_TYPES.add("lightningBolt");
-        HAZARD_DAMAGE_TYPES.add("freeze");
 
         HAZARD_EFFECTS.add(POISON);
         HAZARD_EFFECTS.add(WITHER);

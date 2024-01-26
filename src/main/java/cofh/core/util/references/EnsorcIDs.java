@@ -12,10 +12,7 @@ public class EnsorcIDs {
     public static final String ID_PROTECTION_FALL = "feather_falling";
     public static final String ID_PROTECTION_FIRE = "fire_protection";
     public static final String ID_PROTECTION_PROJECTILE = "projectile_protection";
-    public static final String ID_FIRE_ASPECT = "fire_aspect";
     public static final String ID_FROST_WALKER = "frost_walker";
-    public static final String ID_KNOCKBACK = "knockback";
-    public static final String ID_LOOTING = "looting";
     public static final String ID_THORNS = "thorns";
     public static final String ID_MENDING = "mending";
 

@@ -44,7 +44,7 @@ public class GlossedMagmaBlock extends MagmaBlock {
     public void playerDestroy(Level worldIn, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity te, ItemStack stack) {
 
         super.playerDestroy(worldIn, player, pos, state, te, stack);
-        if (getItemEnchantmentLevel(Enchantments.SILK_TOUCH, stack) == 0) {
+        if (getItemEnchantmentLevel(Enchantments.SILK_TOUCH, stack) <= 0) {
             BlockState below = worldIn.getBlockState(pos.below());
             if (below.blocksMotion() || below.liquid()) {
                 worldIn.setBlockAndUpdate(pos, Blocks.LAVA.defaultBlockState());
@@ -70,17 +70,17 @@ public class GlossedMagmaBlock extends MagmaBlock {
     @Override
     public void tick(BlockState state, ServerLevel worldIn, BlockPos pos, RandomSource rand) {
 
-        if ((rand.nextInt(9) == 0 || this.shouldMelt(worldIn, pos, 4)) && this.slightlyMelt(state, worldIn, pos)) {
+        if ((rand.nextInt(15) == 0 || this.shouldMelt(worldIn, pos, 3)) && this.slightlyMelt(state, worldIn, pos)) {
             BlockPos.MutableBlockPos blockpos$mutable = new BlockPos.MutableBlockPos();
             for (Direction direction : DIRECTIONS) {
                 blockpos$mutable.setWithOffset(pos, direction);
                 BlockState blockstate = worldIn.getBlockState(blockpos$mutable);
                 if (blockstate.is(this) && !this.slightlyMelt(blockstate, worldIn, blockpos$mutable)) {
-                    worldIn.scheduleTick(blockpos$mutable, this, Mth.nextInt(rand, 20, 40));
+                    worldIn.scheduleTick(blockpos$mutable, this, Mth.nextInt(rand, 80, 160));
                 }
             }
         } else {
-            worldIn.scheduleTick(pos, this, MathHelper.nextInt(rand, 20, 40));
+            worldIn.scheduleTick(pos, this, MathHelper.nextInt(rand, 80, 160));
         }
     }
 

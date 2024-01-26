@@ -10,7 +10,10 @@
     "MouseHandlerMixin"
   ],
   "mixins": [
+    "HorseArmorItemMixin",
     "LivingEntityMixin",
-    "MultiPlayerGameModeMixin"
+    "MultiPlayerGameModeMixin",
+    "ShearsItemMixin",
+    "ShieldItemMixin"
   ]
 }
