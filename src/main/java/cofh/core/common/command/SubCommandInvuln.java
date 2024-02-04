@@ -10,20 +10,21 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Collection;
+import java.util.function.Supplier;
 
 import static cofh.core.common.command.CoFHCommand.CMD_FLAG;
 import static cofh.core.common.command.CoFHCommand.CMD_TARGETS;
 
 public class SubCommandInvuln {
 
-    public static int permissionLevel = 2;
+    public static Supplier<Integer> permissionLevel = () -> 2;
 
     static final boolean DEFAULT_FLAG = true;
 
     static ArgumentBuilder<CommandSourceStack, ?> register() {
 
         return Commands.literal("invuln")
-                .requires(source -> source.hasPermission(permissionLevel))
+                .requires(source -> source.hasPermission(permissionLevel.get()))
                 // Self
                 .executes(context -> flagEntities(context.getSource(), ImmutableList.of(context.getSource().getPlayerOrException()), DEFAULT_FLAG))
                 // Flag Specified
@@ -41,7 +42,7 @@ public class SubCommandInvuln {
     static ArgumentBuilder<CommandSourceStack, ?> registerAlt() {
 
         return Commands.literal("invulnerable")
-                .requires(source -> source.hasPermission(permissionLevel))
+                .requires(source -> source.hasPermission(permissionLevel.get()))
                 // Self
                 .executes(context -> flagEntities(context.getSource(), ImmutableList.of(context.getSource().getPlayerOrException()), DEFAULT_FLAG))
                 // Flag Specified

@@ -9,17 +9,18 @@ import net.minecraft.commands.arguments.GameProfileArgument;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Collection;
+import java.util.function.Supplier;
 
 import static cofh.core.common.command.CoFHCommand.CMD_PLAYERS;
 
 public class SubCommandFriend {
 
-    public static int permissionLevel = 0;
+    public static Supplier<Integer> permissionLevel = () -> 0;
 
     static ArgumentBuilder<CommandSourceStack, ?> register() {
 
         return Commands.literal("friend")
-                .requires(source -> source.hasPermission(permissionLevel))
+                .requires(source -> source.hasPermission(permissionLevel.get()))
                 .then(Commands.literal("add")
                         .then(Commands.argument(CMD_PLAYERS, GameProfileArgument.gameProfile())
                                 .executes((context) -> addFriends(context.getSource().getPlayerOrException(), GameProfileArgument.getGameProfiles(context, CMD_PLAYERS)))))
