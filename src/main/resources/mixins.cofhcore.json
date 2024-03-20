@@ -6,10 +6,12 @@
   "target": "@env(DEFAULT)",
   "compatibilityLevel": "JAVA_17",
   "client": [
+    "ClientPacketListenerMixin",
     "LevelRendererMixin",
     "MouseHandlerMixin"
   ],
   "mixins": [
+    "ClientboundSetEntityMotionPacketMixin",
     "HorseArmorItemMixin",
     "LivingEntityMixin",
     "MultiPlayerGameModeMixin",

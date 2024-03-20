@@ -1,5 +1,6 @@
 package cofh.lib.util;
 
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
@@ -12,6 +13,8 @@ import net.minecraftforge.common.PlantType;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.UUID;
 import java.util.function.Supplier;
 
@@ -54,6 +57,8 @@ public class Constants {
 
     public static final EquipmentSlot[] ARMOR_SLOTS = new EquipmentSlot[]{HEAD, CHEST, LEGS, FEET};
     public static final Direction[] DIRECTIONS = Direction.values();
+    public static final Direction[] POSITIVE_DIRECTIONS = Arrays.stream(Direction.Axis.values()).map(axis -> Direction.get(Direction.AxisDirection.POSITIVE, axis)).toArray(Direction[]::new);
+    public static final Direction[] NEGATIVE_DIRECTIONS = Arrays.stream(Direction.Axis.values()).map(axis -> Direction.get(Direction.AxisDirection.NEGATIVE, axis)).toArray(Direction[]::new);
     // endregion
 
     // region CONSTANTS
