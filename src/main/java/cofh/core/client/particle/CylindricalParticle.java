@@ -30,6 +30,14 @@ public abstract class CylindricalParticle extends ColorParticle {
         hasPhysics = false;
     }
 
+    @Override
+    public void tick() {
+
+        if (this.age++ >= this.lifetime) {
+            this.remove();
+        }
+    }
+
     protected void setHeight(float height) {
 
         this.height = height;

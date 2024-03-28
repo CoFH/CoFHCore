@@ -7,6 +7,7 @@ import net.minecraft.world.phys.Vec3;
 import org.joml.*;
 
 import java.lang.Math;
+import java.util.random.RandomGenerator;
 
 /**
  * Contains various math-related helper functions. Often faster than conventional implementations.
@@ -102,6 +103,15 @@ public final class MathHelper {
 
         int base = floor(d);
         if (source.nextDouble() < d - base) {
+            return base + 1;
+        }
+        return base;
+    }
+
+    public static int weightedRound(float d, RandomGenerator source) {
+
+        int base = floor(d);
+        if (source.nextFloat() < d - base) {
             return base + 1;
         }
         return base;

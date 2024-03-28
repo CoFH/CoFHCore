@@ -21,17 +21,9 @@ public class ShockwaveParticle extends CylindricalParticle {
     }
 
     @Override
-    public void tick() {
-
-        if (this.age++ >= this.lifetime) {
-            this.remove();
-        }
-    }
-
-    @Override
     public void render(PoseStack stack, MultiBufferSource buffer, VertexConsumer consumer, int packedLightIn, float time, float pTicks) {
 
-        VFXHelper.renderShockwave(stack, buffer, level, BlockPos.containing(x, y, z), time * (size * 0.5F + 5) / duration, size, height);
+        VFXHelper.renderShockwave(stack, buffer, level, BlockPos.containing(x, y, z), time * (size * 0.5F + 5) / duration, size * 0.5F, height);
     }
 
     @Nonnull

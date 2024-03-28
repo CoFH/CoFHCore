@@ -1,6 +1,7 @@
 package cofh.core.common.entity;
 
 import cofh.core.client.particle.options.CylindricalParticleOptions;
+import cofh.core.util.helpers.vfx.VFXHelper;
 import cofh.lib.api.IDetonatable;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.Packet;
@@ -63,7 +64,7 @@ public abstract class AbstractGrenade extends ThrowableItemProjectile implements
     public void handleEntityEvent(byte event) {
 
         if (event == 3) {
-            level.addParticle(new CylindricalParticleOptions(BLAST_WAVE.get(), radius * 2.0F, radius * 3.0F, 2.5F), this.getX(), this.getY(), this.getZ(), 0, 0, 0);
+            level.addParticle(new CylindricalParticleOptions(BLAST_WAVE.get(), radius * 2.0F, radius * 3.0F, 0, VFXHelper.windColor(random).toRGBA(), 2.5F), this.getX(), this.getY(), this.getZ(), 0, 0, 0);
             level.addParticle(ParticleTypes.EXPLOSION, this.getX(), this.getY(), this.getZ(), 1.0D, 0.0D, 0.0D);
             level.playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 0.5F, (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F, false);
         } else {

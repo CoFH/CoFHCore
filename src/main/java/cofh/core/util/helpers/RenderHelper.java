@@ -7,6 +7,7 @@ import com.mojang.blaze3d.platform.GlStateManager.DestFactor;
 import com.mojang.blaze3d.platform.GlStateManager.SourceFactor;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
+import net.minecraft.client.GraphicsStatus;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -108,6 +109,11 @@ public final class RenderHelper {
     public static float frameDelta() {
 
         return Minecraft.getInstance().getDeltaFrameTime();
+    }
+
+    public static boolean isFabulousGraphics() {
+
+        return Minecraft.getInstance().options.graphicsMode().get().getId() >= GraphicsStatus.FABULOUS.getId();
     }
     // endregion
 

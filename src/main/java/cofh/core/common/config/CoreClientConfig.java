@@ -46,6 +46,10 @@ public class CoreClientConfig implements IBaseConfig {
                 .comment("If TRUE, certain CoFH particles will dynamically emit light.")
                 .define("Dynamically Light Particles", particleDynamicLighting);
 
+        stylizedGraphics = builder
+                .comment("If TRUE, certain particles will use a stylized graphics pipeline on Fabulous graphics.")
+                .define("Stylized Graphics", stylizedGraphics);
+
         builder.pop();
     }
 
@@ -57,5 +61,6 @@ public class CoreClientConfig implements IBaseConfig {
     public static Supplier<Boolean> alwaysShowDetails = FALSE;
     public static Supplier<Boolean> holdShiftForDetails = TRUE;
     public static Supplier<Boolean> particleDynamicLighting = TRUE;
+    public static Supplier<Boolean> stylizedGraphics = TRUE;
 
 }

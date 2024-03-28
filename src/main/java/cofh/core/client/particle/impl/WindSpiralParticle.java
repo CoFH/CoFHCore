@@ -2,6 +2,7 @@ package cofh.core.client.particle.impl;
 
 import cofh.core.client.particle.CylindricalParticle;
 import cofh.core.client.particle.options.CylindricalParticleOptions;
+import cofh.core.init.CoreShaders;
 import cofh.core.util.helpers.vfx.RenderTypes;
 import cofh.core.util.helpers.vfx.VFXHelper;
 import cofh.lib.util.helpers.MathHelper;
@@ -15,7 +16,10 @@ import org.joml.Quaternionf;
 import org.joml.Vector4f;
 
 import javax.annotation.Nonnull;
+
 import java.util.SplittableRandom;
+
+import static cofh.core.util.helpers.vfx.RenderTypes.BLANK_TEXTURE;
 
 public class WindSpiralParticle extends CylindricalParticle {
 
@@ -28,22 +32,15 @@ public class WindSpiralParticle extends CylindricalParticle {
     }
 
     @Override
-    public void tick() {
-
-        if (this.age++ >= this.lifetime) {
-            this.remove();
-        }
-    }
-
-    @Override
     public void render(PoseStack stack, MultiBufferSource buffer, VertexConsumer consumer, int packedLightIn, float time, float pTicks) {
 
+        //VFXHelper.renderTest(stack, CoreShaders.PIXELATE.getBuffer().getBuffer(RenderTypes.bufferTest(BLANK_TEXTURE)));
         SplittableRandom rand = new SplittableRandom(this.seed);
         if (!rotation.equals(new Quaternionf())) {
             stack.mulPose(rotation);
         }
         float progress = time / duration;
-        float easeCub = 1.0F - MathHelper.easeInCubic(progress);
+        //float easeCub = 1.0F - MathHelper.easeInCubic(progress);
         float easeSin = MathHelper.sin(progress * MathHelper.F_PI);
         float easePlat = MathHelper.easePlateau(progress);
         float offset = (float) rand.nextDouble(0.0F, 0.8F);
@@ -59,7 +56,7 @@ public class WindSpiralParticle extends CylindricalParticle {
             float r = size * (1.0F + i * 0.02F) * expand;
             poss[i] = new Vector4f(r * MathHelper.cos(angle), i * yScale + height * y, r * MathHelper.sin(angle), 1.0F);
         }
-        VFXHelper.renderStreamLine(stack, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLightIn, poss, c0, VFXHelper.getWidthFunc((easeSin * 0.08F + 0.01F) * (float) rand.nextDouble(0.3F, 1.0F)));
+        VFXHelper.renderStreamLine(stack, CoreShaders.PIXELATE.getBuffer(BLANK_TEXTURE), packedLightIn, poss, c0, VFXHelper.getWidthFunc((easeSin * 0.06F + 0.01F) * rand.nextFloat(0.6F, 1.1F)));
     }
 
     @Nonnull

@@ -1,11 +1,13 @@
 package cofh.core.client.event;
 
+import cofh.core.client.PostEffect;
 import cofh.core.client.particle.CoFHParticle;
 import cofh.core.common.config.CoreClientConfig;
 import cofh.lib.client.renderer.entity.ITranslucentRenderer;
 import cofh.lib.util.Utils;
 import cofh.lib.util.constants.ModIds;
 import cofh.lib.util.raytracer.VoxelShapeBlockHitResult;
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -182,40 +184,68 @@ public class CoreClientEvents {
         }
     }
 
-    @SubscribeEvent
+    @SubscribeEvent //(priority = EventPriority.LOWEST)
     public static void renderTranslucent(RenderLevelStageEvent event) {
 
-        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
-            return;
-        }
-        PoseStack stack = event.getPoseStack();
-        float partialTick = event.getPartialTick();
-        Minecraft minecraft = Minecraft.getInstance();
-        MultiBufferSource buffer = minecraft.renderBuffers().bufferSource();
-        TextureManager manager = minecraft.getTextureManager();
-        Tesselator tesselator = Tesselator.getInstance();
-        BufferBuilder consumer = tesselator.getBuilder();
-        LightTexture light = minecraft.gameRenderer.lightTexture();
-
-        light.turnOnLightLayer();
-
-        stack.pushPose();
-        Vec3 pos = event.getCamera().getPosition();
-        stack.translate(-pos.x, -pos.y, -pos.z);
-        for (ParticleRenderType renderType : delayedRenderParticles.keySet()) {
-            RenderSystem.setShader(GameRenderer::getParticleShader);
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            Queue<CoFHParticle> particles = delayedRenderParticles.get(renderType);
-
-            renderType.begin(consumer, manager);
-            while (!particles.isEmpty()) {
-                particles.poll().render(stack, buffer, consumer, partialTick);
+        // POST SHADERS
+        if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_SKY) {
+            for (PostEffect effect : PostEffect.getAllEffects()) {
+                if (effect.isEnabled()) {
+                    effect.begin(event.getPartialTick());
+                }
             }
-            renderType.end(tesselator);
+            Minecraft.getInstance().getMainRenderTarget().bindWrite(false);
         }
-        stack.popPose();
-        light.turnOffLightLayer();
-        ITranslucentRenderer.renderTranslucent(stack, partialTick, event.getLevelRenderer(), event.getProjectionMatrix());
+        if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_LEVEL) {
+            for (PostEffect effect : PostEffect.getAllEffects()) {
+                if (effect.isEnabled()) {
+                    effect.end(event.getPartialTick());
+                }
+            }
+            Minecraft.getInstance().getMainRenderTarget().bindWrite(false);
+            RenderSystem.enableBlend();
+            RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
+            Minecraft minecraft = Minecraft.getInstance();
+            for (PostEffect effect : PostEffect.getAllEffects()) {
+                if (effect.isEnabled()) {
+                    effect.apply(minecraft.getWindow());
+                }
+            }
+            RenderSystem.disableBlend();
+            RenderSystem.defaultBlendFunc();
+        }
+
+        // PARTICLES
+        if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
+            PoseStack stack = event.getPoseStack();
+            float partialTick = event.getPartialTick();
+            Minecraft minecraft = Minecraft.getInstance();
+            MultiBufferSource buffer = minecraft.renderBuffers().bufferSource();
+            TextureManager manager = minecraft.getTextureManager();
+            Tesselator tesselator = Tesselator.getInstance();
+            BufferBuilder consumer = tesselator.getBuilder();
+            LightTexture light = minecraft.gameRenderer.lightTexture();
+
+            light.turnOnLightLayer();
+
+            stack.pushPose();
+            Vec3 pos = event.getCamera().getPosition();
+            stack.translate(-pos.x, -pos.y, -pos.z);
+            for (ParticleRenderType renderType : delayedRenderParticles.keySet()) {
+                RenderSystem.setShader(GameRenderer::getParticleShader);
+                RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+                Queue<CoFHParticle> particles = delayedRenderParticles.get(renderType);
+
+                renderType.begin(consumer, manager);
+                while (!particles.isEmpty()) {
+                    particles.poll().render(stack, buffer, consumer, partialTick);
+                }
+                renderType.end(tesselator);
+            }
+            stack.popPose();
+            light.turnOffLightLayer();
+            ITranslucentRenderer.renderTranslucent(stack, partialTick, event.getLevelRenderer(), event.getProjectionMatrix());
+        }
     }
 
     @SubscribeEvent (priority = EventPriority.HIGH)

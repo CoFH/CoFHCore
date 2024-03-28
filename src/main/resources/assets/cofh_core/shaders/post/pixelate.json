@@ -1,0 +1,30 @@
+{
+  "targets": [
+    "swap",
+    "final"
+  ],
+  "passes": [
+    {
+      "name": "cofh_core:pixelate0",
+      "intarget": "final",
+      "outtarget": "swap",
+      "auxtargets": [
+        {
+          "name": "DiffuseDepthSampler",
+          "id": "final:depth"
+        }
+      ]
+    },
+    {
+      "name": "cofh_core:pixelate1",
+      "intarget": "swap",
+      "outtarget": "final",
+      "auxtargets": [
+        {
+          "name": "MainDepthSampler",
+          "id": "minecraft:main:depth"
+        }
+      ]
+    }
+  ]
+}

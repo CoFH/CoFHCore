@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
@@ -24,6 +25,7 @@ import java.util.Random;
 import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
+import java.util.random.RandomGenerator;
 
 import static cofh.core.util.helpers.vfx.RenderTypes.*;
 
@@ -245,10 +247,8 @@ public final class VFXHelper {
     /**
      * Renders a billboarded translucent magenta square. Useful for preventing insanity.
      */
-    public static void renderTest(PoseStack stack, MultiBufferSource buffer) {
+    public static void renderTest(PoseStack stack, VertexConsumer consumer) {
 
-        RenderType type = FLAT_TRANSLUCENT;
-        VertexConsumer builder = buffer.getBuffer(type);
         Vector4f center = new Vector4f(0, 0, 0, 1).mul(stack.last().pose());
         Matrix3f normal = stack.last().normal();
         float xp = center.x() + 0.5F;
@@ -259,12 +259,18 @@ public final class VFXHelper {
         int r = 255;
         int g = 0;
         int b = 255;
-        int a = 128;
+        int a = 255;
         int packedLight = 0x00F000F0;
-        builder.vertex(xp, yp, z).color(r, g, b, a).uv(0, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
-        builder.vertex(xn, yp, z).color(r, g, b, a).uv(0, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
-        builder.vertex(xn, yn, z).color(r, g, b, a).uv(1, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
-        builder.vertex(xp, yn, z).color(r, g, b, a).uv(1, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
+        int overlay = OverlayTexture.pack(0, false); //OverlayTexture.NO_OVERLAY
+        consumer.vertex(xp, yp, z).color(r, g, b, a).uv(0, 0).overlayCoords(overlay).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
+        consumer.vertex(xn, yp, z).color(r, g, b, a).uv(0, 1).overlayCoords(overlay).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
+        consumer.vertex(xn, yn, z).color(r, g, b, a).uv(1, 1).overlayCoords(overlay).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
+        consumer.vertex(xp, yn, z).color(r, g, b, a).uv(1, 0).overlayCoords(overlay).uv2(packedLight).normal(normal, 0, 1, 0).endVertex();
+    }
+
+    public static void renderTest(PoseStack stack, MultiBufferSource buffer) {
+
+        renderTest(stack, buffer.getBuffer(FLAT_TRANSLUCENT));
     }
 
     public static void renderTest(PoseStack stack) {
@@ -319,14 +325,13 @@ public final class VFXHelper {
      * @param origin      Center of the shockwave.
      * @param time        Travels outward 1 block per unit time. Blocks take 5 units to complete their trajectory.
      *                    Scale this value based on how fast you want the animation to play.
-     * @param diameter    The maximum diameter of the shockwave. Hard limit of 32.
+     * @param radius      The maximum radius of the shockwave. Hard limit of 16.
      * @param heightScale Adjusts how high the blocks travel.
      * @param canRender   Predicate for filtering which blocks are to be rendered.
      */
-    public static void renderShockwave(PoseStack stack, MultiBufferSource buffer, Level level, BlockPos origin, float time, float diameter, float heightScale, BiPredicate<BlockPos, BlockState> canRender) {
+    public static void renderShockwave(PoseStack stack, MultiBufferSource buffer, Level level, BlockPos origin, float time, float radius, float heightScale, BiPredicate<BlockPos, BlockState> canRender) {
 
         BlockRenderDispatcher renderer = RenderHelper.renderBlock();
-        float radius = diameter * 0.5F;
         float invRadius = 1 / radius;
         for (Float2ReferenceMap.Entry<Vector2i[]> entry : SHOCKWAVE_OFFSETS.subMap(Math.min(time - 5, radius), Math.min(time, radius)).float2ReferenceEntrySet()) {
             float dist = entry.getFloatKey();
@@ -354,9 +359,9 @@ public final class VFXHelper {
         }
     }
 
-    public static void renderShockwave(PoseStack stack, MultiBufferSource buffer, Level world, BlockPos origin, float time, float diameter, float heightScale) {
+    public static void renderShockwave(PoseStack stack, MultiBufferSource buffer, Level world, BlockPos origin, float time, float radius, float heightScale) {
 
-        renderShockwave(stack, buffer, world, origin, time, diameter, heightScale, (pos, state) ->
+        renderShockwave(stack, buffer, world, origin, time, radius, heightScale, (pos, state) ->
                 !state.isAir() && state.isRedstoneConductor(world, pos) &&
                         state.isCollisionShapeFullBlock(world, pos) && !state.hasBlockEntity() &&
                         !world.getBlockState(pos.above()).isCollisionShapeFullBlock(world, pos.above()));
@@ -572,10 +577,21 @@ public final class VFXHelper {
     // region WIND
     private static final int WIND_SEGMENTS = 48;
     public static final float WIND_INCR = MathHelper.F_TAU / WIND_SEGMENTS;
+    public static final Color WIND_BASE = Color.WHITE.scaleAlpha(0.4F);
 
-    public static Function<Float, Float> getWidthFunc(float width) {
+    public static Float2FloatFunction getWidthFunc(float width) {
 
         return index -> width * MathHelper.easePlateau(index);
+    }
+
+    public static Color windColor(RandomGenerator random) {
+
+        return WIND_BASE.scaleRGB(random.nextFloat(0.65F, 1.0F));
+    }
+
+    public static Color windColor(RandomSource random) {
+
+        return WIND_BASE.scaleRGB(random.nextFloat() * 0.35F + 0.65F);
     }
 
     /**
@@ -585,7 +601,7 @@ public final class VFXHelper {
      * @param widthFunc Function that determines stream width at each node based on the order of nodes.
      *                  Input is a float representing the normalized index of the node (0F for the first node, 1F for the last).
      */
-    public static void renderStreamLine(PoseStack stack, VertexConsumer builder, int packedLight, Vector4f[] posns, Color color, Function<Float, Float> widthFunc) {
+    public static void renderStreamLine(PoseStack stack, VertexConsumer builder, int packedLight, Vector4f[] posns, Color color, Float2FloatFunction widthFunc) {
 
         if (posns.length < 2) {
             return;
@@ -613,55 +629,26 @@ public final class VFXHelper {
         renderNodes(normal, builder, packedLight, nodes, color);
     }
 
-    public static void renderStreamLine(PoseStack stack, MultiBufferSource buffer, int packedLight, Vector4f[] posns, Color color, Function<Float, Float> widthFunc) {
+    //public static void renderStreamLine(PoseStack stack, MultiBufferSource buffer, int packedLight, Vector4f[] posns, Color color, Float2FloatFunction widthFunc) {
+    //
+    //    renderStreamLine(stack, buffer.getBuffer(FLAT_TRANSLUCENT), packedLight, posns, color, widthFunc);
+    //}
 
-        renderStreamLine(stack, buffer.getBuffer(FLAT_TRANSLUCENT), packedLight, posns, color, widthFunc);
-    }
+    public static void renderCyclone(PoseStack stack, VertexConsumer consumer, int packedLight, Color color, float radius, float thickness, int length, float rot, float y) {
 
-    /**
-     * Renders a unit wind cyclone that rotates about the Y axis.
-     *
-     * @param streamCount The number of streamlines. The number of visible streamlines will be about half this due to fading in and out.
-     * @param streamWidth The average width of streamlines.
-     * @param time        Streamlines rotate on average once every time unit. Negate to rotate in the opposite direction. Offset for different "seeds."
-     * @param alphaScale  Value between 0.0F and 1.0F for the alpha scale. 0.5F recommended.
-     */
-    public static void renderCyclone(PoseStack stack, VertexConsumer builder, int packedLight, int streamCount, float streamWidth, float time, float alphaScale) {
-
-        SplittableRandom rand = new SplittableRandom(69420);
-
-        stack.pushPose();
-        stack.mulPose(Axis.YP.rotation(time * 6.2332F));
-        for (int i = 0; i < streamCount; ++i) {
-            float relRot = (rand.nextFloat() - 0.5F) * time * 0.5F + 2 * i;
-            float scale = 1.0F + (rand.nextFloat() + MathHelper.sin(time * 0.1F + i)) * 0.1F;
-            float width = streamWidth * (rand.nextFloat() * 0.8F + 0.6F) / scale;
-            int alpha = (int) MathHelper.clamp((64 + rand.nextInt(64)) * alphaScale * (MathHelper.bevel((float) rand.nextDouble(4.0F) + time * 0.06F) + 1.0F), 0, 255);
-            int value = rand.nextInt(32) + 224;
-            float y = (rand.nextFloat() + MathHelper.cos(time * 0.2F + i)) * 0.16F;
-            int length = rand.nextInt(WIND_SEGMENTS / 2) + WIND_SEGMENTS / 2;
-            if (alpha > 0) {
-                Vector4f[] nodes = new Vector4f[length];
-                stack.pushPose();
-                stack.mulPose(Axis.YP.rotation(relRot));
-                stack.scale(scale, scale, scale);
-                for (int j = 0; j < length; ++j) {
-                    float angle = j * WIND_INCR;
-                    nodes[j] = new Vector4f(MathHelper.cos(angle) * 0.5F, y, MathHelper.sin(angle) * 0.5F, 1.0F);
-                }
-                renderStreamLine(stack, builder, packedLight, nodes, Color.fromRGBA(value, value, value, alpha), getWidthFunc(width));
-                stack.popPose();
-            }
+        Vector4f[] nodes = new Vector4f[length];
+        for (int j = 0; j < length; ++j) {
+            float angle = j * WIND_INCR + rot;
+            nodes[j] = new Vector4f(MathHelper.cos(angle) * radius, y, MathHelper.sin(angle) * radius, 1.0F);
         }
-        stack.popPose();
+        renderStreamLine(stack, consumer, packedLight, nodes, color, getWidthFunc(thickness));
     }
 
-    public static void renderCyclone(PoseStack stack, MultiBufferSource buffer, int packedLight, float diameter, float height, int streamCount, float streamWidth, float time, float alphaScale) {
+    public static void renderCyclone(PoseStack stack, VertexConsumer consumer, int packedLight, Color color, float radius, float thickness, float height, RandomGenerator rand, float time) {
 
-        stack.pushPose();
-        stack.scale(diameter, height, diameter);
-        renderCyclone(stack, buffer.getBuffer(FLAT_TRANSLUCENT), packedLight, streamCount, streamWidth, time, alphaScale);
-        stack.popPose();
+        //int alpha = (int) MathHelper.clamp((64 + rand.nextInt(64)) * alphaScale * (MathHelper.bevel((float) rand.nextDouble(4.0F) + time * 0.06F) + 1.0F), 0, 255);
+        time += rand.nextFloat(420);
+        renderCyclone(stack, consumer, packedLight, color, radius, thickness, rand.nextInt(WIND_SEGMENTS / 2, WIND_SEGMENTS), (rand.nextFloat(-1F, 1F) + 6F) * time, (rand.nextFloat() + MathHelper.cos(time * 0.2F)) * 0.25F * height);
     }
     // endregion
 

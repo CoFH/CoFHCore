@@ -65,7 +65,7 @@ public class RenderTypes {
     //                    .createCompositeState(false)
     //    );
 
-    public static final RenderType FLAT_CUTOUT = opaque("cofh:opaque", new TextureStateShard(BLANK_TEXTURE, false, false));
+    public static final RenderType FLAT_CUTOUT = opaque("cofh_core:opaque", new TextureStateShard(BLANK_TEXTURE, false, false));
     public static final RenderType FLAT_TRANSLUCENT = translucentNoDepthWrite(BLANK_TEXTURE);
     public static final RenderType LINEAR_GLOW = translucentNoDepthWrite(LIN_GLOW_TEXTURE);
     public static final RenderType ROUND_GLOW = translucentNoDepthWrite(RND_GLOW_TEXTURE);
@@ -81,7 +81,7 @@ public class RenderTypes {
 
     public static RenderType translucent(ResourceLocation texture) {
 
-        return RenderType.create("cofh:translucent", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true,
+        return RenderType.create("cofh_core:translucent", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true,
                 RenderType.CompositeState.builder()
                         .setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
                         .setShaderState(RENDERTYPE_TRANSLUCENT_NO_CRUMBLING_SHADER)
@@ -94,7 +94,7 @@ public class RenderTypes {
 
     public static RenderType translucentNoCull(ResourceLocation texture) {
 
-        return RenderType.create("cofh:translucent", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true,
+        return RenderType.create("cofh_core:translucent", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true,
                 RenderType.CompositeState.builder()
                         .setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
                         .setShaderState(RENDERTYPE_TRANSLUCENT_NO_CRUMBLING_SHADER)
@@ -108,7 +108,7 @@ public class RenderTypes {
 
     public static RenderType translucentNoDepthWrite(ResourceLocation texture) {
 
-        return RenderType.create("cofh:translucent", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true,
+        return RenderType.create("cofh_core:translucent", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true,
                 //RenderType.CompositeState.builder()
                 //        .setShaderState(RenderType.RENDERTYPE_ENTITY_TRANSLUCENT_SHADER)
                 //        .setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))

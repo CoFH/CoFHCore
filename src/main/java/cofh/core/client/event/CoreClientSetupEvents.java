@@ -1,5 +1,6 @@
 package cofh.core.client.event;
 
+import cofh.core.client.PostEffect;
 import cofh.core.client.model.FluidContainerItemModel;
 import cofh.core.client.particle.impl.*;
 import cofh.lib.api.item.IColorableItem;
@@ -7,6 +8,7 @@ import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelEvent.RegisterGeometryLoaders;
+import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
@@ -72,6 +74,14 @@ public class CoreClientSetupEvents {
         event.registerSpriteSet(STRAIGHT_ARC.get(), ArcParticle::factory);
         event.registerSpriteSet(SHARD.get(), ShardParticle::factory);
         event.registerSpriteSet(STREAM.get(), StreamParticle::factory);
+    }
+
+    @SubscribeEvent
+    public static void registerReloadListeners(final RegisterClientReloadListenersEvent event) {
+
+        for (PostEffect effect : PostEffect.getAllEffects()) {
+            event.registerReloadListener(effect);
+        }
     }
 
     // region HELPERS
