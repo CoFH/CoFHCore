@@ -7,8 +7,8 @@
   "attribute.name.cofh.hazard_resistance": "危害耐性",
   "attribute.name.cofh.sting_resistance": "刺突耐性",
 
-  "death.attack.knife": "%1$sは%2$sに刺殺された",
-  "death.attack.knife.item": "%1$sは%2$sに%3$sでメッタ刺しにされた",
+  "death.attack.cofh.knife": "%1$sは%2$sに刺殺された",
+  "death.attack.cofh.knife.item": "%1$sは%2$sに%3$sでメッタ刺しにされた",
 
   "forge.swimSpeed": "遊泳速度",
 
@@ -62,6 +62,10 @@
   "info.cofh.tails": "尻尾",
   "info.cofh.transfer": "輸送効率",
   "info.cofh.type": "タイプ",
+  "info.cofh.unit_mb": "mB",
+  "info.cofh.unit_mb_t": "mB/t",
+  "info.cofh.unit_rf": "RF",
+  "info.cofh.unit_rf_t": "RF/t",
   "info.cofh.unit_xp": "経験値",
 
   "info.cofh.block_tags": "ブロックのタグ",
@@ -136,6 +140,7 @@
   "effect.cofh_core.amplification": "増幅",
   "effect.cofh_core.chilled": "寒気",
   "effect.cofh_core.clarity": "純化",
+  "effect.cofh_core.cold_resistance": "凍結耐性",
   "effect.cofh_core.eagle_eye": "イーグルアイ",
   "effect.cofh_core.enderference": "エンダーファレンス",
   "effect.cofh_core.explosion_resistance": "爆発耐性",
@@ -148,6 +153,7 @@
   "effect.cofh_core.slimed": "スライム浸し",
   "effect.cofh_core.sundered": "割れ鎧",
   "effect.cofh_core.supercharge": "スーパーチャージ",
+  "effect.cofh_core.true_invisibility": "真なる透明化",
   "effect.cofh_core.wrenched": "ねじられ",
 
   "enchantment.cofh_core.disabled": "陽炎",
@@ -210,6 +216,8 @@
   "enchantment.minecraft.thorns.desc": "攻撃者に反撃します。",
   "enchantment.minecraft.unbreaking.desc": "実効耐久値を増加させます。",
   "enchantment.minecraft.vanishing_curse.desc": "所有者が死んだ時このアイテムが消滅します。",
+
+  "fluid_type.minecraft.milk": "ミルク",
 
   "item.minecraft.lingering_potion.effect.amplification": "増幅の残留ポーション",
   "item.minecraft.lingering_potion.effect.clarity": "純化の残留ポーション",
