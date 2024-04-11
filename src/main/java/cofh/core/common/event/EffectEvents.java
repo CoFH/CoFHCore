@@ -188,6 +188,6 @@ public class EffectEvents {
     }
     // endregion
 
-    private static final int CLARITY_MOD = 0.2D;
+    private static final double CLARITY_MOD = 0.2D;
 
 }
