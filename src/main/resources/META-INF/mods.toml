@@ -27,6 +27,6 @@ side = "BOTH"
 [[dependencies.cofh_core]]
 modId = "forge"
 mandatory = true
-versionRange = "[${forge_version},)"
+versionRange = "[${neo_version},)"
 ordering = "AFTER"
 side = "BOTH"

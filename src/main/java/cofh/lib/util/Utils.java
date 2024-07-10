@@ -12,6 +12,7 @@ import com.google.gson.JsonParser;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -45,17 +46,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.entity.PartEntity;
-import net.minecraftforge.event.entity.EntityTeleportEvent;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.util.FakePlayer;
+import net.neoforged.neoforge.entity.PartEntity;
+import net.neoforged.neoforge.event.entity.EntityTeleportEvent;
+import net.neoforged.neoforge.fluids.FluidStack;
 import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nullable;
@@ -121,7 +119,7 @@ public class Utils {
         return gson.toJson(json);
     }
 
-    public static void loadConfig(ForgeConfigSpec spec, Path path) {
+    public static void loadConfig(ModConfigSpec spec, Path path) {
 
         final CommentedFileConfig configData = CommentedFileConfig.builder(path).sync().autosave().writingMode(WritingMode.REPLACE).build();
         configData.load();
@@ -190,7 +188,7 @@ public class Utils {
 
     public static void openEntityScreen(ServerPlayer player, MenuProvider containerSupplier, Entity entity) {
 
-        NetworkHooks.openScreen(player, containerSupplier, buf -> buf.writeVarInt(entity.getId()));
+        player.openMenu(containerSupplier, buf -> buf.writeVarInt(entity.getId()));
     }
 
     public static <E extends Entity> E getEntityFromBuf(FriendlyByteBuf buf, Class<E> type) {
@@ -198,7 +196,7 @@ public class Utils {
         if (buf == null) {
             throw new IllegalArgumentException("Null packet buffer.");
         }
-        return DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> () -> {
+        if (FMLEnvironment.dist.isClient()) {
             if (Minecraft.getInstance().level == null) {
                 throw new IllegalStateException("Client world is null.");
             }
@@ -209,7 +207,8 @@ public class Utils {
                 return (E) e;
             }
             throw new IllegalStateException("Client could not locate entity (id: " + entityId + ")  for entity container or the entity was of an invalid type. This is likely caused by a mod breaking client side entity lookup.");
-        });
+        }
+        return null;
     }
 
     public static boolean hurt(Entity target, DamageSource source, float amount, int invuln) {
@@ -441,7 +440,7 @@ public class Utils {
     public static boolean teleportEntityTo(LivingEntity entity, double x, double y, double z) {
 
         EntityTeleportEvent.EnderEntity event = new EntityTeleportEvent.EnderEntity(entity, x, y, z);
-        if (MinecraftForge.EVENT_BUS.post(event)) {
+        if (NeoForge.EVENT_BUS.post(event).isCanceled()) {
             return false;
         }
         if (entity instanceof ServerPlayer player && !isFakePlayer(entity)) {
@@ -467,7 +466,7 @@ public class Utils {
     // region ENCHANT UTILS
     public static Enchantment getEnchantment(String modId, String enchantId) {
 
-        return ForgeRegistries.ENCHANTMENTS.getValue(new ResourceLocation(modId, enchantId));
+        return BuiltInRegistries.ENCHANTMENT.get(new ResourceLocation(modId, enchantId));
     }
 
     public static int getEnchantedCapacity(int amount, int holding) {
@@ -510,7 +509,7 @@ public class Utils {
             return;
         }
         ListTag list = stack.getTag().getList(TAG_ENCHANTMENTS, TAG_COMPOUND);
-        String encId = String.valueOf(ForgeRegistries.ENCHANTMENTS.getKey(ench));
+        String encId = String.valueOf(BuiltInRegistries.ENCHANTMENT.getKey(ench));
 
         for (int i = 0; i < list.size(); ++i) {
             CompoundTag tag = list.getCompound(i);
@@ -529,27 +528,27 @@ public class Utils {
     // region REGISTRY NAME
     public static ResourceLocation getRegistryName(Block block) {
 
-        return ForgeRegistries.BLOCKS.getKey(block);
+        return BuiltInRegistries.BLOCK.getKey(block);
     }
 
     public static ResourceLocation getRegistryName(Item item) {
 
-        return ForgeRegistries.ITEMS.getKey(item);
+        return BuiltInRegistries.ITEM.getKey(item);
     }
 
     public static ResourceLocation getRegistryName(Fluid fluid) {
 
-        return ForgeRegistries.FLUIDS.getKey(fluid);
+        return BuiltInRegistries.FLUID.getKey(fluid);
     }
 
     public static ResourceLocation getRegistryName(EntityType entity) {
 
-        return ForgeRegistries.ENTITY_TYPES.getKey(entity);
+        return BuiltInRegistries.ENTITY_TYPE.getKey(entity);
     }
 
     public static ResourceLocation getRegistryName(MobEffect effect) {
 
-        return ForgeRegistries.MOB_EFFECTS.getKey(effect);
+        return BuiltInRegistries.MOB_EFFECT.getKey(effect);
     }
     // endregion
 

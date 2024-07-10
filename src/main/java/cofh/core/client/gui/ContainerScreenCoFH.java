@@ -66,7 +66,7 @@ public class ContainerScreenCoFH<T extends AbstractContainerMenu> extends Abstra
         updatePanels();
         updateElements();
 
-        renderBackground(pGuiGraphics);
+        renderBackground(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
         super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
         renderTooltip(pGuiGraphics, pMouseX, pMouseY);
 
@@ -386,7 +386,7 @@ public class ContainerScreenCoFH<T extends AbstractContainerMenu> extends Abstra
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double movement) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double movement, double deltaY) {
 
         if (movement != 0) {
             for (int i = elements.size(); i-- > 0; ) {

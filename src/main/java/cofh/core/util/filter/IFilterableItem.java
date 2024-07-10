@@ -4,7 +4,7 @@ import cofh.core.util.helpers.FilterHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.network.NetworkHooks;
 
 public interface IFilterableItem {
 

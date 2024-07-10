@@ -6,7 +6,7 @@ import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.util.helpers.StringHelper;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.util.List;
 import java.util.function.Supplier;

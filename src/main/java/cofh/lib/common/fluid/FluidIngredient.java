@@ -12,9 +12,8 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidType;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidType;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -175,7 +174,7 @@ public class FluidIngredient implements Predicate<FluidStack> {
             throw new JsonParseException("A fluid ingredient entry is either a fluid tag or a fluid, not both");
         } else if (jsonObject.has("fluid")) {
             ResourceLocation resourcelocation1 = new ResourceLocation(GsonHelper.getAsString(jsonObject, "fluid"));
-            Fluid fluid = ForgeRegistries.FLUIDS.getValue(resourcelocation1);
+            Fluid fluid = BuiltInRegistries.FLUID.get(resourcelocation1);
             if (fluid == null) {
                 throw new JsonSyntaxException("Unknown fluid '" + resourcelocation1 + "'");
             }
@@ -226,7 +225,7 @@ public class FluidIngredient implements Predicate<FluidStack> {
         public JsonObject serialize() {
 
             JsonObject jsonobject = new JsonObject();
-            jsonobject.addProperty("fluid", ForgeRegistries.FLUIDS.getKey(this.fluid.getFluid()).toString());
+            jsonobject.addProperty("fluid", BuiltInRegistries.FLUID.getKey(this.fluid.getFluid()).toString());
             jsonobject.addProperty("amount", this.fluid.getAmount());
             return jsonobject;
         }

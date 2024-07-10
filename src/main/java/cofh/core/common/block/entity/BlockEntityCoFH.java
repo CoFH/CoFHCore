@@ -21,8 +21,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.FakePlayer;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.common.util.FakePlayer;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nullable;
 
@@ -86,7 +87,12 @@ public class BlockEntityCoFH extends BlockEntity implements ITileCallback, IPack
     // region HELPERS
     public boolean onActivatedDelegate(Level world, BlockPos pos, BlockState state, Player player, InteractionHand hand, BlockHitResult result) {
 
-        return getCapability(ForgeCapabilities.FLUID_HANDLER).map(handler -> FluidHelper.interactWithHandler(player.getItemInHand(hand), handler, player, hand)).orElse(false);
+        IFluidHandler handler = world.getCapability(Capabilities.FluidHandler.BLOCK, pos, state, this, result.getDirection());
+        if (handler != null) {
+            FluidHelper.interactWithHandler(player.getItemInHand(hand), handler, player, hand);
+            return true;
+        }
+        return false;
     }
 
     public boolean hasGuiPacket() {

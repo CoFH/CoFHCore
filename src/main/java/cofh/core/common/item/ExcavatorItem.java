@@ -5,7 +5,7 @@ import cofh.lib.common.item.ShovelItemCoFH;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.neoforged.neoforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
 

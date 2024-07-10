@@ -1,5 +1,6 @@
 package cofh.core.client.event;
 
+import cofh.core.common.capability.CoreCapabilities;
 import cofh.core.common.capability.templates.AreaEffectItemWrapper;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -18,15 +19,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RenderHighlightEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.event.RenderHighlightEvent;
 
 import java.util.List;
 
-import static cofh.core.common.capability.CapabilityAreaEffect.AREA_EFFECT_ITEM_CAPABILITY;
 import static cofh.core.util.helpers.AreaEffectHelper.validAreaEffectItem;
 import static cofh.core.util.helpers.AreaEffectHelper.validAreaEffectMiningItem;
 import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
@@ -53,7 +53,11 @@ public class AreaEffectClientEvents {
             return;
         }
         Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
-        ImmutableList<BlockPos> areaBlocks = stack.getCapability(AREA_EFFECT_ITEM_CAPABILITY).orElse(new AreaEffectItemWrapper(stack)).getAreaEffectBlocks(event.getTarget().getBlockPos(), player);
+        var aeCap = stack.getCapability(CoreCapabilities.AreaEffectHandler.ITEM);
+        if (aeCap == null) {
+            aeCap = new AreaEffectItemWrapper(stack);
+        }
+        ImmutableList<BlockPos> areaBlocks = aeCap.getAreaEffectBlocks(event.getTarget().getBlockPos(), player);
 
         LevelRenderer levelRenderer = event.getLevelRenderer();
         PoseStack matrix = event.getPoseStack();

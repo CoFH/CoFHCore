@@ -5,6 +5,7 @@ import cofh.lib.common.fluid.FluidIngredient;
 import cofh.lib.util.crafting.IngredientWithCount;
 import com.google.gson.*;
 import com.mojang.logging.LogUtils;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.resources.ResourceLocation;
@@ -15,8 +16,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.fluids.FluidStack;
 import org.slf4j.Logger;
 
 import java.util.List;
@@ -43,7 +43,7 @@ public abstract class RecipeJsonUtils {
 
         if (element.isJsonArray()) {
             try {
-                ingredient = Ingredient.fromJson(element);
+                ingredient = Ingredient.fromJson(element, true);
             } catch (Throwable t) {
                 ingredient = Ingredient.of(ItemStack.EMPTY);
                 LOG.debug("Invalid Ingredient - using EMPTY instead!", t);
@@ -53,9 +53,9 @@ public abstract class RecipeJsonUtils {
             try {
                 JsonObject object = subElement.getAsJsonObject();
                 if (object.has(VALUE)) {
-                    ingredient = Ingredient.fromJson(object.get(VALUE));
+                    ingredient = Ingredient.fromJson(object.get(VALUE), true);
                 } else {
-                    ingredient = Ingredient.fromJson(subElement);
+                    ingredient = Ingredient.fromJson(subElement, true);
                 }
                 int count = 1;
                 if (object.has(COUNT)) {
@@ -183,7 +183,7 @@ public abstract class RecipeJsonUtils {
         int count = 1;
 
         if (element.isJsonPrimitive()) {
-            item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(element.getAsString()));
+            item = BuiltInRegistries.ITEM.get(new ResourceLocation(element.getAsString()));
             return item == null ? ItemStack.EMPTY : new ItemStack(item);
         } else {
             JsonObject itemObject = element.getAsJsonObject();
@@ -197,7 +197,7 @@ public abstract class RecipeJsonUtils {
 
             /* ITEM */
             if (itemObject.has(ITEM)) {
-                item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemObject.get(ITEM).getAsString()));
+                item = BuiltInRegistries.ITEM.get(new ResourceLocation(itemObject.get(ITEM).getAsString()));
             }
             if (item == null) {
                 return ItemStack.EMPTY;
@@ -234,7 +234,7 @@ public abstract class RecipeJsonUtils {
         int amount = BUCKET_VOLUME;
 
         if (element.isJsonPrimitive()) {
-            fluid = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(element.getAsString()));
+            fluid = BuiltInRegistries.FLUID.get(new ResourceLocation(element.getAsString()));
             return fluid == null ? FluidStack.EMPTY : new FluidStack(fluid, amount);
         } else {
             JsonObject fluidObject = element.getAsJsonObject();
@@ -248,7 +248,7 @@ public abstract class RecipeJsonUtils {
 
             /* FLUID */
             if (fluidObject.has(FLUID)) {
-                fluid = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(fluidObject.get(FLUID).getAsString()));
+                fluid = BuiltInRegistries.FLUID.get(new ResourceLocation(fluidObject.get(FLUID).getAsString()));
             }
             if (fluid == null) {
                 return FluidStack.EMPTY;
@@ -296,7 +296,7 @@ public abstract class RecipeJsonUtils {
         }
         Block block;
 
-        block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(element.getAsString()));
+        block = BuiltInRegistries.BLOCK.get(new ResourceLocation(element.getAsString()));
         return block == null ? Blocks.AIR : block;
     }
 

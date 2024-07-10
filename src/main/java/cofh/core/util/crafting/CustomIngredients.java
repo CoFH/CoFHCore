@@ -2,7 +2,7 @@ package cofh.core.util.crafting;
 
 import cofh.lib.util.crafting.IngredientWithCount;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.crafting.CraftingHelper;
+import net.neoforged.neoforge.common.crafting.CraftingHelper;
 
 import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 

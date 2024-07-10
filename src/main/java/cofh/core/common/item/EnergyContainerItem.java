@@ -1,14 +1,11 @@
 package cofh.core.common.item;
 
 import cofh.lib.api.item.IEnergyContainerItem;
-import cofh.lib.common.energy.EnergyContainerItemWrapper;
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -94,12 +91,6 @@ public abstract class EnergyContainerItem extends ItemCoFH implements IEnergyCon
             return 0;
         }
         return (int) Math.round(13.0D * getEnergyStored(stack) / (double) getMaxEnergyStored(stack));
-    }
-
-    @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-
-        return new EnergyContainerItemWrapper(stack, this, getEnergyCapability());
     }
 
     // region IEnergyContainerItem

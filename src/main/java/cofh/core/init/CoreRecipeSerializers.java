@@ -2,11 +2,11 @@ package cofh.core.init;
 
 import cofh.core.util.crafting.SecureRecipe;
 import cofh.core.util.crafting.ShapedPotionNBTRecipe;
-import cofh.lib.util.flags.TagExistsRecipeCondition;
+import cofh.lib.util.flags.TagExistsCondition;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
-import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.common.crafting.CraftingHelper;
+import net.neoforged.neoforge.registries.RegistryObject;
 
 import static cofh.core.CoFHCore.RECIPE_SERIALIZERS;
 import static cofh.core.util.references.CoreIDs.ID_CRAFTING_POTION;
@@ -20,7 +20,7 @@ public class CoreRecipeSerializers {
 
     public static void register() {
 
-        CraftingHelper.register(TagExistsRecipeCondition.Serializer.INSTANCE);
+        CraftingHelper.register(TagExistsCondition.Serializer.INSTANCE);
     }
 
     public static final RegistryObject<RecipeSerializer<ShapedPotionNBTRecipe>> SHAPED_POTION_RECIPE_SERIALIZER = RECIPE_SERIALIZERS.register(ID_CRAFTING_POTION, ShapedPotionNBTRecipe.Serializer::new);

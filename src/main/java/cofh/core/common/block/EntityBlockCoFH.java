@@ -11,7 +11,6 @@ import cofh.lib.util.helpers.SecurityHelper;
 import cofh.lib.util.raytracer.RayTracer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
@@ -21,6 +20,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.Rotation;
@@ -29,7 +29,6 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
@@ -91,7 +90,7 @@ public class EntityBlockCoFH extends Block implements EntityBlock, IDismantleabl
                 return InteractionResult.SUCCESS;
             }
             if (cofhTile.canOpenGui()) {
-                NetworkHooks.openScreen((ServerPlayer) player, (MenuProvider) tile, tile.getBlockPos());
+                player.openMenu((MenuProvider) tile, tile.getBlockPos());
                 return InteractionResult.SUCCESS;
             }
         }
@@ -165,7 +164,7 @@ public class EntityBlockCoFH extends Block implements EntityBlock, IDismantleabl
     }
 
     @Override
-    public ItemStack getCloneItemStack(BlockGetter worldIn, BlockPos pos, BlockState state) {
+    public ItemStack getCloneItemStack(LevelReader worldIn, BlockPos pos, BlockState state) {
 
         ItemStack stack = super.getCloneItemStack(worldIn, pos, state);
         BlockEntity tile = worldIn.getBlockEntity(pos);

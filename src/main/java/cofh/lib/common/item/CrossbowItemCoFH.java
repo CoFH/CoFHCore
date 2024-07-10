@@ -1,5 +1,6 @@
 package cofh.lib.common.item;
 
+import cofh.core.common.capability.CoreCapabilities;
 import cofh.core.common.capability.templates.ArcheryAmmoItemWrapper;
 import cofh.core.util.ProxyUtils;
 import cofh.core.util.helpers.ArcheryHelper;
@@ -32,7 +33,6 @@ import org.joml.Vector3f;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import static cofh.core.common.capability.CapabilityArchery.AMMO_ITEM_CAPABILITY;
 import static cofh.lib.util.constants.NBTTags.TAG_AMMO;
 
 public class CrossbowItemCoFH extends CrossbowItem implements ICoFHItem {
@@ -177,7 +177,11 @@ public class CrossbowItemCoFH extends CrossbowItem implements ICoFHItem {
                 }
                 return success;
             }
-            IArcheryAmmoItem ammoCap = ammo.getCapability(AMMO_ITEM_CAPABILITY).orElse(new ArcheryAmmoItemWrapper(ammo));
+            IArcheryAmmoItem ammoCap = ammo.getCapability(CoreCapabilities.ArcheryHandler.AMMO);
+
+            if (ammoCap == null) {
+                ammoCap = new ArcheryAmmoItemWrapper(ammo);
+            }
             boolean infinite = player.abilities.instabuild
                     || ammoCap.isInfinite(crossbow, player)
                     || (ArcheryHelper.isArrow(ammo) && ((ArrowItem) ammo.getItem()).isInfinite(ammo, crossbow, player));
@@ -242,7 +246,7 @@ public class CrossbowItemCoFH extends CrossbowItem implements ICoFHItem {
                 for (int i = -multishot; i <= multishot; ++i) {
                     if (!ammo.isEmpty()) {
                         Projectile projectile;
-                        if (ammo.getCapability(AMMO_ITEM_CAPABILITY).isPresent() || ammo.getItem() instanceof ArrowItem) {
+                        if (ammo.getCapability(CoreCapabilities.ArcheryHandler.AMMO) != null || ammo.getItem() instanceof ArrowItem) {
                             AbstractArrow arrow = ArcheryHelper.createArrow(level, ammo, shooter);
                             projectile = adjustArrow(crossbow, arrow, shooter.abilities.instabuild || i != 0);
                             ++damage;

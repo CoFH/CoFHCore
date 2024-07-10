@@ -5,19 +5,32 @@ plugins {
     id 'com.matthewprenger.cursegradle' version '1.4.0'
     id 'com.modrinth.minotaur' version "2.+"
 
-    id 'net.neoforged.gradle' version '[6.0.18,6.2)'
-    id 'org.spongepowered.mixin' version '0.7-SNAPSHOT'
+    id 'net.neoforged.gradle.userdev' version '7.0.97'
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of("${java_version}")
-java.withSourcesJar()
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+    withSourcesJar()
+    withJavadocJar()
+}
 
 sourceSets.main.resources.srcDirs += "src/main/generated"
 
 group = 'com.teamcofh'
-archivesBaseName = "${mod_id}"
+base {
+    archivesName = "${mod_id}"
+}
+
 def buildVersion = "${mod_version}." + (System.getenv("BUILD_NUMBER") ?: '0')
 version = "${mc_version}-${buildVersion}"
+println "Starting build of ${archivesBaseName}, Version: ${mod_version}"
+println "Using NeoForge: ${neo_version}, for Minecraft: ${mc_version}"
+
+minecraft {
+    accessTransformers.file file("src/main/resources/META-INF/accesstransformer.cfg")
+}
 
 if (System.getenv('CURSEFORGE_KEY') || project.hasProperty('curseforgeKey')) {
     println "Enabling CurseForge config."
@@ -53,74 +66,50 @@ if (System.getenv('MODRINTH_TOKEN') || project.hasProperty('modrinthToken')) {
     }
 }
 
-minecraft {
-    mappings channel: 'official', version: "${mc_version}"
-    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-}
-
-mixin {
-    add(sourceSets.main, 'mixins.cofhcore.refmap.json')
-}
-
 processResources {
     filesMatching('META-INF/mods.toml') {
         expand 'file': ['jarVersion': mod_version],
                 'mc_version': mc_version,
-                'forge_version': forge_version,
-                'forge_major_version': forge_version.split('\\.')[0]
+                'neo_version': neo_version,
+                'lang_version': neo_version.split('\\.')[0]
     }
-}
-
-configurations {
-    annotationProcessor.extendsFrom minecraft
 }
 
 repositories {
     mavenLocal()
     maven { url 'https://maven.covers1624.net/' }
-    maven { url 'https://maven.tterrag.com/' }
-    maven { url 'https://dvs1.progwml6.com/files/maven/' }
     maven { url 'https://maven.blamejared.com/' }
     maven { url 'https://maven.theillusivec4.top/' }
 }
 
 dependencies {
-    minecraft "net.neoforged:forge:${mc_version}-${neoforge_version}"
+    implementation("net.neoforged:neoforge:${neo_version}")
 
     // compile against the JEI API but do not include it at runtime
-    compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
-    compileOnly fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}")
+    compileOnly("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
+    compileOnly("mezz.jei:jei-${mc_version}-neoforge-api:${jei_version}")
+    // at runtime, use the full JEI jar for NeoForge
+    runtimeOnly("mezz.jei:jei-${mc_version}-neoforge:${jei_version}")
 
-    // at runtime, use the full JEI
-    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
-
-    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}:api")
-    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}")
+    compileOnly("top.theillusivec4.curios:curios-neoforge:${curios_version}:api")
+    runtimeOnly("top.theillusivec4.curios:curios-neoforge:${curios_version}")
 }
 
-jar {
-    manifest {
-        attributes([
-                'Specification-Title'     : "${mod_name}",
-                'Specification-Vendor'    : 'Team CoFH',
-                'Specification-Version'   : "${mc_version}",
-                'Implementation-Title'    : "${mod_id}",
-                'Implementation-Vendor'   : 'Team CoFH',
-                'Implementation-Version'  : "${mod_version}",
-                'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                'MixinConfigs'            : 'mixins.cofhcore.json'
-        ])
-    }
-
-    doFirst {
-        exclude 'cofh/core/data/**'
-        exclude '.cache/**'
-    }
+def commonManifest = {
+    attributes([
+            'Specification-Title'     : "${mod_name}",
+            'Specification-Vendor'    : 'Team CoFH',
+            'Specification-Version'   : "${mc_version}",
+            'Implementation-Title'    : "${mod_id}",
+            'Implementation-Vendor'   : 'Team CoFH',
+            'Implementation-Version'  : "${mod_version}",
+            'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+            'MixinConfigs'            : 'mixins.cofhcore.json'
+    ])
 }
 
 tasks.register("signJar") {
     dependsOn("jar")
-    dependsOn("reobfJar")
 
     doFirst {
         def args = [:]

@@ -11,22 +11,22 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.*;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.client.ForgeHooksClient;
-import net.minecraftforge.client.ForgeRenderTypes;
-import net.minecraftforge.client.RenderTypeGroup;
-import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
-import net.minecraftforge.client.model.CompositeModel;
-import net.minecraftforge.client.model.IQuadTransformer;
-import net.minecraftforge.client.model.QuadTransformers;
-import net.minecraftforge.client.model.SimpleModelState;
-import net.minecraftforge.client.model.geometry.*;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.client.ClientHooks;
+import net.neoforged.neoforge.client.NeoForgeRenderTypes;
+import net.neoforged.neoforge.client.RenderTypeGroup;
+import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.neoforged.neoforge.client.model.CompositeModel;
+import net.neoforged.neoforge.client.model.IQuadTransformer;
+import net.neoforged.neoforge.client.model.QuadTransformers;
+import net.neoforged.neoforge.client.model.SimpleModelState;
+import net.neoforged.neoforge.client.model.geometry.*;
+import net.neoforged.neoforge.fluids.FluidStack;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
@@ -68,7 +68,7 @@ public final class FluidContainerItemModel implements IUnbakedGeometry<FluidCont
 
         Fluid fluid = fluidStack.getFluid();
 
-        TextureAtlasSprite fluidSprite = fluid != Fluids.EMPTY ? spriteGetter.apply(ForgeHooksClient.getBlockMaterial(IClientFluidTypeExtensions.of(fluid).getStillTexture(fluidStack))) : null;
+        TextureAtlasSprite fluidSprite = fluid != Fluids.EMPTY ? spriteGetter.apply(ClientHooks.getBlockMaterial(IClientFluidTypeExtensions.of(fluid).getStillTexture(fluidStack))) : null;
         TextureAtlasSprite particleSprite = particleLocation != null ? spriteGetter.apply(particleLocation) : null;
         if (particleSprite == null) {
             particleSprite = fluidSprite != null ? fluidSprite : spriteGetter.apply(baseLocation);
@@ -79,7 +79,7 @@ public final class FluidContainerItemModel implements IUnbakedGeometry<FluidCont
 
         if (baseLocation != null) {
             var baseSprite = spriteGetter.apply(baseLocation);
-            var unbaked = UnbakedGeometryHelper.createUnbakedItemElements(0, baseSprite.contents());
+            var unbaked = UnbakedGeometryHelper.createUnbakedItemElements(0, baseSprite);
             var quads = UnbakedGeometryHelper.bakeElements(unbaked, $ -> baseSprite, modelState, modelLocation);
             modelBuilder.addQuads(normalRenderTypes, quads);
         }
@@ -89,7 +89,7 @@ public final class FluidContainerItemModel implements IUnbakedGeometry<FluidCont
             if (templateSprite != null) {
                 // Fluid layer
                 var transformedState = new SimpleModelState(modelState.getRotation().compose(FLUID_TRANSFORM), modelState.isUvLocked());
-                var unbaked = UnbakedGeometryHelper.createUnbakedItemMaskElements(1, templateSprite.contents()); // Use template as mask
+                var unbaked = UnbakedGeometryHelper.createUnbakedItemMaskElements(1, templateSprite); // Use template as mask
                 var quads = UnbakedGeometryHelper.bakeElements(unbaked, $ -> fluidSprite, transformedState, modelLocation); // Bake with fluid texture
 
                 var unlit = fluid.getFluidType().getLightLevel() > 0;
@@ -106,7 +106,7 @@ public final class FluidContainerItemModel implements IUnbakedGeometry<FluidCont
 
     public static RenderTypeGroup getLayerRenderTypes() {
 
-        return new RenderTypeGroup(RenderType.cutout(), ForgeRenderTypes.ITEM_LAYERED_CUTOUT.get());
+        return new RenderTypeGroup(RenderType.cutout(), NeoForgeRenderTypes.ITEM_LAYERED_CUTOUT.get());
     }
 
     public static class Loader implements IGeometryLoader<FluidContainerItemModel> {
@@ -117,7 +117,7 @@ public final class FluidContainerItemModel implements IUnbakedGeometry<FluidCont
             FluidStack stack = FluidStack.EMPTY;
             if (jsonObject.has("fluid")) {
                 ResourceLocation fluidName = new ResourceLocation(jsonObject.get("fluid").getAsString());
-                Fluid fluid = ForgeRegistries.FLUIDS.getValue(fluidName);
+                Fluid fluid = BuiltInRegistries.FLUID.get(fluidName);
                 if (fluid != null) {
                     stack = new FluidStack(fluid, BUCKET_VOLUME);
                 }

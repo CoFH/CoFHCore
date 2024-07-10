@@ -4,6 +4,7 @@ import cofh.core.CoFHCore;
 import cofh.core.util.ProxyUtils;
 import cofh.lib.common.network.packet.IPacketClient;
 import cofh.lib.common.network.packet.PacketBase;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
@@ -12,7 +13,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import static cofh.core.common.network.packet.PacketIDs.PACKET_EFFECT_ADD;
 import static cofh.lib.util.Constants.NETWORK_UPDATE_DISTANCE;
@@ -56,7 +56,7 @@ public class EffectAddedPacket extends PacketBase implements IPacketClient {
     public void read(FriendlyByteBuf buf) {
 
         this.id = buf.readVarInt();
-        MobEffect effectType = ForgeRegistries.MOB_EFFECTS.getValue(buf.readResourceLocation());
+        MobEffect effectType = BuiltInRegistries.MOB_EFFECT.get(buf.readResourceLocation());
         int duration = buf.readInt();
         if (effectType != null) {
             effect = new MobEffectInstance(effectType, duration);

@@ -4,10 +4,10 @@
 //import cofh.core.xp.XpStorage;
 //import net.minecraft.nbt.INBT;
 //import net.minecraft.util.Direction;
-//import net.minecraftforge.common.capabilities.Capability;
-//import net.minecraftforge.common.capabilities.Capability.IStorage;
-//import net.minecraftforge.common.capabilities.CapabilityInject;
-//import net.minecraftforge.common.capabilities.CapabilityManager;
+//import net.neoforged.neoforge.common.capabilities.Capability;
+//import net.neoforged.neoforge.common.capabilities.Capability.IStorage;
+//import net.neoforged.neoforge.common.capabilities.CapabilityInject;
+//import net.neoforged.neoforge.common.capabilities.CapabilityManager;
 //
 //import javax.annotation.Nullable;
 //

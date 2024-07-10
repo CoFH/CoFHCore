@@ -2,7 +2,7 @@ package cofh.core.init.data.providers;
 
 import cofh.lib.init.data.BlockStateProviderCoFH;
 import net.minecraft.data.PackOutput;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 

@@ -39,7 +39,7 @@ public class GhostItemPacket extends PacketBase implements IPacketServer {
     public void write(FriendlyByteBuf buf) {
 
         buf.writeInt(slotNumber);
-        buf.writeItemStack(stack, false);
+        buf.writeItemWithLargeCount(stack);
         buf.writeInt(count);
     }
 

@@ -5,8 +5,6 @@ import cofh.lib.util.constants.NBTTags;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -22,9 +20,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.common.NeoForgeMod;
+import net.neoforged.neoforge.event.EventHooks;
 
 import java.util.Comparator;
 import java.util.Optional;
@@ -57,12 +54,6 @@ public class ProjectileCoFH extends Projectile {
     @Override
     protected void defineSynchedData() {
 
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-
-        return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     @Override
@@ -122,7 +113,7 @@ public class ProjectileCoFH extends Projectile {
                         TheEndGatewayBlockEntity.teleportEntity(level, blockpos, blockstate, this, gateway);
                     }
                     return;
-                } else if (ForgeEventFactory.onProjectileImpact(this, blockResult)) {
+                } else if (EventHooks.onProjectileImpact(this, blockResult)) {
                     end = disp;
                 } else {
                     this.onHit(blockResult);
@@ -152,7 +143,7 @@ public class ProjectileCoFH extends Projectile {
         Vec3 pos = this.position();
         Optional<EntityHitResult> closest = entityRayTrace(level, startPos, endPos)
                 .sorted(Comparator.comparingDouble(result -> result.getLocation().distanceToSqr(pos)))
-                .filter(result -> !ForgeEventFactory.onProjectileImpact(this, result))
+                .filter(result -> !EventHooks.onProjectileImpact(this, result))
                 .findFirst();
         if (closest.isPresent()) {
             onHit(closest.get());
@@ -188,7 +179,7 @@ public class ProjectileCoFH extends Projectile {
         boolean inLava = this.isInLava();
         if (inLava) {
             this.lavaHurt();
-            this.fallDistance *= this.getFluidFallDistanceModifier(ForgeMod.LAVA_TYPE.get());
+            this.fallDistance *= this.getFluidFallDistanceModifier(NeoForgeMod.LAVA_TYPE.value());
         }
 
         if (this.level.isClientSide) {

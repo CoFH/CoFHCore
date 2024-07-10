@@ -2,8 +2,8 @@ package cofh.lib.common.inventory;
 
 import cofh.lib.api.IStorageCallback;
 import cofh.lib.api.StorageGroup;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.wrapper.EmptyHandler;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.wrapper.EmptyHandler;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;

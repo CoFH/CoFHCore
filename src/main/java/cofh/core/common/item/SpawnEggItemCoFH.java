@@ -4,7 +4,7 @@ import cofh.lib.api.item.IColorableItem;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.ForgeSpawnEggItem;
+import net.neoforged.neoforge.common.ForgeSpawnEggItem;
 
 import java.util.function.Supplier;
 

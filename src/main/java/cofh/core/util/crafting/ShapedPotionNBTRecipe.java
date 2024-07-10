@@ -13,7 +13,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.crafting.IShapedRecipe;
+import net.neoforged.neoforge.common.crafting.IShapedRecipe;
 
 import java.util.Map;
 

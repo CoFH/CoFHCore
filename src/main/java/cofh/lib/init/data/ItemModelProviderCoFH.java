@@ -1,16 +1,16 @@
 package cofh.lib.init.data;
 
 import cofh.lib.util.DeferredRegisterCoFH;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.client.model.generators.ItemModelBuilder;
-import net.minecraftforge.client.model.generators.ItemModelProvider;
-import net.minecraftforge.client.model.generators.ModelFile.UncheckedModelFile;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
+import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
+import net.neoforged.neoforge.client.model.generators.ModelFile.UncheckedModelFile;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import java.util.function.Supplier;
 
@@ -104,7 +104,7 @@ public abstract class ItemModelProviderCoFH extends ItemModelProvider {
     // region HELPERS
     protected String name(Supplier<? extends ItemLike> item) {
 
-        return ForgeRegistries.ITEMS.getKey(item.get().asItem()).getPath();
+        return BuiltInRegistries.ITEM.getKey(item.get().asItem()).getPath();
     }
 
     protected ResourceLocation itemTexture(Supplier<? extends ItemLike> item) {

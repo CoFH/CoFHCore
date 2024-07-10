@@ -7,12 +7,11 @@ import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.common.crafting.AbstractIngredient;
-import net.minecraftforge.common.crafting.IIngredientSerializer;
+import net.neoforged.neoforge.common.crafting.IIngredientSerializer;
 
 import javax.annotation.Nullable;
 
-public class IngredientWithCount extends AbstractIngredient {
+public class IngredientWithCount extends Ingredient {
 
     private final Ingredient wrappedIngredient;
     private final int count;

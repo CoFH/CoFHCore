@@ -3,8 +3,9 @@ package cofh.core.init;
 import cofh.core.common.enchantment.HoldingEnchantment;
 import cofh.lib.common.enchantment.EnchantmentCoFH;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 import static cofh.core.CoFHCore.ENCHANTMENTS;
 import static cofh.core.util.references.CoreIDs.ID_HOLDING;
@@ -39,6 +40,6 @@ public class CoreEnchantments {
 
     }
 
-    public static final RegistryObject<EnchantmentCoFH> HOLDING = ENCHANTMENTS.register(ID_HOLDING, HoldingEnchantment::new);
+    public static final DeferredHolder<Enchantment, EnchantmentCoFH> HOLDING = ENCHANTMENTS.register(ID_HOLDING, HoldingEnchantment::new);
 
 }

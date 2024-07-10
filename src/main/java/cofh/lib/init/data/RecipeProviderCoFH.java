@@ -3,8 +3,8 @@ package cofh.lib.init.data;
 import cofh.lib.util.DeferredRegisterCoFH;
 import cofh.lib.util.Utils;
 import cofh.lib.util.flags.FlagManager;
-import cofh.lib.util.flags.FlagRecipeCondition;
-import cofh.lib.util.flags.TagExistsRecipeCondition;
+import cofh.lib.util.flags.FlagSetCondition;
+import cofh.lib.util.flags.TagExistsCondition;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -22,11 +22,11 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.crafting.CompoundIngredient;
-import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.common.crafting.conditions.ICondition;
-import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.crafting.CompoundIngredient;
+import net.neoforged.neoforge.common.crafting.CraftingHelper;
+import net.neoforged.neoforge.common.crafting.conditions.ICondition;
+import net.neoforged.neoforge.common.crafting.conditions.IConditionBuilder;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -536,14 +536,14 @@ public abstract class RecipeProviderCoFH extends RecipeProvider implements ICond
 
         public ConditionalRecipeConsumer tagExists(TagKey<Item> tag) {
 
-            this.conditions.add(new TagExistsRecipeCondition(tag.location()));
+            this.conditions.add(new TagExistsCondition(tag.location()));
             return this;
         }
 
         public ConditionalRecipeConsumer flag(String flag) {
 
             if (manager != null) {
-                this.conditions.add(new FlagRecipeCondition(manager, flag));
+                this.conditions.add(new FlagSetCondition(manager, flag));
             }
             return this;
         }

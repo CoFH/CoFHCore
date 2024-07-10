@@ -4,7 +4,6 @@ import cofh.lib.common.network.PacketHandler;
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
-import net.minecraftforge.network.NetworkDirection;
 import org.apache.commons.lang3.tuple.Pair;
 
 /**

@@ -13,8 +13,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.common.PlantType;
+import net.neoforged.neoforge.common.ForgeHooks;
+import net.neoforged.neoforge.common.PlantType;
 
 import static cofh.lib.util.Constants.FUNGUS;
 import static cofh.lib.util.constants.BlockStatePropertiesCoFH.AGE_0_4;

@@ -1,6 +1,6 @@
 package cofh.core.common.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.util.function.Supplier;
 
@@ -9,7 +9,7 @@ import static cofh.lib.util.Constants.FALSE;
 public class CoreCommonConfig implements IBaseConfig {
 
     @Override
-    public void apply(ForgeConfigSpec.Builder builder) {
+    public void apply(ModConfigSpec.Builder builder) {
 
         builder.push("Gameplay");
 

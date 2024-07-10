@@ -2,10 +2,10 @@ package cofh.core.common.effect;
 
 import cofh.lib.common.effect.MobEffectCoFH;
 import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.neoforged.neoforge.common.EffectCure;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.Set;
 
 public class NeutralMobEffect extends MobEffectCoFH {
 
@@ -15,15 +15,14 @@ public class NeutralMobEffect extends MobEffectCoFH {
     }
 
     @Override
-    public boolean isDurationEffectTick(int duration, int amplifier) {
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
 
         return false;
     }
 
     @Override
-    public List<ItemStack> getCurativeItems() {
+    public void fillEffectCures(Set<EffectCure> cures, MobEffectInstance effectInstance) {
 
-        return Collections.emptyList();
     }
 
 }

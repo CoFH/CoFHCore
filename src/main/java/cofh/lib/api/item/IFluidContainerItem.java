@@ -3,8 +3,8 @@ package cofh.lib.api.item;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
 
 import static cofh.lib.api.ContainerType.FLUID;
 import static cofh.lib.util.constants.NBTTags.TAG_AMOUNT;

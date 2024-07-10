@@ -2,8 +2,8 @@ package cofh.core.init;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.syncher.EntityDataSerializer;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.registries.RegistryObject;
 
 import static cofh.core.CoFHCore.ENTITY_DATA_SERIALIZERS;
 

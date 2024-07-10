@@ -13,6 +13,7 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
 
 public abstract class GasParticle extends SpriteParticle {
 
@@ -36,7 +37,7 @@ public abstract class GasParticle extends SpriteParticle {
         Vec3 velocity = new Vec3(dx, dy, dz);
         Vec3 end = start.add(dx, dy, dz);
         if (hasPhysics) {
-            BlockHitResult result = level.clip(new ClipContext(start, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.ANY, null));
+            BlockHitResult result = level.clip(new ClipContext(start, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.ANY, CollisionContext.empty()));
             if (!level.getFluidState(result.getBlockPos()).isEmpty()) {
                 this.remove();
                 return;

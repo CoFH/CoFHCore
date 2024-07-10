@@ -1,7 +1,7 @@
 package cofh.core.common.config;
 
 import cofh.lib.common.enchantment.EnchantmentCoFH;
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.util.function.Supplier;
 
@@ -13,7 +13,7 @@ import static cofh.lib.util.Constants.TRUE;
 public class CoreEnchantConfig implements IBaseConfig {
 
     @Override
-    public void apply(ForgeConfigSpec.Builder builder) {
+    public void apply(ModConfigSpec.Builder builder) {
 
         String treasure = "This sets whether or not the Enchantment is considered a 'treasure' enchantment.";
         String level = "This option adjusts the maximum allowable level for the Enchantment.";

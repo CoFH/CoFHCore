@@ -7,16 +7,17 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.alchemy.PotionUtils;
-import net.minecraftforge.event.entity.EntityStruckByLightningEvent;
-import net.minecraftforge.event.entity.EntityTeleportEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.event.entity.living.MobEffectEvent;
-import net.minecraftforge.event.entity.living.PotionColorCalculationEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.entity.player.PlayerXpEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.Event;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.entity.EntityStruckByLightningEvent;
+import net.neoforged.neoforge.event.entity.EntityTeleportEvent;
+import net.neoforged.neoforge.event.entity.living.LivingEvent;
+import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
+import net.neoforged.neoforge.event.entity.living.PotionColorCalculationEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerXpEvent;
 
 import java.util.Collection;
 import java.util.List;
@@ -105,7 +106,7 @@ public class EffectEvents {
     @SubscribeEvent (priority = EventPriority.LOWEST)
     public static void handlePotionAddEvent(MobEffectEvent.Added event) {
 
-        if (event.isCanceled()) {
+        if (event.getResult() == Event.Result.DENY) {
             return;
         }
         MobEffectInstance instance = event.getEffectInstance();
@@ -117,7 +118,7 @@ public class EffectEvents {
     @SubscribeEvent (priority = EventPriority.LOWEST)
     public static void handlePotionTrackEvent(PlayerEvent.StartTracking event) {
 
-        if (event.isCanceled()) {
+        if (event.getResult() == Event.Result.DENY) {
             return;
         }
         if (event.getTarget() instanceof LivingEntity entity) {

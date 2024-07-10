@@ -7,9 +7,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.common.extensions.IForgeBlock;
+import net.neoforged.neoforge.common.extensions.IBlockExtension;
 
-public interface IWrenchable extends IForgeBlock {
+public interface IWrenchable extends IBlockExtension {
 
     /**
      * Wrenches the block.

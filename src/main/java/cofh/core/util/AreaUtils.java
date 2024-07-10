@@ -155,7 +155,7 @@ public class AreaUtils {
             succeeded |= world.setBlockAndUpdate(pos, SNOW.defaultBlockState());
 
             // TODO: This is just a quick testing hack to be used occassionally.
-            //            var duct = ForgeRegistries.BLOCKS.getValue(new ResourceLocation("thermal:fluid_duct_windowed"));
+            //            var duct = BuiltInRegistries.BLOCK.getValue(new ResourceLocation("thermal:fluid_duct_windowed"));
             //            succeeded |= world.setBlockAndUpdate(pos, duct.defaultBlockState());
         }
         // FIRE

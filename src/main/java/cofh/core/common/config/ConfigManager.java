@@ -3,13 +3,13 @@ package cofh.core.common.config;
 import cofh.core.util.ProxyUtils;
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
-import net.minecraftforge.fml.loading.FMLPaths;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.fml.loading.FMLPaths;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -26,14 +26,14 @@ public class ConfigManager {
     protected boolean clientInit = false;
     protected boolean serverInit = false;
 
-    protected final ForgeConfigSpec.Builder commonConfig = new ForgeConfigSpec.Builder();
-    protected ForgeConfigSpec commonSpec;
+    protected final ModConfigSpec.Builder commonConfig = new ModConfigSpec.Builder();
+    protected ModConfigSpec commonSpec;
 
-    protected final ForgeConfigSpec.Builder clientConfig = new ForgeConfigSpec.Builder();
-    protected ForgeConfigSpec clientSpec;
+    protected final ModConfigSpec.Builder clientConfig = new ModConfigSpec.Builder();
+    protected ModConfigSpec clientSpec;
 
-    protected final ForgeConfigSpec.Builder serverConfig = new ForgeConfigSpec.Builder();
-    protected ForgeConfigSpec serverSpec;
+    protected final ModConfigSpec.Builder serverConfig = new ModConfigSpec.Builder();
+    protected ModConfigSpec serverSpec;
 
     public ConfigManager register(IEventBus bus) {
 
@@ -73,7 +73,7 @@ public class ConfigManager {
         }
     }
 
-    public static void loadConfig(ForgeConfigSpec spec, Path path) {
+    public static void loadConfig(ModConfigSpec spec, Path path) {
 
         final CommentedFileConfig configData = CommentedFileConfig.builder(path)
                 .sync()
@@ -122,12 +122,12 @@ public class ConfigManager {
         return serverInit;
     }
 
-    public ForgeConfigSpec getServerSpec() {
+    public ModConfigSpec getServerSpec() {
 
         return serverSpec;
     }
 
-    public ForgeConfigSpec getClientSpec() {
+    public ModConfigSpec getClientSpec() {
 
         return clientSpec;
     }

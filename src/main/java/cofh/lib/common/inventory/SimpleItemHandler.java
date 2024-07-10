@@ -2,7 +2,7 @@ package cofh.lib.common.inventory;
 
 import cofh.lib.api.IStorageCallback;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.IItemHandler;
+import net.neoforged.neoforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

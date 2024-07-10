@@ -1,6 +1,6 @@
 package cofh.lib.common.energy;
 
-import net.minecraftforge.energy.IEnergyStorage;
+import net.neoforged.neoforge.energy.IEnergyStorage;
 
 public class EnergyHandlerRestrictionWrapper implements IEnergyStorage {
 

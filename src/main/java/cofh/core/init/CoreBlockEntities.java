@@ -5,7 +5,7 @@ import cofh.core.common.block.entity.GlowAirBlockEntity;
 import cofh.core.common.block.entity.LightningAirBlockEntity;
 import cofh.core.common.block.entity.SignalAirTile;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 import static cofh.core.CoFHCore.TILE_ENTITIES;
 import static cofh.core.init.CoreBlocks.*;
@@ -22,9 +22,9 @@ public class CoreBlockEntities {
 
     }
 
-    public static final RegistryObject<BlockEntityType<SignalAirTile>> SIGNAL_AIR_TILE = TILE_ENTITIES.register(ID_SIGNAL_AIR, () -> BlockEntityType.Builder.of(SignalAirTile::new, SIGNAL_AIR.get()).build(null));
-    public static final RegistryObject<BlockEntityType<GlowAirBlockEntity>> GLOW_AIR_TILE = TILE_ENTITIES.register(ID_GLOW_AIR, () -> BlockEntityType.Builder.of(GlowAirBlockEntity::new, GLOW_AIR.get()).build(null));
-    public static final RegistryObject<BlockEntityType<EnderAirBlockEntity>> ENDER_AIR_TILE = TILE_ENTITIES.register(ID_ENDER_AIR, () -> BlockEntityType.Builder.of(EnderAirBlockEntity::new, ENDER_AIR.get()).build(null));
-    public static final RegistryObject<BlockEntityType<LightningAirBlockEntity>> LIGHTNING_AIR_TILE = TILE_ENTITIES.register(ID_LIGHTNING_AIR, () -> BlockEntityType.Builder.of(LightningAirBlockEntity::new, LIGHTNING_AIR.get()).build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SignalAirTile>> SIGNAL_AIR_TILE = TILE_ENTITIES.register(ID_SIGNAL_AIR, () -> BlockEntityType.Builder.of(SignalAirTile::new, SIGNAL_AIR.get()).build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GlowAirBlockEntity>> GLOW_AIR_TILE = TILE_ENTITIES.register(ID_GLOW_AIR, () -> BlockEntityType.Builder.of(GlowAirBlockEntity::new, GLOW_AIR.get()).build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<EnderAirBlockEntity>> ENDER_AIR_TILE = TILE_ENTITIES.register(ID_ENDER_AIR, () -> BlockEntityType.Builder.of(EnderAirBlockEntity::new, ENDER_AIR.get()).build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<LightningAirBlockEntity>> LIGHTNING_AIR_TILE = TILE_ENTITIES.register(ID_LIGHTNING_AIR, () -> BlockEntityType.Builder.of(LightningAirBlockEntity::new, LIGHTNING_AIR.get()).build(null));
 
 }

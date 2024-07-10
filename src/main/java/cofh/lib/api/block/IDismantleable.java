@@ -10,14 +10,14 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.common.extensions.IForgeBlock;
+import net.neoforged.neoforge.common.extensions.IBlockExtension;
 
 /**
  * Implemented on Blocks which have some method of being instantly dismantled.
  *
  * @author King Lemming
  */
-public interface IDismantleable extends IForgeBlock {
+public interface IDismantleable extends IBlockExtension {
 
     /**
      * Dismantles the block. If returnDrops is true, the drop(s) should be placed into the player's inventory.

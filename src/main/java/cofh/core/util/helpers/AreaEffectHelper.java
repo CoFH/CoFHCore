@@ -1,10 +1,12 @@
 package cofh.core.util.helpers;
 
+import cofh.core.common.capability.CoreCapabilities;
 import cofh.lib.api.block.IHarvestable;
 import cofh.lib.util.raytracer.RayTracer;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -19,7 +21,6 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,6 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static cofh.core.common.capability.CapabilityAreaEffect.AREA_EFFECT_ITEM_CAPABILITY;
 import static cofh.core.util.references.EnsorcIDs.ID_EXCAVATING;
 import static cofh.lib.util.Utils.getEnchantment;
 import static cofh.lib.util.Utils.getItemEnchantmentLevel;
@@ -43,12 +43,12 @@ public final class AreaEffectHelper {
 
     public static boolean validAreaEffectItem(ItemStack stack) {
 
-        return stack.getCapability(AREA_EFFECT_ITEM_CAPABILITY).isPresent() || stack.getItem() instanceof DiggerItem;
+        return stack.getCapability(CoreCapabilities.AreaEffectHandler.ITEM) != null || stack.getItem() instanceof DiggerItem;
     }
 
     public static boolean validAreaEffectMiningItem(ItemStack stack) {
 
-        return stack.getCapability(AREA_EFFECT_ITEM_CAPABILITY).isPresent() || stack.getItem() instanceof DiggerItem;
+        return stack.getCapability(CoreCapabilities.AreaEffectHandler.ITEM) != null || stack.getItem() instanceof DiggerItem;
     }
 
     /**
@@ -278,7 +278,7 @@ public final class AreaEffectHelper {
 
         Predicate<BlockPos> exact = p -> world.getBlockState(p).is(block) && canToolAffect(tool, stack, world, p);
         // Match logs based on tag
-        Predicate<BlockPos> match = Optional.ofNullable(ForgeRegistries.BLOCKS.tags()).flatMap(tags ->
+        Predicate<BlockPos> match = Optional.ofNullable(BuiltInRegistries.BLOCK.tags()).flatMap(tags ->
                 tags.getReverseTag(block).map(rev -> {
                     if (rev.containsTag(BlockTags.LOGS)) {
                         return rev.getTagKeys().filter(key -> key.location().getPath().contains("_logs")).findAny().map(key -> exact.or(p -> world.getBlockState(p).is(key))).orElse(exact);

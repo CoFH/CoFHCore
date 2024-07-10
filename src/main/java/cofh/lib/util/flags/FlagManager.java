@@ -5,7 +5,6 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
-import net.minecraftforge.common.crafting.CraftingHelper;
 
 import java.util.function.Supplier;
 
@@ -16,27 +15,18 @@ public class FlagManager {
 
     private static final Object2ObjectOpenHashMap<String, Supplier<Boolean>> FLAGS = new Object2ObjectOpenHashMap<>(64);
 
-    public final ResourceLocation id;
-    public LootItemConditionType flagConditionType;
+    public static LootItemConditionType FLAG_SET;
 
-    public FlagManager(String modId) {
+    private FlagManager() {
 
-        this(modId, "flag");
     }
 
-    public FlagManager(String modId, String path) {
+    public static void setup() {
 
-        id = new ResourceLocation(modId, path);
-        CraftingHelper.register(new FlagRecipeCondition.Serializer(this, id));
-        flagConditionType = new LootItemConditionType(new FlagLootCondition.Serializer(this));
+        FLAG_SET = Registry.register(BuiltInRegistries.LOOT_CONDITION_TYPE, new ResourceLocation("cofh:flag_set"), new LootItemConditionType(FlagSetLootCondition.CODEC));
     }
 
-    public void setup() {
-
-        Registry.register(BuiltInRegistries.LOOT_CONDITION_TYPE, id, flagConditionType);
-    }
-
-    private Supplier<Boolean> getOrCreateFlag(String flag) {
+    private static Supplier<Boolean> getOrCreateFlag(String flag) {
 
         synchronized (FLAGS) {
             FLAGS.putIfAbsent(flag, FALSE);
@@ -44,21 +34,21 @@ public class FlagManager {
         }
     }
 
-    public void setFlag(String flag, boolean enable) {
+    public static void setFlag(String flag, boolean enable) {
 
         synchronized (FLAGS) {
             FLAGS.put(flag, enable ? TRUE : FALSE);
         }
     }
 
-    public void setFlag(String flag, Supplier<Boolean> condition) {
+    public static void setFlag(String flag, Supplier<Boolean> condition) {
 
         synchronized (FLAGS) {
             FLAGS.put(flag, condition == null ? FALSE : condition);
         }
     }
 
-    public Supplier<Boolean> getFlag(String flag) {
+    public static Supplier<Boolean> getFlag(String flag) {
 
         return () -> getOrCreateFlag(flag).get();
     }

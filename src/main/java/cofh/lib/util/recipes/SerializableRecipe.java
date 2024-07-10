@@ -54,12 +54,6 @@ public abstract class SerializableRecipe implements Recipe<FalseIInventory> {
     }
 
     @Override
-    public ResourceLocation getId() {
-
-        return recipeId;
-    }
-
-    @Override
     public abstract RecipeSerializer<?> getSerializer();
 
     @Override

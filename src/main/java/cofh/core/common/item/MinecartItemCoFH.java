@@ -2,8 +2,8 @@ package cofh.core.common.item;
 
 import cofh.core.common.entity.AbstractMinecartCoFH;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.BlockSource;
 import net.minecraft.core.Direction;
+import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.minecraft.tags.BlockTags;
@@ -81,14 +81,14 @@ public class MinecartItemCoFH extends ItemCoFH {
         @Override
         public ItemStack execute(BlockSource source, ItemStack stack) {
 
-            Direction direction = source.getBlockState().getValue(DispenserBlock.FACING);
-            Level world = source.getLevel();
+            Direction direction = source.state().getValue(DispenserBlock.FACING);
+            Level world = source.level();
 
-            double d0 = source.x() + (double) direction.getStepX() * 1.125D;
-            double d1 = Math.floor(source.y()) + (double) direction.getStepY();
-            double d2 = source.z() + (double) direction.getStepZ() * 1.125D;
+            double d0 = source.pos().getX() + (double) direction.getStepX() * 1.125D;
+            double d1 = Math.floor(source.pos().getY()) + (double) direction.getStepY();
+            double d2 = source.pos().getZ() + (double) direction.getStepZ() * 1.125D;
 
-            BlockPos blockpos = source.getPos().relative(direction);
+            BlockPos blockpos = source.pos().relative(direction);
             BlockState blockstate = world.getBlockState(blockpos);
             RailShape railshape = blockstate.getBlock() instanceof BaseRailBlock rail ? rail.getRailDirection(blockstate, world, blockpos, null) : RailShape.NORTH_SOUTH;
             double d3;

@@ -10,7 +10,7 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.network.NetworkHooks;
 
 import static cofh.core.util.helpers.AugmentableHelper.getPropertyWithDefault;
 import static cofh.lib.util.constants.NBTTags.TAG_FILTER_TYPE;

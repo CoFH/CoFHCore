@@ -3,7 +3,7 @@ package cofh.lib.common.block;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraftforge.common.PlantType;
+import net.neoforged.neoforge.common.PlantType;
 
 import static cofh.lib.util.constants.BlockStatePropertiesCoFH.AGE_0_10;
 

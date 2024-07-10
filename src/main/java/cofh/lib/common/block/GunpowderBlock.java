@@ -2,6 +2,7 @@ package cofh.lib.common.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.ColorRGBA;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -11,29 +12,22 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.FallingBlock;
+import net.minecraft.world.level.block.ColoredFallingBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
 
-public class GunpowderBlock extends FallingBlock {
+public class GunpowderBlock extends ColoredFallingBlock {
 
     private static final float EXPLOSION_STRENGTH = 4.0F;
 
     public GunpowderBlock(Properties properties) {
 
-        super(properties);
-    }
-
-    @Override
-    public int getDustColor(BlockState state, BlockGetter reader, BlockPos pos) {
-
-        return -8356741;
+        super(new ColorRGBA(-8356741), properties);
     }
 
     @Override

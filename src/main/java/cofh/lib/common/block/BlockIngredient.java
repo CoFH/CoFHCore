@@ -4,6 +4,7 @@ import cofh.lib.util.Utils;
 import cofh.lib.util.recipes.RecipeJsonUtils;
 import com.google.gson.*;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
@@ -12,7 +13,6 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -147,10 +147,10 @@ public class BlockIngredient implements Predicate<BlockState> {
                 throw new JsonParseException("A block ingredient entry is either a block tag or a block, not both");
             }
             ResourceLocation resLoc = new ResourceLocation(GsonHelper.getAsString(jsonObject, RecipeJsonUtils.NAME));
-            if (!ForgeRegistries.BLOCKS.containsKey(resLoc)) {
+            if (!BuiltInRegistries.BLOCK.containsKey(resLoc)) {
                 throw new JsonSyntaxException("Unknown block '" + resLoc + "'");
             }
-            BlockState state = ForgeRegistries.BLOCKS.getValue(resLoc).defaultBlockState();
+            BlockState state = BuiltInRegistries.BLOCK.get(resLoc).defaultBlockState();
             JsonElement element = jsonObject.get(RecipeJsonUtils.PROPERTIES);
             if (element != null && element.isJsonObject()) {
                 Collection<Property<?>> variable = new ArrayList<>();
@@ -236,7 +236,7 @@ public class BlockIngredient implements Predicate<BlockState> {
 
         public Stream<BlockState> getBlockStates() {
 
-            return ForgeRegistries.BLOCKS.tags().getTag(this.tag).stream().flatMap(block -> block.getStateDefinition().getPossibleStates().stream());
+            return BuiltInRegistries.BLOCK.tags().getTag(this.tag).stream().flatMap(block -> block.getStateDefinition().getPossibleStates().stream());
         }
 
         public JsonObject serialize() {

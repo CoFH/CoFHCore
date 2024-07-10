@@ -9,7 +9,7 @@ import net.minecraft.world.entity.Pose;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.entity.IEntityAdditionalSpawnData;
+import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 
 import javax.annotation.Nullable;
 import java.util.SplittableRandom;
@@ -18,7 +18,7 @@ import java.util.random.RandomGenerator;
 import static cofh.lib.util.constants.NBTTags.TAG_AUGMENT_RADIUS;
 import static cofh.lib.util.constants.NBTTags.TAG_DURATION;
 
-public abstract class AbstractFieldSpell extends AbstractAoESpell implements IEntityAdditionalSpawnData {
+public abstract class AbstractFieldSpell extends AbstractAoESpell implements IEntityWithComplexSpawn {
 
     protected RandomGenerator rand = new SplittableRandom();
     protected int duration;

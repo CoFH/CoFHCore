@@ -1,9 +1,9 @@
 package cofh.core.common.event;
 
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.event.entity.living.ShieldBlockEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.entity.living.ShieldBlockEvent;
 
 import static cofh.core.common.capability.CapabilityShieldItem.SHIELD_ITEM_CAPABILITY;
 import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;

@@ -13,7 +13,7 @@ import cofh.lib.common.inventory.ItemStorageCoFH;
 import cofh.lib.common.xp.XpStorage;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.util.Collections;
 import java.util.List;

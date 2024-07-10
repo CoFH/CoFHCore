@@ -3,8 +3,8 @@ package cofh.core.compat.jei;
 import cofh.core.client.gui.ContainerScreenCoFH;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
-import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.helpers.IPlatformFluidHelper;
+import mezz.jei.api.neoforge.NeoForgeTypes;
 import mezz.jei.api.registration.IAdvancedRegistration;
 import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
@@ -19,7 +19,7 @@ public class CoreJeiPlugin implements IModPlugin {
     @Override
     public <T> void registerFluidSubtypes(ISubtypeRegistration registration, IPlatformFluidHelper<T> platformFluidHelper) {
 
-        registration.registerSubtypeInterpreter(ForgeTypes.FLUID_STACK, POTION_FLUID.get(), FluidPotionSubtypeInterpreter.INSTANCE);
+        registration.registerSubtypeInterpreter(NeoForgeTypes.FLUID_STACK, POTION_FLUID.get(), FluidPotionSubtypeInterpreter.INSTANCE);
     }
 
     @Override

@@ -6,8 +6,8 @@ import cofh.core.common.fluid.PotionFluid;
 import cofh.lib.init.tags.FluidTagsCoFH;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.ForgeFlowingFluid;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.ForgeFlowingFluid;
 
 import java.util.function.Supplier;
 

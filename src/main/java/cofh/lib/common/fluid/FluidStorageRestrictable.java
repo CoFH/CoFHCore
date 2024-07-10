@@ -1,7 +1,7 @@
 package cofh.lib.common.fluid;
 
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidTank;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.IFluidTank;
 
 import javax.annotation.Nonnull;
 import java.util.function.IntSupplier;

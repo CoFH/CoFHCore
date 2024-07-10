@@ -1,23 +1,13 @@
 package cofh.core.common.capability.templates;
 
-import cofh.core.common.capability.CapabilityArchery;
 import cofh.core.util.helpers.ArcheryHelper;
 import cofh.lib.api.capability.IArcheryBowItem;
 import cofh.lib.util.helpers.MathHelper;
-import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.LazyOptional;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-public class ArcheryBowItemWrapper implements IArcheryBowItem, ICapabilityProvider {
-
-    private final LazyOptional<IArcheryBowItem> holder = LazyOptional.of(() -> this);
+public class ArcheryBowItemWrapper implements IArcheryBowItem {
 
     private final float accuracyModifier;
     private final float damageModifier;
@@ -67,13 +57,6 @@ public class ArcheryBowItemWrapper implements IArcheryBowItem, ICapabilityProvid
     public boolean fireArrow(ItemStack arrow, Player shooter, int charge, Level world) {
 
         return ArcheryHelper.fireArrow(bowItem, arrow, shooter, charge, world);
-    }
-
-    @Nonnull
-    @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull final Capability<T> cap, final @Nullable Direction side) {
-
-        return CapabilityArchery.BOW_ITEM_CAPABILITY.orEmpty(cap, this.holder);
     }
 
 }

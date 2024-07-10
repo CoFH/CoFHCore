@@ -5,7 +5,7 @@ import cofh.lib.api.IResourceStorage;
 import cofh.lib.api.inventory.IItemStackHolder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.IItemHandler;
+import net.neoforged.neoforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
 import java.util.function.Predicate;

@@ -2,8 +2,8 @@ package cofh.core.common.item;
 
 import cofh.core.common.entity.IOnPlaced;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.BlockSource;
 import net.minecraft.core.Direction;
+import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.minecraft.stats.Stats;
@@ -110,12 +110,12 @@ public class BoatItemCoFH extends ItemCoFH {
         @Override
         public ItemStack execute(BlockSource source, ItemStack stack) {
 
-            Direction direction = source.getBlockState().getValue(DispenserBlock.FACING);
-            Level level = source.getLevel();
-            double d0 = source.x() + ((double) direction.getStepX() * 1.125D);
-            double d1 = source.y() + ((double) direction.getStepY() * 1.125D);
-            double d2 = source.z() + ((double) direction.getStepZ() * 1.125D);
-            BlockPos pos = source.getPos().relative(direction);
+            Direction direction = source.state().getValue(DispenserBlock.FACING);
+            Level level = source.level();
+            double d0 = source.pos().getX() + ((double) direction.getStepX() * 1.125D);
+            double d1 = source.pos().getY() + ((double) direction.getStepY() * 1.125D);
+            double d2 = source.pos().getZ() + ((double) direction.getStepZ() * 1.125D);
+            BlockPos pos = source.pos().relative(direction);
 
             if (stack.getItem() instanceof BoatItemCoFH boatItem) {
                 var boat = boatItem.createBoat(stack, level, direction.toYRot(), d0, d1, d2);

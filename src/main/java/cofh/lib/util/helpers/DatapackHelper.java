@@ -3,8 +3,8 @@ package cofh.lib.util.helpers;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.tags.TagKey;
-import net.minecraftforge.registries.holdersets.AndHolderSet;
-import net.minecraftforge.registries.holdersets.OrHolderSet;
+import net.neoforged.neoforge.registries.holdersets.AndHolderSet;
+import net.neoforged.neoforge.registries.holdersets.OrHolderSet;
 
 import java.util.Arrays;
 import java.util.List;

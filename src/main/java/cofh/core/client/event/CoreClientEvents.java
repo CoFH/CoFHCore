@@ -25,6 +25,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -40,14 +41,13 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.*;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.event.*;
+import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import org.joml.Matrix4f;
 
 import java.util.*;
@@ -106,8 +106,8 @@ public class CoreClientEvents {
             if (stack.getTag() != null) {
                 ListTag list = stack.getTag().getList(TAG_STORED_ENCHANTMENTS, TAG_COMPOUND);
                 if (list.size() == 1) {
-                    Enchantment ench = ForgeRegistries.ENCHANTMENTS.getValue(ResourceLocation.tryParse(list.getCompound(0).getString("id")));
-                    if (ench != null && ForgeRegistries.ENCHANTMENTS.getKey(ench) != null) {
+                    Enchantment ench = BuiltInRegistries.ENCHANTMENT.get(ResourceLocation.tryParse(list.getCompound(0).getString("id")));
+                    if (ench != null && BuiltInRegistries.ENCHANTMENT.getKey(ench) != null) {
                         String enchKey = ench.getDescriptionId() + ".desc";
                         if (canLocalize(enchKey)) {
                             tooltip.add(getInfoTextComponent(enchKey));
@@ -248,7 +248,7 @@ public class CoreClientEvents {
     }
 
     @SubscribeEvent (priority = EventPriority.HIGH)
-    public static <T extends LivingEntity, M extends EntityModel<T>> void handleTrueInvisibility(RenderLivingEvent<T, M> event) {
+    public static <T extends LivingEntity, M extends EntityModel<T>> void handleTrueInvisibility(RenderLivingEvent.Pre<T, M> event) {
 
         LivingEntity entity = event.getEntity();
         if (entity.hasEffect(TRUE_INVISIBILITY.get()) && entity.isInvisible()) {

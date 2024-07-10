@@ -2,7 +2,7 @@ package cofh.core.client.settings;
 
 import cofh.core.common.network.packet.server.ItemModeChangePacket;
 import net.minecraft.client.KeyMapping;
-import net.minecraftforge.client.settings.KeyConflictContext;
+import net.neoforged.neoforge.client.settings.KeyConflictContext;
 
 public class KeyBindingModeChange extends KeyMapping {
 

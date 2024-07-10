@@ -1,12 +1,12 @@
 package cofh.core.common.config;
 
 import cofh.core.common.command.*;
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class CoreCommandConfig implements IBaseConfig {
 
     @Override
-    public void apply(ForgeConfigSpec.Builder builder) {
+    public void apply(ModConfigSpec.Builder builder) {
 
         builder.push("Commands");
 

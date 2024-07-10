@@ -1,7 +1,7 @@
 package cofh.lib.common.fluid;
 
 import cofh.lib.api.IStorageCallback;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

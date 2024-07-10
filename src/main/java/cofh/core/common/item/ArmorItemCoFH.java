@@ -3,13 +3,13 @@ package cofh.core.common.item;
 import cofh.core.util.ProxyUtils;
 import cofh.lib.api.item.ICoFHItem;
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
@@ -66,7 +66,7 @@ public class ArmorItemCoFH extends ArmorItem implements ICoFHItem {
     @Nullable
     public <A extends HumanoidModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot armorSlot, A _default) {
 
-        return (A) ProxyUtils.getModel(ForgeRegistries.ITEMS.getKey(this));
+        return (A) ProxyUtils.getModel(BuiltInRegistries.ITEM.getKey(this));
     }
 
 }

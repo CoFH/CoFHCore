@@ -4,8 +4,8 @@ import cofh.lib.api.IResourceStorage;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.energy.IEnergyStorage;
+import net.neoforged.neoforge.common.util.INBTSerializable;
+import net.neoforged.neoforge.energy.IEnergyStorage;
 
 import java.util.function.Supplier;
 

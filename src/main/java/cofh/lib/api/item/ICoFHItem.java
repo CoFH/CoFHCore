@@ -6,7 +6,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.extensions.IForgeItem;
+import net.neoforged.neoforge.common.extensions.IItemExtension;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -21,7 +21,7 @@ import static net.minecraft.ChatFormatting.YELLOW;
 /**
  * Hacky default interface to reduce boilerplate. :)
  */
-public interface ICoFHItem extends IForgeItem {
+public interface ICoFHItem extends IItemExtension {
 
     ICoFHItem setModId(String modId);
 

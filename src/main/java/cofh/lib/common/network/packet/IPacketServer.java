@@ -2,7 +2,7 @@ package cofh.lib.common.network.packet;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.network.NetworkDirection;
+import net.neoforged.neoforge.network.NetworkDirection;
 
 /**
  * Packet sent FROM Clients TO Servers

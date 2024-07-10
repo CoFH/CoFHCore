@@ -1,7 +1,7 @@
 package cofh.core.common.config.world;
 
 import cofh.core.common.config.IBaseConfig;
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.util.function.Supplier;
 
@@ -33,7 +33,7 @@ public class FeatureConfig implements IBaseConfig {
     }
 
     @Override
-    public void apply(ForgeConfigSpec.Builder builder) {
+    public void apply(ModConfigSpec.Builder builder) {
 
         if (enable.get()) {
             builder.push(name);

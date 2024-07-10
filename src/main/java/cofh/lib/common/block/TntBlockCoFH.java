@@ -3,8 +3,8 @@ package cofh.lib.common.block;
 import cofh.lib.api.ITNTFactory;
 import cofh.lib.common.entity.PrimedTntCoFH;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.BlockSource;
 import net.minecraft.core.Direction;
+import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -72,8 +72,8 @@ public class TntBlockCoFH extends TntBlock {
             Item tntItem = stack.getItem();
             if (tntItem instanceof BlockItem) {
                 TntBlockCoFH tntBlock = (TntBlockCoFH) ((BlockItem) tntItem).getBlock();
-                Level world = source.getLevel();
-                BlockPos blockpos = source.getPos().relative(source.getBlockState().getValue(DispenserBlock.FACING));
+                Level world = source.level();
+                BlockPos blockpos = source.pos().relative(source.state().getValue(DispenserBlock.FACING));
 
                 Entity entity = tntBlock.factory.createTNT(world, (double) blockpos.getX() + 0.5D, blockpos.getY(), (double) blockpos.getZ() + 0.5D, null);
                 world.addFreshEntity(entity);
