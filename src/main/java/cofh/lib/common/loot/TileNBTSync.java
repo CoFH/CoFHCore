@@ -1,8 +1,8 @@
 package cofh.lib.common.loot;
 
 import cofh.lib.api.block.entity.ITileCallback;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -20,6 +20,11 @@ import static net.minecraft.world.level.storage.loot.parameters.LootContextParam
 
 public class TileNBTSync extends LootItemConditionalFunction {
 
+    public static final Codec<TileNBTSync> CODEC = RecordCodecBuilder.create(
+            instance -> commonFields(instance)
+                    .apply(instance, TileNBTSync::new)
+    );
+
     private static LootItemFunctionType INSTANCE;
 
     public static void setup() {
@@ -27,7 +32,7 @@ public class TileNBTSync extends LootItemConditionalFunction {
         if (INSTANCE != null) {
             return;
         }
-        INSTANCE = Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE, new ResourceLocation(ID_COFH_CORE + ":nbt_sync"), new LootItemFunctionType(new Serializer()));
+        INSTANCE = Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE, new ResourceLocation(ID_COFH_CORE + ":nbt_sync"), new LootItemFunctionType(CODEC));
     }
 
     protected TileNBTSync(List<LootItemCondition> conditionsIn) {
@@ -58,15 +63,6 @@ public class TileNBTSync extends LootItemConditionalFunction {
     public static LootItemConditionalFunction.Builder<?> builder() {
 
         return simpleBuilder(TileNBTSync::new);
-    }
-
-    public static class Serializer extends LootItemConditionalFunction.Serializer<TileNBTSync> {
-
-        public TileNBTSync deserialize(JsonObject object, JsonDeserializationContext deserializationContext, LootItemCondition[] conditionsIn) {
-
-            return new TileNBTSync(conditionsIn);
-        }
-
     }
 
 }

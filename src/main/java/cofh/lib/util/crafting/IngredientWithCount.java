@@ -1,97 +1,80 @@
 package cofh.lib.util.crafting;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 
 import javax.annotation.Nullable;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 public class IngredientWithCount extends Ingredient {
 
-    private final Ingredient wrappedIngredient;
+    private final Ingredient ingredient;
     private final int count;
 
     public IngredientWithCount(Ingredient ingredient, int count) {
 
-        this.wrappedIngredient = ingredient;
+        super(Stream.empty());
+
+        this.ingredient = ingredient;
         this.count = count;
     }
 
     @Override
     public ItemStack[] getItems() {
 
-        if (wrappedIngredient.itemStacks == null) {
-            wrappedIngredient.getItems();
-            for (ItemStack stack : wrappedIngredient.itemStacks) {
+        if (ingredient.itemStacks == null) {
+            ingredient.getItems();
+            for (ItemStack stack : ingredient.itemStacks) {
                 stack.setCount(count);
             }
         }
-        return wrappedIngredient.getItems();
+        return ingredient.getItems();
     }
 
     @Override
     public boolean test(@Nullable ItemStack stack) {
 
-        return stack != null && wrappedIngredient.test(stack) && stack.getCount() >= count;
+        return stack != null && ingredient.test(stack) && stack.getCount() >= count;
     }
 
     @Override
     public IntList getStackingIds() {
 
-        return wrappedIngredient.getStackingIds();
+        return ingredient.getStackingIds();
     }
 
     @Override
     public boolean isEmpty() {
 
-        return wrappedIngredient.isEmpty();
+        return ingredient.isEmpty();
     }
 
     @Override
     public boolean isSimple() {
 
-        return wrappedIngredient.isSimple();
+        return ingredient.isSimple();
     }
 
     @Override
-    public IIngredientSerializer<? extends Ingredient> getSerializer() {
+    public boolean equals(Object o) {
 
-        return Serializer.INSTANCE;
+        if (this == o) return true;
+        if (!(o instanceof IngredientWithCount other)) return false;
+        return count == other.count && ingredient.equals(other.ingredient);
     }
 
     @Override
-    public JsonElement toJson() {
+    public int hashCode() {
 
-        return wrappedIngredient.toJson();
+        return Objects.hash(ingredient, count);
     }
 
-    public static class Serializer implements IIngredientSerializer<IngredientWithCount> {
+    @Override
+    public String toString() {
 
-        public static final Serializer INSTANCE = new Serializer();
-
-        @Override
-        public IngredientWithCount parse(FriendlyByteBuf buffer) {
-
-            return new IngredientWithCount(Ingredient.fromNetwork(buffer), buffer.readVarInt());
-        }
-
-        @Override
-        public IngredientWithCount parse(JsonObject json) {
-
-            throw new JsonSyntaxException("IngredientWithCount should not be parsed from JSON using the serializer, if you are a modder, use RecipeJsonUtils instead!");
-        }
-
-        @Override
-        public void write(FriendlyByteBuf buffer, IngredientWithCount ingredient) {
-
-            ingredient.wrappedIngredient.toNetwork(buffer);
-            buffer.writeVarInt(ingredient.count);
-        }
-
+        return count + "x " + ingredient;
     }
 
 }

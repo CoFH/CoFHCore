@@ -4,21 +4,13 @@ import cofh.lib.api.item.IFluidContainerItem;
 import cofh.lib.common.fluid.FluidStorageCoFH;
 import cofh.lib.init.tags.FluidTagsCoFH;
 import cofh.lib.util.helpers.BlockHelper;
-import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffectUtil;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -37,7 +29,6 @@ import net.neoforged.neoforge.fluids.FluidActionResult;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidUtil;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
 import net.neoforged.neoforge.fluids.capability.templates.EmptyFluidHandler;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.wrapper.InvWrapper;
@@ -47,7 +38,6 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -191,35 +181,60 @@ public final class FluidHelper {
     // region CAPABILITY HELPERS
     public static boolean hasFluidHandlerCap(ItemStack item) {
 
-        return !item.isEmpty() && item.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent();
+        return !item.isEmpty() && item.getCapability(Capabilities.FluidHandler.ITEM) != null;
     }
 
-    public static LazyOptional<IFluidHandlerItem> getFluidHandlerCap(@Nonnull ItemStack stack) {
+    public static IFluidHandler getFluidHandlerCap(@Nonnull ItemStack stack) {
 
-        return stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM);
+        return stack.getCapability(Capabilities.FluidHandler.ITEM);
     }
 
-    public static Optional<FluidStack> getFluidContainedInItem(@Nonnull ItemStack container) {
+    public static FluidStack getFluidContainedInItem(@Nonnull ItemStack container) {
 
         if (!container.isEmpty()) {
-            Optional<FluidStack> fluidContained = getFluidHandlerCap(container).map(c -> c.getFluidInTank(0));
-            if (fluidContained.isPresent() && !fluidContained.get().isEmpty()) {
-                return fluidContained;
+            FluidStack fluidContained;
+
+            var handler = container.getCapability(Capabilities.FluidHandler.ITEM);
+            if (handler != null) {
+                fluidContained = handler.getFluidInTank(0);
+                if (!fluidContained.isEmpty()) {
+                    return fluidContained;
+                }
             }
             if (container.getItem() instanceof IFluidContainerItem fluidContainerItem) {
-                fluidContained = Optional.of(fluidContainerItem.getFluid(container));
-            }
-            if (fluidContained.isPresent() && !fluidContained.get().isEmpty()) {
-                return fluidContained;
+                fluidContained = fluidContainerItem.getFluid(container);
+                if (!fluidContained.isEmpty()) {
+                    return fluidContained;
+                }
             }
         }
-        return Optional.empty();
+        return FluidStack.EMPTY;
     }
+
+    //    public static Optional<FluidStack> getFluidContainedInItem(@Nonnull ItemStack container) {
+    //
+    //        if (!container.isEmpty()) {
+    //            Optional<FluidStack> fluidContained = getFluidHandlerCap(container).map(c -> c.getFluidInTank(0));
+    //            if (fluidContained.isPresent() && !fluidContained.get().isEmpty()) {
+    //                return fluidContained;
+    //            }
+    //            if (container.getItem() instanceof IFluidContainerItem fluidContainerItem) {
+    //                fluidContained = Optional.of(fluidContainerItem.getFluid(container));
+    //            }
+    //            if (fluidContained.isPresent() && !fluidContained.get().isEmpty()) {
+    //                return fluidContained;
+    //            }
+    //        }
+    //        return Optional.empty();
+    //    }
 
     public static int getCapacityForItem(@Nonnull ItemStack container) {
 
         if (!container.isEmpty()) {
-            return getFluidHandlerCap(container).map(c -> c.getTankCapacity(0)).orElse(0);
+            var handler = getFluidHandlerCap(container);
+            if (handler != null) {
+                return handler.getTankCapacity(0);
+            }
         }
         return 0;
     }
@@ -359,16 +374,17 @@ public final class FluidHelper {
             return true;
         }
         if (stack.getCount() == 1) {
-            FluidStack containedFluid = getFluidContainedInItem(stack).orElse(FluidStack.EMPTY);
+            FluidStack containedFluid = getFluidContainedInItem(stack);
             int tankSpace = getCapacityForItem(stack) - containedFluid.getAmount();
             if (!containedFluid.isEmpty() && tankSpace > 0) {
-                stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).ifPresent(e -> {
+                var stackCap = stack.getCapability(Capabilities.FluidHandler.ITEM);
+                if (stackCap != null) {
                     if (player.getAbilities().instabuild) {
                         handler.drain(new FluidStack(containedFluid, tankSpace), EXECUTE);
                     } else {
-                        FluidUtil.tryFluidTransfer(e, handler, new FluidStack(containedFluid, tankSpace), true);
+                        FluidUtil.tryFluidTransfer(stackCap, handler, new FluidStack(containedFluid, tankSpace), true);
                     }
-                });
+                }
                 return true;
             }
         }
@@ -430,59 +446,59 @@ public final class FluidHelper {
         if (stack.isEmpty()) {
             return;
         }
-        addPotionTooltip(PotionUtils.getAllEffects(stack.getTag()), lores, durationFactor);
+        PotionUtils.addPotionTooltip(PotionUtils.getAllEffects(stack.getTag()), lores, durationFactor, 20.F);
     }
 
-    public static void addPotionTooltip(List<MobEffectInstance> list, List<Component> lores, float durationFactor) {
-
-        List<Pair<Attribute, AttributeModifier>> list1 = new ArrayList<>();
-        if (list.isEmpty()) {
-            lores.add(EMPTY_POTION);
-        } else {
-            for (MobEffectInstance effectinstance : list) {
-                MutableComponent mutableComponent = Component.translatable(effectinstance.getDescriptionId());
-                MobEffect effect = effectinstance.getEffect();
-                Map<Attribute, AttributeModifier> map = effect.getAttributeModifiers();
-                if (!map.isEmpty()) {
-                    for (Map.Entry<Attribute, AttributeModifier> entry : map.entrySet()) {
-                        AttributeModifier attributemodifier = entry.getValue();
-                        AttributeModifier attributemodifier1 = new AttributeModifier(attributemodifier.getName(), effect.getAttributeModifierValue(effectinstance.getAmplifier(), attributemodifier), attributemodifier.getOperation());
-                        list1.add(new Pair<>(entry.getKey(), attributemodifier1));
-                    }
-                }
-                if (effectinstance.getAmplifier() > 0) {
-                    mutableComponent = Component.translatable("potion.withAmplifier", mutableComponent, Component.translatable("potion.potency." + effectinstance.getAmplifier()));
-                }
-                if (effectinstance.getDuration() > 20) {
-                    mutableComponent = Component.translatable("potion.withDuration", mutableComponent, MobEffectUtil.formatDuration(effectinstance, durationFactor));
-                }
-                lores.add(mutableComponent.withStyle(effect.getCategory().getTooltipFormatting()));
-            }
-        }
-        if (!list1.isEmpty()) {
-            lores.add(Component.empty());
-            lores.add((Component.translatable("potion.whenDrank")).withStyle(ChatFormatting.DARK_PURPLE));
-
-            for (Pair<Attribute, AttributeModifier> pair : list1) {
-                AttributeModifier attributemodifier2 = pair.getSecond();
-                double d0 = attributemodifier2.getAmount();
-                double d1;
-                if (attributemodifier2.getOperation() != AttributeModifier.Operation.MULTIPLY_BASE && attributemodifier2.getOperation() != AttributeModifier.Operation.MULTIPLY_TOTAL) {
-                    d1 = attributemodifier2.getAmount();
-                } else {
-                    d1 = attributemodifier2.getAmount() * 100.0D;
-                }
-                if (d0 > 0.0D) {
-                    lores.add((Component.translatable("attribute.modifier.plus." + attributemodifier2.getOperation().toValue(), ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(d1), Component.translatable(pair.getFirst().getDescriptionId()))).withStyle(ChatFormatting.BLUE));
-                } else if (d0 < 0.0D) {
-                    d1 = d1 * -1.0D;
-                    lores.add((Component.translatable("attribute.modifier.take." + attributemodifier2.getOperation().toValue(), ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(d1), Component.translatable(pair.getFirst().getDescriptionId()))).withStyle(ChatFormatting.RED));
-                }
-            }
-        }
-    }
-
-    public static final MutableComponent EMPTY_POTION = (Component.translatable("effect.none")).withStyle(ChatFormatting.GRAY);
+    //    public static void addPotionTooltip(List<MobEffectInstance> list, List<Component> lores, float durationFactor) {
+    //
+    //        List<Pair<Attribute, AttributeModifier>> list1 = new ArrayList<>();
+    //        if (list.isEmpty()) {
+    //            lores.add(EMPTY_POTION);
+    //        } else {
+    //            for (MobEffectInstance effectinstance : list) {
+    //                MutableComponent mutableComponent = Component.translatable(effectinstance.getDescriptionId());
+    //                MobEffect effect = effectinstance.getEffect();
+    //                Map<Attribute, AttributeModifier> map = effect.getAttributeModifiers();
+    //                if (!map.isEmpty()) {
+    //                    for (Map.Entry<Attribute, AttributeModifier> entry : map.entrySet()) {
+    //                        AttributeModifier attributemodifier = entry.getValue();
+    //                        AttributeModifier attributemodifier1 = new AttributeModifier(attributemodifier.getName(), effect.getAttributeModifierValue(effectinstance.getAmplifier(), attributemodifier), attributemodifier.getOperation());
+    //                        list1.add(new Pair<>(entry.getKey(), attributemodifier1));
+    //                    }
+    //                }
+    //                if (effectinstance.getAmplifier() > 0) {
+    //                    mutableComponent = Component.translatable("potion.withAmplifier", mutableComponent, Component.translatable("potion.potency." + effectinstance.getAmplifier()));
+    //                }
+    //                if (effectinstance.getDuration() > 20) {
+    //                    mutableComponent = Component.translatable("potion.withDuration", mutableComponent, MobEffectUtil.formatDuration(effectinstance, durationFactor));
+    //                }
+    //                lores.add(mutableComponent.withStyle(effect.getCategory().getTooltipFormatting()));
+    //            }
+    //        }
+    //        if (!list1.isEmpty()) {
+    //            lores.add(Component.empty());
+    //            lores.add((Component.translatable("potion.whenDrank")).withStyle(ChatFormatting.DARK_PURPLE));
+    //
+    //            for (Pair<Attribute, AttributeModifier> pair : list1) {
+    //                AttributeModifier attributemodifier2 = pair.getSecond();
+    //                double d0 = attributemodifier2.getAmount();
+    //                double d1;
+    //                if (attributemodifier2.getOperation() != AttributeModifier.Operation.MULTIPLY_BASE && attributemodifier2.getOperation() != AttributeModifier.Operation.MULTIPLY_TOTAL) {
+    //                    d1 = attributemodifier2.getAmount();
+    //                } else {
+    //                    d1 = attributemodifier2.getAmount() * 100.0D;
+    //                }
+    //                if (d0 > 0.0D) {
+    //                    lores.add((Component.translatable("attribute.modifier.plus." + attributemodifier2.getOperation().toValue(), ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(d1), Component.translatable(pair.getFirst().getDescriptionId()))).withStyle(ChatFormatting.BLUE));
+    //                } else if (d0 < 0.0D) {
+    //                    d1 = d1 * -1.0D;
+    //                    lores.add((Component.translatable("attribute.modifier.take." + attributemodifier2.getOperation().toValue(), ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(d1), Component.translatable(pair.getFirst().getDescriptionId()))).withStyle(ChatFormatting.RED));
+    //                }
+    //            }
+    //        }
+    //    }
+    //
+    //    public static final MutableComponent EMPTY_POTION = (Component.translatable("effect.none")).withStyle(ChatFormatting.GRAY);
     // endregion
 
     // region PROPERTY HELPERS

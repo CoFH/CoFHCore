@@ -2,7 +2,6 @@ package cofh.lib.util.recipes;
 
 import cofh.lib.common.block.BlockIngredient;
 import cofh.lib.common.fluid.FluidIngredient;
-import cofh.lib.util.crafting.IngredientWithCount;
 import com.google.gson.*;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -64,7 +63,8 @@ public abstract class RecipeJsonUtils {
                     count = object.get(AMOUNT).getAsInt();
                 }
                 if (count > 1) {
-                    return new IngredientWithCount(ingredient, count);
+                    // TODO: Fix
+                    // return new IngredientWithCount(ingredient, count);
                 }
             } catch (Throwable t) {
                 ingredient = Ingredient.of(ItemStack.EMPTY);

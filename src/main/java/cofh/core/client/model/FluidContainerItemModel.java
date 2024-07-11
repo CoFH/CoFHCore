@@ -145,7 +145,7 @@ public final class FluidContainerItemModel implements IUnbakedGeometry<FluidCont
         @Override
         public BakedModel resolve(BakedModel originalModel, ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity, int seed) {
 
-            FluidStack fluidStack = FluidHelper.getFluidContainedInItem(stack).orElse(FluidStack.EMPTY);
+            FluidStack fluidStack = FluidHelper.getFluidContainedInItem(stack);
             int fluidHash = FluidHelper.fluidHashcode(fluidStack);
             if (!cache.containsKey(fluidHash)) {
                 FluidContainerItemModel unbaked = this.parent.withProperties(fluidStack);

@@ -39,7 +39,7 @@ public class InvWrapperFluids implements Container {
     @Override
     public boolean canPlaceItem(int slot, ItemStack stack) {
 
-        return stack.isEmpty() || FluidHelper.getFluidContainedInItem(stack).isPresent();
+        return stack.isEmpty() || !FluidHelper.getFluidContainedInItem(stack).isEmpty();
     }
 
     // region IInventory
@@ -81,7 +81,11 @@ public class InvWrapperFluids implements Container {
     public void setItem(int index, ItemStack stack) {
 
         if (index >= 0 && index < getContainerSize()) {
-            FluidHelper.getFluidContainedInItem(stack).ifPresentOrElse((e) -> this.stackList.set(index, e), () -> this.stackList.set(index, FluidStack.EMPTY));
+            if (FluidHelper.getFluidContainedInItem(stack).isEmpty()) {
+                this.stackList.set(index, FluidStack.EMPTY);
+            } else {
+                this.stackList.set(index, FluidHelper.getFluidContainedInItem(stack));
+            }
             this.eventHandler.slotsChanged(this);
         }
     }

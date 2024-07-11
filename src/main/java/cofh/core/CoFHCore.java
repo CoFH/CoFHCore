@@ -16,7 +16,6 @@ import cofh.core.common.network.packet.server.*;
 import cofh.core.init.*;
 import cofh.core.util.Proxy;
 import cofh.core.util.ProxyClient;
-import cofh.core.util.crafting.CustomIngredients;
 import cofh.core.util.helpers.ArcheryHelper;
 import cofh.core.util.references.IMCMethods;
 import cofh.lib.client.renderer.entity.NothingRenderer;
@@ -235,7 +234,6 @@ public class CoFHCore {
         event.enqueueWork(TileNBTSync::setup);
         event.enqueueWork(ArmorEvents::setup);
         event.enqueueWork(CoreFluids::setup);
-        event.enqueueWork(CustomIngredients::setup);
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {
