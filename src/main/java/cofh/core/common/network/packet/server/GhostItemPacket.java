@@ -1,59 +1,43 @@
 package cofh.core.common.network.packet.server;
 
-import cofh.core.CoFHCore;
 import cofh.core.common.inventory.ContainerMenuCoFH;
+import cofh.core.common.network.data.server.GhostItemPayload;
 import cofh.lib.common.inventory.SlotFalseCopy;
-import cofh.lib.common.network.packet.IPacketServer;
-import cofh.lib.common.network.packet.PacketBase;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 
-import static cofh.core.common.network.packet.PacketIDs.PACKET_GHOST_ITEM;
+import java.util.Optional;
+
 import static cofh.core.util.helpers.ItemHelper.cloneStack;
 
-public class GhostItemPacket extends PacketBase implements IPacketServer {
+public class GhostItemPacket {
 
-    protected int slotNumber;
-    protected ItemStack stack;
-    protected int count;
+    public static final GhostItemPacket INSTANCE = new GhostItemPacket();
 
-    public GhostItemPacket() {
+    public static GhostItemPacket get() {
 
-        super(PACKET_GHOST_ITEM, CoFHCore.PACKET_HANDLER);
+        return INSTANCE;
     }
 
-    @Override
-    public void handleServer(ServerPlayer player) {
+    public void handle(final GhostItemPayload payload, final PlayPayloadContext context) {
 
-        if (player.containerMenu instanceof ContainerMenuCoFH container) {
-            Slot slot = container.getSlot(slotNumber);
-            if (slot instanceof SlotFalseCopy) {
-                slot.set(cloneStack(stack, count));
+        context.workHandler().submitAsync(() -> {
+            Optional<Player> senderOptional = context.player();
+            if (senderOptional.isEmpty()) {
+                return;
             }
-        }
-    }
+            Player player = senderOptional.get();
 
-    @Override
-    public void write(FriendlyByteBuf buf) {
-
-        buf.writeInt(slotNumber);
-        buf.writeItemWithLargeCount(stack);
-        buf.writeInt(count);
-    }
-
-    @Override
-    public void read(FriendlyByteBuf buf) {
-
-        slotNumber = buf.readInt();
-        stack = buf.readItem();
-        count = buf.readInt();
-    }
-
-    public static void sendToServer(int slotNumber, ItemStack stack) {
-
-        sendToServer(slotNumber, stack, 1);
+            if (player.containerMenu instanceof ContainerMenuCoFH container) {
+                Slot slot = container.getSlot(payload.slotNumber());
+                if (slot instanceof SlotFalseCopy) {
+                    slot.set(cloneStack(payload.stack(), payload.count()));
+                }
+            }
+        });
     }
 
     public static void sendToServer(int slotNumber, ItemStack stack, int count) {
@@ -61,11 +45,7 @@ public class GhostItemPacket extends PacketBase implements IPacketServer {
         if (slotNumber < 0 || stack.isEmpty() || count < 0) {
             return;
         }
-        GhostItemPacket packet = new GhostItemPacket();
-        packet.slotNumber = slotNumber;
-        packet.stack = stack;
-        packet.count = count;
-        packet.sendToServer();
+        PacketDistributor.SERVER.noArg().send(new GhostItemPayload(slotNumber, stack, count));
     }
 
 }

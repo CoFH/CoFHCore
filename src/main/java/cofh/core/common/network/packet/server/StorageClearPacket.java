@@ -1,60 +1,46 @@
 package cofh.core.common.network.packet.server;
 
-import cofh.core.CoFHCore;
+import cofh.core.common.network.data.server.StorageClearPayload;
 import cofh.lib.api.block.entity.ITileCallback;
-import cofh.lib.common.network.packet.IPacketServer;
-import cofh.lib.common.network.packet.PacketBase;
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 
-import static cofh.core.common.network.packet.PacketIDs.PACKET_STORAGE_CLEAR;
+import java.util.Optional;
 
-public class StorageClearPacket extends PacketBase implements IPacketServer {
+public class StorageClearPacket {
 
-    protected BlockPos pos;
-    protected int storageType;
-    protected int storageIndex;
+    public static final StorageClearPacket INSTANCE = new StorageClearPacket();
 
-    public StorageClearPacket() {
+    public static StorageClearPacket get() {
 
-        super(PACKET_STORAGE_CLEAR, CoFHCore.PACKET_HANDLER);
+        return INSTANCE;
     }
 
-    @Override
-    public void handleServer(ServerPlayer player) {
+    public void handle(final StorageClearPayload payload, final PlayPayloadContext context) {
 
-        Level world = player.level;
-        if (!world.isLoaded(pos)) {
-            return;
-        }
-        BlockEntity tile = world.getBlockEntity(pos);
-        if (tile instanceof ITileCallback callback) {
-            switch (StorageType.values()[storageType]) {
-                case ENERGY -> callback.clearEnergy(storageIndex);
-                case FLUID -> callback.clearTank(storageIndex);
-                case ITEM -> callback.clearSlot(storageIndex);
+        context.workHandler().submitAsync(() -> {
+            Optional<Player> senderOptional = context.player();
+            if (senderOptional.isEmpty()) {
+                return;
             }
-        }
-        // TODO: Debug logging?
-    }
+            Player player = senderOptional.get();
 
-    @Override
-    public void write(FriendlyByteBuf buf) {
-
-        buf.writeBlockPos(pos);
-        buf.writeInt(storageType);
-        buf.writeInt(storageIndex);
-    }
-
-    @Override
-    public void read(FriendlyByteBuf buf) {
-
-        pos = buf.readBlockPos();
-        storageType = buf.readInt();
-        storageIndex = buf.readInt();
+            Level world = player.level;
+            if (!world.isLoaded(payload.pos())) {
+                return;
+            }
+            BlockEntity tile = world.getBlockEntity(payload.pos());
+            if (tile instanceof ITileCallback callback) {
+                switch (StorageType.values()[payload.type()]) {
+                    case ENERGY -> callback.clearEnergy(payload.index());
+                    case FLUID -> callback.clearTank(payload.index());
+                    case ITEM -> callback.clearSlot(payload.index());
+                }
+            }
+        });
     }
 
     public static boolean sendToServer(ITileCallback tile, StorageType storageType, int storageIndex) {
@@ -62,15 +48,11 @@ public class StorageClearPacket extends PacketBase implements IPacketServer {
         if (tile == null) {
             return false;
         }
-        StorageClearPacket packet = new StorageClearPacket();
-        packet.pos = tile.pos();
-        packet.storageType = storageType.ordinal();
-        packet.storageIndex = storageIndex;
-        packet.sendToServer();
+        PacketDistributor.SERVER.noArg().send(new StorageClearPayload(tile.pos(), storageType.ordinal(), storageIndex));
         return true;
     }
 
-    // CLEAR TYPE ENUM
+    // STORAGE TYPE ENUM
     public enum StorageType {
         ENERGY, FLUID, ITEM;
 

@@ -1,42 +1,37 @@
 package cofh.core.common.network.packet.server;
 
-import cofh.core.CoFHCore;
 import cofh.core.common.inventory.ContainerMenuCoFH;
-import cofh.lib.common.network.packet.IPacketServer;
-import cofh.lib.common.network.packet.PacketBase;
+import cofh.core.common.network.data.server.ContainerConfigPayload;
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 
-import static cofh.core.common.network.packet.PacketIDs.PACKET_CONTAINER_CONFIG;
+import java.util.Optional;
 
-public class ContainerConfigPacket extends PacketBase implements IPacketServer {
+public class ContainerConfigPacket {
 
-    protected FriendlyByteBuf buffer;
+    public static final ContainerConfigPacket INSTANCE = new ContainerConfigPacket();
 
-    public ContainerConfigPacket() {
+    public static ContainerConfigPacket get() {
 
-        super(PACKET_CONTAINER_CONFIG, CoFHCore.PACKET_HANDLER);
+        return INSTANCE;
     }
 
-    @Override
-    public void handleServer(ServerPlayer player) {
+    public void handle(final ContainerConfigPayload payload, final PlayPayloadContext context) {
 
-        if (player.containerMenu instanceof ContainerMenuCoFH container) {
-            container.handleConfigPacket(buffer);
-        }
-    }
+        context.workHandler().submitAsync(() -> {
+            Optional<Player> senderOptional = context.player();
+            if (senderOptional.isEmpty()) {
+                return;
+            }
+            Player player = senderOptional.get();
 
-    @Override
-    public void write(FriendlyByteBuf buf) {
-
-        buf.writeBytes(buffer);
-    }
-
-    @Override
-    public void read(FriendlyByteBuf buf) {
-
-        buffer = buf;
+            if (player.containerMenu instanceof ContainerMenuCoFH container) {
+                container.handleConfigPacket(payload.buffer());
+            }
+        });
     }
 
     public static void sendToServer(ContainerMenuCoFH container) {
@@ -44,9 +39,7 @@ public class ContainerConfigPacket extends PacketBase implements IPacketServer {
         if (container == null) {
             return;
         }
-        ContainerConfigPacket packet = new ContainerConfigPacket();
-        packet.buffer = container.getConfigPacket(new FriendlyByteBuf(Unpooled.buffer()));
-        packet.sendToServer();
+        PacketDistributor.SERVER.noArg().send(new ContainerConfigPayload(container.getConfigPacket(new FriendlyByteBuf(Unpooled.buffer()))));
     }
 
 }

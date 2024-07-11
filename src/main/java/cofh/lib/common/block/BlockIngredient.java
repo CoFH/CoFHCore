@@ -15,10 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -236,7 +233,8 @@ public class BlockIngredient implements Predicate<BlockState> {
 
         public Stream<BlockState> getBlockStates() {
 
-            return BuiltInRegistries.BLOCK.tags().getTag(this.tag).stream().flatMap(block -> block.getStateDefinition().getPossibleStates().stream());
+            return getStreamFromIterator(BuiltInRegistries.BLOCK.getTagOrEmpty(tag).iterator()).flatMap(holder -> holder.value().getStateDefinition().getPossibleStates().stream());
+            // return BuiltInRegistries.BLOCK.tags().getTag(this.tag).stream().flatMap(block -> block.getStateDefinition().getPossibleStates().stream());
         }
 
         public JsonObject serialize() {
@@ -246,6 +244,19 @@ public class BlockIngredient implements Predicate<BlockState> {
             return jsonobject;
         }
 
+    }
+
+    public static <T> Stream<T>
+    getStreamFromIterator(Iterator<T> iterator)
+    {
+
+        // Convert the iterator to Spliterator
+        Spliterator<T>
+                spliterator = Spliterators
+                .spliteratorUnknownSize(iterator, 0);
+
+        // Get a Sequential Stream from spliterator
+        return StreamSupport.stream(spliterator, false);
     }
 
 }

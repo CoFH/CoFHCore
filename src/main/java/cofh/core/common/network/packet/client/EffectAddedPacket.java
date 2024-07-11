@@ -1,11 +1,8 @@
 package cofh.core.common.network.packet.client;
 
-import cofh.core.CoFHCore;
+import cofh.core.common.network.data.client.EffectAddedPayload;
 import cofh.core.util.ProxyUtils;
-import cofh.lib.common.network.packet.IPacketClient;
-import cofh.lib.common.network.packet.PacketBase;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -13,23 +10,27 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 
-import static cofh.core.common.network.packet.PacketIDs.PACKET_EFFECT_ADD;
-import static cofh.lib.util.Constants.NETWORK_UPDATE_DISTANCE;
 import static cofh.lib.util.Utils.getRegistryName;
 
-public class EffectAddedPacket extends PacketBase implements IPacketClient {
+public class EffectAddedPacket {
 
-    protected int id;
-    protected MobEffectInstance effect;
+    public static final EffectAddedPacket INSTANCE = new EffectAddedPacket();
 
-    public EffectAddedPacket() {
+    public static EffectAddedPacket get() {
 
-        super(PACKET_EFFECT_ADD, CoFHCore.PACKET_HANDLER);
+        return INSTANCE;
     }
 
-    @Override
-    public void handleClient() {
+    public void handle(final EffectAddedPayload payload, final PlayPayloadContext context) {
+
+        int id = payload.entityId();
+        MobEffect effectType = BuiltInRegistries.MOB_EFFECT.get(payload.effect());
+        int effectDur = payload.duration();
+
+        MobEffectInstance effect = effectType != null ? new MobEffectInstance(effectType, effectDur) : null;
 
         if (effect == null) {
             return;
@@ -44,42 +45,17 @@ public class EffectAddedPacket extends PacketBase implements IPacketClient {
         }
     }
 
-    @Override
-    public void write(FriendlyByteBuf buf) {
-
-        buf.writeVarInt(id);
-        buf.writeResourceLocation(getRegistryName(effect.getEffect()));
-        buf.writeInt(effect.getDuration());
-    }
-
-    @Override
-    public void read(FriendlyByteBuf buf) {
-
-        this.id = buf.readVarInt();
-        MobEffect effectType = BuiltInRegistries.MOB_EFFECT.get(buf.readResourceLocation());
-        int duration = buf.readInt();
-        if (effectType != null) {
-            effect = new MobEffectInstance(effectType, duration);
-        }
-    }
-
     public static void sendToClient(LivingEntity entity, MobEffectInstance effect) {
 
         if (!entity.level.isClientSide) {
-            EffectAddedPacket packet = new EffectAddedPacket();
-            packet.id = entity.getId();
-            packet.effect = effect;
-            packet.sendToAllAround(entity.position(), NETWORK_UPDATE_DISTANCE, entity.level.dimension());
+            PacketDistributor.ALL.noArg().send(new EffectAddedPayload(entity.getId(), getRegistryName(effect.getEffect()), effect.getDuration()));
         }
     }
 
-    public static void sendToClient(LivingEntity entity, MobEffectInstance effect, Player client) {
+    public static void sendToClient(LivingEntity entity, MobEffectInstance effect, Player player) {
 
-        if (!entity.level.isClientSide && client instanceof ServerPlayer player) {
-            EffectAddedPacket packet = new EffectAddedPacket();
-            packet.id = entity.getId();
-            packet.effect = effect;
-            packet.sendToPlayer(player);
+        if (!entity.level.isClientSide && player instanceof ServerPlayer serverPlayer) {
+            PacketDistributor.PLAYER.with(serverPlayer).send(new EffectAddedPayload(entity.getId(), getRegistryName(effect.getEffect()), effect.getDuration()));
         }
     }
 

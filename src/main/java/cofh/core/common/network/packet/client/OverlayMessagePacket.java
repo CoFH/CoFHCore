@@ -1,47 +1,30 @@
 package cofh.core.common.network.packet.client;
 
-import cofh.core.CoFHCore;
-import cofh.core.common.network.packet.PacketIDs;
+import cofh.core.common.network.data.client.OverlayMessagePayload;
 import cofh.core.util.ProxyUtils;
-import cofh.lib.common.network.packet.IPacketClient;
-import cofh.lib.common.network.packet.PacketBase;
 import cofh.lib.util.helpers.StringHelper;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 
-public class OverlayMessagePacket extends PacketBase implements IPacketClient {
+public class OverlayMessagePacket {
 
-    protected String message;
+    public static final OverlayMessagePacket INSTANCE = new OverlayMessagePacket();
 
-    public OverlayMessagePacket() {
+    public static OverlayMessagePacket get() {
 
-        super(PacketIDs.PACKET_OVERLAY, CoFHCore.PACKET_HANDLER);
+        return INSTANCE;
     }
 
-    @Override
-    public void handleClient() {
+    public void handle(final OverlayMessagePayload payload, final PlayPayloadContext context) {
 
-        ProxyUtils.setOverlayMessage(StringHelper.fromJSON(message));
-    }
-
-    @Override
-    public void write(FriendlyByteBuf buf) {
-
-        buf.writeUtf(message);
-    }
-
-    @Override
-    public void read(FriendlyByteBuf buf) {
-
-        message = buf.readUtf(Short.MAX_VALUE);
+        context.workHandler().submitAsync(() -> ProxyUtils.setOverlayMessage(StringHelper.fromJSON(payload.message())));
     }
 
     public static void sendToClient(Component message, ServerPlayer player) {
 
-        OverlayMessagePacket packet = new OverlayMessagePacket();
-        packet.message = StringHelper.toJSON(message);
-        packet.sendToPlayer(player);
+        PacketDistributor.PLAYER.with(player).send(new OverlayMessagePayload(StringHelper.toJSON(message)));
     }
 
 }

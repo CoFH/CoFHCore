@@ -47,7 +47,7 @@ public class FalseCopySlotGhostHandler implements IGhostIngredientHandler<Contai
                     public void accept(I ingredient) {
 
                         slot.set(finalStack);
-                        GhostItemPacket.sendToServer(slot.slot, finalStack);
+                        GhostItemPacket.sendToServer(slot.slot, finalStack, 1);
                     }
                 });
             }

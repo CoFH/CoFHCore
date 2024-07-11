@@ -1,52 +1,42 @@
 package cofh.core.common.network.packet.server;
 
-import cofh.core.CoFHCore;
 import cofh.core.common.block.entity.ITileXpHandler;
-import cofh.lib.common.network.packet.IPacketServer;
-import cofh.lib.common.network.packet.PacketBase;
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerPlayer;
+import cofh.core.common.network.data.server.ClaimXPPayload;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 
-import static cofh.core.common.network.packet.PacketIDs.PACKET_CLAIM_XP;
+import java.util.Optional;
 
-public class ClaimXPPacket extends PacketBase implements IPacketServer {
+public class ClaimXPPacket {
 
-    protected BlockPos pos;
-    protected Vec3 spawnPos;
+    public static final ClaimXPPacket INSTANCE = new ClaimXPPacket();
 
-    public ClaimXPPacket() {
+    public static ClaimXPPacket get() {
 
-        super(PACKET_CLAIM_XP, CoFHCore.PACKET_HANDLER);
+        return INSTANCE;
     }
 
-    @Override
-    public void handleServer(ServerPlayer player) {
+    public void handle(final ClaimXPPayload payload, final PlayPayloadContext context) {
 
-        Level world = player.level;
-        if (!world.isLoaded(pos)) {
-            return;
-        }
-        BlockEntity tile = world.getBlockEntity(pos);
-        if (tile instanceof ITileXpHandler tileXpHandler) {
-            tileXpHandler.claimXP(player);
-        }
-        // TODO: Debug logging?
-    }
+        context.workHandler().submitAsync(() -> {
+            Optional<Player> senderOptional = context.player();
+            if (senderOptional.isEmpty()) {
+                return;
+            }
+            Player player = senderOptional.get();
 
-    @Override
-    public void write(FriendlyByteBuf buf) {
-
-        buf.writeBlockPos(pos);
-    }
-
-    @Override
-    public void read(FriendlyByteBuf buf) {
-
-        pos = buf.readBlockPos();
+            Level world = player.level;
+            if (!world.isLoaded(payload.pos())) {
+                return;
+            }
+            BlockEntity tile = world.getBlockEntity(payload.pos());
+            if (tile instanceof ITileXpHandler tileXpHandler) {
+                tileXpHandler.claimXP(player);
+            }
+        });
     }
 
     public static boolean sendToServer(ITileXpHandler tile) {
@@ -54,9 +44,7 @@ public class ClaimXPPacket extends PacketBase implements IPacketServer {
         if (tile == null) {
             return false;
         }
-        ClaimXPPacket packet = new ClaimXPPacket();
-        packet.pos = tile.pos();
-        packet.sendToServer();
+        PacketDistributor.SERVER.noArg().send(new ClaimXPPayload(tile.pos()));
         return true;
     }
 
