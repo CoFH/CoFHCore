@@ -1,14 +1,9 @@
 package cofh.core.common.item;
 
-import cofh.core.common.capability.templates.ArcheryBowItemWrapper;
 import cofh.lib.api.item.ICoFHItem;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
-import net.neoforged.neoforge.common.capabilities.ICapabilityProvider;
-
-import javax.annotation.Nullable;
 
 public class BowItemCoFH extends BowItem implements ICoFHItem {
 
@@ -49,12 +44,6 @@ public class BowItemCoFH extends BowItem implements ICoFHItem {
     public int getEnchantmentValue() {
 
         return enchantability;
-    }
-
-    @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-
-        return new ArcheryBowItemWrapper(stack, accuracyModifier, damageModifier, velocityModifier);
     }
 
     // region DISPLAY

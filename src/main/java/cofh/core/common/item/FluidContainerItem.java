@@ -3,17 +3,14 @@ package cofh.core.common.item;
 import cofh.core.util.helpers.FluidHelper;
 import cofh.lib.api.item.IColorableItem;
 import cofh.lib.api.item.IFluidContainerItem;
-import cofh.lib.common.fluid.FluidContainerItemWrapper;
 import cofh.lib.util.helpers.StringHelper;
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.common.capabilities.ICapabilityProvider;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
@@ -121,12 +118,6 @@ public class FluidContainerItem extends ItemCoFH implements IFluidContainerItem,
 
         float f = Math.max(0.0F, (float) getFluidAmount(stack) / getCapacity(stack));
         return Mth.hsvToRgb(f / 3.0F, 1.0F, 1.0F);
-    }
-
-    @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-
-        return new FluidContainerItemWrapper(stack, this);
     }
 
     // region IFluidContainerItem

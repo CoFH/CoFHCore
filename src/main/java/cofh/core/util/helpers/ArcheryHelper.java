@@ -1,8 +1,8 @@
 package cofh.core.util.helpers;
 
+import cofh.core.common.capability.CoreCapabilities;
 import cofh.core.common.capability.templates.ArcheryAmmoItemWrapper;
 import cofh.core.common.capability.templates.ArcheryBowItemWrapper;
-import cofh.core.compat.curios.CuriosProxy;
 import cofh.lib.api.capability.IArcheryAmmoItem;
 import cofh.lib.api.capability.IArcheryBowItem;
 import cofh.lib.util.Utils;
@@ -20,7 +20,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.util.LazyOptional;
 
 import java.util.Comparator;
 import java.util.HashSet;
@@ -29,8 +28,6 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import static cofh.core.common.capability.CapabilityArchery.AMMO_ITEM_CAPABILITY;
-import static cofh.core.common.capability.CapabilityArchery.BOW_ITEM_CAPABILITY;
 import static cofh.core.util.references.EnsorcIDs.ID_TRUESHOT;
 import static cofh.core.util.references.EnsorcIDs.ID_VOLLEY;
 import static cofh.lib.util.Utils.getEnchantment;
@@ -53,7 +50,7 @@ public final class ArcheryHelper {
 
     public static boolean validBow(ItemStack stack) {
 
-        return VALID_BOWS.contains(stack.getItem()) || stack.getCapability(BOW_ITEM_CAPABILITY).isPresent();
+        return VALID_BOWS.contains(stack.getItem()) || stack.getCapability(CoreCapabilities.ArcheryHandler.BOW) != null;
     }
 
     public static boolean isArrow(ItemStack stack) {
@@ -71,9 +68,14 @@ public final class ArcheryHelper {
      */
     public static boolean fireArrow(ItemStack bow, ItemStack ammo, Player shooter, int charge, Level world) {
 
-        IArcheryBowItem bowCap = bow.getCapability(BOW_ITEM_CAPABILITY).orElse(new ArcheryBowItemWrapper(bow));
-        IArcheryAmmoItem ammoCap = ammo.getCapability(AMMO_ITEM_CAPABILITY).orElse(new ArcheryAmmoItemWrapper(ammo));
-
+        IArcheryBowItem bowCap = bow.getCapability(CoreCapabilities.ArcheryHandler.BOW);
+        if (bowCap == null) {
+            bowCap = new ArcheryBowItemWrapper(bow);
+        }
+        IArcheryAmmoItem ammoCap = ammo.getCapability(CoreCapabilities.ArcheryHandler.AMMO);
+        if (ammoCap == null) {
+            ammoCap = new ArcheryAmmoItemWrapper(ammo);
+        }
         boolean infinite = shooter.getAbilities().instabuild
                 || ammoCap.isInfinite(bow, shooter)
                 || (isArrow(ammo) && ((ArrowItem) ammo.getItem()).isInfinite(ammo, bow, shooter))
@@ -111,7 +113,7 @@ public final class ArcheryHelper {
                     for (int shot = 0; shot < numArrows; ++shot) {
                         AbstractArrow arrow = createArrow(world, ammo, shooter);
                         if (bowItem != null) {
-                            arrow = bowItem.customArrow(arrow);
+                            arrow = bowItem.customArrow(arrow, ammo);
                         }
                         arrow.shootFromRotation(shooter, shooter.getXRot() - volleyPitch * shot, shooter.getYRot(), 0.0F, arrowVelocity * 3.0F * velocityMod, accuracyMod);// * (1 + shot * 2));
                         arrow.setBaseDamage(arrow.getBaseDamage() * damageMod);
@@ -155,8 +157,11 @@ public final class ArcheryHelper {
 
     public static AbstractArrow createArrow(Level world, ItemStack ammo, Player shooter) {
 
-        LazyOptional<IArcheryAmmoItem> ammoCap = ammo.getCapability(AMMO_ITEM_CAPABILITY);
-        return ammoCap.map(cap -> cap.createArrowEntity(world, shooter)).orElse(createDefaultArrow(world, ammo, shooter));
+        IArcheryAmmoItem ammoCap = ammo.getCapability(CoreCapabilities.ArcheryHandler.AMMO);
+        if (ammoCap == null) {
+            ammoCap = new ArcheryAmmoItemWrapper(ammo);
+        }
+        return ammoCap.createArrowEntity(world, shooter);
     }
 
     public static AbstractArrow createDefaultArrow(Level world, ItemStack ammo, Player shooter) {
@@ -172,28 +177,33 @@ public final class ArcheryHelper {
         Predicate<ItemStack> isAmmo = weapon.getItem() instanceof ProjectileWeaponItem weaponItem ? weaponItem.getAllSupportedProjectiles() : i -> false;
 
         // HELD
-        if (offHand.getCapability(AMMO_ITEM_CAPABILITY).map(cap -> !cap.isEmpty(shooter)).orElse(false) || isHeldAmmo.test(offHand)) {
+        IArcheryAmmoItem ammoCap = offHand.getCapability(CoreCapabilities.ArcheryHandler.AMMO);
+        if (ammoCap != null && !ammoCap.isEmpty(shooter) || isHeldAmmo.test(offHand)) {
             return offHand;
         }
-        if (mainHand.getCapability(AMMO_ITEM_CAPABILITY).map(cap -> !cap.isEmpty(shooter)).orElse(false) || isHeldAmmo.test(mainHand)) {
+        ammoCap = mainHand.getCapability(CoreCapabilities.ArcheryHandler.AMMO);
+        if (ammoCap != null && !ammoCap.isEmpty(shooter) || isHeldAmmo.test(mainHand)) {
             return mainHand;
         }
+
+        // TODO: Fix
         // CURIOS
-        final ItemStack[] retStack = {ItemStack.EMPTY};
-        CuriosProxy.getAllWorn(shooter).ifPresent(c -> {
-            for (int i = 0; i < c.getSlots(); ++i) {
-                ItemStack slot = c.getStackInSlot(i);
-                if (slot.getCapability(AMMO_ITEM_CAPABILITY).map(cap -> !cap.isEmpty(shooter)).orElse(false)) {
-                    retStack[0] = slot;
-                }
-            }
-        });
-        if (!retStack[0].isEmpty()) {
-            return retStack[0];
-        }
+        //        final ItemStack[] retStack = {ItemStack.EMPTY};
+        //        CuriosProxy.getAllWorn(shooter).ifPresent(c -> {
+        //            for (int i = 0; i < c.getSlots(); ++i) {
+        //                ItemStack slot = c.getStackInSlot(i);
+        //                if (slot.getCapability(AMMO_ITEM_CAPABILITY).map(cap -> !cap.isEmpty(shooter)).orElse(false)) {
+        //                    retStack[0] = slot;
+        //                }
+        //            }
+        //        });
+        //        if (!retStack[0].isEmpty()) {
+        //            return retStack[0];
+        //        }
         // INVENTORY
         for (ItemStack slot : shooter.getInventory().items) {
-            if (slot.getCapability(AMMO_ITEM_CAPABILITY).map(cap -> !cap.isEmpty(shooter)).orElse(false)) {
+            ammoCap = slot.getCapability(CoreCapabilities.ArcheryHandler.AMMO);
+            if (ammoCap != null && !ammoCap.isEmpty(shooter)) {
                 return slot;
             }
         }

@@ -3,15 +3,7 @@ package cofh.lib.init.data;
 import cofh.lib.util.DeferredRegisterCoFH;
 import cofh.lib.util.Utils;
 import cofh.lib.util.flags.FlagManager;
-import cofh.lib.util.flags.FlagSetCondition;
-import cofh.lib.util.flags.TagExistsCondition;
-import com.google.common.collect.Sets;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import net.minecraft.advancements.critereon.*;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.data.CachedOutput;
-import net.minecraft.data.DataProvider;
+import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
@@ -19,21 +11,13 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.conditions.IConditionBuilder;
 import net.neoforged.neoforge.common.crafting.CompoundIngredient;
-import net.neoforged.neoforge.common.crafting.CraftingHelper;
-import net.neoforged.neoforge.common.crafting.conditions.ICondition;
-import net.neoforged.neoforge.common.crafting.conditions.IConditionBuilder;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
 
 import static cofh.lib.util.constants.ModIds.ID_FORGE;
 
@@ -50,32 +34,63 @@ public abstract class RecipeProviderCoFH extends RecipeProvider implements ICond
         this.modid = modid;
     }
 
-    @Override
-    public CompletableFuture<?> run(CachedOutput pOutput) {
+    //    @Override
+    //    public CompletableFuture<?> run(CachedOutput pOutput) {
+    //
+    //        Set<ResourceLocation> set = Sets.newHashSet();
+    //        List<CompletableFuture<?>> list = new ArrayList<>();
+    //        this.buildRecipes((recipe) -> {
+    //            if (!set.add(recipe.getId())) {
+    //                throw new IllegalStateException("Duplicate recipe " + recipe.getId());
+    //            } else {
+    //                list.add(DataProvider.saveStable(pOutput, recipe.serializeRecipe(), this.recipePathProvider.json(recipe.getId())));
+    //
+    //                if (advancements) {
+    //                    JsonObject jsonobject = recipe.serializeAdvancement();
+    //                    if (jsonobject != null) {
+    //                        var saveAdvancementFuture = saveAdvancement(pOutput, recipe, jsonobject);
+    //                        if (saveAdvancementFuture != null)
+    //                            list.add(saveAdvancementFuture);
+    //                    }
+    //                }
+    //            }
+    //        });
+    //        return CompletableFuture.allOf(list.toArray(CompletableFuture[]::new));
+    //    }
 
-        Set<ResourceLocation> set = Sets.newHashSet();
-        List<CompletableFuture<?>> list = new ArrayList<>();
-        this.buildRecipes((recipe) -> {
-            if (!set.add(recipe.getId())) {
-                throw new IllegalStateException("Duplicate recipe " + recipe.getId());
-            } else {
-                list.add(DataProvider.saveStable(pOutput, recipe.serializeRecipe(), this.recipePathProvider.json(recipe.getId())));
-
-                if (advancements) {
-                    JsonObject jsonobject = recipe.serializeAdvancement();
-                    if (jsonobject != null) {
-                        var saveAdvancementFuture = saveAdvancement(pOutput, recipe, jsonobject);
-                        if (saveAdvancementFuture != null)
-                            list.add(saveAdvancementFuture);
-                    }
-                }
-            }
-        });
-        return CompletableFuture.allOf(list.toArray(CompletableFuture[]::new));
-    }
+    //    @Override
+    //    public CompletableFuture<?> run(final CachedOutput pOutput) {
+    //        final Set<ResourceLocation> set = Sets.newHashSet();
+    //        final List<CompletableFuture<?>> list = new ArrayList<>();
+    //        this.buildRecipes(
+    //                new RecipeOutput() {
+    //                    @Override
+    //                    public void accept(ResourceLocation id, Recipe<?> recipe, @Nullable AdvancementHolder advancement, ICondition... conditions) {
+    //                        if (!set.add(id)) {
+    //                            throw new IllegalStateException("Duplicate recipe " + id);
+    //                        } else {
+    //                            list.add(DataProvider.saveStable(pOutput, Recipe.CONDITIONAL_CODEC, Optional.of(new WithConditions<>(recipe, conditions)), RecipeProviderCoFH.this.recipePathProvider.json(id)));
+    //                            if (advancement != null) {
+    //                                list.add(
+    //                                        DataProvider.saveStable(
+    //                                                pOutput, Advancement.CONDITIONAL_CODEC, Optional.of(new WithConditions<>(advancement.value(), conditions)), RecipeProviderCoFH.this.advancementPathProvider.json(advancement.id())
+    //                                        )
+    //                                );
+    //                            }
+    //                        }
+    //                    }
+    //
+    //                    @Override
+    //                    public Advancement.Builder advancement() {
+    //                        return Advancement.Builder.recipeAdvancement().parent(RecipeBuilder.ROOT_RECIPE_ADVANCEMENT);
+    //                    }
+    //                }
+    //        );
+    //        return CompletableFuture.allOf(list.toArray(p_253414_ -> new CompletableFuture[p_253414_]));
+    //    }
 
     // region RECIPE HELPERS
-    protected void generateSmallPackingRecipe(Consumer<FinishedRecipe> consumer, Item storage, Item individual, String suffix) {
+    protected void generateSmallPackingRecipe(RecipeOutput consumer, Item storage, Item individual, String suffix) {
 
         String storageName = name(storage);
         String individualName = name(individual);
@@ -84,34 +99,34 @@ public abstract class RecipeProviderCoFH extends RecipeProvider implements ICond
                 .define('#', individual)
                 .pattern("##")
                 .pattern("##")
-                .unlockedBy("has_at_least_4_" + individualName, hasItem(MinMaxBounds.Ints.atLeast(4), individual))
+                .unlockedBy("has_at_least_4_" + individualName, has(MinMaxBounds.Ints.atLeast(4), individual))
                 .save(consumer, this.modid + ":storage/" + storageName + suffix);
     }
 
-    protected void generateSmallUnpackingRecipe(Consumer<FinishedRecipe> consumer, Item storage, Item individual, String suffix) {
+    protected void generateSmallUnpackingRecipe(RecipeOutput consumer, Item storage, Item individual, String suffix) {
 
         String storageName = name(storage);
         String individualName = name(individual);
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, individual, 4)
                 .requires(storage)
-                .unlockedBy("has_at_least_4_" + individualName, hasItem(MinMaxBounds.Ints.atLeast(4), individual))
+                .unlockedBy("has_at_least_4_" + individualName, has(MinMaxBounds.Ints.atLeast(4), individual))
                 .unlockedBy("has_" + storageName, has(storage))
                 .save(consumer, this.modid + ":storage/" + individualName + suffix);
     }
 
-    protected void generateSmallStorageRecipes(Consumer<FinishedRecipe> consumer, Item storage, Item individual, String packingSuffix, String unpackingSuffix) {
+    protected void generateSmallStorageRecipes(RecipeOutput consumer, Item storage, Item individual, String packingSuffix, String unpackingSuffix) {
 
         generateSmallPackingRecipe(consumer, storage, individual, packingSuffix);
         generateSmallUnpackingRecipe(consumer, storage, individual, unpackingSuffix);
     }
 
-    protected void generateSmallStorageRecipes(Consumer<FinishedRecipe> consumer, Item storage, Item individual) {
+    protected void generateSmallStorageRecipes(RecipeOutput consumer, Item storage, Item individual) {
 
         generateSmallStorageRecipes(consumer, storage, individual, "", "_from_block");
     }
 
-    protected void generatePackingRecipe(Consumer<FinishedRecipe> consumer, Item storage, Item individual, String suffix) {
+    protected void generatePackingRecipe(RecipeOutput consumer, Item storage, Item individual, String suffix) {
 
         String storageName = name(storage);
         String individualName = name(individual);
@@ -121,11 +136,11 @@ public abstract class RecipeProviderCoFH extends RecipeProvider implements ICond
                 .pattern("###")
                 .pattern("###")
                 .pattern("###")
-                .unlockedBy("has_at_least_9_" + individualName, hasItem(MinMaxBounds.Ints.atLeast(9), individual))
+                .unlockedBy("has_at_least_9_" + individualName, has(MinMaxBounds.Ints.atLeast(9), individual))
                 .save(consumer, this.modid + ":storage/" + storageName + suffix);
     }
 
-    protected void generatePackingRecipe(Consumer<FinishedRecipe> consumer, Item storage, Item individual, TagKey<Item> tag, String suffix) {
+    protected void generatePackingRecipe(RecipeOutput consumer, Item storage, Item individual, TagKey<Item> tag, String suffix) {
 
         String storageName = name(storage);
         String individualName = name(individual);
@@ -136,45 +151,45 @@ public abstract class RecipeProviderCoFH extends RecipeProvider implements ICond
                 .pattern("###")
                 .pattern("#I#")
                 .pattern("###")
-                .unlockedBy("has_at_least_9_" + individualName, hasItem(MinMaxBounds.Ints.atLeast(9), individual))
+                .unlockedBy("has_at_least_9_" + individualName, has(MinMaxBounds.Ints.atLeast(9), individual))
                 .save(consumer, this.modid + ":storage/" + storageName + suffix);
     }
 
-    protected void generateUnpackingRecipe(Consumer<FinishedRecipe> consumer, Item storage, Item individual, String suffix) {
+    protected void generateUnpackingRecipe(RecipeOutput consumer, Item storage, Item individual, String suffix) {
 
         String storageName = name(storage);
         String individualName = name(individual);
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, individual, 9)
                 .requires(storage)
-                .unlockedBy("has_at_least_9_" + individualName, hasItem(MinMaxBounds.Ints.atLeast(9), individual))
+                .unlockedBy("has_at_least_9_" + individualName, has(MinMaxBounds.Ints.atLeast(9), individual))
                 .unlockedBy("has_" + storageName, has(storage))
                 .save(consumer, this.modid + ":storage/" + individualName + suffix);
     }
 
-    protected void generateStorageRecipes(Consumer<FinishedRecipe> consumer, Item storage, Item individual, String packingSuffix, String unpackingSuffix) {
+    protected void generateStorageRecipes(RecipeOutput consumer, Item storage, Item individual, String packingSuffix, String unpackingSuffix) {
 
         generatePackingRecipe(consumer, storage, individual, packingSuffix);
         generateUnpackingRecipe(consumer, storage, individual, unpackingSuffix);
     }
 
-    protected void generateStorageRecipes(Consumer<FinishedRecipe> consumer, Item storage, Item individual, TagKey<Item> tag, String packingSuffix, String unpackingSuffix) {
+    protected void generateStorageRecipes(RecipeOutput consumer, Item storage, Item individual, TagKey<Item> tag, String packingSuffix, String unpackingSuffix) {
 
         generatePackingRecipe(consumer, storage, individual, tag, packingSuffix);
         generateUnpackingRecipe(consumer, storage, individual, unpackingSuffix);
     }
 
-    protected void generateStorageRecipes(Consumer<FinishedRecipe> consumer, Item storage, Item individual, TagKey<Item> tag) {
+    protected void generateStorageRecipes(RecipeOutput consumer, Item storage, Item individual, TagKey<Item> tag) {
 
         generateStorageRecipes(consumer, storage, individual, tag, "", "_from_block");
     }
 
-    protected void generateStorageRecipes(Consumer<FinishedRecipe> consumer, Item storage, Item individual) {
+    protected void generateStorageRecipes(RecipeOutput consumer, Item storage, Item individual) {
 
         generateStorageRecipes(consumer, storage, individual, "", "_from_block");
     }
 
-    protected void generateTypeRecipes(DeferredRegisterCoFH<Item> reg, Consumer<FinishedRecipe> consumer, String type) {
+    protected void generateTypeRecipes(DeferredRegisterCoFH<Item> reg, RecipeOutput consumer, String type) {
 
         Item ingot = reg.get(type + "_ingot");
         Item gem = reg.get(type);
@@ -211,7 +226,7 @@ public abstract class RecipeProviderCoFH extends RecipeProvider implements ICond
         generateGearRecipe(reg, consumer, type);
     }
 
-    protected void generateGearRecipe(DeferredRegisterCoFH<Item> reg, Consumer<FinishedRecipe> consumer, String type) {
+    protected void generateGearRecipe(DeferredRegisterCoFH<Item> reg, RecipeOutput consumer, String type) {
 
         Item gear = reg.get(type + "_gear");
         if (gear == null) {
@@ -245,7 +260,7 @@ public abstract class RecipeProviderCoFH extends RecipeProvider implements ICond
         }
     }
 
-    protected void generateGearRecipe(Consumer<FinishedRecipe> consumer, Item gear, Item material, TagKey<Item> tag) {
+    protected void generateGearRecipe(RecipeOutput consumer, Item gear, Item material, TagKey<Item> tag) {
 
         if (gear == null || material == null || tag == null) {
             return;
@@ -260,29 +275,29 @@ public abstract class RecipeProviderCoFH extends RecipeProvider implements ICond
                 .save(consumer, this.modid + ":parts/" + name(gear));
     }
 
-    protected void generateSmeltingRecipe(DeferredRegisterCoFH<Item> reg, Consumer<FinishedRecipe> consumer, Item input, Item output, float xp) {
+    protected void generateSmeltingRecipe(DeferredRegisterCoFH<Item> reg, RecipeOutput consumer, Item input, Item output, float xp) {
 
         generateSmeltingRecipe(reg, consumer, input, output, xp, "", "");
     }
 
-    protected void generateSmeltingRecipe(DeferredRegisterCoFH<Item> reg, Consumer<FinishedRecipe> consumer, Item input, Item output, float xp, String folder) {
+    protected void generateSmeltingRecipe(DeferredRegisterCoFH<Item> reg, RecipeOutput consumer, Item input, Item output, float xp, String folder) {
 
         generateSmeltingRecipe(reg, consumer, input, output, xp, folder, "");
     }
 
-    protected void generateSmeltingRecipe(DeferredRegisterCoFH<Item> reg, Consumer<FinishedRecipe> consumer, Item input, Item output, float xp, String folder, String suffix) {
+    protected void generateSmeltingRecipe(DeferredRegisterCoFH<Item> reg, RecipeOutput consumer, Item input, Item output, float xp, String folder, String suffix) {
 
         SimpleCookingRecipeBuilder.smelting(Ingredient.of(input), RecipeCategory.MISC, output, xp, 200)
                 .unlockedBy("has_" + name(input), has(input))
                 .save(consumer, this.modid + ":" + folder + "/" + name(output) + "_from" + suffix + "_smelting");
     }
 
-    protected void generateSmeltingAndBlastingRecipes(DeferredRegisterCoFH<Item> reg, Consumer<FinishedRecipe> consumer, String material, float xp) {
+    protected void generateSmeltingAndBlastingRecipes(DeferredRegisterCoFH<Item> reg, RecipeOutput consumer, String material, float xp) {
 
         generateSmeltingAndBlastingRecipes(reg, consumer, material, xp, "smelting");
     }
 
-    protected void generateSmeltingAndBlastingRecipes(DeferredRegisterCoFH<Item> reg, Consumer<FinishedRecipe> consumer, String material, float xp, String folder) {
+    protected void generateSmeltingAndBlastingRecipes(DeferredRegisterCoFH<Item> reg, RecipeOutput consumer, String material, float xp, String folder) {
 
         Item ore = reg.get(material + "_ore");
         Item deep = reg.get("deepslate_" + material + "_ore");
@@ -315,12 +330,12 @@ public abstract class RecipeProviderCoFH extends RecipeProvider implements ICond
         }
     }
 
-    protected void generateSmeltingAndBlastingRecipes(DeferredRegisterCoFH<Item> reg, Consumer<FinishedRecipe> consumer, Item input, Item output, float xp, String folder) {
+    protected void generateSmeltingAndBlastingRecipes(DeferredRegisterCoFH<Item> reg, RecipeOutput consumer, Item input, Item output, float xp, String folder) {
 
         generateSmeltingAndBlastingRecipes(reg, consumer, input, output, xp, folder, "");
     }
 
-    protected void generateSmeltingAndBlastingRecipes(DeferredRegisterCoFH<Item> reg, Consumer<FinishedRecipe> consumer, Item input, Item output, float xp, String folder, String suffix) {
+    protected void generateSmeltingAndBlastingRecipes(DeferredRegisterCoFH<Item> reg, RecipeOutput consumer, Item input, Item output, float xp, String folder, String suffix) {
 
         SimpleCookingRecipeBuilder.smelting(Ingredient.of(input), RecipeCategory.MISC, output, xp, 200)
                 .unlockedBy(getHasName(input), has(input))
@@ -331,12 +346,12 @@ public abstract class RecipeProviderCoFH extends RecipeProvider implements ICond
                 .save(consumer, this.modid + ":" + folder + "/" + name(output) + "_from" + suffix + "_blasting");
     }
 
-    protected void generateSmeltingAndBlastingRecipes(DeferredRegisterCoFH<Item> reg, Consumer<FinishedRecipe> consumer, TagKey<Item> input, String condition, Item output, float xp, String folder) {
+    protected void generateSmeltingAndBlastingRecipes(DeferredRegisterCoFH<Item> reg, RecipeOutput consumer, TagKey<Item> input, String condition, Item output, float xp, String folder) {
 
         generateSmeltingAndBlastingRecipes(reg, consumer, input, condition, output, xp, folder, "");
     }
 
-    protected void generateSmeltingAndBlastingRecipes(DeferredRegisterCoFH<Item> reg, Consumer<FinishedRecipe> consumer, TagKey<Item> input, String condition, Item output, float xp, String folder, String suffix) {
+    protected void generateSmeltingAndBlastingRecipes(DeferredRegisterCoFH<Item> reg, RecipeOutput consumer, TagKey<Item> input, String condition, Item output, float xp, String folder, String suffix) {
 
         SimpleCookingRecipeBuilder.smelting(Ingredient.of(input), RecipeCategory.MISC, output, xp, 200)
                 .unlockedBy(condition, has(input))
@@ -347,12 +362,12 @@ public abstract class RecipeProviderCoFH extends RecipeProvider implements ICond
                 .save(consumer, this.modid + ":" + folder + "/" + name(output) + "_from" + suffix + "_blasting");
     }
 
-    protected void generateSmeltingAndCookingRecipes(DeferredRegisterCoFH<Item> reg, Consumer<FinishedRecipe> consumer, Item input, Item output, float xp, String folder) {
+    protected void generateSmeltingAndCookingRecipes(DeferredRegisterCoFH<Item> reg, RecipeOutput consumer, Item input, Item output, float xp, String folder) {
 
         generateSmeltingAndCookingRecipes(reg, consumer, input, output, xp, folder, "");
     }
 
-    protected void generateSmeltingAndCookingRecipes(DeferredRegisterCoFH<Item> reg, Consumer<FinishedRecipe> consumer, Item input, Item output, float xp, String folder, String suffix) {
+    protected void generateSmeltingAndCookingRecipes(DeferredRegisterCoFH<Item> reg, RecipeOutput consumer, Item input, Item output, float xp, String folder, String suffix) {
 
         SimpleCookingRecipeBuilder.smelting(Ingredient.of(input), RecipeCategory.FOOD, output, xp, 200)
                 .unlockedBy(getHasName(input), has(input))
@@ -367,12 +382,12 @@ public abstract class RecipeProviderCoFH extends RecipeProvider implements ICond
                 .save(consumer, this.modid + ":" + folder + "/" + name(output) + "_from" + suffix + "_campfire_cooking");
     }
 
-    protected void generateSmeltingAndCookingRecipes(DeferredRegisterCoFH<Item> reg, Consumer<FinishedRecipe> consumer, TagKey<Item> input, String condition, Item output, float xp, String folder) {
+    protected void generateSmeltingAndCookingRecipes(DeferredRegisterCoFH<Item> reg, RecipeOutput consumer, TagKey<Item> input, String condition, Item output, float xp, String folder) {
 
         generateSmeltingAndCookingRecipes(reg, consumer, input, condition, output, xp, folder, "");
     }
 
-    protected void generateSmeltingAndCookingRecipes(DeferredRegisterCoFH<Item> reg, Consumer<FinishedRecipe> consumer, TagKey<Item> input, String condition, Item output, float xp, String folder, String suffix) {
+    protected void generateSmeltingAndCookingRecipes(DeferredRegisterCoFH<Item> reg, RecipeOutput consumer, TagKey<Item> input, String condition, Item output, float xp, String folder, String suffix) {
 
         SimpleCookingRecipeBuilder.smelting(Ingredient.of(input), RecipeCategory.FOOD, output, xp, 200)
                 .unlockedBy(condition, has(input))
@@ -387,12 +402,12 @@ public abstract class RecipeProviderCoFH extends RecipeProvider implements ICond
                 .save(consumer, this.modid + ":" + folder + "/" + name(output) + "_from" + suffix + "_campfire_cooking");
     }
 
-    protected void generateStonecuttingRecipe(DeferredRegisterCoFH<Item> reg, Consumer<FinishedRecipe> consumer, Item input, Item output, String folder) {
+    protected void generateStonecuttingRecipe(DeferredRegisterCoFH<Item> reg, RecipeOutput consumer, Item input, Item output, String folder) {
 
         generateStonecuttingRecipe(reg, consumer, input, output, folder, "");
     }
 
-    protected void generateStonecuttingRecipe(DeferredRegisterCoFH<Item> reg, Consumer<FinishedRecipe> consumer, Item input, Item output, String folder, String suffix) {
+    protected void generateStonecuttingRecipe(DeferredRegisterCoFH<Item> reg, RecipeOutput consumer, Item input, Item output, String folder, String suffix) {
 
         SingleItemRecipeBuilder.stonecutting(Ingredient.of(input), RecipeCategory.BUILDING_BLOCKS, output)
                 .unlockedBy("has_" + name(input), has(input))
@@ -401,13 +416,6 @@ public abstract class RecipeProviderCoFH extends RecipeProvider implements ICond
     // endregion
 
     // region UTIL METHODS
-
-    // TODO: Change if Mojang implements some better defaults...
-    public InventoryChangeTrigger.TriggerInstance hasItem(MinMaxBounds.Ints amount, ItemLike itemIn) {
-
-        return inventoryTrigger(new ItemPredicate(null, Set.of(itemIn.asItem()), amount, MinMaxBounds.Ints.ANY, EnchantmentPredicate.NONE, EnchantmentPredicate.NONE, null, NbtPredicate.ANY)); // ItemPredicate.Builder.create().item(itemIn).count(amount).build());
-    }
-
     @SafeVarargs
     protected final Ingredient fromTags(TagKey<Item>... tagsIn) {
 
@@ -434,130 +442,131 @@ public abstract class RecipeProviderCoFH extends RecipeProvider implements ICond
     }
     // endregion
 
+    // TODO: Fix
     // region CONDITIONAL RECIPES
-    protected static class ConditionalRecipeWrapper implements FinishedRecipe {
-
-        protected FinishedRecipe recipe;
-        protected List<ICondition> conditions = new ArrayList<>();
-
-        public ConditionalRecipeWrapper(FinishedRecipe recipe) {
-
-            this.recipe = recipe;
-        }
-
-        public ConditionalRecipeWrapper addCondition(ICondition condition) {
-
-            this.conditions.add(condition);
-            return this;
-        }
-
-        public ConditionalRecipeWrapper addConditions(List<ICondition> conditions) {
-
-            this.conditions.addAll(conditions);
-            return this;
-        }
-
-        @Override
-        public void serializeRecipeData(JsonObject json) {
-
-            recipe.serializeRecipeData(json);
-        }
-
-        @Override
-        public JsonObject serializeRecipe() {
-
-            JsonObject jsonobject = new JsonObject();
-            jsonobject.addProperty("type", BuiltInRegistries.RECIPE_SERIALIZER.getKey(this.getType()).toString());
-            this.serializeRecipeData(jsonobject);
-            if (!conditions.isEmpty()) {
-                JsonArray conditionArray = new JsonArray();
-                for (ICondition condition : conditions) {
-                    conditionArray.add(CraftingHelper.serialize(condition));
-                }
-                jsonobject.add("conditions", conditionArray);
-            }
-            return jsonobject;
-        }
-
-        @Override
-        public ResourceLocation getId() {
-
-            return recipe.getId();
-        }
-
-        @Override
-        public RecipeSerializer<?> getType() {
-
-            return recipe.getType();
-        }
-
-        @Nullable
-        @Override
-        public JsonObject serializeAdvancement() {
-
-            return recipe.serializeAdvancement();
-        }
-
-        @Nullable
-        @Override
-        public ResourceLocation getAdvancementId() {
-
-            return recipe.getAdvancementId();
-        }
-
-    }
-
-    protected ConditionalRecipeConsumer withConditions(Consumer<FinishedRecipe> consumer) {
-
-        return new ConditionalRecipeConsumer(consumer);
-    }
-
-    protected class ConditionalRecipeConsumer implements Consumer<FinishedRecipe> {
-
-        protected final Consumer<FinishedRecipe> consumer;
-        protected List<ICondition> conditions = new ArrayList<>();
-
-        public ConditionalRecipeConsumer(Consumer<FinishedRecipe> consumer) {
-
-            this.consumer = consumer;
-        }
-
-        public ConditionalRecipeConsumer addCondition(ICondition condition) {
-
-            this.conditions.add(condition);
-            return this;
-        }
-
-        public ConditionalRecipeConsumer addConditions(List<ICondition> conditions) {
-
-            this.conditions.addAll(conditions);
-            return this;
-        }
-
-        public ConditionalRecipeConsumer tagExists(TagKey<Item> tag) {
-
-            this.conditions.add(new TagExistsCondition(tag.location()));
-            return this;
-        }
-
-        public ConditionalRecipeConsumer flag(String flag) {
-
-            if (manager != null) {
-                this.conditions.add(new FlagSetCondition(manager, flag));
-            }
-            return this;
-        }
-
-        @Override
-        public void accept(FinishedRecipe recipe) {
-
-            if (!conditions.isEmpty()) {
-                consumer.accept(new ConditionalRecipeWrapper(recipe).addConditions(conditions));
-            } else {
-                consumer.accept(recipe);
-            }
-        }
-
-    }
+    //    protected static class ConditionalRecipeWrapper implements FinishedRecipe {
+    //
+    //        protected FinishedRecipe recipe;
+    //        protected List<ICondition> conditions = new ArrayList<>();
+    //
+    //        public ConditionalRecipeWrapper(FinishedRecipe recipe) {
+    //
+    //            this.recipe = recipe;
+    //        }
+    //
+    //        public ConditionalRecipeWrapper addCondition(ICondition condition) {
+    //
+    //            this.conditions.add(condition);
+    //            return this;
+    //        }
+    //
+    //        public ConditionalRecipeWrapper addConditions(List<ICondition> conditions) {
+    //
+    //            this.conditions.addAll(conditions);
+    //            return this;
+    //        }
+    //
+    //        @Override
+    //        public void serializeRecipeData(JsonObject json) {
+    //
+    //            recipe.serializeRecipeData(json);
+    //        }
+    //
+    //        @Override
+    //        public JsonObject serializeRecipe() {
+    //
+    //            JsonObject jsonobject = new JsonObject();
+    //            jsonobject.addProperty("type", BuiltInRegistries.RECIPE_SERIALIZER.getKey(this.getType()).toString());
+    //            this.serializeRecipeData(jsonobject);
+    //            if (!conditions.isEmpty()) {
+    //                JsonArray conditionArray = new JsonArray();
+    //                for (ICondition condition : conditions) {
+    //                    conditionArray.add(CraftingHelper.serialize(condition));
+    //                }
+    //                jsonobject.add("conditions", conditionArray);
+    //            }
+    //            return jsonobject;
+    //        }
+    //
+    //        @Override
+    //        public ResourceLocation getId() {
+    //
+    //            return recipe.getId();
+    //        }
+    //
+    //        @Override
+    //        public RecipeSerializer<?> getType() {
+    //
+    //            return recipe.getType();
+    //        }
+    //
+    //        @Nullable
+    //        @Override
+    //        public JsonObject serializeAdvancement() {
+    //
+    //            return recipe.serializeAdvancement();
+    //        }
+    //
+    //        @Nullable
+    //        @Override
+    //        public ResourceLocation getAdvancementId() {
+    //
+    //            return recipe.getAdvancementId();
+    //        }
+    //
+    //    }
+    //
+    //    protected ConditionalRecipeConsumer withConditions(RecipeOutput consumer) {
+    //
+    //        return new ConditionalRecipeConsumer(consumer);
+    //    }
+    //
+    //    protected class ConditionalRecipeConsumer implements RecipeOutput {
+    //
+    //        protected final RecipeOutput consumer;
+    //        protected List<ICondition> conditions = new ArrayList<>();
+    //
+    //        public ConditionalRecipeConsumer(RecipeOutput consumer) {
+    //
+    //            this.consumer = consumer;
+    //        }
+    //
+    //        public ConditionalRecipeConsumer addCondition(ICondition condition) {
+    //
+    //            this.conditions.add(condition);
+    //            return this;
+    //        }
+    //
+    //        public ConditionalRecipeConsumer addConditions(List<ICondition> conditions) {
+    //
+    //            this.conditions.addAll(conditions);
+    //            return this;
+    //        }
+    //
+    //        public ConditionalRecipeConsumer tagExists(TagKey<Item> tag) {
+    //
+    //            this.conditions.add(new TagExistsCondition(tag.location()));
+    //            return this;
+    //        }
+    //
+    //        public ConditionalRecipeConsumer flag(String flag) {
+    //
+    //            if (manager != null) {
+    //                this.conditions.add(new FlagSetCondition(manager, flag));
+    //            }
+    //            return this;
+    //        }
+    //
+    //        @Override
+    //        public void accept(FinishedRecipe recipe) {
+    //
+    //            if (!conditions.isEmpty()) {
+    //                consumer.accept(new ConditionalRecipeWrapper(recipe).addConditions(conditions));
+    //            } else {
+    //                consumer.accept(recipe);
+    //            }
+    //        }
+    //
+    //    }
     // endregion
 }

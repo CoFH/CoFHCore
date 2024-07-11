@@ -1,37 +1,24 @@
 package cofh.lib.common.energy;
 
 import cofh.lib.api.item.IEnergyContainerItem;
-import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.common.capabilities.Capability;
-import net.neoforged.neoforge.common.capabilities.ICapabilityProvider;
-import net.neoforged.neoforge.common.util.LazyOptional;
-import net.neoforged.neoforge.energy.IEnergyStorage;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
  * This class provides a simple way to wrap an IEnergyContainerItem to allow for capability support.
  *
  * @author King Lemming
  */
-public class EnergyContainerItemWrapper implements IRedstoneFluxStorage, ICapabilityProvider {
-
-    private final Capability<? extends IEnergyStorage> capability;
-    private final LazyOptional<IEnergyStorage> holder = LazyOptional.of(() -> this);
+public class EnergyContainerItemWrapper implements IRedstoneFluxStorage {
 
     protected final ItemStack container;
     protected final IEnergyContainerItem item;
 
-    public EnergyContainerItemWrapper(ItemStack containerIn, IEnergyContainerItem itemIn, Capability<? extends IEnergyStorage> capability) {
+    public EnergyContainerItemWrapper(ItemStack containerIn, IEnergyContainerItem itemIn) {
 
         this.container = containerIn;
         this.item = itemIn;
-        this.capability = capability;
     }
 
-    // region IEnergyStorage
     @Override
     public int receiveEnergy(int maxReceive, boolean simulate) {
 
@@ -73,16 +60,5 @@ public class EnergyContainerItemWrapper implements IRedstoneFluxStorage, ICapabi
 
         return item.getReceive(container) > 0;
     }
-    // endregion
 
-    // region ICapabilityProvider
-    @Nonnull
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-
-        if (cap == capability) {
-            return holder.cast();
-        }
-        return LazyOptional.empty();
-    }
-    // endregion
 }

@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.common.ForgeHooks;
+import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.common.PlantType;
 
 import static cofh.lib.util.Constants.FUNGUS;
@@ -53,10 +53,10 @@ public class CropBlockMushroom extends CropBlockCoFH {
     public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, RandomSource rand) {
 
         int age = getAge(state);
-        if (age < getMaxAge() && ForgeHooks.onCropsGrowPre(worldIn, pos, state, rand.nextInt(20 + age) == 0)) {
+        if (age < getMaxAge() && CommonHooks.onCropsGrowPre(worldIn, pos, state, rand.nextInt(20 + age) == 0)) {
             int newAge = age + 1 == getPostHarvestAge() ? getMaxAge() : age + 1;
             worldIn.setBlock(pos, getStateForAge(newAge), newAge == getMaxAge() ? 3 : 2);
-            ForgeHooks.onCropsGrowPost(worldIn, pos, state);
+            CommonHooks.onCropsGrowPost(worldIn, pos, state);
         }
     }
 
@@ -96,7 +96,7 @@ public class CropBlockMushroom extends CropBlockCoFH {
 
     // region BonemealableBlock
     @Override
-    public boolean isValidBonemealTarget(LevelReader worldIn, BlockPos pos, BlockState state, boolean isClient) {
+    public boolean isValidBonemealTarget(LevelReader worldIn, BlockPos pos, BlockState state) {
 
         return false;
     }

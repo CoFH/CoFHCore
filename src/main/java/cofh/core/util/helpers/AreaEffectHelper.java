@@ -6,7 +6,6 @@ import cofh.lib.util.raytracer.RayTracer;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -24,7 +23,6 @@ import net.minecraft.world.phys.HitResult;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -276,16 +274,18 @@ public final class AreaEffectHelper {
         BlockState state = world.getBlockState(pos);
         Block block = state.getBlock();
 
-        Predicate<BlockPos> exact = p -> world.getBlockState(p).is(block) && canToolAffect(tool, stack, world, p);
+        // Predicate<BlockPos> exact = p -> world.getBlockState(p).is(block) && canToolAffect(tool, stack, world, p);
         // Match logs based on tag
-        Predicate<BlockPos> match = Optional.ofNullable(BuiltInRegistries.BLOCK.tags()).flatMap(tags ->
-                tags.getReverseTag(block).map(rev -> {
-                    if (rev.containsTag(BlockTags.LOGS)) {
-                        return rev.getTagKeys().filter(key -> key.location().getPath().contains("_logs")).findAny().map(key -> exact.or(p -> world.getBlockState(p).is(key))).orElse(exact);
-                    }
-                    return exact;
-                })
-        ).orElse(exact);
+        //        Predicate<BlockPos> match = Optional.ofNullable(BuiltInRegistries.BLOCK.tags()).flatMap(tags ->
+        //                tags.getReverseTag(block).map(rev -> {
+        //                    if (rev.containsTag(BlockTags.LOGS)) {
+        //                        return rev.getTagKeys().filter(key -> key.location().getPath().contains("_logs")).findAny().map(key -> exact.or(p -> world.getBlockState(p).is(key))).orElse(exact);
+        //                    }
+        //                    return exact;
+        //                })
+        //        ).orElse(exact);
+
+        Predicate<BlockPos> match = p -> world.getBlockState(p).is(block) && canToolAffect(tool, stack, world, p) || world.getBlockState(p).is(BlockTags.LOGS);
 
         BlockPos.MutableBlockPos mutable = pos.mutable();
         ImmutableList.Builder<BlockPos> builder = ImmutableList.builder();
@@ -314,28 +314,21 @@ public final class AreaEffectHelper {
         int yMin = -1;
         int yMax = 2 * radius - 1;
 
-        switch (traceResult.getDirection()) {
-            case DOWN:
-            case UP:
-                area = BlockPos.betweenClosedStream(pos.offset(-radius, 0, -radius), pos.offset(radius, 0, radius))
-                        .filter(blockPos -> canToolAffect(tool, stack, world, blockPos))
-                        .map(BlockPos::immutable)
-                        .collect(Collectors.toList());
-                break;
-            case NORTH:
-            case SOUTH:
-                area = BlockPos.betweenClosedStream(pos.offset(-radius, yMin, 0), pos.offset(radius, yMax, 0))
-                        .filter(blockPos -> canToolAffect(tool, stack, world, blockPos))
-                        .map(BlockPos::immutable)
-                        .collect(Collectors.toList());
-                break;
-            default:
-                area = BlockPos.betweenClosedStream(pos.offset(0, yMin, -radius), pos.offset(0, yMax, radius))
-                        .filter(blockPos -> canToolAffect(tool, stack, world, blockPos))
-                        .map(BlockPos::immutable)
-                        .collect(Collectors.toList());
-                break;
-        }
+        area = switch (traceResult.getDirection()) {
+            case DOWN, UP ->
+                    BlockPos.betweenClosedStream(pos.offset(-radius, 0, -radius), pos.offset(radius, 0, radius))
+                            .filter(blockPos -> canToolAffect(tool, stack, world, blockPos))
+                            .map(BlockPos::immutable)
+                            .collect(Collectors.toList());
+            case NORTH, SOUTH -> BlockPos.betweenClosedStream(pos.offset(-radius, yMin, 0), pos.offset(radius, yMax, 0))
+                    .filter(blockPos -> canToolAffect(tool, stack, world, blockPos))
+                    .map(BlockPos::immutable)
+                    .collect(Collectors.toList());
+            default -> BlockPos.betweenClosedStream(pos.offset(0, yMin, -radius), pos.offset(0, yMax, radius))
+                    .filter(blockPos -> canToolAffect(tool, stack, world, blockPos))
+                    .map(BlockPos::immutable)
+                    .collect(Collectors.toList());
+        };
         return ImmutableList.copyOf(area);
     }
     // endregion
@@ -444,7 +437,7 @@ public final class AreaEffectHelper {
                 .or(() -> state.getOptionalValue(AGE_25).map(v -> v >= 25))
                 .orElse(block instanceof BigDripleafBlock || block instanceof BigDripleafStemBlock ||
                         block instanceof HugeMushroomBlock || state.is(BlockTags.TALL_FLOWERS) ||
-                        block instanceof StemGrownBlock || block instanceof MossBlock);
+                        block instanceof MossBlock);
     }
     // endregion
 }

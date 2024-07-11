@@ -25,7 +25,7 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.common.ForgeHooks;
+import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.common.PlantType;
 
 import java.util.List;
@@ -115,10 +115,10 @@ public class CropBlockCoFH extends CropBlock implements IHarvestable {
             if (!canHarvest(state)) {
                 int age = getAge(state);
                 float growthChance = Math.max(getGrowthSpeed(this, worldIn, pos) * growMod, 0.1F);
-                if (ForgeHooks.onCropsGrowPre(worldIn, pos, state, rand.nextInt((int) (25.0F / growthChance) + 1) == 0)) {
+                if (CommonHooks.onCropsGrowPre(worldIn, pos, state, rand.nextInt((int) (25.0F / growthChance) + 1) == 0)) {
                     int newAge = age + 1 == getPostHarvestAge() ? getMaxAge() : age + 1;
                     worldIn.setBlock(pos, getStateForAge(newAge), 2);
-                    ForgeHooks.onCropsGrowPost(worldIn, pos, state);
+                    CommonHooks.onCropsGrowPost(worldIn, pos, state);
                 }
             }
         }
@@ -223,7 +223,7 @@ public class CropBlockCoFH extends CropBlock implements IHarvestable {
 
     // region BonemealableBlock
     @Override
-    public boolean isValidBonemealTarget(LevelReader worldIn, BlockPos pos, BlockState state, boolean isClient) {
+    public boolean isValidBonemealTarget(LevelReader worldIn, BlockPos pos, BlockState state) {
 
         return !canHarvest(state);
     }

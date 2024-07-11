@@ -1,6 +1,8 @@
 package cofh.core.common.event;
 
+import cofh.core.common.capability.CoreCapabilities;
 import cofh.core.common.capability.templates.ArcheryBowItemWrapper;
+import cofh.lib.api.capability.IArcheryBowItem;
 import cofh.lib.util.constants.ModIds;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.damagesource.DamageSource;
@@ -17,7 +19,6 @@ import net.neoforged.neoforge.event.entity.living.LivingHurtEvent;
 import net.neoforged.neoforge.event.entity.player.ArrowLooseEvent;
 import net.neoforged.neoforge.event.entity.player.ArrowNockEvent;
 
-import static cofh.core.common.capability.CapabilityArchery.BOW_ITEM_CAPABILITY;
 import static cofh.core.util.helpers.ArcheryHelper.findAmmo;
 import static cofh.core.util.helpers.ArcheryHelper.validBow;
 import static cofh.core.util.references.EnsorcIDs.ID_QUICK_DRAW;
@@ -42,7 +43,11 @@ public class ArcheryEvents {
             return;
         }
         Player shooter = event.getEntity();
-        event.setCanceled(bow.getCapability(BOW_ITEM_CAPABILITY).orElse(new ArcheryBowItemWrapper(bow)).fireArrow(findAmmo(shooter, bow), shooter, event.getCharge(), event.getLevel()));
+        IArcheryBowItem bowCap = bow.getCapability(CoreCapabilities.ArcheryHandler.BOW);
+        if (bowCap == null) {
+            bowCap = new ArcheryBowItemWrapper(bow);
+        }
+        event.setCanceled(bowCap.fireArrow(findAmmo(shooter, bow), shooter, event.getCharge(), event.getLevel()));
     }
 
     @SubscribeEvent (priority = EventPriority.HIGHEST)

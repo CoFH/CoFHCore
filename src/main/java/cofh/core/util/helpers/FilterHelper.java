@@ -10,7 +10,6 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.neoforged.neoforge.network.NetworkHooks;
 
 import static cofh.core.util.helpers.AugmentableHelper.getPropertyWithDefault;
 import static cofh.lib.util.constants.NBTTags.TAG_FILTER_TYPE;
@@ -57,7 +56,7 @@ public final class FilterHelper {
 
     public static void openItemScreen(ServerPlayer player, MenuProvider containerSupplier) {
 
-        NetworkHooks.openScreen(player, containerSupplier, buf -> {
+        player.openMenu(containerSupplier, buf -> {
             buf.writeVarInt(FilterHolderType.ITEM.ordinal());
             buf.writeVarInt(-1);
             buf.writeBlockPos(BlockPos.ZERO);
@@ -66,7 +65,7 @@ public final class FilterHelper {
 
     public static void openTileScreen(ServerPlayer player, MenuProvider containerSupplier, BlockPos pos) {
 
-        NetworkHooks.openScreen(player, containerSupplier, buf -> {
+        player.openMenu(containerSupplier, buf -> {
             buf.writeVarInt(FilterHolderType.TILE.ordinal());
             buf.writeVarInt(-1);
             buf.writeBlockPos(pos);
@@ -75,7 +74,7 @@ public final class FilterHelper {
 
     public static void openEntityScreen(ServerPlayer player, MenuProvider containerSupplier, int entityId) {
 
-        NetworkHooks.openScreen(player, containerSupplier, buf -> {
+        player.openMenu(containerSupplier, buf -> {
             buf.writeVarInt(FilterHolderType.ENTITY.ordinal());
             buf.writeVarInt(entityId);
             buf.writeBlockPos(BlockPos.ZERO);

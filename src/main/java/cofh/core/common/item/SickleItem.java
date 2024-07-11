@@ -1,17 +1,12 @@
 package cofh.core.common.item;
 
-import cofh.core.common.capability.templates.AreaEffectMiningItemWrapper;
 import cofh.lib.api.item.ICoFHItem;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.common.capabilities.ICapabilityProvider;
-
-import javax.annotation.Nullable;
 
 import static cofh.lib.init.tags.BlockTagsCoFH.MINEABLE_WITH_SICKLE;
 
@@ -56,12 +51,6 @@ public class SickleItem extends DiggerItem implements ICoFHItem {
         } else {
             return super.getDestroySpeed(stack, state);
         }
-    }
-
-    @Nullable
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-
-        return new AreaEffectMiningItemWrapper(stack, radius, height, AreaEffectMiningItemWrapper.Type.SICKLE);
     }
 
     // region DISPLAY

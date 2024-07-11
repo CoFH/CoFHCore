@@ -1,12 +1,12 @@
 package cofh.core.common.effect;
 
-import cofh.core.common.capability.CapabilityRedstoneFlux;
+import cofh.core.common.capability.CoreCapabilities;
 import cofh.lib.common.effect.MobEffectCoFH;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.common.capabilities.ForgeCapabilities;
+import net.neoforged.neoforge.capabilities.Capabilities;
 
 public class EnergyChargeMobEffect extends MobEffectCoFH {
 
@@ -38,18 +38,24 @@ public class EnergyChargeMobEffect extends MobEffectCoFH {
 
         // Main Inventory
         for (ItemStack stack : player.getInventory().items) {
-            stack.getCapability(ForgeCapabilities.ENERGY, null)
-                    .ifPresent(c -> c.receiveEnergy(chargeAmount, false));
+            var cap = stack.getCapability(Capabilities.EnergyStorage.ITEM);
+            if (cap != null) {
+                cap.receiveEnergy(chargeAmount, false);
+            }
         }
         // Armor Inventory
         for (ItemStack stack : player.getInventory().armor) {
-            stack.getCapability(ForgeCapabilities.ENERGY, null)
-                    .ifPresent(c -> c.receiveEnergy(chargeAmount, false));
+            var cap = stack.getCapability(Capabilities.EnergyStorage.ITEM);
+            if (cap != null) {
+                cap.receiveEnergy(chargeAmount, false);
+            }
         }
         // Offhand
         for (ItemStack stack : player.getInventory().offhand) {
-            stack.getCapability(ForgeCapabilities.ENERGY, null)
-                    .ifPresent(c -> c.receiveEnergy(chargeAmount, false));
+            var cap = stack.getCapability(Capabilities.EnergyStorage.ITEM);
+            if (cap != null) {
+                cap.receiveEnergy(chargeAmount, false);
+            }
         }
     }
 
@@ -57,18 +63,24 @@ public class EnergyChargeMobEffect extends MobEffectCoFH {
 
         // Main Inventory
         for (ItemStack stack : player.getInventory().items) {
-            stack.getCapability(CapabilityRedstoneFlux.RF_ENERGY, null)
-                    .ifPresent(c -> c.receiveEnergy(chargeAmount, false));
+            var cap = stack.getCapability(CoreCapabilities.RedstoneFluxStorage.ITEM);
+            if (cap != null) {
+                cap.receiveEnergy(chargeAmount, false);
+            }
         }
         // Armor Inventory
         for (ItemStack stack : player.getInventory().armor) {
-            stack.getCapability(CapabilityRedstoneFlux.RF_ENERGY, null)
-                    .ifPresent(c -> c.receiveEnergy(chargeAmount, false));
+            var cap = stack.getCapability(CoreCapabilities.RedstoneFluxStorage.ITEM);
+            if (cap != null) {
+                cap.receiveEnergy(chargeAmount, false);
+            }
         }
         // Offhand
         for (ItemStack stack : player.getInventory().offhand) {
-            stack.getCapability(CapabilityRedstoneFlux.RF_ENERGY, null)
-                    .ifPresent(c -> c.receiveEnergy(chargeAmount, false));
+            var cap = stack.getCapability(CoreCapabilities.RedstoneFluxStorage.ITEM);
+            if (cap != null) {
+                cap.receiveEnergy(chargeAmount, false);
+            }
         }
     }
 
@@ -76,18 +88,24 @@ public class EnergyChargeMobEffect extends MobEffectCoFH {
 
         // Main Inventory
         for (ItemStack stack : player.getInventory().items) {
-            stack.getCapability(ForgeCapabilities.ENERGY, null)
-                    .ifPresent(c -> c.extractEnergy(drainAmount, false));
+            var cap = stack.getCapability(Capabilities.EnergyStorage.ITEM);
+            if (cap != null) {
+                cap.extractEnergy(drainAmount, false);
+            }
         }
         // Armor Inventory
         for (ItemStack stack : player.getInventory().armor) {
-            stack.getCapability(ForgeCapabilities.ENERGY, null)
-                    .ifPresent(c -> c.extractEnergy(drainAmount, false));
+            var cap = stack.getCapability(Capabilities.EnergyStorage.ITEM);
+            if (cap != null) {
+                cap.extractEnergy(drainAmount, false);
+            }
         }
         // Offhand
         for (ItemStack stack : player.getInventory().offhand) {
-            stack.getCapability(ForgeCapabilities.ENERGY, null)
-                    .ifPresent(c -> c.extractEnergy(drainAmount, false));
+            var cap = stack.getCapability(Capabilities.EnergyStorage.ITEM);
+            if (cap != null) {
+                cap.extractEnergy(drainAmount, false);
+            }
         }
     }
 
@@ -95,18 +113,24 @@ public class EnergyChargeMobEffect extends MobEffectCoFH {
 
         // Main Inventory
         for (ItemStack stack : player.getInventory().items) {
-            stack.getCapability(CapabilityRedstoneFlux.RF_ENERGY, null)
-                    .ifPresent(c -> c.extractEnergy(drainAmount, false));
+            var cap = stack.getCapability(CoreCapabilities.RedstoneFluxStorage.ITEM);
+            if (cap != null) {
+                cap.extractEnergy(drainAmount, false);
+            }
         }
         // Armor Inventory
         for (ItemStack stack : player.getInventory().armor) {
-            stack.getCapability(CapabilityRedstoneFlux.RF_ENERGY, null)
-                    .ifPresent(c -> c.extractEnergy(drainAmount, false));
+            var cap = stack.getCapability(CoreCapabilities.RedstoneFluxStorage.ITEM);
+            if (cap != null) {
+                cap.extractEnergy(drainAmount, false);
+            }
         }
         // Offhand
         for (ItemStack stack : player.getInventory().offhand) {
-            stack.getCapability(CapabilityRedstoneFlux.RF_ENERGY, null)
-                    .ifPresent(c -> c.extractEnergy(drainAmount, false));
+            var cap = stack.getCapability(CoreCapabilities.RedstoneFluxStorage.ITEM);
+            if (cap != null) {
+                cap.extractEnergy(drainAmount, false);
+            }
         }
     }
     // endregion

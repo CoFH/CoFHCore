@@ -1,26 +1,18 @@
 package cofh.lib.common.fluid;
 
 import cofh.lib.api.item.IFluidContainerItem;
-import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.common.capabilities.Capability;
-import net.neoforged.neoforge.common.capabilities.ForgeCapabilities;
-import net.neoforged.neoforge.common.capabilities.ICapabilityProvider;
-import net.neoforged.neoforge.common.util.LazyOptional;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
  * This class provides a simple way to wrap an IFluidContainerItem to allow for capability support.
  *
  * @author King Lemming
  */
-public class FluidContainerItemWrapper implements IFluidHandlerItem, ICapabilityProvider {
-
-    private final LazyOptional<IFluidHandlerItem> holder = LazyOptional.of(() -> this);
+public class FluidContainerItemWrapper implements IFluidHandlerItem {
 
     protected final ItemStack container;
     protected final IFluidContainerItem item;
@@ -86,12 +78,4 @@ public class FluidContainerItemWrapper implements IFluidHandlerItem, ICapability
         return item.drain(container, maxDrain, action);
     }
 
-    // region ICapabilityProvider
-    @Override
-    @Nonnull
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-
-        return ForgeCapabilities.FLUID_HANDLER_ITEM.orEmpty(cap, holder);
-    }
-    // endregion
 }

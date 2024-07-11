@@ -1,6 +1,9 @@
 package cofh.core.init.data;
 
-import cofh.core.init.data.providers.*;
+import cofh.core.init.data.providers.CoreBlockStateProvider;
+import cofh.core.init.data.providers.CoreItemModelProvider;
+import cofh.core.init.data.providers.CoreLootTableProvider;
+import cofh.core.init.data.providers.CoreTagsProvider;
 import cofh.lib.common.loot.TileNBTSync;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
@@ -30,7 +33,6 @@ public class CoreDataGen {
         gen.addProvider(event.includeServer(), new CoreTagsProvider.DamageType(output, event.getLookupProvider(), exFileHelper));
 
         gen.addProvider(event.includeServer(), new CoreLootTableProvider(output));
-        gen.addProvider(event.includeServer(), new CoreRecipeProvider(output));
 
         gen.addProvider(event.includeClient(), new CoreBlockStateProvider(output, exFileHelper));
         gen.addProvider(event.includeClient(), new CoreItemModelProvider(output, exFileHelper));

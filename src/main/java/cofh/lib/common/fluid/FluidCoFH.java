@@ -3,11 +3,12 @@ package cofh.lib.common.fluid;
 import cofh.lib.util.DeferredRegisterCoFH;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.material.Fluid;
+import net.neoforged.neoforge.fluids.BaseFlowingFluid;
 import net.neoforged.neoforge.fluids.FluidType;
-import net.neoforged.neoforge.fluids.ForgeFlowingFluid;
-import net.neoforged.neoforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import org.joml.Vector3f;
 
 import java.util.function.Supplier;
@@ -20,13 +21,13 @@ public abstract class FluidCoFH {
     public static final ResourceLocation WATER_OVERLAY = new ResourceLocation("block/water_overlay");
     public static final ResourceLocation UNDERWATER_LOCATION = new ResourceLocation("textures/misc/underwater.png");
 
-    protected RegistryObject<ForgeFlowingFluid> stillFluid;
-    protected RegistryObject<ForgeFlowingFluid> flowingFluid;
+    protected DeferredHolder<Fluid, BaseFlowingFluid> stillFluid;
+    protected DeferredHolder<Fluid, BaseFlowingFluid> flowingFluid;
 
-    protected RegistryObject<LiquidBlock> block;
-    protected RegistryObject<Item> bucket;
+    protected DeferredHolder<Block, LiquidBlock> block;
+    protected DeferredHolder<Item, Item> bucket;
 
-    protected ForgeFlowingFluid.Properties properties;
+    protected BaseFlowingFluid.Properties properties;
 
     protected Vector3f particleColor = new Vector3f(1.0F, 1.0F, 1.0F);
 
@@ -36,23 +37,23 @@ public abstract class FluidCoFH {
 
     protected FluidCoFH(DeferredRegisterCoFH<Fluid> reg, String key) {
 
-        stillFluid = reg.register(key, () -> new ForgeFlowingFluid.Source(fluidProperties()));
-        flowingFluid = reg.register(flowing(key), () -> new ForgeFlowingFluid.Flowing(fluidProperties()));
+        stillFluid = reg.register(key, () -> new BaseFlowingFluid.Source(fluidProperties()));
+        flowingFluid = reg.register(flowing(key), () -> new BaseFlowingFluid.Flowing(fluidProperties()));
     }
 
-    protected ForgeFlowingFluid.Properties fluidProperties() {
+    protected BaseFlowingFluid.Properties fluidProperties() {
 
-        return new ForgeFlowingFluid.Properties(type(), stillFluid, flowingFluid);
+        return new BaseFlowingFluid.Properties(type(), stillFluid, flowingFluid);
     }
 
     protected abstract Supplier<FluidType> type();
 
-    public Supplier<ForgeFlowingFluid> still() {
+    public Supplier<BaseFlowingFluid> still() {
 
         return stillFluid;
     }
 
-    public Supplier<ForgeFlowingFluid> flowing() {
+    public Supplier<BaseFlowingFluid> flowing() {
 
         return flowingFluid;
     }

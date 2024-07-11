@@ -4,8 +4,6 @@ import cofh.core.client.particle.options.CylindricalParticleOptions;
 import cofh.core.util.helpers.vfx.VFXHelper;
 import cofh.lib.api.IDetonatable;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EntityType;
@@ -13,7 +11,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
-import net.neoforged.neoforge.network.NetworkHooks;
 
 import static cofh.core.init.CoreParticles.BLAST_WAVE;
 
@@ -70,12 +67,6 @@ public abstract class AbstractGrenade extends ThrowableItemProjectile implements
         } else {
             super.handleEntityEvent(event);
         }
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-
-        return NetworkHooks.getEntitySpawningPacket(this);
     }
 
 }

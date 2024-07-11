@@ -3,7 +3,7 @@ package cofh.core.init;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 import static cofh.core.CoFHCore.ENTITY_DATA_SERIALIZERS;
 
@@ -17,7 +17,7 @@ public class CoreEntityDataSerializers {
 
     }
 
-    public static final RegistryObject<EntityDataSerializer<FluidStack>> FLUID_STACK_DATA_SERIALIZER = ENTITY_DATA_SERIALIZERS.register("fluid_stack_eds",
+    public static final DeferredHolder<EntityDataSerializer<?>, EntityDataSerializer<FluidStack>> FLUID_STACK_DATA_SERIALIZER = ENTITY_DATA_SERIALIZERS.register("fluid_stack_eds",
             () -> new EntityDataSerializer<>() {
 
                 @Override

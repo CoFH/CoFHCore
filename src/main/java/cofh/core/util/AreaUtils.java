@@ -316,7 +316,7 @@ public class AreaUtils {
         BlockState state = world.getBlockState(pos);
         if (state.getBlock() instanceof BonemealableBlock) {
             BonemealableBlock growable = (BonemealableBlock) state.getBlock();
-            if (!world.isClientSide && growable.isValidBonemealTarget(world, pos, state, world.isClientSide) && growable.isBonemealSuccess(world, world.random, pos, state)) {
+            if (!world.isClientSide && growable.isValidBonemealTarget(world, pos, state) && growable.isBonemealSuccess(world, world.random, pos, state)) {
                 // TODO: Remove try/catch when Mojang fixes base issue.
                 try {
                     growable.performBonemeal((ServerLevel) world, world.random, pos, state);
@@ -501,7 +501,7 @@ public class AreaUtils {
     // region BURNING
     public static void igniteNearbyEntities(Entity entity, Level levelIn, BlockPos pos, int radius, int duration) {
 
-        AABB area = new AABB(pos.offset(-radius, -radius, -radius), pos.offset(1 + radius, 1 + radius, 1 + radius));
+        AABB area = AABB.encapsulatingFullBlocks(pos.offset(-radius, -radius, -radius), pos.offset(1 + radius, 1 + radius, 1 + radius));
         List<LivingEntity> mobs = levelIn.getEntitiesOfClass(LivingEntity.class, area, EntitySelector.ENTITY_STILL_ALIVE);
         mobs.removeIf(Entity::isInWater);
         mobs.removeIf(Entity::fireImmune);
@@ -906,7 +906,7 @@ public class AreaUtils {
                 state = levelIn.getBlockState(iterPos);
                 if (state.getBlock() instanceof BonemealableBlock) {
                     BonemealableBlock growable = (BonemealableBlock) state.getBlock();
-                    if (growable.isValidBonemealTarget(levelIn, iterPos, state, levelIn.isClientSide)) {
+                    if (growable.isValidBonemealTarget(levelIn, iterPos, state)) {
                         if (!levelIn.isClientSide) {
                             if (growable.isBonemealSuccess(levelIn, levelIn.random, iterPos, state)) {
                                 // TODO: Remove try/catch when Mojang fixes base issue.
@@ -938,7 +938,7 @@ public class AreaUtils {
         BlockState state = levelIn.getBlockState(entity.blockPosition());
         if (state.getBlock() instanceof BonemealableBlock) {
             BonemealableBlock growable = (BonemealableBlock) state.getBlock();
-            if (growable.isValidBonemealTarget(levelIn, pos, state, levelIn.isClientSide)) {
+            if (growable.isValidBonemealTarget(levelIn, pos, state)) {
                 if (!levelIn.isClientSide) {
                     if (growable.isBonemealSuccess(levelIn, levelIn.random, pos, state)) {
                         // TODO: Remove try/catch when Mojang fixes base issue.
@@ -964,7 +964,7 @@ public class AreaUtils {
                 state = levelIn.getBlockState(iterPos);
                 if (state.getBlock() instanceof BonemealableBlock) {
                     BonemealableBlock growable = (BonemealableBlock) state.getBlock();
-                    if (growable.isValidBonemealTarget(levelIn, iterPos, state, levelIn.isClientSide)) {
+                    if (growable.isValidBonemealTarget(levelIn, iterPos, state)) {
                         if (!levelIn.isClientSide) {
                             if (growable.isBonemealSuccess(levelIn, levelIn.random, iterPos, state)) {
                                 // TODO: Remove try/catch when Mojang fixes base issue.

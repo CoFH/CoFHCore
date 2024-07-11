@@ -1,5 +1,6 @@
 package cofh.core.common.event;
 
+import cofh.core.common.capability.CoreCapabilities;
 import cofh.core.common.capability.templates.AreaEffectItemWrapper;
 import cofh.lib.util.Utils;
 import com.google.common.collect.ImmutableList;
@@ -26,7 +27,6 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Set;
 
-import static cofh.core.common.capability.CapabilityAreaEffect.AREA_EFFECT_ITEM_CAPABILITY;
 import static cofh.core.util.helpers.AreaEffectHelper.validAreaEffectMiningItem;
 import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 
@@ -54,7 +54,11 @@ public class AreaEffectEvents {
         if (!validAreaEffectMiningItem(stack)) {
             return;
         }
-        ImmutableList<BlockPos> areaBlocks = stack.getCapability(AREA_EFFECT_ITEM_CAPABILITY).orElse(new AreaEffectItemWrapper(stack)).getAreaEffectBlocks(origin, player);
+        var aeCap = stack.getCapability(CoreCapabilities.AreaEffectHandler.ITEM);
+        if (aeCap == null) {
+            aeCap = new AreaEffectItemWrapper(stack);
+        }
+        ImmutableList<BlockPos> areaBlocks = aeCap.getAreaEffectBlocks(origin, player);
         // TODO: Revisit if performance issues show. This is the most *proper* way to handle this, but is not particularly friendly.
         for (BlockPos pos : areaBlocks) {
             if (stack.isEmpty()) {
@@ -79,7 +83,11 @@ public class AreaEffectEvents {
         }
 
         event.getPosition().ifPresent(pos -> {
-            ImmutableList<BlockPos> areaBlocks = stack.getCapability(AREA_EFFECT_ITEM_CAPABILITY).orElse(new AreaEffectItemWrapper(stack)).getAreaEffectBlocks(pos, player);
+            var aeCap = stack.getCapability(CoreCapabilities.AreaEffectHandler.ITEM);
+            if (aeCap == null) {
+                aeCap = new AreaEffectItemWrapper(stack);
+            }
+            ImmutableList<BlockPos> areaBlocks = aeCap.getAreaEffectBlocks(pos, player);
 
             float curHardness = event.getState().getDestroySpeed(player.level, pos);
             if (curHardness <= 0 || areaBlocks.size() <= 1) {

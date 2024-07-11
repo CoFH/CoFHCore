@@ -9,7 +9,7 @@ import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.neoforged.neoforge.common.capabilities.ForgeCapabilities;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.neoforged.neoforge.items.wrapper.EmptyHandler;
@@ -225,13 +225,15 @@ public final class InventoryHelper {
 
     public static boolean hasItemHandlerCap(BlockEntity tile, Direction face) {
 
-        return tile != null && tile.getCapability(ForgeCapabilities.ITEM_HANDLER, face).isPresent() || tile instanceof Container;
+        return tile != null && tile.getLevel() != null && tile.getLevel().getCapability(Capabilities.ItemHandler.BLOCK, tile.getBlockPos(), tile.getBlockState(), tile, face) != null || tile instanceof Container;
     }
 
     public static IItemHandler getItemHandlerCap(BlockEntity tile, Direction face) {
 
-        if (tile.getCapability(ForgeCapabilities.ITEM_HANDLER, face).isPresent()) {
-            return tile.getCapability(ForgeCapabilities.ITEM_HANDLER, face).orElse(EmptyHandler.INSTANCE);
+        var handler = tile.getLevel() != null ? tile.getLevel().getCapability(Capabilities.ItemHandler.BLOCK, tile.getBlockPos(), tile.getBlockState(), tile, face) : null;
+
+        if (handler != null) {
+            return handler;
         } else if (tile instanceof WorldlyContainer && face != null) {
             return new SidedInvWrapper(((WorldlyContainer) tile), face);
         } else if (tile instanceof Container) {

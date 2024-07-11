@@ -4,11 +4,11 @@ import cofh.lib.api.item.IColorableItem;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.common.ForgeSpawnEggItem;
+import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 
 import java.util.function.Supplier;
 
-public class SpawnEggItemCoFH extends ForgeSpawnEggItem implements IColorableItem {
+public class SpawnEggItemCoFH extends DeferredSpawnEggItem implements IColorableItem {
 
     public SpawnEggItemCoFH(Supplier<EntityType<? extends Mob>> typeSupIn, int primaryColorIn, int secondaryColorIn, Properties builder) {
 

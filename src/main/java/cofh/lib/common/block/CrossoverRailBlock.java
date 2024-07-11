@@ -3,6 +3,7 @@ package cofh.lib.common.block;
 import cofh.lib.api.block.IDismantleable;
 import cofh.lib.util.Utils;
 import cofh.lib.util.helpers.MathHelper;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -26,6 +27,14 @@ import static cofh.core.common.config.CoreCommonConfig.returnDismantleDrops;
 import static cofh.lib.util.constants.BlockStatePropertiesCoFH.RAIL_STRAIGHT_FLAT;
 
 public class CrossoverRailBlock extends BaseRailBlock implements IDismantleable {
+
+    public static final MapCodec<CrossoverRailBlock> CODEC = simpleCodec(CrossoverRailBlock::new);
+
+    @Override
+    public MapCodec<CrossoverRailBlock> codec() {
+
+        return CODEC;
+    }
 
     protected float maxSpeed = 0.4F;
 

@@ -6,8 +6,8 @@ import cofh.core.common.fluid.PotionFluid;
 import cofh.lib.init.tags.FluidTagsCoFH;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.neoforged.neoforge.fluids.BaseFlowingFluid;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.ForgeFlowingFluid;
 
 import java.util.function.Supplier;
 
@@ -38,8 +38,8 @@ public class CoreFluids {
         BOTTLE_FILL_MAP.put(fluid -> fluid.getFluid().is(FluidTagsCoFH.EXPERIENCE), fluid -> new ItemStack(Items.EXPERIENCE_BOTTLE));
     }
 
-    public static Supplier<ForgeFlowingFluid> EXPERIENCE_FLUID;
-    public static Supplier<ForgeFlowingFluid> HONEY_FLUID;
-    public static Supplier<ForgeFlowingFluid> POTION_FLUID;
+    public static Supplier<BaseFlowingFluid> EXPERIENCE_FLUID;
+    public static Supplier<BaseFlowingFluid> HONEY_FLUID;
+    public static Supplier<BaseFlowingFluid> POTION_FLUID;
 
 }

@@ -4,7 +4,6 @@ import cofh.lib.api.control.ISecurable.AccessMode;
 import cofh.lib.init.tags.ItemTagsCoFH;
 import cofh.lib.util.helpers.SecurityHelper;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
@@ -17,9 +16,9 @@ import static cofh.core.init.CoreRecipeSerializers.SECURE_RECIPE_SERIALIZER;
 
 public class SecureRecipe extends CustomRecipe {
 
-    public SecureRecipe(ResourceLocation pId, CraftingBookCategory pCategory) {
+    public SecureRecipe(CraftingBookCategory pCategory) {
 
-        super(pId, pCategory);
+        super(pCategory);
     }
 
     @Override

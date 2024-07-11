@@ -5,8 +5,6 @@ import cofh.lib.util.Utils;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -30,7 +28,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.entity.PartEntity;
-import net.neoforged.neoforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
@@ -45,18 +42,23 @@ public class ThrownKnife extends AbstractArrow {
 
     public ThrownKnife(EntityType<? extends AbstractArrow> type, Level worldIn) {
 
-        super(type, worldIn);
+        super(type, worldIn, ItemStack.EMPTY);
+    }
+
+    public ThrownKnife(EntityType<? extends AbstractArrow> type, Level worldIn, ItemStack stack) {
+
+        super(type, worldIn, stack);
     }
 
     public ThrownKnife(Level world, double x, double y, double z, ItemStack stack) {
 
-        super(THROWN_KNIFE.get(), x, y, z, world);
+        super(THROWN_KNIFE.get(), x, y, z, world, stack);
         this.entityData.set(DATA_ITEM_STACK, stack.copy());
     }
 
     public ThrownKnife(Level world, LivingEntity owner, ItemStack stack) {
 
-        super(THROWN_KNIFE.get(), owner, world);
+        super(THROWN_KNIFE.get(), owner, world, stack);
         this.entityData.set(DATA_ITEM_STACK, stack.copy());
     }
 
@@ -71,12 +73,6 @@ public class ThrownKnife extends AbstractArrow {
 
         super.defineSynchedData();
         this.entityData.define(DATA_ITEM_STACK, ItemStack.EMPTY);
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-
-        return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     @Override

@@ -1,14 +1,9 @@
 package cofh.core.common.item;
 
-import cofh.core.common.capability.templates.AreaEffectMiningItemWrapper;
 import cofh.lib.common.item.PickaxeItemCoFH;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
-import net.neoforged.neoforge.common.capabilities.ICapabilityProvider;
-
-import javax.annotation.Nullable;
 
 public class HammerItem extends PickaxeItemCoFH {
 
@@ -43,12 +38,6 @@ public class HammerItem extends PickaxeItemCoFH {
     public boolean canDisableShield(ItemStack stack, ItemStack shield, LivingEntity entity, LivingEntity attacker) {
 
         return true;
-    }
-
-    @Nullable
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-
-        return new AreaEffectMiningItemWrapper(stack, radius, AreaEffectMiningItemWrapper.Type.HAMMER);
     }
 
 }

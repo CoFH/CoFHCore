@@ -1,20 +1,12 @@
 package cofh.lib.common.inventory;
 
 import cofh.lib.api.item.IInventoryContainerItem;
-import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.common.capabilities.Capability;
-import net.neoforged.neoforge.common.capabilities.ForgeCapabilities;
-import net.neoforged.neoforge.common.capabilities.ICapabilityProvider;
-import net.neoforged.neoforge.common.util.LazyOptional;
 import net.neoforged.neoforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
-public class InventoryContainerItemWrapper implements IItemHandler, ICapabilityProvider {
-
-    private final LazyOptional<IItemHandler> holder = LazyOptional.of(() -> this);
+public class InventoryContainerItemWrapper implements IItemHandler {
 
     protected final ItemStack container;
     protected final IInventoryContainerItem item;
@@ -62,13 +54,6 @@ public class InventoryContainerItemWrapper implements IItemHandler, ICapabilityP
     public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
 
         return item.isItemValid(container, slot, stack);
-    }
-
-    @Nonnull
-    @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-
-        return ForgeCapabilities.ITEM_HANDLER.orEmpty(cap, holder);
     }
 
 }

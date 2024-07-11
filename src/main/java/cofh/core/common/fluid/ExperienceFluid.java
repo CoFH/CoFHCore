@@ -6,9 +6,9 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.Rarity;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.common.SoundActions;
+import net.neoforged.neoforge.fluids.BaseFlowingFluid;
 import net.neoforged.neoforge.fluids.FluidType;
-import net.neoforged.neoforge.fluids.ForgeFlowingFluid;
-import net.neoforged.neoforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -35,9 +35,9 @@ public class ExperienceFluid extends FluidCoFH {
     }
 
     @Override
-    protected ForgeFlowingFluid.Properties fluidProperties() {
+    protected BaseFlowingFluid.Properties fluidProperties() {
 
-        return new ForgeFlowingFluid.Properties(type(), stillFluid, flowingFluid);
+        return new BaseFlowingFluid.Properties(type(), stillFluid, flowingFluid);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class ExperienceFluid extends FluidCoFH {
         return TYPE;
     }
 
-    public static final RegistryObject<FluidType> TYPE = FLUID_TYPES.register(ID_FLUID_EXPERIENCE, () -> new FluidType(FluidType.Properties.create()
+    public static final DeferredHolder<FluidType, FluidType> TYPE = FLUID_TYPES.register(ID_FLUID_EXPERIENCE, () -> new FluidType(FluidType.Properties.create()
             .lightLevel(10)
             .density(250)
             .viscosity(500)

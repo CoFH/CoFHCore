@@ -2,6 +2,7 @@ package cofh.core.common.fluid;
 
 import cofh.core.util.helpers.FluidHelper;
 import cofh.lib.common.fluid.FluidCoFH;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
@@ -18,11 +19,10 @@ import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.common.SoundActions;
+import net.neoforged.neoforge.fluids.BaseFlowingFluid;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
-import net.neoforged.neoforge.fluids.ForgeFlowingFluid;
-import net.neoforged.neoforge.registries.ForgeRegistries;
-import net.neoforged.neoforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -55,9 +55,9 @@ public class PotionFluid extends FluidCoFH {
     }
 
     @Override
-    protected ForgeFlowingFluid.Properties fluidProperties() {
+    protected BaseFlowingFluid.Properties fluidProperties() {
 
-        return new ForgeFlowingFluid.Properties(type(), stillFluid, flowingFluid);
+        return new BaseFlowingFluid.Properties(type(), stillFluid, flowingFluid);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class PotionFluid extends FluidCoFH {
         return TYPE;
     }
 
-    public static final RegistryObject<FluidType> TYPE = FLUID_TYPES.register(ID_FLUID_POTION, () -> new FluidType(FluidType.Properties.create()
+    public static final DeferredHolder<FluidType, FluidType> TYPE = FLUID_TYPES.register(ID_FLUID_POTION, () -> new FluidType(FluidType.Properties.create()
             .density(1100)
             .viscosity(1100)
             .sound(SoundActions.BUCKET_FILL, SoundEvents.BOTTLE_FILL)
@@ -149,7 +149,7 @@ public class PotionFluid extends FluidCoFH {
 
     public static FluidStack addPotionToFluidStack(FluidStack stack, Potion type) {
 
-        ResourceLocation resourceLoc = ForgeRegistries.POTIONS.getKey(type);
+        ResourceLocation resourceLoc = BuiltInRegistries.POTION.getKey(type);
         // NOTE: This can actually happen.
         if (resourceLoc == null) {
             return FluidStack.EMPTY;

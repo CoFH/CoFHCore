@@ -1,5 +1,6 @@
 package cofh.core.mixin;
 
+import cofh.core.common.capability.CoreCapabilities;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
@@ -11,7 +12,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import static cofh.core.common.capability.CapabilityShieldItem.SHIELD_ITEM_CAPABILITY;
 import static cofh.core.init.CoreMobEffects.*;
 import static cofh.lib.init.tags.DamageTypeTagsCoFH.IS_MAGIC;
 import static net.minecraft.tags.DamageTypeTags.*;
@@ -106,11 +106,12 @@ public abstract class LivingEntityMixin {
     )
     public void shield(DamageSource source, CallbackInfoReturnable<Boolean> cir) {
 
-        this.getUseItem().getCapability(SHIELD_ITEM_CAPABILITY).ifPresent(shield -> {
+        var shield = this.getUseItem().getCapability(CoreCapabilities.ShieldHandler.ITEM);
+        if (shield != null) {
             LivingEntity living = (LivingEntity) (Object) this;
             cir.setReturnValue(shield.canBlock(living, source));
             cir.cancel();
-        });
+        }
     }
 
 }

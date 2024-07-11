@@ -6,9 +6,6 @@ import cofh.core.client.gui.ItemFilterScreen;
 import cofh.core.client.renderer.entity.ElectricFieldRenderer;
 import cofh.core.client.renderer.entity.KnifeRenderer;
 import cofh.core.client.renderer.entity.model.ArmorFullSuitModel;
-import cofh.core.common.capability.CapabilityArchery;
-import cofh.core.common.capability.CapabilityAreaEffect;
-import cofh.core.common.capability.CapabilityShieldItem;
 import cofh.core.common.command.CoFHCommand;
 import cofh.core.common.config.*;
 import cofh.core.common.enchantment.HoldingEnchantment;
@@ -16,10 +13,7 @@ import cofh.core.common.event.ArmorEvents;
 import cofh.core.common.network.packet.PacketIDs;
 import cofh.core.common.network.packet.client.*;
 import cofh.core.common.network.packet.server.*;
-import cofh.core.compat.curios.CuriosProxy;
-import cofh.core.compat.quark.QuarkFlags;
 import cofh.core.init.*;
-import cofh.core.util.CoreFlags;
 import cofh.core.util.Proxy;
 import cofh.core.util.ProxyClient;
 import cofh.core.util.crafting.CustomIngredients;
@@ -28,8 +22,9 @@ import cofh.core.util.references.IMCMethods;
 import cofh.lib.client.renderer.entity.NothingRenderer;
 import cofh.lib.common.loot.TileNBTSync;
 import cofh.lib.common.network.PacketHandler;
+import cofh.lib.util.DeferredRegisterCoFH;
 import cofh.lib.util.Utils;
-import net.minecraft.client.gui.screens.MenuScreens;
+import cofh.lib.util.flags.FlagManager;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.syncher.EntityDataSerializer;
@@ -42,22 +37,23 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.DistExecutor;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.InterModProcessEvent;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.NeoForgeMod;
-import net.neoforged.neoforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.fluids.FluidType;
-import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
@@ -78,23 +74,23 @@ public class CoFHCore {
 
     public static final ConfigManager CONFIG_MANAGER = new ConfigManager();
     public static final PacketHandler PACKET_HANDLER = new PacketHandler(new ResourceLocation(ID_COFH_CORE, "general"), LOG);
-    public static final Proxy PROXY = DistExecutor.unsafeRunForDist(() -> ProxyClient::new, () -> Proxy::new);
+    public static final Proxy PROXY = FMLEnvironment.dist.isClient() ? new ProxyClient() : new Proxy();
 
-    public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(ID_COFH_CORE);
-    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(ID_COFH_CORE);
-    public static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(BuiltInRegistries.FLUID, ID_COFH_CORE);
+    public static final DeferredRegisterCoFH<Block> BLOCKS = DeferredRegisterCoFH.create(BuiltInRegistries.BLOCK, ID_COFH_CORE);
+    public static final DeferredRegisterCoFH<Item> ITEMS = DeferredRegisterCoFH.create(BuiltInRegistries.ITEM, ID_COFH_CORE);
+    public static final DeferredRegisterCoFH<Fluid> FLUIDS = DeferredRegisterCoFH.create(BuiltInRegistries.FLUID, ID_COFH_CORE);
 
-    public static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(BuiltInRegistries.MENU, ID_COFH_CORE);
-    public static final DeferredRegister<Enchantment> ENCHANTMENTS = DeferredRegister.create(BuiltInRegistries.ENCHANTMENT, ID_COFH_CORE);
-    public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(BuiltInRegistries.ENTITY_TYPE, ID_COFH_CORE);
-    public static final DeferredRegister<MobEffect> MOB_EFFECTS = DeferredRegister.create(BuiltInRegistries.MOB_EFFECT, ID_COFH_CORE);
-    public static final DeferredRegister<ParticleType<?>> PARTICLES = DeferredRegister.create(BuiltInRegistries.PARTICLE_TYPE, ID_COFH_CORE);
-    public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(BuiltInRegistries.RECIPE_SERIALIZER, ID_COFH_CORE);
-    public static final DeferredRegister<SoundEvent> SOUND_EVENTS = DeferredRegister.create(BuiltInRegistries.SOUND_EVENT, ID_COFH_CORE);
-    public static final DeferredRegister<BlockEntityType<?>> TILE_ENTITIES = DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, ID_COFH_CORE);
+    public static final DeferredRegisterCoFH<MenuType<?>> CONTAINERS = DeferredRegisterCoFH.create(BuiltInRegistries.MENU, ID_COFH_CORE);
+    public static final DeferredRegisterCoFH<Enchantment> ENCHANTMENTS = DeferredRegisterCoFH.create(BuiltInRegistries.ENCHANTMENT, ID_COFH_CORE);
+    public static final DeferredRegisterCoFH<EntityType<?>> ENTITIES = DeferredRegisterCoFH.create(BuiltInRegistries.ENTITY_TYPE, ID_COFH_CORE);
+    public static final DeferredRegisterCoFH<MobEffect> MOB_EFFECTS = DeferredRegisterCoFH.create(BuiltInRegistries.MOB_EFFECT, ID_COFH_CORE);
+    public static final DeferredRegisterCoFH<ParticleType<?>> PARTICLES = DeferredRegisterCoFH.create(BuiltInRegistries.PARTICLE_TYPE, ID_COFH_CORE);
+    public static final DeferredRegisterCoFH<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegisterCoFH.create(BuiltInRegistries.RECIPE_SERIALIZER, ID_COFH_CORE);
+    public static final DeferredRegisterCoFH<SoundEvent> SOUND_EVENTS = DeferredRegisterCoFH.create(BuiltInRegistries.SOUND_EVENT, ID_COFH_CORE);
+    public static final DeferredRegisterCoFH<BlockEntityType<?>> TILE_ENTITIES = DeferredRegisterCoFH.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, ID_COFH_CORE);
 
-    public static final DeferredRegister<EntityDataSerializer<?>> ENTITY_DATA_SERIALIZERS = DeferredRegister.create(NeoForgeRegistries.Keys.ENTITY_DATA_SERIALIZERS, ID_COFH_CORE);
-    public static final DeferredRegister<FluidType> FLUID_TYPES = DeferredRegister.create(NeoForgeRegistries.Keys.FLUID_TYPES, ID_COFH_CORE);
+    public static final DeferredRegisterCoFH<EntityDataSerializer<?>> ENTITY_DATA_SERIALIZERS = DeferredRegisterCoFH.create(NeoForgeRegistries.Keys.ENTITY_DATA_SERIALIZERS, ID_COFH_CORE);
+    public static final DeferredRegisterCoFH<FluidType> FLUID_TYPES = DeferredRegisterCoFH.create(NeoForgeRegistries.Keys.FLUID_TYPES, ID_COFH_CORE);
 
     public static boolean curiosLoaded = false;
 
@@ -109,6 +105,7 @@ public class CoFHCore {
         modEventBus.addListener(this::registrySetup);
         modEventBus.addListener(this::entityLayerSetup);
         modEventBus.addListener(this::entityRendererSetup);
+        modEventBus.addListener(this::menuScreenSetup);
         modEventBus.addListener(this::capSetup);
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::clientSetup);
@@ -155,7 +152,7 @@ public class CoFHCore {
         CoreSounds.register();
         CoreBlockEntities.register();
 
-        CuriosProxy.register();
+        // CuriosProxy.register();
 
         ArcheryHelper.addValidBow(Items.BOW);
     }
@@ -206,9 +203,8 @@ public class CoFHCore {
 
     private void registerLootData(final RegisterEvent event) {
 
-        if (event.getRegistryKey() == ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS) {
-            CoreFlags.manager().setup();
-            QuarkFlags.setup();
+        if (event.getRegistryKey() == NeoForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS) {
+            FlagManager.setup();
         }
     }
 
@@ -224,11 +220,14 @@ public class CoFHCore {
         event.registerEntityRenderer(FROST_FIELD.get(), NothingRenderer::new);
     }
 
+    private void menuScreenSetup(final RegisterMenuScreensEvent event) {
+
+        event.register(FLUID_FILTER_CONTAINER.get(), FluidFilterScreen::new);
+        event.register(ITEM_FILTER_CONTAINER.get(), ItemFilterScreen::new);
+    }
+
     private void capSetup(RegisterCapabilitiesEvent event) {
 
-        CapabilityArchery.register(event);
-        CapabilityAreaEffect.register(event);
-        CapabilityShieldItem.register(event);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
@@ -241,12 +240,7 @@ public class CoFHCore {
 
     private void clientSetup(final FMLClientSetupEvent event) {
 
-        event.enqueueWork(() -> {
-            MenuScreens.register(FLUID_FILTER_CONTAINER.get(), FluidFilterScreen::new);
-            MenuScreens.register(ITEM_FILTER_CONTAINER.get(), ItemFilterScreen::new);
-        });
         event.enqueueWork(ProxyClient::registerItemModelProperties);
-
         event.enqueueWork(() -> CoreClientEvents.addNamespace(ID_COFH_CORE));
     }
 

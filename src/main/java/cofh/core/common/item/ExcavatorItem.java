@@ -1,13 +1,7 @@
 package cofh.core.common.item;
 
-import cofh.core.common.capability.templates.AreaEffectMiningItemWrapper;
 import cofh.lib.common.item.ShovelItemCoFH;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
-import net.neoforged.neoforge.common.capabilities.ICapabilityProvider;
-
-import javax.annotation.Nullable;
 
 public class ExcavatorItem extends ShovelItemCoFH {
 
@@ -36,12 +30,6 @@ public class ExcavatorItem extends ShovelItemCoFH {
     public ExcavatorItem(Tier tier, Properties builder) {
 
         this(tier, DEFAULT_ATTACK_DAMAGE, DEFAULT_ATTACK_SPEED, DEFAULT_BASE_AREA, builder);
-    }
-
-    @Nullable
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-
-        return new AreaEffectMiningItemWrapper(stack, radius, AreaEffectMiningItemWrapper.Type.EXCAVATOR);
     }
 
 }

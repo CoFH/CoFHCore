@@ -4,7 +4,6 @@ import cofh.core.util.helpers.FilterHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.network.NetworkHooks;
 
 public interface IFilterableItem {
 
@@ -20,7 +19,7 @@ public interface IFilterableItem {
     default boolean openGui(ServerPlayer player, ItemStack stack) {
 
         if (hasGui(stack)) {
-            NetworkHooks.openScreen(player, (MenuProvider) this);
+            player.openMenu((MenuProvider) this);
         }
         return true;
     }

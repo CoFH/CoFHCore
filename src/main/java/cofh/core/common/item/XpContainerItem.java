@@ -4,9 +4,7 @@ import cofh.core.util.helpers.FluidHelper;
 import cofh.lib.api.ContainerType;
 import cofh.lib.api.item.IFluidContainerItem;
 import cofh.lib.api.item.IXpContainerItem;
-import cofh.lib.common.fluid.FluidContainerItemWrapper;
 import cofh.lib.util.Utils;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -14,7 +12,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.common.capabilities.ICapabilityProvider;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
@@ -120,12 +117,6 @@ public class XpContainerItem extends ItemCoFH implements IXpContainerItem, IFlui
             }
         }
         return InteractionResultHolder.success(stack);
-    }
-
-    @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-
-        return new FluidContainerItemWrapper(stack, this);
     }
 
     // region IXpContainerItem
