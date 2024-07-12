@@ -19,14 +19,14 @@ Also contains a number of optional gameplay tweaks for convenience.
 '''
 [[dependencies.cofh_core]]
 modId = "minecraft"
-mandatory = true
-versionRange = "1.20.1"
+type = "required"
+versionRange = "1.20.4"
 ordering = "AFTER"
 side = "BOTH"
 
 [[dependencies.cofh_core]]
-modId = "forge"
-mandatory = true
+modId = "neoforge"
+type = "required"
 versionRange = "[${neo_version},)"
 ordering = "AFTER"
 side = "BOTH"

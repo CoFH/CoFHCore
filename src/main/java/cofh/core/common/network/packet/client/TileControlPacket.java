@@ -1,70 +1,49 @@
-//package cofh.core.common.network.packet.client;
-//
-//import cofh.core.CoFHCore;
-//import cofh.core.util.ProxyUtils;
-//import cofh.lib.api.block.entity.IPacketHandlerTile;
-//import cofh.lib.common.network.packet.IPacketClient;
-//import cofh.lib.common.network.packet.PacketBase;
-//import cofh.lib.util.Utils;
-//import io.netty.buffer.Unpooled;
-//import net.minecraft.core.BlockPos;
-//import net.minecraft.network.FriendlyByteBuf;
-//import net.minecraft.world.level.Level;
-//import net.minecraft.world.level.block.entity.BlockEntity;
-//import net.minecraft.world.level.block.state.BlockState;
-//
-//import static cofh.core.common.network.packet.PacketIDs.PACKET_CONTROL;
-//import static cofh.lib.util.Constants.NETWORK_UPDATE_DISTANCE;
-//
-//public class TileControlPacket extends PacketBase implements IPacketClient {
-//
-//    protected BlockPos pos;
-//    protected FriendlyByteBuf buffer;
-//
-//    public TileControlPacket() {
-//
-//        super(PACKET_CONTROL, CoFHCore.PACKET_HANDLER);
-//    }
-//
-//    @Override
-//    public void handleClient() {
-//
-//        Level world = ProxyUtils.getClientWorld();
-//        if (world == null) {
-//            handler.log().error("Client world is null! (Is this being called on the server?)");
-//            return;
-//        }
-//        BlockEntity tile = world.getBlockEntity(pos);
-//        if (tile instanceof IPacketHandlerTile handlerTile) {
-//            handlerTile.handleControlPacket(buffer);
-//            BlockState state = tile.getLevel().getBlockState(pos);
-//            tile.getLevel().sendBlockUpdated(pos, state, state, 3);
-//        }
-//    }
-//
-//    @Override
-//    public void write(FriendlyByteBuf buf) {
-//
-//        buf.writeBlockPos(pos);
-//        buf.writeBytes(buffer);
-//    }
-//
-//    @Override
-//    public void read(FriendlyByteBuf buf) {
-//
-//        buffer = buf;
-//        pos = buffer.readBlockPos();
-//    }
-//
-//    public static void sendToClient(IPacketHandlerTile tile) {
-//
-//        if (tile.world() == null || Utils.isClientWorld(tile.world())) {
-//            return;
-//        }
-//        TileControlPacket packet = new TileControlPacket();
-//        packet.pos = tile.pos();
-//        packet.buffer = tile.getControlPacket(new FriendlyByteBuf(Unpooled.buffer()));
-//        packet.sendToAllAround(packet.pos, NETWORK_UPDATE_DISTANCE, tile.world().dimension());
-//    }
-//
-//}
+package cofh.core.common.network.packet.client;
+
+import cofh.core.common.network.data.client.TileControlPayload;
+import cofh.core.util.ProxyUtils;
+import cofh.lib.api.block.entity.IPacketHandlerTile;
+import cofh.lib.util.Utils;
+import io.netty.buffer.Unpooled;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+
+public class TileControlPacket {
+
+    public static final TileControlPacket INSTANCE = new TileControlPacket();
+
+    public static TileControlPacket get() {
+
+        return INSTANCE;
+    }
+
+    public void handle(final TileControlPayload payload, final PlayPayloadContext context) {
+
+        context.workHandler().submitAsync(() -> {
+            Level world = ProxyUtils.getClientWorld();
+
+            BlockPos pos = payload.pos();
+
+            BlockEntity tile = world.getBlockEntity(pos);
+            if (tile instanceof IPacketHandlerTile handlerTile) {
+                handlerTile.handleControlPacket(payload.buf());
+                BlockState state = world.getBlockState(pos);
+                world.sendBlockUpdated(pos, state, state, 3);
+            }
+        });
+    }
+
+    public static void sendToClient(IPacketHandlerTile tile) {
+
+        if (tile == null || tile.world() == null || tile.world().isClientSide) {
+            return;
+        }
+        PacketDistributor.NEAR.with(Utils.createTargetPoint(tile.world(), tile.pos())).send(new TileControlPayload(tile.pos(), new FriendlyByteBuf(Unpooled.buffer())));
+    }
+
+}

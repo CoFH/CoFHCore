@@ -11,6 +11,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -447,6 +448,11 @@ public final class FluidHelper {
             return;
         }
         PotionUtils.addPotionTooltip(PotionUtils.getAllEffects(stack.getTag()), lores, durationFactor, 20.F);
+    }
+
+    public static void addPotionTooltip(List<MobEffectInstance> list, List<Component> lores, float durationFactor) {
+
+        PotionUtils.addPotionTooltip(list, lores, durationFactor, 20.F);
     }
 
     //    public static void addPotionTooltip(List<MobEffectInstance> list, List<Component> lores, float durationFactor) {

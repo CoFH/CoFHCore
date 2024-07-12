@@ -10,6 +10,7 @@ import cofh.core.common.command.CoFHCommand;
 import cofh.core.common.config.*;
 import cofh.core.common.enchantment.HoldingEnchantment;
 import cofh.core.common.event.ArmorEvents;
+import cofh.core.common.network.PacketHandler;
 import cofh.core.init.*;
 import cofh.core.util.Proxy;
 import cofh.core.util.ProxyClient;
@@ -67,7 +68,6 @@ public class CoFHCore {
     public static final Logger LOG = LogManager.getLogger(ID_COFH_CORE);
 
     public static final ConfigManager CONFIG_MANAGER = new ConfigManager();
-    // public static final PacketHandler PACKET_HANDLER = new PacketHandler(new ResourceLocation(ID_COFH_CORE, "general"), LOG);
     public static final Proxy PROXY = FMLEnvironment.dist.isClient() ? new ProxyClient() : new Proxy();
 
     public static final DeferredRegisterCoFH<Block> BLOCKS = DeferredRegisterCoFH.create(BuiltInRegistries.BLOCK, ID_COFH_CORE);
@@ -94,8 +94,6 @@ public class CoFHCore {
 
         curiosLoaded = Utils.isModLoaded(ID_CURIOS);
 
-        registerPackets();
-
         modEventBus.addListener(this::registrySetup);
         modEventBus.addListener(this::entityLayerSetup);
         modEventBus.addListener(this::entityRendererSetup);
@@ -106,6 +104,8 @@ public class CoFHCore {
         modEventBus.addListener(this::handleIMC);
         modEventBus.addListener(this::registerLootData);
 
+        modEventBus.addListener(PacketHandler::registerNetworking);
+
         NeoForge.EVENT_BUS.addListener(this::registerCommands);
 
         BLOCKS.register(modEventBus);
@@ -113,7 +113,6 @@ public class CoFHCore {
         FLUIDS.register(modEventBus);
 
         CONTAINERS.register(modEventBus);
-        ENTITY_DATA_SERIALIZERS.register(modEventBus);
         ENCHANTMENTS.register(modEventBus);
         ENTITIES.register(modEventBus);
         MOB_EFFECTS.register(modEventBus);
@@ -122,6 +121,7 @@ public class CoFHCore {
         SOUND_EVENTS.register(modEventBus);
         TILE_ENTITIES.register(modEventBus);
 
+        ENTITY_DATA_SERIALIZERS.register(modEventBus);
         FLUID_TYPES.register(modEventBus);
 
         CONFIG_MANAGER.register(modEventBus)
@@ -151,44 +151,6 @@ public class CoFHCore {
         ArcheryHelper.addValidBow(Items.BOW);
     }
 
-    private void registerPackets() {
-
-        //        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_CONTROL, TileControlPacket::new);
-        //        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_GUI, TileGuiPacket::new);
-        //        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_REDSTONE, TileRedstonePacket::new);
-        //        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_STATE, TileStatePacket::new);
-        //        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_RENDER, TileRenderPacket::new);
-        //
-        //        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_MODEL_UPDATE, ModelUpdatePacket::new);
-        //
-        //        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_OVERLAY, OverlayMessagePacket::new);
-        //        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_MOTION, PlayerMotionPacket::new);
-        //
-        //        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_FILTERABLE_GUI_OPEN, FilterableGuiTogglePacket::new);
-        //        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_GHOST_ITEM, GhostItemPacket::new);
-        //
-        //        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_CONTAINER_CONFIG, ContainerConfigPacket::new);
-        //        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_CONTAINER_GUI, ContainerGuiPacket::new);
-        //
-        //        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_SECURITY, SecurityPacket::new);
-        //
-        //        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_CONFIG, TileConfigPacket::new);
-        //        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_SECURITY_CONTROL, SecurityControlPacket::new);
-        //        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_REDSTONE_CONTROL, RedstoneControlPacket::new);
-        //        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_TRANSFER_CONTROL, TransferControlPacket::new);
-        //        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_SIDE_CONFIG, SideConfigPacket::new);
-        //        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_STORAGE_CLEAR, StorageClearPacket::new);
-        //        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_CLAIM_XP, ClaimXPPacket::new);
-        //
-        //        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_ITEM_MODE_CHANGE, ItemModeChangePacket::new);
-        //        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_ITEM_LEFT_CLICK, ItemLeftClickPacket::new);
-        //        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_ITEM_RAYTRACE_BLOCK, ItemRayTraceBlockPacket::new);
-        //        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_ITEM_RAYTRACE_ENTITY, ItemRayTraceEntityPacket::new);
-        //
-        //        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_EFFECT_ADD, EffectAddedPacket::new);
-        //        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_EFFECT_REMOVE, EffectRemovedPacket::new);
-    }
-
     // region INITIALIZATION
     private void registrySetup(final NewRegistryEvent event) {
 
@@ -197,8 +159,10 @@ public class CoFHCore {
 
     private void registerLootData(final RegisterEvent event) {
 
-        if (event.getRegistryKey() == NeoForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS) {
+        if (event.getRegistryKey() == BuiltInRegistries.LOOT_CONDITION_TYPE) {
             FlagManager.setup();
+        } else if (event.getRegistryKey() == BuiltInRegistries.LOOT_FUNCTION_TYPE) {
+            TileNBTSync.setup();
         }
     }
 
@@ -226,7 +190,6 @@ public class CoFHCore {
 
     private void commonSetup(final FMLCommonSetupEvent event) {
 
-        event.enqueueWork(TileNBTSync::setup);
         event.enqueueWork(ArmorEvents::setup);
         event.enqueueWork(CoreFluids::setup);
     }

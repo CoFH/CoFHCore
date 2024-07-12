@@ -6,7 +6,6 @@ import cofh.lib.api.IProxyItemPropertyGetter;
 import cofh.lib.api.block.entity.IAreaEffectTile;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -24,9 +23,7 @@ public class ProxyUtils {
         if (player instanceof FakePlayer) {
             return;
         }
-        if (player instanceof ServerPlayer serverPlayer) {
-            OverlayMessagePacket.sendToClient(message, serverPlayer);
-        }
+        OverlayMessagePacket.sendToClient(message, player);
     }
 
     public static void setOverlayMessage(Component message) {

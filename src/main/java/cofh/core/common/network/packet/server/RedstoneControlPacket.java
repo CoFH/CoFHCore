@@ -1,65 +1,51 @@
-//package cofh.core.common.network.packet.server;
-//
-//import cofh.core.CoFHCore;
-//import cofh.core.util.control.IRedstoneControllableTile;
-//import cofh.lib.api.control.IRedstoneControllable.ControlMode;
-//import cofh.lib.common.network.packet.IPacketServer;
-//import cofh.lib.common.network.packet.PacketBase;
-//import net.minecraft.core.BlockPos;
-//import net.minecraft.network.FriendlyByteBuf;
-//import net.minecraft.server.level.ServerPlayer;
-//import net.minecraft.world.level.Level;
-//import net.minecraft.world.level.block.entity.BlockEntity;
-//
-//import static cofh.core.common.network.packet.PacketIDs.PACKET_REDSTONE_CONTROL;
-//
-//public class RedstoneControlPacket extends PacketBase implements IPacketServer {
-//
-//    protected BlockPos pos;
-//    protected int threshold;
-//    protected byte mode;
-//
-//    public RedstoneControlPacket() {
-//
-//        super(PACKET_REDSTONE_CONTROL, CoFHCore.PACKET_HANDLER);
-//    }
-//
-//    @Override
-//    public void handleServer(ServerPlayer player) {
-//
-//        Level world = player.level;
-//        if (!world.isLoaded(pos)) {
-//            return;
-//        }
-//        BlockEntity tile = world.getBlockEntity(pos);
-//        if (tile instanceof IRedstoneControllableTile redstoneControllableTile) {
-//            redstoneControllableTile.setControl(threshold, ControlMode.VALUES[mode]);
-//        }
-//    }
-//
-//    @Override
-//    public void write(FriendlyByteBuf buf) {
-//
-//        buf.writeBlockPos(pos);
-//        buf.writeInt(threshold);
-//        buf.writeByte(mode);
-//    }
-//
-//    @Override
-//    public void read(FriendlyByteBuf buf) {
-//
-//        pos = buf.readBlockPos();
-//        threshold = buf.readInt();
-//        mode = buf.readByte();
-//    }
-//
-//    public static void sendToServer(IRedstoneControllableTile tile) {
-//
-//        RedstoneControlPacket packet = new RedstoneControlPacket();
-//        packet.pos = tile.pos();
-//        packet.threshold = tile.redstoneControl().getThreshold();
-//        packet.mode = (byte) tile.redstoneControl().getMode().ordinal();
-//        packet.sendToServer();
-//    }
-//
-//}
+package cofh.core.common.network.packet.server;
+
+import cofh.core.common.network.data.server.RedstoneControlPayload;
+import cofh.core.util.control.IRedstoneControllableTile;
+import cofh.lib.api.control.IRedstoneControllable.ControlMode;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+
+import java.util.Optional;
+
+public class RedstoneControlPacket {
+
+    public static final RedstoneControlPacket INSTANCE = new RedstoneControlPacket();
+
+    public static RedstoneControlPacket get() {
+
+        return INSTANCE;
+    }
+
+    public void handle(final RedstoneControlPayload payload, final PlayPayloadContext context) {
+
+        context.workHandler().submitAsync(() -> {
+            Optional<Player> senderOptional = context.player();
+            if (senderOptional.isEmpty()) {
+                return;
+            }
+            Player player = senderOptional.get();
+
+            Level world = player.level;
+            if (!world.isLoaded(payload.pos())) {
+                return;
+            }
+            BlockEntity tile = world.getBlockEntity(payload.pos());
+            if (tile instanceof IRedstoneControllableTile redstoneControllableTile) {
+                redstoneControllableTile.setControl(payload.threshold(), ControlMode.VALUES[payload.mode()]);
+            }
+        });
+    }
+
+    public static void sendToServer(IRedstoneControllableTile tile) {
+
+        if (tile == null) {
+            return;
+        }
+        PacketDistributor.SERVER.noArg().send(new RedstoneControlPayload(tile.pos(), tile.redstoneControl().getThreshold(), (byte) tile.redstoneControl().getMode().ordinal()));
+    }
+
+}

@@ -1,67 +1,46 @@
-//package cofh.core.common.network.packet.client;
-//
-//import cofh.core.CoFHCore;
-//import cofh.core.util.ProxyUtils;
-//import cofh.lib.api.block.entity.IPacketHandlerTile;
-//import cofh.lib.common.network.packet.IPacketClient;
-//import cofh.lib.common.network.packet.PacketBase;
-//import cofh.lib.util.Utils;
-//import io.netty.buffer.Unpooled;
-//import net.minecraft.core.BlockPos;
-//import net.minecraft.network.FriendlyByteBuf;
-//import net.minecraft.world.level.Level;
-//import net.minecraft.world.level.block.entity.BlockEntity;
-//
-//import static cofh.core.common.network.packet.PacketIDs.PACKET_REDSTONE;
-//import static cofh.lib.util.Constants.NETWORK_UPDATE_DISTANCE;
-//
-//public class TileRedstonePacket extends PacketBase implements IPacketClient {
-//
-//    protected BlockPos pos;
-//    protected FriendlyByteBuf buffer;
-//
-//    public TileRedstonePacket() {
-//
-//        super(PACKET_REDSTONE, CoFHCore.PACKET_HANDLER);
-//    }
-//
-//    @Override
-//    public void handleClient() {
-//
-//        Level world = ProxyUtils.getClientWorld();
-//        if (world == null) {
-//            handler.log().error("Client world is null! (Is this being called on the server?)");
-//            return;
-//        }
-//        BlockEntity tile = world.getBlockEntity(pos);
-//        if (tile instanceof IPacketHandlerTile handlerTile) {
-//            handlerTile.handleRedstonePacket(buffer);
-//        }
-//    }
-//
-//    @Override
-//    public void write(FriendlyByteBuf buf) {
-//
-//        buf.writeBlockPos(pos);
-//        buf.writeBytes(buffer);
-//    }
-//
-//    @Override
-//    public void read(FriendlyByteBuf buf) {
-//
-//        buffer = buf;
-//        pos = buffer.readBlockPos();
-//    }
-//
-//    public static void sendToClient(IPacketHandlerTile tile) {
-//
-//        if (tile.world() == null || Utils.isClientWorld(tile.world())) {
-//            return;
-//        }
-//        TileRedstonePacket packet = new TileRedstonePacket();
-//        packet.pos = tile.pos();
-//        packet.buffer = tile.getRedstonePacket(new FriendlyByteBuf(Unpooled.buffer()));
-//        packet.sendToAllAround(packet.pos, NETWORK_UPDATE_DISTANCE, tile.world().dimension());
-//    }
-//
-//}
+package cofh.core.common.network.packet.client;
+
+import cofh.core.common.network.data.client.TileRedstonePayload;
+import cofh.core.util.ProxyUtils;
+import cofh.lib.api.block.entity.IPacketHandlerTile;
+import cofh.lib.util.Utils;
+import io.netty.buffer.Unpooled;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+
+public class TileRedstonePacket {
+
+    public static final TileRedstonePacket INSTANCE = new TileRedstonePacket();
+
+    public static TileRedstonePacket get() {
+
+        return INSTANCE;
+    }
+
+    public void handle(final TileRedstonePayload payload, final PlayPayloadContext context) {
+
+        context.workHandler().submitAsync(() -> {
+            Level world = ProxyUtils.getClientWorld();
+
+            BlockPos pos = payload.pos();
+
+            BlockEntity tile = world.getBlockEntity(pos);
+            if (tile instanceof IPacketHandlerTile handlerTile) {
+                handlerTile.handleRedstonePacket(payload.buf());
+            }
+        });
+    }
+
+    public static void sendToClient(IPacketHandlerTile tile) {
+
+        if (tile == null || tile.world() == null || tile.world().isClientSide) {
+            return;
+        }
+        PacketDistributor.NEAR.with(Utils.createTargetPoint(tile.world(), tile.pos())).send(new TileRedstonePayload(tile.pos(), new FriendlyByteBuf(Unpooled.buffer())));
+    }
+
+}

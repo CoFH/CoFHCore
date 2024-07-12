@@ -6,19 +6,19 @@ import net.minecraft.resources.ResourceLocation;
 
 import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 
-public record ContainerConfigPayload(FriendlyByteBuf buf) implements CustomPacketPayload {
+public record ItemModeChangePayload(boolean decr) implements CustomPacketPayload {
 
-    public static final ResourceLocation ID = new ResourceLocation(ID_COFH_CORE, "container_config_packet");
+    public static final ResourceLocation ID = new ResourceLocation(ID_COFH_CORE, "item_mode_change_packet");
 
-    public ContainerConfigPayload(final FriendlyByteBuf buf) {
+    public ItemModeChangePayload(final FriendlyByteBuf buf) {
 
-        this.buf = buf;
+        this(buf.readBoolean());
     }
 
     @Override
     public void write(FriendlyByteBuf buf) {
 
-        buf.writeBytes(this.buf);
+        buf.writeBoolean(decr);
     }
 
     @Override

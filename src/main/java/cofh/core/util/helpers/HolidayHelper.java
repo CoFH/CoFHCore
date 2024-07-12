@@ -52,7 +52,7 @@ public final class HolidayHelper {
         BOXING_DAY(12, 26),
         NEW_YEARS_EVE(12, 31);
 
-        protected final MonthDay date;
+        private final MonthDay date;
 
         Holiday(int month, int dayOfMonth) {
 

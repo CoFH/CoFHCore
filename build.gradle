@@ -85,14 +85,13 @@ repositories {
 dependencies {
     implementation("net.neoforged:neoforge:${neo_version}")
 
-    // compile against the JEI API but do not include it at runtime
-    compileOnly("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
-    compileOnly("mezz.jei:jei-${mc_version}-neoforge-api:${jei_version}")
-    // at runtime, use the full JEI jar for NeoForge
-    runtimeOnly("mezz.jei:jei-${mc_version}-neoforge:${jei_version}")
+    implementation("mezz.jei:jei-${mc_version}-neoforge:${jei_version}") {
+        transitive false
+    }
 
-    compileOnly("top.theillusivec4.curios:curios-neoforge:${curios_version}:api")
-    runtimeOnly("top.theillusivec4.curios:curios-neoforge:${curios_version}")
+    implementation("top.theillusivec4.curios:curios-neoforge:${curios_version}") {
+        transitive false
+    }
 }
 
 def commonManifest = {

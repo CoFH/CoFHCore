@@ -80,7 +80,7 @@ public class BlockEntityCoFH extends BlockEntity implements ITileCallback, IPack
     public void sendGuiNetworkData(AbstractContainerMenu container, Player player) {
 
         if (hasGuiPacket() && player instanceof ServerPlayer && (!(player instanceof FakePlayer))) {
-            TileGuiPacket.sendToClient(this, (ServerPlayer) player);
+            TileGuiPacket.sendToClient(this, player);
         }
     }
 

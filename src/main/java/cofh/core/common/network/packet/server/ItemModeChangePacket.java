@@ -1,61 +1,54 @@
-//package cofh.core.common.network.packet.server;
-//
-//import cofh.core.CoFHCore;
-//import cofh.core.util.helpers.ItemHelper;
-//import cofh.lib.common.network.packet.IPacketServer;
-//import cofh.lib.common.network.packet.PacketBase;
-//import net.minecraft.network.FriendlyByteBuf;
-//import net.minecraft.server.level.ServerPlayer;
-//
-//import static cofh.core.common.network.packet.PacketIDs.PACKET_ITEM_MODE_CHANGE;
-//
-//public class ItemModeChangePacket extends PacketBase implements IPacketServer {
-//
-//    protected boolean decr;
-//
-//    public ItemModeChangePacket() {
-//
-//        super(PACKET_ITEM_MODE_CHANGE, CoFHCore.PACKET_HANDLER);
-//    }
-//
-//    @Override
-//    public void handleServer(ServerPlayer player) {
-//
-//        if (!ItemHelper.isPlayerHoldingMultiModeItem(player)) {
-//            return;
-//        }
-//        if (decr && ItemHelper.decrHeldMultiModeItemState(player) || !decr && ItemHelper.incrHeldMultiModeItemState(player)) {
-//            ItemHelper.onHeldMultiModeItemChange(player);
-//        }
-//    }
-//
-//    @Override
-//    public void write(FriendlyByteBuf buf) {
-//
-//        buf.writeBoolean(decr);
-//    }
-//
-//    @Override
-//    public void read(FriendlyByteBuf buf) {
-//
-//        decr = buf.readBoolean();
-//    }
-//
-//    public static void incrMode() {
-//
-//        sendToServer(false);
-//    }
-//
-//    public static void decrMode() {
-//
-//        sendToServer(true);
-//    }
-//
-//    private static void sendToServer(boolean decr) {
-//
-//        ItemModeChangePacket packet = new ItemModeChangePacket();
-//        packet.decr = decr;
-//        packet.sendToServer();
-//    }
-//
-//}
+package cofh.core.common.network.packet.server;
+
+import cofh.core.common.network.data.server.ItemModeChangePayload;
+import cofh.core.util.helpers.ItemHelper;
+import net.minecraft.world.entity.player.Player;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+
+import java.util.Optional;
+
+public class ItemModeChangePacket {
+
+    public static final ItemModeChangePacket INSTANCE = new ItemModeChangePacket();
+
+    public static ItemModeChangePacket get() {
+
+        return INSTANCE;
+    }
+
+    public void handle(final ItemModeChangePayload payload, final PlayPayloadContext context) {
+
+        context.workHandler().submitAsync(() -> {
+            Optional<Player> senderOptional = context.player();
+            if (senderOptional.isEmpty()) {
+                return;
+            }
+            Player player = senderOptional.get();
+            boolean decr = payload.decr();
+
+            if (!ItemHelper.isPlayerHoldingMultiModeItem(player)) {
+                return;
+            }
+            if (decr && ItemHelper.decrHeldMultiModeItemState(player) || !decr && ItemHelper.incrHeldMultiModeItemState(player)) {
+                ItemHelper.onHeldMultiModeItemChange(player);
+            }
+        });
+    }
+
+    public static void incrMode() {
+
+        sendToServer(false);
+    }
+
+    public static void decrMode() {
+
+        sendToServer(true);
+    }
+
+    private static void sendToServer(boolean decr) {
+
+        PacketDistributor.SERVER.noArg().send(new ItemModeChangePayload(decr));
+    }
+
+}

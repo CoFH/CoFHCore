@@ -29,7 +29,7 @@ public class ContainerConfigPacket {
             Player player = senderOptional.get();
 
             if (player.containerMenu instanceof ContainerMenuCoFH container) {
-                container.handleConfigPacket(payload.buffer());
+                container.handleConfigPacket(payload.buf());
             }
         });
     }

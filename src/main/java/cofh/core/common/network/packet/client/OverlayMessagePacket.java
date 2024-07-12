@@ -5,6 +5,7 @@ import cofh.core.util.ProxyUtils;
 import cofh.lib.util.helpers.StringHelper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 
@@ -22,9 +23,14 @@ public class OverlayMessagePacket {
         context.workHandler().submitAsync(() -> ProxyUtils.setOverlayMessage(StringHelper.fromJSON(payload.message())));
     }
 
-    public static void sendToClient(Component message, ServerPlayer player) {
+    public static void sendToClient(Component message, Player player) {
 
-        PacketDistributor.PLAYER.with(player).send(new OverlayMessagePayload(StringHelper.toJSON(message)));
+        if (message == null) {
+            return;
+        }
+        if (player instanceof ServerPlayer serverPlayer) {
+            PacketDistributor.PLAYER.with(serverPlayer).send(new OverlayMessagePayload(StringHelper.toJSON(message)));
+        }
     }
 
 }

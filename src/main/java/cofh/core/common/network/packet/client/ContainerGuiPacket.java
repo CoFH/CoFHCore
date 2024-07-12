@@ -24,14 +24,17 @@ public class ContainerGuiPacket {
         context.workHandler().submitAsync(() -> {
             Player player = ProxyUtils.getClientPlayer();
             if (player.containerMenu instanceof ContainerMenuCoFH container) {
-                container.handleGuiPacket(payload.buffer());
+                container.handleGuiPacket(payload.buf());
             }
         });
     }
 
     public static void sendToClient(ContainerMenuCoFH container, Player player) {
 
-        if (container != null && player instanceof ServerPlayer serverPlayer) {
+        if (container == null) {
+            return;
+        }
+        if (player instanceof ServerPlayer serverPlayer) {
             PacketDistributor.PLAYER.with(serverPlayer).send(new ContainerGuiPayload(container.getGuiPacket(new FriendlyByteBuf(Unpooled.buffer()))));
         }
     }

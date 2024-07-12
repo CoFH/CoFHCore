@@ -247,8 +247,7 @@ public class BlockIngredient implements Predicate<BlockState> {
     }
 
     public static <T> Stream<T>
-    getStreamFromIterator(Iterator<T> iterator)
-    {
+    getStreamFromIterator(Iterator<T> iterator) {
 
         // Convert the iterator to Spliterator
         Spliterator<T>

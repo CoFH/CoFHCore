@@ -54,12 +54,14 @@ import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.entity.PartEntity;
 import net.neoforged.neoforge.event.entity.EntityTeleportEvent;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nullable;
 import java.nio.file.Path;
 
 import static cofh.lib.util.Constants.MAX_CAPACITY;
+import static cofh.lib.util.Constants.NETWORK_UPDATE_DISTANCE;
 import static cofh.lib.util.constants.NBTTags.TAG_ENCHANTMENTS;
 import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 import static net.minecraft.nbt.Tag.TAG_LIST;
@@ -611,6 +613,29 @@ public class Utils {
 
         ResourceLocation loc = getRegistryName(stack.getFluid());
         return loc == null ? "" : loc.getPath();
+    }
+    // endregion
+
+    // region PACKET UTILS
+
+    public static PacketDistributor.TargetPoint createTargetPoint(Entity entity) {
+
+        return createTargetPoint(entity, NETWORK_UPDATE_DISTANCE);
+    }
+
+    public static PacketDistributor.TargetPoint createTargetPoint(Entity entity, int radius) {
+
+        return new PacketDistributor.TargetPoint(entity.getX(), entity.getY(), entity.getZ(), radius, entity.level.dimension());
+    }
+
+    public static PacketDistributor.TargetPoint createTargetPoint(Level level, BlockPos pos) {
+
+        return createTargetPoint(level, pos, NETWORK_UPDATE_DISTANCE);
+    }
+
+    public static PacketDistributor.TargetPoint createTargetPoint(Level level, BlockPos pos, int radius) {
+
+        return new PacketDistributor.TargetPoint(pos.getX(), pos.getY(), pos.getZ(), radius, level.dimension());
     }
     // endregion
 }

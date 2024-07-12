@@ -250,8 +250,7 @@ public class AreaUtils {
     public static final IBlockTransformer GLOW_AIR_TRANSFORM = getConversionTransform(REPLACEABLE_AIR, GLOW_AIR.get().defaultBlockState(), false);
     public static final IEffectApplier GLOW_ENTITIES = (target, duration, power, source) -> {
 
-        if (target instanceof LivingEntity) {
-            LivingEntity living = (LivingEntity) target;
+        if (target instanceof LivingEntity living) {
             living.addEffect(new MobEffectInstance(MobEffects.GLOWING, duration, power));
             if (living.getMobType() == MobType.UNDEAD) {
                 living.hurt(living.level.damageSources().indirectMagic(source instanceof LivingEntity ? source : null, null), 4.0F);
@@ -314,8 +313,7 @@ public class AreaUtils {
     public static final IBlockTransformer GROW_PLANTS = (world, pos, face, entity) -> {
 
         BlockState state = world.getBlockState(pos);
-        if (state.getBlock() instanceof BonemealableBlock) {
-            BonemealableBlock growable = (BonemealableBlock) state.getBlock();
+        if (state.getBlock() instanceof BonemealableBlock growable) {
             if (!world.isClientSide && growable.isValidBonemealTarget(world, pos, state) && growable.isBonemealSuccess(world, world.random, pos, state)) {
                 // TODO: Remove try/catch when Mojang fixes base issue.
                 try {
@@ -904,8 +902,7 @@ public class AreaUtils {
             double distance = iterPos.distToCenterSqr(entity.position());
             if (distance < f2) {
                 state = levelIn.getBlockState(iterPos);
-                if (state.getBlock() instanceof BonemealableBlock) {
-                    BonemealableBlock growable = (BonemealableBlock) state.getBlock();
+                if (state.getBlock() instanceof BonemealableBlock growable) {
                     if (growable.isValidBonemealTarget(levelIn, iterPos, state)) {
                         if (!levelIn.isClientSide) {
                             if (growable.isBonemealSuccess(levelIn, levelIn.random, iterPos, state)) {
@@ -936,8 +933,7 @@ public class AreaUtils {
         int grow = 0;
 
         BlockState state = levelIn.getBlockState(entity.blockPosition());
-        if (state.getBlock() instanceof BonemealableBlock) {
-            BonemealableBlock growable = (BonemealableBlock) state.getBlock();
+        if (state.getBlock() instanceof BonemealableBlock growable) {
             if (growable.isValidBonemealTarget(levelIn, pos, state)) {
                 if (!levelIn.isClientSide) {
                     if (growable.isBonemealSuccess(levelIn, levelIn.random, pos, state)) {
@@ -962,8 +958,7 @@ public class AreaUtils {
             double distance = iterPos.distToCenterSqr(entity.position());
             if (distance < f2) {
                 state = levelIn.getBlockState(iterPos);
-                if (state.getBlock() instanceof BonemealableBlock) {
-                    BonemealableBlock growable = (BonemealableBlock) state.getBlock();
+                if (state.getBlock() instanceof BonemealableBlock growable) {
                     if (growable.isValidBonemealTarget(levelIn, iterPos, state)) {
                         if (!levelIn.isClientSide) {
                             if (growable.isBonemealSuccess(levelIn, levelIn.random, iterPos, state)) {
