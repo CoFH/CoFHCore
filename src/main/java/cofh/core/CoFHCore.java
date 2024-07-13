@@ -101,7 +101,6 @@ public class CoFHCore {
         modEventBus.addListener(this::entityLayerSetup);
         modEventBus.addListener(this::entityRendererSetup);
         modEventBus.addListener(this::menuScreenSetup);
-        modEventBus.addListener(this::capSetup);
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::clientSetup);
         modEventBus.addListener(this::handleIMC);
@@ -163,9 +162,6 @@ public class CoFHCore {
 
     private void registerLootData(final RegisterEvent event) {
 
-        //        if (event.getRegistryKey() == BuiltInRegistries.LOOT_CONDITION_TYPE) {
-        //            FlagManager.setup();
-        //        } else
         if (event.getRegistryKey() == BuiltInRegistries.LOOT_FUNCTION_TYPE) {
             TileNBTSync.setup();
         }
@@ -187,10 +183,6 @@ public class CoFHCore {
 
         event.register(FLUID_FILTER_CONTAINER.get(), FluidFilterScreen::new);
         event.register(ITEM_FILTER_CONTAINER.get(), ItemFilterScreen::new);
-    }
-
-    private void capSetup(RegisterCapabilitiesEvent event) {
-
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
