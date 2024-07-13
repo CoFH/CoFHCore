@@ -26,18 +26,18 @@ public class CoreParticles {
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SPARK = PARTICLES.register(ID_PARTICLE_SPARK, () -> new SimpleParticleType(true));
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> PLASMA = PARTICLES.register(ID_PARTICLE_PLASMA, () -> new SimpleParticleType(true));
 
-    public static final DeferredHolder<ParticleType<?>, ColorParticleType> FIRE = PARTICLES.register(ID_PARTICLE_FIRE, () -> new ColorParticleType());
-    public static final DeferredHolder<ParticleType<?>, ColorParticleType> BLAST = PARTICLES.register(ID_PARTICLE_BLAST, () -> new ColorParticleType());
-    public static final DeferredHolder<ParticleType<?>, ColorParticleType> MIST = PARTICLES.register(ID_PARTICLE_MIST, () -> new ColorParticleType());
+    public static final DeferredHolder<ParticleType<?>, ColorParticleType> FIRE = PARTICLES.register(ID_PARTICLE_FIRE, ColorParticleType::new);
+    public static final DeferredHolder<ParticleType<?>, ColorParticleType> BLAST = PARTICLES.register(ID_PARTICLE_BLAST, ColorParticleType::new);
+    public static final DeferredHolder<ParticleType<?>, ColorParticleType> MIST = PARTICLES.register(ID_PARTICLE_MIST, ColorParticleType::new);
 
-    public static final DeferredHolder<ParticleType<?>, CylindricalParticleType> BLAST_WAVE = PARTICLES.register(ID_PARTICLE_BLAST_WAVE, () -> new CylindricalParticleType());
-    public static final DeferredHolder<ParticleType<?>, CylindricalParticleType> SHOCKWAVE = PARTICLES.register(ID_PARTICLE_SHOCKWAVE, () -> new CylindricalParticleType());
-    public static final DeferredHolder<ParticleType<?>, CylindricalParticleType> WIND_SPIRAL = PARTICLES.register(ID_PARTICLE_WIND_SPIRAL, () -> new CylindricalParticleType());
-    public static final DeferredHolder<ParticleType<?>, CylindricalParticleType> WIND_VORTEX = PARTICLES.register(ID_PARTICLE_WIND_VORTEX, () -> new CylindricalParticleType());
+    public static final DeferredHolder<ParticleType<?>, CylindricalParticleType> BLAST_WAVE = PARTICLES.register(ID_PARTICLE_BLAST_WAVE, CylindricalParticleType::new);
+    public static final DeferredHolder<ParticleType<?>, CylindricalParticleType> SHOCKWAVE = PARTICLES.register(ID_PARTICLE_SHOCKWAVE, CylindricalParticleType::new);
+    public static final DeferredHolder<ParticleType<?>, CylindricalParticleType> WIND_SPIRAL = PARTICLES.register(ID_PARTICLE_WIND_SPIRAL, CylindricalParticleType::new);
+    public static final DeferredHolder<ParticleType<?>, CylindricalParticleType> WIND_VORTEX = PARTICLES.register(ID_PARTICLE_WIND_VORTEX, CylindricalParticleType::new);
 
-    public static final DeferredHolder<ParticleType<?>, PointToPointParticleType> BEAM = PARTICLES.register(ID_PARTICLE_BEAM, () -> new PointToPointParticleType());
-    public static final DeferredHolder<ParticleType<?>, PointToPointParticleType> SHARD = PARTICLES.register(ID_PARTICLE_SHARD, () -> new PointToPointParticleType());
-    public static final DeferredHolder<ParticleType<?>, PointToPointParticleType> STRAIGHT_ARC = PARTICLES.register(ID_PARTICLE_STRAIGHT_ARC, () -> new PointToPointParticleType());
-    public static final DeferredHolder<ParticleType<?>, PointToPointParticleType> STREAM = PARTICLES.register(ID_PARTICLE_STREAM, () -> new PointToPointParticleType());
+    public static final DeferredHolder<ParticleType<?>, PointToPointParticleType> BEAM = PARTICLES.register(ID_PARTICLE_BEAM, PointToPointParticleType::new);
+    public static final DeferredHolder<ParticleType<?>, PointToPointParticleType> SHARD = PARTICLES.register(ID_PARTICLE_SHARD, PointToPointParticleType::new);
+    public static final DeferredHolder<ParticleType<?>, PointToPointParticleType> STRAIGHT_ARC = PARTICLES.register(ID_PARTICLE_STRAIGHT_ARC, PointToPointParticleType::new);
+    public static final DeferredHolder<ParticleType<?>, PointToPointParticleType> STREAM = PARTICLES.register(ID_PARTICLE_STREAM, PointToPointParticleType::new);
 
 }

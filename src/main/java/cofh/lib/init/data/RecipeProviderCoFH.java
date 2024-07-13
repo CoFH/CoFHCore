@@ -2,7 +2,6 @@ package cofh.lib.init.data;
 
 import cofh.lib.util.DeferredRegisterCoFH;
 import cofh.lib.util.Utils;
-import cofh.lib.util.flags.FlagManager;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
@@ -24,7 +23,6 @@ import static cofh.lib.util.constants.ModIds.ID_FORGE;
 public abstract class RecipeProviderCoFH extends RecipeProvider implements IConditionBuilder {
 
     protected final String modid;
-    protected FlagManager manager;
 
     protected boolean advancements = false;
 
@@ -440,133 +438,5 @@ public abstract class RecipeProviderCoFH extends RecipeProvider implements ICond
 
         return Utils.getName(item);
     }
-    // endregion
-
-    // TODO: Fix
-    // region CONDITIONAL RECIPES
-    //    protected static class ConditionalRecipeWrapper implements FinishedRecipe {
-    //
-    //        protected FinishedRecipe recipe;
-    //        protected List<ICondition> conditions = new ArrayList<>();
-    //
-    //        public ConditionalRecipeWrapper(FinishedRecipe recipe) {
-    //
-    //            this.recipe = recipe;
-    //        }
-    //
-    //        public ConditionalRecipeWrapper addCondition(ICondition condition) {
-    //
-    //            this.conditions.add(condition);
-    //            return this;
-    //        }
-    //
-    //        public ConditionalRecipeWrapper addConditions(List<ICondition> conditions) {
-    //
-    //            this.conditions.addAll(conditions);
-    //            return this;
-    //        }
-    //
-    //        @Override
-    //        public void serializeRecipeData(JsonObject json) {
-    //
-    //            recipe.serializeRecipeData(json);
-    //        }
-    //
-    //        @Override
-    //        public JsonObject serializeRecipe() {
-    //
-    //            JsonObject jsonobject = new JsonObject();
-    //            jsonobject.addProperty("type", BuiltInRegistries.RECIPE_SERIALIZER.getKey(this.getType()).toString());
-    //            this.serializeRecipeData(jsonobject);
-    //            if (!conditions.isEmpty()) {
-    //                JsonArray conditionArray = new JsonArray();
-    //                for (ICondition condition : conditions) {
-    //                    conditionArray.add(CraftingHelper.serialize(condition));
-    //                }
-    //                jsonobject.add("conditions", conditionArray);
-    //            }
-    //            return jsonobject;
-    //        }
-    //
-    //        @Override
-    //        public ResourceLocation getId() {
-    //
-    //            return recipe.getId();
-    //        }
-    //
-    //        @Override
-    //        public RecipeSerializer<?> getType() {
-    //
-    //            return recipe.getType();
-    //        }
-    //
-    //        @Nullable
-    //        @Override
-    //        public JsonObject serializeAdvancement() {
-    //
-    //            return recipe.serializeAdvancement();
-    //        }
-    //
-    //        @Nullable
-    //        @Override
-    //        public ResourceLocation getAdvancementId() {
-    //
-    //            return recipe.getAdvancementId();
-    //        }
-    //
-    //    }
-    //
-    //    protected ConditionalRecipeConsumer withConditions(RecipeOutput consumer) {
-    //
-    //        return new ConditionalRecipeConsumer(consumer);
-    //    }
-    //
-    //    protected class ConditionalRecipeConsumer implements RecipeOutput {
-    //
-    //        protected final RecipeOutput consumer;
-    //        protected List<ICondition> conditions = new ArrayList<>();
-    //
-    //        public ConditionalRecipeConsumer(RecipeOutput consumer) {
-    //
-    //            this.consumer = consumer;
-    //        }
-    //
-    //        public ConditionalRecipeConsumer addCondition(ICondition condition) {
-    //
-    //            this.conditions.add(condition);
-    //            return this;
-    //        }
-    //
-    //        public ConditionalRecipeConsumer addConditions(List<ICondition> conditions) {
-    //
-    //            this.conditions.addAll(conditions);
-    //            return this;
-    //        }
-    //
-    //        public ConditionalRecipeConsumer tagExists(TagKey<Item> tag) {
-    //
-    //            this.conditions.add(new TagExistsCondition(tag.location()));
-    //            return this;
-    //        }
-    //
-    //        public ConditionalRecipeConsumer flag(String flag) {
-    //
-    //            if (manager != null) {
-    //                this.conditions.add(new FlagSetCondition(manager, flag));
-    //            }
-    //            return this;
-    //        }
-    //
-    //        @Override
-    //        public void accept(FinishedRecipe recipe) {
-    //
-    //            if (!conditions.isEmpty()) {
-    //                consumer.accept(new ConditionalRecipeWrapper(recipe).addConditions(conditions));
-    //            } else {
-    //                consumer.accept(recipe);
-    //            }
-    //        }
-    //
-    //    }
     // endregion
 }

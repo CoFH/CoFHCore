@@ -62,6 +62,11 @@ public class DeferredRegisterCoFH<T> {
         wrappedRegister.register(bus);
     }
 
+    public Map<ResourceLocation, DeferredHolder<T, ? extends T>> getRegistryObjects() {
+
+        return registryObjects;
+    }
+
     // region OBJECT RETRIEVAL
     public T get(final String resourceLoc) {
 

@@ -4,7 +4,6 @@ import cofh.core.init.data.providers.CoreBlockStateProvider;
 import cofh.core.init.data.providers.CoreItemModelProvider;
 import cofh.core.init.data.providers.CoreLootTableProvider;
 import cofh.core.init.data.providers.CoreTagsProvider;
-import cofh.lib.common.loot.TileNBTSync;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -20,7 +19,7 @@ public class CoreDataGen {
     @SubscribeEvent
     public static void gatherData(final GatherDataEvent event) {
 
-        TileNBTSync.setup();
+        // TileNBTSync.setup();
 
         DataGenerator gen = event.getGenerator();
         PackOutput output = gen.getPackOutput();

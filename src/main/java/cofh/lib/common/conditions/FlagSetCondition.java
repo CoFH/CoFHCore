@@ -1,5 +1,6 @@
-package cofh.lib.util.flags;
+package cofh.lib.common.conditions;
 
+import cofh.lib.util.FlagManager;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.neoforged.neoforge.common.conditions.ICondition;

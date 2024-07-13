@@ -1,4 +1,4 @@
-package cofh.lib.util.flags;
+package cofh.lib.common.conditions;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

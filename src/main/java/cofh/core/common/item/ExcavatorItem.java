@@ -9,7 +9,7 @@ public class ExcavatorItem extends ShovelItemCoFH {
     private static final float DEFAULT_ATTACK_SPEED = -3.2F;
     private static final int DEFAULT_BASE_AREA = 1;
 
-    private final int radius;
+    public final int radius;
 
     public ExcavatorItem(Tier tier, float attackDamageIn, float attackSpeedIn, int radius, Properties builder) {
 

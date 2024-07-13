@@ -20,7 +20,7 @@ import cofh.lib.client.renderer.entity.NothingRenderer;
 import cofh.lib.common.loot.TileNBTSync;
 import cofh.lib.util.DeferredRegisterCoFH;
 import cofh.lib.util.Utils;
-import cofh.lib.util.flags.FlagManager;
+import com.mojang.serialization.Codec;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.syncher.EntityDataSerializer;
@@ -47,8 +47,10 @@ import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.NeoForgeMod;
+import net.neoforged.neoforge.common.conditions.ICondition;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.fluids.FluidType;
+import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
@@ -83,6 +85,7 @@ public class CoFHCore {
     public static final DeferredRegisterCoFH<SoundEvent> SOUND_EVENTS = DeferredRegisterCoFH.create(BuiltInRegistries.SOUND_EVENT, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<BlockEntityType<?>> TILE_ENTITIES = DeferredRegisterCoFH.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, ID_COFH_CORE);
 
+    public static final DeferredRegister<Codec<? extends ICondition>> CONDITION_CODECS = DeferredRegister.create(NeoForgeRegistries.Keys.CONDITION_CODECS, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<EntityDataSerializer<?>> ENTITY_DATA_SERIALIZERS = DeferredRegisterCoFH.create(NeoForgeRegistries.Keys.ENTITY_DATA_SERIALIZERS, ID_COFH_CORE);
     public static final DeferredRegisterCoFH<FluidType> FLUID_TYPES = DeferredRegisterCoFH.create(NeoForgeRegistries.Keys.FLUID_TYPES, ID_COFH_CORE);
 
@@ -121,6 +124,7 @@ public class CoFHCore {
         SOUND_EVENTS.register(modEventBus);
         TILE_ENTITIES.register(modEventBus);
 
+        CONDITION_CODECS.register(modEventBus);
         ENTITY_DATA_SERIALIZERS.register(modEventBus);
         FLUID_TYPES.register(modEventBus);
 
@@ -159,9 +163,10 @@ public class CoFHCore {
 
     private void registerLootData(final RegisterEvent event) {
 
-        if (event.getRegistryKey() == BuiltInRegistries.LOOT_CONDITION_TYPE) {
-            FlagManager.setup();
-        } else if (event.getRegistryKey() == BuiltInRegistries.LOOT_FUNCTION_TYPE) {
+        //        if (event.getRegistryKey() == BuiltInRegistries.LOOT_CONDITION_TYPE) {
+        //            FlagManager.setup();
+        //        } else
+        if (event.getRegistryKey() == BuiltInRegistries.LOOT_FUNCTION_TYPE) {
             TileNBTSync.setup();
         }
     }
