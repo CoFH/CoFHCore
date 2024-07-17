@@ -139,7 +139,7 @@ public class ManagedItemInv extends SimpleItemInv {
                 return allHandler;
             default:
         }
-        return EmptyHandler.INSTANCE;
+        return null;
     }
 
 }

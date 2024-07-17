@@ -168,7 +168,7 @@ public final class InventoryHelper {
 
         if (hasItemHandlerCap(adjTile, opposite)) {
             IItemHandler handler = getItemHandlerCap(adjTile, opposite);
-            if (handler == EmptyHandler.INSTANCE) {
+            if (handler == null) {
                 return false;
             }
             int initialAmount = amount;
@@ -239,7 +239,7 @@ public final class InventoryHelper {
         } else if (tile instanceof Container) {
             return new InvWrapper((Container) tile);
         }
-        return EmptyHandler.INSTANCE;
+        return null;
     }
 
     public static boolean isEmpty(ItemStack[] inventory) {

@@ -120,7 +120,7 @@ public class ManagedTankInv extends SimpleTankInv {
                 return allHandler;
             default:
         }
-        return EmptyFluidHandler.INSTANCE;
+        return null;
     }
 
 }

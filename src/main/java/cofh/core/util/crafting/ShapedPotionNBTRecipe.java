@@ -154,7 +154,7 @@ public class ShapedPotionNBTRecipe implements CraftingRecipe, IShapedRecipe<Craf
     //        }
     //
     //        @Override
-    //        public ShapedPotionNBTRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
+    //        public ShapedPotionNBTRecipe fromNetwork(FriendlyByteBuf buffer) {
     //
     //            int i = buffer.readVarInt();
     //            int j = buffer.readVarInt();

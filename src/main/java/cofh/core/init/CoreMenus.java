@@ -12,9 +12,9 @@ import static cofh.core.util.ProxyUtils.getClientWorld;
 import static cofh.core.util.references.CoreIDs.ID_CONTAINER_FLUID_FILTER;
 import static cofh.core.util.references.CoreIDs.ID_CONTAINER_ITEM_FILTER;
 
-public class CoreContainers {
+public class CoreMenus {
 
-    private CoreContainers() {
+    private CoreMenus() {
 
     }
 

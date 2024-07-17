@@ -31,6 +31,7 @@ public class BlockIngredient implements Predicate<BlockState> {
             return false;
         }
     };
+
     protected static IBlockStateList EMPTY_LIST = new IBlockStateList() {
 
         @Override
@@ -45,6 +46,7 @@ public class BlockIngredient implements Predicate<BlockState> {
             return new JsonObject();
         }
     };
+
     private final IBlockStateList[] values;
     private Set<BlockState> blockStates;
 
@@ -131,7 +133,7 @@ public class BlockIngredient implements Predicate<BlockState> {
 
     public static BlockIngredient fromJsonArray(JsonArray jsonArray) {
 
-        if (jsonArray.size() == 0) {
+        if (jsonArray.isEmpty()) {
             throw new JsonSyntaxException("Block array cannot be empty, at least one block must be defined");
         }
         return fromValues(StreamSupport.stream(jsonArray.spliterator(), false).map(elem -> valueFromJson(GsonHelper.convertToJsonObject(elem, RecipeJsonUtils.BLOCK))).toArray(IBlockStateList[]::new));

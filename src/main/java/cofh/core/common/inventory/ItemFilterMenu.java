@@ -17,7 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-import static cofh.core.init.CoreContainers.ITEM_FILTER_CONTAINER;
+import static cofh.core.init.CoreMenus.ITEM_FILTER_CONTAINER;
 import static cofh.core.util.filter.FilterHolderType.ITEM;
 import static cofh.core.util.filter.FilterHolderType.SELF;
 import static cofh.core.util.helpers.FilterHelper.hasFilter;

@@ -116,7 +116,7 @@ public final class FluidHelper {
         Direction opposite = side.getOpposite();
 
         IFluidHandler handler = getFluidHandlerCap(adjTile, opposite);
-        if (handler == EmptyFluidHandler.INSTANCE) {
+        if (handler == null) {
             return false;
         }
         FluidStack drainStack = handler.drain(amount, SIMULATE);
@@ -134,7 +134,7 @@ public final class FluidHelper {
         Direction opposite = side.getOpposite();
 
         IFluidHandler handler = getFluidHandlerCap(adjTile, opposite);
-        if (handler == EmptyFluidHandler.INSTANCE) {
+        if (handler == null) {
             return false;
         }
         FluidStack drainStack = handler.drain(resource, SIMULATE);
@@ -157,7 +157,7 @@ public final class FluidHelper {
         Direction opposite = side.getOpposite();
 
         IFluidHandler handler = getFluidHandlerCap(adjTile, opposite);
-        if (handler == EmptyFluidHandler.INSTANCE) {
+        if (handler == null) {
             return false;
         }
         int fillAmount = handler.fill(new FluidStack(tank.getFluidStack(), amount), EXECUTE);
@@ -175,7 +175,7 @@ public final class FluidHelper {
 
     public static IFluidHandler getFluidHandlerCap(BlockEntity tile, Direction face) {
 
-        return tile == null || tile.getLevel() == null ? EmptyFluidHandler.INSTANCE : tile.getLevel().getCapability(Capabilities.FluidHandler.BLOCK, tile.getBlockPos(), tile.getBlockState(), tile, face);
+        return tile == null || tile.getLevel() == null ? null : tile.getLevel().getCapability(Capabilities.FluidHandler.BLOCK, tile.getBlockPos(), tile.getBlockState(), tile, face);
     }
     // endregion
 

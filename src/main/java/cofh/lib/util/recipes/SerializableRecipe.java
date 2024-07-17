@@ -15,13 +15,6 @@ import net.minecraft.world.level.Level;
  */
 public abstract class SerializableRecipe implements Recipe<FalseIInventory> {
 
-    protected final ResourceLocation recipeId;
-
-    protected SerializableRecipe(ResourceLocation recipeId) {
-
-        this.recipeId = recipeId;
-    }
-
     // region IRecipe
     @Override
     public boolean matches(FalseIInventory inv, Level worldIn) {

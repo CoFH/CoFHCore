@@ -133,7 +133,7 @@ public class IOItemInv extends SimpleItemInv {
                 return allHandler;
             default:
         }
-        return EmptyHandler.INSTANCE;
+        return null;
     }
 
 }

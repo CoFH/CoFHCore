@@ -307,5 +307,4 @@ public final class ItemHelper {
         ((ILeftClickHandlerItem) heldItem.getItem()).onLeftClick(player, heldItem);
     }
     // endregion
-
 }

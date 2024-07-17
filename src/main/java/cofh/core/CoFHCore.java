@@ -42,7 +42,6 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.InterModProcessEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.common.NeoForge;
@@ -58,8 +57,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import static cofh.core.client.renderer.entity.model.ArmorFullSuitModel.ARMOR_FULL_SUIT_LAYER;
-import static cofh.core.init.CoreContainers.FLUID_FILTER_CONTAINER;
-import static cofh.core.init.CoreContainers.ITEM_FILTER_CONTAINER;
+import static cofh.core.init.CoreMenus.FLUID_FILTER_CONTAINER;
+import static cofh.core.init.CoreMenus.ITEM_FILTER_CONTAINER;
 import static cofh.core.init.CoreEntities.*;
 import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 import static cofh.lib.util.constants.ModIds.ID_CURIOS;
@@ -139,7 +138,7 @@ public class CoFHCore {
         CoreBlocks.register();
         CoreFluids.register();
 
-        CoreContainers.register();
+        CoreMenus.register();
         CoreEnchantments.register();
         CoreEntityDataSerializers.register();
         CoreEntities.register();

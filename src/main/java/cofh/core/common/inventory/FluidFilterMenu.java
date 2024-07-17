@@ -22,7 +22,7 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import java.util.ArrayList;
 import java.util.List;
 
-import static cofh.core.init.CoreContainers.FLUID_FILTER_CONTAINER;
+import static cofh.core.init.CoreMenus.FLUID_FILTER_CONTAINER;
 import static cofh.core.util.filter.FilterHolderType.ITEM;
 import static cofh.core.util.filter.FilterHolderType.SELF;
 import static cofh.core.util.helpers.FilterHelper.hasFilter;
