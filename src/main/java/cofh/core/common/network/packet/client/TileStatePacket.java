@@ -43,7 +43,7 @@ public class TileStatePacket {
         if (tile == null || tile.world() == null || tile.world().isClientSide) {
             return;
         }
-        PacketDistributor.NEAR.with(Utils.createTargetPoint(tile.world(), tile.pos())).send(new TileStatePayload(tile.pos(), new FriendlyByteBuf(Unpooled.buffer())));
+        PacketDistributor.NEAR.with(Utils.createTargetPoint(tile.world(), tile.pos())).send(new TileStatePayload(tile.pos(), tile.getStatePacket(new FriendlyByteBuf(Unpooled.buffer()))));
     }
 
 }

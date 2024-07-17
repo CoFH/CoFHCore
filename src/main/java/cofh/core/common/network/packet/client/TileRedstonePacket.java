@@ -40,7 +40,7 @@ public class TileRedstonePacket {
         if (tile == null || tile.world() == null || tile.world().isClientSide) {
             return;
         }
-        PacketDistributor.NEAR.with(Utils.createTargetPoint(tile.world(), tile.pos())).send(new TileRedstonePayload(tile.pos(), new FriendlyByteBuf(Unpooled.buffer())));
+        PacketDistributor.NEAR.with(Utils.createTargetPoint(tile.world(), tile.pos())).send(new TileRedstonePayload(tile.pos(), tile.getRedstonePacket(new FriendlyByteBuf(Unpooled.buffer()))));
     }
 
 }

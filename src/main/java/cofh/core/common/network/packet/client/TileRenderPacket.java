@@ -40,7 +40,7 @@ public class TileRenderPacket {
         if (tile == null || tile.world() == null || tile.world().isClientSide) {
             return;
         }
-        PacketDistributor.NEAR.with(Utils.createTargetPoint(tile.world(), tile.pos())).send(new TileRenderPayload(tile.pos(), new FriendlyByteBuf(Unpooled.buffer())));
+        PacketDistributor.NEAR.with(Utils.createTargetPoint(tile.world(), tile.pos())).send(new TileRenderPayload(tile.pos(), tile.getRenderPacket(new FriendlyByteBuf(Unpooled.buffer()))));
     }
 
 }

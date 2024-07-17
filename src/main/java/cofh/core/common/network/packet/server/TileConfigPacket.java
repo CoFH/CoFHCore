@@ -46,7 +46,7 @@ public class TileConfigPacket {
         if (tile == null) {
             return;
         }
-        PacketDistributor.SERVER.noArg().send(new TileConfigPayload(tile.pos(), new FriendlyByteBuf(Unpooled.buffer())));
+        PacketDistributor.SERVER.noArg().send(new TileConfigPayload(tile.pos(), tile.getConfigPacket(new FriendlyByteBuf(Unpooled.buffer()))));
     }
 
 }

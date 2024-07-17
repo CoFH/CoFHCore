@@ -42,7 +42,7 @@ public class TileGuiPacket {
             return;
         }
         if (player instanceof ServerPlayer serverPlayer) {
-            PacketDistributor.PLAYER.with(serverPlayer).send(new TileGuiPayload(tile.pos(), new FriendlyByteBuf(Unpooled.buffer())));
+            PacketDistributor.PLAYER.with(serverPlayer).send(new TileGuiPayload(tile.pos(), tile.getGuiPacket(new FriendlyByteBuf(Unpooled.buffer()))));
         }
     }
 
