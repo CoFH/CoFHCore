@@ -2,6 +2,7 @@ package cofh.lib.util.recipes;
 
 import cofh.lib.common.block.BlockIngredient;
 import cofh.lib.common.fluid.FluidIngredient;
+import cofh.lib.util.crafting.IngredientWithCount;
 import com.google.gson.*;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -63,8 +64,7 @@ public abstract class RecipeJsonUtils {
                     count = object.get(AMOUNT).getAsInt();
                 }
                 if (count > 1) {
-                    // TODO: Fix
-                    // return new IngredientWithCount(ingredient, count);
+                    return new IngredientWithCount(ingredient, count);
                 }
             } catch (Throwable t) {
                 ingredient = Ingredient.of(ItemStack.EMPTY);
@@ -346,6 +346,8 @@ public abstract class RecipeJsonUtils {
     public static final String INGREDIENT = "ingredient";
     public static final String INGREDIENTS = "ingredients";
     public static final String INPUT = "input";
+    public static final String INPUT_FLUIDS = "input_fluids";
+    public static final String INPUT_ITEMS = "input_items";
     public static final String INPUTS = "inputs";
     public static final String ITEM = "item";
     public static final String LAVA = "lava";
@@ -363,6 +365,8 @@ public abstract class RecipeJsonUtils {
     public static final String NBT = "nbt";
     public static final String OPERATION = "operation";
     public static final String OUTPUT = "output";
+    public static final String OUTPUT_FLUIDS = "output_fluids";
+    public static final String OUTPUT_ITEMS = "output_items";
     public static final String OUTPUT_MOD = "output_mod";
     public static final String OUTPUTS = "outputs";
     public static final String PRIMARY_MOD = "primary_mod";

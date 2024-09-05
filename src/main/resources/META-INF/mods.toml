@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[${forge_major_version},)"
+loaderVersion = "[${lang_version},)"
 issueTrackerURL = "https://github.com/cofh/feedback"
 license = "CoFH - Don't Be A Jerk (Learn, Don't Steal)"
 

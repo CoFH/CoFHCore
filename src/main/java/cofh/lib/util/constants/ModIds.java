@@ -7,7 +7,6 @@ public class ModIds {
     }
 
     public static final String ID_MINECRAFT = "minecraft";
-    public static final String ID_FORGE = "forge";
     public static final String ID_COFH_CORE = "cofh_core";
 
     public static final String ID_ARCHERS_PARADOX = "archers_paradox";

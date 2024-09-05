@@ -44,13 +44,13 @@ public class RetexturedBakedQuad extends BakedQuad {
     private static float getUnInterpolatedU(TextureAtlasSprite sprite, float u) {
 
         float f = sprite.getU1() - sprite.getU0();
-        return (u - sprite.getU0()) / f * 16.0F;
+        return (u - sprite.getU0()) / f;
     }
 
     private static float getUnInterpolatedV(TextureAtlasSprite sprite, float v) {
 
         float f = sprite.getV1() - sprite.getV0();
-        return (v - sprite.getV0()) / f * 16.0F;
+        return (v - sprite.getV0()) / f;
     }
 
 }

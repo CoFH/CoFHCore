@@ -18,8 +18,6 @@ import net.neoforged.neoforge.common.crafting.CompoundIngredient;
 import java.util.ArrayList;
 import java.util.List;
 
-import static cofh.lib.util.constants.ModIds.ID_FORGE;
-
 public abstract class RecipeProviderCoFH extends RecipeProvider implements IConditionBuilder {
 
     protected final String modid;
@@ -197,10 +195,10 @@ public abstract class RecipeProviderCoFH extends RecipeProvider implements ICond
         Item raw = reg.get("raw_" + type);
         Item rawBlock = reg.get("raw_" + type + "_block");
 
-        TagKey<Item> ingotTag = forgeTag("ingots/" + type);
-        TagKey<Item> gemTag = forgeTag("gems/" + type);
-        TagKey<Item> nuggetTag = forgeTag("nuggets/" + type);
-        TagKey<Item> rawTag = forgeTag("raw_materials/" + type);
+        TagKey<Item> ingotTag = commonTag("ingots/" + type);
+        TagKey<Item> gemTag = commonTag("gems/" + type);
+        TagKey<Item> nuggetTag = commonTag("nuggets/" + type);
+        TagKey<Item> rawTag = commonTag("raw_materials/" + type);
 
         if (block != null) {
             if (ingot != null) {
@@ -233,8 +231,8 @@ public abstract class RecipeProviderCoFH extends RecipeProvider implements ICond
         Item ingot = reg.get(type + "_ingot");
         Item gem = reg.get(type);
 
-        TagKey<Item> ingotTag = forgeTag("ingots/" + type);
-        TagKey<Item> gemTag = forgeTag("gems/" + type);
+        TagKey<Item> ingotTag = commonTag("ingots/" + type);
+        TagKey<Item> gemTag = commonTag("gems/" + type);
 
         if (ingot != null) {
             ShapedRecipeBuilder.shaped(RecipeCategory.MISC, gear)
@@ -424,9 +422,9 @@ public abstract class RecipeProviderCoFH extends RecipeProvider implements ICond
         return CompoundIngredient.of(ingredients.toArray(Ingredient[]::new));
     }
 
-    protected static TagKey<Item> forgeTag(String name) {
+    protected static TagKey<Item> commonTag(String name) {
 
-        return ItemTags.create(new ResourceLocation(ID_FORGE, name));
+        return ItemTags.create(new ResourceLocation("c", name));
     }
 
     protected static String name(Block block) {

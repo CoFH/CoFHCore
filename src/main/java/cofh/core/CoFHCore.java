@@ -11,6 +11,7 @@ import cofh.core.common.config.*;
 import cofh.core.common.enchantment.HoldingEnchantment;
 import cofh.core.common.event.ArmorEvents;
 import cofh.core.common.network.PacketHandler;
+import cofh.core.compat.curios.CuriosProxy;
 import cofh.core.init.*;
 import cofh.core.util.Proxy;
 import cofh.core.util.ProxyClient;
@@ -63,7 +64,7 @@ import static cofh.core.init.CoreEntities.*;
 import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 import static cofh.lib.util.constants.ModIds.ID_CURIOS;
 
-@Mod (ID_COFH_CORE)
+@Mod(ID_COFH_CORE)
 public class CoFHCore {
 
     public static final Logger LOG = LogManager.getLogger(ID_COFH_CORE);
@@ -148,7 +149,7 @@ public class CoFHCore {
         CoreSounds.register();
         CoreBlockEntities.register();
 
-        // CuriosProxy.register();
+        CuriosProxy.register();
 
         ArcheryHelper.addValidBow(Items.BOW);
     }
@@ -161,7 +162,7 @@ public class CoFHCore {
 
     private void registerLootData(final RegisterEvent event) {
 
-        if (event.getRegistryKey() == BuiltInRegistries.LOOT_FUNCTION_TYPE) {
+        if (event.getRegistryKey() == BuiltInRegistries.LOOT_FUNCTION_TYPE.key()) {
             TileNBTSync.setup();
         }
     }

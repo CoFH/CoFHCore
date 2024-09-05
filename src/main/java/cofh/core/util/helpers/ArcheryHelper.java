@@ -3,6 +3,7 @@ package cofh.core.util.helpers;
 import cofh.core.common.capability.CoreCapabilities;
 import cofh.core.common.capability.templates.ArcheryAmmoItemWrapper;
 import cofh.core.common.capability.templates.ArcheryBowItemWrapper;
+import cofh.core.compat.curios.CuriosProxy;
 import cofh.lib.api.capability.IArcheryAmmoItem;
 import cofh.lib.api.capability.IArcheryBowItem;
 import cofh.lib.util.Utils;
@@ -186,20 +187,20 @@ public final class ArcheryHelper {
             return mainHand;
         }
 
-        // TODO: Fix
         // CURIOS
-        //        final ItemStack[] retStack = {ItemStack.EMPTY};
-        //        CuriosProxy.getAllWorn(shooter).ifPresent(c -> {
-        //            for (int i = 0; i < c.getSlots(); ++i) {
-        //                ItemStack slot = c.getStackInSlot(i);
-        //                if (slot.getCapability(AMMO_ITEM_CAPABILITY).map(cap -> !cap.isEmpty(shooter)).orElse(false)) {
-        //                    retStack[0] = slot;
-        //                }
-        //            }
-        //        });
-        //        if (!retStack[0].isEmpty()) {
-        //            return retStack[0];
-        //        }
+        final ItemStack[] retStack = {ItemStack.EMPTY};
+        CuriosProxy.getAllWorn(shooter).ifPresent(c -> {
+            for (int i = 0; i < c.getSlots(); ++i) {
+                ItemStack slot = c.getStackInSlot(i);
+                var curioCap = slot.getCapability(CoreCapabilities.ArcheryHandler.AMMO);
+                if (curioCap != null && !curioCap.isEmpty(shooter)) {
+                    retStack[0] = slot;
+                }
+            }
+        });
+        if (!retStack[0].isEmpty()) {
+            return retStack[0];
+        }
         // INVENTORY
         for (ItemStack slot : shooter.getInventory().items) {
             ammoCap = slot.getCapability(CoreCapabilities.ArcheryHandler.AMMO);

@@ -13,7 +13,7 @@ java {
         languageVersion = JavaLanguageVersion.of(17)
     }
     withSourcesJar()
-    withJavadocJar()
+    // withJavadocJar()
 }
 
 sourceSets.main.resources.srcDirs += "src/main/generated"
