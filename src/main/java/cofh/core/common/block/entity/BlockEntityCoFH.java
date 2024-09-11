@@ -89,8 +89,7 @@ public class BlockEntityCoFH extends BlockEntity implements ITileCallback, IPack
 
         IFluidHandler handler = world.getCapability(Capabilities.FluidHandler.BLOCK, pos, state, this, result.getDirection());
         if (handler != null) {
-            FluidHelper.interactWithHandler(player.getItemInHand(hand), handler, player, hand);
-            return true;
+            return FluidHelper.interactWithHandler(player.getItemInHand(hand), handler, player, hand);
         }
         return false;
     }
