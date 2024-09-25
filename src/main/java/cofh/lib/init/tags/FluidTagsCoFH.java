@@ -15,6 +15,14 @@ public class FluidTagsCoFH {
     public static final TagKey<Fluid> HONEY = commonTag("honey");
     public static final TagKey<Fluid> POTION = commonTag("potion");
 
+    public static final TagKey<Fluid> REDSTONE = commonTag("redstone");
+    public static final TagKey<Fluid> GLOWSTONE = commonTag("glowstone");
+    public static final TagKey<Fluid> ENDER = commonTag("ender");
+
+    public static final TagKey<Fluid> LATEX = commonTag("latex");
+    public static final TagKey<Fluid> CREOSOTE = commonTag("creosote");
+    public static final TagKey<Fluid> CRUDE_OIL = commonTag("crude_oil");
+
     // region HELPERS
     private static TagKey<Fluid> commonTag(String name) {
 

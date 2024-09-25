@@ -9,12 +9,38 @@ import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 
 public class ItemTagsCoFH {
 
+    public static final TagKey<Item> ORES_APATITE = Items.commonTag("ores/apatite");
+    public static final TagKey<Item> ORES_CINNABAR = Items.commonTag("ores/cinnabar");
+    public static final TagKey<Item> ORES_LEAD = Items.commonTag("ores/lead");
+    public static final TagKey<Item> ORES_NICKEL = Items.commonTag("ores/nickel");
+    public static final TagKey<Item> ORES_NITER = Items.commonTag("ores/niter");
+    public static final TagKey<Item> ORES_RUBY = Items.commonTag("ores/ruby");
+    public static final TagKey<Item> ORES_SAPPHIRE = Items.commonTag("ores/sapphire");
+    public static final TagKey<Item> ORES_SILVER = Items.commonTag("ores/silver");
+    public static final TagKey<Item> ORES_SULFUR = Items.commonTag("ores/sulfur");
+    public static final TagKey<Item> ORES_TIN = Items.commonTag("ores/tin");
+    public static final TagKey<Item> STORAGE_BLOCKS_BRONZE = Items.commonTag("storage_blocks/bronze");
+    public static final TagKey<Item> STORAGE_BLOCKS_CONSTANTAN = Items.commonTag("storage_blocks/constantan");
+    public static final TagKey<Item> STORAGE_BLOCKS_ELECTRUM = Items.commonTag("storage_blocks/electrum");
+    public static final TagKey<Item> STORAGE_BLOCKS_INVAR = Items.commonTag("storage_blocks/invar");
+    public static final TagKey<Item> STORAGE_BLOCKS_LEAD = Items.commonTag("storage_blocks/lead");
+    public static final TagKey<Item> STORAGE_BLOCKS_NICKEL = Items.commonTag("storage_blocks/nickel");
+    public static final TagKey<Item> STORAGE_BLOCKS_RAW_LEAD = Items.commonTag("storage_blocks/raw_lead");
+    public static final TagKey<Item> STORAGE_BLOCKS_RAW_NICKEL = Items.commonTag("storage_blocks/raw_nickel");
+    public static final TagKey<Item> STORAGE_BLOCKS_RAW_SILVER = Items.commonTag("storage_blocks/raw_silver");
+    public static final TagKey<Item> STORAGE_BLOCKS_RAW_TIN = Items.commonTag("storage_blocks/raw_tin");
+    public static final TagKey<Item> STORAGE_BLOCKS_RUBY = Items.commonTag("storage_blocks/ruby");
+    public static final TagKey<Item> STORAGE_BLOCKS_SAPPHIRE = Items.commonTag("storage_blocks/sapphire");
+    public static final TagKey<Item> STORAGE_BLOCKS_SILVER = Items.commonTag("storage_blocks/silver");
+    public static final TagKey<Item> STORAGE_BLOCKS_TIN = Items.commonTag("storage_blocks/tin");
+
     private ItemTagsCoFH() {
 
     }
 
     public static final TagKey<Item> COINS = commonTag("coins");
 
+    public static final TagKey<Item> COINS_ALUMINUM = commonTag("coins/aluminum");
     public static final TagKey<Item> COINS_BRONZE = commonTag("coins/bronze");
     public static final TagKey<Item> COINS_CONSTANTAN = commonTag("coins/constantan");
     public static final TagKey<Item> COINS_COPPER = commonTag("coins/copper");
@@ -32,7 +58,9 @@ public class ItemTagsCoFH {
     public static final TagKey<Item> COINS_SILVER = commonTag("coins/silver");
     public static final TagKey<Item> COINS_STEEL = commonTag("coins/steel");
     public static final TagKey<Item> COINS_TIN = commonTag("coins/tin");
+    public static final TagKey<Item> COINS_URANIUM = commonTag("coins/uranium");
 
+    public static final TagKey<Item> DUSTS_ALUMINUM = commonTag("dusts/aluminum");
     public static final TagKey<Item> DUSTS_APATITE = commonTag("dusts/apatite");
     public static final TagKey<Item> DUSTS_BRONZE = commonTag("dusts/bronze");
     public static final TagKey<Item> DUSTS_CINNABAR = commonTag("dusts/cinnabar");
@@ -61,10 +89,12 @@ public class ItemTagsCoFH {
     public static final TagKey<Item> DUSTS_STEEL = commonTag("dusts/steel");
     public static final TagKey<Item> DUSTS_SULFUR = commonTag("dusts/sulfur");
     public static final TagKey<Item> DUSTS_TIN = commonTag("dusts/tin");
+    public static final TagKey<Item> DUSTS_URANIUM = commonTag("dusts/uranium");
     public static final TagKey<Item> DUSTS_WOOD = commonTag("dusts/wood");
 
     public static final TagKey<Item> GEARS = commonTag("gears");
 
+    public static final TagKey<Item> GEARS_ALUMINUM = commonTag("gears/aluminum");
     public static final TagKey<Item> GEARS_BRONZE = commonTag("gears/bronze");
     public static final TagKey<Item> GEARS_CONSTANTAN = commonTag("gears/constantan");
     public static final TagKey<Item> GEARS_COPPER = commonTag("gears/copper");
@@ -88,6 +118,7 @@ public class ItemTagsCoFH {
     public static final TagKey<Item> GEARS_SILVER = commonTag("gears/silver");
     public static final TagKey<Item> GEARS_STEEL = commonTag("gears/steel");
     public static final TagKey<Item> GEARS_TIN = commonTag("gears/tin");
+    public static final TagKey<Item> GEARS_URANIUM = commonTag("gears/uranium");
 
     public static final TagKey<Item> GEMS_APATITE = commonTag("gems/apatite");
     public static final TagKey<Item> GEMS_CINNABAR = commonTag("gems/cinnabar");
@@ -96,6 +127,7 @@ public class ItemTagsCoFH {
     public static final TagKey<Item> GEMS_SAPPHIRE = commonTag("gems/sapphire");
     public static final TagKey<Item> GEMS_SULFUR = commonTag("gems/sulfur");
 
+    public static final TagKey<Item> INGOTS_ALUMINUM = commonTag("ingots/aluminum");
     public static final TagKey<Item> INGOTS_BRONZE = commonTag("ingots/bronze");
     public static final TagKey<Item> INGOTS_CONSTANTAN = commonTag("ingots/constantan");
     public static final TagKey<Item> INGOTS_ELECTRUM = commonTag("ingots/electrum");
@@ -109,7 +141,9 @@ public class ItemTagsCoFH {
     public static final TagKey<Item> INGOTS_SILVER = commonTag("ingots/silver");
     public static final TagKey<Item> INGOTS_STEEL = commonTag("ingots/steel");
     public static final TagKey<Item> INGOTS_TIN = commonTag("ingots/tin");
+    public static final TagKey<Item> INGOTS_URANIUM = commonTag("ingots/uranium");
 
+    public static final TagKey<Item> NUGGETS_ALUMINUM = commonTag("nuggets/aluminum");
     public static final TagKey<Item> NUGGETS_BRONZE = commonTag("nuggets/bronze");
     public static final TagKey<Item> NUGGETS_CONSTANTAN = commonTag("nuggets/constantan");
     public static final TagKey<Item> NUGGETS_COPPER = commonTag("nuggets/copper");
@@ -131,7 +165,9 @@ public class ItemTagsCoFH {
     public static final TagKey<Item> NUGGETS_SILVER = commonTag("nuggets/silver");
     public static final TagKey<Item> NUGGETS_STEEL = commonTag("nuggets/steel");
     public static final TagKey<Item> NUGGETS_TIN = commonTag("nuggets/tin");
+    public static final TagKey<Item> NUGGETS_URANIUM = commonTag("nuggets/uranium");
 
+    public static final TagKey<Item> ORES_ALUMINUM = commonTag("ores/aluminum");
     public static final TagKey<Item> ORES_APATITE = commonTag("ores/apatite");
     public static final TagKey<Item> ORES_CINNABAR = commonTag("ores/cinnabar");
     public static final TagKey<Item> ORES_LEAD = commonTag("ores/lead");
@@ -142,9 +178,11 @@ public class ItemTagsCoFH {
     public static final TagKey<Item> ORES_SILVER = commonTag("ores/silver");
     public static final TagKey<Item> ORES_SULFUR = commonTag("ores/sulfur");
     public static final TagKey<Item> ORES_TIN = commonTag("ores/tin");
+    public static final TagKey<Item> ORES_URANIUM = commonTag("ores/uranium");
 
     public static final TagKey<Item> PLATES = commonTag("plates");
 
+    public static final TagKey<Item> PLATES_ALUMINUM = commonTag("plates/aluminum");
     public static final TagKey<Item> PLATES_BRONZE = commonTag("plates/bronze");
     public static final TagKey<Item> PLATES_CONSTANTAN = commonTag("plates/constantan");
     public static final TagKey<Item> PLATES_COPPER = commonTag("plates/copper");
@@ -168,16 +206,22 @@ public class ItemTagsCoFH {
     public static final TagKey<Item> PLATES_SILVER = commonTag("plates/silver");
     public static final TagKey<Item> PLATES_STEEL = commonTag("plates/steel");
     public static final TagKey<Item> PLATES_TIN = commonTag("plates/tin");
+    public static final TagKey<Item> PLATES_URANIUM = commonTag("plates/uranium");
 
+    public static final TagKey<Item> RAW_MATERIALS_ALUMINUM = commonTag("raw_materials/aluminum");
     public static final TagKey<Item> RAW_MATERIALS_LEAD = commonTag("raw_materials/lead");
     public static final TagKey<Item> RAW_MATERIALS_NICKEL = commonTag("raw_materials/nickel");
     public static final TagKey<Item> RAW_MATERIALS_SILVER = commonTag("raw_materials/silver");
     public static final TagKey<Item> RAW_MATERIALS_TIN = commonTag("raw_materials/tin");
+    public static final TagKey<Item> RAW_MATERIALS_URANIUM = commonTag("raw_materials/uranium");
 
+    public static final TagKey<Item> STORAGE_BLOCKS_ALUMINUM = commonTag("storage_blocks/aluminum");
     public static final TagKey<Item> STORAGE_BLOCKS_APATITE = commonTag("storage_blocks/apatite");
-    public static final TagKey<Item> STORAGE_BLOCKS_BAMBOO = commonTag("storage_blocks/bamboo");
+    public static final TagKey<Item> STORAGE_BLOCKS_APPLE = commonTag("storage_blocks/apple");
+    public static final TagKey<Item> STORAGE_BLOCKS_BEETROOT = commonTag("storage_blocks/beetroot");
     public static final TagKey<Item> STORAGE_BLOCKS_BITUMEN = commonTag("storage_blocks/bitumen");
     public static final TagKey<Item> STORAGE_BLOCKS_BRONZE = commonTag("storage_blocks/bronze");
+    public static final TagKey<Item> STORAGE_BLOCKS_CARROT = commonTag("storage_blocks/carrot");
     public static final TagKey<Item> STORAGE_BLOCKS_CHARCOAL = commonTag("storage_blocks/charcoal");
     public static final TagKey<Item> STORAGE_BLOCKS_CINNABAR = commonTag("storage_blocks/cinnabar");
     public static final TagKey<Item> STORAGE_BLOCKS_COAL_COKE = commonTag("storage_blocks/coal_coke");
@@ -190,10 +234,13 @@ public class ItemTagsCoFH {
     public static final TagKey<Item> STORAGE_BLOCKS_LUMIUM = commonTag("storage_blocks/lumium");
     public static final TagKey<Item> STORAGE_BLOCKS_NICKEL = commonTag("storage_blocks/nickel");
     public static final TagKey<Item> STORAGE_BLOCKS_NITER = commonTag("storage_blocks/niter");
+    public static final TagKey<Item> STORAGE_BLOCKS_POTATO = commonTag("storage_blocks/potato");
+    public static final TagKey<Item> STORAGE_BLOCKS_RAW_ALUMINUM = commonTag("storage_blocks/raw_aluminum");
     public static final TagKey<Item> STORAGE_BLOCKS_RAW_LEAD = commonTag("storage_blocks/raw_lead");
     public static final TagKey<Item> STORAGE_BLOCKS_RAW_NICKEL = commonTag("storage_blocks/raw_nickel");
     public static final TagKey<Item> STORAGE_BLOCKS_RAW_SILVER = commonTag("storage_blocks/raw_silver");
     public static final TagKey<Item> STORAGE_BLOCKS_RAW_TIN = commonTag("storage_blocks/raw_tin");
+    public static final TagKey<Item> STORAGE_BLOCKS_RAW_URANIUM = commonTag("storage_blocks/raw_uranium");
     public static final TagKey<Item> STORAGE_BLOCKS_ROSE_GOLD = commonTag("storage_blocks/rose_gold");
     public static final TagKey<Item> STORAGE_BLOCKS_RUBY = commonTag("storage_blocks/ruby");
     public static final TagKey<Item> STORAGE_BLOCKS_SAPPHIRE = commonTag("storage_blocks/sapphire");
@@ -205,6 +252,7 @@ public class ItemTagsCoFH {
     public static final TagKey<Item> STORAGE_BLOCKS_SULFUR = commonTag("storage_blocks/sulfur");
     public static final TagKey<Item> STORAGE_BLOCKS_TAR = commonTag("storage_blocks/tar");
     public static final TagKey<Item> STORAGE_BLOCKS_TIN = commonTag("storage_blocks/tin");
+    public static final TagKey<Item> STORAGE_BLOCKS_URANIUM = commonTag("storage_blocks/uranium");
 
     public static final TagKey<Item> PUMPKINS_CARVED = commonTag("pumpkins/carved");
 

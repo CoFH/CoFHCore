@@ -13,7 +13,9 @@ public class BlockTagsCoFH {
 
     public static final TagKey<Block> MINEABLE_WITH_SICKLE = commonTag("mineable/sickle");
 
-    // TODO: Remove in 11.1
+    public static final TagKey<Block> PUMPKINS_CARVED = commonTag("pumpkins/carved");
+
+    public static final TagKey<Block> ORES_ALUMINUM = commonTag("ores/aluminum");
     public static final TagKey<Block> ORES_APATITE = commonTag("ores/apatite");
     public static final TagKey<Block> ORES_CINNABAR = commonTag("ores/cinnabar");
     public static final TagKey<Block> ORES_LEAD = commonTag("ores/lead");
@@ -24,12 +26,15 @@ public class BlockTagsCoFH {
     public static final TagKey<Block> ORES_SILVER = commonTag("ores/silver");
     public static final TagKey<Block> ORES_SULFUR = commonTag("ores/sulfur");
     public static final TagKey<Block> ORES_TIN = commonTag("ores/tin");
+    public static final TagKey<Block> ORES_URANIUM = commonTag("ores/uranium");
 
-    // TODO: Remove in 11.1 (As appropriate)
+    public static final TagKey<Block> STORAGE_BLOCKS_ALUMINUM = commonTag("storage_blocks/aluminum");
     public static final TagKey<Block> STORAGE_BLOCKS_APATITE = commonTag("storage_blocks/apatite");
-    public static final TagKey<Block> STORAGE_BLOCKS_BAMBOO = commonTag("storage_blocks/bamboo");
+    public static final TagKey<Block> STORAGE_BLOCKS_APPLE = commonTag("storage_blocks/apple");
+    public static final TagKey<Block> STORAGE_BLOCKS_BEETROOT = commonTag("storage_blocks/beetroot");
     public static final TagKey<Block> STORAGE_BLOCKS_BITUMEN = commonTag("storage_blocks/bitumen");
     public static final TagKey<Block> STORAGE_BLOCKS_BRONZE = commonTag("storage_blocks/bronze");
+    public static final TagKey<Block> STORAGE_BLOCKS_CARROT = commonTag("storage_blocks/carrot");
     public static final TagKey<Block> STORAGE_BLOCKS_CHARCOAL = commonTag("storage_blocks/charcoal");
     public static final TagKey<Block> STORAGE_BLOCKS_CINNABAR = commonTag("storage_blocks/cinnabar");
     public static final TagKey<Block> STORAGE_BLOCKS_COAL_COKE = commonTag("storage_blocks/coal_coke");
@@ -42,10 +47,13 @@ public class BlockTagsCoFH {
     public static final TagKey<Block> STORAGE_BLOCKS_LUMIUM = commonTag("storage_blocks/lumium");
     public static final TagKey<Block> STORAGE_BLOCKS_NICKEL = commonTag("storage_blocks/nickel");
     public static final TagKey<Block> STORAGE_BLOCKS_NITER = commonTag("storage_blocks/niter");
+    public static final TagKey<Block> STORAGE_BLOCKS_POTATO = commonTag("storage_blocks/potato");
+    public static final TagKey<Block> STORAGE_BLOCKS_RAW_ALUMINUM = commonTag("storage_blocks/raw_aluminum");
     public static final TagKey<Block> STORAGE_BLOCKS_RAW_LEAD = commonTag("storage_blocks/raw_lead");
     public static final TagKey<Block> STORAGE_BLOCKS_RAW_NICKEL = commonTag("storage_blocks/raw_nickel");
     public static final TagKey<Block> STORAGE_BLOCKS_RAW_SILVER = commonTag("storage_blocks/raw_silver");
     public static final TagKey<Block> STORAGE_BLOCKS_RAW_TIN = commonTag("storage_blocks/raw_tin");
+    public static final TagKey<Block> STORAGE_BLOCKS_RAW_URANIUM = commonTag("storage_blocks/raw_uranium");
     public static final TagKey<Block> STORAGE_BLOCKS_ROSE_GOLD = commonTag("storage_blocks/rose_gold");
     public static final TagKey<Block> STORAGE_BLOCKS_RUBY = commonTag("storage_blocks/ruby");
     public static final TagKey<Block> STORAGE_BLOCKS_SAPPHIRE = commonTag("storage_blocks/sapphire");
@@ -57,8 +65,7 @@ public class BlockTagsCoFH {
     public static final TagKey<Block> STORAGE_BLOCKS_SULFUR = commonTag("storage_blocks/sulfur");
     public static final TagKey<Block> STORAGE_BLOCKS_TAR = commonTag("storage_blocks/tar");
     public static final TagKey<Block> STORAGE_BLOCKS_TIN = commonTag("storage_blocks/tin");
-
-    public static final TagKey<Block> PUMPKINS_CARVED = commonTag("pumpkins/carved");
+    public static final TagKey<Block> STORAGE_BLOCKS_URANIUM = commonTag("storage_blocks/uranium");
 
     // region HELPERS
     private static TagKey<Block> commonTag(String name) {
