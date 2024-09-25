@@ -141,7 +141,7 @@ public class ItemTagsCoFH {
     public static final TagKey<Item> NUGGETS_SILVER = forgeTag("nuggets/silver");
     public static final TagKey<Item> NUGGETS_STEEL = forgeTag("nuggets/steel");
     public static final TagKey<Item> NUGGETS_TIN = forgeTag("nuggets/tin");
-    public static final TagKey<Item> NUGGETS_URANIUM = forgeTag("plates/uranium");
+    public static final TagKey<Item> NUGGETS_URANIUM = forgeTag("nuggets/uranium");
 
     public static final TagKey<Item> ORES_ALUMINUM = forgeTag("ores/aluminum");
     public static final TagKey<Item> ORES_APATITE = forgeTag("ores/apatite");
