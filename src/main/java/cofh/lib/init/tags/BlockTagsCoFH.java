@@ -15,7 +15,9 @@ public class BlockTagsCoFH {
 
     public static final TagKey<Block> MINEABLE_WITH_SICKLE = forgeTag("mineable/sickle");
 
-    // TODO: Remove in 11.1
+    public static final TagKey<Block> PUMPKINS_CARVED = forgeTag("pumpkins/carved");
+
+    public static final TagKey<Block> ORES_ALUMINUM = forgeTag("ores/aluminum");
     public static final TagKey<Block> ORES_APATITE = forgeTag("ores/apatite");
     public static final TagKey<Block> ORES_CINNABAR = forgeTag("ores/cinnabar");
     public static final TagKey<Block> ORES_LEAD = forgeTag("ores/lead");
@@ -26,12 +28,15 @@ public class BlockTagsCoFH {
     public static final TagKey<Block> ORES_SILVER = forgeTag("ores/silver");
     public static final TagKey<Block> ORES_SULFUR = forgeTag("ores/sulfur");
     public static final TagKey<Block> ORES_TIN = forgeTag("ores/tin");
+    public static final TagKey<Block> ORES_URANIUM = forgeTag("ores/uranium");
 
-    // TODO: Remove in 11.1 (As appropriate)
+    public static final TagKey<Block> STORAGE_BLOCKS_ALUMINUM = forgeTag("storage_blocks/aluminum");
     public static final TagKey<Block> STORAGE_BLOCKS_APATITE = forgeTag("storage_blocks/apatite");
-    public static final TagKey<Block> STORAGE_BLOCKS_BAMBOO = forgeTag("storage_blocks/bamboo");
+    public static final TagKey<Block> STORAGE_BLOCKS_APPLE = forgeTag("storage_blocks/apple");
+    public static final TagKey<Block> STORAGE_BLOCKS_BEETROOT = forgeTag("storage_blocks/beetroot");
     public static final TagKey<Block> STORAGE_BLOCKS_BITUMEN = forgeTag("storage_blocks/bitumen");
     public static final TagKey<Block> STORAGE_BLOCKS_BRONZE = forgeTag("storage_blocks/bronze");
+    public static final TagKey<Block> STORAGE_BLOCKS_CARROT = forgeTag("storage_blocks/carrot");
     public static final TagKey<Block> STORAGE_BLOCKS_CHARCOAL = forgeTag("storage_blocks/charcoal");
     public static final TagKey<Block> STORAGE_BLOCKS_CINNABAR = forgeTag("storage_blocks/cinnabar");
     public static final TagKey<Block> STORAGE_BLOCKS_COAL_COKE = forgeTag("storage_blocks/coal_coke");
@@ -44,10 +49,13 @@ public class BlockTagsCoFH {
     public static final TagKey<Block> STORAGE_BLOCKS_LUMIUM = forgeTag("storage_blocks/lumium");
     public static final TagKey<Block> STORAGE_BLOCKS_NICKEL = forgeTag("storage_blocks/nickel");
     public static final TagKey<Block> STORAGE_BLOCKS_NITER = forgeTag("storage_blocks/niter");
+    public static final TagKey<Block> STORAGE_BLOCKS_POTATO = forgeTag("storage_blocks/potato");
+    public static final TagKey<Block> STORAGE_BLOCKS_RAW_ALUMINUM = forgeTag("storage_blocks/raw_aluminum");
     public static final TagKey<Block> STORAGE_BLOCKS_RAW_LEAD = forgeTag("storage_blocks/raw_lead");
     public static final TagKey<Block> STORAGE_BLOCKS_RAW_NICKEL = forgeTag("storage_blocks/raw_nickel");
     public static final TagKey<Block> STORAGE_BLOCKS_RAW_SILVER = forgeTag("storage_blocks/raw_silver");
     public static final TagKey<Block> STORAGE_BLOCKS_RAW_TIN = forgeTag("storage_blocks/raw_tin");
+    public static final TagKey<Block> STORAGE_BLOCKS_RAW_URANIUM = forgeTag("storage_blocks/raw_uranium");
     public static final TagKey<Block> STORAGE_BLOCKS_ROSE_GOLD = forgeTag("storage_blocks/rose_gold");
     public static final TagKey<Block> STORAGE_BLOCKS_RUBY = forgeTag("storage_blocks/ruby");
     public static final TagKey<Block> STORAGE_BLOCKS_SAPPHIRE = forgeTag("storage_blocks/sapphire");
@@ -59,8 +67,7 @@ public class BlockTagsCoFH {
     public static final TagKey<Block> STORAGE_BLOCKS_SULFUR = forgeTag("storage_blocks/sulfur");
     public static final TagKey<Block> STORAGE_BLOCKS_TAR = forgeTag("storage_blocks/tar");
     public static final TagKey<Block> STORAGE_BLOCKS_TIN = forgeTag("storage_blocks/tin");
-
-    public static final TagKey<Block> PUMPKINS_CARVED = forgeTag("pumpkins/carved");
+    public static final TagKey<Block> STORAGE_BLOCKS_URANIUM = forgeTag("storage_blocks/uranium");
 
     // region HELPERS
     private static TagKey<Block> forgeTag(String name) {
