@@ -131,7 +131,7 @@ public class CrossbowItemCoFH extends CrossbowItem implements ICoFHItem {
     @Override
     public int getUseDuration(ItemStack stack) {
 
-        return getChargeDuration(stack);
+        return Math.max(0, getChargeDuration(stack)) + 1;
     }
 
     @Override
