@@ -8,7 +8,8 @@ import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 
 public class CapabilityRedstoneFlux {
 
-    public static final Capability<IRedstoneFluxStorage> RF_ENERGY = CapabilityManager.get(new CapabilityToken<>() {});
+    public static final Capability<IRedstoneFluxStorage> RF_ENERGY = CapabilityManager.get(new CapabilityToken<>() {
+    });
 
     public static void register(RegisterCapabilitiesEvent event) {
 

@@ -51,9 +51,9 @@ public final class AugmentableHelper {
         return !isAugmentableItem(augmentable) ? 0 : MathHelper.clamp(((IAugmentableItem) augmentable.getItem()).getAugmentSlots(augmentable), 0, MAX_AUGMENTS);
     }
 
-    public static boolean validAugment(ItemStack augmentable, ItemStack augment, List<ItemStack> augments) {
+    public static boolean validAugment(int index, ItemStack augmentable, ItemStack augment, List<ItemStack> augments) {
 
-        return isAugmentableItem(augmentable) && ((IAugmentableItem) augmentable.getItem()).validAugment(augmentable, augment, augments);
+        return isAugmentableItem(augmentable) && ((IAugmentableItem) augmentable.getItem()).validAugment(index, augmentable, augment, augments);
     }
 
     public static void setAugments(ItemStack stack, List<ItemStack> augments) {

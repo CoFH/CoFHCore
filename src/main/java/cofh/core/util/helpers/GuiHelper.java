@@ -120,11 +120,6 @@ public final class GuiHelper {
         return createDefaultSlot(gui, posX - 1, posY - 1, 18, 18, PATH_ELEMENTS + "slot.png", 32, 32);
     }
 
-    public static ElementSlot createLockedSlot(IGuiAccess gui, int posX, int posY) {
-
-        return createDefaultSlot(gui, posX - 1, posY - 1, 18, 18, PATH_ELEMENTS + "slot.png", 32, 32).setOverlayTexture(PATH_ELEMENTS + "locked_overlay_slot.png");
-    }
-
     public static ElementSlot createInputSlot(IGuiAccess gui, int posX, int posY, IReconfigurable reconfig) {
 
         return createDefaultSlot(gui, posX - 1, posY - 1, 18, 18, PATH_ELEMENTS + "slot.png", PATH_ELEMENTS + "input_underlay_slot.png", reconfig::hasInputSide, 32, 32);
@@ -160,7 +155,7 @@ public final class GuiHelper {
     public static ElementSlot createDefaultSlot(IGuiAccess gui, int posX, int posY, int width, int height, String texture, String overlayTexture, int texW, int texH) {
 
         return (ElementSlot) new ElementSlot(gui, posX, posY)
-                .setOverlayTexture(overlayTexture)
+                .setIconTexture(overlayTexture)
                 .setSize(width, height)
                 .setTexture(texture, texW, texH);
     }
@@ -177,7 +172,7 @@ public final class GuiHelper {
 
         return (ElementSlot) new ElementSlot(gui, posX, posY)
                 .setUnderlayTexture(underlayTexture, drawUnderlay)
-                .setOverlayTexture(overlayTexture)
+                .setIconTexture(overlayTexture)
                 .setSize(width, height)
                 .setTexture(texture, texW, texH);
     }

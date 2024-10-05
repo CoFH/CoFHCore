@@ -23,17 +23,17 @@ public class AugmentPanel extends PanelBase {
     public static int defaultTextColor = 0x101010;
     public static int defaultBackgroundColor = 0x089e4c;
 
-    private final int slotsBorderX1 = 18;
-    private final int slotsBorderX2 = slotsBorderX1 + 60;
+    private final int slotsBorderX1 = 10;
+    private final int slotsBorderX2 = slotsBorderX1 + 87;
     private final int slotsBorderY1 = 20;
     private final int slotsBorderY2 = slotsBorderY1 + 60;
 
-    public AugmentPanel(IGuiAccess gui, @Nonnull IntSupplier numSlots, @Nonnull List<SlotCoFH> augmentSlots) {
+    public AugmentPanel(IGuiAccess gui, @Nonnull IntSupplier numSlots, @Nonnull List<SlotCoFH> augmentSlots, boolean hasUpgradeSlot, boolean hasFilterSlot) {
 
-        this(gui, defaultSide, numSlots, augmentSlots);
+        this(gui, defaultSide, numSlots, augmentSlots, hasUpgradeSlot, hasFilterSlot);
     }
 
-    protected AugmentPanel(IGuiAccess gui, int sideIn, @Nonnull IntSupplier numSlots, @Nonnull List<SlotCoFH> augmentSlots) {
+    protected AugmentPanel(IGuiAccess gui, int sideIn, @Nonnull IntSupplier numSlots, @Nonnull List<SlotCoFH> augmentSlots, boolean hasUpgradeSlot, boolean hasFilterSlot) {
 
         super(gui, sideIn);
 
@@ -43,9 +43,9 @@ public class AugmentPanel extends PanelBase {
         backgroundColor = defaultBackgroundColor;
 
         maxHeight = 92;
-        maxWidth = 102;
+        maxWidth = 112;
 
-        addElement(new ElementAugmentSlots(gui, 24, 24, numSlots, augmentSlots));
+        addElement(new ElementAugmentSlots(gui, 43, 24, numSlots, augmentSlots, () -> hasUpgradeSlot, () -> hasFilterSlot));
     }
 
     @Override
@@ -73,6 +73,7 @@ public class AugmentPanel extends PanelBase {
         float colorB = (backgroundColor & 255) / 255.0F * 0.6F;
         RenderHelper.setPosTexShader();
         RenderSystem.setShaderColor(colorR, colorG, colorB, 1.0F);
+        // gui.drawTexturedModalRect(pGuiGraphics, 6, 32, 16, 20, 20, 40);
         gui.drawTexturedModalRect(pGuiGraphics, sideOffset() + slotsBorderX1, slotsBorderY1, 16, 20, slotsBorderX2 - slotsBorderX1, slotsBorderY2 - slotsBorderY1);
         RenderHelper.resetShaderColor();
     }

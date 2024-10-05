@@ -8,7 +8,8 @@ import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 
 public class CapabilityAreaEffect {
 
-    public static final Capability<IAreaEffectItem> AREA_EFFECT_ITEM_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {});
+    public static final Capability<IAreaEffectItem> AREA_EFFECT_ITEM_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {
+    });
 
     public static void register(RegisterCapabilitiesEvent event) {
 

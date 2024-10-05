@@ -15,6 +15,10 @@ public interface IAugmentableItem {
         return AugmentableHelper.readAugmentsFromItem(augmentable);
     }
 
+    boolean hasUpgradeSlot();
+
+    boolean hasFilterSlot();
+
     /**
      * @param augmentable Stack representing the Augmentable item.
      * @return The *total* number of slots available for augmentation.
@@ -29,7 +33,7 @@ public interface IAugmentableItem {
      * @param augments    List of ItemStacks representing existing augments.
      * @return TRUE if the augment is compatible.
      */
-    boolean validAugment(ItemStack augmentable, ItemStack augment, List<ItemStack> augments);
+    boolean validAugment(int index, ItemStack augmentable, ItemStack augment, List<ItemStack> augments);
 
     /**
      * Writes the augments TO the ItemStack's NBT and performs any extra logic which may be required.

@@ -9,9 +9,11 @@ import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 
 public class CapabilityArchery {
 
-    public static final Capability<IArcheryBowItem> BOW_ITEM_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {});
+    public static final Capability<IArcheryBowItem> BOW_ITEM_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {
+    });
 
-    public static final Capability<IArcheryAmmoItem> AMMO_ITEM_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {});
+    public static final Capability<IArcheryAmmoItem> AMMO_ITEM_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {
+    });
 
     public static void register(RegisterCapabilitiesEvent event) {
 

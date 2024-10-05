@@ -9,15 +9,16 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.function.Supplier;
 
 import static cofh.core.CoFHCore.LOG;
+import static cofh.lib.util.Constants.FALSE;
 import static cofh.lib.util.Constants.TRUE;
 
 public class ElementSlot extends ElementBase {
 
     protected ResourceLocation underlayTexture;
-    protected ResourceLocation overlayTexture;
+    protected ResourceLocation iconTexture;
 
     protected Supplier<Boolean> drawUnderlay = TRUE;
-    protected Supplier<Boolean> drawOverlay = TRUE;
+    protected Supplier<Boolean> drawIcon = TRUE;
 
     public ElementSlot(IGuiAccess gui, int posX, int posY) {
 
@@ -40,20 +41,26 @@ public class ElementSlot extends ElementBase {
         return this;
     }
 
-    public final ElementSlot setOverlayTexture(String texture) {
+    public final ElementSlot setIconTexture(String texture) {
 
-        return setOverlayTexture(texture, TRUE);
+        return setIconTexture(texture, TRUE);
     }
 
-    public final ElementSlot setOverlayTexture(String texture, Supplier<Boolean> draw) {
+    public final ElementSlot setIconTexture(String texture, Supplier<Boolean> draw) {
 
         if (texture == null || draw == null) {
-            LOG.warn("Attempted to assign a NULL overlay texture.");
+            LOG.warn("Attempted to assign a NULL icon texture.");
             return this;
         }
-        this.overlayTexture = new ResourceLocation(texture);
-        this.drawOverlay = draw;
+        this.iconTexture = new ResourceLocation(texture);
+        this.drawIcon = draw;
         return this;
+    }
+
+    public final void clearIconTexture() {
+
+        this.iconTexture = null;
+        this.drawIcon = FALSE;
     }
 
     @Override
@@ -62,12 +69,7 @@ public class ElementSlot extends ElementBase {
         PoseStack poseStack = pGuiGraphics.pose();
         drawSlot(poseStack);
         drawUnderlayTexture(poseStack);
-    }
-
-    @Override
-    public void drawForeground(GuiGraphics pGuiGraphics, int mouseX, int mouseY) {
-
-        drawOverlayTexture(pGuiGraphics.pose());
+        drawIconTexture(pGuiGraphics.pose());
     }
 
     protected void drawSlot(PoseStack poseStack) {
@@ -86,11 +88,11 @@ public class ElementSlot extends ElementBase {
         }
     }
 
-    protected void drawOverlayTexture(PoseStack poseStack) {
+    protected void drawIconTexture(PoseStack poseStack) {
 
-        if (drawOverlay.get() && overlayTexture != null) {
+        if (drawIcon.get() && iconTexture != null) {
             RenderHelper.setPosTexShader();
-            RenderHelper.setShaderTexture0(overlayTexture);
+            RenderHelper.setShaderTexture0(iconTexture);
             drawTexturedModalRect(poseStack, posX(), posY(), 0, 0, width, height);
         }
     }
