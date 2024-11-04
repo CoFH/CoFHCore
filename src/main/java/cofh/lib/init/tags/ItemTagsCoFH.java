@@ -9,31 +9,6 @@ import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 
 public class ItemTagsCoFH {
 
-    public static final TagKey<Item> ORES_APATITE = Items.commonTag("ores/apatite");
-    public static final TagKey<Item> ORES_CINNABAR = Items.commonTag("ores/cinnabar");
-    public static final TagKey<Item> ORES_LEAD = Items.commonTag("ores/lead");
-    public static final TagKey<Item> ORES_NICKEL = Items.commonTag("ores/nickel");
-    public static final TagKey<Item> ORES_NITER = Items.commonTag("ores/niter");
-    public static final TagKey<Item> ORES_RUBY = Items.commonTag("ores/ruby");
-    public static final TagKey<Item> ORES_SAPPHIRE = Items.commonTag("ores/sapphire");
-    public static final TagKey<Item> ORES_SILVER = Items.commonTag("ores/silver");
-    public static final TagKey<Item> ORES_SULFUR = Items.commonTag("ores/sulfur");
-    public static final TagKey<Item> ORES_TIN = Items.commonTag("ores/tin");
-    public static final TagKey<Item> STORAGE_BLOCKS_BRONZE = Items.commonTag("storage_blocks/bronze");
-    public static final TagKey<Item> STORAGE_BLOCKS_CONSTANTAN = Items.commonTag("storage_blocks/constantan");
-    public static final TagKey<Item> STORAGE_BLOCKS_ELECTRUM = Items.commonTag("storage_blocks/electrum");
-    public static final TagKey<Item> STORAGE_BLOCKS_INVAR = Items.commonTag("storage_blocks/invar");
-    public static final TagKey<Item> STORAGE_BLOCKS_LEAD = Items.commonTag("storage_blocks/lead");
-    public static final TagKey<Item> STORAGE_BLOCKS_NICKEL = Items.commonTag("storage_blocks/nickel");
-    public static final TagKey<Item> STORAGE_BLOCKS_RAW_LEAD = Items.commonTag("storage_blocks/raw_lead");
-    public static final TagKey<Item> STORAGE_BLOCKS_RAW_NICKEL = Items.commonTag("storage_blocks/raw_nickel");
-    public static final TagKey<Item> STORAGE_BLOCKS_RAW_SILVER = Items.commonTag("storage_blocks/raw_silver");
-    public static final TagKey<Item> STORAGE_BLOCKS_RAW_TIN = Items.commonTag("storage_blocks/raw_tin");
-    public static final TagKey<Item> STORAGE_BLOCKS_RUBY = Items.commonTag("storage_blocks/ruby");
-    public static final TagKey<Item> STORAGE_BLOCKS_SAPPHIRE = Items.commonTag("storage_blocks/sapphire");
-    public static final TagKey<Item> STORAGE_BLOCKS_SILVER = Items.commonTag("storage_blocks/silver");
-    public static final TagKey<Item> STORAGE_BLOCKS_TIN = Items.commonTag("storage_blocks/tin");
-
     private ItemTagsCoFH() {
 
     }

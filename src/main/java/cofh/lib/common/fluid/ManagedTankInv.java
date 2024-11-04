@@ -3,7 +3,6 @@ package cofh.lib.common.fluid;
 import cofh.lib.api.StorageGroup;
 import cofh.lib.api.block.entity.ITileCallback;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.fluids.capability.templates.EmptyFluidHandler;
 
 import java.util.ArrayList;
 import java.util.Collections;

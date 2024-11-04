@@ -112,8 +112,7 @@ public class RSControlPanel extends PanelBase {
             tooltipList.add(Component.translatable("info.cofh.redstone_control"));
 
             switch (myRSControllable.getMode()) {
-                case DISABLED ->
-                        tooltipList.add(Component.translatable("info.cofh.disabled").withStyle(ChatFormatting.YELLOW));
+                case DISABLED -> tooltipList.add(Component.translatable("info.cofh.disabled").withStyle(ChatFormatting.YELLOW));
                 case LOW -> tooltipList.add(Component.translatable("info.cofh.low").withStyle(ChatFormatting.YELLOW));
                 case HIGH -> tooltipList.add(Component.translatable("info.cofh.high").withStyle(ChatFormatting.YELLOW));
                 default -> {

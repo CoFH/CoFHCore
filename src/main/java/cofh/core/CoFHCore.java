@@ -58,13 +58,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import static cofh.core.client.renderer.entity.model.ArmorFullSuitModel.ARMOR_FULL_SUIT_LAYER;
+import static cofh.core.init.CoreEntities.*;
 import static cofh.core.init.CoreMenus.FLUID_FILTER_CONTAINER;
 import static cofh.core.init.CoreMenus.ITEM_FILTER_CONTAINER;
-import static cofh.core.init.CoreEntities.*;
 import static cofh.lib.util.constants.ModIds.ID_COFH_CORE;
 import static cofh.lib.util.constants.ModIds.ID_CURIOS;
 
-@Mod(ID_COFH_CORE)
+@Mod (ID_COFH_CORE)
 public class CoFHCore {
 
     public static final Logger LOG = LogManager.getLogger(ID_COFH_CORE);

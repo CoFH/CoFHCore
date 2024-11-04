@@ -315,11 +315,10 @@ public final class AreaEffectHelper {
         int yMax = 2 * radius - 1;
 
         area = switch (traceResult.getDirection()) {
-            case DOWN, UP ->
-                    BlockPos.betweenClosedStream(pos.offset(-radius, 0, -radius), pos.offset(radius, 0, radius))
-                            .filter(blockPos -> canToolAffect(tool, stack, world, blockPos))
-                            .map(BlockPos::immutable)
-                            .collect(Collectors.toList());
+            case DOWN, UP -> BlockPos.betweenClosedStream(pos.offset(-radius, 0, -radius), pos.offset(radius, 0, radius))
+                    .filter(blockPos -> canToolAffect(tool, stack, world, blockPos))
+                    .map(BlockPos::immutable)
+                    .collect(Collectors.toList());
             case NORTH, SOUTH -> BlockPos.betweenClosedStream(pos.offset(-radius, yMin, 0), pos.offset(radius, yMax, 0))
                     .filter(blockPos -> canToolAffect(tool, stack, world, blockPos))
                     .map(BlockPos::immutable)

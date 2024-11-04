@@ -4,7 +4,6 @@ import cofh.lib.api.IStorageCallback;
 import cofh.lib.api.StorageGroup;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.wrapper.EmptyHandler;
 
 import java.util.ArrayList;
 import java.util.Collections;

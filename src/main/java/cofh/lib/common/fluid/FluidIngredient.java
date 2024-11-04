@@ -2,7 +2,6 @@ package cofh.lib.common.fluid;
 
 import com.google.common.collect.Lists;
 import com.google.gson.*;
-import com.mojang.serialization.Codec;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
