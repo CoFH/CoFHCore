@@ -97,15 +97,16 @@ public class ElementAugmentSlots extends ElementBase {
 
         int offset = (hasUpgradeSlot.getAsBoolean() ? 1 : 0) + (hasFilterSlot.getAsBoolean() ? 1 : 0);
 
+        int specialShift = (activeSlots - offset) > 4 ? SLOT_SIZE * 3 / 2 : SLOT_SIZE;
         switch (offset) {
             case 1:
-                augmentSlots.get(0).x = absX - SLOT_SIZE * 3 / 2;
+                augmentSlots.get(0).x = absX - specialShift;
                 augmentSlots.get(0).y = absY + SLOT_SIZE;
                 break;
             case 2:
-                augmentSlots.get(0).x = absX - SLOT_SIZE * 3 / 2;
+                augmentSlots.get(0).x = absX - specialShift;
                 augmentSlots.get(0).y = absY + SLOT_SIZE / 2;
-                augmentSlots.get(1).x = absX - SLOT_SIZE * 3 / 2;
+                augmentSlots.get(1).x = absX - specialShift;
                 augmentSlots.get(1).y = absY + SLOT_SIZE * 3 / 2;
                 break;
             default:
