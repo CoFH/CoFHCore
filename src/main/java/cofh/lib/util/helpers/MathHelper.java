@@ -20,7 +20,7 @@ public final class MathHelper {
 
     }
 
-    public static final RandomSource RANDOM = RandomSource.create();
+    public static final RandomSource RANDOM = RandomSource.createThreadSafe();
     public static final double PI = Math.PI;
     public static final double PI_2 = Math.PI * 2.0D;
     public static final double PHI = 1.618033988749894;
