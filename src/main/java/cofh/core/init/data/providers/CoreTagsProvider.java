@@ -37,8 +37,8 @@ public class CoreTagsProvider {
         @Override
         protected void addTags(HolderLookup.Provider pProvider) {
 
+            tag(BlockTagsCoFH.ROTATION_NOT_SUPPORTED).addTags(BlockTags.BEDS, BlockTags.DOORS);
             tag(BlockTagsCoFH.MINEABLE_WITH_SICKLE).addTags(BlockTags.MINEABLE_WITH_HOE, BlockTags.SWORD_EFFICIENT);
-
             tag(BlockTagsCoFH.PUMPKINS_CARVED).add(Blocks.CARVED_PUMPKIN);
         }
 

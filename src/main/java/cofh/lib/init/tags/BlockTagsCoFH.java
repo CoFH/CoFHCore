@@ -13,6 +13,7 @@ public class BlockTagsCoFH {
 
     }
 
+    public static final TagKey<Block> ROTATION_NOT_SUPPORTED = forgeTag("rotation_not_supported");
     public static final TagKey<Block> MINEABLE_WITH_SICKLE = forgeTag("mineable/sickle");
 
     public static final TagKey<Block> PUMPKINS_CARVED = forgeTag("pumpkins/carved");
