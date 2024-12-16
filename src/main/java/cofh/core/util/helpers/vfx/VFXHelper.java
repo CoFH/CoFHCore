@@ -256,9 +256,9 @@ public final class VFXHelper {
         float yn = center.y() - 0.5F;
         float z = center.z();
         int r = 255;
-        int g = 255;
+        int g = 0;
         int b = 255;
-        int a = 255;
+        int a = 128;
         int overlay = OverlayTexture.pack(0, false); //OverlayTexture.NO_OVERLAY
         consumer.vertex(xp, yp, z).color(r, g, b, a).uv(0, 0).overlayCoords(overlay).uv2(RenderHelper.FULL_BRIGHT).normal(normal, 0, 1, 0).endVertex();
         consumer.vertex(xn, yp, z).color(r, g, b, a).uv(0, 1).overlayCoords(overlay).uv2(RenderHelper.FULL_BRIGHT).normal(normal, 0, 1, 0).endVertex();
@@ -473,21 +473,21 @@ public final class VFXHelper {
         return getSeedWithTime(seed, time, 0.75F);
     }
 
-    public static float getTaperOffsetFromTimes(float time, float endTime, float taperTime) {
+    //public static float getTaperOffsetFromTimes(float time, float endTime, float taperTime) {
+    //
+    //    float offset = 0.0F;
+    //    if (time < taperTime) {
+    //        offset = 1.25F * (time - taperTime) / taperTime;
+    //    } else if (endTime - time < taperTime) {
+    //        offset = 1.25F * (time + taperTime - endTime) / taperTime;
+    //    }
+    //    return offset;
+    //}
 
-        float offset = 0.0F;
-        if (time < taperTime) {
-            offset = 1.25F * (time - taperTime) / taperTime;
-        } else if (endTime - time < taperTime) {
-            offset = 1.25F * (time + taperTime - endTime) / taperTime;
-        }
-        return offset;
-    }
-
-    public static float getTaperOffsetFromTimes(float time, float startTime, float endTime, float taperTime) {
-
-        return getTaperOffsetFromTimes(time - startTime, endTime - startTime, taperTime);
-    }
+    //public static float getTaperOffsetFromTimes(float time, float startTime, float endTime, float taperTime) {
+    //
+    //    return getTaperOffsetFromTimes(time - startTime, endTime - startTime, taperTime);
+    //}
 
     private static Vector3f[][] getRandomArcs(Random random, int arcCount, int nodeCount) {
 
@@ -646,7 +646,7 @@ public final class VFXHelper {
 
         //int alpha = (int) MathHelper.clamp((64 + rand.nextInt(64)) * alphaScale * (MathHelper.bevel((float) rand.nextDouble(4.0F) + time * 0.06F) + 1.0F), 0, 255);
         time += rand.nextFloat(420);
-        renderCyclone(stack, consumer, packedLight, color, radius, thickness, rand.nextInt(WIND_SEGMENTS / 2, WIND_SEGMENTS), (rand.nextFloat(-1F, 1F) + 6F) * time, (rand.nextFloat() + MathHelper.cos(time * 0.2F)) * 0.25F * height);
+        renderCyclone(stack, consumer, packedLight, color, radius, thickness, rand.nextInt(WIND_SEGMENTS / 2, WIND_SEGMENTS), (rand.nextFloat(-1F, 1F) + 6F) * time, (rand.nextFloat(0.5F, 1.5F) + 0.5F * MathHelper.cos(time * 0.2F)) * 0.25F * height);
     }
     // endregion
 

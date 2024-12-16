@@ -12,7 +12,7 @@ import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ReferenceOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
@@ -66,7 +66,7 @@ public class CoreClientEvents {
 
     public static int renderTime;
     public static float renderFrame;
-    public static final Map<ParticleRenderType, Queue<CoFHParticle>> delayedRenderParticles = new Object2ObjectOpenHashMap<>();
+    public static final Map<ParticleRenderType, Queue<CoFHParticle>> delayedRenderParticles = new Object2ReferenceOpenHashMap<>();
 
     private static final Set<String> NAMESPACES = new ObjectOpenHashSet<>();
 
@@ -184,7 +184,7 @@ public class CoreClientEvents {
     }
 
     @SubscribeEvent //(priority = EventPriority.LOWEST)
-    public static void renderTranslucent(RenderLevelStageEvent event) {
+    public static void renderLevelStage(RenderLevelStageEvent event) {
 
         // POST SHADERS
         if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_SKY) {

@@ -1,9 +1,11 @@
 package cofh.core.client;
 
 import com.google.gson.JsonSyntaxException;
+import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.platform.Window;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.PostChain;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
@@ -25,11 +27,6 @@ public class PostEffect implements ResourceManagerReloadListener {
 
         this.shader = new ResourceLocation(shader.getNamespace(), "shaders/post/" + shader.getPath() + ".json");
         EFFECTS.add(this);
-    }
-
-    public PostChain getPostChain() {
-
-        return chain;
     }
 
     public boolean isEnabled() {
@@ -59,6 +56,11 @@ public class PostEffect implements ResourceManagerReloadListener {
         }
     }
 
+    protected PostChain getPostChain(TextureManager textures, ResourceManager resources, RenderTarget target) throws IOException {
+
+        return new PostChain(textures, resources, target, shader);
+    }
+
     protected void onChainLoad() {
 
     }
@@ -72,7 +74,7 @@ public class PostEffect implements ResourceManagerReloadListener {
         loaded = false;
         try {
             Minecraft mc = Minecraft.getInstance();
-            chain = new PostChain(mc.getTextureManager(), mc.getResourceManager(), mc.getMainRenderTarget(), shader);
+            chain = getPostChain(mc.getTextureManager(), mc.getResourceManager(), mc.getMainRenderTarget());
             chain.resize(mc.getWindow().getWidth(), mc.getWindow().getHeight());
             loaded = true;
             onChainLoad();

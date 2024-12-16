@@ -158,8 +158,7 @@ public final class MathHelper {
 
     public static float easeOutCubic(float a) {
 
-        a = 1.0F - a;
-        return 1.0F - a * a * a;
+        return 1.0F - easeInCubic(1.0F - a);
     }
 
     public static float easeInOutCubic(float a) {

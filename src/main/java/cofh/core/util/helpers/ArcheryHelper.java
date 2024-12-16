@@ -22,6 +22,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.LazyOptional;
 
+import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Objects;
@@ -262,6 +263,33 @@ public final class ArcheryHelper {
     public static Comparator<HitResult> compareHitDistance(Vec3 loc) {
 
         return Comparator.comparingDouble(hit -> hit.getLocation().distanceToSqr(loc));
+    }
+
+    /**
+     * Uses kinematics to determine the optimal aiming direction. Assumes no air resistance.
+     * @param origin Start location of the projectile.
+     * @param target Target location of the projectile.
+     * @param speed Intended starting speed of the projectile.
+     * @param gravity Gravity acting on the projectile. A positive value indicates downward acceleration.
+     * @return The normalized aim direction if a valid solution was found. Otherwise, null.
+     */
+    @Nullable
+    public static Vec3 getAimDirection(Vec3 origin, Vec3 target, float speed, float gravity) {
+
+        Vec3 disp = target.subtract(origin);
+        if (gravity == 0) {
+            return disp.normalize();
+        }
+        double horz = disp.horizontalDistanceSqr();
+        float s2 = speed * speed;
+        double discriminant = s2 * s2 - gravity * (gravity * horz + 2 * s2 * disp.y);
+        if (discriminant < 0) {
+            return null;
+        }
+        horz = Math.sqrt(horz);
+        double angle = Math.atan((s2 - Math.sqrt(discriminant)) / (gravity * horz));
+        double h = MathHelper.cos(angle) / horz;
+        return new Vec3(disp.x * h, MathHelper.sin(angle), disp.z * h);
     }
 
 }

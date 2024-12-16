@@ -34,8 +34,7 @@ public class BlastWaveParticle extends CylindricalParticle {
         SplittableRandom rand = new SplittableRandom(seed);
         float progress = time / duration;
         float easeSin = MathHelper.sin(progress * MathHelper.F_PI * 0.5F);
-        //float easeCub = MathHelper.easeOutCubic(progress);
-        VFXHelper.renderCyclone(stack, CoreShaders.PIXELATE.getBuffer(BLANK_TEXTURE), getLightColor(time), c0, easeSin * size * 0.5F, 0.018F * MathHelper.sqrt(9 + size * size), height * easeSin, rand, progress * 0.5F);
+        VFXHelper.renderCyclone(stack, CoreShaders.PIXELATE.getBuffer(BLANK_TEXTURE), getLightColor(time), c0.scaleAlpha(1 - MathHelper.easeInCubic(progress)), easeSin * size * 0.5F, 0.018F * MathHelper.sqrt(9 + size * size), height * easeSin, rand, progress * 0.5F);
     }
 
     @Nonnull

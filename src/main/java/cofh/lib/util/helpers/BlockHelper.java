@@ -1,7 +1,10 @@
 package cofh.lib.util.helpers;
 
+import it.unimi.dsi.fastutil.longs.Long2IntFunction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.SectionPos;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseRailBlock;
 import net.minecraft.world.level.block.Block;
@@ -11,10 +14,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraftforge.event.ForgeEventFactory;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumMap;
+import java.util.EnumSet;
+import java.util.function.LongToIntFunction;
 import java.util.function.ToIntFunction;
 
 import static cofh.lib.util.Constants.DIRECTIONS;
@@ -42,6 +49,10 @@ public final class BlockHelper {
     private static final EnumMap<Direction, Direction> SIDE_OPPOSITE_LOOKUP = computeMap(SIDE_OPPOSITE);
     private static final EnumMap<Direction, Direction> SIDE_ABOVE_LOOKUP = computeMap(SIDE_ABOVE);
     private static final EnumMap<Direction, Direction> SIDE_BELOW_LOOKUP = computeMap(SIDE_BELOW);
+
+    private static final LongToIntFunction[] COMPONENT_GETTERS = {BlockPos::getX, BlockPos::getY, BlockPos::getZ};
+    //private static final LongToIntFunction[] COMPONENT_SETTERS = {BlockPos::, BlockPos::getY, BlockPos::getZ};
+    private static final Direction[][] DIRECTION_LOOKUP = Arrays.stream(Direction.Axis.values()).map(axis -> Arrays.stream(Direction.AxisDirection.values()).map(pole -> Direction.get(pole, axis)).toArray(Direction[]::new)).toArray(Direction[][]::new);
 
     // These assume facing is towards negative - looking AT side 1, 3, or 5.
     public static final byte[] ROTATE_CLOCK_Y = {0, 1, 4, 5, 3, 2};
@@ -209,6 +220,11 @@ public final class BlockHelper {
         return pos.getX() == 0 ? (pos.getY() == 0 || pos.getZ() == 0) : (pos.getY() == 0 && pos.getZ() == 0);
     }
 
+    public static boolean isAxial(long pos) {
+
+        return BlockPos.getX(pos) == 0 ? (BlockPos.getY(pos) == 0 || BlockPos.getZ(pos) == 0) : (BlockPos.getY(pos) == 0 && BlockPos.getZ(pos) == 0);
+    }
+
     @Nullable
     public static Direction getSide(BlockPos pos) {
 
@@ -235,6 +251,68 @@ public final class BlockHelper {
         }
 
         return null;
+    }
+
+    @Nullable
+    public static Direction getSide(long pos) {
+
+        if (!isAxial(pos)) {
+            return null;
+        }
+        if (BlockPos.getY(pos) < 0) {
+            return Direction.DOWN;
+        }
+        if (BlockPos.getY(pos) > 0) {
+            return Direction.UP;
+        }
+        if (BlockPos.getZ(pos) < 0) {
+            return Direction.NORTH;
+        }
+        if (BlockPos.getZ(pos) > 0) {
+            return Direction.SOUTH;
+        }
+        if (BlockPos.getX(pos) < 0) {
+            return Direction.WEST;
+        }
+        if (BlockPos.getX(pos) > 0) {
+            return Direction.EAST;
+        }
+        return null;
+    }
+
+    public static int getComponent(long pos, Direction.Axis axis) {
+
+        return COMPONENT_GETTERS[axis.ordinal()].applyAsInt(pos);
+    }
+
+    public static BlockPos.MutableBlockPos setComponent(BlockPos.MutableBlockPos pos, Direction.Axis axis, int value) {
+
+        return switch (axis) {
+            case X -> pos.setX(value);
+            case Y -> pos.setY(value);
+            case Z -> pos.setZ(value);
+        };
+    }
+
+    public static long blockToChunk(long blockPos) {
+
+        return ChunkPos.asLong(SectionPos.blockToSectionCoord(BlockPos.getX(blockPos)), SectionPos.blockToSectionCoord(BlockPos.getZ(blockPos)));
+    }
+
+    public static Direction getDirection(Direction.Axis axis, Direction.AxisDirection polarity) {
+
+        return DIRECTION_LOOKUP[axis.ordinal()][polarity.ordinal()];
+    }
+
+    public static void updateNeighbors(Level level, BlockPos pos, BlockState state, EnumSet<Direction> sides) {
+
+        if (ForgeEventFactory.onNeighborNotify(level, pos, state, sides, false).isCanceled()) {
+            return;
+        }
+        BlockPos.MutableBlockPos cursor = pos.mutable();
+        for (Direction direction : sides) {
+            level.neighborChanged(cursor.set(pos).move(direction), state.getBlock(), pos);
+        }
     }
     // endregion
 

@@ -157,6 +157,7 @@ public class EffectEvents {
     public static void handleTargetChangeEvent(LivingEvent.LivingVisibilityEvent event) {
 
         LivingEntity entity = event.getEntity();
+        // If has true invisibility, set detection range equal to invisibility without armor (7%)
         if (entity.hasEffect(TRUE_INVISIBILITY.get())) {
             float armor = Math.max(entity.getArmorCoverPercentage(), 0.1F) * 0.7F;
             event.modifyVisibility(0.07F / armor);

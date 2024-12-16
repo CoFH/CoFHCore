@@ -29,10 +29,12 @@ public class NBTTags {
     public static final String TAG_CART_DATA = "CartData";
     public static final String TAG_CAPACITY = "Capacity";
     public static final String TAG_COLORS = "Colors";
+    public static final String TAG_CONNECTIONS = "Connections";
     public static final String TAG_COOLANT = "Coolant";
     public static final String TAG_COOLANT_MAX = "CoolantMax";
     public static final String TAG_CREATIVE = "Creative";
     public static final String TAG_DAMAGE = "Damage";
+    public static final String TAG_DIRECTION = "Direction";
     public static final String TAG_DURATION = "Duration";
     public static final String TAG_ENCHANTMENTS = "Enchantments";
     public static final String TAG_ENDER_ADDRESS = "EnderAddress";
@@ -86,6 +88,7 @@ public class NBTTags {
     public static final String TAG_TRACK_IN = "TrackIn";
     public static final String TAG_TRACK_OUT = "TrackOut";
     public static final String TAG_TYPE = "Type";
+    public static final String TAG_UPDATABLE = "Updatable";
     public static final String TAG_UUID = "UUID";
     public static final String TAG_VALID = "Valid";
     public static final String TAG_XP = "Xp";
