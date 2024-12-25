@@ -65,6 +65,7 @@ public class CoreIDs {
     public static final String ID_PARTICLE_MIST = "mist";
     public static final String ID_PARTICLE_FIRE = "fire";
     public static final String ID_PARTICLE_BLAST = "blast";
+    public static final String ID_PARTICLE_SQUARE = "square";
     public static final String ID_PARTICLE_EXPLOSION = "explosion";
     public static final String ID_PARTICLE_BEAM = "beam";
     public static final String ID_PARTICLE_SHARD = "shard";

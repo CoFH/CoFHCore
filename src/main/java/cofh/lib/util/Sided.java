@@ -4,24 +4,34 @@ import net.minecraft.world.level.LevelReader;
 
 import java.util.function.Supplier;
 
-public class SidedVariable<T> {
+public class Sided<T> {
 
     protected T client;
     protected T server;
 
-    public SidedVariable() {
+    public Sided() {
 
     }
 
-    public SidedVariable(Supplier<T> initial) {
+    public Sided(Supplier<T> initial) {
 
         client = initial.get();
         server = initial.get();
     }
 
+    public T client() {
+
+        return this.client;
+    }
+
+    public T server() {
+
+        return this.server;
+    }
+
     public T get(boolean isClient) {
 
-        return isClient ? this.client : this.server;
+        return isClient ? client() : server();
     }
 
     public T get(LevelReader level) {

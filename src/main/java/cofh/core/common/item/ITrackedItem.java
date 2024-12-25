@@ -31,7 +31,7 @@ public interface ITrackedItem {
     /**
      * @param from The previously held item stack.
      * @param to   The currently held item stack.
-     * @return Whether two item stacks should be considered the same for tracking purposes.
+     * @return Whether two item stacks should be considered the same for tracking purposes. Should be transitive.
      */
     default boolean matches(ItemStack from, ItemStack to) {
 

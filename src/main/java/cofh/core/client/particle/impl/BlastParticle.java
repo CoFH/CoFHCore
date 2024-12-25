@@ -15,8 +15,8 @@ public class BlastParticle extends SpriteParticle {
     private BlastParticle(ColorParticleOptions data, ClientLevel level, SpriteSet sprites, double x, double y, double z, double dx, double dy, double dz) {
 
         super(data, level, sprites, x, y, z, dx, dy, dz);
-        gravity = -0.1F;
-        friction = 0.9F;
+        //gravity = -0.1F;
+        //friction = 0.9F;
         oRoll = roll = 0.5F * (float) random.nextGaussian();
     }
 

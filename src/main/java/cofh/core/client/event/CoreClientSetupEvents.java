@@ -64,6 +64,7 @@ public class CoreClientSetupEvents {
         event.registerSpriteSet(FIRE.get(), FireParticle::factory);
         event.registerSpriteSet(BLAST.get(), BlastParticle::factory);
         event.registerSpriteSet(MIST.get(), MistParticle::factory);
+        event.registerSpriteSet(SQUARE.get(), SquareParticle::factory);
 
         event.registerSpriteSet(SHOCKWAVE.get(), ShockwaveParticle::factory);
         event.registerSpriteSet(BLAST_WAVE.get(), BlastWaveParticle::factory);

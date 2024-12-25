@@ -20,6 +20,8 @@ import java.util.ArrayDeque;
  */
 public abstract class CoFHParticle extends Particle {
 
+    private static final BlockPos.MutableBlockPos CURSOR = new BlockPos.MutableBlockPos();
+
     //The total time a particle is rendered, in ticks.
     protected float duration = 1.0F;
     //The amount of delay before a particle is rendered, in ticks.
@@ -93,8 +95,8 @@ public abstract class CoFHParticle extends Particle {
 
     protected int getLightColor(float pTicks, double x, double y, double z) {
 
-        BlockPos blockpos = BlockPos.containing(x, y, z);
-        return this.level.hasChunkAt(blockpos) ? LevelRenderer.getLightColor(this.level, blockpos) : 0;
+        CURSOR.set(x, y, z);
+        return this.level.hasChunkAt(CURSOR) ? LevelRenderer.getLightColor(this.level, CURSOR) : 0;
     }
 
     protected void setLifetime(float duration, float delay) {

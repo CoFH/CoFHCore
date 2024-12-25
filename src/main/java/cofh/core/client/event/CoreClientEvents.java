@@ -66,6 +66,7 @@ public class CoreClientEvents {
 
     public static int renderTime;
     public static float renderFrame;
+    public static LivingEntity itemHolder = null;
     public static final Map<ParticleRenderType, Queue<CoFHParticle>> delayedRenderParticles = new Object2ReferenceOpenHashMap<>();
 
     private static final Set<String> NAMESPACES = new ObjectOpenHashSet<>();

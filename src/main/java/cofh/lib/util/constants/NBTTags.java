@@ -123,6 +123,7 @@ public class NBTTags {
     public static final String TAG_AUGMENT_TYPE_MACHINE = "Machine";
     public static final String TAG_AUGMENT_TYPE_DYNAMO = "Dynamo";
     public static final String TAG_AUGMENT_TYPE_AREA_EFFECT = "Area";
+    public static final String TAG_AUGMENT_TYPE_REACH = "Reach";
     public static final String TAG_AUGMENT_TYPE_FILTER = "Filter";
     public static final String TAG_AUGMENT_TYPE_POTION = "Potion";
 

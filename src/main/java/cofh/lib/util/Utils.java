@@ -14,6 +14,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -60,6 +61,7 @@ import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nullable;
 import java.nio.file.Path;
+import java.util.Objects;
 
 import static cofh.lib.util.Constants.MAX_CAPACITY;
 import static cofh.lib.util.constants.NBTTags.TAG_ENCHANTMENTS;
@@ -523,6 +525,49 @@ public class Utils {
         if (list.isEmpty()) {
             stack.removeTagKey(TAG_ENCHANTMENTS);
         }
+    }
+
+    public static boolean matchesExcluding(ItemStack a, ItemStack b, String... excludes) {
+
+        if (a.equals(b)) {
+            return true;
+        }
+        if (a.getItem() != b.getItem() || a.getCount() != b.getCount()) {
+            return false;
+        }
+        CompoundTag aTag = a.getTag();
+        CompoundTag bTag = b.getTag();
+        if (aTag == null) {
+            return bTag == null;
+        }
+        if (bTag == null) {
+            return false;
+        }
+        if (excludes.length <= 0) {
+            return Objects.equals(aTag, bTag);
+        }
+        Tag[] excluded = new Tag[excludes.length * 2];
+        int i = 0;
+        for (String exclude : excludes) {
+            excluded[i++] = aTag.get(exclude);
+            aTag.remove(exclude);
+            excluded[i++] = bTag.get(exclude);
+            bTag.remove(exclude);
+        }
+        boolean result = Objects.equals(aTag, bTag);
+        i = 0;
+        for (String exclude : excludes) {
+            Tag e = excluded[i++];
+            if (e != null) {
+                aTag.put(exclude, e);
+            }
+            e = excluded[i++];
+            if (e != null) {
+                bTag.put(exclude, e);
+            }
+        }
+        return result;
+
     }
     // endregion
 

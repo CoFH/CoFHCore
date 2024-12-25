@@ -28,6 +28,7 @@ public class CoreParticles {
     public static final RegistryObject<ColorParticleType> FIRE = PARTICLES.register(ID_PARTICLE_FIRE, ColorParticleType::new);
     public static final RegistryObject<ColorParticleType> BLAST = PARTICLES.register(ID_PARTICLE_BLAST, ColorParticleType::new);
     public static final RegistryObject<ColorParticleType> MIST = PARTICLES.register(ID_PARTICLE_MIST, ColorParticleType::new);
+    public static final RegistryObject<ColorParticleType> SQUARE = PARTICLES.register(ID_PARTICLE_SQUARE, ColorParticleType::new);
 
     public static final RegistryObject<CylindricalParticleType> BLAST_WAVE = PARTICLES.register(ID_PARTICLE_BLAST_WAVE, CylindricalParticleType::new);
     public static final RegistryObject<CylindricalParticleType> SHOCKWAVE = PARTICLES.register(ID_PARTICLE_SHOCKWAVE, CylindricalParticleType::new);

@@ -537,38 +537,27 @@ public final class VFXHelper {
     // endregion
 
     // region BEAM
-
     /**
      * Renders a laser beam in a unit column towards positive y.
      *
      * @param width     Width of the beam.
-     * @param coreColor Color/alpha for the center part of the beam.
-     * @param glowColor Color/alpha for the glow surrounding the beam.
+     * @param colors    Colors/alphas for the beam, from outermost to innermost.
      */
-    public static void renderBeam(PoseStack stack, MultiBufferSource buffer, int packedLight, float width, Color coreColor, Color glowColor) {
+    public static void renderBeam(Vector4f start, Vector4f end, Vector3f normal, MultiBufferSource buffer, int packedLight, float width, Color... colors) {
+
+        Vector2f perp = axialPerp(start, end, width);
+        for (Color color : colors) {
+            VFXNode[] nodes = {new VFXNode(start, perp, width), new VFXNode(end, perp, width)};
+            renderNodesCapped(normal, buffer, LINEAR_GLOW, ROUND_GLOW, packedLight, nodes, color);
+            perp.mul(0.5F);
+            width *= 0.5F;
+        }
+    }
+
+    public static void renderBeam(PoseStack stack, MultiBufferSource buffer, int packedLight, float width, Color... colors) {
 
         Matrix4f pose = stack.last().pose();
-        Vector3f normal = normal(stack);
-        Vector4f start = new Vector4f(0, 0, 0, 1).mul(pose);
-        Vector4f end = new Vector4f(0, 1, 0, 1).mul(pose);
-        Vector2f perp = axialPerp(start, end, width);
-
-        float sx = start.x();
-        float sy = start.y();
-        float sz = start.z();
-        float ex = end.x();
-        float ey = end.y();
-        float ez = end.z();
-
-        VFXNode[] outer = {new VFXNode(sx + perp.x, sx - perp.x, sy + perp.y, sy - perp.y, sz, width),
-                new VFXNode(ex + perp.x, ex - perp.x, ey + perp.y, ey - perp.y, ez, width)};
-        perp.mul(0.5F);
-        width *= 0.5F;
-        VFXNode[] inner = {new VFXNode(sx + perp.x, sx - perp.x, sy + perp.y, sy - perp.y, sz, width),
-                new VFXNode(ex + perp.x, ex - perp.x, ey + perp.y, ey - perp.y, ez, width)};
-
-        renderNodesCapped(normal, buffer, LINEAR_GLOW, ROUND_GLOW, packedLight, outer, glowColor);
-        renderNodesCapped(normal, buffer, LINEAR_GLOW, ROUND_GLOW, packedLight, inner, coreColor);
+        renderBeam(new Vector4f(0, 0, 0, 1).mul(pose), new Vector4f(0, 1, 0, 1).mul(pose), normal(stack), buffer, packedLight, width, colors);
     }
     // endregion
 
@@ -646,7 +635,7 @@ public final class VFXHelper {
 
         //int alpha = (int) MathHelper.clamp((64 + rand.nextInt(64)) * alphaScale * (MathHelper.bevel((float) rand.nextDouble(4.0F) + time * 0.06F) + 1.0F), 0, 255);
         time += rand.nextFloat(420);
-        renderCyclone(stack, consumer, packedLight, color, radius, thickness, rand.nextInt(WIND_SEGMENTS / 2, WIND_SEGMENTS), (rand.nextFloat(-1F, 1F) + 6F) * time, (rand.nextFloat(0.5F, 1.5F) + 0.5F * MathHelper.cos(time * 0.2F)) * 0.25F * height);
+        renderCyclone(stack, consumer, packedLight, color, radius, thickness, rand.nextInt(WIND_SEGMENTS / 2, WIND_SEGMENTS), (rand.nextFloat(-1F, 1F) + 6F) * time, (rand.nextFloat(1.0F) + 0.5F * MathHelper.cos(time * 0.2F)) * 0.25F * height);
     }
     // endregion
 

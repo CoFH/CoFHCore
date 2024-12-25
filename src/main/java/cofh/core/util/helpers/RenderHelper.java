@@ -22,7 +22,11 @@ import net.minecraft.client.renderer.texture.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.AABB;
@@ -813,5 +817,33 @@ public final class RenderHelper {
         }
     }
     // endregion
+
+    public static boolean isHandTransform(ItemDisplayContext transform) {
+
+        return transform.firstPerson() || isThirdPerson(transform);
+    }
+
+    public static boolean isThirdPerson(ItemDisplayContext transform) {
+
+        return transform == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND || transform == ItemDisplayContext.THIRD_PERSON_LEFT_HAND;
+    }
+
+    public static boolean handMatchesTransform(InteractionHand hand, HumanoidArm main, ItemDisplayContext transform) {
+
+        if (handMatches(hand, HumanoidArm.RIGHT, main)) {
+            return transform == ItemDisplayContext.FIRST_PERSON_RIGHT_HAND || transform == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND;
+        }
+        return transform == ItemDisplayContext.FIRST_PERSON_LEFT_HAND || transform == ItemDisplayContext.THIRD_PERSON_LEFT_HAND;
+    }
+
+    public static boolean handMatches(InteractionHand hand, HumanoidArm arm, HumanoidArm main) {
+
+        return (hand == InteractionHand.MAIN_HAND) == (arm == main);
+    }
+
+    public static boolean isRightArm(LivingEntity entity, InteractionHand hand) {
+
+        return handMatches(hand, HumanoidArm.RIGHT, entity.getMainArm());
+    }
 
 }
