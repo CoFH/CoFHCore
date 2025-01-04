@@ -15,7 +15,7 @@ import javax.annotation.Nonnull;
 
 public class ShockwaveParticle extends CylindricalParticle {
 
-    private ShockwaveParticle(CylindricalParticleOptions data, ClientLevel level, double x, double y, double z, double xDir, double yDir, double zDir) {
+    public ShockwaveParticle(CylindricalParticleOptions data, ClientLevel level, double x, double y, double z, double xDir, double yDir, double zDir) {
 
         super(data, level, Math.floor(x), Math.floor(y), Math.floor(z));
     }
@@ -24,12 +24,6 @@ public class ShockwaveParticle extends CylindricalParticle {
     public void render(PoseStack stack, MultiBufferSource buffer, VertexConsumer consumer, int packedLightIn, float time, float pTicks) {
 
         VFXHelper.renderShockwave(stack, buffer, level, BlockPos.containing(x, y, z), time * (size * 0.5F + 5) / duration, size * 0.5F, height);
-    }
-
-    @Nonnull
-    public static ParticleProvider<CylindricalParticleOptions> factory(SpriteSet spriteSet) {
-
-        return ShockwaveParticle::new;
     }
 
 }

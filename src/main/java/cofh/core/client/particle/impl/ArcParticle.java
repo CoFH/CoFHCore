@@ -27,7 +27,7 @@ public class ArcParticle extends PointToPointParticle {
     protected Vector3f disp;
     protected LongList path;
 
-    private ArcParticle(BiColorParticleOptions data, ClientLevel level, double sx, double sy, double sz, double ex, double ey, double ez) {
+    public ArcParticle(BiColorParticleOptions data, ClientLevel level, double sx, double sy, double sz, double ex, double ey, double ez) {
 
         super(data, level, sx, sy, sz, ex, ey, ez);
         float dx = (float) (ex - sx);
@@ -128,12 +128,6 @@ public class ArcParticle extends PointToPointParticle {
     public int getLightColor(float pTicks, double x, double y, double z) {
 
         return RenderHelper.FULL_BRIGHT;
-    }
-
-    @Nonnull
-    public static ParticleProvider<BiColorParticleOptions> factory(SpriteSet spriteSet) {
-
-        return ArcParticle::new;
     }
 
 }

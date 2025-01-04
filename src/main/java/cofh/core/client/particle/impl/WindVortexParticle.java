@@ -21,7 +21,7 @@ import static cofh.core.util.helpers.vfx.RenderTypes.BLANK_TEXTURE;
 
 public class WindVortexParticle extends CylindricalParticle {
 
-    private WindVortexParticle(CylindricalParticleOptions data, ClientLevel level, double x, double y, double z, double xDir, double yDir, double zDir) {
+    public WindVortexParticle(CylindricalParticleOptions data, ClientLevel level, double x, double y, double z, double xDir, double yDir, double zDir) {
 
         super(data, level, x, y, z, xDir, yDir, zDir);
         oRoll = roll = random.nextFloat() * MathHelper.F_TAU;
@@ -60,12 +60,6 @@ public class WindVortexParticle extends CylindricalParticle {
         if (rand.nextInt(3) == 0) {
             VFXHelper.renderCyclone(stack, consumer, packedLight, c0, rand.nextFloat(0.5F, 0.8F), rand.nextFloat(0.07F, 0.09F), 1.0F, rand, progress * 0.5F);
         }
-    }
-
-    @Nonnull
-    public static ParticleProvider<CylindricalParticleOptions> factory(SpriteSet spriteSet) {
-
-        return WindVortexParticle::new;
     }
 
 }

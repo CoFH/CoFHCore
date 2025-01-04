@@ -35,7 +35,7 @@ public class StreamParticle extends PointToPointParticle {
     protected Vec3[] path;
     protected List<Vector3f> curve;
 
-    private StreamParticle(BiColorParticleOptions data, ClientLevel level, double sx, double sy, double sz, double ex, double ey, double ez) {
+    public StreamParticle(BiColorParticleOptions data, ClientLevel level, double sx, double sy, double sz, double ex, double ey, double ez) {
 
         super(data, level, sx, sy, sz, ex, ey, ez);
         dest = new Vec3(ex, ey, ez);
@@ -223,11 +223,5 @@ public class StreamParticle extends PointToPointParticle {
 
     }
     // endregion
-
-    @Nonnull
-    public static ParticleProvider<BiColorParticleOptions> factory(SpriteSet spriteSet) {
-
-        return StreamParticle::new;
-    }
 
 }

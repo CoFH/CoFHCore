@@ -59,12 +59,14 @@ public class CoreIDs {
     public static final String ID_PARTICLE_PLASMA = "plasma_ball";
     public static final String ID_PARTICLE_SHOCKWAVE = "shockwave";
     public static final String ID_PARTICLE_BLAST_WAVE = "blast_wave";
+    public static final String ID_PARTICLE_RING = "ring";
     public static final String ID_PARTICLE_WIND_CURRENT = "wind_current";
     public static final String ID_PARTICLE_WIND_VORTEX = "wind_vortex";
     public static final String ID_PARTICLE_WIND_SPIRAL = "wind_spiral";
     public static final String ID_PARTICLE_MIST = "mist";
     public static final String ID_PARTICLE_FIRE = "fire";
     public static final String ID_PARTICLE_BLAST = "blast";
+    public static final String ID_PARTICLE_PULSE = "pulse";
     public static final String ID_PARTICLE_SQUARE = "square";
     public static final String ID_PARTICLE_EXPLOSION = "explosion";
     public static final String ID_PARTICLE_BEAM = "beam";

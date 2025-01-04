@@ -21,7 +21,7 @@ import static cofh.core.util.helpers.vfx.RenderTypes.BLANK_TEXTURE;
 
 public class WindSpiralParticle extends CylindricalParticle {
 
-    private WindSpiralParticle(CylindricalParticleOptions data, ClientLevel level, double x, double y, double z, double xDir, double yDir, double zDir) {
+    public WindSpiralParticle(CylindricalParticleOptions data, ClientLevel level, double x, double y, double z, double xDir, double yDir, double zDir) {
 
         super(data, level, x, y, z, xDir, yDir, zDir);
         //alpha = 0.20F * (1.0F + random.nextFloat());
@@ -54,12 +54,6 @@ public class WindSpiralParticle extends CylindricalParticle {
             poss[i] = new Vector4f(r * MathHelper.cos(angle), i * yScale + height * y, r * MathHelper.sin(angle), 1.0F);
         }
         VFXHelper.renderStreamLine(stack, CoreShaders.PIXELATE.getBuffer(BLANK_TEXTURE), packedLightIn, poss, c0, VFXHelper.getWidthFunc((easeSin * 0.06F + 0.01F) * rand.nextFloat(0.6F, 1.1F)));
-    }
-
-    @Nonnull
-    public static ParticleProvider<CylindricalParticleOptions> factory(SpriteSet spriteSet) {
-
-        return WindSpiralParticle::new;
     }
 
 }

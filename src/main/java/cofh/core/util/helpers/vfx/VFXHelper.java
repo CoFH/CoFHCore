@@ -211,8 +211,12 @@ public final class VFXHelper {
      */
     public static Quaternionf alignVertical(Vector3f dir) {
 
-        if (dir.x() == 0 && dir.y() == 0 && dir.z() == 0) {
-            return new Quaternionf();
+        if (dir.x() == 0 && dir.z() == 0) {
+            if (dir.y() >= 0) {
+                return new Quaternionf();
+            } else {
+                return new Quaternionf(1, 0, 0, 0);
+            }
         }
         return MathHelper.rotation(new Vector3f(dir).normalize().add(0, 1, 0).normalize(), MathHelper.F_PI);
     }

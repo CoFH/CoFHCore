@@ -25,7 +25,7 @@ public class ShardParticle extends PointToPointParticle {
     //The displacement, i.e. the start point subtracted from the end point.
     protected Vector3f disp;
 
-    private ShardParticle(BiColorParticleOptions data, ClientLevel level, double sx, double sy, double sz, double ex, double ey, double ez) {
+    public ShardParticle(BiColorParticleOptions data, ClientLevel level, double sx, double sy, double sz, double ex, double ey, double ez) {
 
         super(data, level, sx, sy, sz, ex, ey, ez);
         this.friction = 1.0F;
@@ -79,12 +79,6 @@ public class ShardParticle extends PointToPointParticle {
         buffer.getBuffer(RenderTypes.LINEAR_GLOW);
         buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT);
         RenderHelper.renderBipyramid(stack, consumer, packedLight, c0.mix(Color.WHITE, 0.5F), 4, 0.4F, 0.066F);
-    }
-
-    @Nonnull
-    public static ParticleProvider<BiColorParticleOptions> factory(SpriteSet spriteSet) {
-
-        return ShardParticle::new;
     }
 
 }

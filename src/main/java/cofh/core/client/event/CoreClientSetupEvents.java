@@ -63,18 +63,20 @@ public class CoreClientSetupEvents {
 
         event.registerSpriteSet(FIRE.get(), FireParticle::factory);
         event.registerSpriteSet(BLAST.get(), BlastParticle::factory);
+        event.registerSpecial(PULSE.get(), PulseParticle::new);
         event.registerSpriteSet(MIST.get(), MistParticle::factory);
         event.registerSpriteSet(SQUARE.get(), SquareParticle::factory);
 
-        event.registerSpriteSet(SHOCKWAVE.get(), ShockwaveParticle::factory);
-        event.registerSpriteSet(BLAST_WAVE.get(), BlastWaveParticle::factory);
-        event.registerSpriteSet(WIND_VORTEX.get(), WindVortexParticle::factory);
-        event.registerSpriteSet(WIND_SPIRAL.get(), WindSpiralParticle::factory);
+        event.registerSpecial(SHOCKWAVE.get(), ShockwaveParticle::new);
+        event.registerSpecial(BLAST_WAVE.get(), BlastWaveParticle::new);
+        event.registerSpecial(WIND_VORTEX.get(), WindVortexParticle::new);
+        event.registerSpecial(WIND_SPIRAL.get(), WindSpiralParticle::new);
+        event.registerSpecial(RING.get(), RingParticle::new);
 
-        event.registerSpriteSet(BEAM.get(), BeamParticle::factory);
-        event.registerSpriteSet(STRAIGHT_ARC.get(), ArcParticle::factory);
-        event.registerSpriteSet(SHARD.get(), ShardParticle::factory);
-        event.registerSpriteSet(STREAM.get(), StreamParticle::factory);
+        event.registerSpecial(BEAM.get(), BeamParticle::new);
+        event.registerSpecial(STRAIGHT_ARC.get(), ArcParticle::new);
+        event.registerSpecial(SHARD.get(), ShardParticle::new);
+        event.registerSpecial(STREAM.get(), StreamParticle::new);
     }
 
     @SubscribeEvent

@@ -1,5 +1,6 @@
 package cofh.core.util.helpers.vfx;
 
+import cofh.core.init.CoreShaders;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
@@ -130,6 +131,7 @@ public class RenderTypes {
     public static ParticleRenderType PARTICLE_SHEET_OVER = translucentSheet(() -> PARTICLE_OVER);
     public static ParticleRenderType PARTICLE_SHEET_ADDITIVE_MULTIPLY = translucentSheet(() -> PARTICLE_ADDITIVE_MULTIPLY);
     public static ParticleRenderType PARTICLE_SHEET_ADDITIVE_SCREEN = translucentSheet(() -> PARTICLE_ADDITIVE_SCREEN);
+    public static ParticleRenderType PARTICLE_SHEET_RING = translucentSheet(() -> PARTICLE_RING);
 
     static ParticleRenderType translucentSheet(Supplier<ShaderInstance> shader) {
 
