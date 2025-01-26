@@ -3,15 +3,18 @@ package cofh.core.client.event;
 import cofh.core.client.PostEffect;
 import cofh.core.client.model.FluidContainerItemModel;
 import cofh.core.client.particle.impl.*;
+import cofh.core.util.helpers.vfx.RenderTypes;
 import cofh.lib.api.item.IColorableItem;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.color.item.ItemColors;
+import net.minecraft.client.renderer.RenderStateShard;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.*;
 import net.minecraftforge.client.event.ModelEvent.RegisterGeometryLoaders;
-import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
-import net.minecraftforge.client.event.RegisterColorHandlersEvent;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -77,6 +80,26 @@ public class CoreClientSetupEvents {
         event.registerSpecial(STRAIGHT_ARC.get(), ArcParticle::new);
         event.registerSpecial(SHARD.get(), ShardParticle::new);
         event.registerSpecial(STREAM.get(), StreamParticle::new);
+    }
+
+    @SubscribeEvent
+    public static void registerNamedRenderTypes(final RegisterNamedRenderTypesEvent event) {
+
+        event.register("no_shade", RenderType.solid(), RenderType.create("no_shade",
+                DefaultVertexFormat.NEW_ENTITY,
+                VertexFormat.Mode.QUADS,
+                256,
+                true,
+                true,
+                RenderType.CompositeState.builder()
+                        .setShaderState(RenderTypes.TRANSLUCENT_SHADER)
+                        .setTextureState(new RenderStateShard.TextureStateShard(TextureAtlas.LOCATION_BLOCKS, false, false))
+                        .setTransparencyState(RenderType.TRANSLUCENT_TRANSPARENCY)
+                        .setOutputState(RenderType.ITEM_ENTITY_TARGET)
+                        .setLightmapState(RenderType.LIGHTMAP)
+                        .setOverlayState(RenderType.OVERLAY)
+                        .setWriteMaskState(RenderStateShard.COLOR_DEPTH_WRITE)
+                        .createCompositeState(true)));
     }
 
     @SubscribeEvent

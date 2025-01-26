@@ -1,6 +1,5 @@
 package cofh.core.util.helpers.vfx;
 
-import cofh.core.init.CoreShaders;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
@@ -26,14 +25,7 @@ public class RenderTypes {
     public static final ResourceLocation BLANK_TEXTURE = new ResourceLocation(ID_COFH_CORE, "textures/render/blank.png");
     public static final ResourceLocation LIN_GLOW_TEXTURE = new ResourceLocation(ID_COFH_CORE, "textures/render/glow_linear.png");
     public static final ResourceLocation RND_GLOW_TEXTURE = new ResourceLocation(ID_COFH_CORE, "textures/render/glow_round.png");
-
-    private static final DepthTestStateShard DISABLE_DEPTH = new DepthTestStateShard("none", 519) {
-        @Override
-        public void setupRenderState() {
-
-            RenderSystem.disableDepthTest();
-        }
-    };
+    public static final ShaderStateShard TRANSLUCENT_SHADER = new RenderStateShard.ShaderStateShard(() -> TRANSLUCENT);
 
     public static final RenderType OVERLAY_LINES = RenderType.create("cofh:overlay_lines",
             DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.LINES, 256, false, true,
@@ -85,8 +77,8 @@ public class RenderTypes {
         return RenderType.create("cofh_core:translucent", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true,
                 RenderType.CompositeState.builder()
                         .setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
-                        .setShaderState(RENDERTYPE_TRANSLUCENT_NO_CRUMBLING_SHADER)
-                        .setOutputState(MAIN_TARGET)
+                        .setShaderState(TRANSLUCENT_SHADER)
+                        .setOutputState(TRANSLUCENT_TARGET)
                         .setWriteMaskState(COLOR_DEPTH_WRITE)
                         .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
                         .setLightmapState(LIGHTMAP)
@@ -98,30 +90,23 @@ public class RenderTypes {
         return RenderType.create("cofh_core:translucent", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true,
                 RenderType.CompositeState.builder()
                         .setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
-                        .setShaderState(RENDERTYPE_TRANSLUCENT_NO_CRUMBLING_SHADER)
-                        .setOutputState(MAIN_TARGET)
-                        .setWriteMaskState(COLOR_WRITE)
-                        .setCullState(NO_CULL)
-                        .setLightmapState(LIGHTMAP)
+                        .setShaderState(TRANSLUCENT_SHADER)
+                        .setOutputState(TRANSLUCENT_TARGET)
+                        .setWriteMaskState(COLOR_DEPTH_WRITE)
                         .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+                        .setLightmapState(LIGHTMAP)
+                        .setCullState(NO_CULL)
                         .createCompositeState(false));
     }
 
     public static RenderType translucentNoDepthWrite(ResourceLocation texture) {
 
         return RenderType.create("cofh_core:translucent", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true,
-                //RenderType.CompositeState.builder()
-                //        .setShaderState(RenderType.RENDERTYPE_ENTITY_TRANSLUCENT_SHADER)
-                //        .setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
-                //        .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
-                //        .setCullState(CULL)
-                //        .setLightmapState(LIGHTMAP)
-                //        .setOverlayState(OVERLAY)
-                //        .createCompositeState(false));
+
                 RenderType.CompositeState.builder()
                         .setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
-                        .setShaderState(RENDERTYPE_TRANSLUCENT_NO_CRUMBLING_SHADER)
-                        .setOutputState(MAIN_TARGET)
+                        .setShaderState(TRANSLUCENT_SHADER)
+                        .setOutputState(TRANSLUCENT_TARGET)
                         .setWriteMaskState(COLOR_WRITE)
                         .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
                         .setLightmapState(LIGHTMAP)

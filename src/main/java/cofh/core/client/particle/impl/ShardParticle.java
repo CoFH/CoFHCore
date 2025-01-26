@@ -48,7 +48,6 @@ public class ShardParticle extends PointToPointParticle {
         float dy = disp.y() * progress;
         float dz = disp.z() * progress;
         stack.translate(dx, dy, dz);
-        float dist = MathHelper.dist(dx, dy, dz);
         stack.scale(size, size, size);
         //if (progress > 1.0F) {
         //    this.alpha = Math.max(1 - MathHelper.easeOutCubic(progress - 1.0F) * 5, 0);
@@ -60,14 +59,13 @@ public class ShardParticle extends PointToPointParticle {
 
         // Trail
         Vector4f start = new Vector4f(0, 0, 0, 1).mul(pose);
-        Vector4f end = new Vector4f(0, -Math.min(dist / size, 3.0F), 0, 1).mul(pose);
-        Vector2f perp = VFXHelper.axialPerp(start, end, 1.0F);
+        float length = Math.min(MathHelper.dist(dx, dy, dz) / size, 3.0F);
+        Vector4f end = new Vector4f(0, -length, 0, 1).mul(pose);
         float w = 0.12F * size;
-        float xs = perp.x * w;
-        float ys = perp.y * w;
+        Vector2f perp = VFXHelper.axialPerp(start, end, w);
         consumer = buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT);
-        new VFXHelper.VFXNode(start.x() + xs, start.x() - xs, start.y() + ys, start.y() - ys, start.z(), w).renderStart(norm, consumer, packedLight, c1);
-        new VFXHelper.VFXNode(end.x(), end.x(), end.y(), end.y(), end.z(), w * 0.1F).renderEnd(norm, consumer, packedLight, c1);
+        new VFXHelper.VFXNode(start, perp).renderStart(norm, consumer, packedLight, c1);
+        new VFXHelper.VFXNode(end, perp.mul(0)).renderEnd(norm, consumer, packedLight, c1);
 
         // If different colors, end batch so the body always renders on top of the trail.
         if (!c0.sameRGB(c1)) {

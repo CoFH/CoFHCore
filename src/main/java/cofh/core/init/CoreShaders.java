@@ -24,6 +24,7 @@ import static net.minecraft.client.renderer.RenderStateShard.TRANSLUCENT_TRANSPA
 @Mod.EventBusSubscriber (value = Dist.CLIENT, modid = ID_COFH_CORE, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CoreShaders {
 
+    public static ShaderInstance TRANSLUCENT;
     public static ShaderInstance PARTICLE_OVER;
     public static ShaderInstance PARTICLE_ADDITIVE_MULTIPLY;
     public static ShaderInstance PARTICLE_ADDITIVE_SCREEN;
@@ -54,6 +55,7 @@ public class CoreShaders {
     @SubscribeEvent
     public static void registerShaders(final RegisterShadersEvent event) throws IOException {
 
+        registerShader(event, "translucent", DefaultVertexFormat.NEW_ENTITY, s -> TRANSLUCENT = s);
         registerShader(event, "particle_over", DefaultVertexFormat.PARTICLE, s -> PARTICLE_OVER = s);
         registerShader(event, "particle_add", DefaultVertexFormat.PARTICLE, s -> PARTICLE_ADDITIVE_MULTIPLY = s);
         registerShader(event, "particle_screen", DefaultVertexFormat.PARTICLE, s -> PARTICLE_ADDITIVE_SCREEN = s);

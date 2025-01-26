@@ -13,7 +13,7 @@ public class ColorParticleType extends ParticleType<ColorParticleOptions> {
 
     public ColorParticleType() {
 
-        this(false);
+        this(true);
     }
 
     @Override

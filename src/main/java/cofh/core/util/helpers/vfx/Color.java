@@ -52,12 +52,12 @@ public class Color {
 
     public void apply(GuiGraphics graphics) {
 
-        graphics.setColor(r * INT_TO_FLOAT, g * INT_TO_FLOAT, b * INT_TO_FLOAT, a * INT_TO_FLOAT);
+        graphics.setColor(redFloat(), greenFloat(), blueFloat(), alphaFloat());
     }
 
     public Color scaleRGB(float scale) {
 
-        return new Color(scale(r, scale), scale(g, scale), scale(b, scale), a);
+        return scaleRGB(scale, scale, scale);
     }
 
     public Color scaleRGB(float sr, float sg, float sb) {
@@ -103,6 +103,26 @@ public class Color {
     public boolean sameRGB(int other) {
 
         return sameRGB(fromRGBA(other));
+    }
+
+    public float redFloat() {
+
+        return r * INT_TO_FLOAT;
+    }
+
+    public float greenFloat() {
+
+        return g * INT_TO_FLOAT;
+    }
+
+    public float blueFloat() {
+
+        return b * INT_TO_FLOAT;
+    }
+
+    public float alphaFloat() {
+
+        return a * INT_TO_FLOAT;
     }
 
     //Linearly interpolate between colors

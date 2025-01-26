@@ -12,8 +12,6 @@ import it.unimi.dsi.fastutil.PriorityQueue;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectHeapPriorityQueue;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.ParticleProvider;
-import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -22,7 +20,6 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -90,14 +87,13 @@ public class StreamParticle extends PointToPointParticle {
         inv = 1.0F / posns.length;
         for (int i = 1; i < last; ++i) {
             float width = (MathHelper.sin(i + offset) * 0.1F + 0.2F) * MathHelper.easePlateau(inv);
-            nodes[i] = new VFXHelper.VFXNode(posns[i], VFXHelper.axialPerp(posns[i - 1], posns[i + 1], width), width);
+            nodes[i] = new VFXHelper.VFXNode(posns[i], VFXHelper.axialPerp(posns[i - 1], posns[i + 1], width));
         }
         float width = 0;
-        nodes[0] = new VFXHelper.VFXNode(posns[0], VFXHelper.axialPerp(posns[0], posns[1], width), width);
+        nodes[0] = new VFXHelper.VFXNode(posns[0], VFXHelper.axialPerp(posns[0], posns[1], width));
         width = 0;
-        nodes[last] = new VFXHelper.VFXNode(posns[last], VFXHelper.axialPerp(posns[last - 1], posns[last], width), width);
-        VFXHelper.renderNodes(normal, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLight, nodes, c0);
-
+        nodes[last] = new VFXHelper.VFXNode(posns[last], VFXHelper.axialPerp(posns[last - 1], posns[last], width));
+        VFXHelper.renderNodes(normal, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLight, c0, nodes);
 
         //float len = end - start;
         //Function<Float, Float> width = p -> 0.2F * (MathHelper.sin(len * p) * 0.5F + 1.0F) * MathHelper.easePlateau(p);
