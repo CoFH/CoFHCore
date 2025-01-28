@@ -2,6 +2,7 @@ package cofh.core.client.particle;
 
 import cofh.core.client.event.CoreClientEvents;
 import cofh.core.client.particle.options.CoFHParticleOptions;
+import cofh.core.util.helpers.vfx.RenderTypes;
 import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -81,7 +82,7 @@ public abstract class CoFHParticle extends Particle {
     @Override
     public ParticleRenderType getRenderType() {
 
-        return ParticleRenderType.CUSTOM;
+        return RenderTypes.MISC;
     }
 
     @Override

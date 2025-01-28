@@ -113,33 +113,66 @@ public class RenderTypes {
                         .createCompositeState(false));
     }
 
-    public static ParticleRenderType PARTICLE_SHEET_OVER = translucentSheet(() -> PARTICLE_OVER);
-    public static ParticleRenderType PARTICLE_SHEET_ADDITIVE_MULTIPLY = translucentSheet(() -> PARTICLE_ADDITIVE_MULTIPLY);
-    public static ParticleRenderType PARTICLE_SHEET_ADDITIVE_SCREEN = translucentSheet(() -> PARTICLE_ADDITIVE_SCREEN);
-    public static ParticleRenderType PARTICLE_SHEET_RING = translucentSheet(() -> PARTICLE_RING);
+    public static ParticleRenderType PARTICLE_SHEET_OVER = new TranslucentParticleRenderType(() -> PARTICLE_OVER);
+    public static ParticleRenderType PARTICLE_SHEET_ADDITIVE_MULTIPLY = new TranslucentParticleRenderType(() -> PARTICLE_ADDITIVE_MULTIPLY);
+    public static ParticleRenderType PARTICLE_SHEET_ADDITIVE_SCREEN = new TranslucentParticleRenderType(() -> PARTICLE_ADDITIVE_SCREEN);
+    public static ParticleRenderType PARTICLE_SHEET_RING = new TranslucentParticleRenderType(() -> PARTICLE_RING);
+    public static ParticleRenderType MISC = new ParticleRenderType() {
 
-    static ParticleRenderType translucentSheet(Supplier<ShaderInstance> shader) {
+        @Override
+        public void begin(BufferBuilder builder, TextureManager manager) {
 
-        return new ParticleRenderType() {
+            RenderSystem.depthMask(true);
+            RenderSystem.disableBlend();
+            builder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
+        }
 
-            @Override
-            public void begin(BufferBuilder builder, TextureManager manager) {
+        @Override
+        public void end(Tesselator tesselator) {
 
-                RenderSystem.depthMask(false); // TODO post shader
-                RenderSystem.enableBlend();
-                RenderSystem.setShader(shader);
-                RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_PARTICLES);
-                builder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
-            }
+            tesselator.end();
+        }
 
-            @Override
-            public void end(Tesselator tess) {
+        @Override
+        public String toString() {
 
-                tess.end();
-                RenderSystem.depthMask(true);
-                RenderSystem.disableBlend();
-            }
-        };
+            return ID_COFH_CORE + ":misc";
+        }
+
+    };
+
+    protected static class TranslucentParticleRenderType implements ParticleRenderType {
+
+        protected final Supplier<ShaderInstance> shader;
+
+        protected TranslucentParticleRenderType(Supplier<ShaderInstance> shader) {
+
+            this.shader = shader;
+        }
+
+        @Override
+        public void begin(BufferBuilder builder, TextureManager manager) {
+
+            RenderSystem.depthMask(true); // TODO post shader
+            RenderSystem.enableBlend();
+            RenderSystem.defaultBlendFunc();
+            RenderSystem.setShader(shader);
+            RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_PARTICLES);
+            builder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
+        }
+
+        @Override
+        public void end(Tesselator tess) {
+
+            tess.end();
+        }
+
+        @Override
+        public String toString() {
+
+            return shader.get().getName() + "_translucent";
+        }
+
     }
 
 }

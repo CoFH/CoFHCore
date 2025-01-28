@@ -14,6 +14,7 @@ import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import it.unimi.dsi.fastutil.objects.Object2ReferenceOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import it.unimi.dsi.fastutil.objects.Reference2ReferenceOpenHashMap;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -67,7 +68,7 @@ public class CoreClientEvents {
     public static int renderTime;
     public static float renderFrame;
     public static LivingEntity itemHolder = null;
-    public static final Map<ParticleRenderType, Queue<CoFHParticle>> delayedRenderParticles = new Object2ReferenceOpenHashMap<>();
+    public static final Map<ParticleRenderType, Queue<CoFHParticle>> delayedRenderParticles = new Reference2ReferenceOpenHashMap<>();
 
     private static final Set<String> NAMESPACES = new ObjectOpenHashSet<>();
 
@@ -225,6 +226,7 @@ public class CoreClientEvents {
             Tesselator tesselator = Tesselator.getInstance();
             BufferBuilder consumer = tesselator.getBuilder();
             LightTexture light = minecraft.gameRenderer.lightTexture();
+            RenderSystem.enableDepthTest();
 
             light.turnOnLightLayer();
 
@@ -232,10 +234,12 @@ public class CoreClientEvents {
             Vec3 pos = event.getCamera().getPosition();
             stack.translate(-pos.x, -pos.y, -pos.z);
             for (ParticleRenderType renderType : delayedRenderParticles.keySet()) {
+                Queue<CoFHParticle> particles = delayedRenderParticles.get(renderType);
+                if (particles.isEmpty()) {
+                    continue;
+                }
                 RenderSystem.setShader(GameRenderer::getParticleShader);
                 RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-                Queue<CoFHParticle> particles = delayedRenderParticles.get(renderType);
-
                 renderType.begin(consumer, manager);
                 while (!particles.isEmpty()) {
                     particles.poll().render(stack, buffer, consumer, partialTick);
