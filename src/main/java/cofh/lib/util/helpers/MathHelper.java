@@ -28,6 +28,7 @@ public final class MathHelper {
     public static final double TO_RAD = 0.017453292519943;
     public static final double SQRT_2 = 1.414213562373095;
 
+    public static final float F_HALF_PI = (float) Math.PI / 2.0F;
     public static final float F_PI = (float) Math.PI;
     public static final float F_TAU = (float) Math.PI * 2.0F;
     public static final float F_TO_DEG = (float) TO_DEG;
@@ -412,7 +413,7 @@ public final class MathHelper {
 
     public static Vec2 decomposeLookVector(Vec3 v) {
 
-        float xRot = v.y <= -1 ? MathHelper.F_PI * 0.5F : asin((float) -v.y);
+        float xRot = v.y <= -1 ? MathHelper.F_HALF_PI : asin((float) -v.y);
         if (Math.abs(-v.y) > 0.9999) {
             return new Vec2(xRot * F_TO_DEG, 0);
         }

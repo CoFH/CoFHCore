@@ -45,7 +45,7 @@ public class WindVortexParticle extends CylindricalParticle {
         for (int i = 0; i < outer; ++i) {
             float rot = angle - i * incr;
             float r = 0.6F + 0.4F * rot * (1.0F - MathHelper.cos(rot));
-            float y = 0.25F + 0.25F * (1.0F - MathHelper.cos(rot * 0.32F * MathHelper.F_PI * 0.5F));
+            float y = 0.25F + 0.25F * (1.0F - MathHelper.cos(rot * 0.32F * MathHelper.F_HALF_PI));
             rot += roll;
             posns[i] = new Vector4f(r * MathHelper.cos(rot), y, r * MathHelper.sin(rot), 1.0F);
         }

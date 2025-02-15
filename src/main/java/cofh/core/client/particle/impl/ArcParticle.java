@@ -12,14 +12,10 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
 import it.unimi.dsi.fastutil.longs.LongList;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.ParticleProvider;
-import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import org.joml.Vector3f;
-
-import javax.annotation.Nonnull;
 
 public class ArcParticle extends PointToPointParticle {
 
@@ -53,7 +49,7 @@ public class ArcParticle extends PointToPointParticle {
         if (CoreClientConfig.particleDynamicLighting.get() && this.age >= this.delay) {
             int light = getDynamicLightLevel();
             for (int i = path.size() - 1; i >= 0; --i) {
-                TransientLightManager.addLight(path.getLong(i), light);
+                TransientLightManager.addLight(level, path.getLong(i), light);
             }
         }
         if (this.age++ >= this.lifetime) {
@@ -111,7 +107,7 @@ public class ArcParticle extends PointToPointParticle {
     public void render(PoseStack stack, MultiBufferSource buffer, VertexConsumer consumer, int packedLight, float time, float pTicks) {
 
         float progress = time / duration;
-        float easeCos = MathHelper.cos(progress * MathHelper.F_PI * 0.5F);
+        float easeCos = MathHelper.cos(progress * MathHelper.F_HALF_PI);
         float easeCub = 1.0F - MathHelper.easeInCubic(progress);
         VFXHelper.alignVertical(stack, MathHelper.ZERO, disp);
         VFXHelper.renderStraightArcs(stack, buffer, packedLight, 2, this.size * (easeCos * 1.5F - 0.5F), 0.015F,

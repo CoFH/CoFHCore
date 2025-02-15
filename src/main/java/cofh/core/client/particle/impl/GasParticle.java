@@ -63,7 +63,7 @@ public abstract class GasParticle extends SpriteParticle {
     @Override
     public ParticleRenderType getRenderType() {
 
-        return RenderTypes.PARTICLE_SHEET_OVER;
+        return RenderTypes.PARTICLE_SHEET_BLEND;
     }
 
 }

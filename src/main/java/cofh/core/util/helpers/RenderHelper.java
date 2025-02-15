@@ -19,6 +19,8 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.*;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -88,6 +90,16 @@ public final class RenderHelper {
     public static BlockRenderDispatcher renderBlock() {
 
         return Minecraft.getInstance().getBlockRenderer();
+    }
+
+    public static ModelManager models() {
+
+        return Minecraft.getInstance().getModelManager();
+    }
+
+    public static BakedModel getModel(ResourceLocation location) {
+
+        return models().getModel(location);
     }
 
     public static EntityRenderDispatcher renderEntity() {

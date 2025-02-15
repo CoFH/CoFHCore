@@ -1,6 +1,7 @@
 package cofh.core.client.particle;
 
 import cofh.core.client.particle.options.ColorParticleOptions;
+import cofh.core.util.helpers.vfx.RenderTypes;
 import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -74,7 +75,7 @@ public abstract class SpriteParticle extends ColorParticle {
     @Override
     public ParticleRenderType getRenderType() {
 
-        return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        return RenderTypes.PARTICLE_SHEET_OVER;
     }
 
     @Override

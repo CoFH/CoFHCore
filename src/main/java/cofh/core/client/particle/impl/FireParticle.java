@@ -35,7 +35,7 @@ public class FireParticle extends GasParticle {
             int x = MathHelper.floor(this.x);
             int y = MathHelper.floor(this.y);
             int z = MathHelper.floor(this.z);
-            TransientLightManager.addLight(BlockPos.asLong(x, y, z), getDynamicLightLevel());
+            TransientLightManager.addLight(level, BlockPos.asLong(x, y, z), getDynamicLightLevel());
         }
     }
 
@@ -49,7 +49,7 @@ public class FireParticle extends GasParticle {
 
         float progress = time / duration;
         float easeCub = 1.0F - MathHelper.easeInCubic(progress);
-        //float easeCos = MathHelper.cos(progress * 0.5F * MathHelper.F_PI);
+        //float easeCos = MathHelper.cos(progress * MathHelper.F_HALF_PI);
         //int rgba = VFXHelper.mix(1.0F - easeCos, 0xe9fa50ff, 0xf2461bff, 0xcc0f02ff, 0x363534ff);
         //this.rCol = ((rgba >> 24) & 0xFF) * 0.0039215686F;
         //this.gCol = ((rgba >> 16) & 0xFF) * 0.0039215686F;

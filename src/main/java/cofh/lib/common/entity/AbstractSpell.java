@@ -52,6 +52,11 @@ public abstract class AbstractSpell extends Entity implements TraceableEntity {
     }
 
     @Override
+    protected void handleNetherPortal() {
+
+    }
+
+    @Override
     public void tick() {
 
         if (firstTick) {

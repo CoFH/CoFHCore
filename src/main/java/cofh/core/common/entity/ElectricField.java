@@ -64,7 +64,7 @@ public class ElectricField extends AbstractFieldSpell {
                 ++lastArc;
             }
         } else if (CoreClientConfig.particleDynamicLighting.get()) {
-            TransientLightManager.addLight(BlockPos.containing(getEyePosition()), 8);
+            TransientLightManager.addLight(level, BlockPos.containing(getEyePosition()), 8);
         }
     }
 

@@ -48,7 +48,7 @@ public class PulseParticle extends ColorParticle {
         if (shrinking) {
             progress = 1.0F - progress;
         }
-        float easeSin = MathHelper.sin(progress * MathHelper.F_PI * 0.5F);
+        float easeSin = MathHelper.sin(progress * MathHelper.F_HALF_PI);
         float radius = easeSin * size * 0.5F;
         int u = (int) (radius * 16.0F * 32F);
         int v = thickness;

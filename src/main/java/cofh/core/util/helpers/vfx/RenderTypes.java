@@ -6,6 +6,7 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ShaderInstance;
@@ -113,10 +114,11 @@ public class RenderTypes {
                         .createCompositeState(false));
     }
 
-    public static ParticleRenderType PARTICLE_SHEET_OVER = new TranslucentParticleRenderType(() -> PARTICLE_OVER);
-    public static ParticleRenderType PARTICLE_SHEET_ADDITIVE_MULTIPLY = new TranslucentParticleRenderType(() -> PARTICLE_ADDITIVE_MULTIPLY);
-    public static ParticleRenderType PARTICLE_SHEET_ADDITIVE_SCREEN = new TranslucentParticleRenderType(() -> PARTICLE_ADDITIVE_SCREEN);
-    public static ParticleRenderType PARTICLE_SHEET_RING = new TranslucentParticleRenderType(() -> PARTICLE_RING);
+    public static ParticleRenderType PARTICLE_SHEET_OVER = new TranslucentParticleRenderType(() -> PARTICLE_OVER, true);
+    public static ParticleRenderType PARTICLE_SHEET_BLEND = new TranslucentParticleRenderType(() -> PARTICLE_OVER, false);
+    public static ParticleRenderType PARTICLE_SHEET_ADDITIVE_MULTIPLY = new TranslucentParticleRenderType(() -> PARTICLE_ADDITIVE_MULTIPLY, false);
+    public static ParticleRenderType PARTICLE_SHEET_ADDITIVE_SCREEN = new TranslucentParticleRenderType(() -> PARTICLE_ADDITIVE_SCREEN, false);
+    public static ParticleRenderType PARTICLE_SHEET_RING = new TranslucentParticleRenderType(() -> PARTICLE_RING, true);
     public static ParticleRenderType MISC = new ParticleRenderType() {
 
         @Override
@@ -144,16 +146,18 @@ public class RenderTypes {
     protected static class TranslucentParticleRenderType implements ParticleRenderType {
 
         protected final Supplier<ShaderInstance> shader;
+        protected final boolean depth;
 
-        protected TranslucentParticleRenderType(Supplier<ShaderInstance> shader) {
+        protected TranslucentParticleRenderType(Supplier<ShaderInstance> shader, boolean depth) {
 
             this.shader = shader;
+            this.depth = depth;
         }
 
         @Override
         public void begin(BufferBuilder builder, TextureManager manager) {
 
-            RenderSystem.depthMask(true); // TODO post shader
+            RenderSystem.depthMask(depth);
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
             RenderSystem.setShader(shader);

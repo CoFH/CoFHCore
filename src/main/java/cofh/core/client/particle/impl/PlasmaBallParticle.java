@@ -39,7 +39,7 @@ public class PlasmaBallParticle extends TextureSheetParticle {
         oRoll = roll = random.nextFloat() * 2 * (float) Math.PI;
         setSpriteFromAge(spriteSet);
         if (CoreClientConfig.particleDynamicLighting.get()) {
-            TransientLightManager.addLight(BlockPos.asLong(MathHelper.floor(x), MathHelper.floor(y), MathHelper.floor(z)), 8);
+            TransientLightManager.addLight(level, BlockPos.asLong(MathHelper.floor(x), MathHelper.floor(y), MathHelper.floor(z)), 8);
         }
         super.tick();
     }

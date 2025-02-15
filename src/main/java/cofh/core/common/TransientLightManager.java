@@ -4,6 +4,7 @@ import cofh.core.util.ProxyUtils;
 import cofh.lib.util.constants.ModIds;
 import it.unimi.dsi.fastutil.longs.Long2ByteMap;
 import it.unimi.dsi.fastutil.longs.Long2ByteOpenHashMap;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
 import net.minecraft.world.level.Level;
@@ -21,47 +22,55 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber (modid = ModIds.ID_COFH_CORE)
 public class TransientLightManager {
 
-    protected static final BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos();
-    protected static Long2ByteMap CURRENT = new Long2ByteOpenHashMap();
-    protected static Long2ByteMap PREVIOUS = new Long2ByteOpenHashMap();
+    protected static final BlockPos.MutableBlockPos CURSOR = new BlockPos.MutableBlockPos();
+    protected static Long2ByteMap current = new Long2ByteOpenHashMap();
+    protected static Long2ByteMap previous = new Long2ByteOpenHashMap();
+    protected static Level last = null;
 
     // region TRANSIENT
-    public static void addLight(BlockPos pos, int level) {
+    public static void addLight(Level level, BlockPos pos, int light) {
 
-        addLight(pos.asLong(), level);
+        addLight(level, pos.asLong(), light);
     }
 
     /**
      * Places a light source lasting one tick in the client level.
      *
+     * @param level The level in which this source should be placed. Mainly used for validation.
      * @param pos   The position to place the light source at.
-     * @param level The light level of the light source.
+     * @param light The light level of the light source.
      */
-    public static void addLight(long pos, int level) {
+    public static void addLight(Level level, long pos, int light) {
 
-        if (0 < level && level < 16 && level > CURRENT.get(pos)) {
-            CURRENT.put(pos, (byte) level);
+        if (level.equals(ProxyUtils.getClientWorld()) && 0 < light && light < 16 && light > current.get(pos)) {
+            current.put(pos, (byte) light);
         }
     }
 
     @SubscribeEvent
     protected static void tick(TickEvent.ClientTickEvent event) {
 
-        if (event.phase != TickEvent.Phase.END || CURRENT.isEmpty() && PREVIOUS.isEmpty()) {
+        if (event.phase != TickEvent.Phase.END || current.isEmpty() && previous.isEmpty()) {
             return;
         }
         Level level = ProxyUtils.getClientWorld();
+        if (level == null || !level.equals(last)) {
+            current.clear();
+            level = last;
+            last = ProxyUtils.getClientWorld();
+        }
         if (level == null || !(level.getLightEngine().blockEngine instanceof BlockLightEngine engine)) {
-            CURRENT.clear();
+            current.clear();
+            previous.clear();
             return;
         }
-        for (Long2ByteMap.Entry entry : CURRENT.long2ByteEntrySet()) {
+        for (Long2ByteMap.Entry entry : current.long2ByteEntrySet()) {
             long pos = entry.getLongKey();
             if (!engine.storage.storingLightForSection(SectionPos.blockToSection(pos))) {
                 return;
             }
             int light = entry.getByteValue();
-            int previous = PREVIOUS.remove(pos);
+            int previous = TransientLightManager.previous.remove(pos);
             if (previous == light) {
                 continue;
             }
@@ -71,7 +80,7 @@ public class TransientLightManager {
             }
             boolean empty = true;
             if (stored == previous) {
-                BlockState state = engine.getState(cursor.set(pos));
+                BlockState state = engine.getState(CURSOR.set(pos));
                 int emitted = engine.getEmission(pos, state);
                 if (emitted > light) {
                     if (emitted == stored) {
@@ -91,14 +100,14 @@ public class TransientLightManager {
                 engine.enqueueIncrease(pos, LightEngine.QueueEntry.increaseLightFromEmission(light, empty));
             }
         }
-        for (Long2ByteMap.Entry entry : PREVIOUS.long2ByteEntrySet()) {
+        for (Long2ByteMap.Entry entry : previous.long2ByteEntrySet()) {
             long pos = entry.getLongKey();
             if (engine.storage.getStoredLevel(pos) == entry.getByteValue()) {
-                engine.checkBlock(cursor.set(pos));
+                engine.checkBlock(CURSOR.set(pos));
             }
         }
-        PREVIOUS = CURRENT;
-        CURRENT = new Long2ByteOpenHashMap(CURRENT.size() + 10);
+        previous = current;
+        current = new Long2ByteOpenHashMap(current.size() + 10);
     }
 
 }
