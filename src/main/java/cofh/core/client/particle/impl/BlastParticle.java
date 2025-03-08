@@ -3,6 +3,7 @@ package cofh.core.client.particle.impl;
 import cofh.core.client.particle.SpriteParticle;
 import cofh.core.client.particle.options.ColorParticleOptions;
 import cofh.core.util.helpers.RenderHelper;
+import cofh.core.util.helpers.vfx.RenderTypes;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.ParticleRenderType;
@@ -18,12 +19,6 @@ public class BlastParticle extends SpriteParticle {
         //gravity = -0.1F;
         //friction = 0.9F;
         oRoll = roll = 0.5F * (float) random.nextGaussian();
-    }
-
-    @Override
-    public ParticleRenderType getRenderType() {
-
-        return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
     }
 
     @Override

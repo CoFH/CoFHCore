@@ -1,11 +1,13 @@
 package cofh.core.client.particle;
 
+import cofh.core.client.particle.impl.FireParticle;
 import cofh.core.client.particle.options.ColorParticleOptions;
 import cofh.core.util.helpers.vfx.RenderTypes;
 import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.particle.TextureSheetParticle;
@@ -15,11 +17,13 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector4f;
 
+import javax.annotation.Nonnull;
+
 /**
  * Reimplementation of {@link TextureSheetParticle} in a CoFH flavor.
  * Should theoretically be much more configurable and performant compared to vanilla.
  */
-public abstract class SpriteParticle extends ColorParticle {
+public class SpriteParticle extends ColorParticle {
 
     protected final SpriteSet sprites;
     protected TextureAtlasSprite sprite;
@@ -50,8 +54,8 @@ public abstract class SpriteParticle extends ColorParticle {
 
     protected void setSprite() {
 
-        int max = MathHelper.ceil(this.duration * 128);
-        int time = MathHelper.clamp(MathHelper.floor((this.age - this.delay) * 128), 0, max);
+        int max = MathHelper.ceil(this.duration * 1024);
+        int time = MathHelper.clamp(MathHelper.floor((this.age - this.delay) * 1024), 0, max);
         this.sprite = sprites.get(time, max);
     }
 
@@ -113,6 +117,12 @@ public abstract class SpriteParticle extends ColorParticle {
         consumer.vertex(x - b, y + a, z).uv(u0, v0).color(c0.r, c0.g, c0.b, c0.a).uv2(packedLight).endVertex();
         consumer.vertex(x - a, y - b, z).uv(u0, v1).color(c0.r, c0.g, c0.b, c0.a).uv2(packedLight).endVertex();
         consumer.vertex(x + b, y - a, z).uv(u1, v1).color(c0.r, c0.g, c0.b, c0.a).uv2(packedLight).endVertex();
+    }
+
+    @Nonnull
+    public static ParticleProvider<ColorParticleOptions> factory(SpriteSet spriteSet) {
+
+        return (data, level, x, y, z, dx, dy, dz) -> new SpriteParticle(data, level, spriteSet, x, y, z, dx, dy, dz);
     }
 
 }
