@@ -55,6 +55,7 @@ public class Constants {
 
     public static final EquipmentSlot[] ARMOR_SLOTS = new EquipmentSlot[]{HEAD, CHEST, LEGS, FEET};
     public static final Direction[] DIRECTIONS = Direction.values();
+    public static final Direction[] HORIZONTAL_DIRECTIONS = Direction.Plane.HORIZONTAL.stream().toArray(Direction[]::new);
     public static final Direction[] POSITIVE_DIRECTIONS = Arrays.stream(Direction.Axis.values()).map(axis -> Direction.get(Direction.AxisDirection.POSITIVE, axis)).toArray(Direction[]::new);
     public static final Direction[] NEGATIVE_DIRECTIONS = Arrays.stream(Direction.Axis.values()).map(axis -> Direction.get(Direction.AxisDirection.NEGATIVE, axis)).toArray(Direction[]::new);
     // endregion
