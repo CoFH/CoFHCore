@@ -118,6 +118,7 @@ public class RenderTypes {
     public static ParticleRenderType PARTICLE_SHEET_BLEND = new TranslucentParticleRenderType(() -> PARTICLE_OVER, false);
     public static ParticleRenderType PARTICLE_SHEET_ADDITIVE_MULTIPLY = new TranslucentParticleRenderType(() -> PARTICLE_ADDITIVE_MULTIPLY, false);
     public static ParticleRenderType PARTICLE_SHEET_ADDITIVE_SCREEN = new TranslucentParticleRenderType(() -> PARTICLE_ADDITIVE_SCREEN, false);
+    public static ParticleRenderType PARTICLE_SHEET_ADDITIVE_TINTED = new TranslucentParticleRenderType(() -> PARTICLE_ADDITIVE_TINTED, false);
     public static ParticleRenderType PARTICLE_SHEET_RING = new TranslucentParticleRenderType(() -> PARTICLE_RING, true);
     public static ParticleRenderType MISC = new ParticleRenderType() {
 

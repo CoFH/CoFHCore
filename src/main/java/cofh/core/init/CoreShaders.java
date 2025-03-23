@@ -29,6 +29,7 @@ public class CoreShaders {
     public static ShaderInstance PARTICLE_ADDITIVE_MULTIPLY;
     public static ShaderInstance PARTICLE_ADDITIVE_SCREEN;
     public static ShaderInstance PARTICLE_RING;
+    public static ShaderInstance PARTICLE_ADDITIVE_TINTED;
     public static final PostBuffer PIXELATE = new PostBuffer(new ResourceLocation(ID_COFH_CORE, "pixelate")) {
 
         @Override
@@ -60,6 +61,7 @@ public class CoreShaders {
         registerShader(event, "particle_add", DefaultVertexFormat.PARTICLE, s -> PARTICLE_ADDITIVE_MULTIPLY = s);
         registerShader(event, "particle_screen", DefaultVertexFormat.PARTICLE, s -> PARTICLE_ADDITIVE_SCREEN = s);
         registerShader(event, "particle_ring", DefaultVertexFormat.PARTICLE, s -> PARTICLE_RING = s);
+        registerShader(event, "particle_add_tint", DefaultVertexFormat.PARTICLE, s -> PARTICLE_ADDITIVE_TINTED = s);
     }
 
     private static void registerShader(RegisterShadersEvent event, String id, VertexFormat format, Consumer<ShaderInstance> callback) throws IOException {
