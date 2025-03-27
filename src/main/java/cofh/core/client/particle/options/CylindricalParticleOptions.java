@@ -1,5 +1,6 @@
 package cofh.core.client.particle.options;
 
+import cofh.core.util.helpers.vfx.Color;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
@@ -17,6 +18,12 @@ public class CylindricalParticleOptions extends ColorParticleOptions {
     public CylindricalParticleOptions(ParticleType<? extends CylindricalParticleOptions> type, float size, float duration, float delay, int rgba0, float height) {
 
         super(type, size, duration, delay, rgba0);
+        this.height = height;
+    }
+
+    public CylindricalParticleOptions(ParticleType<? extends CylindricalParticleOptions> type, float size, float duration, float delay, Color color, float height) {
+
+        super(type, size, duration, delay, color);
         this.height = height;
     }
 

@@ -70,24 +70,18 @@ public final class VFXHelper {
         return normal(stack.last().normal());
     }
 
-    //public static int mix(float d, int rgba0, int... colors) {
-    //
-    //    if (colors.length <= 0 || d <= 0) {
-    //        return rgba0;
-    //    }
-    //    if (d >= 1) {
-    //        return colors[colors.length - 1];
-    //    }
-    //    int i = MathHelper.floor(d * colors.length);
-    //    int x = i <= 0 ? rgba0 : colors[i - 1];
-    //    int y = colors[i];
-    //    d = d * colors.length - i;
-    //    int r = MathHelper.interpolate((x >> 24) & 0xFF, (y >> 24) & 0xFF, d);
-    //    int g = MathHelper.interpolate((x >> 16) & 0xFF, (y >> 16) & 0xFF, d);
-    //    int b = MathHelper.interpolate((x >> 8) & 0xFF, (y >> 8) & 0xFF, d);
-    //    int a = MathHelper.interpolate(x & 0xFF, y & 0xFF, d);
-    //    return packRGBA(r, g, b, a);
-    //}
+    public static Color mix(float d, Color c0, Color... colors) {
+
+        if (colors.length <= 0 || d <= 0) {
+            return c0;
+        }
+        if (d >= 1) {
+            return colors[colors.length - 1];
+        }
+        d *= colors.length;
+        int i = MathHelper.floor(d);
+        return (i <= 0 ? c0 : colors[i - 1]).mix(colors[i], d - i);
+    }
 
     public static Vector4f mid(Vector4f a, Vector4f b) {
 

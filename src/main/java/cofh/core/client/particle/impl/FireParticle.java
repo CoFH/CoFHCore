@@ -54,7 +54,7 @@ public class FireParticle extends GasParticle {
         //this.rCol = ((rgba >> 24) & 0xFF) * 0.0039215686F;
         //this.gCol = ((rgba >> 16) & 0xFF) * 0.0039215686F;
         //this.bCol = ((rgba >> 8) & 0xFF) * 0.0039215686F;
-        setColor0(baseColor.scaleAlpha(easeCub));
+        //setColor0(baseColor.scaleAlpha(easeCub));
 
         //Only set render size based off BB size
         this.size = this.bbWidth * MathHelper.sin(0.25F * MathHelper.F_PI * (progress + 1));

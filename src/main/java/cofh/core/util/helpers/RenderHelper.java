@@ -14,6 +14,7 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
@@ -24,15 +25,18 @@ import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.fluids.FluidStack;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
@@ -60,6 +64,7 @@ public final class RenderHelper {
     public static final ResourceLocation MC_FONT_SGA = new ResourceLocation("textures/font/ascii_sga.png");
     public static final ResourceLocation MC_ITEM_GLINT = new ResourceLocation("textures/misc/enchanted_item_glint.png");
     public static PoseStack particleStack = new PoseStack();
+    private static final RandomSource RANDOM = RandomSource.create();
 
     // region ACCESSORS
     public static MultiBufferSource.BufferSource bufferSource() {
@@ -613,6 +618,33 @@ public final class RenderHelper {
         //        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
         //        GlStateManager.popMatrix();
         //        net.minecraft.client.renderer.RenderHelper.enableStandardItemLighting();
+    }
+
+    public static void renderModel(PoseStack stack, MultiBufferSource buffer, BlockState state, long seed, int packedLight, int overlay) {
+
+        renderModel(stack, buffer, state, RenderHelper.renderBlock().getBlockModel(state), 1, 1, 1, 1, seed, packedLight, overlay);
+    }
+
+    public static void renderModel(PoseStack stack, MultiBufferSource buffer, BlockState state, BakedModel model, float r, float g, float b, float a, long seed, int packedLight, int overlay) {
+
+        RANDOM.setSeed(seed);
+        PoseStack.Pose pose = stack.last();
+        for (RenderType type : model.getRenderTypes(state, RANDOM, ModelData.EMPTY)) {
+            VertexConsumer consumer = buffer.getBuffer(type);
+            for (Direction direction : Direction.values()) {
+                RANDOM.setSeed(seed);
+                renderQuadList(pose, consumer, model.getQuads(state, direction, RANDOM, ModelData.EMPTY, type), r, g, b, a, packedLight, overlay);
+            }
+            RANDOM.setSeed(seed);
+            renderQuadList(pose, consumer, model.getQuads(state, null, RANDOM, ModelData.EMPTY, type), r, g, b, a, packedLight, overlay);
+        }
+    }
+
+    private static void renderQuadList(PoseStack.Pose pose, VertexConsumer consumer, List<BakedQuad> quads, float r, float g, float b, float a, int packedLight, int overlay) {
+
+        for (BakedQuad quad : quads) {
+            consumer.putBulkData(pose, quad, r, g, b, a, packedLight, overlay, false);
+        }
     }
 
     // TODO Fix if required, 1.17 render changes are required.

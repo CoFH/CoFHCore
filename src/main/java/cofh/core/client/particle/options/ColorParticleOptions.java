@@ -1,5 +1,6 @@
 package cofh.core.client.particle.options;
 
+import cofh.core.util.helpers.vfx.Color;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
@@ -19,6 +20,12 @@ public class ColorParticleOptions extends CoFHParticleOptions {
 
         super(type, size, duration, delay);
         this.rgba0 = rgba;
+    }
+
+    public ColorParticleOptions(ParticleType<? extends ColorParticleOptions> type, float size, float duration, float delay, Color color) {
+
+        super(type, size, duration, delay);
+        this.rgba0 = color.toRGBA();
     }
 
     public ColorParticleOptions(ParticleType<? extends ColorParticleOptions> type, float size, float duration, float delay) {

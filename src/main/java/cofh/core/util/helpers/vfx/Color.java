@@ -7,6 +7,7 @@ public class Color {
 
     public static final float INT_TO_FLOAT = 0.003921569F;
     public static final Color WHITE = fromRGBA(0xFFFFFFFF);
+
     public final int r;
     public final int g;
     public final int b;

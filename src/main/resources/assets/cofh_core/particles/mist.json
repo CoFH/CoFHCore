@@ -1,5 +1,10 @@
 {
   "textures": [
-    "cofh_core:mist"
+    "cofh_core:smoke_0",
+    "cofh_core:smoke_1",
+    "cofh_core:smoke_2",
+    "cofh_core:smoke_3",
+    "cofh_core:smoke_4",
+    "cofh_core:smoke_4"
   ]
 }
