@@ -37,11 +37,11 @@ public class FrostField extends AbstractFieldSpell {
 
         Vec3 center = position();
         float r = Math.min(tickCount * 12.0F / this.duration, 1.0F);
-        float n = MathHelper.ceil(r * 4);
+        float n = MathHelper.ceil(r * 8);
         r *= getRadius();
         if (level.isClientSide()) {
             for (int i = 0; i < n; ++i) {
-                addParticle(new ColorParticleOptions(MIST.get(), rand.nextFloat(1.0F, 3.0F), rand.nextFloat(50, 70), 0, Color.fromRGBA(rand.nextInt(153, 180), rand.nextInt(192, 216), 255, 48)), center, r);
+                addParticle(new ColorParticleOptions(MIST.get(), rand.nextFloat(1.0F, 3.0F), rand.nextFloat(25, 35), 0, Color.fromRGBA(rand.nextInt(153, 180), rand.nextInt(192, 216), 255, 48)), center, r);
                 addParticle(FROST.get(), center, r);
             }
         } else if (tickCount % 6 == 0) {

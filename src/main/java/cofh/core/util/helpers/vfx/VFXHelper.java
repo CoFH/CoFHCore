@@ -88,6 +88,28 @@ public final class VFXHelper {
         return new Vector4f((a.x() + b.x()) * 0.5F, (a.y() + b.y()) * 0.5F, (a.z() + b.z()) * 0.5F, (a.w() + b.w()) * 0.5F);
     }
 
+    public static Vector3f shake(float scale, float time, long seed) {
+
+        if (scale <= 0) {
+            return new Vector3f();
+        }
+        int floor = MathHelper.floor(time);
+        float frac = time - floor;
+        RandomGenerator r0 = createRandom(floor, seed);
+        RandomGenerator r1 = createRandom(floor - 1, seed);
+        return new Vector3f(interpolate(r0, r1, frac), interpolate(r0, r1, frac), interpolate(r0, r1, frac)).mul(scale);
+    }
+
+    private static float interpolate(RandomGenerator r0, RandomGenerator r1, float fraction) {
+
+        return MathHelper.interpolate(r0.nextFloat(-1, 1), r1.nextFloat(-1, 1), fraction);
+    }
+
+    private static RandomGenerator createRandom(long time, long seed) {
+
+        return new SplittableRandom((time * 42069) ^ (seed * 3151986));
+    }
+
     // region HELPERS
     public static void renderNodes(Vector3f normal, VertexConsumer builder, int packedLight, Color color, VFXNode... nodes) {
 

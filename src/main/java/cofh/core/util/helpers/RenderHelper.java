@@ -622,7 +622,12 @@ public final class RenderHelper {
 
     public static void renderModel(PoseStack stack, MultiBufferSource buffer, BlockState state, long seed, int packedLight, int overlay) {
 
-        renderModel(stack, buffer, state, RenderHelper.renderBlock().getBlockModel(state), 1, 1, 1, 1, seed, packedLight, overlay);
+        renderModel(stack, buffer, state, RenderHelper.renderBlock().getBlockModel(state), seed, packedLight, overlay);
+    }
+
+    public static void renderModel(PoseStack stack, MultiBufferSource buffer, BlockState state, BakedModel model, long seed, int packedLight, int overlay) {
+
+        renderModel(stack, buffer, state, model, 1, 1, 1, 1, seed, packedLight, overlay);
     }
 
     public static void renderModel(PoseStack stack, MultiBufferSource buffer, BlockState state, BakedModel model, float r, float g, float b, float a, long seed, int packedLight, int overlay) {
@@ -722,10 +727,15 @@ public final class RenderHelper {
         buffer.vertex(mat4, (float) aabb.maxX, (float) aabb.minY, (float) aabb.maxZ).color(r, g, b, a).uv(u0, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(mat3, 1.0F, 0.0F, 0.0F).endVertex();
     }
 
-    public static Vector4f[] getCuboidCorners(Matrix4f pose, float w, float l, float h) {
+    public static Vector4f[] getCuboidCorners(Matrix4f pose, float w, float h, float l) {
 
-        Vector4f[] corners = {new Vector4f(-w, -l, -h, 1.0F), new Vector4f(-w, -l, h, 1.0F), new Vector4f(w, -l, -h, 1.0F), new Vector4f(w, -l, h, 1.0F),
-                new Vector4f(w, l, -h, 1.0F), new Vector4f(w, l, h, 1.0F), new Vector4f(-w, l, -h, 1.0F), new Vector4f(-w, l, h, 1.0F)};
+        return getCuboidCorners(pose, -w, -h, -l, w, h, l);
+    }
+
+    public static Vector4f[] getCuboidCorners(Matrix4f pose, float nx, float ny, float nz, float px, float py, float pz) {
+
+        Vector4f[] corners = {new Vector4f(nx, ny, nz, 1.0F), new Vector4f(nx, ny, pz, 1.0F), new Vector4f(px, ny, nz, 1.0F), new Vector4f(px, ny, pz, 1.0F),
+                new Vector4f(px, py, nz, 1.0F), new Vector4f(px, py, pz, 1.0F), new Vector4f(nx, py, nz, 1.0F), new Vector4f(nx, py, pz, 1.0F)};
 
         for (Vector4f corner : corners) {
             corner.mul(pose);
@@ -735,20 +745,20 @@ public final class RenderHelper {
 
     public static void renderSides(VertexConsumer consumer, int light, Color color, Vector4f[] corners, Vector3f normal, float u0, float v0, float u1, float v1) {
 
-        renderFace(consumer, light, color, corners[1], corners[0], corners[2], corners[3], u0, v0, u1, v1, normal);
-        renderFace(consumer, light, color, corners[3], corners[2], corners[4], corners[5], u0, v0, u1, v1, normal);
-        renderFace(consumer, light, color, corners[5], corners[4], corners[6], corners[7], u0, v0, u1, v1, normal);
+        renderFace(consumer, light, color, corners[3], corners[2], corners[4], corners[5], u1, v1, u0, v0, normal);
         renderFace(consumer, light, color, corners[7], corners[6], corners[0], corners[1], u0, v0, u1, v1, normal);
+        renderFace(consumer, light, color, corners[6], corners[4], corners[2], corners[0], u0, v0, u1, v1, normal);
+        renderFace(consumer, light, color, corners[1], corners[3], corners[5], corners[7], u1, v1, u0, v0, normal);
     }
 
     public static void renderBottom(VertexConsumer consumer, int light, Color color, Vector4f[] corners, Vector3f normal, float u0, float v0, float u1, float v1) {
 
-        renderFace(consumer, light, color, corners[6], corners[4], corners[2], corners[0], u0, v0, u1, v1, normal);
+        renderFace(consumer, light, color, corners[1], corners[0], corners[2], corners[3], u0, v0, u1, v1, normal);
     }
 
     public static void renderTop(VertexConsumer consumer, int light, Color color, Vector4f[] corners, Vector3f normal, float u0, float v0, float u1, float v1) {
 
-        renderFace(consumer, light, color, corners[1], corners[3], corners[5], corners[7], u0, v0, u1, v1, normal);
+        renderFace(consumer, light, color, corners[5], corners[4], corners[6], corners[7], u0, v0, u1, v1, normal);
     }
 
     public static void renderCuboid(VertexConsumer consumer, int light, Color color, Vector4f[] corners, Vector3f normal, float u0, float v0, float u1, float v1) {

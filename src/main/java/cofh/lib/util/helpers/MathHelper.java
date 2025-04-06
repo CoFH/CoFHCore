@@ -414,7 +414,7 @@ public final class MathHelper {
     public static Vec2 decomposeLookVector(Vec3 v) {
 
         float xRot = v.y <= -1 ? MathHelper.F_HALF_PI : asin((float) -v.y);
-        if (Math.abs(-v.y) > 0.9999) {
+        if (Math.abs(v.y) > 0.9999) {
             return new Vec2(xRot * F_TO_DEG, 0);
         }
         float yRot = asin((float) v.x / cos(xRot));
