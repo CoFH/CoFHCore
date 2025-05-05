@@ -79,6 +79,7 @@ public class CoreClientSetupEvents {
         event.registerSpecial(BEAM.get(), BeamParticle::new);
         event.registerSpecial(STRAIGHT_ARC.get(), ArcParticle::new);
         event.registerSpecial(SHARD.get(), ShardParticle::new);
+        event.registerSpecial(CURVED_SHARD.get(), CurvedShardParticle::new);
         event.registerSpecial(STREAM.get(), StreamParticle::new);
     }
 

@@ -39,6 +39,7 @@ public class CoreParticles {
 
     public static final RegistryObject<PointToPointParticleType> BEAM = PARTICLES.register(ID_PARTICLE_BEAM, PointToPointParticleType::new);
     public static final RegistryObject<PointToPointParticleType> SHARD = PARTICLES.register(ID_PARTICLE_SHARD, PointToPointParticleType::new);
+    public static final RegistryObject<PointToPointParticleType> CURVED_SHARD = PARTICLES.register(ID_PARTICLE_CURVED_SHARD, PointToPointParticleType::new);
     public static final RegistryObject<PointToPointParticleType> STRAIGHT_ARC = PARTICLES.register(ID_PARTICLE_STRAIGHT_ARC, PointToPointParticleType::new);
     public static final RegistryObject<PointToPointParticleType> STREAM = PARTICLES.register(ID_PARTICLE_STREAM, PointToPointParticleType::new);
 

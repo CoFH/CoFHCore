@@ -1,6 +1,5 @@
 package cofh.core.client.particle;
 
-import cofh.core.client.particle.impl.FireParticle;
 import cofh.core.client.particle.options.ColorParticleOptions;
 import cofh.core.util.helpers.vfx.RenderTypes;
 import cofh.lib.util.helpers.MathHelper;
