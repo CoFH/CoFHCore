@@ -45,20 +45,10 @@ public class FireParticle extends GasParticle {
     }
 
     @Override
-    public void render(PoseStack stack, MultiBufferSource buffer, VertexConsumer consumer, int packedLight, float time, float pTicks) {
+    protected float getSize(float time, float pTicks) {
 
         float progress = time / duration;
-        float easeCub = 1.0F - MathHelper.easeInCubic(progress);
-        //float easeCos = MathHelper.cos(progress * MathHelper.F_HALF_PI);
-        //int rgba = VFXHelper.mix(1.0F - easeCos, 0xe9fa50ff, 0xf2461bff, 0xcc0f02ff, 0x363534ff);
-        //this.rCol = ((rgba >> 24) & 0xFF) * 0.0039215686F;
-        //this.gCol = ((rgba >> 16) & 0xFF) * 0.0039215686F;
-        //this.bCol = ((rgba >> 8) & 0xFF) * 0.0039215686F;
-        //setColor0(baseColor.scaleAlpha(easeCub));
-
-        //Only set render size based off BB size
-        this.size = this.bbWidth * MathHelper.sin(0.25F * MathHelper.F_PI * (progress + 1));
-        super.render(stack, buffer, consumer, packedLight, time, pTicks);
+        return size * MathHelper.sin(0.25F * MathHelper.F_PI * (progress + 1));
     }
 
     @Override

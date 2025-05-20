@@ -1,6 +1,7 @@
 package cofh.core.client.particle;
 
 import cofh.core.client.particle.options.ColorParticleOptions;
+import cofh.core.util.helpers.vfx.Color;
 import cofh.core.util.helpers.vfx.RenderTypes;
 import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -94,13 +95,32 @@ public class SpriteParticle extends ColorParticle {
     @Override
     public void render(PoseStack stack, MultiBufferSource buffer, VertexConsumer consumer, int packedLight, float time, float pTicks) {
 
+        render(stack, consumer, packedLight, sprite, getSize(time, pTicks), getRotation(time, pTicks), getColor(time, pTicks));
+    }
+
+    protected Color getColor(float time, float pTicks) {
+
+        return c0;
+    }
+
+    protected float getRotation(float time, float pTicks) {
+
+        return MathHelper.interpolate(oRoll, roll, pTicks);
+    }
+
+    protected float getSize(float time, float pTicks) {
+
+        return size;
+    }
+
+    public static void render(PoseStack stack, VertexConsumer consumer, int packedLight, TextureAtlasSprite sprite, float size, float rot, Color color) {
+
         Vector4f center = new Vector4f(0, 0, 0, 1).mul(stack.last().pose());
 
         float x = center.x();
         float y = center.y();
         float z = center.z() + 0.1F;
 
-        float rot = MathHelper.interpolate(oRoll, roll, pTicks);
         float sin = MathHelper.sin(rot);
         float cos = MathHelper.cos(rot);
         float w = size * 0.5F;
@@ -112,10 +132,10 @@ public class SpriteParticle extends ColorParticle {
         float v0 = sprite.getV0();
         float v1 = sprite.getV1();
 
-        consumer.vertex(x + a, y + b, z).uv(u1, v0).color(c0.r, c0.g, c0.b, c0.a).uv2(packedLight).endVertex();
-        consumer.vertex(x - b, y + a, z).uv(u0, v0).color(c0.r, c0.g, c0.b, c0.a).uv2(packedLight).endVertex();
-        consumer.vertex(x - a, y - b, z).uv(u0, v1).color(c0.r, c0.g, c0.b, c0.a).uv2(packedLight).endVertex();
-        consumer.vertex(x + b, y - a, z).uv(u1, v1).color(c0.r, c0.g, c0.b, c0.a).uv2(packedLight).endVertex();
+        consumer.vertex(x + a, y + b, z).uv(u1, v0).color(color.r, color.g, color.b, color.a).uv2(packedLight).endVertex();
+        consumer.vertex(x - b, y + a, z).uv(u0, v0).color(color.r, color.g, color.b, color.a).uv2(packedLight).endVertex();
+        consumer.vertex(x - a, y - b, z).uv(u0, v1).color(color.r, color.g, color.b, color.a).uv2(packedLight).endVertex();
+        consumer.vertex(x + b, y - a, z).uv(u1, v1).color(color.r, color.g, color.b, color.a).uv2(packedLight).endVertex();
     }
 
     @Nonnull

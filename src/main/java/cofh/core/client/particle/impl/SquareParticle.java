@@ -17,23 +17,18 @@ import javax.annotation.Nonnull;
 
 public class SquareParticle extends SpriteParticle {
 
-    protected Color baseColor;
-
     private SquareParticle(ColorParticleOptions data, ClientLevel level, SpriteSet sprites, double x, double y, double z, double dx, double dy, double dz) {
 
         super(data, level, sprites, x, y, z, dx, dy, dz);
         oRoll = roll = random.nextFloat() * MathHelper.F_PI;
-        baseColor = c0;
         hasPhysics = false;
         friction = 1;
     }
 
     @Override
-    public void render(PoseStack stack, MultiBufferSource buffer, VertexConsumer consumer, int packedLight, float time, float pTicks) {
+    protected Color getColor(float time, float pTicks) {
 
-        float progress = time / duration;
-        setColor0(baseColor.scaleAlpha(1 - MathHelper.easeInCubic(progress)));
-        super.render(stack, buffer, consumer, packedLight, time, pTicks);
+        return c0.scaleAlpha(1 - MathHelper.easeInCubic(time / duration));
     }
 
     @Override

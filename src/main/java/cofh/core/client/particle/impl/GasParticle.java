@@ -16,14 +16,12 @@ import net.minecraft.world.phys.Vec3;
 
 public abstract class GasParticle extends SpriteParticle {
 
-    protected Color baseColor;
     protected float groundFriction = 0.5F;
 
     protected GasParticle(ColorParticleOptions data, ClientLevel level, SpriteSet sprites, double x, double y, double z, double dx, double dy, double dz) {
 
         super(data, level, sprites, x, y, z, dx, dy, dz);
         oRoll = roll = random.nextFloat() * MathHelper.F_TAU;
-        baseColor = Color.fromRGBA(data.rgba0);
     }
 
     @Override

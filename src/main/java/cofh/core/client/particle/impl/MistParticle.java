@@ -18,21 +18,22 @@ public class MistParticle extends GasParticle {
 
         super(data, level, sprites, x, y, z, dx, dy, dz);
         oRoll = roll = random.nextFloat() * MathHelper.F_TAU;
-        baseColor = Color.fromRGBA(data.rgba0);
         groundFriction = 0.3F;
     }
 
     @Override
-    public void render(PoseStack stack, MultiBufferSource buffer, VertexConsumer consumer, int packedLight, float time, float pTicks) {
+    protected Color getColor(float time, float pTicks) {
 
         float progress = time / duration;
         float q = 2 * progress - 1;
         q *= q;
-        setColor0(baseColor.scaleAlpha(Math.max((1 - q * q) * MathHelper.cos(0.25F * MathHelper.F_PI * progress), 0)));
+        return c0.scaleAlpha(Math.max((1 - q * q) * MathHelper.cos(0.25F * MathHelper.F_PI * progress), 0));
+    }
 
-        //Only set render size based off BB size
-        this.size = this.bbWidth * MathHelper.sin(0.25F * MathHelper.F_PI * (progress + 1));
-        super.render(stack, buffer, consumer, packedLight, time, pTicks);
+    @Override
+    protected float getSize(float time, float pTicks) {
+
+        return size * MathHelper.sin(0.25F * MathHelper.F_PI * (time / duration + 1));
     }
 
     @Nonnull
