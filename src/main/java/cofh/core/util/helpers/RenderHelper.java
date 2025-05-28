@@ -734,8 +734,8 @@ public final class RenderHelper {
 
     public static Vector4f[] getCuboidCorners(Matrix4f pose, float nx, float ny, float nz, float px, float py, float pz) {
 
-        Vector4f[] corners = {new Vector4f(nx, ny, nz, 1.0F), new Vector4f(nx, ny, pz, 1.0F), new Vector4f(px, ny, nz, 1.0F), new Vector4f(px, ny, pz, 1.0F),
-                new Vector4f(px, py, nz, 1.0F), new Vector4f(px, py, pz, 1.0F), new Vector4f(nx, py, nz, 1.0F), new Vector4f(nx, py, pz, 1.0F)};
+        Vector4f[] corners = {new Vector4f(nx, ny, nz, 1.0F), new Vector4f(nx, ny, pz, 1.0F), new Vector4f(px, ny, pz, 1.0F), new Vector4f(px, ny, nz, 1.0F),
+                new Vector4f(nx, py, nz, 1.0F), new Vector4f(nx, py, pz, 1.0F), new Vector4f(px, py, pz, 1.0F), new Vector4f(px, py, nz, 1.0F)};
 
         for (Vector4f corner : corners) {
             corner.mul(pose);
@@ -745,20 +745,20 @@ public final class RenderHelper {
 
     public static void renderSides(VertexConsumer consumer, int light, Color color, Vector4f[] corners, Vector3f normal, float u0, float v0, float u1, float v1) {
 
-        renderFace(consumer, light, color, corners[3], corners[2], corners[4], corners[5], u1, v1, u0, v0, normal);
-        renderFace(consumer, light, color, corners[7], corners[6], corners[0], corners[1], u0, v0, u1, v1, normal);
-        renderFace(consumer, light, color, corners[6], corners[4], corners[2], corners[0], u0, v0, u1, v1, normal);
-        renderFace(consumer, light, color, corners[1], corners[3], corners[5], corners[7], u1, v1, u0, v0, normal);
+        renderFace(consumer, light, color, corners[2], corners[3], corners[7], corners[6], u1, v1, u0, v0, normal);
+        renderFace(consumer, light, color, corners[5], corners[4], corners[0], corners[1], u0, v0, u1, v1, normal);
+        renderFace(consumer, light, color, corners[4], corners[7], corners[3], corners[0], u0, v0, u1, v1, normal);
+        renderFace(consumer, light, color, corners[1], corners[2], corners[6], corners[5], u1, v1, u0, v0, normal);
     }
 
     public static void renderBottom(VertexConsumer consumer, int light, Color color, Vector4f[] corners, Vector3f normal, float u0, float v0, float u1, float v1) {
 
-        renderFace(consumer, light, color, corners[1], corners[0], corners[2], corners[3], u0, v0, u1, v1, normal);
+        renderFace(consumer, light, color, corners[1], corners[0], corners[3], corners[2], u0, v0, u1, v1, normal);
     }
 
     public static void renderTop(VertexConsumer consumer, int light, Color color, Vector4f[] corners, Vector3f normal, float u0, float v0, float u1, float v1) {
 
-        renderFace(consumer, light, color, corners[5], corners[4], corners[6], corners[7], u0, v0, u1, v1, normal);
+        renderFace(consumer, light, color, corners[6], corners[7], corners[4], corners[5], u0, v0, u1, v1, normal);
     }
 
     public static void renderCuboid(VertexConsumer consumer, int light, Color color, Vector4f[] corners, Vector3f normal, float u0, float v0, float u1, float v1) {
@@ -829,7 +829,7 @@ public final class RenderHelper {
     }
 
     /**
-     * Renders a bipyramid.
+     * Renders an inverted bipyramid.
      *
      * @param height    The total height of the polyhedron.
      * @param radius    The maximum distance of a point within the polyhedron from its axis.
@@ -859,15 +859,15 @@ public final class RenderHelper {
         for (int i = 0; i < baseEdges; ++i) {
             Vector4f v0 = v[i];
             Vector4f v1 = v[i + 1];
-            consumer.vertex(v0.x(), v0.y(), v0.z()).color(r, g, b, a).uv(0, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(norm, 0, 1, 0).endVertex();
-            consumer.vertex(v1.x(), v1.y(), v1.z()).color(r, g, b, a).uv(0, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(norm, 0, 1, 0).endVertex();
-            consumer.vertex(u.x(), u.y(), u.z()).color(r, g, b, a).uv(1, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(norm, 0, 1, 0).endVertex();
             consumer.vertex(u.x(), u.y(), u.z()).color(r, g, b, a).uv(1, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(norm, 0, 1, 0).endVertex();
+            consumer.vertex(u.x(), u.y(), u.z()).color(r, g, b, a).uv(1, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(norm, 0, 1, 0).endVertex();
+            consumer.vertex(v1.x(), v1.y(), v1.z()).color(r, g, b, a).uv(0, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(norm, 0, 1, 0).endVertex();
+            consumer.vertex(v0.x(), v0.y(), v0.z()).color(r, g, b, a).uv(0, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(norm, 0, 1, 0).endVertex();
 
-            consumer.vertex(v1.x(), v1.y(), v1.z()).color(r, g, b, a).uv(0, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(norm, 0, 1, 0).endVertex();
-            consumer.vertex(v0.x(), v0.y(), v0.z()).color(r, g, b, a).uv(0, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(norm, 0, 1, 0).endVertex();
-            consumer.vertex(l.x(), l.y(), l.z()).color(r, g, b, a).uv(1, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(norm, 0, 1, 0).endVertex();
             consumer.vertex(l.x(), l.y(), l.z()).color(r, g, b, a).uv(1, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(norm, 0, 1, 0).endVertex();
+            consumer.vertex(l.x(), l.y(), l.z()).color(r, g, b, a).uv(1, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(norm, 0, 1, 0).endVertex();
+            consumer.vertex(v0.x(), v0.y(), v0.z()).color(r, g, b, a).uv(0, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(norm, 0, 1, 0).endVertex();
+            consumer.vertex(v1.x(), v1.y(), v1.z()).color(r, g, b, a).uv(0, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(norm, 0, 1, 0).endVertex();
         }
     }
     // endregion

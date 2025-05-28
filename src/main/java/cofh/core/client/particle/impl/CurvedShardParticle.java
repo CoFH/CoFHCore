@@ -10,13 +10,10 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.renderer.RenderType;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
-
-import static cofh.core.util.helpers.vfx.RenderTypes.LINEAR_GLOW;
-import static cofh.core.util.helpers.vfx.RenderTypes.ROUND_GLOW;
 
 public class CurvedShardParticle extends CurvedPointToPointParticle {
 
@@ -57,22 +54,14 @@ public class CurvedShardParticle extends CurvedPointToPointParticle {
             int j = Math.max(i, 1);
             nodes[i] = new VFXHelper.VFXNode(posns[i], VFXHelper.axialPerp(posns[j - 1], posns[j], 0.35F * size * (length - segment * i)));
         }
-        consumer = buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT);
-        VFXHelper.renderNodes(norm, consumer, packedLight, c1, nodes);
-
-        // If different colors, end batch so the body always renders on top of the trail.
-        if (!c0.sameRGB(c1)) {
-            buffer.getBuffer(RenderTypes.LINEAR_GLOW);
-            buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT);
-        }
+        VFXHelper.renderNodes(norm, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLight, c1, nodes);
         // Body
         Vector3f pos = pos(disp, perp, eccentricity, progress);
         stack.translate(pos.x, pos.y, pos.z);
         stack.scale(size, size, size);
+        consumer = buffer.getBuffer(RenderTypes.translucent(RenderTypes.BLANK_TEXTURE));
         VFXHelper.alignVertical(stack, tangent(disp, perp, eccentricity, progress));
         RenderHelper.renderBipyramid(stack, consumer, packedLight, c0, 4, 0.6F, 0.1F);
-        buffer.getBuffer(RenderTypes.LINEAR_GLOW);
-        buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT);
         RenderHelper.renderBipyramid(stack, consumer, packedLight, c0.mix(Color.WHITE, 0.5F), 4, 0.4F, 0.066F);
     }
 

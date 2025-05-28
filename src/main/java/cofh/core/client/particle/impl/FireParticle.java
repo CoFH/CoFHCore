@@ -54,7 +54,7 @@ public class FireParticle extends GasParticle {
     @Override
     public ParticleRenderType getRenderType() {
 
-        return RenderTypes.PARTICLE_SHEET_ADDITIVE_MULTIPLY;
+        return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
     }
 
     @Override

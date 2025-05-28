@@ -3,6 +3,7 @@ package cofh.core.client.event;
 import cofh.core.client.PostEffect;
 import cofh.core.client.particle.CoFHParticle;
 import cofh.core.common.config.CoreClientConfig;
+import cofh.core.util.helpers.vfx.RenderTypes;
 import cofh.lib.client.renderer.entity.ITranslucentRenderer;
 import cofh.lib.util.Utils;
 import cofh.lib.util.constants.ModIds;
@@ -209,11 +210,6 @@ public class CoreClientEvents {
             }
             RenderSystem.disableBlend();
             RenderSystem.defaultBlendFunc();
-            //RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
-            //for (PostEffect effect : PostEffect.getAllEffects()) {
-            //    if (effect.isEnabled()) {
-            //    }
-            //}
         }
 
         // PARTICLES
@@ -229,26 +225,32 @@ public class CoreClientEvents {
             RenderSystem.enableDepthTest();
 
             light.turnOnLightLayer();
-
             stack.pushPose();
             Vec3 pos = event.getCamera().getPosition();
             stack.translate(-pos.x, -pos.y, -pos.z);
-            for (ParticleRenderType renderType : delayedRenderParticles.keySet()) {
-                Queue<CoFHParticle> particles = delayedRenderParticles.get(renderType);
-                if (particles.isEmpty()) {
-                    continue;
-                }
-                RenderSystem.setShader(GameRenderer::getParticleShader);
-                RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-                renderType.begin(consumer, manager);
-                while (!particles.isEmpty()) {
-                    particles.poll().render(stack, buffer, consumer, partialTick);
-                }
-                renderType.end(tesselator);
+            Queue<CoFHParticle> misc = delayedRenderParticles.remove(RenderTypes.MISC);
+            for (Map.Entry<ParticleRenderType, Queue<CoFHParticle>> entry : delayedRenderParticles.entrySet()) {
+                renderParticles(entry.getKey(), entry.getValue(), stack, buffer, consumer, manager, tesselator, partialTick);
+            }
+            if (misc != null) {
+                renderParticles(RenderTypes.MISC, misc, stack, buffer, consumer, manager, tesselator, partialTick);
             }
             stack.popPose();
             light.turnOffLightLayer();
             ITranslucentRenderer.renderTranslucent(stack, partialTick, event.getLevelRenderer(), event.getProjectionMatrix());
+        }
+    }
+
+    private static void renderParticles(ParticleRenderType type, Queue<CoFHParticle> particles, PoseStack stack, MultiBufferSource buffer, BufferBuilder consumer, TextureManager manager, Tesselator tesselator, float partialTick) {
+
+        if (!particles.isEmpty()) {
+            RenderSystem.setShader(GameRenderer::getParticleShader);
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            type.begin(consumer, manager);
+            while (!particles.isEmpty()) {
+                particles.poll().render(stack, buffer, consumer, partialTick);
+            }
+            type.end(tesselator);
         }
     }
 

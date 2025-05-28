@@ -25,6 +25,7 @@ import java.util.Random;
 import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.random.RandomGenerator;
+import java.util.stream.IntStream;
 
 import static cofh.core.util.helpers.vfx.RenderTypes.*;
 
@@ -86,6 +87,16 @@ public final class VFXHelper {
     public static Vector4f mid(Vector4f a, Vector4f b) {
 
         return new Vector4f((a.x() + b.x()) * 0.5F, (a.y() + b.y()) * 0.5F, (a.z() + b.z()) * 0.5F, (a.w() + b.w()) * 0.5F);
+    }
+
+    public static Quaternionf randomRot(RandomGenerator rand) {
+
+        float u = rand.nextFloat();
+        float sqrt = MathHelper.sqrt(u);
+        float trqs = MathHelper.sqrt(1 - u);
+        float v = MathHelper.F_TAU * rand.nextFloat();
+        float w = MathHelper.F_TAU * rand.nextFloat();
+        return new Quaternionf(trqs * MathHelper.sin(v), trqs * MathHelper.cos(v), sqrt * MathHelper.sin(w), sqrt * MathHelper.cos(w));
     }
 
     public static Vector3f shake(float scale, float time, long seed) {
@@ -399,7 +410,7 @@ public final class VFXHelper {
     // endregion
 
     // region ELECTRICITY
-    private static final Vector3f[][] ARCS = getRandomArcs(new Random(), 8, 48);
+    private static final Vector3f[][] ARCS = IntStream.range(0, 8).mapToObj(i -> getRandomNodes(new SplittableRandom(i * 69420), 24)).toArray(Vector3f[][]::new);
 
     /**
      * Renders straight electric arcs in a unit column towards positive y.
@@ -416,34 +427,29 @@ public final class VFXHelper {
     public static void renderStraightArcs(PoseStack stack, MultiBufferSource buffer, int packedLight, int arcCount, float arcWidth, float widthVar, long seed, Color coreColor, Color glowColor, float taperOffset) {
 
         SplittableRandom rand = new SplittableRandom(seed);
-
-        int nodeCount = ARCS[0].length;
-        int first = MathHelper.clamp((int) (nodeCount * (taperOffset - 0.25F) + 1), 0, nodeCount);
-        int last = MathHelper.clamp((int) (nodeCount * (1.25F + taperOffset) + 1), 0, nodeCount);
-
-        if (last - first <= 1) {
-            return;
-        }
-        stack.pushPose();
         Matrix4f pose = stack.last().pose();
         Vector3f normal = normal(stack);
         Vector2f perp = axialPerp(new Vector4f(0, 0, 0, 1).mul(pose), new Vector4f(0, 1, 0, 1).mul(pose), 1.0F);
 
         //These are calculated first so they are not affected by differing taper values.
-        Vector3f[][] randomArcs = new Vector3f[nodeCount][arcCount];
+        Vector3f[][] arcs = new Vector3f[arcCount][];
         float[] rotations = new float[arcCount];
         for (int i = 0; i < arcCount; ++i) {
-            randomArcs[i] = ARCS[rand.nextInt(ARCS.length)];
+            arcs[i] = ARCS[rand.nextInt(ARCS.length)];
             rotations[i] = rand.nextFloat(360.0F);
         }
 
-        float incr = 1.0F / nodeCount;
         VFXNode[][] outers = new VFXNode[arcCount][];
         VFXNode[][] inners = new VFXNode[arcCount][];
         VertexConsumer builder = buffer.getBuffer(LINEAR_GLOW);
-        for (int i = 0; i < arcCount; ++i) {
-            stack.mulPose(Axis.YP.rotationDegrees(rotations[i]));
-            Vector3f[] arc = randomArcs[i];
+        int n = 0;
+        for (Vector3f[] arc : arcs) {
+            int first = MathHelper.clamp((int) (arc.length * (taperOffset - 0.25F) + 1), 0, arc.length);
+            int last = MathHelper.clamp((int) (arc.length * (1.25F + taperOffset) + 1), 0, arc.length);
+            if (last - first <= 1) {
+                continue;
+            }
+            float incr = 1.0F / arc.length;
             VFXNode[] outer = new VFXNode[last - first];
             VFXNode[] inner = new VFXNode[last - first];
             for (int j = first; j < last; ++j) {
@@ -462,15 +468,15 @@ public final class VFXHelper {
             }
             renderNodes(normal, builder, packedLight, glowColor, outer);
             renderNodes(normal, builder, packedLight, coreColor, inner);
-            outers[i] = outer;
-            inners[i] = inner;
+            outers[n] = outer;
+            inners[n] = inner;
+            ++n;
         }
         builder = buffer.getBuffer(ROUND_GLOW);
-        for (int i = 0; i < arcCount; ++i) {
+        for (int i = 0; i < n; ++i) {
             renderCaps(normal, builder, packedLight, glowColor, outers[i]);
             renderCaps(normal, builder, packedLight, coreColor, inners[i]);
         }
-        stack.popPose();
     }
 
     public static void renderStraightArcs(PoseStack stack, MultiBufferSource buffer, int packedLightIn, int arcCount, float arcWidth, long seed, Color coreColor, Color glowColor, float taperOffset) {
@@ -512,33 +518,23 @@ public final class VFXHelper {
     //    return getTaperOffsetFromTimes(time - startTime, endTime - startTime, taperTime);
     //}
 
-    private static Vector3f[][] getRandomArcs(Random random, int arcCount, int nodeCount) {
+    private static Vector3f[] getRandomNodes(RandomGenerator random, int count) {
 
-        Vector3f[][] arcs = new Vector3f[arcCount][nodeCount];
-        for (int i = 0; i < arcs.length; ++i) {
-            arcs[i] = getRandomNodes(random, nodeCount);
-        }
-        return arcs;
-    }
-
-    private static Vector3f[] getRandomNodes(Random random, int count) {
-
-        SortedSet<Float> ySet = new TreeSet<>();
-        float e = 0.25F / count;
+        FloatSortedSet ySet = new FloatRBTreeSet();
+        float e = 0.4F / count;
         ySet.add(0.0F);
         ySet.add(1.0F);
-        count -= 2;
         for (int i = 0; i < count * 3 && ySet.size() < count; ++i) {
             float next = random.nextFloat();
-            if (ySet.subSet(next - e, next + e).size() <= 0) {
+            if (ySet.subSet(next - e, next + e).isEmpty()) {
                 ySet.add(next);
             }
         }
-        for (int i = count - ySet.size(); i > 0; --i) {
+        for (int i = ySet.size(); i <= count / 2; ++i) {
             ySet.add(random.nextFloat());
         }
 
-        Float[] y = ySet.toArray(Float[]::new);
+        float[] y = ySet.toFloatArray();
         Vector3f[] nodes = new Vector3f[y.length];
 
         nodes[0] = new Vector3f(0, 0, 0);
@@ -553,7 +549,7 @@ public final class VFXHelper {
         return nodes;
     }
 
-    private static float boundedGaussian(Random random, float z) {
+    private static float boundedGaussian(RandomGenerator random, float z) {
 
         return MathHelper.clamp((float) random.nextGaussian(), -z, z);
     }

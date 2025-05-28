@@ -287,10 +287,10 @@ public class AreaUtils {
         }
 
         @Override
-        public void transformSphere(Level levelIn, Vec3 pos, int radius, float chance, int max, @Nullable Entity entity) {
+        public void transformSphere(Level levelIn, Vec3 pos, float radius, float chance, int max, @Nullable Entity entity) {
 
-            int f = Math.min(HORZ_MAX, radius);
-            int v = Math.min(VERT_MAX, radius);
+            int f = Math.min(HORZ_MAX, MathHelper.ceil(radius));
+            int v = Math.min(VERT_MAX, MathHelper.ceil(radius));
             int f2 = f * f;
             BlockPos origin = BlockPos.containing(pos);
 
@@ -302,7 +302,7 @@ public class AreaUtils {
                     return;
                 }
                 double distance = iterPos.distSqr(origin);
-                if (distance < f2) {
+                if (distance <= f2) {
                     if (levelIn.random.nextDouble() < 0.5 - (distance / f2) && transformBlock(levelIn, iterPos, Direction.DOWN, entity)) {
                         --max;
                     }
@@ -444,39 +444,39 @@ public class AreaUtils {
 
         boolean transformBlock(Level level, BlockPos pos, Direction face, @Nullable Entity entity);
 
-        default void transformSphere(Level level, Vec3 pos, int radius, @Nullable Entity entity) {
+        default void transformSphere(Level level, Vec3 pos, float radius, @Nullable Entity entity) {
 
-            int f = Math.min(HORZ_MAX, radius);
-            int v = Math.min(VERT_MAX, radius);
+            int f = Math.min(HORZ_MAX, MathHelper.floor(radius));
+            int v = Math.min(VERT_MAX, MathHelper.floor(radius));
             float f2 = f * f;
             BlockPos origin = BlockPos.containing(pos);
 
             for (BlockPos iterPos : BlockPos.betweenClosed(origin.offset(-f, -v, -f), origin.offset(f + 1, v + 1, f + 1))) {
-                if (iterPos.distSqr(origin) < f2) {
+                if (iterPos.distSqr(origin) <= f2) {
                     transformBlock(level, iterPos, Direction.DOWN, entity);
                 }
             }
         }
 
-        default void transformSphere(Level levelIn, Vec3 pos, int radius, float chance, @Nullable Entity entity) {
+        default void transformSphere(Level levelIn, Vec3 pos, float radius, float chance, @Nullable Entity entity) {
 
-            int f = Math.min(HORZ_MAX, radius);
-            int v = Math.min(VERT_MAX, radius);
+            int f = Math.min(HORZ_MAX, MathHelper.floor(radius));
+            int v = Math.min(VERT_MAX, MathHelper.floor(radius));
             float f2 = f * f;
             BlockPos origin = BlockPos.containing(pos);
 
             for (BlockPos iterPos : BlockPos.betweenClosed(origin.offset(-f, -v, -f), origin.offset(f, v, f))) {
                 double distSqr = iterPos.distSqr(origin);
-                if (distSqr < f2 && (chance > 0.99999F || levelIn.random.nextDouble() < chance)) {
+                if (distSqr <= f2 && (chance > 0.99999F || levelIn.random.nextDouble() < chance)) {
                     transformBlock(levelIn, iterPos, Direction.DOWN, entity);
                 }
             }
         }
 
-        default void transformSphere(Level levelIn, Vec3 pos, int radius, float chance, int max, @Nullable Entity entity) {
+        default void transformSphere(Level levelIn, Vec3 pos, float radius, float chance, int max, @Nullable Entity entity) {
 
-            int f = Math.min(HORZ_MAX, radius);
-            int v = Math.min(VERT_MAX, radius);
+            int f = Math.min(HORZ_MAX, MathHelper.floor(radius));
+            int v = Math.min(VERT_MAX, MathHelper.floor(radius));
             float f2 = f * f;
             BlockPos origin = BlockPos.containing(pos);
 
@@ -488,7 +488,7 @@ public class AreaUtils {
                     return;
                 }
                 double distSqr = iterPos.distSqr(origin);
-                if (distSqr < f2 && (chance > 0.99999F || levelIn.random.nextDouble() < chance) && transformBlock(levelIn, iterPos, Direction.DOWN, entity)) {
+                if (distSqr <= f2 && (chance > 0.99999F || levelIn.random.nextDouble() < chance) && transformBlock(levelIn, iterPos, Direction.DOWN, entity)) {
                     --max;
                 }
             }
