@@ -41,4 +41,8 @@ public class PacketIDs {
     public static final int PACKET_EFFECT_ADD = 96;
     public static final int PACKET_EFFECT_REMOVE = 97;
 
+    public static final int PACKET_LIGHT_SYNC = 112;
+    public static final int PACKET_LIGHT_ADD = 113;
+    public static final int PACKET_LIGHT_REMOVE = 114;
+
 }

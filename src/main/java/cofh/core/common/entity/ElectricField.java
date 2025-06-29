@@ -1,7 +1,7 @@
 package cofh.core.common.entity;
 
 import cofh.core.client.particle.options.BiColorParticleOptions;
-import cofh.core.common.TransientLightManager;
+import cofh.core.client.TransientLightManager;
 import cofh.core.common.config.CoreClientConfig;
 import cofh.core.init.CoreMobEffects;
 import cofh.core.init.CoreParticles;

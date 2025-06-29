@@ -410,7 +410,7 @@ public final class VFXHelper {
     // endregion
 
     // region ELECTRICITY
-    private static final Vector3f[][] ARCS = IntStream.range(0, 8).mapToObj(i -> getRandomNodes(new SplittableRandom(i * 69420), 24)).toArray(Vector3f[][]::new);
+    private static final Vector2f[][] ARCS = IntStream.range(0, 12).mapToObj(i -> getRandomNodes(new SplittableRandom(i * 69420), 24)).toArray(Vector2f[][]::new);
 
     /**
      * Renders straight electric arcs in a unit column towards positive y.
@@ -432,18 +432,12 @@ public final class VFXHelper {
         Vector2f perp = axialPerp(new Vector4f(0, 0, 0, 1).mul(pose), new Vector4f(0, 1, 0, 1).mul(pose), 1.0F);
 
         //These are calculated first so they are not affected by differing taper values.
-        Vector3f[][] arcs = new Vector3f[arcCount][];
-        float[] rotations = new float[arcCount];
+        Vector2f[][] arcs = new Vector2f[arcCount][];
         for (int i = 0; i < arcCount; ++i) {
             arcs[i] = ARCS[rand.nextInt(ARCS.length)];
-            rotations[i] = rand.nextFloat(360.0F);
         }
 
-        VFXNode[][] outers = new VFXNode[arcCount][];
-        VFXNode[][] inners = new VFXNode[arcCount][];
-        VertexConsumer builder = buffer.getBuffer(LINEAR_GLOW);
-        int n = 0;
-        for (Vector3f[] arc : arcs) {
+        for (Vector2f[] arc : arcs) {
             int first = MathHelper.clamp((int) (arc.length * (taperOffset - 0.25F) + 1), 0, arc.length);
             int last = MathHelper.clamp((int) (arc.length * (1.25F + taperOffset) + 1), 0, arc.length);
             if (last - first <= 1) {
@@ -453,29 +447,19 @@ public final class VFXHelper {
             VFXNode[] outer = new VFXNode[last - first];
             VFXNode[] inner = new VFXNode[last - first];
             for (int j = first; j < last; ++j) {
-                Vector4f center = new Vector4f(0, arc[j].y(), 0, 1.0F).mul(pose);
-                float dot = MathHelper.toVector4f(arc[j]).mul(pose).sub(center).dot(new Vector4f(perp.x, perp.y, 0, 0));
-                float xc = center.x() + perp.x * dot * 3.0F;
-                float yc = center.y() + perp.y * dot * 3.0F;
+                Vector2f pos = arc[j];
+                Vector4f center = new Vector4f(0, pos.y, 0, 1.0F).mul(pose);
+                float xc = center.x() + perp.x * pos.x * 3.0F;
+                float yc = center.y() + perp.y * pos.x * 3.0F;
                 float width = Math.max(arcWidth + rand.nextFloat(-1.0F, 1.0F) * widthVar, 0) * MathHelper.clamp(4.0F * (0.75F - Math.abs(j * incr - 0.5F - taperOffset)), 0.0F, 1.0F);
-                float xw = perp.x * width;
-                float yw = perp.y * width;
-                inner[j - first] = new VFXNode(xc + xw, xc - xw, yc + yw, yc - yw, center.z());
-                width = Math.max(width, arcWidth);
-                xw += perp.x * width * 1.5F;
-                yw += perp.y * width * 1.5F;
-                outer[j - first] = new VFXNode(xc + xw, xc - xw, yc + yw, yc - yw, center.z());
+                inner[j - first] = VFXNode.of(xc, perp.x * width, yc, perp.y * width, center.z);
+                width += Math.max(width, arcWidth) * 1.5F;
+                outer[j - first] = VFXNode.of(xc, perp.x * width, yc, perp.y * width, center.z);
             }
-            renderNodes(normal, builder, packedLight, glowColor, outer);
-            renderNodes(normal, builder, packedLight, coreColor, inner);
-            outers[n] = outer;
-            inners[n] = inner;
-            ++n;
-        }
-        builder = buffer.getBuffer(ROUND_GLOW);
-        for (int i = 0; i < n; ++i) {
-            renderCaps(normal, builder, packedLight, glowColor, outers[i]);
-            renderCaps(normal, builder, packedLight, coreColor, inners[i]);
+            renderNodes(normal, buffer.getBuffer(LINEAR_GLOW), packedLight, glowColor, outer);
+            renderCaps(normal, buffer.getBuffer(ROUND_GLOW), packedLight, glowColor, outer);
+            renderNodes(normal, buffer.getBuffer(LINEAR_GLOW), packedLight, coreColor, inner);
+            renderCaps(normal, buffer.getBuffer(ROUND_GLOW), packedLight, coreColor, inner);
         }
     }
 
@@ -518,7 +502,7 @@ public final class VFXHelper {
     //    return getTaperOffsetFromTimes(time - startTime, endTime - startTime, taperTime);
     //}
 
-    private static Vector3f[] getRandomNodes(RandomGenerator random, int count) {
+    private static Vector2f[] getRandomNodes(RandomGenerator random, int count) {
 
         FloatSortedSet ySet = new FloatRBTreeSet();
         float e = 0.4F / count;
@@ -535,16 +519,13 @@ public final class VFXHelper {
         }
 
         float[] y = ySet.toFloatArray();
-        Vector3f[] nodes = new Vector3f[y.length];
-
-        nodes[0] = new Vector3f(0, 0, 0);
-        nodes[nodes.length - 1] = new Vector3f(0, 1, 0);
-
+        Vector2f[] nodes = new Vector2f[y.length];
+        nodes[0] = new Vector2f(0, 0);
+        nodes[nodes.length - 1] = new Vector2f(0, 1);
         for (int i = 1; i < nodes.length - 1; ++i) {
-            float eccentricity = 0.3F * (y[i] - y[i - 1]);
+            float eccentricity = 1.5F * (y[i] - y[i - 1]);
             float centering = Math.min(1, 3.0F - 3.0F * i / nodes.length);
-            nodes[i] = new Vector3f(centering * nodes[i - 1].x() + eccentricity * boundedGaussian(random, 1.65F),
-                    y[i], centering * nodes[i - 1].z() + eccentricity * boundedGaussian(random, 1.65F));
+            nodes[i] = new Vector2f(centering * nodes[i - 1].x + eccentricity * boundedGaussian(random, 1F), y[i]);
         }
         return nodes;
     }
@@ -682,7 +663,12 @@ public final class VFXHelper {
 
         public VFXNode(Vector4f pos, Vector2f perp) {
 
-            this(pos.x() + perp.x, pos.x() - perp.x, pos.y() + perp.y, pos.y() - perp.y, pos.z());
+            this(pos.x + perp.x, pos.x - perp.x, pos.y + perp.y, pos.y - perp.y, pos.z);
+        }
+
+        public static VFXNode of(float xc, float xw, float yc, float yw, float z) {
+
+            return new VFXNode(xc + xw, xc - xw, yc + yw, yc - yw, z);
         }
 
         public float xMid() {

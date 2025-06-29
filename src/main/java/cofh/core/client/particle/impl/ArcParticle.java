@@ -2,7 +2,7 @@ package cofh.core.client.particle.impl;
 
 import cofh.core.client.particle.PointToPointParticle;
 import cofh.core.client.particle.options.BiColorParticleOptions;
-import cofh.core.common.TransientLightManager;
+import cofh.core.client.TransientLightManager;
 import cofh.core.common.config.CoreClientConfig;
 import cofh.core.util.helpers.RenderHelper;
 import cofh.core.util.helpers.vfx.VFXHelper;

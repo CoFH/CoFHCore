@@ -46,18 +46,17 @@ public interface IPacketClient extends IPacket {
         player.connection.send(toVanillaPacket(NetworkDirection.PLAY_TO_CLIENT));
     }
 
-    // TODO: Consider fixing if functionality required.
-    //    /**
-    //     * Sends this packet to all players in the specified dimension.
-    //     *
-    //     * @param dim The dimension.
-    //     */
-    //    default void sendToDimension(DimensionType dim) {
-    //
-    //        MinecraftServer server = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
-    //        PlayerList list = server.getPlayerList();
-    //        list.sendPacketToAllPlayersInDimension(toVanillaPacket(NetworkDirection.PLAY_TO_CLIENT), dim);
-    //    }
+    /**
+     * Sends this packet to all players in the specified dimension.
+     *
+     * @param dim The dimension.
+     */
+    default void sendToDimension(ResourceKey<Level> dim) {
+
+        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+        PlayerList list = server.getPlayerList();
+        list.broadcastAll(toVanillaPacket(NetworkDirection.PLAY_TO_CLIENT), dim);
+    }
 
     /**
      * Sends this packet to all server operators.

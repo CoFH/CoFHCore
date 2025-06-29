@@ -1,22 +1,28 @@
 package cofh.core.common.event;
 
+import cofh.core.common.capability.CapabilityPersistentLight;
 import cofh.core.common.config.CoreCommonConfig;
 import cofh.core.common.config.CoreEnchantConfig;
+import cofh.core.common.capability.templates.PersistentLights;
 import cofh.core.util.helpers.XpHelper;
 import cofh.lib.util.Utils;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.event.entity.player.PlayerXpEvent;
 import net.minecraftforge.event.level.BlockEvent;
+import net.minecraftforge.event.level.ChunkWatchEvent;
 import net.minecraftforge.event.level.SaplingGrowTreeEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -144,6 +150,18 @@ public class CoreCommonEvents {
         if (event.phase == TickEvent.Phase.START) {
             Utils.tickTimeConstants();
         }
+    }
+
+    @SubscribeEvent
+    public static void attachCapabilities(AttachCapabilitiesEvent<LevelChunk> event) {
+
+        event.addCapability(new ResourceLocation(ID_COFH_CORE, "lights"), new PersistentLights(event.getObject().getPos()));
+    }
+
+    @SubscribeEvent
+    public static void syncLights(ChunkWatchEvent.Watch event) {
+
+        event.getChunk().getCapability(CapabilityPersistentLight.LIGHT_CAPABILITY).ifPresent(lights -> lights.syncTo(event.getPlayer()));
     }
 
     // region HELPERS

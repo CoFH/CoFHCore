@@ -76,7 +76,7 @@ void main() {
     float scale = 1.0 / girth;
     float noise = 0.125 * (clamp(radius * scale, 1.0, 4.0) - 1.0) * (cnoise(uv * 6.0 / (girth * radius) + 0.5 + girth * 1024.0) + 1.0);
     float a = color.a * cos(clamp(abs(h - radius + girth + 2.0) * scale, -1.5708, 1.5708)) - noise;
-    if (a < 0.0039) {
+    if (a < 0.25) {
         discard;
     }
     fragColor = linear_fog(vec4(color.rgb, a), vertexDistance, FogStart, FogEnd, FogColor);

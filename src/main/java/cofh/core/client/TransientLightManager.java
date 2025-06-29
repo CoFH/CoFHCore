@@ -1,10 +1,9 @@
-package cofh.core.common;
+package cofh.core.client;
 
 import cofh.core.util.ProxyUtils;
 import cofh.lib.util.constants.ModIds;
 import it.unimi.dsi.fastutil.longs.Long2ByteMap;
 import it.unimi.dsi.fastutil.longs.Long2ByteOpenHashMap;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
 import net.minecraft.world.level.Level;

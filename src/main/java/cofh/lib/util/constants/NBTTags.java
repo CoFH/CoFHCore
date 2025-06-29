@@ -65,6 +65,8 @@ public class NBTTags {
     public static final String TAG_NAME = "Name";
     public static final String TAG_ORIGIN = "Origin";
     public static final String TAG_OWNER = "Owner";
+    public static final String TAG_POSITION = "Position";
+    public static final String TAG_POSITIONS = "Positions";
     public static final String TAG_POTION = "Potion";
     public static final String TAG_POWER = "Power";
     public static final String TAG_PRIMED = "Primed";

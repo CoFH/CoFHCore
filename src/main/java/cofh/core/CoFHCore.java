@@ -8,6 +8,7 @@ import cofh.core.client.renderer.entity.KnifeRenderer;
 import cofh.core.client.renderer.entity.model.ArmorFullSuitModel;
 import cofh.core.common.capability.CapabilityArchery;
 import cofh.core.common.capability.CapabilityAreaEffect;
+import cofh.core.common.capability.CapabilityPersistentLight;
 import cofh.core.common.capability.CapabilityShieldItem;
 import cofh.core.common.command.CoFHCommand;
 import cofh.core.common.config.*;
@@ -198,6 +199,10 @@ public class CoFHCore {
 
         PACKET_HANDLER.registerPacket(PacketIDs.PACKET_EFFECT_ADD, EffectAddedPacket::new);
         PACKET_HANDLER.registerPacket(PacketIDs.PACKET_EFFECT_REMOVE, EffectRemovedPacket::new);
+
+        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_LIGHT_SYNC, LightSyncPacket::new);
+        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_LIGHT_ADD, LightAddPacket::new);
+        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_LIGHT_REMOVE, LightRemovePacket::new);
     }
 
     // region INITIALIZATION
@@ -231,6 +236,7 @@ public class CoFHCore {
         CapabilityArchery.register(event);
         CapabilityAreaEffect.register(event);
         CapabilityShieldItem.register(event);
+        CapabilityPersistentLight.register(event);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
