@@ -742,7 +742,13 @@ public final class RenderHelper {
         }
         return corners;
     }
+    public static void renderInvertedSides(VertexConsumer consumer, int light, Color color, Vector4f[] corners, Vector3f normal, float u0, float v0, float u1, float v1) {
 
+        renderFace(consumer, light, color, corners[6], corners[7], corners[3], corners[2], u1, v1, u0, v0, normal);
+        renderFace(consumer, light, color, corners[1], corners[0], corners[4], corners[5], u0, v0, u1, v1, normal);
+        renderFace(consumer, light, color, corners[0], corners[3], corners[7], corners[4], u0, v0, u1, v1, normal);
+        renderFace(consumer, light, color, corners[5], corners[6], corners[2], corners[1], u1, v1, u0, v0, normal);
+    }
     public static void renderSides(VertexConsumer consumer, int light, Color color, Vector4f[] corners, Vector3f normal, float u0, float v0, float u1, float v1) {
 
         renderFace(consumer, light, color, corners[2], corners[3], corners[7], corners[6], u1, v1, u0, v0, normal);
@@ -750,17 +756,28 @@ public final class RenderHelper {
         renderFace(consumer, light, color, corners[4], corners[7], corners[3], corners[0], u0, v0, u1, v1, normal);
         renderFace(consumer, light, color, corners[1], corners[2], corners[6], corners[5], u1, v1, u0, v0, normal);
     }
+    public static void renderInvertedBottom(VertexConsumer consumer, int light, Color color, Vector4f[] corners, Vector3f normal, float u0, float v0, float u1, float v1) {
 
+        renderFace(consumer, light, color, corners[2], corners[3], corners[0], corners[1], u0, v0, u1, v1, normal);
+    }
     public static void renderBottom(VertexConsumer consumer, int light, Color color, Vector4f[] corners, Vector3f normal, float u0, float v0, float u1, float v1) {
 
         renderFace(consumer, light, color, corners[1], corners[0], corners[3], corners[2], u0, v0, u1, v1, normal);
     }
+    public static void renderInvertedTop(VertexConsumer consumer, int light, Color color, Vector4f[] corners, Vector3f normal, float u0, float v0, float u1, float v1) {
 
+        renderFace(consumer, light, color, corners[5], corners[4], corners[7], corners[6], u0, v0, u1, v1, normal);
+    }
     public static void renderTop(VertexConsumer consumer, int light, Color color, Vector4f[] corners, Vector3f normal, float u0, float v0, float u1, float v1) {
 
         renderFace(consumer, light, color, corners[6], corners[7], corners[4], corners[5], u0, v0, u1, v1, normal);
     }
+    public static void renderInvertedCuboid(VertexConsumer consumer, int light, Color color, Vector4f[] corners, Vector3f normal, float u0, float v0, float u1, float v1) {
 
+        renderInvertedSides(consumer, light, color, corners, normal, u0, v0, u1, v1);
+        renderInvertedBottom(consumer, light, color, corners, normal, u0, v0, u1, v1);
+        renderInvertedTop(consumer, light, color, corners, normal, u0, v0, u1, v1);
+    }
     public static void renderCuboid(VertexConsumer consumer, int light, Color color, Vector4f[] corners, Vector3f normal, float u0, float v0, float u1, float v1) {
 
         renderSides(consumer, light, color, corners, normal, u0, v0, u1, v1);
