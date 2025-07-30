@@ -13,10 +13,12 @@ import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.model.data.ModelData;
 import org.joml.*;
 
@@ -567,6 +569,70 @@ public final class VFXHelper {
         renderBeam(new Vector4f(0, 0, 0, 1).mul(pose), new Vector4f(0, 1, 0, 1).mul(pose), normal(stack), buffer, packedLight, width, colors);
     }
     // endregion
+
+    // region TEXTURE
+
+    public static void renderLineTexture(Vec3 tip, Vec3 base, PoseStack poseStack, float partialTick, MultiBufferSource buffer, int packedLight, ResourceLocation texture, boolean left){
+        poseStack.pushPose();
+        PoseStack.Pose pose = poseStack.last();
+
+        VertexConsumer builder = buffer.getBuffer(RenderType.entityCutoutNoCull(texture));
+
+        Vec3 direction = tip.subtract(base);
+        Vec3 dirNorm = direction.normalize();
+
+        Vec3 up = Math.abs(dirNorm.y) < 0.9 ? new Vec3(0, 1, 0) : new Vec3(1, 0, 0);
+        Vec3 right = dirNorm.cross(up).normalize().scale(0.3);
+        Vec3 side = dirNorm.cross(right).normalize().scale(0.3);
+        Vec3 dir = left ? right : side;
+
+        float length = (float) direction.length();
+
+        //TODO Rewrite to use the renderface method
+
+        //Vector3f[] verts = new Vector3f[4];
+        //verts[0] = new Vector3f((float) (base.x + dir.x), (float) (base.y + dir.y), (float) (base.z + dir.z));
+        //verts[1] = new Vector3f((float) (base.x - dir.x), (float) (base.y - dir.y), (float) (base.z - dir.z));
+        //verts[2] = new Vector3f((float) (tip.x - dir.x), (float) (tip.y - dir.y), (float) (tip.z - dir.z));
+        //verts[3] = new Vector3f((float) (tip.x + dir.x), (float) (tip.y + dir.y), (float) (tip.z + dir.z));
+        //RenderHelper.renderFace();
+
+        builder.vertex(pose.pose(), (float) (base.x + dir.x), (float) (base.y + dir.y), (float) (base.z + dir.z))
+                .color(1F, 1F, 1F, 1F)
+                .uv(left ? 0 : 0.5f, 0F)
+                .overlayCoords(OverlayTexture.NO_OVERLAY)
+                .uv2(packedLight)
+                .normal(pose.normal(), 0, 1, 0)
+                .endVertex();
+
+        builder.vertex(pose.pose(), (float) (base.x - dir.x), (float) (base.y - dir.y), (float) (base.z - dir.z))
+                .color(1F, 1F, 1F, 1F)
+                .uv(left ? 0.5f : 1, 0F)
+                .overlayCoords(OverlayTexture.NO_OVERLAY)
+                .uv2(packedLight)
+                .normal(pose.normal(), 0, 1, 0)
+                .endVertex();
+
+        builder.vertex(pose.pose(), (float) (tip.x - dir.x), (float) (tip.y - dir.y), (float) (tip.z - dir.z))
+                .color(1F, 1F, 1F, 1F)
+                .uv(left ? 0.5f : 1, length)
+                .overlayCoords(OverlayTexture.NO_OVERLAY)
+                .uv2((int) (packedLight * tip.y))
+                .normal(pose.normal(), 0, 1, 0)
+                .endVertex();
+
+        builder.vertex(pose.pose(), (float) (tip.x + dir.x), (float) (tip.y + dir.y), (float) (tip.z + dir.z))
+                .color(1F, 1F, 1F, 1F)
+                .uv(left ? 0 : 0.5f, length)
+                .overlayCoords(OverlayTexture.NO_OVERLAY)
+                .uv2((int) (packedLight * tip.y))
+                .normal(pose.normal(), 0, 1, 0)
+                .endVertex();
+
+        poseStack.popPose();
+    }
+
+    // end region
 
     // region WIND
     private static final int WIND_SEGMENTS = 48;
