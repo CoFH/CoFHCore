@@ -79,5 +79,5 @@ void main() {
     if (a < 0.3) {
         discard;
     }
-    fragColor = linear_fog(vec4(color.rgb, a), vertexDistance, FogStart, FogEnd, FogColor);
+    fragColor = linear_fog(vec4(color.rgb, 1.0 - 0.5 * (1.0 - a)), vertexDistance, FogStart, FogEnd, FogColor);
 }

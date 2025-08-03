@@ -273,14 +273,14 @@ public final class VFXHelper {
     /**
      * Renders a billboarded translucent magenta square. Useful for preventing insanity.
      */
-    public static void renderTest(PoseStack stack, VertexConsumer consumer) {
+    public static void renderTest(PoseStack stack, VertexConsumer consumer, float size) {
 
         Vector4f center = new Vector4f(0, 0, 0, 1).mul(stack.last().pose());
         Matrix3f normal = stack.last().normal();
-        float xp = center.x() + 0.5F;
-        float xn = center.x() - 0.5F;
-        float yp = center.y() + 0.5F;
-        float yn = center.y() - 0.5F;
+        float xp = center.x() + size;
+        float xn = center.x() - size;
+        float yp = center.y() + size;
+        float yn = center.y() - size;
         float z = center.z();
         int r = 255;
         int g = 0;
@@ -291,6 +291,11 @@ public final class VFXHelper {
         consumer.vertex(xn, yp, z).color(r, g, b, a).uv(0, 1).overlayCoords(overlay).uv2(RenderHelper.FULL_BRIGHT).normal(normal, 0, 1, 0).endVertex();
         consumer.vertex(xn, yn, z).color(r, g, b, a).uv(1, 1).overlayCoords(overlay).uv2(RenderHelper.FULL_BRIGHT).normal(normal, 0, 1, 0).endVertex();
         consumer.vertex(xp, yn, z).color(r, g, b, a).uv(1, 0).overlayCoords(overlay).uv2(RenderHelper.FULL_BRIGHT).normal(normal, 0, 1, 0).endVertex();
+    }
+
+    public static void renderTest(PoseStack stack, VertexConsumer consumer) {
+
+        renderTest(stack, consumer, 0.5F);
     }
 
     public static void renderTest(PoseStack stack, MultiBufferSource buffer) {
@@ -654,26 +659,10 @@ public final class VFXHelper {
         return WIND_BASE.scaleRGB(random.nextFloat() * 0.35F + 0.65F);
     }
 
-    /**
-     * Renders an axially billboarded streamline that follows the given node positions.
-     *
-     * @param posns     Desired positions of the nodes.
-     * @param widthFunc Function that determines stream width at each node based on the order of nodes.
-     *                  Input is a float representing the normalized index of the node (0F for the first node, 1F for the last).
-     */
-    public static void renderStreamLine(PoseStack stack, VertexConsumer builder, int packedLight, Vector4f[] posns, Color color, Float2FloatFunction widthFunc) {
+    public static VFXNode[] getStreamNodes(Vector4f[] posns, Float2FloatFunction widthFunc) {
 
         if (posns.length < 2) {
-            return;
-        }
-        if (color.a <= 0) {
-            return;
-        }
-
-        Matrix4f pose = stack.last().pose();
-        Vector3f normal = normal(stack);
-        for (Vector4f pos : posns) {
-            pos.mul(pose);
+            return new VFXNode[0];
         }
         int last = posns.length - 1;
         VFXNode[] nodes = new VFXNode[posns.length];
@@ -686,7 +675,31 @@ public final class VFXHelper {
         nodes[0] = new VFXNode(posns[0], axialPerp(posns[0], posns[1], width));
         width = widthFunc.apply(1.0F);
         nodes[last] = new VFXNode(posns[last], axialPerp(posns[last - 1], posns[last], width));
-        renderNodes(normal, builder, packedLight, color, nodes);
+        return nodes;
+    }
+
+    public static VFXNode[] getStreamNodes(PoseStack stack, Vector4f[] posns, Float2FloatFunction widthFunc) {
+
+        Matrix4f pose = stack.last().pose();
+        for (Vector4f pos : posns) {
+            pos.mul(pose);
+        }
+        return getStreamNodes(posns, widthFunc);
+    }
+
+    /**
+     * Renders an axially billboarded streamline that follows the given node positions.
+     *
+     * @param posns     Desired positions of the nodes.
+     * @param widthFunc Function that determines stream width at each node based on the order of nodes.
+     *                  Input is a float representing the normalized index of the node (0F for the first node, 1F for the last).
+     */
+    public static void renderStreamLine(PoseStack stack, VertexConsumer builder, int packedLight, Vector4f[] posns, Color color, Float2FloatFunction widthFunc) {
+
+        if (posns.length < 2 || color.a <= 0) {
+            return;
+        }
+        renderNodes(normal(stack), builder, packedLight, color, getStreamNodes(stack, posns, widthFunc));
     }
 
     //public static void renderStreamLine(PoseStack stack, MultiBufferSource buffer, int packedLight, Vector4f[] posns, Color color, Float2FloatFunction widthFunc) {
