@@ -3,22 +3,18 @@ package cofh.core.client.particle.impl;
 import cofh.core.client.particle.PointToPointParticle;
 import cofh.core.client.particle.options.BiColorParticleOptions;
 import cofh.core.util.helpers.RenderHelper;
-import cofh.core.util.helpers.vfx.Color;
 import cofh.core.util.helpers.vfx.RenderTypes;
 import cofh.core.util.helpers.vfx.VFXHelper;
+import cofh.core.util.helpers.vfx.TrailNode;
 import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.ParticleProvider;
-import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.MultiBufferSource;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
-
-import javax.annotation.Nonnull;
 
 public class ShardParticle extends PointToPointParticle {
 
@@ -64,8 +60,8 @@ public class ShardParticle extends PointToPointParticle {
         float w = 0.12F * size;
         Vector2f perp = VFXHelper.axialPerp(start, end, w);
         consumer = buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT);
-        new VFXHelper.VFXNode(start, perp).renderStart(norm, consumer, packedLight, c1);
-        new VFXHelper.VFXNode(end, perp.mul(0)).renderEnd(norm, consumer, packedLight, c1);
+        new TrailNode(start, perp).renderStart(norm, consumer, packedLight, c1);
+        new TrailNode(end, perp.mul(0)).renderEnd(norm, consumer, packedLight, c1);
 
         // If different colors, end batch so the body always renders on top of the trail.
         if (!c0.sameRGB(c1)) {

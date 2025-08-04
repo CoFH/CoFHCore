@@ -4,6 +4,7 @@ import cofh.core.client.particle.PointToPointParticle;
 import cofh.core.client.particle.options.BiColorParticleOptions;
 import cofh.core.util.helpers.vfx.RenderTypes;
 import cofh.core.util.helpers.vfx.VFXHelper;
+import cofh.core.util.helpers.vfx.TrailNode;
 import cofh.lib.util.helpers.MathHelper;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -83,16 +84,16 @@ public class StreamParticle extends PointToPointParticle {
             pos.mul(pose);
         }
         int last = posns.length - 1;
-        VFXHelper.VFXNode[] nodes = new VFXHelper.VFXNode[posns.length];
+        TrailNode[] nodes = new TrailNode[posns.length];
         inv = 1.0F / posns.length;
         for (int i = 1; i < last; ++i) {
             float width = (MathHelper.sin(i + offset) * 0.1F + 0.2F) * MathHelper.easePlateau(inv);
-            nodes[i] = new VFXHelper.VFXNode(posns[i], VFXHelper.axialPerp(posns[i - 1], posns[i + 1], width));
+            nodes[i] = new TrailNode(posns[i], VFXHelper.axialPerp(posns[i - 1], posns[i + 1], width));
         }
         float width = 0;
-        nodes[0] = new VFXHelper.VFXNode(posns[0], VFXHelper.axialPerp(posns[0], posns[1], width));
+        nodes[0] = new TrailNode(posns[0], VFXHelper.axialPerp(posns[0], posns[1], width));
         width = 0;
-        nodes[last] = new VFXHelper.VFXNode(posns[last], VFXHelper.axialPerp(posns[last - 1], posns[last], width));
+        nodes[last] = new TrailNode(posns[last], VFXHelper.axialPerp(posns[last - 1], posns[last], width));
         VFXHelper.renderNodes(normal, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLight, c0, nodes);
 
         //float len = end - start;

@@ -5,12 +5,12 @@ import cofh.core.util.helpers.RenderHelper;
 import cofh.core.util.helpers.vfx.Color;
 import cofh.core.util.helpers.vfx.RenderTypes;
 import cofh.core.util.helpers.vfx.VFXHelper;
+import cofh.core.util.helpers.vfx.TrailNode;
 import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -49,10 +49,10 @@ public class CurvedShardParticle extends CurvedPointToPointParticle {
         for (int i = 0; i < posns.length; ++i) {
             posns[i] = new Vector4f(pos(disp, perp, eccentricity, progress - segment * i), 1).mul(pose);
         }
-        VFXHelper.VFXNode[] nodes = new VFXHelper.VFXNode[posns.length];
+        TrailNode[] nodes = new TrailNode[posns.length];
         for (int i = 0; i < nodes.length; ++i) {
             int j = Math.max(i, 1);
-            nodes[i] = new VFXHelper.VFXNode(posns[i], VFXHelper.axialPerp(posns[j - 1], posns[j], 0.35F * size * (length - segment * i)));
+            nodes[i] = new TrailNode(posns[i], VFXHelper.axialPerp(posns[j - 1], posns[j], 0.35F * size * (length - segment * i)));
         }
         VFXHelper.renderNodes(norm, buffer.getBuffer(RenderTypes.FLAT_TRANSLUCENT), packedLight, c1, nodes);
         // Body

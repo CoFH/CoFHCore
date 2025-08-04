@@ -4,7 +4,6 @@ import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
 import it.unimi.dsi.fastutil.floats.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -23,7 +22,6 @@ import net.minecraftforge.client.model.data.ModelData;
 import org.joml.*;
 
 import java.lang.Math;
-import java.util.Random;
 import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.random.RandomGenerator;
@@ -48,9 +46,9 @@ public final class VFXHelper {
         return MathHelper.dist(vec.x(), vec.y(), vec.z());
     }
 
-    public static VFXNode interpolate(VFXNode a, VFXNode b, float d) {
+    public static TrailNode interpolate(TrailNode a, TrailNode b, float d) {
 
-        return new VFXNode(MathHelper.interpolate(a.xp, b.xp, d), MathHelper.interpolate(a.xn, b.xn, d), MathHelper.interpolate(a.yp, b.yp, d), MathHelper.interpolate(a.yn, b.yn, d), MathHelper.interpolate(a.z, b.z, d));
+        return new TrailNode(MathHelper.interpolate(a.xp, b.xp, d), MathHelper.interpolate(a.xn, b.xn, d), MathHelper.interpolate(a.yp, b.yp, d), MathHelper.interpolate(a.yn, b.yn, d), MathHelper.interpolate(a.z, b.z, d));
     }
 
     public static Vector4f interpolate(Vector4f a, Vector4f b, float d) {
@@ -58,7 +56,7 @@ public final class VFXHelper {
         return new Vector4f(MathHelper.interpolate(a.x(), b.x(), d), MathHelper.interpolate(a.y(), b.y(), d), MathHelper.interpolate(a.z(), b.z(), d), MathHelper.interpolate(a.w(), b.w(), d));
     }
 
-    private static VFXNode interpolateCap(VFXNode a, VFXNode b) {
+    private static TrailNode interpolateCap(TrailNode a, TrailNode b) {
 
         return interpolate(a, b, 1.0F + MathHelper.dist(b.xp - b.xn, b.yp - b.yn) * 0.5F / MathHelper.dist(a.xMid() - b.xMid(), a.yMid() - b.yMid(), a.z - b.z));
     }
@@ -124,7 +122,7 @@ public final class VFXHelper {
     }
 
     // region HELPERS
-    public static void renderNodes(Vector3f normal, VertexConsumer builder, int packedLight, Color color, VFXNode... nodes) {
+    public static void renderNodes(Vector3f normal, VertexConsumer builder, int packedLight, Color color, TrailNode... nodes) {
 
         if (nodes.length < 2) {
             return;
@@ -137,15 +135,15 @@ public final class VFXHelper {
         nodes[count].renderEnd(normal, builder, packedLight, color);
     }
 
-    public static void renderCaps(Vector3f normal, VertexConsumer builder, int packedLight, Color color, VFXNode... nodes) {
+    public static void renderCaps(Vector3f normal, VertexConsumer builder, int packedLight, Color color, TrailNode... nodes) {
 
         if (nodes.length < 2) {
             return;
         }
-        interpolateCap(nodes[1], nodes[0]).renderStart(normal, builder, packedLight, color, 0, 0, 1.0F, 0.5F);
-        nodes[0].renderEnd(normal, builder, packedLight, color, 0, 0, 1.0F, 0.5F);
-        nodes[nodes.length - 1].renderStart(normal, builder, packedLight, color, 0, 0.5F, 1.0F, 1.0F);
-        interpolateCap(nodes[nodes.length - 2], nodes[nodes.length - 1]).renderEnd(normal, builder, packedLight, color, 0, 0.5F, 1.0F, 1.0F);
+        interpolateCap(nodes[1], nodes[0]).renderStart(normal, builder, packedLight, color, 0, 1.0F, 0);
+        nodes[0].renderEnd(normal, builder, packedLight, color, 0, 1.0F, 0.5F);
+        nodes[nodes.length - 1].renderStart(normal, builder, packedLight, color, 0, 1.0F, 0.5F);
+        interpolateCap(nodes[nodes.length - 2], nodes[nodes.length - 1]).renderEnd(normal, builder, packedLight, color, 0, 1.0F, 1.0F);
     }
 
     public static Vector2f axialPerp(Vector4f start, Vector4f end, float width) {
@@ -308,39 +306,42 @@ public final class VFXHelper {
         renderTest(stack, RenderHelper.bufferSource());
     }
 
-    private static void renderSkeleton(VertexConsumer builder, VFXNode[] nodes) {
+    public static void renderSkeleton(VertexConsumer builder, TrailNode[] nodes) {
 
-        VFXNode node = nodes[0];
+        if (nodes.length < 2) {
+            return;
+        }
+        TrailNode node = nodes[0];
         float xm = node.xMid();
         float ym = node.yMid();
 
-        builder.vertex(node.xp, node.yp, node.z).color(255, 0, 0, 255).endVertex();
-        builder.vertex(xm, ym, node.z).color(255, 0, 0, 255).endVertex();
-        builder.vertex(xm, ym, node.z).color(0, 0, 255, 255).endVertex();
-        builder.vertex(node.xn, node.yn, node.z).color(0, 0, 255, 255).endVertex();
-        builder.vertex(xm, ym, node.z).color(255, 255, 255, 255).endVertex();
+        builder.vertex(node.xp, node.yp, node.z).color(255, 0, 0, 255).normal(0, 1, 0).endVertex();
+        builder.vertex(xm, ym, node.z).color(255, 0, 0, 255).normal(0, 1, 0).endVertex();
+        builder.vertex(xm, ym, node.z).color(0, 0, 255, 255).normal(0, 1, 0).endVertex();
+        builder.vertex(node.xn, node.yn, node.z).color(0, 0, 255, 255).normal(0, 1, 0).endVertex();
+        builder.vertex(xm, ym, node.z).color(255, 255, 255, 255).normal(0, 1, 0).endVertex();
         for (int i = 1; i < nodes.length - 1; ++i) {
             node = nodes[i];
             xm = node.xMid();
             ym = node.yMid();
-            builder.vertex(xm, ym, node.z).color(255, 255, 255, 255).endVertex();
-            builder.vertex(node.xp, node.yp, node.z).color(255, 0, 0, 255).endVertex();
-            builder.vertex(xm, ym, node.z).color(255, 0, 0, 255).endVertex();
-            builder.vertex(xm, ym, node.z).color(0, 0, 255, 255).endVertex();
-            builder.vertex(node.xn, node.yn, node.z).color(0, 0, 255, 255).endVertex();
-            builder.vertex(xm, ym, node.z).color(255, 255, 255, 255).endVertex();
+            builder.vertex(xm, ym, node.z).color(255, 255, 255, 255).normal(0, 1, 0).endVertex();
+            builder.vertex(node.xp, node.yp, node.z).color(255, 0, 0, 255).normal(0, 1, 0).endVertex();
+            builder.vertex(xm, ym, node.z).color(255, 0, 0, 255).normal(0, 1, 0).endVertex();
+            builder.vertex(xm, ym, node.z).color(0, 0, 255, 255).normal(0, 1, 0).endVertex();
+            builder.vertex(node.xn, node.yn, node.z).color(0, 0, 255, 255).normal(0, 1, 0).endVertex();
+            builder.vertex(xm, ym, node.z).color(255, 255, 255, 255).normal(0, 1, 0).endVertex();
         }
         node = nodes[nodes.length - 1];
         xm = node.xMid();
         ym = node.yMid();
-        builder.vertex(xm, ym, node.z).color(255, 255, 255, 255).endVertex();
-        builder.vertex(node.xp, node.yp, node.z).color(255, 0, 0, 255).endVertex();
-        builder.vertex(xm, ym, node.z).color(255, 0, 0, 255).endVertex();
-        builder.vertex(xm, ym, node.z).color(0, 0, 255, 255).endVertex();
-        builder.vertex(node.xn, node.yn, node.z).color(0, 0, 255, 255).endVertex();
+        builder.vertex(xm, ym, node.z).color(255, 255, 255, 255).normal(0, 1, 0).endVertex();
+        builder.vertex(node.xp, node.yp, node.z).color(255, 0, 0, 255).normal(0, 1, 0).endVertex();
+        builder.vertex(xm, ym, node.z).color(255, 0, 0, 255).normal(0, 1, 0).endVertex();
+        builder.vertex(xm, ym, node.z).color(0, 0, 255, 255).normal(0, 1, 0).endVertex();
+        builder.vertex(node.xn, node.yn, node.z).color(0, 0, 255, 255).normal(0, 1, 0).endVertex();
     }
 
-    private static void renderSkeleton(VFXNode[] nodes) {
+    public static void renderSkeleton(TrailNode[] nodes) {
 
         renderSkeleton(Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(RenderType.LINES), nodes);
     }
@@ -451,17 +452,17 @@ public final class VFXHelper {
                 continue;
             }
             float incr = 1.0F / arc.length;
-            VFXNode[] outer = new VFXNode[last - first];
-            VFXNode[] inner = new VFXNode[last - first];
+            TrailNode[] outer = new TrailNode[last - first];
+            TrailNode[] inner = new TrailNode[last - first];
             for (int j = first; j < last; ++j) {
                 Vector2f pos = arc[j];
                 Vector4f center = new Vector4f(0, pos.y, 0, 1.0F).mul(pose);
                 float xc = center.x() + perp.x * pos.x * 3.0F;
                 float yc = center.y() + perp.y * pos.x * 3.0F;
                 float width = Math.max(arcWidth + rand.nextFloat(-1.0F, 1.0F) * widthVar, 0) * MathHelper.clamp(4.0F * (0.75F - Math.abs(j * incr - 0.5F - taperOffset)), 0.0F, 1.0F);
-                inner[j - first] = VFXNode.of(xc, perp.x * width, yc, perp.y * width, center.z);
+                inner[j - first] = TrailNode.of(xc, perp.x * width, yc, perp.y * width, center.z);
                 width += Math.max(width, arcWidth) * 1.5F;
-                outer[j - first] = VFXNode.of(xc, perp.x * width, yc, perp.y * width, center.z);
+                outer[j - first] = TrailNode.of(xc, perp.x * width, yc, perp.y * width, center.z);
             }
             renderNodes(normal, buffer.getBuffer(LINEAR_GLOW), packedLight, glowColor, outer);
             renderCaps(normal, buffer.getBuffer(ROUND_GLOW), packedLight, glowColor, outer);
@@ -553,12 +554,12 @@ public final class VFXHelper {
     public static void renderBeam(Vector4f start, Vector4f end, Vector3f normal, MultiBufferSource buffer, int packedLight, float width, Color... colors) {
 
         Vector2f perp = axialPerp(start, end, width);
-        VFXNode[] starts = new VFXNode[colors.length];
-        VFXNode[] ends = new VFXNode[colors.length];
+        TrailNode[] starts = new TrailNode[colors.length];
+        TrailNode[] ends = new TrailNode[colors.length];
         VertexConsumer builder = buffer.getBuffer(LINEAR_GLOW);
         for (int i = 0; i < colors.length; ++i) {
-            starts[i] = new VFXNode(start, perp);
-            ends[i] = new VFXNode(end, perp);
+            starts[i] = new TrailNode(start, perp);
+            ends[i] = new TrailNode(end, perp);
             renderNodes(normal, builder, packedLight, colors[i], starts[i], ends[i]);
             perp.mul(0.5F);
         }
@@ -659,26 +660,26 @@ public final class VFXHelper {
         return WIND_BASE.scaleRGB(random.nextFloat() * 0.35F + 0.65F);
     }
 
-    public static VFXNode[] getStreamNodes(Vector4f[] posns, Float2FloatFunction widthFunc) {
+    public static TrailNode[] getStreamNodes(Vector4f[] posns, Float2FloatFunction widthFunc) {
 
         if (posns.length < 2) {
-            return new VFXNode[0];
+            return new TrailNode[0];
         }
         int last = posns.length - 1;
-        VFXNode[] nodes = new VFXNode[posns.length];
+        TrailNode[] nodes = new TrailNode[posns.length];
         float increment = 1.0F / last;
         for (int i = 1; i < last; ++i) {
             float width = widthFunc.apply(increment * i);
-            nodes[i] = new VFXNode(posns[i], axialPerp(posns[i - 1], posns[i + 1], width));
+            nodes[i] = new TrailNode(posns[i], axialPerp(posns[i - 1], posns[i + 1], width));
         }
         float width = widthFunc.apply(0.0F);
-        nodes[0] = new VFXNode(posns[0], axialPerp(posns[0], posns[1], width));
+        nodes[0] = new TrailNode(posns[0], axialPerp(posns[0], posns[1], width));
         width = widthFunc.apply(1.0F);
-        nodes[last] = new VFXNode(posns[last], axialPerp(posns[last - 1], posns[last], width));
+        nodes[last] = new TrailNode(posns[last], axialPerp(posns[last - 1], posns[last], width));
         return nodes;
     }
 
-    public static VFXNode[] getStreamNodes(PoseStack stack, Vector4f[] posns, Float2FloatFunction widthFunc) {
+    public static TrailNode[] getStreamNodes(PoseStack stack, Vector4f[] posns, Float2FloatFunction widthFunc) {
 
         Matrix4f pose = stack.last().pose();
         for (Vector4f pos : posns) {
@@ -724,94 +725,5 @@ public final class VFXHelper {
         renderCyclone(stack, consumer, packedLight, color, radius, thickness, rand.nextInt(WIND_SEGMENTS / 2, WIND_SEGMENTS), (rand.nextFloat(-1F, 1F) + 6F) * time, (rand.nextFloat(1.0F) + 0.5F * MathHelper.cos(time * 0.2F)) * 0.25F * height);
     }
     // endregion
-
-    public static class VFXNode {
-
-        public final float xp, xn;
-        public final float yp, yn;
-        public final float z;
-
-        public VFXNode(float xp, float xn, float yp, float yn, float z) {
-
-            this.xp = xp;
-            this.xn = xn;
-            this.yp = yp;
-            this.yn = yn;
-            this.z = z;
-        }
-
-        public VFXNode(Vector4f pos, Vector2f perp) {
-
-            this(pos.x + perp.x, pos.x - perp.x, pos.y + perp.y, pos.y - perp.y, pos.z);
-        }
-
-        public static VFXNode of(float xc, float xw, float yc, float yw, float z) {
-
-            return new VFXNode(xc + xw, xc - xw, yc + yw, yc - yw, z);
-        }
-
-        public float xMid() {
-
-            return (xp + xn) * 0.5F;
-        }
-
-        public float yMid() {
-
-            return (yp + yn) * 0.5F;
-        }
-
-        public VFXNode renderStart(Vector3f normal, VertexConsumer builder, int packedLight, Color col, float u0, float v0, float u1, float v1) {
-
-            builder.vertex(xp, yp, z).color(col.r, col.g, col.b, col.a).uv(u0, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal.x, normal.y, normal.z).endVertex();
-            builder.vertex(xn, yn, z).color(col.r, col.g, col.b, col.a).uv(u1, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal.x, normal.y, normal.z).endVertex();
-            return this;
-        }
-
-        public VFXNode renderStart(Vector3f normal, VertexConsumer builder, int packedLight, Color color) {
-
-            return renderStart(normal, builder, packedLight, color, 0, 0, 1, 1);
-        }
-
-        public VFXNode renderEnd(Vector3f normal, VertexConsumer builder, int packedLight, Color col, float u0, float v0, float u1, float v1) {
-
-            builder.vertex(xn, yn, z).color(col.r, col.g, col.b, col.a).uv(u1, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal.x, normal.y, normal.z).endVertex();
-            builder.vertex(xp, yp, z).color(col.r, col.g, col.b, col.a).uv(u0, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal.x, normal.y, normal.z).endVertex();
-            return this;
-        }
-
-        public VFXNode renderEnd(Vector3f normal, VertexConsumer builder, int packedLight, Color color) {
-
-            return renderEnd(normal, builder, packedLight, color, 0, 0, 1, 1);
-        }
-
-        public VFXNode renderMid(Vector3f normal, VertexConsumer builder, int packedLight, Color col, float u0, float v0, float u1, float v1, float u2, float v2, float u3, float v3) {
-
-            renderEnd(normal, builder, packedLight, col, u0, v0, u1, v1);
-            renderStart(normal, builder, packedLight, col, u2, v2, u3, v3);
-            return this;
-        }
-
-        public VFXNode renderMid(Vector3f normal, VertexConsumer builder, int packedLight, Color col, float u0, float v0, float u1, float v1, float u2, float v2) {
-
-            return renderMid(normal, builder, packedLight, col, u0, v0, u1, v1, u1, v1, u2, v2);
-        }
-
-        public VFXNode renderMid(Vector3f normal, VertexConsumer builder, int packedLight, Color col, float u0, float v0, float u1, float v1) {
-
-            return renderMid(normal, builder, packedLight, col, u0, v0, u1, v1, u0, v0, u1, v1);
-        }
-
-        public VFXNode renderMid(Vector3f normal, VertexConsumer builder, int packedLight, Color col) {
-
-            return renderMid(normal, builder, packedLight, col, 0, 0, 1, 1);
-        }
-
-        @Override
-        public String toString() {
-
-            return "{" + xp + ", " + xn + "}, {" + yp + ", " + yn + "}, " + z;
-        }
-
-    }
 
 }
