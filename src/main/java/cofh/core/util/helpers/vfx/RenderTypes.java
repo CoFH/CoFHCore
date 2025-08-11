@@ -103,7 +103,6 @@ public class RenderTypes {
     public static RenderType translucentNoDepthWrite(ResourceLocation texture) {
 
         return RenderType.create("cofh_core:translucent", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 4096, false, true,
-
                 RenderType.CompositeState.builder()
                         .setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
                         .setShaderState(TRANSLUCENT_SHADER)
