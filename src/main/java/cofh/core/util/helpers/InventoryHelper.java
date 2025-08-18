@@ -4,6 +4,7 @@ import cofh.lib.common.inventory.ItemStorageCoFH;
 import cofh.lib.common.inventory.SlotFalseCopy;
 import cofh.lib.util.helpers.BlockHelper;
 import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.inventory.Slot;
@@ -248,6 +249,22 @@ public final class InventoryHelper {
             }
         }
         return true;
+    }
+
+    public static int calcRedstoneFromInventories(IItemHandler... invs) {
+
+        int slots = 0;
+        float proportion = 0.0F;
+        for (IItemHandler inv : invs) {
+            slots += inv.getSlots();
+            for (int j = 0; j < inv.getSlots(); ++j) {
+                ItemStack itemstack = inv.getStackInSlot(j);
+                if (!itemstack.isEmpty()) {
+                    proportion += (float) itemstack.getCount() / Math.min(inv.getSlotLimit(j), itemstack.getMaxStackSize());
+                }
+            }
+        }
+        return Mth.ceil(proportion * 15.0F / slots);
     }
     // endregion
 }
