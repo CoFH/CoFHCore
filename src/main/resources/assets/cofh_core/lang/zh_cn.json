@@ -3,9 +3,9 @@
   "_comment": "CoFH General / Lib",
   "_comment": "========================================================================================================",
 
-  "attribute.name.cofh.fall_distance": "刷落距离",
+  "attribute.name.cofh.fall_distance": "摔落距离",
   "attribute.name.cofh.hazard_resistance": "毒害抗性",
-  "attribute.name.cofh.sting_resistance": "叮咬抗性",
+  "attribute.name.cofh.sting_resistance": "刺蛰抗性",
 
   "death.attack.knife": "%1$s被%2$s刀了！",
   "death.attack.knife.item": "%1$s被%2$s用%3$s捅死了！",
@@ -49,7 +49,7 @@
   "info.cofh.enchantments": "附魔",
   "info.cofh.energy": "能量",
   "info.cofh.fluid": "流体",
-  "info.cofh.heads": "头",
+  "info.cofh.heads": "正面",
   "info.cofh.infinite": "无限",
   "info.cofh.infinite_source": "无限资源",
   "info.cofh.key_not_bound": "按键绑定：CoFH-'%s'未设置。",
@@ -59,7 +59,7 @@
   "info.cofh.receive": "接收",
   "info.cofh.send": "传出",
   "info.cofh.single_block": "单个方块",
-  "info.cofh.tails": "尾",
+  "info.cofh.tails": "反面",
   "info.cofh.transfer": "转换",
   "info.cofh.type": "种类",
   "info.cofh.unit_mb": "mB",
@@ -224,7 +224,7 @@
   "item.minecraft.lingering_potion.effect.enderference": "滞留型抑影药水",
   "item.minecraft.lingering_potion.effect.explosion_resistance": "滞留型抗爆药水",
   "item.minecraft.lingering_potion.effect.lightning_resistance": "滞留型抗震药水",
-  "item.minecraft.lingering_potion.effect.love": "滞留型催情药水",
+  "item.minecraft.lingering_potion.effect.love": "滞留型爱情药水",
   "item.minecraft.lingering_potion.effect.magic_resistance": "滞留型魔抗药水",
   "item.minecraft.lingering_potion.effect.panacea": "滞留型万灵药",
 
@@ -233,7 +233,7 @@
   "item.minecraft.potion.effect.enderference": "抑影药水",
   "item.minecraft.potion.effect.explosion_resistance": "抗爆药水",
   "item.minecraft.potion.effect.lightning_resistance": "抗震药水",
-  "item.minecraft.potion.effect.love": "催情药水",
+  "item.minecraft.potion.effect.love": "爱情药水",
   "item.minecraft.potion.effect.magic_resistance": "魔抗药水",
   "item.minecraft.potion.effect.panacea": "万灵药",
 
@@ -242,7 +242,7 @@
   "item.minecraft.splash_potion.effect.enderference": "喷溅型抑影药水",
   "item.minecraft.splash_potion.effect.explosion_resistance": "喷溅型抗爆药水",
   "item.minecraft.splash_potion.effect.lightning_resistance": "喷溅型抗震药水",
-  "item.minecraft.splash_potion.effect.love": "喷溅型催情药水",
+  "item.minecraft.splash_potion.effect.love": "喷溅型爱情药水",
   "item.minecraft.splash_potion.effect.magic_resistance": "喷溅型魔抗药水",
   "item.minecraft.splash_potion.effect.panacea": "喷溅型万灵药",
 
