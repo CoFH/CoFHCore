@@ -26,7 +26,9 @@ public class RenderTypes {
     public static final ResourceLocation BLANK_TEXTURE = new ResourceLocation(ID_COFH_CORE, "textures/render/blank.png");
     public static final ResourceLocation LIN_GLOW_TEXTURE = new ResourceLocation(ID_COFH_CORE, "textures/render/glow_linear.png");
     public static final ResourceLocation RND_GLOW_TEXTURE = new ResourceLocation(ID_COFH_CORE, "textures/render/glow_round.png");
+    public static final ResourceLocation FLUID_STREAM_TEXTURE = new ResourceLocation(ID_COFH_CORE, "textures/render/fluid_stream.png");
     public static final ShaderStateShard TRANSLUCENT_SHADER = new RenderStateShard.ShaderStateShard(() -> TRANSLUCENT);
+    public static final ShaderStateShard FLUID_STREAM_SHADER = new RenderStateShard.ShaderStateShard(() -> FLUID_STREAM);
 
     public static final RenderType OVERLAY_LINES = RenderType.create("cofh:overlay_lines",
             DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.LINES, 256, false, true,
@@ -108,6 +110,19 @@ public class RenderTypes {
                         .setShaderState(TRANSLUCENT_SHADER)
                         .setOutputState(TRANSLUCENT_TARGET)
                         .setWriteMaskState(COLOR_WRITE)
+                        .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+                        .setLightmapState(LIGHTMAP)
+                        .createCompositeState(false));
+    }
+
+    public static RenderType stream(ResourceLocation texture) {
+
+        return RenderType.create("cofh_core:fluid_stream", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 4096, false, true,
+                RenderType.CompositeState.builder()
+                        .setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
+                        .setShaderState(RenderTypes.FLUID_STREAM_SHADER)
+                        .setOutputState(TRANSLUCENT_TARGET)
+                        .setWriteMaskState(COLOR_DEPTH_WRITE)
                         .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
                         .setLightmapState(LIGHTMAP)
                         .createCompositeState(false));

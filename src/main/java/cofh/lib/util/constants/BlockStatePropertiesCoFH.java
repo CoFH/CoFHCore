@@ -3,6 +3,7 @@ package cofh.lib.util.constants;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.properties.*;
 
+import java.util.Arrays;
 import java.util.function.Predicate;
 
 public class BlockStatePropertiesCoFH {
@@ -28,6 +29,7 @@ public class BlockStatePropertiesCoFH {
 
     public static final DirectionProperty FACING_ALL = DirectionProperty.create("facing", Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST, Direction.UP, Direction.DOWN);
     public static final DirectionProperty FACING_HORIZONTAL = DirectionProperty.create("facing", Direction.Plane.HORIZONTAL);
+    public static final BooleanProperty[] SIDES = Arrays.stream(Direction.values()).map(d -> BooleanProperty.create(d.getSerializedName())).toArray(BooleanProperty[]::new);
 
     public static final EnumProperty<RailShape> RAIL_DEFAULT = EnumProperty.create("shape", RailShape.class);
     public static final EnumProperty<RailShape> RAIL_STRAIGHT = EnumProperty.create("shape", RailShape.class, PRED_STRAIGHT);

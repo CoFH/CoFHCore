@@ -1,5 +1,6 @@
 package cofh.core.util.helpers.vfx;
 
+import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import org.joml.Vector2f;
@@ -41,50 +42,50 @@ public class TrailNode {
         return (yp + yn) * 0.5F;
     }
 
-    public TrailNode renderStart(Vector3f normal, VertexConsumer builder, int packedLight, Color col, float u0, float u1, float v0) {
+    public TrailNode renderStart(Vector3f normal, VertexConsumer builder, int light, int overlay, Color col, float u0, float v0, float v1) {
 
-        builder.vertex(xp, yp, z).color(col.r, col.g, col.b, col.a).uv(u0, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(xn, yn, z).color(col.r, col.g, col.b, col.a).uv(u1, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(xp, yp, z).color(col.r, col.g, col.b, col.a).uv(u0, v0).overlayCoords(overlay).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(xn, yn, z).color(col.r, col.g, col.b, col.a).uv(u0, v1).overlayCoords(overlay).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
         return this;
     }
 
-    public TrailNode renderStart(Vector3f normal, VertexConsumer builder, int packedLight, Color color) {
+    public TrailNode renderStart(Vector3f normal, VertexConsumer builder, int light, Color color) {
 
-        return renderStart(normal, builder, packedLight, color, 0, 1, 0);
+        return renderStart(normal, builder, light, OverlayTexture.NO_OVERLAY, color, 0, 0, 1);
     }
 
-    public TrailNode renderEnd(Vector3f normal, VertexConsumer builder, int packedLight, Color col, float u0, float u1, float v1) {
+    public TrailNode renderEnd(Vector3f normal, VertexConsumer builder, int light, int overlay, Color col, float u1, float v0, float v1) {
 
-        builder.vertex(xn, yn, z).color(col.r, col.g, col.b, col.a).uv(u1, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(xp, yp, z).color(col.r, col.g, col.b, col.a).uv(u0, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(xn, yn, z).color(col.r, col.g, col.b, col.a).uv(u1, v1).overlayCoords(overlay).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(xp, yp, z).color(col.r, col.g, col.b, col.a).uv(u1, v0).overlayCoords(overlay).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
         return this;
     }
 
-    public TrailNode renderEnd(Vector3f normal, VertexConsumer builder, int packedLight, Color color) {
+    public TrailNode renderEnd(Vector3f normal, VertexConsumer builder, int light, Color color) {
 
-        return renderEnd(normal, builder, packedLight, color, 0, 1, 1);
+        return renderEnd(normal, builder, light, OverlayTexture.NO_OVERLAY, color, 1, 0, 1);
     }
 
-    public TrailNode renderMid(Vector3f normal, VertexConsumer builder, int packedLight, Color col, float u0, float u1, float v0, float u2, float u3, float v1) {
+    public TrailNode renderMid(Vector3f normal, VertexConsumer builder, int light, int overlay, Color col, float u0, float v0, float v1, float u1, float v2, float v3) {
 
-        renderEnd(normal, builder, packedLight, col, u2, u3, v1);
-        renderStart(normal, builder, packedLight, col, u0, u1, v0);
+        renderEnd(normal, builder, light, overlay, col, u1, v2, v3);
+        renderStart(normal, builder, light, overlay, col, u0, v0, v1);
         return this;
     }
 
-    public TrailNode renderMid(Vector3f normal, VertexConsumer builder, int packedLight, Color col, float u0, float u1, float v0, float v1) {
+    public TrailNode renderMid(Vector3f normal, VertexConsumer builder, int light, int overlay, Color col, float u0, float u1, float v0, float v1) {
 
-        return renderMid(normal, builder, packedLight, col, u0, u1, v0, u0, u1, v1);
+        return renderMid(normal, builder, light, overlay, col, u0, v0, v1, u1, v0, v1);
     }
 
-    public TrailNode renderMid(Vector3f normal, VertexConsumer builder, int packedLight, Color col, float u0, float u1, float v) {
+    public TrailNode renderMid(Vector3f normal, VertexConsumer builder, int light, int overlay, Color col, float u, float v0, float v1) {
 
-        return renderMid(normal, builder, packedLight, col, u0, u1, v, u0, u1, v);
+        return renderMid(normal, builder, light, overlay, col, u, v0, v1, u, v0, v1);
     }
 
-    public TrailNode renderMid(Vector3f normal, VertexConsumer builder, int packedLight, Color col) {
+    public TrailNode renderMid(Vector3f normal, VertexConsumer builder, int light, Color col) {
 
-        return renderMid(normal, builder, packedLight, col, 0, 1, 0, 1);
+        return renderMid(normal, builder, light, OverlayTexture.NO_OVERLAY, col, 0, 1, 0, 1);
     }
 
     @Override

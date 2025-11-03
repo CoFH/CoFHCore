@@ -3,6 +3,7 @@ package cofh.core.client;
 import cofh.core.util.ProxyUtils;
 import cofh.lib.util.constants.ModIds;
 import it.unimi.dsi.fastutil.longs.Long2ByteMap;
+import it.unimi.dsi.fastutil.longs.Long2ByteMaps;
 import it.unimi.dsi.fastutil.longs.Long2ByteOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
@@ -22,8 +23,8 @@ import net.minecraftforge.fml.common.Mod;
 public class TransientLightManager {
 
     protected static final BlockPos.MutableBlockPos CURSOR = new BlockPos.MutableBlockPos();
-    protected static Long2ByteMap current = new Long2ByteOpenHashMap();
-    protected static Long2ByteMap previous = new Long2ByteOpenHashMap();
+    protected static Long2ByteMap current = Long2ByteMaps.synchronize(new Long2ByteOpenHashMap());
+    protected static Long2ByteMap previous = Long2ByteMaps.synchronize(new Long2ByteOpenHashMap());
     protected static Level last = null;
 
     // region TRANSIENT
@@ -106,7 +107,7 @@ public class TransientLightManager {
             }
         }
         previous = current;
-        current = new Long2ByteOpenHashMap(current.size() + 10);
+        current = Long2ByteMaps.synchronize(new Long2ByteOpenHashMap(current.size() + 10));
     }
 
 }
