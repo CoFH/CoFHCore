@@ -77,7 +77,7 @@ public class CoreClientSetupEvents {
         event.registerSpecial(RING.get(), RingParticle::new);
 
         event.registerSpecial(BEAM.get(), BeamParticle::new);
-        event.registerSpecial(STRAIGHT_ARC.get(), ArcParticle::new);
+        event.registerSpecial(STRAIGHT_ARC.get(), StaticArcParticle::new);
         event.registerSpecial(SHARD.get(), ShardParticle::new);
         event.registerSpecial(CURVED_SHARD.get(), CurvedShardParticle::new);
         event.registerSpecial(STREAM.get(), StreamParticle::new);
@@ -91,15 +91,13 @@ public class CoreClientSetupEvents {
                 VertexFormat.Mode.QUADS,
                 256,
                 true,
-                true,
+                false,
                 RenderType.CompositeState.builder()
-                        .setShaderState(RenderTypes.TRANSLUCENT_SHADER)
                         .setTextureState(new RenderStateShard.TextureStateShard(TextureAtlas.LOCATION_BLOCKS, false, false))
+                        .setShaderState(RenderTypes.TRANSLUCENT_SHADER)
                         .setTransparencyState(RenderType.TRANSLUCENT_TRANSPARENCY)
-                        .setOutputState(RenderType.ITEM_ENTITY_TARGET)
                         .setLightmapState(RenderType.LIGHTMAP)
                         .setOverlayState(RenderType.OVERLAY)
-                        .setWriteMaskState(RenderStateShard.COLOR_DEPTH_WRITE)
                         .createCompositeState(true)));
     }
 

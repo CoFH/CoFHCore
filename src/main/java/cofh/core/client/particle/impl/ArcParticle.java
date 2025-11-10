@@ -15,17 +15,45 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
-public class ArcParticle extends PointToPointParticle {
+public abstract class ArcParticle extends PointToPointParticle {
 
-    protected final float taper;
+    protected Vec3 end;
+    protected float taper;
     protected Vector3f disp;
-    protected LongList path;
 
     public ArcParticle(BiColorParticleOptions data, ClientLevel level, double sx, double sy, double sz, double ex, double ey, double ez) {
 
         super(data, level, sx, sy, sz, ex, ey, ez);
+        end = new Vec3(ex, ey, ez);
+    }
+
+    public ArcParticle(BiColorParticleOptions data, ClientLevel level, Vec3 start, Vec3 end) {
+
+        this(data, level, start.x, start.y, start.z, end.x, end.y, end.z);
+    }
+
+    @Override
+    public void tick() {
+
+        if (isAlive() && CoreClientConfig.particleDynamicLighting.get() && this.age >= this.delay) {
+            int light = getDynamicLightLevel();
+            LongList path = getPath();
+            for (int i = path.size() - 1; i >= 0; --i) {
+                TransientLightManager.addLight(level, path.getLong(i), light);
+            }
+        }
+        if (this.age++ >= this.lifetime) {
+            this.remove();
+        }
+    }
+
+    protected abstract LongList getPath();
+
+    protected void recalcDisplacement(double sx, double sy, double sz, double ex, double ey, double ez) {
+
         float dx = (float) (ex - sx);
         float dy = (float) (ey - sy);
         float dz = (float) (ez - sz);
@@ -40,21 +68,6 @@ public class ArcParticle extends PointToPointParticle {
             taper = 0;
             disp = new Vector3f(dx, dy, dz);
         }
-        this.path = traversePath();
-    }
-
-    @Override
-    public void tick() {
-
-        if (CoreClientConfig.particleDynamicLighting.get() && this.age >= this.delay) {
-            int light = getDynamicLightLevel();
-            for (int i = path.size() - 1; i >= 0; --i) {
-                TransientLightManager.addLight(level, path.getLong(i), light);
-            }
-        }
-        if (this.age++ >= this.lifetime) {
-            this.remove();
-        }
     }
 
     protected int getDynamicLightLevel() {
@@ -62,25 +75,25 @@ public class ArcParticle extends PointToPointParticle {
         return 8;
     }
 
-    protected LongList traversePath() {
+    protected LongList traversePath(double sx, double sy, double sz, double ex, double ey, double ez) {
 
         LongList path = new LongArrayList();
-        int i = Mth.floor(x);
-        int j = Mth.floor(y);
-        int k = Mth.floor(z);
+        int i = Mth.floor(sx);
+        int j = Mth.floor(sy);
+        int k = Mth.floor(sz);
         path.add(BlockPos.asLong(i, j, k));
-        double dx = disp.x;
-        double dy = disp.y;
-        double dz = disp.z;
+        double dx = ex - sx;
+        double dy = ey - sy;
+        double dz = ez - sz;
         int signX = Mth.sign(dx);
         int signY = Mth.sign(dy);
         int signZ = Mth.sign(dz);
         double incrX = signX == 0 ? Double.MAX_VALUE : signX / dx;
         double incrY = signY == 0 ? Double.MAX_VALUE : signY / dy;
         double incrZ = signZ == 0 ? Double.MAX_VALUE : signZ / dz;
-        double remX = incrX * (signX > 0 ? 1.0D - Mth.frac(x) : Mth.frac(x));
-        double remY = incrY * (signY > 0 ? 1.0D - Mth.frac(y) : Mth.frac(y));
-        double remZ = incrZ * (signZ > 0 ? 1.0D - Mth.frac(z) : Mth.frac(z));
+        double remX = incrX * (signX > 0 ? 1.0D - Mth.frac(sx) : Mth.frac(sx));
+        double remY = incrY * (signY > 0 ? 1.0D - Mth.frac(sy) : Mth.frac(sy));
+        double remZ = incrZ * (signZ > 0 ? 1.0D - Mth.frac(sz) : Mth.frac(sz));
 
         while (remX <= 1.0D || remY <= 1.0D || remZ <= 1.0D) {
             if (remX < remY) {

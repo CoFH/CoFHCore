@@ -199,7 +199,8 @@ public class CoreClientEvents {
             Minecraft.getInstance().getMainRenderTarget().bindWrite(false);
         }
         if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_LEVEL) {
-            RenderSystem.enableBlend();
+            RenderSystem.disableBlend();
+            RenderSystem.defaultBlendFunc();
             Minecraft minecraft = Minecraft.getInstance();
             for (PostEffect effect : PostEffect.getAllEffects()) {
                 if (effect.isEnabled()) {
@@ -208,8 +209,6 @@ public class CoreClientEvents {
                     effect.apply(minecraft.getWindow());
                 }
             }
-            RenderSystem.disableBlend();
-            RenderSystem.defaultBlendFunc();
         }
 
         // PARTICLES

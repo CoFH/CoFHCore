@@ -2,11 +2,14 @@ package cofh.core.util.helpers.vfx;
 
 import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.util.helpers.MathHelper;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import it.unimi.dsi.fastutil.floats.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -28,6 +31,8 @@ import java.util.random.RandomGenerator;
 import java.util.stream.IntStream;
 
 import static cofh.core.util.helpers.vfx.RenderTypes.*;
+import static net.minecraft.client.renderer.RenderStateShard.*;
+import static net.minecraft.client.renderer.RenderStateShard.LIGHTMAP;
 
 /**
  * The cooler version of RenderHelper.
@@ -122,28 +127,28 @@ public final class VFXHelper {
     }
 
     // region HELPERS
-    public static void renderNodes(Vector3f normal, VertexConsumer builder, int packedLight, Color color, TrailNode... nodes) {
+    public static void renderNodes(Vector3f normal, VertexConsumer builder, int light, Color color, TrailNode... nodes) {
 
         if (nodes.length < 2) {
             return;
         }
-        nodes[0].renderStart(normal, builder, packedLight, color);
+        nodes[0].renderStart(normal, builder, light, color);
         int count = nodes.length - 1;
         for (int i = 1; i < count; ++i) {
-            nodes[i].renderMid(normal, builder, packedLight, color);
+            nodes[i].renderMid(normal, builder, light, color);
         }
-        nodes[count].renderEnd(normal, builder, packedLight, color);
+        nodes[count].renderEnd(normal, builder, light, color);
     }
 
-    public static void renderCaps(Vector3f normal, VertexConsumer builder, int packedLight, Color color, TrailNode... nodes) {
+    public static void renderCaps(Vector3f normal, VertexConsumer builder, int light, Color color, TrailNode... nodes) {
 
         if (nodes.length < 2) {
             return;
         }
-        interpolateCap(nodes[1], nodes[0]).renderStart(normal, builder, packedLight, color, 0, 1.0F, 0);
-        nodes[0].renderEnd(normal, builder, packedLight, color, 0, 1.0F, 0.5F);
-        nodes[nodes.length - 1].renderStart(normal, builder, packedLight, color, 0, 1.0F, 0.5F);
-        interpolateCap(nodes[nodes.length - 2], nodes[nodes.length - 1]).renderEnd(normal, builder, packedLight, color, 0, 1.0F, 1.0F);
+        interpolateCap(nodes[1], nodes[0]).renderStart(normal, builder, light, OverlayTexture.NO_OVERLAY, color, 0, 0, 1.0F);
+        nodes[0].renderEnd(normal, builder, light, OverlayTexture.NO_OVERLAY, color, 0.5F, 0, 1.0F);
+        nodes[nodes.length - 1].renderStart(normal, builder, light, OverlayTexture.NO_OVERLAY, color, 0.5F, 0, 1.0F);
+        interpolateCap(nodes[nodes.length - 2], nodes[nodes.length - 1]).renderEnd(normal, builder, light, OverlayTexture.NO_OVERLAY, color, 1.0F, 0, 1.0F);
     }
 
     public static Vector2f axialPerp(Vector4f start, Vector4f end, float width) {
@@ -418,7 +423,7 @@ public final class VFXHelper {
     // endregion
 
     // region ELECTRICITY
-    private static final Vector2f[][] ARCS = IntStream.range(0, 12).mapToObj(i -> getRandomNodes(new SplittableRandom(i * 69420), 24)).toArray(Vector2f[][]::new);
+    private static final Vector2f[][] ARCS = IntStream.range(0, 12).mapToObj(i -> getRandomNodes(new SplittableRandom(i * 69420), 12)).toArray(Vector2f[][]::new);
 
     /**
      * Renders straight electric arcs in a unit column towards positive y.
@@ -432,7 +437,7 @@ public final class VFXHelper {
      * @param taperOffset Value between -1.25F and 1.25F that determines the threshold for tapering.
      *                    Generally, negative at the start of an animation, 0 in the middle (no taper), and positive at the end.
      */
-    public static void renderStraightArcs(PoseStack stack, MultiBufferSource buffer, int packedLight, int arcCount, float arcWidth, float widthVar, long seed, Color coreColor, Color glowColor, float taperOffset) {
+    public static void renderStraightArcs(PoseStack stack, MultiBufferSource buffer, int light, int arcCount, float arcWidth, float widthVar, long seed, Color coreColor, Color glowColor, float taperOffset) {
 
         SplittableRandom rand = new SplittableRandom(seed);
         Matrix4f pose = stack.last().pose();
@@ -464,23 +469,23 @@ public final class VFXHelper {
                 width += Math.max(width, arcWidth) * 1.5F;
                 outer[j - first] = TrailNode.of(xc, perp.x * width, yc, perp.y * width, center.z);
             }
-            renderNodes(normal, buffer.getBuffer(LINEAR_GLOW), packedLight, glowColor, outer);
-            renderCaps(normal, buffer.getBuffer(ROUND_GLOW), packedLight, glowColor, outer);
-            renderNodes(normal, buffer.getBuffer(LINEAR_GLOW), packedLight, coreColor, inner);
-            renderCaps(normal, buffer.getBuffer(ROUND_GLOW), packedLight, coreColor, inner);
+            renderNodes(normal, buffer.getBuffer(LINEAR_GLOW), light, glowColor, outer);
+            renderCaps(normal, buffer.getBuffer(ROUND_GLOW), light, glowColor, outer);
+            renderNodes(normal, buffer.getBuffer(LINEAR_GLOW), light, coreColor, inner);
+            renderCaps(normal, buffer.getBuffer(ROUND_GLOW), light, coreColor, inner);
         }
     }
 
-    public static void renderStraightArcs(PoseStack stack, MultiBufferSource buffer, int packedLightIn, int arcCount, float arcWidth, long seed, Color coreColor, Color glowColor, float taperOffset) {
+    public static void renderStraightArcs(PoseStack stack, MultiBufferSource buffer, int lightIn, int arcCount, float arcWidth, long seed, Color coreColor, Color glowColor, float taperOffset) {
 
-        renderStraightArcs(stack, buffer, packedLightIn, arcCount, arcWidth, 0.3F * arcWidth, seed, coreColor, glowColor, taperOffset);
+        renderStraightArcs(stack, buffer, lightIn, arcCount, arcWidth, 0.3F * arcWidth, seed, coreColor, glowColor, taperOffset);
     }
 
-    public static void renderStraightArcs(PoseStack stack, MultiBufferSource buffer, int packedLightIn, float length, int arcCount, float arcWidth, long seed, Color coreColor, Color glowColor, float taperOffset) {
+    public static void renderStraightArcs(PoseStack stack, MultiBufferSource buffer, int lightIn, float length, int arcCount, float arcWidth, long seed, Color coreColor, Color glowColor, float taperOffset) {
 
         stack.pushPose();
         stack.scale(length, length, length);
-        renderStraightArcs(stack, buffer, packedLightIn, arcCount, arcWidth / Math.abs(length), seed, coreColor, glowColor, taperOffset);
+        renderStraightArcs(stack, buffer, lightIn, arcCount, arcWidth / Math.abs(length), seed, coreColor, glowColor, taperOffset);
         stack.popPose();
     }
 
@@ -551,7 +556,7 @@ public final class VFXHelper {
      * @param width     Width of the beam.
      * @param colors    Colors/alphas for the beam, from outermost to innermost.
      */
-    public static void renderBeam(Vector4f start, Vector4f end, Vector3f normal, MultiBufferSource buffer, int packedLight, float width, Color... colors) {
+    public static void renderBeam(Vector4f start, Vector4f end, Vector3f normal, MultiBufferSource buffer, int light, float width, Color... colors) {
 
         Vector2f perp = axialPerp(start, end, width);
         TrailNode[] starts = new TrailNode[colors.length];
@@ -560,25 +565,25 @@ public final class VFXHelper {
         for (int i = 0; i < colors.length; ++i) {
             starts[i] = new TrailNode(start, perp);
             ends[i] = new TrailNode(end, perp);
-            renderNodes(normal, builder, packedLight, colors[i], starts[i], ends[i]);
+            renderNodes(normal, builder, light, colors[i], starts[i], ends[i]);
             perp.mul(0.5F);
         }
         builder = buffer.getBuffer(ROUND_GLOW);
         for (int i = 0; i < colors.length; ++i) {
-            renderCaps(normal, builder, packedLight, colors[i], starts[i], ends[i]);
+            renderCaps(normal, builder, light, colors[i], starts[i], ends[i]);
         }
     }
 
-    public static void renderBeam(PoseStack stack, MultiBufferSource buffer, int packedLight, float width, Color... colors) {
+    public static void renderBeam(PoseStack stack, MultiBufferSource buffer, int light, float width, Color... colors) {
 
         Matrix4f pose = stack.last().pose();
-        renderBeam(new Vector4f(0, 0, 0, 1).mul(pose), new Vector4f(0, 1, 0, 1).mul(pose), normal(stack), buffer, packedLight, width, colors);
+        renderBeam(new Vector4f(0, 0, 0, 1).mul(pose), new Vector4f(0, 1, 0, 1).mul(pose), normal(stack), buffer, light, width, colors);
     }
     // endregion
 
     // region TEXTURE
 
-    public static void renderLineTexture(Vec3 tip, Vec3 base, PoseStack poseStack, float partialTick, MultiBufferSource buffer, int packedLight, ResourceLocation texture, boolean left){
+    public static void renderLineTexture(Vec3 tip, Vec3 base, PoseStack poseStack, float partialTick, MultiBufferSource buffer, int light, ResourceLocation texture, boolean left){
         poseStack.pushPose();
         PoseStack.Pose pose = poseStack.last();
 
@@ -607,7 +612,7 @@ public final class VFXHelper {
                 .color(1F, 1F, 1F, 1F)
                 .uv(left ? 0 : 0.5f, 0F)
                 .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(packedLight)
+                .uv2(light)
                 .normal(pose.normal(), 0, 1, 0)
                 .endVertex();
 
@@ -615,7 +620,7 @@ public final class VFXHelper {
                 .color(1F, 1F, 1F, 1F)
                 .uv(left ? 0.5f : 1, 0F)
                 .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(packedLight)
+                .uv2(light)
                 .normal(pose.normal(), 0, 1, 0)
                 .endVertex();
 
@@ -623,7 +628,7 @@ public final class VFXHelper {
                 .color(1F, 1F, 1F, 1F)
                 .uv(left ? 0.5f : 1, length)
                 .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2((int) (packedLight * tip.y))
+                .uv2((int) (light * tip.y))
                 .normal(pose.normal(), 0, 1, 0)
                 .endVertex();
 
@@ -631,7 +636,7 @@ public final class VFXHelper {
                 .color(1F, 1F, 1F, 1F)
                 .uv(left ? 0 : 0.5f, length)
                 .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2((int) (packedLight * tip.y))
+                .uv2((int) (light * tip.y))
                 .normal(pose.normal(), 0, 1, 0)
                 .endVertex();
 
@@ -695,35 +700,64 @@ public final class VFXHelper {
      * @param widthFunc Function that determines stream width at each node based on the order of nodes.
      *                  Input is a float representing the normalized index of the node (0F for the first node, 1F for the last).
      */
-    public static void renderStreamLine(PoseStack stack, VertexConsumer builder, int packedLight, Vector4f[] posns, Color color, Float2FloatFunction widthFunc) {
+    public static void renderStreamLine(PoseStack stack, VertexConsumer builder, int light, Vector4f[] posns, Color color, Float2FloatFunction widthFunc) {
 
         if (posns.length < 2 || color.a <= 0) {
             return;
         }
-        renderNodes(normal(stack), builder, packedLight, color, getStreamNodes(stack, posns, widthFunc));
+        renderNodes(normal(stack), builder, light, color, getStreamNodes(stack, posns, widthFunc));
     }
 
-    //public static void renderStreamLine(PoseStack stack, MultiBufferSource buffer, int packedLight, Vector4f[] posns, Color color, Float2FloatFunction widthFunc) {
+    //public static void renderStreamLine(PoseStack stack, MultiBufferSource buffer, int light, Vector4f[] posns, Color color, Float2FloatFunction widthFunc) {
     //
-    //    renderStreamLine(stack, buffer.getBuffer(FLAT_TRANSLUCENT), packedLight, posns, color, widthFunc);
+    //    renderStreamLine(stack, buffer.getBuffer(FLAT_TRANSLUCENT), light, posns, color, widthFunc);
     //}
 
-    public static void renderCyclone(PoseStack stack, VertexConsumer consumer, int packedLight, Color color, float radius, float thickness, int length, float rot, float y) {
+    public static void renderCyclone(PoseStack stack, VertexConsumer consumer, int light, Color color, float radius, float thickness, int length, float rot, float y) {
 
         Vector4f[] nodes = new Vector4f[length];
         for (int j = 0; j < length; ++j) {
             float angle = j * WIND_INCR + rot;
             nodes[j] = new Vector4f(MathHelper.cos(angle) * radius, y, MathHelper.sin(angle) * radius, 1.0F);
         }
-        renderStreamLine(stack, consumer, packedLight, nodes, color, getWidthFunc(thickness));
+        renderStreamLine(stack, consumer, light, nodes, color, getWidthFunc(thickness));
     }
 
-    public static void renderCyclone(PoseStack stack, VertexConsumer consumer, int packedLight, Color color, float radius, float thickness, float height, RandomGenerator rand, float time) {
+    public static void renderCyclone(PoseStack stack, VertexConsumer consumer, int light, Color color, float radius, float thickness, float height, RandomGenerator rand, float time) {
 
         //int alpha = (int) MathHelper.clamp((64 + rand.nextInt(64)) * alphaScale * (MathHelper.bevel((float) rand.nextDouble(4.0F) + time * 0.06F) + 1.0F), 0, 255);
         time += rand.nextFloat(420);
-        renderCyclone(stack, consumer, packedLight, color, radius, thickness, rand.nextInt(WIND_SEGMENTS / 2, WIND_SEGMENTS), (rand.nextFloat(-1F, 1F) + 6F) * time, (rand.nextFloat(1.0F) + 0.5F * MathHelper.cos(time * 0.2F)) * 0.25F * height);
+        renderCyclone(stack, consumer, light, color, radius, thickness, rand.nextInt(WIND_SEGMENTS / 2, WIND_SEGMENTS), (rand.nextFloat(-1F, 1F) + 6F) * time, (rand.nextFloat(1.0F) + 0.5F * MathHelper.cos(time * 0.2F)) * 0.25F * height);
     }
     // endregion
+
+    // region FLUID STREAM
+
+    public static void renderFluidStream(PoseStack stack, VertexConsumer builder, int light, Vector4f[] posns, Color color, float width) {
+
+        TrailNode[] nodes = getStreamNodes(stack, posns, i -> width);
+        if (posns.length < 2 || color.a <= 0) {
+            return;
+        }
+        Vector3f normal = normal(stack);
+
+        int count = nodes.length - 1;
+        float length = 0;
+        float[] lengths = new float[count];
+        for (int i = 0; i < count; ++i) {
+            lengths[i] = posns[i].distance(posns[i + 1]);
+            length += lengths[i];
+        }
+        float unit = 1F / length;
+        int floor = MathHelper.floor(length);
+        int overlay = OverlayTexture.pack(floor, MathHelper.floor((length - floor) * 16384F));
+        nodes[0].renderStart(normal, builder, light, overlay, color, 0, 0, 1);
+        float u = lengths[0] * unit;
+        for (int i = 1; i < count; ++i) {
+            nodes[i].renderMid(normal, builder, light, overlay, color, u, 0, 1);
+            u += lengths[i] * unit;
+        }
+        nodes[count].renderEnd(normal, builder, light, overlay, color, u, 0, 1);
+    }
 
 }
