@@ -3,12 +3,14 @@ package cofh.core.util.helpers;
 import cofh.lib.common.inventory.ItemStorageCoFH;
 import cofh.lib.common.inventory.SlotFalseCopy;
 import cofh.lib.util.helpers.BlockHelper;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
@@ -239,6 +241,12 @@ public final class InventoryHelper {
             return new InvWrapper((Container) tile);
         }
         return EmptyHandler.INSTANCE;
+    }
+
+    public static IItemHandler getItemHandlerCap(Level level, BlockPos pos, Direction face) {
+
+        BlockEntity tile = level.getBlockEntity(pos);
+        return tile != null ? getItemHandlerCap(tile, face) : EmptyHandler.INSTANCE;
     }
 
     public static boolean isEmpty(ItemStack[] inventory) {

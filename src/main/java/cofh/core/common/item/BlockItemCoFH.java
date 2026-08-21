@@ -74,10 +74,10 @@ public class BlockItemCoFH extends BlockItem implements ICoFHItem {
     //    }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flags) {
 
         List<Component> additionalTooltips = new ArrayList<>();
-        tooltipDelegate(stack, worldIn, additionalTooltips, flagIn);
+        tooltipDelegate(stack, level, additionalTooltips, flags);
 
         if (!additionalTooltips.isEmpty()) {
             if (Screen.hasShiftDown() || CoreClientConfig.alwaysShowDetails.get()) {

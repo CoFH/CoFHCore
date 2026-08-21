@@ -85,7 +85,7 @@ public class CrossbowItemCoFH extends CrossbowItem implements ICoFHItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level levelIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flags) {
 
         if (isLoaded(stack)) {
             tooltip.add((Component.translatable("info.cofh.crossbow_loaded")).append(" ").append(getLoadedAmmo(stack).getDisplayName()));
