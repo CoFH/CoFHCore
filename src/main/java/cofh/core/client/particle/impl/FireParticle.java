@@ -1,7 +1,7 @@
 package cofh.core.client.particle.impl;
 
-import cofh.core.client.particle.options.ColorParticleOptions;
 import cofh.core.client.TransientLightManager;
+import cofh.core.client.particle.options.ColorParticleOptions;
 import cofh.core.common.config.CoreClientConfig;
 import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.util.helpers.MathHelper;

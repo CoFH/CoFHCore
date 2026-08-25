@@ -3,7 +3,6 @@ package cofh.core.client.particle.impl;
 import cofh.core.client.particle.options.BiColorParticleOptions;
 import it.unimi.dsi.fastutil.longs.LongList;
 import net.minecraft.client.multiplayer.ClientLevel;
-import org.joml.Vector3f;
 
 public class StaticArcParticle extends ArcParticle {
 

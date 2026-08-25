@@ -9,7 +9,7 @@ import net.minecraft.client.particle.SpriteSet;
 
 import javax.annotation.Nonnull;
 
-public class AddSpriteParticle extends SpriteParticle{
+public class AddSpriteParticle extends SpriteParticle {
 
     protected AddSpriteParticle(ColorParticleOptions data, ClientLevel level, SpriteSet sprites, double x, double y, double z, double dx, double dy, double dz) {
         super(data, level, sprites, x, y, z, dx, dy, dz);

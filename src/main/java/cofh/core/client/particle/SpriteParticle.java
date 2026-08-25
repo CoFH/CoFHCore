@@ -7,10 +7,7 @@ import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.ParticleProvider;
-import net.minecraft.client.particle.ParticleRenderType;
-import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.particle.*;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.world.phys.AABB;
@@ -25,13 +22,13 @@ import javax.annotation.Nonnull;
  */
 public class SpriteParticle extends ColorParticle {
 
-    protected final SpriteSet sprites;
+    protected final ParticleEngine.MutableSpriteSet sprites;
     protected TextureAtlasSprite sprite;
 
     protected SpriteParticle(ColorParticleOptions data, ClientLevel level, SpriteSet sprites, double x, double y, double z, double dx, double dy, double dz) {
 
         super(data, level, x, y, z, dx, dy, dz);
-        this.sprites = sprites;
+        this.sprites = sprites instanceof ParticleEngine.MutableSpriteSet set ? set : null;
         this.sprite = sprites.get(0, 1);
     }
 
@@ -54,9 +51,9 @@ public class SpriteParticle extends ColorParticle {
 
     protected void setSprite() {
 
-        int max = MathHelper.ceil(this.duration * 1024);
-        int time = MathHelper.clamp(MathHelper.floor((this.age - this.delay) * 1024), 0, max);
-        this.sprite = sprites.get(time, max);
+        if (sprites != null) {
+            this.sprite = sprites.sprites.get(MathHelper.clamp(MathHelper.floor((this.age - this.delay) / this.duration * sprites.sprites.size()), 0, sprites.sprites.size() - 1));
+        }
     }
 
     protected void updateVelocity() {

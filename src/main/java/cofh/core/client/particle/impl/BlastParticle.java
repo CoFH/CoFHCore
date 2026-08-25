@@ -3,10 +3,8 @@ package cofh.core.client.particle.impl;
 import cofh.core.client.particle.SpriteParticle;
 import cofh.core.client.particle.options.ColorParticleOptions;
 import cofh.core.util.helpers.RenderHelper;
-import cofh.core.util.helpers.vfx.RenderTypes;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleProvider;
-import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
 
 import javax.annotation.Nonnull;

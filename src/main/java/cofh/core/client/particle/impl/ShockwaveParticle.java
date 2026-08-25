@@ -6,12 +6,8 @@ import cofh.core.util.helpers.vfx.VFXHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.ParticleProvider;
-import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
-
-import javax.annotation.Nonnull;
 
 public class ShockwaveParticle extends CylindricalParticle {
 

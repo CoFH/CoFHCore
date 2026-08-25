@@ -2,7 +2,6 @@ package cofh.core.client.particle.impl;
 
 import cofh.core.client.particle.SpriteParticle;
 import cofh.core.client.particle.options.ColorParticleOptions;
-import cofh.core.util.helpers.vfx.Color;
 import cofh.core.util.helpers.vfx.RenderTypes;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.client.multiplayer.ClientLevel;

@@ -8,9 +8,13 @@ import cofh.lib.api.item.IColorableItem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.color.item.ItemColors;
+import net.minecraft.client.particle.ParticleEngine;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.*;
@@ -20,6 +24,7 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 import static cofh.core.client.CoreKeys.MULTIMODE_DECREMENT;
 import static cofh.core.client.CoreKeys.MULTIMODE_INCREMENT;
@@ -117,4 +122,5 @@ public class CoreClientSetupEvents {
         }
     }
     // endregion
+
 }
