@@ -619,17 +619,17 @@ public final class RenderHelper {
         //        net.minecraft.client.renderer.RenderHelper.enableStandardItemLighting();
     }
 
-    public static void renderModel(PoseStack stack, MultiBufferSource buffer, BlockState state, long seed, int packedLight, int overlay) {
+    public static void renderBlockModel(PoseStack stack, MultiBufferSource buffer, BlockState state, long seed, int packedLight, int overlay) {
 
-        renderModel(stack, buffer, state, RenderHelper.renderBlock().getBlockModel(state), seed, packedLight, overlay);
+        renderBlockModel(stack, buffer, state, RenderHelper.renderBlock().getBlockModel(state), seed, packedLight, overlay);
     }
 
-    public static void renderModel(PoseStack stack, MultiBufferSource buffer, BlockState state, BakedModel model, long seed, int packedLight, int overlay) {
+    public static void renderBlockModel(PoseStack stack, MultiBufferSource buffer, BlockState state, BakedModel model, long seed, int packedLight, int overlay) {
 
-        renderModel(stack, buffer, state, model, 1, 1, 1, 1, seed, packedLight, overlay);
+        renderBlockModel(stack, buffer, state, model, 1, 1, 1, 1, seed, packedLight, overlay);
     }
 
-    public static void renderModel(PoseStack stack, MultiBufferSource buffer, BlockState state, BakedModel model, float r, float g, float b, float a, long seed, int packedLight, int overlay) {
+    public static void renderBlockModel(PoseStack stack, MultiBufferSource buffer, BlockState state, BakedModel model, float r, float g, float b, float a, long seed, int packedLight, int overlay) {
 
         RANDOM.setSeed(seed);
         PoseStack.Pose pose = stack.last();
@@ -641,6 +641,22 @@ public final class RenderHelper {
             }
             RANDOM.setSeed(seed);
             renderQuadList(pose, consumer, model.getQuads(state, null, RANDOM, ModelData.EMPTY, type), r, g, b, a, packedLight, overlay);
+        }
+    }
+
+    public static void renderItemModel(ResourceLocation loc, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int overlayCoord) {
+
+        renderItemModel(getModel(loc), poseStack, buffer, packedLight, overlayCoord);
+    }
+
+    public static void renderItemModel(BakedModel model, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int overlayCoord) {
+
+        ItemRenderer renderer = RenderHelper.renderItem();
+        for (BakedModel pass : model.getRenderPasses(ItemStack.EMPTY, true)) {
+            for (RenderType type : pass.getRenderTypes(ItemStack.EMPTY, true)) {
+                VertexConsumer consumer = ItemRenderer.getFoilBufferDirect(buffer, type, true, false);
+                renderer.renderModelLists(pass, ItemStack.EMPTY, packedLight, overlayCoord, poseStack, consumer);
+            }
         }
     }
 

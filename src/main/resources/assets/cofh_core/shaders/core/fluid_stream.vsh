@@ -10,7 +10,6 @@ in ivec2 UV1;
 in ivec2 UV2;
 in vec3 Normal;
 
-uniform sampler2D Sampler1;
 uniform sampler2D Sampler2;
 
 uniform mat4 ModelViewMat;
@@ -18,13 +17,9 @@ uniform mat4 ProjMat;
 uniform mat3 IViewRotMat;
 uniform int FogShape;
 
-uniform vec3 Light0_Direction;
-uniform vec3 Light1_Direction;
-
 out float vertexDistance;
 out vec4 vertexColor;
 out vec2 texCoord0;
-flat out float length;
 
 void main() {
     gl_Position = ProjMat * ModelViewMat * vec4(Position, 1.0);
@@ -32,5 +27,4 @@ void main() {
     vertexDistance = fog_distance(ModelViewMat, IViewRotMat * Position, FogShape);
     vertexColor = Color * texelFetch(Sampler2, UV2 / 16, 0);
     texCoord0 = UV0;
-    length = float(UV1.x) + float(UV1.y) / 16384.0;
 }

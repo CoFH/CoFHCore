@@ -9,11 +9,12 @@ uniform float FogStart;
 uniform float FogEnd;
 uniform vec4 FogColor;
 uniform float GameTime;
+uniform float Length; //in blocks
+uniform float Offset; //in blocks
 
 in float vertexDistance;
 in vec4 vertexColor;
 in vec2 texCoord0;
-flat in float length; //in blocks
 
 out vec4 fragColor;
 
@@ -72,7 +73,7 @@ float lump(float freq) { // lump.
 
 void main() {
     float time = GameTime * 1200.0; //in seconds
-    float x = (floor(texCoord0.x * length * 16.0) + 0.5) * 0.0625;
+    float x = (floor(texCoord0.x * Length * 16.0) + 0.5) * 0.0625;
     float y = round(texCoord0.y * 10.0) * 0.2 - 1.0;
 
     float shift = y > 0.0 ? -420.0 : 420.0;
@@ -85,7 +86,7 @@ void main() {
 
     float freq = x - time * 2.5;
     width += 0.3 * lump(freq); // periodic wave
-    width *= 3.6 * min(min(0.25, x), length - x); // tapered ends
+    width *= 3.6 * min(min(0.25, x), Length - x); // tapered ends
     width = min(1.0, width);
 
     if (abs(y) >= width) {

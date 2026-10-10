@@ -26,6 +26,8 @@
     { "name": "FogStart", "type": "float", "count": 1, "values": [ 0.0 ] },
     { "name": "FogEnd", "type": "float", "count": 1, "values": [ 1.0 ] },
     { "name": "FogShape", "type": "int", "count": 1, "values": [ 0 ] },
-    { "name": "GameTime", "type": "float", "count": 1, "values": [ 0.0 ] }
+    { "name": "GameTime", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "Length", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "Offset", "type": "float", "count": 1, "values": [ 0.0 ] }
   ]
 }

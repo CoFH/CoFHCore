@@ -1,5 +1,6 @@
 package cofh.core.util.helpers.vfx;
 
+import cofh.core.init.CoreShaders;
 import cofh.core.util.helpers.RenderHelper;
 import cofh.lib.util.helpers.MathHelper;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
@@ -733,7 +734,7 @@ public final class VFXHelper {
 
     // region FLUID STREAM
 
-    public static void renderFluidStream(PoseStack stack, VertexConsumer builder, int light, Vector4f[] posns, Color color, float width) {
+    public static void renderFluidStream(PoseStack stack, VertexConsumer builder, int light, Vector4f[] posns, Color color, float width, float offset) {
 
         TrailNode[] nodes = getStreamNodes(stack, posns, i -> width);
         if (posns.length < 2 || color.a <= 0) {
@@ -749,15 +750,15 @@ public final class VFXHelper {
             length += lengths[i];
         }
         float unit = 1F / length;
-        int floor = MathHelper.floor(length);
-        int overlay = OverlayTexture.pack(floor, MathHelper.floor((length - floor) * 16384F));
-        nodes[0].renderStart(normal, builder, light, overlay, color, 0, 0, 1);
+        CoreShaders.FLUID_STREAM.safeGetUniform("Length").set(length);
+        CoreShaders.FLUID_STREAM.safeGetUniform("Offset").set(offset);
+        nodes[0].renderStart(normal, builder, light, OverlayTexture.NO_OVERLAY, color, 0, 0, 1);
         float u = lengths[0] * unit;
         for (int i = 1; i < count; ++i) {
-            nodes[i].renderMid(normal, builder, light, overlay, color, u, 0, 1);
+            nodes[i].renderMid(normal, builder, light, OverlayTexture.NO_OVERLAY, color, u, 0, 1);
             u += lengths[i] * unit;
         }
-        nodes[count].renderEnd(normal, builder, light, overlay, color, u, 0, 1);
+        nodes[count].renderEnd(normal, builder, light, OverlayTexture.NO_OVERLAY, color, u, 0, 1);
     }
 
 }
