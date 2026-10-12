@@ -203,6 +203,9 @@ public class CoFHCore {
         PACKET_HANDLER.registerPacket(PacketIDs.PACKET_LIGHT_SYNC, LightSyncPacket::new);
         PACKET_HANDLER.registerPacket(PacketIDs.PACKET_LIGHT_ADD, LightAddPacket::new);
         PACKET_HANDLER.registerPacket(PacketIDs.PACKET_LIGHT_REMOVE, LightRemovePacket::new);
+
+        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_PROFILE_SYNC, ProfileSyncPacket::new);
+        PACKET_HANDLER.registerPacket(PacketIDs.PACKET_PROFILE_ADD, ProfileAddPacket::new);
     }
 
     // region INITIALIZATION
