@@ -72,19 +72,27 @@ float lump(float freq) { // lump.
 }
 
 void main() {
+    if (Length <= 0.0) {
+        discard;
+    }
+
     float time = GameTime * 1200.0; //in seconds
-    float x = (floor(texCoord0.x * Length * 16.0) + 0.5) * 0.0625;
+    float u = (floor(texCoord0.x * 16.0) + 0.5) * 0.0625;
+    float x = (floor((texCoord0.x - Offset + Length) * 16.0) + 0.5) * 0.0625;
+    if (x <= 0.0 || x >= Length) {
+        discard;
+    }
     float y = round(texCoord0.y * 10.0) * 0.2 - 1.0;
 
     float shift = y > 0.0 ? -420.0 : 420.0;
 
     // main shape
-    float width = sin(x * 2.0);
+    float width = sin(u * 2.0);
     float inv = 1.0 - abs(width);
     width = 0.8 * saygex((1.0 - inv * inv * inv) * sign(width) * cos(time), 0.3);
-    width -= 0.5 * (width - 0.25) * (cos(x * 4.0 + 0.5 * cnoise(x * 2.0 + shift, time * 0.4)) + 1.0);
+    width -= 0.5 * (width - 0.25) * (cos(u * 4.0 + 0.5 * cnoise(u * 2.0 + shift, time * 0.4) - 1.5 * time) + 1.0);
 
-    float freq = x - time * 2.5;
+    float freq = u - time * 2.5;
     width += 0.3 * lump(freq); // periodic wave
     width *= 3.6 * min(min(0.25, x), Length - x); // tapered ends
     width = min(1.0, width);
@@ -92,7 +100,7 @@ void main() {
     if (abs(y) >= width) {
         discard;
     }
-    vec4 color = texture(Sampler0, vec2(x - time, y / width));
+    vec4 color = texture(Sampler0, vec2(u - time, y / width));
     float a = color.a * vertexColor.a;
     if (a < 0.0039) {
         discard;

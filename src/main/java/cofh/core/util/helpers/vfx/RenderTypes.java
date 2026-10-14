@@ -1,5 +1,6 @@
 package cofh.core.util.helpers.vfx;
 
+import cofh.core.init.CoreShaders;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
@@ -28,7 +29,7 @@ public class RenderTypes {
     public static final ResourceLocation RND_GLOW_TEXTURE = new ResourceLocation(ID_COFH_CORE, "textures/render/glow_round.png");
     public static final ResourceLocation FLUID_STREAM_TEXTURE = new ResourceLocation(ID_COFH_CORE, "textures/render/fluid_stream.png");
     public static final ShaderStateShard TRANSLUCENT_SHADER = new RenderStateShard.ShaderStateShard(() -> TRANSLUCENT);
-    public static final ShaderStateShard FLUID_STREAM_SHADER = new RenderStateShard.ShaderStateShard(() -> FLUID_STREAM);
+    public static final ShaderStateShard FLUID_STREAM_SHADER = new RenderStateShard.ShaderStateShard(() -> CoreShaders.FLUID_STREAM);
 
     public static final RenderType OVERLAY_LINES = RenderType.create("cofh:overlay_lines",
             DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.LINES, 256, false, true,
@@ -60,6 +61,15 @@ public class RenderTypes {
     //                    .setWriteMaskState(COLOR_WRITE)
     //                    .createCompositeState(false)
     //    );
+
+    public static final RenderType FLUID_STREAM = RenderType.create("cofh_core:fluid_stream",
+            DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 4096, false, true,
+            RenderType.CompositeState.builder()
+                    .setTextureState(new RenderStateShard.TextureStateShard(FLUID_STREAM_TEXTURE, false, false))
+                    .setShaderState(RenderTypes.FLUID_STREAM_SHADER)
+                    .setWriteMaskState(COLOR_DEPTH_WRITE)
+                    .setLightmapState(LIGHTMAP)
+                    .createCompositeState(false));
 
     public static final RenderType FLAT_CUTOUT = opaque("cofh_core:opaque", new TextureStateShard(BLANK_TEXTURE, false, false));
     public static final RenderType FLAT_TRANSLUCENT = translucentNoDepthWrite(BLANK_TEXTURE);

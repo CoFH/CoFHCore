@@ -31,6 +31,7 @@ import java.util.function.BiPredicate;
 import java.util.random.RandomGenerator;
 import java.util.stream.IntStream;
 
+import static cofh.core.client.CoreRenderType.THICK_LINES;
 import static cofh.core.util.helpers.vfx.RenderTypes.*;
 import static net.minecraft.client.renderer.RenderStateShard.*;
 import static net.minecraft.client.renderer.RenderStateShard.LIGHTMAP;
@@ -42,15 +43,9 @@ import static net.minecraft.client.renderer.RenderStateShard.LIGHTMAP;
  */
 public final class VFXHelper {
 
-    public static float lengthSqr(Vector3f vec) {
-
-        return MathHelper.distSqr(vec.x(), vec.y(), vec.z());
-    }
-
-    public static float length(Vector3f vec) {
-
-        return MathHelper.dist(vec.x(), vec.y(), vec.z());
-    }
+    private static final RenderType DUMMY = RenderType.create("cofh:dummy",
+            DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, false,
+            RenderType.CompositeState.builder().createCompositeState(false));
 
     public static TrailNode interpolate(TrailNode a, TrailNode b, float d) {
 
@@ -59,7 +54,7 @@ public final class VFXHelper {
 
     public static Vector4f interpolate(Vector4f a, Vector4f b, float d) {
 
-        return new Vector4f(MathHelper.interpolate(a.x(), b.x(), d), MathHelper.interpolate(a.y(), b.y(), d), MathHelper.interpolate(a.z(), b.z(), d), MathHelper.interpolate(a.w(), b.w(), d));
+        return new Vector4f(a).lerp(b, d);
     }
 
     private static TrailNode interpolateCap(TrailNode a, TrailNode b) {
@@ -125,6 +120,11 @@ public final class VFXHelper {
     private static RandomGenerator createRandom(long time, long seed) {
 
         return new SplittableRandom((time * 42069) ^ (seed * 3151986));
+    }
+
+    public static void endBatch(MultiBufferSource buffer) {
+
+        buffer.getBuffer(DUMMY);
     }
 
     // region HELPERS
@@ -265,7 +265,7 @@ public final class VFXHelper {
 
         Vector3f diff = new Vector3f(end);
         diff.sub(start);
-        float scale = length(diff);
+        float scale = diff.length();
         stack.translate(start.x(), start.y(), start.z());
         alignVertical(stack, diff);
         stack.scale(scale, scale, scale);
@@ -694,6 +694,11 @@ public final class VFXHelper {
         return getStreamNodes(posns, widthFunc);
     }
 
+    public static TrailNode[] getStreamNodes(PoseStack stack, Vector4f[] posns, float width) {
+
+        return getStreamNodes(stack, posns, i -> width);
+    }
+
     /**
      * Renders an axially billboarded streamline that follows the given node positions.
      *
@@ -733,32 +738,52 @@ public final class VFXHelper {
     // endregion
 
     // region FLUID STREAM
+    public static void renderFluidStream(PoseStack stack, VertexConsumer builder, int light, Vector4f[] posns, Color color, float width, float length, float offset) {
 
-    public static void renderFluidStream(PoseStack stack, VertexConsumer builder, int light, Vector4f[] posns, Color color, float width, float offset) {
-
-        TrailNode[] nodes = getStreamNodes(stack, posns, i -> width);
+        TrailNode[] nodes = getStreamNodes(stack, posns, width);
         if (posns.length < 2 || color.a <= 0) {
             return;
         }
         Vector3f normal = normal(stack);
 
         int count = nodes.length - 1;
-        float length = 0;
         float[] lengths = new float[count];
         for (int i = 0; i < count; ++i) {
             lengths[i] = posns[i].distance(posns[i + 1]);
-            length += lengths[i];
         }
-        float unit = 1F / length;
         CoreShaders.FLUID_STREAM.safeGetUniform("Length").set(length);
         CoreShaders.FLUID_STREAM.safeGetUniform("Offset").set(offset);
         nodes[0].renderStart(normal, builder, light, OverlayTexture.NO_OVERLAY, color, 0, 0, 1);
-        float u = lengths[0] * unit;
+        float u = lengths[0];
         for (int i = 1; i < count; ++i) {
             nodes[i].renderMid(normal, builder, light, OverlayTexture.NO_OVERLAY, color, u, 0, 1);
-            u += lengths[i] * unit;
+            u += lengths[i];
         }
         nodes[count].renderEnd(normal, builder, light, OverlayTexture.NO_OVERLAY, color, u, 0, 1);
     }
+
+    public static Vector4f[] wigglePoints(Vector4f[] posns, long seed, float time, float scale, float rate) {
+
+        SplittableRandom rand = new SplittableRandom(seed);
+        float fx = rand.nextFloat() + 1;
+        float fy = rand.nextFloat() + 1;
+        float fz = rand.nextFloat() + 1;
+
+        float incr = 1.0F / (posns.length - 1.0F);
+        for (int i = 0; i < posns.length; ++i) {
+            float taper = MathHelper.sin(i * incr * MathHelper.F_PI) * scale;
+            posns[i].add(MathHelper.cos(time * fx * rate) * taper,
+                    MathHelper.cos(time * fy * rate) * taper,
+                    MathHelper.cos(time * fz * rate) * taper,
+                    0);
+        }
+        return posns;
+    }
+
+    public static Vector4f[] wigglePoints(Vector4f[] posns, long seed, float time) {
+
+        return wigglePoints(posns, seed, time, 0.15F, 0.05F);
+    }
+    // endregion
 
 }
