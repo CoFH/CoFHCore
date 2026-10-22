@@ -31,7 +31,9 @@ public class LightHelper {
         int maxZ = SectionPos.blockToSectionCoord(center.getZ() + r);
         for (int x = SectionPos.blockToSectionCoord(center.getX() - r); x <= maxX; ++x) {
             for (int z = minZ; z <= maxZ; ++z) {
-                level.getChunk(x, z).getCapability(LIGHT_CAPABILITY).ifPresent(cap -> cap.add(center, radius));
+                LevelChunk chunk = level.getChunk(x, z);
+                chunk.getCapability(LIGHT_CAPABILITY).ifPresent(cap -> cap.add(center, radius));
+                chunk.setUnsaved(true);
             }
         }
         forEach(level, center, radius, (e, b, x, y, z) -> {
@@ -55,7 +57,9 @@ public class LightHelper {
         int maxZ = SectionPos.blockToSectionCoord(center.getZ() + r);
         for (int x = minX; x <= maxX; ++x) {
             for (int z = minZ; z <= maxZ; ++z) {
-                level.getChunk(x, z).getCapability(LIGHT_CAPABILITY).ifPresent(cap -> cap.remove(center));
+                LevelChunk chunk = level.getChunk(x, z);
+                chunk.getCapability(LIGHT_CAPABILITY).ifPresent(cap -> cap.remove(center));
+                chunk.setUnsaved(true);
             }
         }
         LightRemovePacket.sendToClient(level, center, radius);
