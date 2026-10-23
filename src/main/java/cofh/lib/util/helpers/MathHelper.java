@@ -117,6 +117,11 @@ public final class MathHelper {
         }
         return base;
     }
+
+    public static float boundedGaussian(RandomSource random, float z) {
+
+        return MathHelper.clamp((float) random.nextGaussian(), -z, z);
+    }
     // endregion
 
     // region TRIGONOMETRY

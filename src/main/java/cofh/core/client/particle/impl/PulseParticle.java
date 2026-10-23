@@ -2,6 +2,7 @@ package cofh.core.client.particle.impl;
 
 import cofh.core.client.particle.ColorParticle;
 import cofh.core.client.particle.options.ColorParticleOptions;
+import cofh.core.client.particle.options.CylindricalParticleOptions;
 import cofh.core.util.helpers.RenderHelper;
 import cofh.core.util.helpers.vfx.Color;
 import cofh.core.util.helpers.vfx.RenderTypes;
@@ -18,11 +19,11 @@ public class PulseParticle extends ColorParticle {
     public int thickness;
     public boolean shrinking;
 
-    public PulseParticle(ColorParticleOptions data, ClientLevel level, double x, double y, double z, double xDir, double yDir, double zDir) {
+    public PulseParticle(CylindricalParticleOptions data, ClientLevel level, double x, double y, double z, double xDir, double yDir, double zDir) {
 
         super(data, level, x, y, z, xDir, yDir, zDir);
         oRoll = roll = level.getRandom().nextFloat() * MathHelper.F_TAU;
-        thickness = (int) (size * 0.1F * 8.0F * 32F);
+        thickness = (int) (data.height * 8.0F * 32F);
         hasPhysics = false;
     }
 

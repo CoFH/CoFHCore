@@ -71,7 +71,6 @@ public class CoreClientSetupEvents {
 
         event.registerSpriteSet(FIRE.get(), FireParticle::factory);
         event.registerSpriteSet(BLAST.get(), BlastParticle::factory);
-        event.registerSpecial(PULSE.get(), PulseParticle::new);
         event.registerSpriteSet(MIST.get(), MistParticle::factory);
         event.registerSpriteSet(SQUARE.get(), SquareParticle::factory);
 
@@ -80,6 +79,7 @@ public class CoreClientSetupEvents {
         event.registerSpecial(WIND_VORTEX.get(), WindVortexParticle::new);
         event.registerSpecial(WIND_SPIRAL.get(), WindSpiralParticle::new);
         event.registerSpecial(RING.get(), RingParticle::new);
+        event.registerSpecial(PULSE.get(), PulseParticle::new);
 
         event.registerSpecial(BEAM.get(), BeamParticle::new);
         event.registerSpecial(STRAIGHT_ARC.get(), StaticArcParticle::new);
