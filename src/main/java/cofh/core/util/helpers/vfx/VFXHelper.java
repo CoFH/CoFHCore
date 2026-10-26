@@ -784,6 +784,15 @@ public final class VFXHelper {
 
         return wigglePoints(posns, seed, time, 0.15F, 0.05F);
     }
+
+    public static Vector4f[] wigglePoints(Vector3f[] posns, long seed, float time) {
+
+        Vector4f[] positions = new Vector4f[posns.length];
+        for (int i = 0; i < positions.length; ++i) {
+            positions[i] = new Vector4f(posns[i], 1.0F);
+        }
+        return wigglePoints(positions, seed, time, 0.15F, 0.05F);
+    }
     // endregion
 
 }

@@ -14,10 +14,9 @@
     "MouseHandlerMixin"
   ],
   "mixins": [
-    "BlockLightEngineMixin",
+    "BlockLightSectionStorageMixin",
     "ClientboundSetEntityMotionPacketMixin",
     "HorseArmorItemMixin",
-    "LightEngineMixin",
     "LivingEntityMixin",
     "MultiPlayerGameModeMixin",
     "ShearsItemMixin",

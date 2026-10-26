@@ -61,6 +61,7 @@ public class NBTTags {
     public static final String TAG_INSTANT = "Instant";
     public static final String TAG_ITEM_INV = "ItemInv";
     public static final String TAG_LEVEL = "Level";
+    public static final String TAG_LIGHTS = "Lights";
     public static final String TAG_MODE = "Mode";
     public static final String TAG_NAME = "Name";
     public static final String TAG_ORIGIN = "Origin";

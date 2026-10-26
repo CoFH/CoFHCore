@@ -67,7 +67,7 @@ public class TransientLightManager {
         for (Long2ByteMap.Entry entry : current.long2ByteEntrySet()) {
             long pos = entry.getLongKey();
             if (!engine.storage.storingLightForSection(SectionPos.blockToSection(pos))) {
-                return;
+                continue;
             }
             int light = entry.getByteValue();
             int previous = TransientLightManager.previous.remove(pos);

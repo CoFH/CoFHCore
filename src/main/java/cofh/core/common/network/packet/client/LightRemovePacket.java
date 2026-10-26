@@ -14,7 +14,6 @@ import static cofh.core.common.network.packet.PacketIDs.PACKET_LIGHT_REMOVE;
 public class LightRemovePacket extends PacketBase implements IPacketClient {
 
     protected long pos;
-    protected double radius;
 
     public LightRemovePacket() {
 
@@ -26,7 +25,7 @@ public class LightRemovePacket extends PacketBase implements IPacketClient {
 
         Level level = Minecraft.getInstance().level;
         if (level != null) {
-            LightHelper.removeLight(level, BlockPos.of(pos), radius);
+            LightHelper.removeLight(level, BlockPos.of(pos));
         }
     }
 
@@ -34,22 +33,19 @@ public class LightRemovePacket extends PacketBase implements IPacketClient {
     public void write(FriendlyByteBuf buf) {
 
         buf.writeLong(pos);
-        buf.writeDouble(radius);
     }
 
     @Override
     public void read(FriendlyByteBuf buf) {
 
         this.pos = buf.readLong();
-        this.radius = buf.readDouble();
     }
 
-    public static void sendToClient(Level level, BlockPos pos, double radius) {
+    public static void sendToClient(Level level, BlockPos pos) {
 
         if (!level.isClientSide) {
             LightRemovePacket packet = new LightRemovePacket();
             packet.pos = pos.asLong();
-            packet.radius = radius;
             packet.sendToDimension(level.dimension());
         }
     }
