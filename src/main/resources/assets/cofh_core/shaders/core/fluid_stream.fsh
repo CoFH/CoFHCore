@@ -110,5 +110,5 @@ void main() {
         rgb *= 1.0 - max(width * 0.7 - 0.14, 0.0); // lighter outlines
     }
     rgb *= 1.0 + lump(freq * 2.5) * 0.2; // darker bands
-    fragColor = linear_fog(vec4(max(1.0 - rgb, 0.0), a) * ColorModulator, vertexDistance, FogStart, FogEnd, FogColor);
+    fragColor = linear_fog(vec4(max(0.87 - rgb, 0.0), a) * ColorModulator, vertexDistance, FogStart, FogEnd, FogColor);
 }

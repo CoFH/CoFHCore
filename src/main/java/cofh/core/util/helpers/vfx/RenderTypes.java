@@ -66,7 +66,8 @@ public class RenderTypes {
             DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 4096, false, true,
             RenderType.CompositeState.builder()
                     .setTextureState(new RenderStateShard.TextureStateShard(FLUID_STREAM_TEXTURE, false, false))
-                    .setShaderState(RenderTypes.FLUID_STREAM_SHADER)
+                    .setShaderState(FLUID_STREAM_SHADER)
+                    .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
                     .setWriteMaskState(COLOR_DEPTH_WRITE)
                     .setLightmapState(LIGHTMAP)
                     .createCompositeState(false));
