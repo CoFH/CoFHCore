@@ -1,29 +1,28 @@
 {
   "targets": [
     "swap",
-    "final"
+    "final",
+    {"name": "pixel2", "width": 1, "height": 1},
+    {"name": "pixel4", "width": 1, "height": 1},
+    {"name": "pixel8", "width": 1, "height": 1},
+    {"name": "pixel16", "width": 1, "height": 1}
   ],
   "passes": [
     {
-      "name": "cofh_core:pixelate0",
+      "name": "cofh_core:pixelate",
       "intarget": "final",
       "outtarget": "swap",
       "auxtargets": [
-        {
-          "name": "DiffuseDepthSampler",
-          "id": "final:depth"
-        }
-      ]
-    },
-    {
-      "name": "cofh_core:pixelate1",
-      "intarget": "swap",
-      "outtarget": "final",
-      "auxtargets": [
-        {
-          "name": "MainDepthSampler",
-          "id": "minecraft:main:depth"
-        }
+        {"name": "DiffuseDepthSampler", "id": "final:depth"},
+        {"name": "Pixel2Sampler", "id": "pixel2"},
+        {"name": "Pixel2DepthSampler", "id": "pixel2:depth"},
+        {"name": "Pixel4Sampler", "id": "pixel4"},
+        {"name": "Pixel4DepthSampler", "id": "pixel4:depth"},
+        {"name": "Pixel8Sampler", "id": "pixel8"},
+        {"name": "Pixel8DepthSampler", "id": "pixel8:depth"},
+        {"name": "Pixel16Sampler", "id": "pixel16"},
+        {"name": "Pixel16DepthSampler", "id": "pixel16:depth"},
+        {"name": "MainDepthSampler", "id": "minecraft:main:depth"}
       ]
     }
   ]

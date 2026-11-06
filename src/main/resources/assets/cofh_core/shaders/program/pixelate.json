@@ -5,16 +5,24 @@
     "dstrgb": "zero"
   },
   "vertex": "sobel",
-  "fragment": "cofh_core:pixelate1",
+  "fragment": "cofh_core:pixelate",
   "attributes": ["Position"],
   "samplers": [
     {"name": "DiffuseSampler"},
+    {"name": "DiffuseDepthSampler"},
+    {"name": "Pixel2Sampler"},
+    {"name": "Pixel2DepthSampler"},
+    {"name": "Pixel4Sampler"},
+    {"name": "Pixel4DepthSampler"},
+    {"name": "Pixel8Sampler"},
+    {"name": "Pixel8DepthSampler"},
+    {"name": "Pixel16Sampler"},
+    {"name": "Pixel16DepthSampler"},
     {"name": "MainDepthSampler"}
   ],
   "uniforms": [
     {"name": "ProjMat", "type": "matrix4x4", "count": 16, "values": [1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0]},
     {"name": "InSize", "type": "float", "count": 2, "values": [1.0, 1.0]},
-    {"name": "OutSize", "type": "float", "count": 2, "values": [1.0, 1.0]},
-    {"name": "Resolution", "type": "float", "count": 1, "values": [128.0]}
+    {"name": "OutSize", "type": "float", "count": 2, "values": [1.0, 1.0]}
   ]
 }

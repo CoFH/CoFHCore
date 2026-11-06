@@ -1,6 +1,6 @@
 package cofh.core.init;
 
-import cofh.core.client.PostBuffer;
+import cofh.core.client.PixelateBuffer;
 import cofh.core.common.config.CoreClientConfig;
 import cofh.core.util.helpers.RenderHelper;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
@@ -31,25 +31,25 @@ public class CoreShaders {
     public static ShaderInstance PARTICLE_ADDITIVE_SCREEN;
     public static ShaderInstance PARTICLE_RING;
     public static ShaderInstance PARTICLE_ADDITIVE_TINTED;
-    public static final PostBuffer PIXELATE = new PostBuffer(new ResourceLocation(ID_COFH_CORE, "pixelate")) {
+    public static final PixelateBuffer PIXELATE = new PixelateBuffer(new ResourceLocation(ID_COFH_CORE, "pixelate"), 5, 0.0625F) {
 
         @Override
         public boolean isEnabled() {
 
-            return super.isEnabled() && RenderHelper.isFabulousGraphics() && CoreClientConfig.stylizedGraphics.get();
+            return super.isEnabled() && CoreClientConfig.stylizedGraphics.get(); // && RenderHelper.isFabulousGraphics()
         }
 
         @Override
-        public RenderType getRenderType(ResourceLocation texture) {
+        public RenderType getRenderType(ResourceLocation texture, int level) {
 
             RenderType.CompositeState.CompositeStateBuilder builder = RenderType.CompositeState.builder()
                     .setShaderState(RENDERTYPE_TRANSLUCENT_NO_CRUMBLING_SHADER)
                     .setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
-                    .setOutputState(getOutputShard());
-            if (!isEnabled()) {
+                    .setOutputState(getOutputShard(level));
+            if (level < 0) {
                 builder.setTransparencyState(TRANSLUCENT_TRANSPARENCY);
             }
-            return RenderType.create(outputName, DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, buffer.getSize(), false, false, builder.createCompositeState(false));
+            return RenderType.create(outputName + level, DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, false, builder.createCompositeState(false));
         }
 
     };
