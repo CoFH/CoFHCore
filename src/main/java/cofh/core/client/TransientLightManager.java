@@ -27,7 +27,6 @@ public class TransientLightManager {
     protected static Long2ByteMap previous = Long2ByteMaps.synchronize(new Long2ByteOpenHashMap());
     protected static Level last = null;
 
-    // region TRANSIENT
     public static void addLight(Level level, BlockPos pos, int light) {
 
         addLight(level, pos.asLong(), light);
@@ -66,20 +65,17 @@ public class TransientLightManager {
         }
         for (Long2ByteMap.Entry entry : current.long2ByteEntrySet()) {
             long pos = entry.getLongKey();
-            if (!engine.storage.storingLightForSection(SectionPos.blockToSection(pos))) {
-                continue;
-            }
             int light = entry.getByteValue();
-            int previous = TransientLightManager.previous.remove(pos);
-            if (previous == light) {
+            int was = previous.remove(pos);
+            if (was == light) {
                 continue;
             }
-            int stored = engine.storage.getStoredLevel(pos);
-            if (stored == light) {
+            int stored = storedLevel(engine, pos);
+            if (stored == light || stored < 0) {
                 continue;
             }
             boolean empty = true;
-            if (stored == previous) {
+            if (stored == was) {
                 BlockState state = engine.getState(CURSOR.set(pos));
                 int emitted = engine.getEmission(pos, state);
                 if (emitted > light) {
@@ -102,12 +98,18 @@ public class TransientLightManager {
         }
         for (Long2ByteMap.Entry entry : previous.long2ByteEntrySet()) {
             long pos = entry.getLongKey();
-            if (engine.storage.getStoredLevel(pos) == entry.getByteValue()) {
+            if (storedLevel(engine, pos) == entry.getByteValue()) {
                 engine.checkBlock(CURSOR.set(pos));
             }
         }
         previous = current;
         current = Long2ByteMaps.synchronize(new Long2ByteOpenHashMap(current.size() + 10));
+    }
+
+    protected static int storedLevel(LightEngine<?, ?> engine, long pos) {
+
+        long section = SectionPos.blockToSection(pos);
+        return engine.storage.storingLightForSection(section) ? engine.storage.getStoredLevel(pos) : -1;
     }
 
 }
