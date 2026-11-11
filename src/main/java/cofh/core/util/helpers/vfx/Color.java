@@ -1,9 +1,38 @@
 package cofh.core.util.helpers.vfx;
 
 import cofh.lib.util.helpers.MathHelper;
+import cofh.lib.util.recipes.RecipeJsonUtils;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import java.util.List;
+
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.util.ExtraCodecs;
 
 public class Color {
+
+    protected static final Codec<Integer> CHANNEL = ExtraCodecs.intRange(0, 0xFF);
+    public static final Codec<Color> CODEC = RecipeJsonUtils.merge(
+            Codec.STRING.comapFlatMap((string) -> {
+                String hex = string.startsWith("#") ? string.substring(1) : string;
+                if (hex.matches("[0-9a-fA-F]{6}|[0-9a-fA-F]{8}")) {
+                    int value = Integer.parseUnsignedInt(hex, 16);
+                    return DataResult.success(hex.length() == 6 ? fromRGB(value) : fromRGBA(value));
+                }
+                return DataResult.error(() -> "Not a valid hex color: " + string);
+            }, (color) -> color.a == 0xFF ? String.format("%06X", color.toRGB()) : String.format("%08X", color.toRGBA())),
+            Codec.INT.xmap(Color::fromRGBA, Color::toRGBA),
+            CHANNEL.listOf().comapFlatMap((values) -> values.size() == 3 || values.size() == 4 ? DataResult.success(
+                            fromRGBA(values.get(0), values.get(1), values.get(2), values.size() == 4 ? values.get(3) : 0xFF))
+                            : DataResult.error(() -> "Expected 3 or 4 channels: " + values),
+                    (color) -> List.of(color.r, color.g, color.b, color.a)),
+            RecordCodecBuilder.create((builder) -> builder.group(
+                    CHANNEL.fieldOf("r").forGetter((color) -> color.r),
+                    CHANNEL.fieldOf("g").forGetter((color) -> color.g),
+                    CHANNEL.fieldOf("b").forGetter((color) -> color.b),
+                    CHANNEL.optionalFieldOf("a", 0xFF).forGetter((color) -> color.a)
+            ).apply(builder, Color::fromRGBA)));
 
     public static final float INT_TO_FLOAT = 0.003921569F;
     public static final Color WHITE = fromRGBA(0xFFFFFFFF);

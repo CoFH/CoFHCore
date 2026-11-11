@@ -4,7 +4,9 @@ import cofh.lib.common.block.BlockIngredient;
 import cofh.lib.common.fluid.FluidIngredient;
 import cofh.lib.util.crafting.IngredientWithCount;
 import com.google.gson.*;
+import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
+import com.mojang.serialization.Codec;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.resources.ResourceLocation;
@@ -20,6 +22,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
 
 import java.util.List;
+import java.util.function.Function;
 
 import static cofh.lib.util.Constants.BASE_CHANCE_LOCKED;
 import static cofh.lib.util.Constants.BUCKET_VOLUME;
@@ -316,6 +319,15 @@ public abstract class RecipeJsonUtils {
             return BlockIngredient.fromJsonObject(element.getAsJsonObject());
         }
         throw new JsonSyntaxException("Expected " + member + " to be an Object or an Array of Objects, was " + GsonHelper.getType(element));
+    }
+
+    public static <T> Codec<T> merge(Codec<T> first, Codec<T>... codecs) {
+
+        Codec<T> output = first;
+        for (Codec<T> codec : codecs) {
+            output = Codec.either(output, codec).xmap((either) -> either.map(Function.identity(), Function.identity()), Either::left);
+        }
+        return output;
     }
     // endregion
 
