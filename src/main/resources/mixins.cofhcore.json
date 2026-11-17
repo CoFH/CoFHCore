@@ -10,7 +10,6 @@
     "GameRendererMixin",
     "ItemRendererMixin",
     "LevelRendererMixin",
-    "ModelPartMixin",
     "MouseHandlerMixin"
   ],
   "mixins": [

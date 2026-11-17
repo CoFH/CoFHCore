@@ -11,28 +11,18 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 
-public abstract class PostBuffer extends PostEffect implements MultiBufferSource {
+public abstract class PostBuffer extends PostTarget implements MultiBufferSource {
 
     protected final BasicBufferSource buffer = new BasicBufferSource(256);
-    protected final String targetName;
-    protected final String outputName;
-    protected final RenderStateShard.OutputStateShard fallback;
-    protected RenderStateShard.OutputStateShard output;
-    protected RenderTarget target;
-    protected boolean active;
 
     public PostBuffer(ResourceLocation shader, String targetName, RenderStateShard.OutputStateShard fallback) {
 
-        super(shader);
-        this.targetName = targetName;
-        this.outputName = shader.toString();
-        this.fallback = fallback;
-        this.output = fallback;
+        super(shader, targetName, fallback);
     }
 
     public PostBuffer(ResourceLocation shader) {
 
-        this(shader, "final", RenderType.MAIN_TARGET);
+        super(shader);
     }
 
     @Override
@@ -52,24 +42,6 @@ public abstract class PostBuffer extends PostEffect implements MultiBufferSource
 
     public abstract RenderType getRenderType(ResourceLocation texture);
 
-    //public RenderTarget getRenderTarget() {
-    //
-    //    return target;
-    //}
-
-    public RenderStateShard.OutputStateShard getOutputShard() {
-
-        return isEnabled() ? output : fallback;
-    }
-
-    @Override
-    public void begin(float partialTick) {
-
-        if (active) {
-            target.clear(Minecraft.ON_OSX);
-            active = false;
-        }
-    }
 
     @Override
     public void end(float partialTick) {
@@ -78,31 +50,6 @@ public abstract class PostBuffer extends PostEffect implements MultiBufferSource
             buffer.endBatch();
             super.end(partialTick);
         }
-    }
-
-    @Override
-    public void apply(Window window) {
-
-        if (active) {
-            target.blitToScreen(window.getWidth(), window.getHeight(), false);
-        }
-    }
-
-    @Override
-    public void onResourceManagerReload(ResourceManager manager) {
-
-        target = null;
-        output = RenderType.MAIN_TARGET;
-        super.onResourceManagerReload(manager);
-    }
-
-    @Override
-    protected void onChainLoad() {
-
-        target = chain.getTempTarget(targetName);
-        output = new RenderStateShard.OutputStateShard(outputName,
-                () -> target.bindWrite(false),
-                () -> Minecraft.getInstance().getMainRenderTarget().bindWrite(false));
     }
 
 }

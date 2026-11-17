@@ -34,7 +34,7 @@ public class Color {
                     CHANNEL.optionalFieldOf("a", 0xFF).forGetter((color) -> color.a)
             ).apply(builder, Color::fromRGBA)));
 
-    public static final float INT_TO_FLOAT = 0.003921569F;
+    public static final float INT_TO_FLOAT = 1F / 255F;
     public static final Color WHITE = fromRGBA(0xFFFFFFFF);
 
     public final int r;
@@ -70,6 +70,11 @@ public class Color {
         return new Color(r, g, b, a);
     }
 
+    public static Color fromAGBR(int abgr) {
+
+        return new Color(abgr & 0xFF, (abgr >> 8) & 0xFF, (abgr >> 16) & 0xFF, (abgr >> 24) & 0xFF);
+    }
+
     public static Color fromFloat(float r, float g, float b, float a) {
 
         return new Color((int) (r * 255), (int) (g * 255), (int) (b * 255), (int) (a * 255));
@@ -83,6 +88,11 @@ public class Color {
     public void apply(GuiGraphics graphics) {
 
         graphics.setColor(redFloat(), greenFloat(), blueFloat(), alphaFloat());
+    }
+
+    public Color scale(Color other) {
+
+        return new Color(r * other.r / 255, g * other.g / 255, b * other.b / 255, a * other.a / 255);
     }
 
     public Color scaleRGB(float scale) {
@@ -162,6 +172,11 @@ public class Color {
                 MathHelper.interpolate(g, other.g, amount),
                 MathHelper.interpolate(b, other.b, amount),
                 MathHelper.interpolate(a, other.a, amount));
+    }
+
+    public float luminance() {
+
+        return 1F - (1F - (r * 0.299F * INT_TO_FLOAT + g * 0.587F * INT_TO_FLOAT + b * 0.114F * INT_TO_FLOAT)) * a * INT_TO_FLOAT;
     }
 
     /**
