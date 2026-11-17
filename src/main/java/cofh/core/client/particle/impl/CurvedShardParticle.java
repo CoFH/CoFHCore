@@ -11,6 +11,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -20,6 +21,11 @@ public class CurvedShardParticle extends CurvedPointToPointParticle {
     public CurvedShardParticle(BiColorParticleOptions data, ClientLevel level, double sx, double sy, double sz, double ex, double ey, double ez) {
 
         super(data, level, sx, sy, sz, ex, ey, ez);
+    }
+
+    public CurvedShardParticle(BiColorParticleOptions data, ClientLevel level, Vec3 start, Vec3 end) {
+
+        this(data, level, start.x, start.y, start.z, end.x, end.y, end.z);
     }
 
     @Override

@@ -17,9 +17,15 @@ public abstract class CurvedPointToPointParticle extends PointToPointParticle {
     public CurvedPointToPointParticle(BiColorParticleOptions data, ClientLevel level, double sx, double sy, double sz, double ex, double ey, double ez) {
 
         super(data, level, sx, sy, sz, ex, ey, ez);
-        this.disp = new Vector3f((float) (ex - sx), (float) (ey - sy), (float) (ez - sz));
-        this.perp = dir(disp, random.nextFloat() * MathHelper.F_TAU);
+        this.roll = random.nextFloat() * MathHelper.F_TAU;
+        setEnd(ex, ey, ez);
         this.eccentricity = getEccentricity(disp);
+    }
+
+    protected void setEnd(double ex, double ey, double ez) {
+
+        this.disp = new Vector3f((float) (ex - x), (float) (ey - y), (float) (ez - z));
+        this.perp = dir(disp, roll);
     }
 
     protected float getEccentricity(Vector3f disp) {
