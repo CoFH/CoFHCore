@@ -39,19 +39,24 @@ public class ProjectileCoFH extends Projectile {
         super(type, level);
     }
 
-    public ProjectileCoFH(EntityType<? extends ProjectileCoFH> type, Level level, Entity owner, Vec3 position, Vec3 velocity, float power) {
+    public ProjectileCoFH(EntityType<? extends ProjectileCoFH> type, Level level, Entity owner, float power) {
 
         this(type, level);
         this.power = power;
         setOwner(owner);
+    }
+
+    public void shoot(Vec3 position, Vec3 velocity) {
+
         setPos(position);
         setDeltaMovement(velocity);
         projectileTick(level);
         leftOwner = true;
-        gameEvent(GameEvent.PROJECTILE_SHOOT, owner);
+        gameEvent(GameEvent.PROJECTILE_SHOOT, getOwner());
         hasBeenShot = true;
         updateVelocity();
         updateRotation();
+        level.addFreshEntity(this);
     }
 
     @Override

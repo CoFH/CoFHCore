@@ -5,9 +5,11 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.entity.PartEntity;
 
 /**
  * Item interface that allows you to send arbitrary entity raytraces from client to server.
@@ -22,6 +24,9 @@ public interface IEntityRayTraceItem {
 
     default void sendEntityRayTrace(Player player, InteractionHand hand, Vec3 origin, Entity target, Vec3 hit, float power) {
 
+        if (target instanceof PartEntity<?> part) {
+            target = part.getParent();
+        }
         ItemRayTraceEntityPacket.sendToServer(player, hand, origin, target, hit, power);
     }
 

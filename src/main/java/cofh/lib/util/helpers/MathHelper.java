@@ -418,7 +418,22 @@ public final class MathHelper {
 
         Vec3 center = point.subtract(lineStart);
         Vec3 disp = lineEnd.subtract(lineStart);
-        return disp.cross(center).length() / disp.length();
+        double lengthSqr = disp.lengthSqr();
+        if (lengthSqr <= 0.0) {
+            return center.length();
+        }
+        return disp.cross(center).length() / Math.sqrt(lengthSqr);
+    }
+
+    public static double pointToSegmentDist(Vec3 point, Vec3 lineStart, Vec3 lineEnd) {
+
+        Vec3 center = point.subtract(lineStart);
+        Vec3 disp = lineEnd.subtract(lineStart);
+        double lengthSqr = disp.lengthSqr();
+        if (lengthSqr <= 0.0) {
+            return center.length();
+        }
+        return center.subtract(disp.scale(clamp(center.dot(disp) / lengthSqr, 0, 1))).length();
     }
 
     public static Vec2 decomposeLookVector(Vec3 v) {

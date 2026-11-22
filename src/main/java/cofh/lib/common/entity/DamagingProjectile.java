@@ -16,9 +16,9 @@ public abstract class DamagingProjectile extends ProjectileCoFH {
         super(type, level);
     }
 
-    public DamagingProjectile(EntityType<? extends DamagingProjectile> type, Level level, Entity owner, Vec3 position, Vec3 velocity, float power) {
+    public DamagingProjectile(EntityType<? extends DamagingProjectile> type, Level level, Entity owner, float power) {
 
-        super(type, level, owner, position, velocity, power);
+        super(type, level, owner, power);
     }
 
     @Override
